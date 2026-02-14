@@ -3,6 +3,7 @@ name: phx:investigate
 description: Investigate a bug or error in Elixir/Phoenix code. Uses Ralph Wiggum approach - checks obvious things first, reads errors literally. Add --parallel for 4-track deep investigation.
 argument-hint: <bug description> [--parallel]
 disable-model-invocation: true
+allowed-tools: Read, Grep, Glob, Bash, Task, AskUserQuestion, WebSearch, WebFetch
 ---
 
 # Investigate Bug

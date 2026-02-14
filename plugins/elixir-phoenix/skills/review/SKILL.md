@@ -3,6 +3,7 @@ name: phx:review
 description: Review code with parallel specialist agents. Finds and explains issues with severity classification. Part of the agentic workflow cycle.
 argument-hint: [test|security|oban|deploy|iron-laws|all]
 disable-model-invocation: true
+allowed-tools: Read, Grep, Glob, Bash, Task, AskUserQuestion
 ---
 
 # Review Elixir/Phoenix Code
