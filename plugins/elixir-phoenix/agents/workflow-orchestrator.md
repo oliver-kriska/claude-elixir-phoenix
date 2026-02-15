@@ -182,7 +182,8 @@ Track state in progress file at `.claude/plans/{slug}/progress.md`:
 2. Read `.claude/plans/{slug}/summaries/review-consolidated.md`
 3. Categorize by severity (BLOCKER, WARNING, SUGGESTION)
 4. If blockers found, present findings via `AskUserQuestion`
-   with `multiSelect: true` — let user pick which to address:
+   with `multiSelect: true` — include severity shortcuts first,
+   then individual findings:
 
    ```
    AskUserQuestion:
@@ -190,18 +191,19 @@ Track state in progress file at `.claude/plans/{slug}/progress.md`:
      header: "Findings"
      multiSelect: true
      options:
+       - label: "All BLOCKERs ({count})"
+         description: "Fix all critical issues that must be resolved"
+       - label: "All WARNINGs ({count})"
+         description: "Fix all should-fix quality issues"
        - label: "{finding 1 short name}"
          description: "BLOCKER: {1-line description}"
        - label: "{finding 2 short name}"
          description: "WARNING: {1-line description}"
-       - label: "{finding 3 short name}"
-         description: "SUGGESTION: {1-line description}"
-       - label: "Accept all risks"
-         description: "Skip all fixes, ship as-is"
    ```
 
-   Create fix tasks ONLY for selected findings. User can select
-   any combination — e.g., fix 2 blockers but accept 1 warning.
+   Severity shortcuts select all findings of that level. User can
+   mix — e.g., select "All BLOCKERs" + one specific WARNING.
+   Create fix tasks ONLY for selected findings.
    Increment cycle counter, transition to WORKING if any selected.
 5. If no blockers:
    - Transition to COMPLETED

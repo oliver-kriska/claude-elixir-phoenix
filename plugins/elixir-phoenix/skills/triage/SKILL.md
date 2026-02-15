@@ -38,8 +38,8 @@ are non-negotiable in Elixir/Phoenix development.
 
 ### Step 2: Present ALL Findings for Batch Selection
 
-Use `AskUserQuestion` with `multiSelect: true` to present all
-non-auto-approved findings at once. User selects which to fix:
+Use `AskUserQuestion` with `multiSelect: true`. Start with
+severity shortcuts, then list individual findings:
 
 ```
 AskUserQuestion:
@@ -47,17 +47,19 @@ AskUserQuestion:
   header: "Triage"
   multiSelect: true
   options:
+    - label: "All BLOCKERs ({count})"
+      description: "Fix all critical issues"
+    - label: "All WARNINGs ({count})"
+      description: "Fix all should-fix issues"
     - label: "[BLOCKER] {title 1}"
       description: "{file}:{line} — {brief description}"
     - label: "[WARNING] {title 2}"
       description: "{file}:{line} — {brief description}"
-    - label: "[SUGGESTION] {title 3}"
-      description: "{file}:{line} — {brief description}"
-    ...up to 4 options per AskUserQuestion call
 ```
 
-If >4 findings, batch them into groups of 4 and present multiple
-rounds. Order: BLOCKERs first, then WARNINGs, then SUGGESTIONs.
+If >4 options, batch into groups of 4 with severity shortcuts in
+the first batch. Severity shortcuts select all findings of that
+level — user can mix shortcuts with individual picks.
 
 ### Step 3: Gather Context on Selected Items
 
