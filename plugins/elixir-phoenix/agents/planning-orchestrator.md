@@ -41,36 +41,18 @@ Determine input source:
 ### Phase 1b: Runtime Context (Tidewave -- when available)
 
 Before spawning research agents, gather live project state via
-Tidewave. This gives agents concrete data instead of guesses:
+Tidewave. Skip if unavailable — agents fall back to static analysis.
 
-**1. Understand current data model:**
-
-Call `mcp__tidewave__get_ecto_schemas` — pass the schema list
-to the ecto-schema-designer prompt.
-
-**2. Understand current routes:**
-
-Call `mcp__tidewave__project_eval` with this Elixir code to
-auto-discover the router module:
-
-```elixir
-router = :code.all_loaded()
-|> Enum.find(fn {mod, _} -> function_exported?(mod, :__routes__, 0) end)
-|> elem(0)
-Phoenix.Router.routes(router)
-|> Enum.map(& {&1.verb, &1.path, &1.plug})
-```
-
-Pass the route list to the phoenix-patterns-analyst prompt.
-
-**3. Check for existing issues:**
-
-Call `mcp__tidewave__get_logs level: :warning` — include
-relevant warnings in research context.
-
-Include runtime context in agent prompts so specialists have
-concrete project state. Skip if Tidewave unavailable -- agents
-will rely on static code analysis as before.
+1. `mcp__tidewave__get_ecto_schemas` → pass to ecto-schema-designer
+2. `mcp__tidewave__project_eval` with route discovery:
+   ```elixir
+   router = :code.all_loaded()
+   |> Enum.find(fn {mod, _} -> function_exported?(mod, :__routes__, 0) end)
+   |> elem(0)
+   Phoenix.Router.routes(router) |> Enum.map(& {&1.verb, &1.path, &1.plug})
+   ```
+   Pass route list to phoenix-patterns-analyst.
+3. `mcp__tidewave__get_logs level: :warning` → include in research context
 
 ### Phase 2: Spawn Research Agents (Parallel)
 
@@ -404,36 +386,13 @@ Create `.claude/plans/{slug}/plan.md` with this structure:
 
 ## System Map (if LiveView feature with 2+ pages/components)
 
-{Include ONLY when breadboarding was performed. Omit for
-non-LiveView or simple single-page features.}
-
-### Places
-
-| ID | Place | Entry Point | Notes |
-|----|-------|-------------|-------|
-| P1 | {LiveViewName} | {route} | {notes} |
-
-### UI Affordances
-
-| ID | Place | Component | Affordance | Type | Wires Out | Returns To |
-|----|-------|-----------|------------|------|-----------|------------|
-| U1 | P1 | {component} | {element} | {phx-*} | {code ID} | {store ID} |
-
-### Code Affordances
-
-| ID | Place | Module | Affordance | Wires Out | Returns To |
-|----|-------|--------|------------|-----------|------------|
-| N1 | P1 | {Module} | {function} | {targets} | {stores} |
-
-### Data Stores
-
-| ID | Store | Type | Read By | Written By |
-|----|-------|------|---------|------------|
-| S1 | {name} | {stream/assign/ecto} | {IDs} | {IDs} |
-
-### Spikes (if any ⚠️ in tables above)
-
-- {N-ID}: {what is unknown and needs investigation}
+{Include ONLY when breadboarding was performed. Omit otherwise.
+Tables: Places (ID/Place/Entry Point/Notes),
+UI Affordances (ID/Place/Component/Affordance/Type/Wires Out/Returns To),
+Code Affordances (ID/Place/Module/Affordance/Wires Out/Returns To),
+Data Stores (ID/Store/Type/Read By/Written By),
+Spikes (⚠️ items needing investigation).
+See Phase 3 breadboarding section for full format.}
 
 ## Phase 0: Spikes [PENDING] (if ⚠️ unknowns exist)
 
@@ -491,31 +450,15 @@ Do NOT invent annotations like `[solo]`, `[general]`, etc.
 
 **Tasks are logical work units, NOT individual file edits.**
 
-BAD (too atomic):
+BAD: One task per file (`Replace X in file_a`, `Replace X in file_b`).
+GOOD: One task per pattern, list locations within:
 
 ```markdown
-- [ ] [P3-T3][direct] Replace wait_for_timeout in file_a_test.exs
-- [ ] [P3-T4][direct] Replace wait_for_timeout in file_b_test.exs
-- [ ] [P3-T5][direct] Replace wait_for_timeout in file_c_test.exs
-```
-
-GOOD (grouped with locations and implementation):
-
-```markdown
-- [ ] [P3-T2][direct] Replace all hardcoded waits with
-  condition-based waits
+- [ ] [P3-T2][direct] Replace all hardcoded waits with condition-based waits
   **Locations** (71 calls across 14 files):
-  - proposal_form_test.exs (15 calls)
-  - space_inputs_test.exs (7 calls)
-  - occupier_proposal_form_test.exs (7 calls)
-  - location_tab_test.exs (6 calls)
-  - kanban_board_test.exs (6 calls)
-  - navbar_test.exs (5 calls)
-  - (8 more files with 1-4 calls each)
-  **Pattern**: Replace `wait_for_timeout(conn, 1000)` with:
-  - DOM element: `Frame.wait_for_selector(id, selector: "css")`
-  - Assertion: `assert_has(conn, "selector", text: "expected")`
-  - PubSub: `assert_patiently(fn -> assert_has(...) end)`
+  - proposal_form_test.exs (15), space_inputs_test.exs (7), ...
+  **Pattern**: Replace `wait_for_timeout(conn, 1000)` with
+  `Frame.wait_for_selector` / `assert_has` / `assert_patiently`
 ```
 
 **Guidelines:**
@@ -550,16 +493,9 @@ the plan while any agent is still running.
 
 ## Memory
 
-Consult your memory before planning to leverage past decisions. After
-completing a plan, save key learnings:
-
-- Architectural decisions that worked well (or failed) in this project
-- Agent spawn patterns: which specialists were useful for which features
-- Recurring patterns: common task groupings, typical phase structures
-- Project-specific conventions discovered during research
-- Dead-end approaches to avoid repeating
-
-Keep notes concise — focus on actionable patterns, not session logs.
+Consult memory before planning. After completing, save: architectural
+decisions (worked/failed), useful agent spawn patterns, recurring task
+groupings, project conventions, dead-ends to avoid.
 
 ## CRITICAL: After Writing the Plan
 

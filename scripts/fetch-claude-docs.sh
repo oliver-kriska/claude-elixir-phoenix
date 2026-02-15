@@ -93,7 +93,7 @@ fetch_page() {
   done
 
   echo "  [FAILED] $page — could not download after 3 attempts"
-  echo "FETCH_FAILED: $url ($(date -Iseconds))" > "$dest"
+  rm -f "$dest"
   return 1
 }
 
@@ -136,25 +136,24 @@ echo "  Cache: $CACHE_DIR"
 echo "  Files: $total_files doc pages"
 echo "  Size:  $total_size"
 if [ "$failed" -gt 0 ]; then
-  echo "  Failures: $failed (check FETCH_FAILED entries)"
+  echo "  Failures: $failed (missing from cache — re-run or use --force)"
 fi
 
 # Show freshness of each cached file
 echo ""
 echo "=== Cache Status ==="
-for f in "$CACHE_DIR"/*.md; do
-  [ -f "$f" ] || continue
-  name=$(basename "$f")
-  if grep -q "FETCH_FAILED" "$f" 2>/dev/null; then
-    echo "  ❌ $name — download failed"
+for page in "${PAGES[@]}"; do
+  dest="${CACHE_DIR}/${page}"
+  if [ ! -f "$dest" ]; then
+    echo "  ❌ $page — missing (download failed)"
   else
-    age_secs=$(( $(date +%s) - $(file_mtime "$f") ))
+    age_secs=$(( $(date +%s) - $(file_mtime "$dest") ))
     if [ "$age_secs" -lt 3600 ]; then
-      echo "  ✅ $name — $(( age_secs / 60 ))m ago"
+      echo "  ✅ $page — $(( age_secs / 60 ))m ago"
     elif [ "$age_secs" -lt 86400 ]; then
-      echo "  ✅ $name — $(( age_secs / 3600 ))h ago"
+      echo "  ✅ $page — $(( age_secs / 3600 ))h ago"
     else
-      echo "  ⚠️  $name — $(( age_secs / 86400 ))d ago (stale)"
+      echo "  ⚠️  $page — $(( age_secs / 86400 ))d ago (stale)"
     fi
   fi
 done
