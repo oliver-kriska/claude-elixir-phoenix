@@ -1,6 +1,7 @@
 ---
 name: oban
 description: Oban background job patterns - workers, queues, error handling, testing. Load when working with background jobs.
+user-invocable: false
 ---
 
 # Oban Background Jobs Reference

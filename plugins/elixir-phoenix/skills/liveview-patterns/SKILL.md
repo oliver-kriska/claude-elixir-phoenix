@@ -1,6 +1,7 @@
 ---
 name: liveview-patterns
 description: Phoenix LiveView patterns and best practices. Load when building interactive features with LiveView.
+user-invocable: false
 ---
 
 # LiveView Patterns Reference

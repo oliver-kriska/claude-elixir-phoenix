@@ -1,7 +1,7 @@
 ---
 name: lv:assigns
 description: Audit LiveView socket assigns for memory issues and clarity. Use when reviewing LiveView performance or debugging memory problems.
-argument: path/to/live_view.ex
+argument-hint: path/to/live_view.ex
 ---
 
 # LiveView Assigns Audit

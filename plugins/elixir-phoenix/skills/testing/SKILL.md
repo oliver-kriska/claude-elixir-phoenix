@@ -1,6 +1,7 @@
 ---
 name: testing
 description: Elixir testing patterns - ExUnit, Mox, property testing, LiveView testing. Load when writing or reviewing tests.
+user-invocable: false
 ---
 
 # Elixir Testing Reference

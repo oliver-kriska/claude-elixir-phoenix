@@ -1,21 +1,23 @@
 {
   "name": "oliver-kriska",
-  "description": "Claude Code plugins by Oliver Kriska",
-  "version": "1.0.0",
   "owner": {
     "name": "Oliver Kriska",
     "email": "oliver@kriska.dev"
+  },
+  "metadata": {
+    "description": "Claude Code plugins by Oliver Kriska",
+    "version": "1.0.0"
   },
   "plugins": [
     {
       "name": "elixir-phoenix",
       "description": "Elixir/Phoenix/LiveView development with specialist agents, Iron Laws, and Tidewave MCP integration",
-      "version": "1.0.0",
       "author": {
         "name": "Oliver Kriska"
       },
       "source": "./plugins/elixir-phoenix",
-      "category": "development"
+      "category": "development",
+      "tags": ["elixir", "phoenix", "liveview", "oban", "ecto"]
     }
   ]
 }

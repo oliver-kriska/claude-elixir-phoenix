@@ -1,6 +1,7 @@
 ---
 name: compound-docs
 description: Searchable solution documentation system with YAML frontmatter. Builds institutional knowledge from solved problems. Use proactively when consulting past solutions before investigating new issues.
+user-invocable: false
 ---
 
 # Compound Docs — Institutional Knowledge Base

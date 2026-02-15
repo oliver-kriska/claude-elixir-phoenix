@@ -5,6 +5,7 @@ tools: Read, Write, Grep, Glob, Task
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: opus
+maxTurns: 40
 memory: project
 skills:
   - elixir-idioms
@@ -45,12 +46,14 @@ Tidewave. Skip if unavailable — agents fall back to static analysis.
 
 1. `mcp__tidewave__get_ecto_schemas` → pass to ecto-schema-designer
 2. `mcp__tidewave__project_eval` with route discovery:
+
    ```elixir
    router = :code.all_loaded()
    |> Enum.find(fn {mod, _} -> function_exported?(mod, :__routes__, 0) end)
    |> elem(0)
    Phoenix.Router.routes(router) |> Enum.map(& {&1.verb, &1.path, &1.plug})
    ```
+
    Pass route list to phoenix-patterns-analyst.
 3. `mcp__tidewave__get_logs level: :warning` → include in research context
 

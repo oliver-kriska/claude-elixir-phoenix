@@ -324,14 +324,9 @@ Chosen option: **"{Option X}"**, because {justification}.
 
 {One paragraph description of what this feature does and why it exists.}
 
-### Prerequisites
-
-- {Any setup required}
-
 ### Configuration
 
 ```elixir
-# config/config.exs
 config :my_app, :feature_name,
   option_a: "value",
   option_b: 123
@@ -339,18 +334,9 @@ config :my_app, :feature_name,
 
 ### Usage
 
-#### {Use Case 1}
-
-{Description}
-
 ```elixir
-# Example code
 MyApp.Feature.do_thing()
 ```
-
-#### {Use Case 2}
-
-{Description}
 
 ### Troubleshooting
 

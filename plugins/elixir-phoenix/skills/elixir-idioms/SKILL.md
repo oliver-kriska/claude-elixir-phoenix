@@ -1,6 +1,7 @@
 ---
 name: elixir-idioms
 description: Idiomatic Elixir patterns, BEAM architecture, OTP patterns, and best practices. Load when writing Elixir code to ensure idiomatic style.
+user-invocable: false
 ---
 
 # Elixir Idioms

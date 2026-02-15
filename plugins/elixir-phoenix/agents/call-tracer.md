@@ -5,6 +5,7 @@ tools: Read, Grep, Glob, Bash, Task
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: opus
+maxTurns: 25
 skills:
   - call-tracing
 ---

@@ -5,6 +5,7 @@ tools: Read, Write, Grep, Glob, Bash, Task
 disallowedTools: NotebookEdit
 permissionMode: bypassPermissions
 model: opus
+maxTurns: 50
 memory: project
 skills:
   - elixir-idioms

@@ -6,23 +6,31 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/format-elixir.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
+            "timeout": 30,
+            "statusMessage": "Formatting Elixir..."
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/verify-elixir.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/verify-elixir.sh",
+            "timeout": 60,
+            "statusMessage": "Compiling..."
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/security-reminder.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/security-reminder.sh",
+            "timeout": 15
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/log-progress.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/log-progress.sh",
+            "timeout": 15,
+            "async": true
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/plan-stop-reminder.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/plan-stop-reminder.sh",
+            "timeout": 15
           }
         ]
       }
@@ -33,23 +41,30 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/detect-tidewave.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/detect-tidewave.sh",
+            "timeout": 30,
+            "statusMessage": "Detecting Tidewave..."
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/setup-dirs.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/setup-dirs.sh",
+            "timeout": 15
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-scratchpad.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-scratchpad.sh",
+            "timeout": 15
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-resume.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-resume.sh",
+            "timeout": 30,
+            "statusMessage": "Checking for resumable work..."
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-branch-freshness.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-branch-freshness.sh",
+            "timeout": 30
           },
           {
             "type": "command",
@@ -64,18 +79,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/precompact-rules.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/precompact-rules.sh",
+            "timeout": 15
           }
         ]
       }
     ],
     "Stop": [
       {
-        "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-pending-plans.sh"
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/check-pending-plans.sh",
+            "timeout": 15
           }
         ]
       }

@@ -1,6 +1,7 @@
 ---
 name: ecto-patterns
 description: Ecto patterns for schemas, queries, changesets, and migrations. Load when working with database code.
+user-invocable: false
 ---
 
 # Ecto Patterns Reference

@@ -123,14 +123,7 @@ Task({
 
 ### Waiting and Checkpoint
 
-After spawning, wait for ALL agents to complete:
-
-```
-TaskOutput({ task_id: "agent-1-id", block: true, timeout: 300000 })
-TaskOutput({ task_id: "agent-2-id", block: true, timeout: 300000 })
-```
-
-Then run phase checkpoint:
+After spawning, wait for ALL agents to complete, then run phase checkpoint:
 
 ```bash
 mix format lib/**/*.ex lib/**/*.exs
@@ -184,36 +177,9 @@ test by task annotation:
 | `[security]` | `project_eval`: Test unauthenticated access returns error |
 | `[direct]` | `get_logs level: :error` to verify no regressions |
 
-**Example: Ecto feature smoke test**
-
-```elixir
-# mcp__tidewave__project_eval
-# Uses transaction + rollback so no records persist in dev DB
-alias MyApp.{Accounts, Repo}
-Repo.transaction(fn ->
-  {:ok, user} = Accounts.create_user(%{
-    email: "smoke-#{System.unique_integer()}@test.com",
-    password: "password123456"
-  })
-  fetched = Accounts.get_user!(user.id)
-  true = fetched.email == user.email
-  Repo.rollback(:smoke_test_passed)
-end)
-# Returns {:error, :smoke_test_passed} = success
-```
-
-**Example: Schema verification after migration**
-
-```sql
--- mcp__tidewave__execute_sql_query
-SELECT column_name, data_type, is_nullable
-FROM information_schema.columns
-WHERE table_name = 'users'
-ORDER BY ordinal_position;
-```
-
-This catches issues unit tests miss: association loading, default
-values, database constraints, and trigger behavior.
+Use `project_eval` with transaction + rollback to verify without
+persisting data. This catches issues unit tests miss: association
+loading, default values, database constraints, and trigger behavior.
 
 ### After ALL Phases (Final Gate)
 
@@ -331,22 +297,6 @@ Don't commit after every task. Instead:
 2. **After blockers**: Commit working state before human intervention
 3. **After completion**: Ask user about final commit
 
-### Commit Example
-
-```bash
-# Stage SPECIFIC files only -- never use git add -A
-git add lib/my_app/accounts/user.ex
-git add priv/repo/migrations/20240115_add_users.exs
-git add test/my_app/accounts_test.exs
-git commit -m "feat(auth): Complete Phase 1 - Schema Design
-
-- Add users migration with email, password_hash
-- Add unique index on email
-- Create User schema with validations
-
-Progress: 1/4 phases complete"
-```
-
 ### Branch Strategy (for /phx:full)
 
 ```bash
@@ -367,15 +317,7 @@ git checkout -b feature/{feature-slug}
 
 ### Retry with Context
 
-If first attempt fails, retry with error info:
-
-```
-Attempt 1: Implement function
-Result: Test failure
-
-Attempt 2: "Previous attempt failed with: {error}.
-           Fix considering this error."
-```
+If first attempt fails, retry with error context in the prompt.
 
 ### Escalate to BLOCKER
 

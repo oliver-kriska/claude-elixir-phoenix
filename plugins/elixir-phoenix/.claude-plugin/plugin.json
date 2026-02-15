@@ -5,5 +5,7 @@
   "keywords": ["elixir", "phoenix", "liveview", "ecto", "oban", "otp"],
   "author": {
     "name": "Oliver Kriska"
-  }
+  },
+  "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix"
 }

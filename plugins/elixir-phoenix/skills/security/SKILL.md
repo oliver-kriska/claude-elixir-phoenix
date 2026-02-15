@@ -1,6 +1,7 @@
 ---
 name: security
 description: Elixir/Phoenix security patterns - authentication, authorization, input validation, OWASP. Load when implementing security features.
+user-invocable: false
 ---
 
 # Elixir/Phoenix Security Reference

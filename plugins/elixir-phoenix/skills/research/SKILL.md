@@ -119,57 +119,6 @@ Based on research:
 
 ```
 
-## Example
-
-For `/phx:research Oban unique jobs`:
-
-```markdown
-# Research: Oban Unique Jobs
-
-## Summary
-Oban provides built-in unique job support via `unique` option in worker. 
-Use `period` for time-based uniqueness, `keys` to specify which args matter.
-
-## Sources
-
-### ElixirForum Discussions
-- [Oban unique jobs not working](https://elixirforum.com/t/...) - Common issue: forgetting `keys` option
-- [Unique jobs across queues](https://elixirforum.com/t/...) - Use `unique: [across: :queues]`
-
-### Documentation
-- [Oban.Worker unique option](https://hexdocs.pm/oban/Oban.Worker.html#module-unique-jobs)
-
-## Code Examples
-
-```elixir
-# From HexDocs
-defmodule MyApp.UniqueWorker do
-  use Oban.Worker,
-    queue: :default,
-    unique: [period: 60, keys: [:user_id]]
-
-  @impl Oban.Worker
-  def perform(%{args: %{"user_id" => user_id}}) do
-    # Only one job per user_id in 60 seconds
-    :ok
-  end
-end
-```
-
-## Recommendations
-
-1. Always specify `keys` - default uses all args which may be too strict
-2. Use `period: :infinity` for truly unique jobs (until completed)
-3. Consider `replace` option for updating existing jobs
-
-## Watch Out For
-
-- Unique check happens at insert time, not execution
-- Jobs in `completed` state don't count (use `states` option)
-- Oban Pro has more advanced uniqueness features
-
-```
-
 ## Token Budget
 
 | Source Type | Max Tokens |
