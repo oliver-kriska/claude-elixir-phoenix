@@ -33,7 +33,7 @@ HAS_CONFIG=$(test -f ${PLUGIN_DIR}/.claude-plugin/plugin.json && echo "yes" || e
 ```
 
 If `--focus` flag: validate ONLY that component type.
-If `--quick` flag: skip to Phase 4 (structural checks only, no docs needed).
+If `--quick` flag: skip to Phase 4 (structural checks only).
 
 ## Phase 2: Read Cached Docs & Validation Rules
 
@@ -47,8 +47,12 @@ Read from `.claude/docs-check/docs-cache/`:
 | `sub-agents.md` | Agent validation |
 | `skills.md` | Skill validation |
 | `hooks.md` | Hook validation |
+| `hooks-guide.md` | Hook validation (patterns) |
 | `plugins-reference.md` | Plugin config validation |
 | `plugin-marketplaces.md` | Marketplace config validation |
+| `plugins.md` | General plugin validation |
+| `settings.md` | Permission mode validation |
+| `mcp.md` | MCP config validation |
 
 **If any required cache file is missing: STOP and tell the user to run
 `bash scripts/fetch-claude-docs.sh` first. Do NOT silently skip or attempt to fetch.**

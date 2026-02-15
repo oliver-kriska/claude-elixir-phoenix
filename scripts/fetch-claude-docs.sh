@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
 # Fetch Claude Code documentation for plugin validation.
-# Downloads only the pages needed, skips if cached and fresh.
+# Downloads all relevant pages, skips if cached and fresh.
 #
 # Usage:
-#   ./scripts/fetch-claude-docs.sh              # Fetch core pages only
-#   ./scripts/fetch-claude-docs.sh --all        # Fetch core + optional pages
+#   ./scripts/fetch-claude-docs.sh              # Fetch all doc pages
 #   ./scripts/fetch-claude-docs.sh --force      # Re-download even if cached
 #   ./scripts/fetch-claude-docs.sh --index-only # Just fetch llms.txt index
 #
@@ -18,22 +17,17 @@ INDEX_URL="https://code.claude.com/docs/llms.txt"
 CACHE_DIR=".claude/docs-check/docs-cache"
 MAX_AGE_HOURS=24
 FORCE=false
-FETCH_ALL=false
 INDEX_ONLY=false
 
-# Core pages — always fetched (mapped to plugin component types)
-CORE_PAGES=(
+# All pages needed for plugin validation (~420KB total)
+PAGES=(
   "sub-agents.md"          # Agent frontmatter schema
   "skills.md"              # Skill format and structure
   "hooks.md"               # Hook events and types
+  "hooks-guide.md"         # Hook patterns and examples
   "plugins-reference.md"   # plugin.json schema
   "plugin-marketplaces.md" # marketplace.json schema
-)
-
-# Optional pages — fetched with --all flag
-OPTIONAL_PAGES=(
   "plugins.md"             # General plugin creation
-  "hooks-guide.md"         # Deep hook patterns
   "settings.md"            # Permission modes
   "mcp.md"                 # MCP server config
 )
@@ -42,12 +36,10 @@ OPTIONAL_PAGES=(
 for arg in "$@"; do
   case "$arg" in
     --force) FORCE=true ;;
-    --all) FETCH_ALL=true ;;
     --index-only) INDEX_ONLY=true ;;
     --help|-h)
-      echo "Usage: $0 [--all] [--force] [--index-only]"
+      echo "Usage: $0 [--force] [--index-only]"
       echo ""
-      echo "  --all         Fetch core + optional doc pages"
       echo "  --force       Re-download even if cached within ${MAX_AGE_HOURS}h"
       echo "  --index-only  Only fetch the llms.txt index file"
       exit 0
@@ -61,25 +53,22 @@ done
 
 mkdir -p "$CACHE_DIR"
 
+# Get file modification time (portable: Linux + macOS)
+file_mtime() {
+  if stat -c %Y "$1" >/dev/null 2>&1; then
+    stat -c %Y "$1"     # Linux
+  else
+    stat -f %m "$1"     # macOS
+  fi
+}
+
 # Check if a cached file is still fresh
 is_fresh() {
   local file="$1"
-  if [ "$FORCE" = true ]; then
-    return 1
-  fi
-  if [ ! -f "$file" ]; then
-    return 1
-  fi
-  # Check if file is younger than MAX_AGE_HOURS (portable: Linux + macOS)
-  local file_age file_mtime
-  if stat -c %Y "$file" >/dev/null 2>&1; then
-    file_mtime=$(stat -c %Y "$file")     # Linux
-  else
-    file_mtime=$(stat -f %m "$file")     # macOS
-  fi
-  file_age=$(( $(date +%s) - file_mtime ))
-  local max_age_secs=$(( MAX_AGE_HOURS * 3600 ))
-  [ "$file_age" -lt "$max_age_secs" ]
+  [ "$FORCE" = true ] && return 1
+  [ ! -f "$file" ] && return 1
+  local file_age=$(( $(date +%s) - $(file_mtime "$file") ))
+  [ "$file_age" -lt $(( MAX_AGE_HOURS * 3600 )) ]
 }
 
 # Download a single page with retry
@@ -100,9 +89,7 @@ fetch_page() {
       echo "  [fetched] $page (${size} bytes)"
       return 0
     fi
-    if [ "$attempt" -lt 3 ]; then
-      sleep $(( attempt * 2 ))
-    fi
+    [ "$attempt" -lt 3 ] && sleep $(( attempt * 2 ))
   done
 
   echo "  [FAILED] $page — could not download after 3 attempts"
@@ -132,22 +119,13 @@ if [ "$INDEX_ONLY" = true ]; then
   exit 0
 fi
 
-# Fetch core pages
+# Fetch all pages
 echo ""
-echo "Fetching core pages..."
+echo "Fetching doc pages..."
 failed=0
-for page in "${CORE_PAGES[@]}"; do
+for page in "${PAGES[@]}"; do
   fetch_page "$page" || (( failed++ )) || true
 done
-
-# Fetch optional pages if requested
-if [ "$FETCH_ALL" = true ]; then
-  echo ""
-  echo "Fetching optional pages..."
-  for page in "${OPTIONAL_PAGES[@]}"; do
-    fetch_page "$page" || (( failed++ )) || true
-  done
-fi
 
 # Summary
 echo ""
@@ -170,11 +148,7 @@ for f in "$CACHE_DIR"/*.md; do
   if grep -q "FETCH_FAILED" "$f" 2>/dev/null; then
     echo "  ❌ $name — download failed"
   else
-    if stat -c %Y "$f" >/dev/null 2>&1; then
-      age_secs=$(( $(date +%s) - $(stat -c %Y "$f") ))
-    else
-      age_secs=$(( $(date +%s) - $(stat -f %m "$f") ))
-    fi
+    age_secs=$(( $(date +%s) - $(file_mtime "$f") ))
     if [ "$age_secs" -lt 3600 ]; then
       echo "  ✅ $name — $(( age_secs / 60 ))m ago"
     elif [ "$age_secs" -lt 86400 ]; then

@@ -4,7 +4,7 @@ description: |
   CONTRIBUTOR TOOL - Validate plugin against latest Claude Code documentation.
   Catches breaking changes, deprecations, discovers new features.
   Run before releases or periodically. NOT part of the distributed plugin.
-argument-hint: "[--quick|--full|--focus=agents|skills|hooks|config]"
+argument-hint: "[--quick|--focus=agents|skills|hooks|config]"
 ---
 
 # Plugin Documentation Compatibility Check
@@ -30,6 +30,7 @@ Claude Code documentation to catch breaking changes and discover new features.
 │  /docs-check (skill entry point)                                │
 │   │                                                             │
 │   ├─ Step 1: bash scripts/fetch-claude-docs.sh (zero tokens)    │
+│   │          Always fetches all 9 doc pages (~420KB)             │
 │   │                                                             │
 │   └─ Step 2: delegate to orchestrator (reads from cache only)   │
 │       │                                                         │
@@ -47,30 +48,27 @@ Claude Code documentation to catch breaking changes and discover new features.
 
 ## Execution
 
-### Step 1: Fetch Docs (Before Orchestrator)
+### Step 1: Fetch Docs (Automatic)
 
-Run the fetch script FIRST, before delegating. This ensures all docs are cached
-and no downstream process needs to worry about fetching.
+**Always run first.** Downloads all doc pages to cache. Skips pages
+already cached within 24h. Zero token cost — pure curl.
 
 ```bash
-# Default mode — core pages only
+# --quick mode: skip this step entirely (structural checks only)
+# All other modes: always fetch
 bash scripts/fetch-claude-docs.sh
-
-# --full mode — also fetches optional pages
-bash scripts/fetch-claude-docs.sh --all
-
-# --quick mode — skip this step entirely (structural checks only)
 ```
 
 ### Step 2: Delegate to Orchestrator
 
-After docs are cached, delegate to the orchestrator which reads from cache only:
+After docs are cached, delegate. The orchestrator reads from cache only
+and crashes if cache files are missing.
 
 ```text
 Task(subagent_type: "docs-validation-orchestrator")
 ```
 
-Pass the user's flags (--quick, --focus, --full) in the prompt.
+Pass the user's flags (--quick, --focus) in the prompt.
 
 ## What the Orchestrator Does
 
@@ -83,7 +81,7 @@ Pass the user's flags (--quick, --focus, --full) in the prompt.
 
 ## Iron Laws
 
-1. **NEVER fetch llms-full.txt** — targeted pages only
+1. **Fetch ALL docs upfront** — no conditional fetching, no partial downloads
 2. **Use `scripts/fetch-claude-docs.sh`** — single source of truth for doc fetching
 3. **Workers get docs IN PROMPT** — no runtime fetching
 4. **Workers use sonnet** — opus is wasteful for comparison tasks
@@ -93,4 +91,4 @@ Pass the user's flags (--quick, --focus, --full) in the prompt.
 ## References
 
 - `references/validation-rules.md` — Per-component validation checklists
-- `references/doc-pages.md` — Component-to-URL mapping and fetch strategy
+- `references/doc-pages.md` — Component-to-URL mapping

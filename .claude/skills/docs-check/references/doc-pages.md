@@ -1,56 +1,47 @@
 # Documentation Pages
 
-Maps plugin component types to the Claude Code doc pages that validate them.
-Used by the orchestrator to fetch only relevant pages.
+Maps plugin component types to Claude Code doc pages used for validation.
 
 ## Source
 
 All docs available at `https://code.claude.com/docs/en/{page}.md`
-Index at `https://code.claude.com/docs/llms.txt` (71 pages total).
+Index at `https://code.claude.com/docs/llms.txt`.
 
-## Component-to-Page Mapping
+## Pages Fetched (All, Always)
 
-| Component | Doc Pages | Why |
-|-----------|-----------|-----|
-| Agents | `sub-agents.md` | Frontmatter schema, tool names, model/permission values |
-| Skills | `skills.md` | SKILL.md format, frontmatter fields, directory structure |
-| Hooks | `hooks.md` | Event names, hook types, schema, matcher syntax |
-| Plugin config | `plugins-reference.md` | plugin.json schema, field inventory |
-| Marketplace | `plugin-marketplaces.md` | marketplace.json schema, plugin entries |
+| Page | Component | Why |
+|------|-----------|-----|
+| `sub-agents.md` | Agents | Frontmatter schema, tool names, model/permission values |
+| `skills.md` | Skills | SKILL.md format, frontmatter fields, directory structure |
+| `hooks.md` | Hooks | Event names, hook types, schema, matcher syntax |
+| `hooks-guide.md` | Hooks | Hook patterns, examples, best practices |
+| `plugins-reference.md` | Plugin config | plugin.json schema, field inventory |
+| `plugin-marketplaces.md` | Marketplace | marketplace.json schema, plugin entries |
+| `plugins.md` | General | Plugin creation guidance, directory conventions |
+| `settings.md` | Config | Permission mode semantics, global settings |
+| `mcp.md` | MCP | MCP server configuration in plugins |
 
-## Optional (Deep Mode)
-
-These pages add context but are not required for basic validation:
-
-| Page | When to Fetch |
-|------|---------------|
-| `plugins.md` | General plugin creation guidance |
-| `hooks-guide.md` | Deep hook pattern validation |
-| `settings.md` | Permission mode semantics |
-| `mcp.md` | MCP server config validation |
+Total: 9 pages, ~420KB. All fetched on every run. Cached for 24h.
 
 ## Fetch Strategy
 
-### --quick Mode
+The `scripts/fetch-claude-docs.sh` script handles everything:
 
-No docs fetched. Structural checks only.
+- **Default**: Fetch all 9 pages, skip if cached within 24h
+- **`--force`**: Re-download regardless of cache age
+- **`--quick` mode**: Skill skips fetching entirely (structural checks only)
 
-### Default Mode
-
-Fetch only pages matching existing components (see Phase 2 in orchestrator).
-
-### --full Mode
-
-Fetch all pages from the Component-to-Page Mapping table plus optional pages.
+No conditional fetching. No partial downloads. Always all pages.
 
 ## Cache Location
 
-Downloaded docs go to `.claude/docs-check/docs-cache/` (gitignored).
-The `scripts/fetch-claude-docs.sh` script handles downloading with
-freshness checks. The orchestrator reads from cache, not from the network.
+`.claude/docs-check/docs-cache/` (gitignored). The orchestrator reads
+from cache and crashes if files are missing.
 
-## Size Expectations
+## Size
 
-Individual pages are typically 5-30KB each.
-Total for core 5 pages: ~50-100KB (well within subagent context limits).
-The full `llms-full.txt` is ~500KB+ — NEVER fetch this.
+Individual pages: 5-80KB each. Total: ~420KB.
+Each validation worker gets 1-2 pages (~8-20K tokens) — well within
+the 200K context limit. No indexing or compression needed for docs.
+
+**NEVER fetch `llms-full.txt`** (~500KB+ single file with all 57+ pages).
