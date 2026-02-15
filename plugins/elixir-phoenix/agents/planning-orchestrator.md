@@ -227,12 +227,14 @@ Flag cross-domain tensions explicitly.
 
 **Present contested decisions to the user with `AskUserQuestion`.**
 For each decision where agents DISAGREE, present the options
-interactively — don't choose for the user:
+interactively with `multiSelect: true` — let the user combine
+approaches rather than forcing a single choice:
 
 ```
 AskUserQuestion:
-  question: "How should we handle {decision topic}?"
+  question: "Which approaches do you want for {decision topic}? Select all that apply."
   header: "{short label}"
+  multiSelect: true
   options:
     - label: "Option A: {name}"
       description: "{1-line summary with key pro from specialist + key risk}"
@@ -242,9 +244,12 @@ AskUserQuestion:
       description: "{1-line summary}"
 ```
 
-Use the council agents' evaluations to write concise, balanced
-descriptions. Include the user's choice in the plan's Technical
-Decisions table with the multi-perspective rationale.
+Use `multiSelect: true` so users can combine options (e.g., pick
+both "ETS for caching" AND "GenServer for coordination"). The user
+creates their own combination — don't pre-define combos.
+
+Include ALL selected options in the plan's Technical Decisions
+table with the multi-perspective rationale from council agents.
 
 For decisions where agents AGREE (all recommend the same option),
 skip AskUserQuestion — just note the consensus in the plan.

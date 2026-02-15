@@ -181,13 +181,28 @@ Track state in progress file at `.claude/plans/{slug}/progress.md`:
 
 2. Read `.claude/plans/{slug}/summaries/review-consolidated.md`
 3. Categorize by severity (BLOCKER, WARNING, SUGGESTION)
-4. If blockers found, present options via `AskUserQuestion`:
-   - "Fix all blockers" — Add fix tasks and continue cycle
-   - "Fix critical only" — Only address BLOCKER severity, skip warnings
-   - "Show me details" — Present each finding for manual triage
-   - "Accept and ship" — User accepts the risks, skip fixes
-   Do NOT auto-add fix tasks without asking. Increment cycle counter
-   after user chooses. Transition to WORKING if fixing.
+4. If blockers found, present findings via `AskUserQuestion`
+   with `multiSelect: true` — let user pick which to address:
+
+   ```
+   AskUserQuestion:
+     question: "Review found these issues. Which do you want to fix?"
+     header: "Findings"
+     multiSelect: true
+     options:
+       - label: "{finding 1 short name}"
+         description: "BLOCKER: {1-line description}"
+       - label: "{finding 2 short name}"
+         description: "WARNING: {1-line description}"
+       - label: "{finding 3 short name}"
+         description: "SUGGESTION: {1-line description}"
+       - label: "Accept all risks"
+         description: "Skip all fixes, ship as-is"
+   ```
+
+   Create fix tasks ONLY for selected findings. User can select
+   any combination — e.g., fix 2 blockers but accept 1 warning.
+   Increment cycle counter, transition to WORKING if any selected.
 5. If no blockers:
    - Transition to COMPLETED
 
