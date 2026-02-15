@@ -201,8 +201,9 @@ Track state in progress file at `.claude/plans/{slug}/progress.md`:
          description: "WARNING: {1-line description}"
    ```
 
-   Severity shortcuts select all findings of that level. User can
-   mix — e.g., select "All BLOCKERs" + one specific WARNING.
+   Max 4 options per AskUserQuestion call. Severity shortcuts take
+   2 slots, leaving 2 for individual findings. If >2 findings,
+   batch remaining into follow-up calls of 4 individual findings.
    Create fix tasks ONLY for selected findings.
    Increment cycle counter, transition to WORKING if any selected.
 5. If no blockers:

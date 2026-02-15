@@ -233,7 +233,7 @@ approaches rather than forcing a single choice:
 ```
 AskUserQuestion:
   question: "Which approaches do you want for {decision topic}? Select all that apply."
-  header: "{short label}"
+  header: "{label ≤12ch}"
   multiSelect: true
   options:
     - label: "Option A: {name}"
