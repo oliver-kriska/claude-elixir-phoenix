@@ -2,7 +2,7 @@
 # Stop hook: Warn about plans with uncompleted tasks
 # Guard against infinite loops per Claude Code docs
 INPUT=$(cat)
-if [ "$(echo "$INPUT" | jq -r '.stop_hook_active // false' 2>/dev/null)" = "true" ]; then
+if [ "$(echo "$INPUT" | jq -r '.stop_hook_active' 2>/dev/null)" = "true" ]; then
   exit 0
 fi
 PENDING=$(grep -rl '\[ \]' .claude/plans/*/plan.md 2>/dev/null | wc -l | tr -d ' ')

@@ -1,6 +1,7 @@
 ---
 name: intent-detection
 description: Detect user intent from their first message and suggest the appropriate /phx: workflow command. Loaded automatically on session start.
+user-invocable: false
 ---
 
 # Intent Detection — Workflow Routing

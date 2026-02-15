@@ -1,6 +1,7 @@
 ---
 name: tidewave-integration
 description: Tidewave MCP runtime tools for Phoenix development. Load when runtime debugging, testing code, or querying database in dev.
+user-invocable: false
 ---
 
 # Tidewave MCP Integration
