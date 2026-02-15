@@ -70,9 +70,14 @@ is_fresh() {
   if [ ! -f "$file" ]; then
     return 1
   fi
-  # Check if file is younger than MAX_AGE_HOURS
-  local file_age
-  file_age=$(( $(date +%s) - $(stat -c %Y "$file" 2>/dev/null || echo 0) ))
+  # Check if file is younger than MAX_AGE_HOURS (portable: Linux + macOS)
+  local file_age file_mtime
+  if stat -c %Y "$file" >/dev/null 2>&1; then
+    file_mtime=$(stat -c %Y "$file")     # Linux
+  else
+    file_mtime=$(stat -f %m "$file")     # macOS
+  fi
+  file_age=$(( $(date +%s) - file_mtime ))
   local max_age_secs=$(( MAX_AGE_HOURS * 3600 ))
   [ "$file_age" -lt "$max_age_secs" ]
 }
@@ -165,7 +170,11 @@ for f in "$CACHE_DIR"/*.md; do
   if grep -q "FETCH_FAILED" "$f" 2>/dev/null; then
     echo "  ❌ $name — download failed"
   else
-    age_secs=$(( $(date +%s) - $(stat -c %Y "$f" 2>/dev/null || echo 0) ))
+    if stat -c %Y "$f" >/dev/null 2>&1; then
+      age_secs=$(( $(date +%s) - $(stat -c %Y "$f") ))
+    else
+      age_secs=$(( $(date +%s) - $(stat -f %m "$f") ))
+    fi
     if [ "$age_secs" -lt 3600 ]; then
       echo "  ✅ $name — $(( age_secs / 60 ))m ago"
     elif [ "$age_secs" -lt 86400 ]; then

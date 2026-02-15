@@ -33,48 +33,39 @@ HAS_CONFIG=$(test -f ${PLUGIN_DIR}/.claude-plugin/plugin.json && echo "yes" || e
 ```
 
 If `--focus` flag: validate ONLY that component type.
-If `--quick` flag: skip to Phase 5 (structural checks only, no docs fetch).
+If `--quick` flag: skip to Phase 4 (structural checks only, no docs needed).
 
-## Phase 2: Fetch Documentation (Targeted)
+## Phase 2: Read Cached Docs & Validation Rules
 
-Download ONLY relevant doc pages via `curl`. **NEVER use WebFetch** — raw
-download avoids wasting tokens on LLM parsing.
+**Prerequisite**: The `/docs-check` skill runs `scripts/fetch-claude-docs.sh` BEFORE
+invoking this orchestrator. Docs MUST already be cached.
 
-| Component | URL | Cache File |
-|-----------|-----|------------|
-| Agents | `https://code.claude.com/docs/en/sub-agents.md` | `sub-agents.md` |
-| Skills | `https://code.claude.com/docs/en/skills.md` | `skills.md` |
-| Hooks | `https://code.claude.com/docs/en/hooks.md` | `hooks.md` |
-| Config | `https://code.claude.com/docs/en/plugins-reference.md` | `plugins-reference.md` |
-| Marketplace | `https://code.claude.com/docs/en/plugin-marketplaces.md` | `plugin-marketplaces.md` |
+Read from `.claude/docs-check/docs-cache/`:
 
-```bash
-# Fetch only what's needed. Retry up to 3x with 2s backoff on failure.
-fetch_doc() {
-  local url="$1" dest=".claude/docs-check/docs-cache/$2"
-  for i in 1 2 3; do
-    curl -sfL "$url" -o "$dest" && return 0
-    sleep 2
-  done
-  echo "FETCH_FAILED: $url" > "$dest"
-}
+| Cache File | Maps To |
+|------------|---------|
+| `sub-agents.md` | Agent validation |
+| `skills.md` | Skill validation |
+| `hooks.md` | Hook validation |
+| `plugins-reference.md` | Plugin config validation |
+| `plugin-marketplaces.md` | Marketplace config validation |
 
-[ $AGENT_COUNT -gt 0 ] && fetch_doc "https://code.claude.com/docs/en/sub-agents.md" "sub-agents.md"
-[ $SKILL_COUNT -gt 0 ] && fetch_doc "https://code.claude.com/docs/en/skills.md" "skills.md"
-[ "$HAS_HOOKS" = "yes" ] && fetch_doc "https://code.claude.com/docs/en/hooks.md" "hooks.md"
-[ "$HAS_CONFIG" = "yes" ] && fetch_doc "https://code.claude.com/docs/en/plugins-reference.md" "plugins-reference.md"
-fetch_doc "https://code.claude.com/docs/en/plugin-marketplaces.md" "plugin-marketplaces.md"
-```
+**If any required cache file is missing: STOP and tell the user to run
+`bash scripts/fetch-claude-docs.sh` first. Do NOT silently skip or attempt to fetch.**
 
-After fetching, **read** each cached file to have the content available for subagent prompts.
+Also read `.claude/skills/docs-check/references/validation-rules.md` and extract the
+section relevant to each component type. Each worker gets ONLY its section.
 
 ## Phase 3: Spawn Validation Workers (Parallel)
 
-Spawn one `general-purpose` subagent per component type. Each worker receives:
+Spawn one subagent per component type. **Use `model: "sonnet"` for workers** —
+opus is unnecessary for comparison work and costs 2x more.
+
+Each worker receives:
 
 1. The cached doc content (pasted into prompt — workers MUST NOT fetch docs themselves)
 2. The plugin files to validate (read contents, paste into prompt)
-3. Validation rules for that component type (from `.claude/skills/docs-check/references/validation-rules.md`)
+3. The relevant section from validation-rules.md (extracted in Phase 2b)
 
 **Subagent prompt template:**
 
@@ -108,7 +99,12 @@ You are a Claude Code plugin validator for {COMPONENT_TYPE}.
 Return ONLY a summary — max 500 words.
 ```
 
-**Spawn ALL workers in parallel with `run_in_background: true`.**
+**Spawn ALL workers in parallel:**
+
+```text
+Task(subagent_type: "general-purpose", model: "sonnet", run_in_background: true, prompt: "...")
+```
+
 **Wait for ALL workers to complete before proceeding.**
 
 ## Phase 4: Context Supervision (Compression)
@@ -199,9 +195,9 @@ Write to `.claude/docs-check/docs-check-{YYYY-MM-DD}.md`:
 
 ## Iron Laws
 
-1. **NEVER fetch llms-full.txt** — always targeted pages only
-2. **curl for docs, not WebFetch** — raw download, no token waste
-3. **Every worker gets docs IN PROMPT** — workers must not fetch docs at runtime
+1. **NEVER fetch docs** — read from cache only, crash if missing
+2. **Every worker gets docs IN PROMPT** — workers must not fetch or read docs themselves
+3. **Workers use sonnet model** — opus is wasteful for comparison tasks
 4. **Blockers > Warnings > Suggestions** — strict triage order
-5. **Structural checks always run** — even if docs fetch fails
+5. **Structural checks always run** — even without cached docs
 6. **Wait for ALL workers** — never synthesize partial results

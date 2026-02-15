@@ -26,68 +26,69 @@ Claude Code documentation to catch breaking changes and discover new features.
 ## Architecture (OTP Supervision Pattern)
 
 ```text
-┌──────────────────────────────────────────────────────────────┐
-│  docs-validation-orchestrator (opus)                         │
-│                                                              │
-│  SCAN → FETCH DOCS → SPAWN WORKERS → COMPRESS → REPORT      │
-│   │         │              │             │          │        │
-│   ↓         ↓              ↓             ↓          ↓        │
-│ inventory  curl only    4 parallel    context    unified     │
-│ plugin     (no tokens)  subagents     supervisor report      │
-│ components              (general)     (haiku)                │
-└──────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────────┐
+│  /docs-check (skill entry point)                                │
+│   │                                                             │
+│   ├─ Step 1: bash scripts/fetch-claude-docs.sh (zero tokens)    │
+│   │                                                             │
+│   └─ Step 2: delegate to orchestrator (reads from cache only)   │
+│       │                                                         │
+│       │  docs-validation-orchestrator (opus)                    │
+│       │                                                         │
+│       │  SCAN → READ CACHE → SPAWN WORKERS → COMPRESS → REPORT │
+│       │   │         │              │             │          │   │
+│       │   ↓         ↓              ↓             ↓          ↓   │
+│       │ inventory  pre-fetched  4 parallel    context    report │
+│       │ plugin     docs-cache   subagents     supervisor       │
+│       │ components              (sonnet)      (haiku)          │
+│       └─────────────────────────────────────────────────────────┘
+└─────────────────────────────────────────────────────────────────┘
 ```
-
-## Workflow
-
-### 1. Inventory
-
-Scan `plugins/elixir-phoenix/` to determine what exists:
-agents, skills, hooks, plugin config, marketplace config.
-
-### 2. Fetch Docs (Targeted)
-
-Download ONLY the doc pages relevant to existing components.
-Uses `curl` — raw download, zero token cost. See `references/doc-pages.md`.
-
-### 3. Spawn Validation Workers
-
-One `general-purpose` subagent per component type, in parallel.
-Each receives: cached doc content + plugin files + validation rules.
-Workers write to `.claude/docs-check/reports/{type}-report.md`.
-
-### 4. Compress (Context Supervisor)
-
-If 3+ workers, spawn `context-supervisor` (haiku) to compress.
-Priority: KEEP ALL breaking changes, COMPRESS suggestions, AGGRESSIVE on passed.
-
-### 5. Structural Checks (Always Run)
-
-Fast local checks — no docs or tokens needed:
-agent frontmatter, skill structure, hook events, config schema.
-
-### 6. Report & Action
-
-Write `.claude/docs-check/docs-check-{date}.md`.
-If issues found: offer to create branch and PR with fixes.
 
 ## Execution
 
-Delegate to the `docs-validation-orchestrator` agent:
+### Step 1: Fetch Docs (Before Orchestrator)
+
+Run the fetch script FIRST, before delegating. This ensures all docs are cached
+and no downstream process needs to worry about fetching.
+
+```bash
+# Default mode — core pages only
+bash scripts/fetch-claude-docs.sh
+
+# --full mode — also fetches optional pages
+bash scripts/fetch-claude-docs.sh --all
+
+# --quick mode — skip this step entirely (structural checks only)
+```
+
+### Step 2: Delegate to Orchestrator
+
+After docs are cached, delegate to the orchestrator which reads from cache only:
 
 ```text
 Task(subagent_type: "docs-validation-orchestrator")
 ```
 
-Pass the user's flags (--quick, --focus, etc.) in the prompt.
+Pass the user's flags (--quick, --focus, --full) in the prompt.
+
+## What the Orchestrator Does
+
+1. **Inventory** — scan `plugins/elixir-phoenix/` for existing components
+2. **Read cached docs** — from `.claude/docs-check/docs-cache/` (never fetches)
+3. **Spawn workers** — one sonnet subagent per component type, in parallel
+4. **Compress** — context-supervisor (haiku) if 3+ workers
+5. **Structural checks** — fast local checks, always run
+6. **Report & Action** — write report, offer PR if issues found
 
 ## Iron Laws
 
 1. **NEVER fetch llms-full.txt** — targeted pages only
-2. **curl for docs, not WebFetch** — no token waste on downloading
+2. **Use `scripts/fetch-claude-docs.sh`** — single source of truth for doc fetching
 3. **Workers get docs IN PROMPT** — no runtime fetching
-4. **Structural checks always run** — even if docs fetch fails
-5. **Breaking changes are BLOCKERS** — surface prominently
+4. **Workers use sonnet** — opus is wasteful for comparison tasks
+5. **Structural checks always run** — even if docs fetch fails
+6. **Breaking changes are BLOCKERS** — surface prominently
 
 ## References
 

@@ -20,5 +20,5 @@ node_modules/
 !.claude/commands/
 !.claude/skills/
 .claude/skills/analyze-sessions/references/session-index.json
-.claude/docs-check/
+.claude/docs-check/  # Runtime artifacts (docs-cache, reports, summaries)
 scratchpad/
