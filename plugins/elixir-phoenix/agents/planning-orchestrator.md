@@ -225,9 +225,29 @@ Flag cross-domain tensions explicitly.
 """)
 ```
 
-Include decision summary in the plan's Technical Decisions table
-with multi-perspective rationale. Mark unresolved tensions with
-⚠️ for user decision.
+**Present contested decisions to the user with `AskUserQuestion`.**
+For each decision where agents DISAGREE, present the options
+interactively — don't choose for the user:
+
+```
+AskUserQuestion:
+  question: "How should we handle {decision topic}?"
+  header: "{short label}"
+  options:
+    - label: "Option A: {name}"
+      description: "{1-line summary with key pro from specialist + key risk}"
+    - label: "Option B: {name}"
+      description: "{1-line summary with key pro from specialist + key risk}"
+    - label: "Option C: {name}" (if exists)
+      description: "{1-line summary}"
+```
+
+Use the council agents' evaluations to write concise, balanced
+descriptions. Include the user's choice in the plan's Technical
+Decisions table with the multi-perspective rationale.
+
+For decisions where agents AGREE (all recommend the same option),
+skip AskUserQuestion — just note the consensus in the plan.
 
 **Cost control**: Only trigger for decisions where research agents
 explicitly presented 2+ options. Most plans have 0-1 such

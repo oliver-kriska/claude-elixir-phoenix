@@ -43,6 +43,20 @@ git diff --name-only HEAD~5   # Recent changes
 git diff --name-only main     # Or changes from main
 ```
 
+### Step 1b: Check Prior Review Output
+
+Before spawning agents, check for existing review files:
+
+```bash
+ls .claude/plans/${SLUG}/reviews/ 2>/dev/null
+ls .claude/plans/${SLUG}/summaries/review-consolidated.md 2>/dev/null
+```
+
+If prior reviews exist, read the consolidated summary and include
+it in each agent's prompt as "PRIOR FINDINGS" context with the
+instruction: "Focus on NEW issues. Mark still-present issues as
+PERSISTENT. Do NOT re-report issues that have been fixed."
+
 ### Step 2: Spawn Review Agents (MANDATORY)
 
 You MUST spawn agents using the Task tool. Do NOT analyze code

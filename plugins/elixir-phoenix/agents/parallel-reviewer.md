@@ -70,6 +70,20 @@ The caller provides `output_dir` and optionally
 When `summaries_dir` is provided, spawn context-supervisor
 after all 4 agents complete to deduplicate findings.
 
+## Cross-Run Deduplication
+
+Before spawning agents, check for prior review output:
+
+1. Read existing files in `{output_dir}` (if any from prior runs)
+2. Include a dedup instruction in each agent prompt:
+   "Prior review findings (from last run) are below. Focus on
+   NEW issues not covered here. If a prior finding is still
+   present, mark it PERSISTENT. Do NOT re-report fixed issues."
+3. Append the prior findings summary to each agent's prompt
+
+This prevents the "repeated criticals" problem where consecutive
+reviews re-discover the same issues that were already addressed.
+
 ## Orchestration Process
 
 ### Phase 1: Identify Review Scope

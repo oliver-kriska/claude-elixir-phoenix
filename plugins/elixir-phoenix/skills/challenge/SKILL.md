@@ -112,6 +112,21 @@ Senior engineer review checklist:
 - [ ] No path traversal in file handling
 - [ ] Authorization checks present
 
+## Prior Findings Deduplication
+
+Before running a challenge, check for prior review output:
+
+1. **Search** for existing reviews in `.claude/plans/*/reviews/` and `.claude/reviews/`
+2. If prior findings exist, **read them first**
+3. In your challenge output, classify each finding as:
+   - **NEW** — Not found in any prior review
+   - **PERSISTENT** — Found before AND still present (not fixed)
+   - **REGRESSION** — Was fixed but reintroduced
+4. **Do NOT re-flag fixed issues** — If prior review flagged something and the code now addresses it, skip it
+5. **Focus on NEW issues** — Spend most effort on findings not in prior reviews
+
+When presenting results, show NEW findings first, then PERSISTENT (with note "flagged previously"), then REGRESSION. This prevents the "3 challenges to clear" problem where the same issues get re-discovered.
+
 ## Usage
 
 Run `/phx:challenge [mode]` to initiate a rigorous review. The reviewer will not approve until all concerns are addressed with evidence.

@@ -181,10 +181,13 @@ Track state in progress file at `.claude/plans/{slug}/progress.md`:
 
 2. Read `.claude/plans/{slug}/summaries/review-consolidated.md`
 3. Categorize by severity (BLOCKER, WARNING, SUGGESTION)
-4. If blockers found:
-   - Add fix tasks to plan
-   - Increment cycle counter
-   - Transition to WORKING
+4. If blockers found, present options via `AskUserQuestion`:
+   - "Fix all blockers" — Add fix tasks and continue cycle
+   - "Fix critical only" — Only address BLOCKER severity, skip warnings
+   - "Show me details" — Present each finding for manual triage
+   - "Accept and ship" — User accepts the risks, skip fixes
+   Do NOT auto-add fix tasks without asking. Increment cycle counter
+   after user chooses. Transition to WORKING if fixing.
 5. If no blockers:
    - Transition to COMPLETED
 
