@@ -70,7 +70,7 @@ Orchestrator (thin coordinator)
           └─► Orchestrator reads only the summary
 ```
 
-Used by: planning-orchestrator, parallel-reviewer, audit skill.
+Used by: planning-orchestrator, parallel-reviewer, audit skill, docs-validation-orchestrator.
 
 ## Structure
 
@@ -78,6 +78,20 @@ Used by: planning-orchestrator, parallel-reviewer, audit skill.
 claude-elixir-phoenix/
 ├── .claude-plugin/
 │   └── marketplace.json
+├── .claude/                         # Contributor tooling (NOT distributed)
+│   ├── agents/
+│   │   ├── phoenix-project-analyzer.md  # Analyze external codebases
+│   │   └── docs-validation-orchestrator.md  # Plugin docs compatibility
+│   ├── commands/
+│   │   ├── psql-query.md
+│   │   └── techdebt.md
+│   └── skills/
+│       ├── docs-check/              # /docs-check — validate against Claude Code docs
+│       ├── find-sessions/
+│       ├── analyze-session/
+│       └── session-insights/
+├── scripts/
+│   └── fetch-claude-docs.sh         # Download Claude Code docs for validation
 ├── plugins/
 │   └── elixir-phoenix/
 │       ├── .claude-plugin/
@@ -515,6 +529,7 @@ When working on code, automatically consult relevant reference documentation bef
 | Find sessions to analyze | `/find-sessions` |
 | Analyze a session | `/analyze-session` |
 | Full session analysis pipeline | `/session-insights` |
+| Validate plugin against docs | `/docs-check` |
 
 **Workflow Commands**: `/phx:plan` -> `/phx:plan --existing` (optional) -> `/phx:work` -> `/phx:review` -> `/phx:triage` (optional) -> `/phx:compound`
 
@@ -523,6 +538,8 @@ When working on code, automatically consult relevant reference documentation bef
 **Analysis**: `/ecto:n1-check`, `/lv:assigns`, `/phx:boundaries`, `/phx:trace`, `/phx:techdebt`
 
 **Session Insights (dev-only, requires ccrider MCP)**: `/find-sessions`, `/analyze-session`, `/session-insights`, `/analyze-sessions`
+
+**Plugin Maintenance (dev-only)**: `/docs-check` — validate plugin against latest Claude Code documentation
 
 ## Workflow Patterns (from Claude Code team)
 
