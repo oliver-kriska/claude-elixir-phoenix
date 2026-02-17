@@ -4,7 +4,7 @@ description: Researches Elixir libraries on hex.pm. Use when evaluating librarie
 tools: Bash, Read, Grep, Glob, WebFetch
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
-model: haiku
+model: sonnet
 skills:
   - elixir-idioms
 ---

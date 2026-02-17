@@ -4,7 +4,7 @@ description: Deep bug investigation using 4 parallel subagents (reproduction, ro
 tools: Read, Grep, Glob, Bash, Task
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
-model: opus
+model: sonnet
 maxTurns: 30
 skills:
   - call-tracing

@@ -4,7 +4,7 @@ description: "Checks code for Iron Law violations using pattern analysis. Use pr
 tools: Read, Grep, Glob
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
-model: haiku
+model: sonnet
 skills:
   - liveview-patterns
   - ecto-patterns

@@ -4,7 +4,7 @@ description: Orchestrates parallel call tree tracing using subagents for each en
 tools: Read, Grep, Glob, Bash, Task
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
-model: opus
+model: sonnet
 maxTurns: 25
 skills:
   - call-tracing

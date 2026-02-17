@@ -140,9 +140,10 @@ skills:
 
 **Rules:**
 
-- Use `sonnet` model by default
-- Use `opus` for orchestrators, subagent coordinators, and security-critical agents
-- Use `haiku` for context-supervisor (compression tasks, cost-efficient)
+- Use `sonnet` model by default (Sonnet 4.6 achieves near-opus quality at lower cost)
+- Use `opus` for primary workflow orchestrators and security-critical agents only
+- Use `sonnet` for secondary orchestrators (investigation, tracing) and judgment-heavy tasks
+- Use `haiku` for mechanical tasks: compression, verification, dependency analysis
 - Review agents are **read-only** (`disallowedTools: Write, Edit, NotebookEdit`)
 - Use `permissionMode: bypassPermissions` for all agents — `default` causes "Bash command permission check failed"
   when agents run in background (safety system scans skill content for shell-like patterns)

@@ -158,9 +158,9 @@ The plugin uses 20 agents organized into 3 tiers:
              └────────────┘      └──────────────┘
 ```
 
-**Orchestrators** (opus) -- Coordinate multi-agent workflows, make architectural decisions.
-**Specialists** (sonnet) -- Domain experts: LiveView, Ecto, security, testing, OTP, deployment.
-**Lightweight** (haiku) -- Cost-efficient tasks: verification, compression, pattern matching.
+**Orchestrators** (opus) -- Primary workflow coordinators, security-critical analysis.
+**Specialists** (sonnet) -- Domain experts, secondary orchestrators, judgment-heavy tasks. Sonnet 4.6 achieves near-opus quality with 1M token context.
+**Lightweight** (haiku) -- Mechanical tasks: verification, compression, dependency analysis.
 
 ### The Context Supervisor Pattern
 
@@ -443,14 +443,14 @@ The plugin enforces critical rules and **stops with an explanation** if code wou
 | **workflow-orchestrator**    | opus   | project | Full cycle coordination (plan, work, review) |
 | **planning-orchestrator**    | opus   | project | Parallel research agent coordination         |
 | **parallel-reviewer**        | opus   | --      | 4-agent parallel code review                 |
-| **deep-bug-investigator**    | opus   | --      | 4-track parallel bug investigation           |
-| **call-tracer**              | opus   | --      | Parallel call tree tracing                   |
+| **deep-bug-investigator**    | sonnet | --      | 4-track parallel bug investigation           |
+| **call-tracer**              | sonnet | --      | Parallel call tree tracing                   |
 | **security-analyzer**        | opus   | --      | OWASP vulnerability scanning                 |
 | **context-supervisor**       | haiku  | --      | Multi-agent output compression               |
 | **verification-runner**      | haiku  | --      | mix compile, format, credo, test             |
-| **iron-law-judge**           | haiku  | --      | Pattern-based Iron Law detection             |
+| **iron-law-judge**           | sonnet | --      | Pattern-based Iron Law detection             |
 | **xref-analyzer**            | haiku  | --      | Module dependency analysis                   |
-| **hex-library-researcher**   | haiku  | --      | Hex.pm library evaluation                    |
+| **hex-library-researcher**   | sonnet | --      | Hex.pm library evaluation                    |
 | **liveview-architect**       | sonnet | --      | Component structure, streams, async patterns |
 | **ecto-schema-designer**     | sonnet | --      | Migrations, data models, query patterns      |
 | **phoenix-patterns-analyst** | sonnet | project | Codebase pattern discovery                   |
