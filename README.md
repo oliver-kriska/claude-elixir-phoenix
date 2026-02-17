@@ -159,7 +159,7 @@ The plugin uses 20 agents organized into 3 tiers:
 ```
 
 **Orchestrators** (opus) -- Primary workflow coordinators, security-critical analysis.
-**Specialists** (sonnet) -- Domain experts, secondary orchestrators, judgment-heavy tasks. Sonnet 4.6 achieves near-opus quality with 1M token context.
+**Specialists** (sonnet) -- Domain experts, secondary orchestrators, judgment-heavy tasks. Sonnet 4.6 achieves near-opus quality at sonnet pricing.
 **Lightweight** (haiku) -- Mechanical tasks: verification, compression, dependency analysis.
 
 ### The Context Supervisor Pattern
