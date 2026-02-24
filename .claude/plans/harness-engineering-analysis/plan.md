@@ -279,29 +279,38 @@ However, there are **7 high-impact gaps** and **5 medium-impact improvements** t
 
 ---
 
-#### GAP 7: Browser/E2E Verification for LiveView
+#### GAP 7: Runtime Smoke Tests + E2E Verification for LiveView
 **Severity**: HIGH
 **Source**: Anthropic, Böckeler
 
 **What the articles say**: Anthropic found that browser automation (Puppeteer MCP) "dramatically improved performance" for verification. Without it, agents marked features as complete without proper end-to-end testing. Böckeler's main critique of OpenAI's harness approach was the absence of behavioral verification.
 
-**What the plugin does**: The verification tiers include per-task compile/format, per-phase tests, and an optional "per-feature smoke test via Tidewave project_eval." But there's no browser-based E2E verification. LiveView tests use `Phoenix.LiveViewTest` (headless DOM assertions), not actual browser rendering.
+**What the plugin does**: The verification tiers include per-task compile/format, per-phase tests, and an optional "per-feature smoke test via Tidewave `project_eval`." LiveView tests use `Phoenix.LiveViewTest` (headless DOM assertions). There's no runtime or browser-based E2E verification in the pipeline.
 
-**The gap**: For LiveView features, the gap between "tests pass" and "feature works as user sees it" can be significant. JS hooks, CSS interactions, and browser-specific behaviors aren't caught by LiveView test helpers. The plugin's Tidewave integration provides `browser_eval` but it's not used in the verification pipeline.
+**Important clarification**: Tidewave's `browser_eval` is a **Tidewave Web** feature (the in-browser agent) — NOT an MCP tool callable from Claude Code CLI. Tidewave Web runs inside the browser as its own separate agent with page context. The MCP tools available to Claude Code are: `get_docs`, `project_eval`, `execute_sql_query`, `get_source_location`, `get_logs`, `search_package_docs`. None provide browser-level DOM verification.
 
-**Proposed improvement**:
-1. Add browser verification step to the verification cascade for LiveView features:
-   - After tests pass, if Tidewave is available, use `mcp__tidewave__browser_eval` to:
-     - Navigate to the page
-     - Verify key elements render
-     - Check for JS errors in console
-     - Verify form submissions work end-to-end
-2. Add Wallaby/browser test generation as an optional verification tier:
-   - When task annotation is `[liveview]`, suggest: "Generate a Wallaby test for this feature?"
-   - Template Wallaby test based on the plan's verification checklist
-3. Document the Tidewave browser verification as a first-class verification tier in `/phx:verify`
+**The gap**: For LiveView features, the gap between "tests pass" and "feature works as user sees it" can be significant. JS hooks, CSS interactions, and browser-specific behaviors aren't caught by LiveView test helpers. Currently the verification cascade has no runtime behavioral verification step.
 
-**Impact**: Closes the biggest verification gap identified by both Anthropic and Böckeler. LiveView is the plugin's primary domain — having the strongest verification here matters most.
+**Proposed improvement** (two tiers):
+
+**Tier A — Runtime smoke tests via `project_eval` (available now)**:
+1. After tests pass, use Tidewave `project_eval` to verify runtime state:
+   - Check that routes are registered: `Phoenix.Router.routes(MyAppWeb.Router) |> Enum.filter(...)`
+   - Check that LiveView mounts without error: `{:ok, _view, _html} = Phoenix.LiveViewTest.live(conn, "/path")`
+   - Verify Ecto data integrity: `MyApp.Repo.aggregate(MyApp.Schema, :count)`
+   - Check for runtime warnings in logs: `get_logs level: :warning`
+2. Add these as a "runtime verification" step in `/phx:verify` after tests pass
+3. This catches the class of bugs where tests pass but the app doesn't actually work (missing routes, broken mounts, data integrity issues)
+
+**Tier B — Wallaby/Playwright E2E test generation (project setup required)**:
+1. When the project has Wallaby or Playwright configured, add E2E test generation as an optional verification tier
+2. When task annotation is `[liveview]` and E2E framework is detected, suggest: "Generate an E2E test for this feature?"
+3. Template E2E test based on the plan's verification checklist
+4. Run with appropriate MIX_ENV (detect `int_test` or similar custom env)
+
+**Why NOT browser-based verification from Claude Code**: Claude Code runs as a CLI agent without browser access. Tidewave Web operates as a separate in-browser agent. These are fundamentally different execution contexts. The plugin should maximize what's available via MCP (`project_eval`, `get_logs`) and defer actual browser testing to proper E2E frameworks.
+
+**Impact**: Tier A is immediately actionable and catches ~60% of "tests pass but app is broken" scenarios. Tier B requires project setup but provides full behavioral verification. Together they address the verification gap without relying on capabilities the agent doesn't have.
 
 ---
 
@@ -410,7 +419,7 @@ This gives agents explicit verification criteria per task — addressing the "pr
 | # | Gap | Effort | Impact | Why Next |
 |---|-----|--------|--------|----------|
 | 2 | JSON feature lists | Medium | High | New file format + hook validation |
-| 7 | Browser/E2E verification | Medium | High | Tidewave integration + new verification tier |
+| 7 | Runtime smoke tests + E2E generation | Medium | High | project_eval integration + Wallaby/Playwright templates |
 | 5 | Unattended task pipeline | High | High | New execution mode + safety rails |
 
 ### Tier 3: Strategic (Longer-Term)
@@ -436,6 +445,7 @@ Not every pattern from the articles applies to our context. Key differences:
 | **Stripe's pre-warmed devboxes** | Not applicable to plugin architecture | Users run in their own environment |
 | **Steinberger's "ship code you don't read"** | Our users ARE the developers | We review with agents, users make final call |
 | **OpenAI's zero-human-written-code** | Different use case (internal tool) | Our users write code alongside agents |
+| **Anthropic's Puppeteer browser automation** | Claude Code is CLI-only, no browser access | Use `project_eval` for runtime tests + Wallaby/Playwright for E2E |
 
 ---
 
