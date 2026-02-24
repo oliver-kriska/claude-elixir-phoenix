@@ -2,7 +2,8 @@
 
 **Status**: IMPLEMENTATION PLAN
 **Created**: 2026-02-24
-**Based on**: Deep analysis of 7 high-impact gaps (7 parallel agents, ~430k tokens of research)
+**Updated**: 2026-02-24 — Incorporated Shape Up methodology insights from PR #7 (rjs/shaping-skills analysis)
+**Based on**: Deep analysis of 7 high-impact gaps (7 parallel agents, ~430k tokens of research) + Shape Up methodology cross-pollination
 
 ---
 
@@ -14,7 +15,7 @@ This plan synthesizes detailed research from 7 specialist agents, each of which 
 
 ## Wave 1: Quick Wins (Low Risk, High Impact)
 
-**Timeline**: 1-2 days | **Files changed**: ~8 | **Lines added**: ~200
+**Timeline**: 1-2 days | **Files changed**: ~12 | **Lines added**: ~290
 
 These require only text additions to existing skills — no new files, no architecture changes, no hooks.
 
@@ -28,8 +29,11 @@ Add compound/learn suggestions at 3 failure recovery points.
 | `skills/work/references/error-recovery.md` | After "Recovery After BLOCKER" step 4, add step 5: "Ask user: Should I capture this fix as a lesson?" | +8 |
 | `skills/review/SKILL.md` | In BLOCKED verdict section (~line 155), add: "After you fix these, run `/phx:compound` to document what you learned" | +5 |
 | `agents/workflow-orchestrator.md` | In BLOCKED state handler, add: "Still compound resolved blockers + dead-ends even on partial completion" | +10 |
+| `agents/planning-orchestrator.md` | In plan.md template, add Source section: capture user's original feature description verbatim | +8 |
 
-**Why first**: Zero risk. Purely additive text. Immediately captures ~40% more learning moments.
+**Why first**: Zero risk. Purely additive text. Immediately captures ~40% more learning moments. Source capture (from Shape Up) preserves original intent across context compaction.
+
+> **Origin**: Source capture idea from [rjs/shaping-skills](https://github.com/rjs/shaping-skills) analysis (PR #7)
 
 ### 1B. Annotation Cycle — Plan Approval UX
 
@@ -52,11 +56,49 @@ Optimize existing hook timeouts and scoping.
 
 **Why first**: Pure config change. Faster feedback loops immediately.
 
+### 1D. Demo Statements for Plan Phases (from Shape Up)
+
+Add requirement that each plan phase declares what's observable after completion.
+
+| File | Change | Lines |
+|------|--------|-------|
+| `skills/plan/SKILL.md` | In plan template section, add: each phase MUST include `**Demo**: After this phase, [observable outcome]` | +10 |
+| `skills/plan/references/planning-workflow.md` | Add "Demo Statements" subsection with examples: good ("user can log in via OAuth") vs bad ("auth module refactored") | +5 |
+
+**Rule**: Flag phases that are purely backend with no observable output. Suggest reordering to ensure each phase delivers visible progress. A phase without a demo statement is a horizontal layer — Shape Up's core slicing discipline.
+
+> **Origin**: Vertical slicing discipline from [rjs/shaping-skills](https://github.com/rjs/shaping-skills) (PR #7)
+
+### 1E. Naming Test for Review Agents (from Shape Up)
+
+Add "one verb per function" design smell check to review agents.
+
+| File | Change | Lines |
+|------|--------|-------|
+| `agents/elixir-review-agent.md` | Add to checklist: "For each new function: can it be named with ONE idiomatic verb? Need 'or' to connect two verbs → suggest splitting. Name matches downstream effect, not this step → suggest renaming" | +15 |
+
+**Why first**: Pure text addition to existing agent. Zero risk. Catches naming smells that indicate SRP violations — particularly valuable in Elixir where function naming conventions are strong.
+
+> **Origin**: Naming test from `/breadboard-reflection` in [rjs/shaping-skills](https://github.com/rjs/shaping-skills) (PR #7)
+
+### 1F. Plan Ripple-Check Hook (from Shape Up)
+
+Add lightweight consistency reminder when plan artifacts are edited.
+
+| File | Change | Lines |
+|------|--------|-------|
+| `hooks/hooks.json` | Add PostToolUse Edit matcher: if edited file is `plans/*/plan.md`, remind about progress.md + scratchpad.md consistency | +12 |
+| `hooks/scripts/plan-ripple-check.sh` | NEW (~20 lines) | Check if plan.md was edited. If so, output reminder: "Plan changed — verify progress.md and scratchpad.md are still consistent" | +20 |
+
+**Why first**: Lightweight precursor to Wave 3's entropy detection (3B) and JSON sidecar (3A). Catches plan/progress drift at the cheapest possible level. The full machine-reliable check comes in Wave 3.
+
+> **Origin**: Ripple-check hook pattern from [rjs/shaping-skills](https://github.com/rjs/shaping-skills) (PR #7)
+
 ---
 
 ## Wave 2: New Capabilities (Medium Risk, High Impact)
 
-**Timeline**: 3-5 days | **New files**: ~8 | **Modified files**: ~10 | **Lines added**: ~1,500
+**Timeline**: 3-5 days | **New files**: ~8 | **Modified files**: ~12 | **Lines added**: ~1,570
 
 ### 2A. Linter Errors as Remediation Instructions
 
@@ -88,15 +130,16 @@ Create error pattern → fix mapping and enhanced verification script.
 
 **Impact**: Reduces fix-retry cycles by ~30-50% for common errors. This is OpenAI's single most impactful harness innovation.
 
-### 2B. Annotation Cycle — Full Implementation
+### 2B. Annotation Cycle — Full Implementation (Enhanced with Shape Up)
 
-Create the `--annotate` mode for iterative plan review.
+Create the `--annotate` mode for iterative plan review, with requirements extraction and fit-check matrix.
 
 | File | Type | Lines | Purpose |
 |------|------|-------|---------|
 | `skills/plan/SKILL.md` | MODIFY | +50 | Add `--annotate` mode section with syntax and workflow |
-| `skills/plan/references/planning-workflow.md` | MODIFY | +80 | Add "Annotation Cycles" section with examples |
+| `skills/plan/references/planning-workflow.md` | MODIFY | +110 | Add "Annotation Cycles" + "Requirements Extraction" + "Fit-Check Matrix" sections |
 | `skills/plan/references/annotation-guide.md` | NEW | ~200 | Complete annotation reference: syntax, types, priorities, examples |
+| `agents/planning-orchestrator.md` | MODIFY | +30 | Add requirements extraction step between research and task generation |
 
 **Key design decisions**:
 - Annotation syntax: `<!-- ANNOTATION: {priority} | {type} | {note} -->` (HTML comments, safe in Markdown)
@@ -108,6 +151,51 @@ Create the `--annotate` mode for iterative plan review.
 - Scratchpad gets `ANNOTATION CYCLE {n}` entries
 
 **vs. `--existing`**: Annotation cycles are lightweight (no new agents spawned), fast (1-3 min per cycle). `--existing` is for deep research. Users combine both.
+
+#### 2B+. Requirements Extraction Step (from Shape Up)
+
+Before generating tasks, the planning-orchestrator enumerates explicit requirements (Rs) — what must be true regardless of implementation approach. This is Shape Up's core insight: requirements must be standalone, not dependent on any specific shape.
+
+**Flow change in planning-orchestrator**:
+```
+BEFORE: Research → Task generation → Plan
+AFTER:  Research → Requirements extraction → Task generation → Plan
+```
+
+**Requirements section in plan.md**:
+```markdown
+## Requirements
+
+| ID | Requirement | Priority | Source |
+|----|-------------|----------|--------|
+| R1 | User can reset password via email | Must | User request |
+| R2 | Token expires after 24 hours | Must | Security policy |
+| R3 | Rate limit: max 3 resets per hour | Should | Best practice |
+```
+
+**Why this matters**: Catches missing requirements BEFORE task generation. Today we jump from research straight to tasks — requirements can fall through the cracks, especially for security and edge cases.
+
+#### 2B++. Fit-Check Matrix for Contested Decisions (from Shape Up)
+
+When the decision council identifies 2+ competing approaches, produce an R × S fit-check grid alongside the council arguments. This makes trade-offs visible at a glance.
+
+**Trigger**: Decision council has 2+ options AND ≥3 requirements extracted.
+
+**Format in plan.md**:
+```markdown
+## Fit Check: [Decision Name]
+
+| Req | Description | Option A: GenServer | Option B: ETS | Option C: Agent |
+|-----|-------------|:---:|:---:|:---:|
+| R1 | Concurrent access | ✅ | ✅ | ❌ |
+| R2 | Survives restart | ❌ | ❌ | ✅ |
+| R3 | Sub-ms reads | ❌ | ✅ | ❌ |
+| **Score** | | **1/3** | **2/3** | **1/3** |
+```
+
+**Key rule**: ✅/❌ only — no "maybe" or "partial". Forces clear thinking. Notes in a separate column if needed.
+
+> **Origin**: Fit-check matrix and requirements extraction from [rjs/shaping-skills](https://github.com/rjs/shaping-skills) (PR #7)
 
 ### 2C. Runtime Smoke Tests (Tier A)
 
@@ -266,18 +354,21 @@ Add `--unattended` flag that auto-pilots through all decision points.
 
 ```
 Wave 1 (no dependencies)
-  ├── 1A: Mistake-driven suggestions ──→ immediate
+  ├── 1A: Mistake-driven suggestions + source capture ──→ immediate
   ├── 1B: Annotation UX ──→ immediate
-  └── 1C: Hook tuning ──→ immediate
+  ├── 1C: Hook tuning ──→ immediate
+  ├── 1D: Demo statements (Shape Up) ──→ immediate
+  ├── 1E: Naming test (Shape Up) ──→ immediate
+  └── 1F: Plan ripple-check (Shape Up) ──→ immediate
 
 Wave 2 (depends on Wave 1 for annotation foundations)
   ├── 2A: Remediation patterns ──→ immediate (parallel with 2B)
-  ├── 2B: Full annotation cycle ──→ depends on 1B
+  ├── 2B: Full annotation cycle + requirements extraction + fit-check ──→ depends on 1B, 1D
   └── 2C: Runtime smoke tests ──→ immediate (parallel)
 
 Wave 3 (independent of Wave 2, but benefits from it)
-  ├── 3A: JSON feature lists ──→ immediate
-  ├── 3B: Entropy detection ──→ immediate
+  ├── 3A: JSON feature lists ──→ immediate (1F ripple-check is lightweight precursor)
+  ├── 3B: Entropy detection ──→ immediate (1F ripple-check is lightweight precursor)
   └── 3C: E2E templates ──→ depends on 2C (smoke test patterns)
 
 Wave 4 (depends on Waves 1-3 being stable)
@@ -290,11 +381,13 @@ Wave 4 (depends on Waves 1-3 being stable)
 
 | Wave | New Files | Modified Files | Lines Added | Risk | Timeline |
 |------|-----------|----------------|-------------|------|----------|
-| 1 | 0 | 8 | ~200 | Low | 1-2 days |
-| 2 | 4 | 7 | ~1,500 | Medium | 3-5 days |
+| 1 | 1 | 12 | ~290 | Low | 1-2 days |
+| 2 | 4 | 9 | ~1,570 | Medium | 3-5 days |
 | 3 | 12 | 8 | ~2,500 | Medium-High | 5-8 days |
 | 4 | 0 | 5 | ~350 | High | 5-8 days |
-| **Total** | **16** | **28** | **~4,550** | | **~3-4 weeks** |
+| **Total** | **17** | **34** | **~4,710** | | **~3-4 weeks** |
+
+> Wave 1 and Wave 2 increases reflect Shape Up methodology additions from PR #7.
 
 ---
 
@@ -309,6 +402,9 @@ Wave 4 (depends on Waves 1-3 being stable)
 | `/phx:queue` (batch multiple unattended tasks) | DEFER | Wait to see if `--unattended` adoption justifies queuing |
 | Adaptive defaults (ML on historical runs) | DEFER | Need usage data first |
 | Slack/Discord integration for unattended | DEFER | Nice-to-have, not core |
+| Shape Up letter notation (R0, S-A, C1...) | SKIP | Decision council handles this more efficiently; notation adds learning curve |
+| Mermaid diagrams as primary plan output | SKIP | Plan checkboxes → executable tasks is more useful for development |
+| `/phx:map` affordance mapping skill | DEFER | Valuable for complex LiveView flows but separate scope; revisit post-Wave 4 |
 
 ---
 
@@ -323,6 +419,9 @@ After all 4 waves:
 5. **Verification depth**: Runtime smoke tests catch bugs that unit tests miss (Tier A)
 6. **Entropy awareness**: Quality drift detected within 1 session (vs never today)
 7. **Unattended capability**: Well-scoped tasks complete without human interaction
+8. **Requirements coverage**: Every plan with 3+ tasks has an explicit Requirements table (vs 0% today)
+9. **Vertical slicing**: Every plan phase has a demo statement — no purely horizontal phases (vs unchecked today)
+10. **Decision visibility**: Contested decisions produce fit-check matrix (vs prose-only council output today)
 
 ---
 
@@ -335,3 +434,20 @@ After all 4 waves:
 5. [Minions: Stripe's One-Shot Coding Agents](https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents) — Stripe
 6. [My AI Adoption Journey](https://mitchellh.com/writing/my-ai-adoption-journey) — Mitchell Hashimoto
 7. [Harness Engineering (Exploring Gen AI)](https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html) — Böckeler / Martin Fowler
+8. [rjs/shaping-skills](https://github.com/rjs/shaping-skills) — Shape Up methodology plugin (analyzed in PR #7)
+
+## Appendix: PR #7 Integration Summary
+
+The following items were incorporated from the [shaping-skills analysis](https://github.com/oliver-kriska/claude-elixir-phoenix/pull/7) (Shape Up methodology by rjs):
+
+| PR #7 Idea | Incorporated As | Wave |
+|-------------|----------------|------|
+| Source material capture | 1A: Source section in plan.md template | 1 |
+| Demo statements / vertical slicing | 1D: Demo statements for plan phases | 1 |
+| Naming test for design smells | 1E: Naming test for review agents | 1 |
+| Ripple-check hook | 1F: Plan ripple-check hook (precursor to 3A/3B) | 1 |
+| Requirements extraction (R1, R2...) | 2B+: Requirements extraction step | 2 |
+| Fit-check matrix (R × S grid) | 2B++: Fit-check matrix for contested decisions | 2 |
+| `/phx:map` affordance mapping | DEFERRED: Separate scope, post-Wave 4 | — |
+| Shape letter notation | NOT ADOPTED: Decision council handles this | — |
+| Mermaid diagrams as primary output | NOT ADOPTED: Checkboxes more actionable | — |
