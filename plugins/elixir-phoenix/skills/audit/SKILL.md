@@ -170,12 +170,37 @@ Combines with other flags: `/phx:audit --since HEAD~5 --focus=security`
 - [ ] {nice-to-have}
 ```
 
+## Garbage Collection Mode (`--gc`)
+
+Lightweight 2-3 minute scan for entropy (quality drift):
+
+```
+/phx:audit --gc                  # Quick entropy check
+/phx:audit --save-baseline       # Save current scores as baseline
+/phx:audit --reset-baseline      # Delete baseline, start fresh
+```
+
+**`--gc` checks** (fast, non-blocking):
+- Compile warnings count vs baseline
+- Credo violation count vs baseline
+- Test count and pass rate vs baseline
+- Circular dependency check via `mix xref graph --format cycles`
+
+**Output**: HEALTHY / DEGRADED / CRITICAL with delta from baseline.
+
+**Baseline file**: `.claude/metrics/baseline.json` — auto-created
+on first `--save-baseline`. Contains scores and metric counts.
+
+See `/phx:entropy` for the full entropy detection system.
+
 ## Relationship to Other Commands
 
 | Command | Scope | Frequency |
 |---------|-------|-----------|
 | `/phx:review` | Changed files (diff) | Every PR |
 | `/phx:audit` | Entire project | Quarterly |
+| `/phx:audit --gc` | Quick entropy check | After workflows |
+| `/phx:entropy` | Full entropy analysis | On-demand |
 | `/phx:boundaries` | Context structure | On-demand |
 | `/phx:verify` | Compile/test pass | Anytime |
 

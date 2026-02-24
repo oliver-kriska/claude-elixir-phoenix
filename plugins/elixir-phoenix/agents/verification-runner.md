@@ -66,7 +66,34 @@ mix test --trace 2>&1
 **Pass criteria**: All tests pass
 **Report**: Test count, failure details, coverage if available
 
-### Step 5: Dialyzer (Pre-PR)
+### Step 5: Smoke Test (Tidewave, Optional)
+
+If Tidewave MCP is available, run a behavioral smoke test:
+
+| Task Type | Smoke Test |
+|-----------|------------|
+| Ecto changes | `project_eval`: `Repo.transaction(fn -> create → fetch → verify → Repo.rollback(:test) end)` |
+| LiveView changes | `get_logs level: :error` after navigating to affected route |
+| Oban changes | `project_eval`: Enqueue test job → verify in oban_jobs table |
+| Security changes | `project_eval`: Test unauthenticated access returns error |
+
+**Rules**: Skip silently if Tidewave not available. Max 3 retries.
+Report as WARNING (not BLOCKER) on failure.
+
+### Step 5b: E2E Tests (If Available)
+
+If the project has Wallaby or Playwright configured:
+
+```bash
+# Detect E2E framework
+grep -q "wallaby" mix.exs && echo "wallaby"
+grep -q "playwright" mix.exs && echo "playwright"
+```
+
+If detected, suggest running E2E tests for the affected feature.
+Do NOT auto-run — E2E tests are slow and may require setup.
+
+### Step 6: Dialyzer (Pre-PR)
 
 ```bash
 mix dialyzer 2>&1

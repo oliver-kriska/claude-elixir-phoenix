@@ -45,12 +45,14 @@ structured plan with checkboxes.
 6. **Wait for ALL agents** — Call `TaskOutput(task_id, block: true)`
    for EVERY spawned agent. Do NOT proceed until all return
    "completed". NEVER write plan while any agent is still running
-7. **Breadboard** (LiveView) — System map for multi-page features
-8. **Completeness check** — MANDATORY when planning from review
-9. **Split decision** — One plan or multiple, concrete options
-10. **Generate plan** — Checkboxes, phased tasks, code patterns
-11. **Self-check** (deep only) — Three questions in Risks section
-12. **Present and ask** — STOP, show summary, let user decide
+7. **Extract requirements** — Enumerate Rs before task generation
+8. **Breadboard** (LiveView) — System map for multi-page features
+9. **Fit-check** (when 2+ options) — R × S grid for competing approaches
+10. **Completeness check** — MANDATORY when planning from review
+11. **Split decision** — One plan or multiple, concrete options
+12. **Generate plan** — Checkboxes, phased tasks, **demo statements**, code patterns
+13. **Self-check** (deep only) — Three questions in Risks section
+14. **Present and ask** — STOP, show summary, let user decide
 
 **When planning from review**: Every finding must appear in the
 plan — either as a task OR explicitly deferred by the user.
@@ -89,6 +91,37 @@ Enhances an existing plan instead of creating a new one:
        |
 /phx:review → /phx:compound
 ```
+
+### --annotate Mode (Lightweight Refinement)
+
+Iterative plan review using inline annotations:
+
+```
+/phx:plan .claude/plans/auth/plan.md --annotate
+```
+
+1. User adds `<!-- ANNOTATION: HIGH | SCOPE | Include rate limiting -->` to plan
+2. Agent processes annotations in priority order (CRITICAL → LOW)
+3. Types: TASK, SCOPE, DECISION, RISK, SPIKE, PATTERN, GENERAL
+4. Removes each annotation after addressing
+5. Task IDs `[Pn-Tm]` are NEVER deleted (Iron Law)
+6. Tracks cycles: `**Annotation Cycles**: n` in plan metadata
+
+**vs. `--existing`**: Annotations are lightweight (no agents spawned),
+fast (1-3 min per cycle). `--existing` is for deep research with
+agent spawning. Users combine both.
+
+See `references/annotation-guide.md` for full syntax reference.
+
+## Plan Artifacts
+
+Each plan includes:
+
+- `.claude/plans/{slug}/plan.md` — The plan itself (source of truth)
+- `.claude/plans/{slug}/plan.json` — Machine-readable sidecar (auto-generated,
+  used for validation and recovery in long-running sessions)
+- `.claude/plans/{slug}/scratchpad.md` — Decisions, dead-ends, handoffs
+- `.claude/plans/{slug}/research/` — Agent research output (deletable)
 
 ## Notes
 

@@ -44,6 +44,13 @@ Static analysis (format, compile, credo, dialyzer) is handled by the verificatio
 - [ ] `with` for happy-path chaining
 - [ ] Proper use of `@doc` and `@spec`
 
+### Naming Quality (Shape Up)
+
+- [ ] Each new function can be named with ONE idiomatic verb
+- [ ] No function name requires "or" to describe ("fetch_or_create" → split into `fetch/1` and `create/1`)
+- [ ] Name describes THIS function's action, not a downstream effect
+- [ ] Predicate functions use `?` suffix (`valid?/1` not `check_valid/1`)
+
 ### Phoenix Conventions
 
 - [ ] Business logic in contexts, not controllers/LiveViews

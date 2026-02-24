@@ -51,6 +51,7 @@ The cycle stops automatically when:
 3. Max blockers reached
 4. Fatal compilation error (unrecoverable)
 5. Test suite completely broken (>50% failing)
+6. **Unattended only**: Same verification failure 2+ cycles (loop detection)
 
 ## Human Checkpoints
 

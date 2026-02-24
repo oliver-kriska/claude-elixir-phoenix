@@ -275,6 +275,21 @@ obvious approach.
 - Each data store → schema/migration task
 - Group by vertical slice (working increment), not by layer
 
+### Phase 3b: Requirements Extraction
+
+**Before generating tasks**, enumerate explicit requirements — what
+must be true regardless of implementation approach:
+
+1. Extract from user description, research findings, and domain rules
+2. Classify as Must / Should / Could (MoSCoW)
+3. Write to the Requirements table in plan.md
+4. Verify each requirement has at least one corresponding task
+
+Requirements are STANDALONE — they don't depend on any specific
+implementation approach. Example: "R3: Rate limit password resets
+to 3 per hour" is valid regardless of whether you use Plug, Oban,
+or a GenServer to implement it.
+
 ### Phase 4: Completeness Verification
 
 **BEFORE generating plans**, verify complete coverage of the input:
@@ -365,6 +380,17 @@ Create `.claude/plans/{slug}/plan.md` with this structure:
 **Detail Level**: {minimal|more|comprehensive}
 **Input**: {review path, or "from description"}
 
+## Source
+
+> {Verbatim capture of user's original feature description or request.
+> Preserves intent across context compaction and session boundaries.}
+
+## Requirements
+
+| ID | Requirement | Priority | Source |
+|----|-------------|----------|--------|
+| R1 | {what must be true} | Must/Should/Could | {user request / security policy / best practice} |
+
 ## Summary
 
 {2-3 sentences}
@@ -397,6 +423,15 @@ Data Stores (ID/Store/Type/Read By/Written By),
 Spikes (⚠️ items needing investigation).
 See Phase 3 breadboarding section for full format.}
 
+## Fit Check: {Decision Name} (when decision council has 2+ options AND ≥3 requirements)
+
+| Req | Description | Option A | Option B | Option C |
+|-----|-------------|:---:|:---:|:---:|
+| R1 | {requirement} | ✅ | ❌ | ✅ |
+| **Score** | | **n/m** | **n/m** | **n/m** |
+
+{✅/❌ only — no "maybe". Forces clear thinking.}
+
 ## Phase 0: Spikes [PENDING] (if ⚠️ unknowns exist)
 
 - [ ] [P0-T1][direct] Spike: {investigate unknown}
@@ -405,6 +440,8 @@ See Phase 3 breadboarding section for full format.}
   **Time-box**: 30 minutes max
 
 ## Phase 1: {Phase Name} [PENDING]
+
+**Demo**: After this phase, {observable outcome — what user can see/test}
 
 - [ ] [P1-T1][agent] High-level task description
   **Locations**: file1.ex:23, file2.ex:45, file3.ex:78
@@ -510,9 +547,28 @@ After writing `.claude/plans/{slug}/plan.md`, you MUST:
    - "Get a briefing" (run `/phx:brief` for interactive walkthrough)
    - "Start here"
    - "Review the plan"
-   - "Adjust the plan"
+   - "Adjust the plan" — add annotations to refine specific parts
 3. **STOP and WAIT for user response**
 4. **NEVER proceed to implementation or call /phx:work**
+
+**When user selects "Adjust the plan"**, explain annotation syntax:
+
+```
+To annotate the plan, add HTML comments at specific locations:
+
+<!-- ANNOTATION: HIGH | SCOPE | This phase should also cover X -->
+<!-- ANNOTATION: CRITICAL | DECISION | Prefer ETS over GenServer here -->
+<!-- ANNOTATION: MEDIUM | RISK | What about rate limiting? -->
+
+Priorities: CRITICAL, HIGH, MEDIUM, LOW
+Types: TASK, SCOPE, DECISION, RISK, SPIKE, PATTERN, GENERAL
+
+I'll process annotations in priority order, addressing each one
+and removing it after resolution. Task IDs [Pn-Tm] are NEVER deleted.
+```
+
+After the user adds annotations, run `/phx:plan --existing` to process them.
+Track cycle count with `**Annotation Cycles**: n` in plan metadata.
 
 **When user selects "Start in fresh session"**, print clear
 step-by-step instructions:
@@ -527,6 +583,17 @@ To start implementation in a fresh session:
 ```
 
 This is Iron Law #1. The user decides when and how to start work.
+
+## Unattended Mode Auto-Resolution
+
+When running inside `/phx:full --unattended`, the planning-orchestrator
+auto-resolves contested decisions instead of asking the user:
+
+1. **Unanimous council** → use that option
+2. **Codebase precedent** → match existing patterns (grep for similar)
+3. **Fallback** → choose the most maintainable option (fewest moving parts)
+
+Log every auto-decision to progress.md with confidence level.
 
 ## Error Handling
 

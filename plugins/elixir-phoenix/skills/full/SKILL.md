@@ -77,13 +77,31 @@ solution docs in `.claude/solutions/`. Then suggest `/phx:document` for docs and
 
 ## Cycle Limits
 
-| Setting | Default | Description |
-|---------|---------|-------------|
-| `--max-cycles` | 10 | Max plan→review cycles |
-| `--max-retries` | 3 | Max retries per task |
-| `--max-blockers` | 5 | Max blockers before stopping |
+| Setting | Default | Unattended | Description |
+|---------|---------|-----------|-------------|
+| `--max-cycles` | 10 | **6** | Max plan→review cycles |
+| `--max-retries` | 3 | **2** | Max retries per task |
+| `--max-blockers` | 5 | **3** | Max blockers before stopping |
 
 When limits exceeded, output INCOMPLETE status with remaining work and recommended action.
+
+## Unattended Mode
+
+```
+/phx:full Add user authentication --unattended
+```
+
+Auto-pilots all decision points without human interaction:
+
+- **Discovery**: Auto-selects depth by complexity (≤2 → "just do it"; 3-6 → "plan it"; 7+ → "research it"; security → always plan)
+- **Planning**: Auto-resolves contested decisions (unanimous → that option; codebase precedent → match; fallback → maintainability)
+- **Review**: Auto-triages (BLOCKERs → fix; WARNINGs ≤3 → fix; WARNINGs >3 → skip; SUGGESTIONs → skip)
+
+**Safety**: Stricter limits (see table). Mandatory exit on: cycle limit, blocker limit, >50% tests failing, fatal compilation, same failure 2+ cycles (loop detection).
+
+**Logging**: Every auto-decision logged to progress.md with timestamp, confidence (HIGH/MEDIUM/LOW), and rationale.
+
+See `references/safety-recovery.md` and `references/execution-steps.md`.
 
 ## Integration
 

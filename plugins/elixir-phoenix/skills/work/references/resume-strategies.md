@@ -60,6 +60,19 @@ On resume, validate:
   - Go back and complete them?
   - Something else?
 
+## Plan Integrity Check (JSON Sidecar)
+
+If `.claude/plans/{slug}/plan.json` exists alongside plan.md:
+
+1. Compare checkbox states in plan.md vs status in plan.json
+2. If mismatch detected, present to user:
+   - "Trust markdown" — plan.md is source of truth (default)
+   - "Trust JSON" — restore state from plan.json
+3. Auto-generate plan.json on first `/phx:work` if missing
+
+The JSON sidecar is a shadow copy for validation — plan.md is
+ALWAYS the source of truth during execution.
+
 ## Idempotent Task Execution
 
 Tasks should be safe to re-execute:

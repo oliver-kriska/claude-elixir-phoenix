@@ -184,7 +184,7 @@ that per-task compile checks miss (test failures, credo violations, type errors)
 
    Skip Dialyzer unless this is a pre-PR cycle (too slow for inner loops).
 
-2. **If all pass**: Log verification PASS to progress file, transition to REVIEWING
+2. **If all pass**: Run optional smoke test (see below), then log verification PASS to progress file, transition to REVIEWING
 3. **If any step fails**:
    a. Analyze the failure and fix the issue
    b. Re-run the full verification sequence from step 1
@@ -206,6 +206,22 @@ that per-task compile checks miss (test failures, credo violations, type errors)
    **Attempt**: {n}/3
    **Result**: PASS → REVIEWING / FAIL → fixing {step}
    ```
+
+### VERIFYING — Smoke Test (Tidewave, Optional)
+
+After static verification passes, if Tidewave is available, run a
+behavioral smoke test via `project_eval`. Pick template by task type:
+
+| Task Annotation | Smoke Test |
+|----------------|------------|
+| `[ecto]` | `Repo.transaction(fn -> create → fetch → verify → Repo.rollback(:test) end)` |
+| `[liveview]` | `get_logs level: :error` after feature route visit |
+| `[oban]` | Enqueue test job → verify in `oban_jobs` table → check state |
+| `[security]` | Test unauthenticated access returns error tuple |
+
+**Rules**: Conditional on Tidewave. Skip silently if not running.
+Max 3 retries, then log as WARNING (not BLOCKER). Never block
+the workflow for smoke test failures.
 
 ### REVIEWING
 
@@ -333,6 +349,10 @@ orchestrator (which may be at 150k+ tokens by this point).
 | Max blockers | Output BLOCKED, list blockers |
 | Fatal error | Output ERROR, preserve state |
 
+**On any BLOCKED/INCOMPLETE exit**: Still run COMPOUNDING for
+resolved blockers and dead-ends. Partial completions produce
+valuable lessons — compound them even on incomplete runs.
+
 ## Agent Routing
 
 Route tasks to specialists:
@@ -420,6 +440,49 @@ To rollback to a checkpoint:
 ```bash
 # Rollback entire phase
 git reset --hard checkpoint/${SLUG}/phase-${n}
+```
+
+## Unattended Mode (`--unattended`)
+
+When `/phx:full --unattended` is used, auto-pilot all decision points:
+
+### Auto-Decision Rules
+
+| Phase | Decision Point | Auto-Selection |
+|-------|---------------|----------------|
+| DISCOVERING | Workflow depth | Complexity ≤2 + non-security → "just do it"; 3-6 → "plan it"; 7+ → "research it" |
+| DISCOVERING | Security features | Always force planning (never "just do it") |
+| PLANNING | Contested decisions | Unanimous council → that option; codebase precedent → match; fallback → maintainability default |
+| REVIEWING | Finding triage | All BLOCKERs → fix; WARNINGs ≤3 → fix; WARNINGs >3 → skip (logged); SUGGESTIONs → skip |
+
+### Safety Rails (Stricter Than Normal)
+
+| Parameter | Normal | Unattended |
+|-----------|--------|-----------|
+| max-cycles | 10 | **6** |
+| max-retries | 3 | **2** |
+| max-blockers | 5 | **3** |
+
+### Mandatory Exit Conditions
+
+Stop immediately and alert when:
+- Cycle limit reached
+- Blocker limit reached
+- Test suite >50% failing
+- Fatal compilation error
+- Same verification failure 2+ cycles (loop detection)
+
+### Logging
+
+Every auto-decision logged to progress.md:
+
+```markdown
+### {timestamp} - AUTO-DECISION
+**Phase**: {phase}
+**Decision**: {what was decided}
+**Confidence**: HIGH|MEDIUM|LOW
+**Options Considered**: {list}
+**Rationale**: {why this was chosen}
 ```
 
 ## Memory

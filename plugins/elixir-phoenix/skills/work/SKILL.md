@@ -119,6 +119,10 @@ Options: 1. **Run review** (`/phx:review`) (Recommended),
 With blockers: list them, offer **Replan** (`/phx:plan`),
 **Review first** (`/phx:review`), or **Handle myself**.
 
+**After resolving blockers or dead-ends**, suggest:
+"Run `/phx:compound` to document what you learned — this captures
+the fix as searchable knowledge for future sessions."
+
 **If blockers remain**, auto-write HANDOFF to scratchpad:
 
 ```markdown

@@ -1,0 +1,212 @@
+{
+  "version": "1.0.0",
+  "description": "Error pattern → remediation mapping for Elixir/Phoenix projects",
+  "patterns": {
+    "compiler": {
+      "undefined_function": {
+        "match": "undefined function",
+        "severity": "error",
+        "remediation": [
+          "Check spelling and arity",
+          "Verify module is imported or aliased",
+          "Check if function exists with: grep -rn 'def func_name' lib/",
+          "Use full module path: MyApp.Module.function(args)"
+        ]
+      },
+      "module_not_available": {
+        "match": "module .* is not available",
+        "severity": "error",
+        "remediation": [
+          "Check module exists: grep -rn 'defmodule ModuleName' lib/",
+          "Check for typos in module name",
+          "Run mix deps.compile for dependency modules"
+        ]
+      },
+      "unused_variable": {
+        "match": "variable .* is unused",
+        "severity": "warning",
+        "remediation": ["Prefix with underscore: _var_name", "Remove if unneeded"]
+      },
+      "unreachable_clause": {
+        "match": "this clause cannot match",
+        "severity": "warning",
+        "remediation": ["Check clause ordering — specific before general", "Remove dead clause"]
+      },
+      "deprecated_function": {
+        "match": "is deprecated",
+        "severity": "warning",
+        "remediation": ["Check deprecation message for replacement", "Search hexdocs for current API"]
+      },
+      "missing_struct_keys": {
+        "match": "the following keys must also be given",
+        "severity": "error",
+        "remediation": ["Add missing fields from error message", "Check @enforce_keys in struct"]
+      },
+      "no_matching_clause": {
+        "match": "no function clause matching",
+        "severity": "error",
+        "remediation": ["Add a catch-all clause", "Check argument types at call site", "Add guard clauses"]
+      },
+      "protocol_not_implemented": {
+        "match": "protocol .* not implemented",
+        "severity": "error",
+        "remediation": ["Implement the protocol for your struct", "Check if using correct data type"]
+      },
+      "badarg": {
+        "match": "bad argument in arithmetic expression",
+        "severity": "error",
+        "remediation": ["Check for nil values in calculations", "Use pattern matching to validate inputs"]
+      },
+      "compile_time_config": {
+        "match": "Application.get_env.*compile time",
+        "severity": "warning",
+        "remediation": ["Move to runtime: fn -> Application.get_env(...) end", "Use config/runtime.exs"]
+      },
+      "atom_from_user_input": {
+        "match": "String.to_atom",
+        "severity": "critical",
+        "iron_law": 10,
+        "remediation": ["IRON LAW: Never use String.to_atom with user input", "Use String.to_existing_atom/1", "Or use a fixed allowlist of atoms"]
+      },
+      "raw_untrusted": {
+        "match": "raw.*user|raw.*param|raw.*input",
+        "severity": "critical",
+        "iron_law": 12,
+        "remediation": ["IRON LAW: Never use raw/1 with untrusted content", "Use Phoenix.HTML.html_escape/1", "Or sanitize with HtmlSanitizeEx"]
+      },
+      "float_for_money": {
+        "match": ":float.*price|:float.*amount|:float.*money|:float.*cost",
+        "severity": "critical",
+        "iron_law": 4,
+        "remediation": ["IRON LAW: Never use :float for money", "Use :decimal or :integer (cents)"]
+      },
+      "no_pin_in_query": {
+        "match": "from.*==.*[^\\^]",
+        "severity": "critical",
+        "iron_law": 5,
+        "remediation": ["IRON LAW: Always pin values with ^ in queries", "Pattern: where(q, [r], r.field == ^value)"]
+      },
+      "assign_new_mount": {
+        "match": "assign_new.*current_user|assign_new.*locale",
+        "severity": "warning",
+        "iron_law": 21,
+        "remediation": ["IRON LAW: Never use assign_new for values refreshed every mount", "Use assign/3 instead — assign_new skips if key exists"]
+      }
+    },
+    "credo": {
+      "cyclomatic_complexity": {
+        "match": "CyclomaticComplexity",
+        "severity": "warning",
+        "remediation": ["Extract branches into private functions", "Use pattern matching in function heads", "Consider 'with' chains"]
+      },
+      "nesting": {
+        "match": "Nesting",
+        "severity": "warning",
+        "remediation": ["Extract inner blocks to named functions", "Use 'with' to flatten chains", "Use multi-clause functions"]
+      },
+      "unused_enum_operation": {
+        "match": "UnusedEnumOperation",
+        "severity": "warning",
+        "remediation": ["Assign result: result = Enum.map(...)", "Use Enum.each/2 for side effects"]
+      },
+      "io_inspect": {
+        "match": "IoInspect",
+        "severity": "error",
+        "remediation": ["Remove IO.inspect() call", "Use Logger for production logging"]
+      },
+      "dbg_macro": {
+        "match": "Dbg",
+        "severity": "error",
+        "remediation": ["Remove dbg() macro call"]
+      },
+      "with_single_clause": {
+        "match": "WithSingleClause",
+        "severity": "suggestion",
+        "remediation": ["Replace with case statement"]
+      },
+      "filter_count": {
+        "match": "FilterCount",
+        "severity": "suggestion",
+        "remediation": ["Use Enum.count(list, &predicate/1)"]
+      },
+      "unless_with_else": {
+        "match": "UnlessWithElse",
+        "severity": "suggestion",
+        "remediation": ["Replace unless...else with if...else"]
+      },
+      "iex_pry": {
+        "match": "IExPry",
+        "severity": "error",
+        "remediation": ["Remove IEx.pry() call — breaks production"]
+      },
+      "application_config_module_attr": {
+        "match": "ApplicationConfigInModuleAttribute",
+        "severity": "warning",
+        "remediation": ["Move to function: def config, do: Application.get_env(...)", "Or use @external_resource"]
+      },
+      "raise_inside_rescue": {
+        "match": "RaiseInsideRescue",
+        "severity": "warning",
+        "remediation": ["Use reraise/2 to preserve stacktrace", "Pattern: reraise exception, __STACKTRACE__"]
+      },
+      "function_arity": {
+        "match": "FunctionArity",
+        "severity": "suggestion",
+        "remediation": ["Use keyword list or struct for params", "Pattern: def func(opts \\\\ [])"]
+      },
+      "large_function": {
+        "match": "MaxLineCount",
+        "severity": "suggestion",
+        "remediation": ["Extract logical sections into private functions", "Target <20 lines per function"]
+      },
+      "specs_missing": {
+        "match": "Specs",
+        "severity": "suggestion",
+        "remediation": ["Add @spec for public functions", "Helps Dialyzer catch type errors"]
+      },
+      "string_sigils": {
+        "match": "StringSigils",
+        "severity": "suggestion",
+        "remediation": ["Use ~s for strings with quotes", "Use ~r for regex"]
+      }
+    },
+    "iron_laws": {
+      "db_query_disconnected_mount": {
+        "match": "Repo\\.|from\\(",
+        "context": "*_live.ex mount function without connected? check",
+        "iron_law": 1,
+        "remediation": ["IRON LAW #1: NO database queries in disconnected mount", "Use assign_async/3 instead", "Pattern: assign_async(socket, :data, fn -> {:ok, fetch_data()} end)"]
+      },
+      "list_without_streams": {
+        "match": "assign.*\\[.*Enum",
+        "context": "assigning large lists in LiveView",
+        "iron_law": 2,
+        "remediation": ["IRON LAW #2: Use streams for lists >100 items", "Pattern: stream(socket, :items, items)"]
+      },
+      "pubsub_without_connected": {
+        "match": "PubSub.subscribe",
+        "context": "without connected?/1 check",
+        "iron_law": 3,
+        "remediation": ["IRON LAW #3: Check connected?/1 before PubSub subscribe", "Pattern: if connected?(socket), do: PubSub.subscribe(...)"]
+      },
+      "job_not_idempotent": {
+        "match": "use Oban.Worker",
+        "context": "without idempotency check",
+        "iron_law": 7,
+        "remediation": ["IRON LAW #7: Jobs MUST be idempotent — safe to retry", "Add unique constraint or idempotency check"]
+      },
+      "oban_atom_keys": {
+        "match": "%{[a-z_]+:",
+        "context": "in Oban worker args",
+        "iron_law": 8,
+        "remediation": ["IRON LAW #8: Oban args use STRING keys, not atoms", "Pattern: %{\"user_id\" => id}"]
+      },
+      "handle_event_no_auth": {
+        "match": "def handle_event",
+        "context": "without authorization check",
+        "iron_law": 11,
+        "remediation": ["IRON LAW #11: AUTHORIZE in EVERY handle_event", "Don't trust mount authorization — verify per event"]
+      }
+    }
+  }
+}

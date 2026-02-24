@@ -164,6 +164,11 @@ Recommend triaging first to prioritize."
 also suggest: `/phx:plan .claude/plans/{slug}/reviews/{file}.md`
 to create a follow-up plan from review findings.
 
+**On BLOCKED or REQUIRES CHANGES (after fixes)**: When the user
+resolves blockers from review, suggest: "These fixes involved
+non-trivial debugging. Run `/phx:compound` to capture the patterns
+so they're available for future sessions."
+
 ## Iron Laws
 
 1. **Review is READ-ONLY** — Find and explain, never fix

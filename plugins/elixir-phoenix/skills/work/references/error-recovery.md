@@ -62,3 +62,10 @@ When user resolves a blocker and resumes:
 2. Start from the previously blocked task
 3. Verify the fix compiles and tests pass
 4. Mark checkbox and continue
+5. **Suggest knowledge capture**: "This blocker required a non-obvious
+   fix. Run `/phx:compound` to document the pattern so future sessions
+   avoid this issue." Only suggest when the fix involved:
+   - A workaround for framework behavior
+   - A non-obvious configuration requirement
+   - An error message that didn't clearly point to the root cause
+   - A pattern that violated initial assumptions

@@ -178,6 +178,68 @@ If the feature is large, present OPTIONS with concrete numbers:
 >    - `auth/plan.md` (5 tasks) -- login, register, reset
 >    - `profiles/plan.md` (4 tasks) -- avatar, bio, settings
 
+## Requirements Extraction
+
+**Before generating tasks**, enumerate explicit requirements:
+
+1. Extract from user description, research findings, and domain rules
+2. Classify as Must / Should / Could (MoSCoW priority)
+3. Requirements are STANDALONE — they don't depend on any specific
+   implementation approach
+
+```markdown
+## Requirements
+
+| ID | Requirement | Priority | Source |
+|----|-------------|----------|--------|
+| R1 | User can reset password via email | Must | User request |
+| R2 | Token expires after 24 hours | Must | Security policy |
+| R3 | Rate limit: max 3 resets per hour | Should | Best practice |
+```
+
+Every requirement MUST have at least one corresponding task.
+This catches gaps before task generation begins.
+
+## Fit-Check Matrix (Contested Decisions)
+
+When the decision council identifies 2+ competing approaches AND
+≥3 requirements have been extracted, produce an R × S fit-check grid:
+
+```markdown
+## Fit Check: State Management
+
+| Req | Description | Option A: GenServer | Option B: ETS |
+|-----|-------------|:---:|:---:|
+| R1 | Concurrent access | ✅ | ✅ |
+| R2 | Survives restart | ❌ | ❌ |
+| R3 | Sub-ms reads | ❌ | ✅ |
+| **Score** | | **1/3** | **2/3** |
+```
+
+**Rules**: ✅/❌ only — no "maybe" or "partial". Forces clear thinking.
+Skip when there's only one viable approach or <3 requirements.
+
+## Demo Statements
+
+Every plan phase MUST include a demo statement declaring what's
+observable after completion:
+
+```markdown
+## Phase 1: User Registration [PENDING]
+
+**Demo**: After this phase, user can register with email and see a
+confirmation message.
+```
+
+**Good demos** (observable): "user can log in via OAuth", "admin
+dashboard shows user count", "test suite passes for auth module"
+
+**Bad demos** (not observable): "auth module refactored", "schema
+updated", "dependencies added"
+
+A phase without a demo statement is a horizontal layer. Suggest
+reordering to ensure each phase delivers visible progress.
+
 ## Plan Generation
 
 Create plan(s) at `.claude/plans/{feature-slug}/plan.md`.
@@ -190,7 +252,8 @@ Key requirements:
   `[otp]`, `[security]`, `[test]`.
   Do NOT use subagent_type names like `[general-purpose]` or
   `[solo]` -- those are not valid annotations.
-- Include: Summary, Scope, Technical Decisions, Phased Tasks,
+- Include: Source, Requirements, Summary, Scope, Technical Decisions,
+  Fit-Check (if contested), Phased Tasks with Demo Statements,
   Patterns, Risks
 
 **Task granularity**: Tasks are logical work units, NOT individual

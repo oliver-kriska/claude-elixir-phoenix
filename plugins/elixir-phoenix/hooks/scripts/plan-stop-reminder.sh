@@ -26,6 +26,11 @@ if [ -f "${PLAN_DIR}/progress.md" ] && grep -q '\*\*State\*\*:' "${PLAN_DIR}/pro
   exit 0
 fi
 
+# Skip for annotation cycles — plan is being refined, not newly created
+if grep -q '\*\*Annotation Cycles\*\*:' "$FILE_PATH" 2>/dev/null; then
+  exit 0
+fi
+
 echo ""
 echo "=========================================="
 echo "STOP: Plan file created."

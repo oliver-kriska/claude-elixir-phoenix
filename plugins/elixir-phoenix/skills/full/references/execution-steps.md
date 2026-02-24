@@ -54,6 +54,18 @@ git checkout -b feature/$FEATURE_SLUG
 
 **Exit condition**: User selects workflow depth.
 
+### Unattended Discovery
+
+In `--unattended` mode, auto-select workflow depth:
+
+| Complexity | Non-Security | Security |
+|-----------|-------------|----------|
+| ≤ 2 (LOW) | "just do it" | "plan it" |
+| 3-6 (MEDIUM) | "plan it" | "plan it" |
+| 7+ (HIGH/CRITICAL) | "research it" | "research it" |
+
+Log: `AUTO-DECISION: Selected "{choice}" — complexity {score}, {reason}`
+
 ## Step 3: Plan Phase
 
 Run `/phx:plan {feature}` (with `--detail comprehensive` for "research it"):
@@ -110,6 +122,19 @@ IF only warnings:
 IF clean:
   1. Continue to completion
 ```
+
+### Unattended Review Triage
+
+In `--unattended` mode, auto-triage without asking:
+
+| Finding Type | Count | Action |
+|-------------|-------|--------|
+| BLOCKERs | Any | Fix all |
+| WARNINGs | ≤ 3 | Fix all |
+| WARNINGs | > 3 | Skip (logged) |
+| SUGGESTIONs | Any | Skip (logged) |
+
+Log each skip: `AUTO-DECISION: Skipped {n} warnings — exceeded threshold`
 
 ## Step 7: Collect Metrics & Complete
 
