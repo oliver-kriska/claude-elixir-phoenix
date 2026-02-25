@@ -466,6 +466,7 @@ When `/phx:full --unattended` is used, auto-pilot all decision points:
 ### Mandatory Exit Conditions
 
 Stop immediately and alert when:
+
 - Cycle limit reached
 - Blocker limit reached
 - Test suite >50% failing

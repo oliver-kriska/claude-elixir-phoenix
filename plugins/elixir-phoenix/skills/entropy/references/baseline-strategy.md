@@ -11,6 +11,7 @@ Save when project is in a known-good state:
 ```
 
 **Good times to save**:
+
 - After `/phx:audit` returns score ≥ 80/100
 - After resolving all compile warnings
 - After fixing all Credo priority A/B issues
@@ -18,6 +19,7 @@ Save when project is in a known-good state:
 - After comprehensive test run passes
 
 **Bad times to save**:
+
 - Mid-feature (baseline will include WIP entropy)
 - Right after adding a dependency (noise from new code)
 - When tests are failing (locks in failures as "normal")
@@ -31,6 +33,7 @@ Reset when the old baseline is no longer meaningful:
 ```
 
 **When to reset**:
+
 - After major Elixir/Phoenix version upgrade
 - After large-scale refactoring (50+ files)
 - After changing project structure

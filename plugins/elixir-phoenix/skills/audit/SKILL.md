@@ -128,47 +128,12 @@ Combines with other flags: `/phx:audit --since HEAD~5 --focus=security`
 
 ## Output Format
 
-```markdown
-# Project Health Audit: {project_name}
+Report at `.claude/audit/summaries/project-health-{date}.md` with:
 
-**Generated**: {date}
-**Mode**: full | quick | focus={area}
-
-## Executive Summary
-
-### Health Score: {A-F} ({numeric}/100)
-
-| Category | Score | Status |
-|----------|-------|--------|
-| Architecture | 85/100 | Good |
-| Performance | 70/100 | Needs Attention |
-| Security | 95/100 | Excellent |
-| Test Quality | 60/100 | Needs Work |
-| Dependencies | 90/100 | Good |
-
-### Critical Issues (Must Address)
-1. {issue}
-2. {issue}
-
-### Top Recommendations
-1. {recommendation}
-2. {recommendation}
-
-## Detailed Findings
-
-[Per-category sections from subagents]
-
-## Action Plan
-
-### Immediate (This Sprint)
-- [ ] {critical fix}
-
-### Short-term (Next 2 Sprints)
-- [ ] {improvement}
-
-### Long-term (Backlog)
-- [ ] {nice-to-have}
-```
+- Executive Summary: Health Score (A-F, numeric/100), per-category scores table
+- Critical Issues + Top Recommendations
+- Detailed Findings (per-category from subagents)
+- Action Plan: Immediate / Short-term / Long-term with checkboxes
 
 ## Garbage Collection Mode (`--gc`)
 
@@ -181,6 +146,7 @@ Lightweight 2-3 minute scan for entropy (quality drift):
 ```
 
 **`--gc` checks** (fast, non-blocking):
+
 - Compile warnings count vs baseline
 - Credo violation count vs baseline
 - Test count and pass rate vs baseline

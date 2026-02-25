@@ -189,59 +189,20 @@ Agent 3 — Codebase Fit:
   Output: .claude/plans/{slug}/research/decision-{topic}-fit.md
 ```
 
-**Prompt template for each council agent:**
+**Each council agent prompt**: "Evaluate options for {decision}: {option_list}.
+Context: {summary excerpt}. For each option: pros, cons, risks,
+recommendation. Write to {output_path}. Return 200-word summary."
 
-> Evaluate these options for {decision}: {option_list}.
-> Context: {relevant excerpt from consolidated summary}.
-> Analyze EVERY option from your perspective. For each, state:
-> pros, cons, risks, and your recommendation with rationale.
-> Write analysis to {output_path}. Return a 200-word summary.
+After all 3 complete, compress with context-supervisor
+(input: `decision-{topic}-*.md`, output: `decision-{topic}.md`).
+Highlight AGREE (strong signal) vs DISAGREE (needs human input).
 
-After all 3 complete, run context-supervisor to compress:
+**Present contested decisions** via `AskUserQuestion` with
+`multiSelect: true` — let users combine approaches. For DISAGREE
+decisions, show options with 1-line summary + key risk. For AGREE
+decisions, skip asking — note consensus in plan.
 
-```
-Task(subagent_type: "context-supervisor", prompt: """
-Compress decision council output.
-Input: .claude/plans/{slug}/research/decision-{topic}-*.md
-Output: .claude/plans/{slug}/summaries/decision-{topic}.md
-Priority: Keep all per-option evaluations, highlight where
-agents AGREE (strong signal) and DISAGREE (needs human input).
-Flag cross-domain tensions explicitly.
-""")
-```
-
-**Present contested decisions to the user with `AskUserQuestion`.**
-For each decision where agents DISAGREE, present the options
-interactively with `multiSelect: true` — let the user combine
-approaches rather than forcing a single choice:
-
-```
-AskUserQuestion:
-  question: "Which approaches do you want for {decision topic}? Select all that apply."
-  header: "{label ≤12ch}"
-  multiSelect: true
-  options:
-    - label: "Option A: {name}"
-      description: "{1-line summary with key pro from specialist + key risk}"
-    - label: "Option B: {name}"
-      description: "{1-line summary with key pro from specialist + key risk}"
-    - label: "Option C: {name}" (if exists)
-      description: "{1-line summary}"
-```
-
-Use `multiSelect: true` so users can combine options (e.g., pick
-both "ETS for caching" AND "GenServer for coordination"). The user
-creates their own combination — don't pre-define combos.
-
-Include ALL selected options in the plan's Technical Decisions
-table with the multi-perspective rationale from council agents.
-
-For decisions where agents AGREE (all recommend the same option),
-skip AskUserQuestion — just note the consensus in the plan.
-
-**Cost control**: Only trigger for decisions where research agents
-explicitly presented 2+ options. Most plans have 0-1 such
-decisions. Each council adds ~3 agent invocations.
+**Cost control**: Only trigger for decisions where research agents explicitly presented 2+ options. Most plans have 0-1 such decisions.
 
 ### Phase 3: Breadboard System Map (LiveView Features)
 
@@ -257,23 +218,9 @@ affordance tables (see `references/breadboarding.md` for format):
 4. **Data Stores table** — streams, assigns, schemas
 5. **Wiring summary** — control flow + data flow
 
-**Spike markers**: Any affordance with unknown implementation
-gets ⚠️. Each ⚠️ becomes a Phase 0 spike task (time-boxed,
-30 min max).
+**Spike markers**: Unknown affordances get ⚠️ → Phase 0 spike task (30 min max).
 
-**Fit check** (when multiple approaches exist): Create a table
-with requirements as rows, solution shapes as columns, ✅/❌
-for pass/fail. Pick the winning shape or flag ⚠️ for spikes.
-Not every plan needs a fit check — skip when there's one
-obvious approach.
-
-**Task derivation from breadboard**:
-
-- Each Place → LiveView module task
-- Each code affordance cluster → context function task
-- Each ⚠️ → spike task in Phase 0
-- Each data store → schema/migration task
-- Group by vertical slice (working increment), not by layer
+**Task derivation**: Place → LiveView task, code affordance cluster → context task, ⚠️ → spike, data store → schema task. Group by vertical slice, not layer.
 
 ### Phase 3b: Requirements Extraction
 
@@ -415,22 +362,14 @@ Create `.claude/plans/{slug}/plan.md` with this structure:
 
 ## System Map (if LiveView feature with 2+ pages/components)
 
-{Include ONLY when breadboarding was performed. Omit otherwise.
-Tables: Places (ID/Place/Entry Point/Notes),
-UI Affordances (ID/Place/Component/Affordance/Type/Wires Out/Returns To),
-Code Affordances (ID/Place/Module/Affordance/Wires Out/Returns To),
-Data Stores (ID/Store/Type/Read By/Written By),
-Spikes (⚠️ items needing investigation).
-See Phase 3 breadboarding section for full format.}
+{Affordance tables from breadboarding. Omit if not applicable.}
 
-## Fit Check: {Decision Name} (when decision council has 2+ options AND ≥3 requirements)
+## Fit Check: {Decision Name} (when 2+ options AND ≥3 requirements)
 
-| Req | Description | Option A | Option B | Option C |
-|-----|-------------|:---:|:---:|:---:|
-| R1 | {requirement} | ✅ | ❌ | ✅ |
-| **Score** | | **n/m** | **n/m** | **n/m** |
-
-{✅/❌ only — no "maybe". Forces clear thinking.}
+| Req | Description | Option A | Option B |
+|-----|-------------|:---:|:---:|
+| R1 | {requirement} | ✅ | ❌ |
+| **Score** | | **n/m** | **n/m** |
 
 ## Phase 0: Spikes [PENDING] (if ⚠️ unknowns exist)
 
@@ -488,48 +427,11 @@ Do NOT invent annotations like `[solo]`, `[general]`, etc.
 
 ## Task Granularity Rules
 
-**Tasks are logical work units, NOT individual file edits.**
-
-BAD: One task per file (`Replace X in file_a`, `Replace X in file_b`).
-GOOD: One task per pattern, list locations within:
-
-```markdown
-- [ ] [P3-T2][direct] Replace all hardcoded waits with condition-based waits
-  **Locations** (71 calls across 14 files):
-  - proposal_form_test.exs (15), space_inputs_test.exs (7), ...
-  **Pattern**: Replace `wait_for_timeout(conn, 1000)` with
-  `Frame.wait_for_selector` / `assert_has` / `assert_patiently`
-```
-
-**Guidelines:**
-
-- 3-8 tasks per phase (not 15+)
-- Group by PATTERN (what you're doing), list LOCATIONS within
-- Each task includes implementation detail: code examples,
-  before/after, or the approach to follow
-- Sub-locations are indented lists under the task, not separate
-  tasks
-- A task should be completable in one sitting (not too big either)
+**Tasks are logical work units, NOT individual file edits.** Group by PATTERN, list LOCATIONS within. 3-8 tasks per phase. Each task includes implementation detail (code examples, before/after).
 
 ## Task Invocation
 
-Use the Task tool to spawn agents with **FOCUSED prompts**.
-Scope each prompt to the relevant directories and patterns.
-Do NOT give vague prompts like "analyze the codebase."
-
-```
-Task({
-  subagent_type: "phoenix-patterns-analyst",
-  prompt: "Analyze test patterns in test/int_support/ and
-    test/features/. Focus on: helper organization, JS usage,
-    wait strategies. Skip full context/schema analysis.",
-  run_in_background: true
-})
-```
-
-Wait for all agents to FULLY complete. If TaskOutput shows
-"still running", wait and check again. NEVER start writing
-the plan while any agent is still running.
+Spawn agents with **FOCUSED prompts** scoped to relevant directories. Use `run_in_background: true`. Wait for ALL agents to FULLY complete before writing the plan.
 
 ## Memory
 

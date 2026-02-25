@@ -21,6 +21,7 @@ warning: MyApp.Accounts.get_user/1 is undefined
 ```
 
 **Checklist**:
+
 1. Check spelling and arity
 2. Is the module imported? `import MyApp.Accounts`
 3. Is it aliased? `alias MyApp.Accounts`
@@ -34,6 +35,7 @@ warning: module MyApp.Schemas.User is not available
 ```
 
 **Checklist**:
+
 1. File exists? `find lib/ -name "*.ex" | xargs grep "defmodule MyApp.Schemas.User"`
 2. Circular dependency? Check `mix xref graph --label compile`
 3. Typo in module name?
@@ -123,6 +125,7 @@ the law number and correct pattern. See the main Iron Laws in
 CLAUDE.md for the complete list (21 laws).
 
 Common violations during `/phx:work`:
+
 - #1: DB queries in disconnected mount → use assign_async
 - #4: :float for money → use :decimal
 - #5: No pin in query → use ^value

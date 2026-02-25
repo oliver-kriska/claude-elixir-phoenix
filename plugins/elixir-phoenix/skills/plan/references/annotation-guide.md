@@ -15,12 +15,14 @@ plan refinement without spawning research agents.
 ```
 
 **Priority** (processing order):
+
 - `CRITICAL` — Must address before work begins
 - `HIGH` — Important change or concern
 - `MEDIUM` — Nice-to-have improvement
 - `LOW` — Minor suggestion
 
 **Type**:
+
 - `TASK` — Add, remove, or modify a task
 - `SCOPE` — Change what's in/out of scope
 - `DECISION` — Override or question a technical decision

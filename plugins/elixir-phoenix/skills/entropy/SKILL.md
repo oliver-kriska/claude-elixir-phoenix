@@ -61,11 +61,13 @@ Baseline saved to `.claude/metrics/baseline.json`:
 ```
 
 **When to save new baseline**:
+
 - After `/phx:audit` with clean results
 - After resolving all regressions
 - After major release/milestone
 
 **When to reset**:
+
 - After large refactor changes project structure
 - After upgrading Elixir/Phoenix versions
 

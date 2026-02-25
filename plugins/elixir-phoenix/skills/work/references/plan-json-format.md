@@ -60,6 +60,7 @@ to create an accurate initial JSON state.
 ## Integrity Checks
 
 The validation hook checks:
+
 - Task ID format: `[Pn-Tm]` where n and m are integers
 - No duplicate task IDs
 - Checkbox count matches JSON completed count

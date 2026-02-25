@@ -180,12 +180,10 @@ If the feature is large, present OPTIONS with concrete numbers:
 
 ## Requirements Extraction
 
-**Before generating tasks**, enumerate explicit requirements:
+**Before generating tasks**, enumerate requirements (standalone, implementation-independent):
 
 1. Extract from user description, research findings, and domain rules
 2. Classify as Must / Should / Could (MoSCoW priority)
-3. Requirements are STANDALONE — they don't depend on any specific
-   implementation approach
 
 ```markdown
 ## Requirements
@@ -231,14 +229,10 @@ observable after completion:
 confirmation message.
 ```
 
-**Good demos** (observable): "user can log in via OAuth", "admin
-dashboard shows user count", "test suite passes for auth module"
+**Good demos** (observable): "user can log in via OAuth", "admin dashboard shows user count"
+**Bad demos** (not observable): "auth module refactored", "schema updated"
 
-**Bad demos** (not observable): "auth module refactored", "schema
-updated", "dependencies added"
-
-A phase without a demo statement is a horizontal layer. Suggest
-reordering to ensure each phase delivers visible progress.
+A phase without a demo is a horizontal layer — suggest reordering for visible progress.
 
 ## Plan Generation
 
