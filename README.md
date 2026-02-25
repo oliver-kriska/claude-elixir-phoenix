@@ -125,7 +125,7 @@ No more scattered files across `.claude/planning/`, `.claude/progress/`, `.claud
 
 ### Agent Hierarchy
 
-The plugin uses 20 agents organized into 3 tiers:
+The plugin uses 21 agents organized into 3 tiers:
 
 ```
                     ┌──────────────────────────────┐
@@ -439,7 +439,7 @@ The plugin enforces critical rules and **stops with an explanation** if code wou
 | `/phx:audit`         | Full project health audit with 5 parallel agents  |
 | `/phx:challenge`     | Rigorous review mode ("grill me")                 |
 
-## Agents (20)
+## Agents (21)
 
 | Agent                        | Model  | Memory  | Role                                         |
 | ---------------------------- | ------ | ------- | -------------------------------------------- |
@@ -452,6 +452,7 @@ The plugin enforces critical rules and **stops with an explanation** if code wou
 | **context-supervisor**       | haiku  | --      | Multi-agent output compression               |
 | **verification-runner**      | haiku  | --      | mix compile, format, credo, test             |
 | **iron-law-judge**           | sonnet | --      | Pattern-based Iron Law detection             |
+| **entropy-detector**         | haiku  | --      | Quality drift and entropy detection          |
 | **xref-analyzer**            | haiku  | --      | Module dependency analysis                   |
 | **hex-library-researcher**   | sonnet | --      | Hex.pm library evaluation                    |
 | **liveview-architect**       | sonnet | --      | Component structure, streams, async patterns |
@@ -581,6 +582,14 @@ This plugin was built with insights from these articles, repositories, and tools
 - <https://allanmacgregor.com/posts/setting-up-tidewave-beam-introspection>
 - <https://theengineeringmanager.substack.com/p/councils-of-agents>
 - <https://x.com/heynavtoor>
+- <https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents>
+- <https://boristane.com/blog/how-i-use-claude-code/>
+- <https://www.ignorance.ai/p/the-emerging-harness-engineering>
+- <https://openai.com/index/harness-engineering/>
+- <https://stripe.dev/blog/minions-stripes-one-shot-end-to-end-coding-agents>
+- <https://mitchellh.com/writing/my-ai-adoption-journey>
+- <https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html>
+- <https://github.com/rjs/shaping-skills>
 
 ## License
 
