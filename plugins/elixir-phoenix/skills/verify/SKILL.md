@@ -14,7 +14,21 @@ Complete verification workflow for Elixir/Phoenix projects. Run this after makin
 3. **Warnings are errors** - Use `--warnings-as-errors` flag; no exceptions
 4. **Full Dialyzer before PR** - Always run Dialyzer before creating pull requests
 
-## Verification Sequence
+## Quick Path: Single-Pass Script
+
+Prefer running all checks in one bash call to avoid the composition
+tax of 4-6 sequential tool round-trips (intermediate "passed" output
+wastes context tokens):
+
+```bash
+bash hooks/scripts/verify-all.sh
+# Or scoped: bash hooks/scripts/verify-all.sh --scope lib/my_app/accounts.ex
+```
+
+Returns a markdown table with only failures detailed. Fall back to
+sequential steps below if the script is unavailable.
+
+## Sequential Steps
 
 Execute these commands in order, stopping on any failure:
 

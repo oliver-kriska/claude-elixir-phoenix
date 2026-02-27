@@ -126,10 +126,22 @@ planning context.
 - To understand an existing library's API, use Read/Grep on
   `deps/{library}/lib/` instead
 
-### Phase 2b: Context Supervision
+### Phase 2b: Context Supervision (Conditional)
 
-After ALL research agents complete, spawn the context-supervisor
-to compress their output before synthesis:
+After ALL research agents complete, estimate total research output:
+
+```bash
+wc -c .claude/plans/{slug}/research/*.md | tail -1
+# Rough tokens = chars / 4
+```
+
+**Skip the context-supervisor when total research is under ~8k
+tokens** (under ~32k chars). Instead, read the research files
+directly — each tool round-trip has a composition tax (latency,
+context serialization, reasoning step). Avoiding an unnecessary
+subagent saves one full round-trip.
+
+**When research exceeds ~8k tokens**, spawn the context-supervisor:
 
 ```
 Task(subagent_type: "context-supervisor", prompt: """
@@ -143,7 +155,7 @@ before/after patterns.
 """)
 ```
 
-This prevents research output (often 30k+ tokens across 5-8
+This prevents large research output (often 30k+ tokens across 5-8
 agents) from exhausting the orchestrator's context.
 
 ### Phase 2c: Decision Council (When Contested Decisions Exist)

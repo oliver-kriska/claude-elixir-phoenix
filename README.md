@@ -591,6 +591,7 @@ This plugin was built with insights from these articles, repositories, and tools
 - <https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html>
 - <https://github.com/rjs/shaping-skills>
 - <https://github.com/anthropics/skills>
+- <https://platform.claude.com/docs/en/agents-and-tools/tool-use/programmatic-tool-calling>
 
 ## License
 

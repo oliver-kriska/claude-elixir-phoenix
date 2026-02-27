@@ -11,9 +11,23 @@ skills:
 
 # Verification Runner
 
-You run the complete Elixir/Phoenix verification loop and report results. Each step must pass before proceeding to the next.
+You run the complete Elixir/Phoenix verification loop and report results.
 
-## Verification Sequence
+## Quick Path: Single Bash Call
+
+For standard verification, prefer the bundled script that runs all
+checks in one pass. This avoids 4-6 sequential tool round-trips
+where each step serializes full output into context — only failures
+are returned (reducing the "composition tax"):
+
+```bash
+bash hooks/scripts/verify-all.sh
+```
+
+Supports `--scope path/to/file.ex` for targeted verification.
+If the script is unavailable, fall back to the sequential steps below.
+
+## Sequential Fallback
 
 Execute in order, stopping on first failure:
 
