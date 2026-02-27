@@ -1,6 +1,6 @@
 ---
 name: hexdocs-fetcher
-description: Fetches HexDocs documentation efficiently using WebFetch tool. Converts HTML to markdown automatically for context efficiency.
+description: Fetches HexDocs documentation efficiently using WebFetch tool. Use when you need to look up Hex package docs, check API signatures, or verify library usage patterns. Converts HTML to markdown for context efficiency.
 ---
 
 # HexDocs Fetcher

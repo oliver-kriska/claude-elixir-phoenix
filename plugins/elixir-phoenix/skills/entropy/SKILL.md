@@ -1,6 +1,6 @@
 ---
 name: phx:entropy
-description: Detect quality drift by comparing project metrics against a baseline. Lightweight alternative to full audit for post-workflow health checks.
+description: Detect quality drift by comparing project metrics against a baseline. Use after completing a /phx:work or /phx:full cycle, or when the user suspects quality degradation. Lightweight alternative to full audit.
 argument-hint: [--save-baseline|--reset-baseline|--compare]
 ---
 

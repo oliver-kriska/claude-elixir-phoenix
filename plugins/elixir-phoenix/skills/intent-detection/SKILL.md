@@ -1,6 +1,6 @@
 ---
 name: intent-detection
-description: Detect user intent from their first message and suggest the appropriate /phx: workflow command. Loaded automatically on session start.
+description: Detect user intent from their first message and suggest the appropriate /phx: workflow command. Use automatically on session start when the user describes work without specifying a command.
 user-invocable: false
 ---
 

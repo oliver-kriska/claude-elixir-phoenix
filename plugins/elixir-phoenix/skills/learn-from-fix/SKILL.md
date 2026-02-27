@@ -1,6 +1,6 @@
 ---
 name: phx:learn
-description: Capture lessons learned after fixing a bug or receiving a correction. Updates knowledge base to prevent future mistakes.
+description: Capture lessons learned after fixing a bug or receiving a correction. Use after the user corrects a mistake, points out a better approach, or says "remember this for next time".
 argument-hint: <description of what was fixed>
 ---
 

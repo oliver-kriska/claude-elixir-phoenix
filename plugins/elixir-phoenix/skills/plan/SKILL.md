@@ -1,6 +1,6 @@
 ---
 name: phx:plan
-description: Plan an Elixir/Phoenix feature with comprehensive research. Spawns specialist agents and outputs structured plan with checkboxes for /phx:work execution.
+description: Plan an Elixir/Phoenix feature with comprehensive research. Use when the user wants to plan a feature, needs a structured implementation approach, or has a multi-step task. Spawns specialist agents and outputs a plan with checkboxes.
 argument-hint: <feature description OR path to review/plan file>
 disable-model-invocation: true
 ---
@@ -52,7 +52,8 @@ structured plan with checkboxes.
 11. **Split decision** — One plan or multiple, concrete options
 12. **Generate plan** — Checkboxes, phased tasks, **demo statements**, code patterns
 13. **Self-check** (deep only) — Three questions in Risks section
-14. **Present and ask** — STOP, show summary, let user decide
+14. **Reader-test** — Spawn fresh haiku to verify plan is self-contained
+15. **Present and ask** — STOP, show summary, let user decide
 
 **When planning from review**: Every finding must appear in the
 plan — either as a task OR explicitly deferred by the user.

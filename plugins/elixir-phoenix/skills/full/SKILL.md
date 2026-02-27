@@ -1,6 +1,6 @@
 ---
 name: phx:full
-description: Full Phoenix feature development cycle. Runs plan → work → review with Elixir specialist agents, Iron Laws, and mix verification. Cycles until complete.
+description: Full autonomous Phoenix feature development cycle. Runs plan → work → verify → review → compound with specialist agents. Use when the user wants hands-off implementation of a complete feature, or says "build this end to end".
 argument-hint: <feature description>
 ---
 

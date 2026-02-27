@@ -1,6 +1,6 @@
 ---
 name: phx:compound
-description: Capture solved problems as searchable Elixir/Phoenix solution documentation. Creates compound knowledge that makes future debugging faster.
+description: Capture solved problems as searchable Elixir/Phoenix solution documentation. Use after fixing a tricky bug, solving a non-obvious problem, or completing a review cycle. Creates compound knowledge that makes future debugging faster.
 argument-hint: [description of what was fixed]
 ---
 

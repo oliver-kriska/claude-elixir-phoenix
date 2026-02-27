@@ -307,6 +307,27 @@ Write one DECISION entry per row in the Technical Decisions
 table. This captures the WHY for future sessions that only
 have the plan checkboxes.
 
+### Phase 6b: Plan Reader-Test
+
+After writing the plan, spawn a haiku agent with ONLY the plan file
+to verify it is self-contained. The reader has NO context from the
+planning session — just like a fresh `/phx:work` session would.
+
+```
+Task(subagent_type: "general-purpose", model: "haiku", prompt: """
+Read {plan_path} and answer:
+1. Can you understand what to build without additional context?
+2. Are there any tasks missing implementation detail (no Locations,
+   no Pattern, or vague description)?
+3. Are there references to decisions or context not in the file?
+List gaps as bullet points. If the plan is self-contained, say
+"PASS: Plan is self-contained."
+""")
+```
+
+If the reader flags gaps, fix them inline before presenting to the
+user. This catches "works for me" plans that fail in fresh sessions.
+
 ### Phase 7: Clarification
 
 If information is missing, ask focused questions (max 3):

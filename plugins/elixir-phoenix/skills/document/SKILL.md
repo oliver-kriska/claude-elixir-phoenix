@@ -1,6 +1,6 @@
 ---
 name: phx:document
-description: Generate documentation for implemented features - @moduledoc, README updates, ADRs. Run after /phx:review passes.
+description: Generate documentation for implemented features - @moduledoc, @doc, README updates, ADRs. Use after implementing a feature or when the user asks for documentation, typespecs, or architecture decision records.
 argument-hint: [plan-file OR feature-name]
 ---
 

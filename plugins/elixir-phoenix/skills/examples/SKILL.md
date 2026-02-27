@@ -1,6 +1,6 @@
 ---
 name: phx:examples
-description: Practical examples and walkthroughs. References official Phoenix guides for standard patterns, documents plugin-specific workflows.
+description: Practical examples and walkthroughs. Use when the user asks "how do I use this plugin", wants to see example workflows, or needs reference patterns for common Phoenix tasks.
 ---
 
 # Examples & Walkthroughs

@@ -1,6 +1,6 @@
 ---
 name: phx:research
-description: Research an Elixir/Phoenix topic on the web. Searches ElixirForum, HexDocs, blogs, and GitHub. Uses efficient markdown conversion.
+description: Research an Elixir/Phoenix topic on the web. Searches ElixirForum, HexDocs, blogs, and GitHub. Use when the user wants to explore a library, understand a concept, find community solutions, or evaluate a Hex package.
 disable-model-invocation: true
 ---
 

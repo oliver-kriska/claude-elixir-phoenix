@@ -1,6 +1,6 @@
 ---
 name: testing
-description: Elixir testing patterns - ExUnit, Mox, property testing, LiveView testing. Load when writing or reviewing tests.
+description: Elixir testing patterns - ExUnit, Mox, property testing, LiveView testing. Use whenever editing *_test.exs files, factories, or fixtures. Also use when the user mentions writing tests, test coverage, mocking, or test failures.
 user-invocable: false
 ---
 

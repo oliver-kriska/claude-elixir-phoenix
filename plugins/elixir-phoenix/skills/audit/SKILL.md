@@ -1,6 +1,6 @@
 ---
 name: phx:audit
-description: Holistic project health audit using 5 parallel specialist subagents. Analyzes architecture, performance, security, test quality, and dependencies. Produces actionable report with health score. Use quarterly or before major releases.
+description: Holistic project health audit using 5 parallel specialist subagents. Analyzes architecture, performance, security, test quality, and dependencies. Use when the user asks about project health, wants a code quality overview, or before major releases.
 argument-hint: [--quick|--full|--focus=area|--since=commit]
 ---
 

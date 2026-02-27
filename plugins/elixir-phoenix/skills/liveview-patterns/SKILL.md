@@ -1,6 +1,6 @@
 ---
 name: liveview-patterns
-description: Phoenix LiveView patterns and best practices. Load when building interactive features with LiveView.
+description: Phoenix LiveView patterns and best practices. Use whenever editing *_live.ex, *_component.ex, or *.sface files. Also use when the user mentions LiveView, real-time UI, forms, streams, PubSub, or interactive features.
 user-invocable: false
 ---
 

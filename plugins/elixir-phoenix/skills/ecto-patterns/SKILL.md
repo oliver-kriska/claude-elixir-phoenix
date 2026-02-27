@@ -1,6 +1,6 @@
 ---
 name: ecto-patterns
-description: Ecto patterns for schemas, queries, changesets, and migrations. Load when working with database code.
+description: Ecto patterns for schemas, queries, changesets, and migrations. Use whenever editing schema files, writing Repo queries, creating migrations, or building changesets. Also use when the user mentions database, Ecto, queries, or data modeling.
 user-invocable: false
 ---
 

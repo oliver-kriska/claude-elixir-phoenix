@@ -1,6 +1,6 @@
 ---
 name: phoenix-contexts
-description: Phoenix context patterns, bounded context design, scopes, and module structure. Load when designing contexts, organizing business logic, or planning module structure.
+description: Phoenix context patterns, bounded context design, scopes, and module structure. Use whenever editing context modules (lib/*/[a-z]*.ex), router.ex, or when the user discusses module boundaries, business logic organization, or API design.
 user-invocable: false
 ---
 

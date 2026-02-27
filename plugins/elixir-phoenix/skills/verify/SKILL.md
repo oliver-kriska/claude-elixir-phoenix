@@ -1,6 +1,6 @@
 ---
 name: phx:verify
-description: Full verification loop for Elixir/Phoenix changes. Use after making code changes to ensure quality.
+description: Full verification loop - mix compile, format, credo, and test. Use after making code changes, before review, or when the user says "run checks", "does it compile", or "run the tests".
 ---
 
 # Verification Loop

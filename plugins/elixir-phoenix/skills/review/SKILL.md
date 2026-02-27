@@ -1,6 +1,6 @@
 ---
 name: phx:review
-description: Review code with parallel specialist agents. Finds and explains issues with severity classification. Part of the agentic workflow cycle.
+description: Review code with 4 parallel specialist agents (idioms, security, tests, compilation). Use after implementing changes, before merging a PR, or when the user asks for a code review or quality check.
 argument-hint: [test|security|oban|deploy|iron-laws|all]
 disable-model-invocation: true
 ---

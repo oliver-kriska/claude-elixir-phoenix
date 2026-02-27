@@ -1,6 +1,6 @@
 ---
 name: deploy
-description: Elixir/Phoenix deployment patterns - releases, Docker, Kubernetes, Fly.io. Load when deploying to production.
+description: Elixir/Phoenix deployment patterns - releases, Docker, Kubernetes, Fly.io. Use when editing Dockerfile, fly.toml, config/runtime.exs, or any deployment config. Also use when the user mentions deploying, releases, CI/CD, or production setup.
 ---
 
 # Elixir/Phoenix Deployment Reference

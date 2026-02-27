@@ -1,6 +1,6 @@
 ---
 name: phx:quick
-description: Fast implementation mode. Skip ceremony, minimal review, direct to working code. For experienced devs who need speed.
+description: Fast implementation mode. Skip ceremony, minimal review, direct to working code. Use for small changes under 50 lines, bug fixes, config tweaks, or when the user says "just do it" or wants speed over process.
 ---
 
 # Quick Mode

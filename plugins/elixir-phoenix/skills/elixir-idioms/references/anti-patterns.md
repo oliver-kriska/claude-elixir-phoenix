@@ -183,3 +183,108 @@ def factorial(n), do: n * factorial(n - 1)  # Multiplication after recursion
 ```
 
 **Rule of thumb**: Use Enum for 95% of cases—cleaner and well-tested.
+
+## AI Code Generation Anti-Slop
+
+Patterns that produce technically correct but generic, low-quality code.
+Avoid these when generating Elixir/Phoenix code:
+
+### Boilerplate Padding
+
+```elixir
+# SLOP: Empty moduledocs on every module
+defmodule MyApp.Accounts do
+  @moduledoc ""
+  # ...
+end
+
+# BETTER: Only add @moduledoc when there's something meaningful to say
+# Omit it entirely for obvious single-purpose modules
+
+# SLOP: Commented-out placeholder code
+def create_user(attrs) do
+  # TODO: Add validation
+  # TODO: Send welcome email
+  # TODO: Notify admin
+  Repo.insert(changeset)
+end
+
+# BETTER: Either implement it or don't mention it
+def create_user(attrs) do
+  %User{} |> User.changeset(attrs) |> Repo.insert()
+end
+```
+
+### Over-Abstraction
+
+```elixir
+# SLOP: Premature abstraction for one-time use
+defmodule MyApp.Helpers.StringUtils do
+  def format_name(first, last), do: "#{first} #{last}"
+end
+
+# BETTER: Inline it where it's used — three lines beats a module
+
+# SLOP: Unnecessary GenServer wrapping
+defmodule MyApp.Calculator do
+  use GenServer
+  def calculate(x, y), do: GenServer.call(__MODULE__, {:calc, x, y})
+  def handle_call({:calc, x, y}, _from, state), do: {:reply, x + y, state}
+end
+
+# BETTER: A module function — no state, no concurrency need
+defmodule MyApp.Calculator do
+  def calculate(x, y), do: x + y
+end
+```
+
+### Defensive Over-Engineering
+
+```elixir
+# SLOP: Redundant error handling for internal code
+def get_user!(id) do
+  case Repo.get(User, id) do
+    nil -> raise "User not found"  # Repo.get! already does this
+    user -> user
+  end
+end
+
+# BETTER: Trust the framework
+def get_user!(id), do: Repo.get!(User, id)
+
+# SLOP: Validating what the type system guarantees
+def process(%User{} = user) do
+  if is_map(user) and Map.has_key?(user, :id) do
+    # ...
+  end
+end
+
+# BETTER: The pattern match already ensures the struct shape
+def process(%User{id: id} = user) do
+  # ...
+end
+```
+
+### Uniform Style
+
+```elixir
+# SLOP: Everything looks the same — identical structure everywhere
+# (every context function: get, list, create, update, delete)
+def list_users, do: Repo.all(User)
+def get_user(id), do: Repo.get(User, id)
+def create_user(attrs), do: %User{} |> User.changeset(attrs) |> Repo.insert()
+def update_user(user, attrs), do: user |> User.changeset(attrs) |> Repo.update()
+def delete_user(user), do: Repo.delete(user)
+
+# BETTER: Only implement what the domain actually needs
+# Not every entity needs full CRUD. A read-only lookup table
+# only needs list and get. An append-only audit log only needs create.
+```
+
+### Key Principle
+
+Write code that solves the specific problem at hand. Don't generate
+scaffolding for hypothetical future needs, add defensive checks for
+impossible states, or create abstractions before you have two concrete
+uses. Three similar lines of code is better than a premature
+abstraction.

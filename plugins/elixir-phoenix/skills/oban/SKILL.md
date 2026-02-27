@@ -1,6 +1,6 @@
 ---
 name: oban
-description: Oban background job patterns - workers, queues, error handling, testing. Load when working with background jobs.
+description: Oban background job patterns - workers, queues, error handling, testing. Use whenever editing *_worker.ex, *_job.ex files, or queue configuration. Also use when the user mentions background jobs, async tasks, scheduled work, or Oban.
 user-invocable: false
 ---
 

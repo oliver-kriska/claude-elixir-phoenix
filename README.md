@@ -590,6 +590,7 @@ This plugin was built with insights from these articles, repositories, and tools
 - <https://mitchellh.com/writing/my-ai-adoption-journey>
 - <https://martinfowler.com/articles/exploring-gen-ai/harness-engineering.html>
 - <https://github.com/rjs/shaping-skills>
+- <https://github.com/anthropics/skills>
 
 ## License
 
