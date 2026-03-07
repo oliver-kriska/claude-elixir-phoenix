@@ -60,6 +60,22 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   pattern for error recovery, action verification hook architecture, and anti-patterns for
   unstructured retry loops
 
+### Added
+
+- **PostToolUse iron-law-verifier.sh hook** — Programmatic code-content scanning for Iron Law
+  violations after Edit/Write. Catches String.to_atom, :float for money, raw/1 with variables,
+  implicit cross joins, bare GenServer.start_link, and assign_new misuse. Inspired by
+  AutoHarness (Lou et al., 2026) "harness-as-action-verifier" pattern: code validates LLM
+  output and feeds specific violation + line number back for targeted retry
+- **PostToolUseFailure error-critic.sh hook** — Detects repeated mix command failures and
+  escalates from generic hints (attempt 1) to structured critic analysis (attempt 3+).
+  Tracks failure count per command, consolidates error history, and suggests /phx:investigate.
+  Implements the Critic→Refiner pattern from AutoHarness: structured error consolidation
+  before retry prevents debugging loops
+- **harness-patterns.md reference** — New work skill reference documenting the critic-refiner
+  pattern for error recovery, action verification hook architecture, and anti-patterns for
+  unstructured retry loops
+
 ### Changed
 
 - **fulltext-search.md** — Rewritten with generated columns (preferred over triggers),
