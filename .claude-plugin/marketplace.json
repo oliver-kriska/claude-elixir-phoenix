@@ -18,6 +18,16 @@
       "source": "./plugins/elixir-phoenix",
       "category": "development",
       "tags": ["elixir", "phoenix", "liveview", "oban", "ecto"]
+    },
+    {
+      "name": "elixir-inspector",
+      "description": "Analyze Elixir/Phoenix codebases across 6 layers and generate Credo checks, skills, CI steps, and review prompts",
+      "author": {
+        "name": "Oliver Kriska"
+      },
+      "source": "./plugins/elixir-inspector",
+      "category": "analysis",
+      "tags": ["elixir", "phoenix", "credo", "code-quality", "inspector"]
     }
   ]
 }
