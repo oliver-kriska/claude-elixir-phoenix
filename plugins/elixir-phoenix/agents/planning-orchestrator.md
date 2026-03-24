@@ -60,9 +60,21 @@ Tidewave. Skip if unavailable — agents fall back to static analysis.
 
 ### Phase 1c: Research Cache Reuse
 
-Before spawning web/hex agents, check `.claude/research/` and
-`.claude/plans/*/research/` for matching research <48h old.
-If found, skip the agent and reuse cached findings.
+Before spawning web/hex agents, check for prior research that
+covers the planned feature's topics:
+
+1. **Discover**: Glob `.claude/research/*.md` and
+   `.claude/plans/*/research/*.md` for existing files
+2. **Relevance**: Grep candidates for keywords from the feature
+   description — 2+ keyword matches = relevant
+3. **Freshness**: Skip files older than 48h (`find -mtime -2`)
+4. **Apply** each relevant, fresh file:
+   - Include key findings in Phase 2 synthesis context
+   - **Skip** the corresponding agent:
+     `*-evaluation.md` → skip hex-library-researcher,
+     `research-*.md` → skip web-researcher for that topic
+   - Log: `REUSED: {filename} (skipped {agent})` in scratchpad
+5. **No match?** Proceed to Phase 2 normally
 
 ### Phase 2: Spawn Research Agents (Parallel)
 

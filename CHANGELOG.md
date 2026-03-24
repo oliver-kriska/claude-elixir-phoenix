@@ -7,6 +7,19 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
+### Changed
+
+- **Planning orchestrator Phase 1c** — Expanded research cache reuse from 3 lines
+  to actionable implementation steps: discover candidates via glob, relevance
+  check via keyword grep, freshness gate (48h), agent skip mapping, and
+  scratchpad logging. Prevents redundant web/hex agent spawns when prior
+  `/phx:research` output exists
+
+### Fixed
+
+- **`setup-dirs.sh`** — Added `.claude/research/` to SessionStart directory
+  creation so the research output directory exists before `/phx:research` runs
+
 ## [2.5.0] - 2026-03-21
 
 ### Added
