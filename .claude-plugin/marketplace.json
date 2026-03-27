@@ -20,12 +20,12 @@
       "tags": ["elixir", "phoenix", "liveview", "oban", "ecto"]
     },
     {
-      "name": "elixir-inspector",
+      "name": "elixir-xray",
       "description": "Analyze Elixir/Phoenix codebases across 6 layers and generate Credo checks, skills, CI steps, and review prompts",
       "author": {
         "name": "Oliver Kriska"
       },
-      "source": "./plugins/elixir-inspector",
+      "source": "./plugins/elixir-xray",
       "category": "analysis",
       "tags": ["elixir", "phoenix", "credo", "code-quality", "inspector"]
     }
