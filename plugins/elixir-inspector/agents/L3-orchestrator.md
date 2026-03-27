@@ -8,6 +8,7 @@ tools: Read, Write, Bash, Agent
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: haiku
+effort: low
 ---
 
 # Layer 3 Orchestrator: Code & Documentation Deep Analysis

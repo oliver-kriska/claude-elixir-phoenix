@@ -7,6 +7,7 @@ tools: Read, Write, Bash, Agent
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: haiku
+effort: low
 ---
 
 # Layer 4 Orchestrator: Config Deep Scan

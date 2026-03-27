@@ -7,8 +7,7 @@ description: |
 tools: Read, Grep, Glob, Write
 permissionMode: bypassPermissions
 model: sonnet
-skills:
-  - ei:apply
+effort: medium
 ---
 
 # Claude Code Skill Generator

@@ -7,6 +7,7 @@ tools: Read, Write, Bash, Agent
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: haiku
+effort: low
 ---
 
 # L2 Deep Orchestrator — PR Reviews

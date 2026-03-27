@@ -1,11 +1,11 @@
 ---
 name: ei:fix
 description: >
-  Auto-implement the highest-ROI finding from Inspector scan — generates AND applies the fix to
-  your project. Creates Credo checks in lib/, adds CI steps to workflows, appends rules to
-  CLAUDE.md. Interactive menu lets you pick all, top N, category, or specific findings. Use after
-  /ei:scan when the user says fix the top issue, implement the first finding, apply the quick win,
-  fix it, or wants to go from analysis to action immediately.
+  Implement the highest-ROI Inspector finding directly in your Elixir project — creates Credo
+  checks in lib/, adds CI steps, appends Ecto and architecture rules to CLAUDE.md. Use after
+  /ei:scan when the user says fix the top issue, implement the finding, apply the quick win,
+  fix it, or wants to go from scan analysis to action immediately.
+effort: medium
 argument-hint: "[finding-id]"
 ---
 
@@ -156,5 +156,5 @@ If `mix compile` fails after generating a Credo check:
 
 ## References
 
-- `references/credo-template.md` — Template for Credo check generation
-- `references/finding-schema.md` — Finding YAML frontmatter format
+- `${CLAUDE_SKILL_DIR}/../apply/references/credo-template.md` — Template for Credo check generation
+- `${CLAUDE_SKILL_DIR}/../scan/references/finding-schema.md` — Finding YAML frontmatter format

@@ -7,6 +7,7 @@ description: |
 tools: Read, Grep, Glob, Bash, Write
 permissionMode: bypassPermissions
 model: sonnet
+effort: medium
 ---
 
 # CI/CD Generator

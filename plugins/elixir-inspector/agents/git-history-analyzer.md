@@ -4,10 +4,11 @@ description: |
   Interpret pre-computed git history data for Inspector Layer 1.
   Receives JSON from analyze-git-history.py, produces findings with YAML frontmatter.
   Use as part of /ei:scan pipeline — never invoke directly.
-tools: Read, Grep, Glob, Bash, Write
-disallowedTools: Edit, NotebookEdit
+tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: sonnet
+effort: medium
 ---
 
 # Git History Analyzer (Layer 1)

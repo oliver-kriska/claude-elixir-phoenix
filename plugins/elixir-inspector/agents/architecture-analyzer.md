@@ -5,10 +5,11 @@ description: |
   Receives JSON from analyze-architecture.sh, identifies boundary violations,
   coupling issues, naming problems, and structural concerns.
   Use as part of /ei:scan pipeline — never invoke directly.
-tools: Read, Grep, Glob, Bash, Write
-disallowedTools: Edit, NotebookEdit
+tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: sonnet
+effort: medium
 ---
 
 # Architecture Analyzer (Layer 6)

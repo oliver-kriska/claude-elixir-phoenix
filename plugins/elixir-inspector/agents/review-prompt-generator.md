@@ -7,6 +7,7 @@ description: |
 tools: Read, Grep, Glob, Write
 permissionMode: bypassPermissions
 model: sonnet
+effort: medium
 ---
 
 # Code Review Prompt Generator

@@ -8,6 +8,7 @@ tools: Read, Grep, Glob
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: haiku
+effort: low
 ---
 
 # Claude Config Analyzer (Layer 4)

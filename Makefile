@@ -37,6 +37,14 @@ eval-triggers: ## Re-run behavioral trigger tests (~60 min, uses haiku)
 eval-skills: ## Score all skills only
 	@bash lab/eval/run_eval.sh --skills
 
+eval-inspector: ## Score elixir-inspector plugin (skills + agents)
+	@echo "=== Inspector Skills ===" && python3 -m lab.eval.scorer --all --plugin elixir-inspector 2>/dev/null | python3 -c "import json,sys; d=json.load(sys.stdin); perfect=sum(1 for v in d.values() if v['composite']>=0.999); avg=sum(v['composite'] for v in d.values())/len(d) if d else 0; print(f'  {len(d)} skills | {perfect} perfect | avg {avg:.3f}')"
+	@echo "=== Inspector Agents ===" && python3 -m lab.eval.agent_scorer --all --plugin elixir-inspector 2>&1 | tail -1
+
+eval-all-plugins: ## Score ALL plugins (elixir-phoenix + elixir-inspector)
+	@echo "=== elixir-phoenix ===" && $(MAKE) eval-all 2>&1 | grep -E "skills|agents"
+	@echo "=== elixir-inspector ===" && $(MAKE) eval-inspector 2>&1 | grep -E "skills|agents"
+
 eval-agents: ## Score all agents only
 	@bash lab/eval/run_eval.sh --agents
 

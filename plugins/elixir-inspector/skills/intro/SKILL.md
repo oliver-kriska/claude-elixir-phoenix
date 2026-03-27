@@ -1,6 +1,11 @@
 ---
 name: ei:intro
-description: Interactive introduction to the Elixir Inspector plugin. Walks through what it does, prerequisites, commands, and expected output.
+description: >
+  Walk through the Elixir Inspector plugin commands and Credo check generation workflow.
+  Use when a new user asks what is Inspector, how does ei:scan work, what commands are
+  available, or needs an introduction to codebase audit and review features.
+effort: low
+argument-hint: ""
 ---
 
 # Elixir Inspector — Introduction
@@ -66,5 +71,16 @@ After running `/ei:scan`, you'll see a dashboard like:
 
 Total: 37 findings | 6 critical | 21 automatable
 ```
+
+## Iron Laws
+
+1. **NEVER modify project files** — intro is informational only, DO NOT write or edit code
+2. **MUST NOT run scan automatically** — only explain commands, let user decide when to run
+3. **DO NOT skip prerequisites check** — warn if `gh` CLI or ccrider are not available
+
+## References
+
+- `${CLAUDE_SKILL_DIR}/../scan/references/report-template.md` — Report structure reference
+- `${CLAUDE_SKILL_DIR}/../scan/references/finding-schema.md` — Finding format reference
 
 Ready to start? Run `/ei:scan` on your project!

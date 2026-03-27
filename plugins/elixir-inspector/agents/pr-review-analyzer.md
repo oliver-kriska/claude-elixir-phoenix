@@ -4,10 +4,11 @@ description: |
   Interpret pre-computed PR review data for Inspector Layer 2.
   Receives JSON from analyze-prs.py, produces findings with YAML frontmatter.
   Use as part of /ei:scan pipeline — never invoke directly.
-tools: Read, Grep, Glob, Bash, Write
-disallowedTools: Edit, NotebookEdit
+tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: sonnet
+effort: medium
 ---
 
 # PR Review Analyzer (Layer 2)

@@ -21,6 +21,12 @@ READONLY_KEYWORDS = {"review", "analyze", "audit", "check", "judge", "inspect", 
 WRITE_EXEMPT_NAMES = {
     "workflow-orchestrator", "planning-orchestrator", "context-supervisor",
     "phoenix-patterns-analyst",  # writes analysis output files
+    # elixir-inspector generators (Write needed for artifact generation)
+    "credo-generator", "cicd-generator", "claudemd-generator",
+    "review-prompt-generator", "skill-generator",
+    # elixir-inspector orchestrators (Write needed for consolidated output)
+    "l1-orchestrator", "l2-orchestrator", "l3-orchestrator",
+    "l4-orchestrator", "l5-orchestrator", "l6-orchestrator",
 }
 
 # Expected model per effort level
@@ -35,6 +41,12 @@ ORCHESTRATOR_NAMES = {
     "workflow-orchestrator", "planning-orchestrator", "parallel-reviewer",
     "deep-bug-investigator", "call-tracer", "context-supervisor",
     "docs-validation-orchestrator",
+    # elixir-inspector orchestrators (both cases: score_agent uses raw name,
+    # agent_model_appropriate lowercases)
+    "l1-orchestrator", "l2-orchestrator", "l3-orchestrator",
+    "l4-orchestrator", "l5-orchestrator", "l6-orchestrator",
+    "L1-orchestrator", "L2-orchestrator", "L3-orchestrator",
+    "L4-orchestrator", "L5-orchestrator", "L6-orchestrator",
 }
 
 

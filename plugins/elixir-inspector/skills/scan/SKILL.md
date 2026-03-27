@@ -1,18 +1,12 @@
 ---
 name: ei:scan
 description: >
-  Comprehensive Elixir/Phoenix codebase analysis across 6 layers (git history, PRs, code patterns,
-  .claude config, Claude sessions, architecture). Discovers recurring bug patterns, naming drift,
-  authorization gaps, architecture violations, and generates Credo checks, CI steps, and CLAUDE.md
-  rules. Use --deep for 20 sub-agent supervision tree producing 100+ patterns with cross-layer
-  correlation. Use --pr NUMBER for targeted PR-scoped scanning (~2 min). ALWAYS use this skill when
-  the user wants to understand their codebase health, find what keeps breaking, audit code quality,
-  discover implicit team conventions, detect architecture drift, identify tech debt priorities, or
-  asks what should we improve, where are the weak points, why do the same bugs keep coming back,
-  how healthy is this project. Also trigger on scan, analyze the codebase, audit, inspect, find
-  patterns, recurring issues, code quality overview, project health check, what conventions are we
-  following. Do NOT trigger for specific bug fixes, single feature implementations, or deployment
-  tasks.
+  Analyze Elixir/Phoenix codebase across 6 layers — git history, PRs, code patterns, config,
+  sessions, architecture. Finds recurring bugs, naming drift, auth gaps, Ecto anti-patterns,
+  and Credo violations. Use when auditing project health, finding tech debt, or asking
+  what keeps breaking, where are weak points, or how healthy is this codebase.
+  Do NOT trigger for single bug fixes or deployment tasks.
+effort: high
 argument-hint: "[--quick|--full|--deep|--fresh|--pr NUMBER|--gate measure|check|--focus=LAYER|--since=DATE]"
 ---
 
@@ -32,12 +26,12 @@ Analyze the current project across 6 layers using deterministic scripts + LLM in
 /ei:scan --since 2025-10-01
 ```
 
-## Bash Call Budget: Maximum 2
+## Iron Laws
 
-1. **Step 2**: mkdir + all scripts + size check (ONE call)
-2. **Step 3**: Session scorers + aggregate (ONE call, only if ccrider available)
-
-Do NOT use Bash for prerequisites, file checks, merge, or any utility — use Read/Glob.
+1. **Scripts extract data, agents interpret** — agents NEVER run git log, gh pr list, or raw grep
+2. **Bash call budget: max 2** — one for scripts, one for session scoring. Do NOT use Bash for prerequisites or file checks
+3. **All agents get pre-computed JSON** — never pass raw command output to agents
+4. **NEVER write generated artifacts** — scan is read-only analysis; use `/ei:apply` for artifact generation
 
 ## Workflow
 
@@ -174,46 +168,12 @@ mkdir -p .claude/inspector/history/ && cp .claude/inspector/findings-merged.json
 
 See `references/history-saving.md` for details.
 
-## Gate Mode (`--gate`)
-
-Quality gate for CI integration. NO agents needed — Python script only.
-
-```
-/ei:scan --gate measure   # Scan project, create baseline.json
-/ei:scan --gate check     # Compare against baseline, exit 0 (pass) or 1 (fail)
-```
-
-Run:
-
-```bash
-python3 "{SCRIPTS}/quality-gate.py" {SUBCOMMAND} "{PROJECT_ROOT}" --baseline .claude/inspector/baseline.json
-```
-
-Present results to user. For `check`: show pass/fail per category + any regressions.
-
-## PR Mode (`--pr NUMBER`)
-
-Targeted scan of files changed in a specific PR. Much faster than full scan (~2 min).
-
-1. Get changed files: `gh pr diff NUMBER --name-only` (in the ONE Bash call)
-2. Run only relevant scripts:
-   - git history: `--since` set to PR base branch merge-base
-   - code analysis: pass changed file list (focus on those files)
-   - architecture: check if changed files introduce NEW violations
-3. Skip: config layer, session layer (not relevant for single PR)
-4. Spawn 3 agents (L1, L3, L6) — not 6
-5. Report format: "This PR introduces:" + cross-reference with existing findings
-
-```bash
-# PR mode Bash call (ONE command)
-PR_FILES=$(gh pr diff {NUMBER} --name-only 2>/dev/null) && mkdir -p .claude/inspector/layers/sessions && S="{SCRIPTS}" && P="{PROJECT_ROOT}" && echo "$PR_FILES" > .claude/inspector/layers/pr-files.txt && python3 "$S/analyze-git-history.py" "$P" --since "$(git merge-base HEAD main)" > .claude/inspector/layers/git-history.json 2>.claude/inspector/layers/git-history.err & python3 "$S/analyze-code.py" "$P" --since "$(git merge-base HEAD main)" > .claude/inspector/layers/code-docs.json 2>.claude/inspector/layers/code-docs.err & bash "$S/analyze-architecture.sh" "$P" > .claude/inspector/layers/architecture.json 2>.claude/inspector/layers/architecture.err & wait && echo "Done" && wc -c .claude/inspector/layers/*.json
-```
-
 ## References
 
-- `references/finding-schema.md` — YAML frontmatter format
-- `references/scoring-methodology.md` — Priority scoring formula
-- `references/report-template.md` — Standard report template
-- `references/detailed-report-template.md` — Deep mode comprehensive template
-- `references/layer-prompts.md` — Agent mapping and session handling
-- `references/history-saving.md` — Scan history for `/ei:compare`
+- `${CLAUDE_SKILL_DIR}/references/finding-schema.md` — YAML frontmatter format
+- `${CLAUDE_SKILL_DIR}/references/scoring-methodology.md` — Priority scoring formula
+- `${CLAUDE_SKILL_DIR}/references/report-template.md` — Standard report template
+- `${CLAUDE_SKILL_DIR}/references/detailed-report-template.md` — Deep mode comprehensive template
+- `${CLAUDE_SKILL_DIR}/references/layer-prompts.md` — Agent mapping and session handling
+- `${CLAUDE_SKILL_DIR}/references/history-saving.md` — Scan history for `/ei:compare`
+- `${CLAUDE_SKILL_DIR}/references/special-modes.md` — Gate mode and PR mode details

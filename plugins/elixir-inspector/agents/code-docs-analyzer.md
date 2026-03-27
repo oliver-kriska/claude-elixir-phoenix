@@ -5,10 +5,11 @@ description: |
   Receives JSON from analyze-code.py, produces findings with YAML frontmatter.
   Largest agent — covers naming, docs, i18n, testing, domain conventions.
   Use as part of /ei:scan pipeline — never invoke directly.
-tools: Read, Grep, Glob, Bash, Write
-disallowedTools: Edit, NotebookEdit
+tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: sonnet
+effort: medium
 ---
 
 # Code & Documentation Analyzer (Layer 3)

@@ -1,9 +1,11 @@
 ---
 name: ei:compare
 description: >
-  Compare current Inspector scan results against a previous scan to show what improved, what
-  regressed, and trend lines. Use after running /ei:scan twice, or when asking did we improve,
-  what changed since last scan, show me progress, compare scans, what got fixed, any regressions.
+  Compare current Inspector scan against a previous scan to show Credo, Ecto, and architecture
+  improvements, regressions, and trend lines. Use after running /ei:scan twice, or when asking
+  did we improve, what changed since last scan, show me progress, compare scans, what got fixed,
+  any regressions. Do NOT trigger for single audit or first-time scan.
+effort: low
 argument-hint: "[previous-scan-path]"
 ---
 

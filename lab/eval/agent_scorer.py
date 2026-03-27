@@ -22,7 +22,8 @@ from lab.eval.agent_matchers import (
     agent_model_appropriate, agent_has_skills, ORCHESTRATOR_NAMES,
 )
 
-PLUGIN_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "plugins", "elixir-phoenix")
+PLUGINS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "plugins")
+PLUGIN_ROOT = os.path.join(PLUGINS_DIR, "elixir-phoenix")
 
 
 def score_agent(agent_path: str) -> SkillScore:
@@ -115,9 +116,12 @@ def score_agent(agent_path: str) -> SkillScore:
     )
 
 
-def find_all_agents() -> list[str]:
-    """Find all agent .md files."""
-    agents_dir = os.path.join(PLUGIN_ROOT, "agents")
+def find_all_agents(plugin_name: str | None = None) -> list[str]:
+    """Find all agent .md files in a plugin."""
+    if plugin_name:
+        agents_dir = os.path.join(PLUGINS_DIR, plugin_name, "agents")
+    else:
+        agents_dir = os.path.join(PLUGIN_ROOT, "agents")
     if not os.path.isdir(agents_dir):
         return []
     return sorted(
@@ -131,12 +135,13 @@ def main():
     parser = argparse.ArgumentParser(description="Score plugin agents across 5 dimensions")
     parser.add_argument("agent_path", nargs="?", help="Path to agent .md file")
     parser.add_argument("--all", action="store_true", help="Score all agents")
+    parser.add_argument("--plugin", help="Plugin name (default: elixir-phoenix)")
     parser.add_argument("--pretty", action="store_true", help="Pretty-print output")
     args = parser.parse_args()
 
     if args.all:
         results = {}
-        for path in find_all_agents():
+        for path in find_all_agents(args.plugin):
             name = os.path.basename(path).replace(".md", "")
             score = score_agent(path)
             results[name] = score.to_dict()

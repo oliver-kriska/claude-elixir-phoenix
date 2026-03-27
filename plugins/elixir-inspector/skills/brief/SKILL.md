@@ -1,10 +1,11 @@
 ---
 name: ei:brief
 description: >
-  Interactive walkthrough of Inspector scan findings — explains each finding with evidence,
-  impact, and suggested fix. Use after /ei:scan when the user wants to understand results, says
-  explain findings, walk me through, what did you find, or has 15+ findings and needs guided
-  review before /ei:apply.
+  Walk through Inspector scan findings interactively — explains each Ecto, LiveView, Credo,
+  or architecture finding with evidence, impact, and suggested fix. Use after /ei:scan when
+  the user wants to understand results, says explain findings, walk me through, what did you
+  find, or needs guided review before /ei:apply.
+effort: low
 argument-hint: "[report-path]"
 ---
 
@@ -67,7 +68,12 @@ After all categories (or user stops):
 
 ## Iron Laws
 
-1. **Never modify the report** — brief is read-only
-2. **Let user control pace** — don't dump everything at once
+1. **NEVER modify the report** — brief is read-only, DO NOT write or edit any scan files
+2. **Let user control pace** — MUST NOT dump all findings at once; use AskUserQuestion
 3. **Show evidence** — every finding needs concrete examples, not abstract claims
 4. **Suggest next action** — end with clear `/ei:apply` recommendation
+
+## References
+
+- `${CLAUDE_SKILL_DIR}/../scan/references/finding-schema.md` — Finding YAML frontmatter format
+- `${CLAUDE_SKILL_DIR}/../scan/references/report-template.md` — Report structure reference

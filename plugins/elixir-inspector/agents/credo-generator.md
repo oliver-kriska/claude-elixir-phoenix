@@ -7,8 +7,7 @@ description: |
 tools: Read, Grep, Glob, Bash, Write
 permissionMode: bypassPermissions
 model: sonnet
-skills:
-  - ei:apply
+effort: medium
 ---
 
 # Credo Check Generator

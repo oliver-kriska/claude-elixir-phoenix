@@ -5,10 +5,11 @@ description: |
   Receives aggregated JSON from analyze-sessions.py --aggregate mode.
   Identifies cross-session patterns worth automating.
   Use as part of /ei:scan pipeline — never invoke directly.
-tools: Read, Grep, Glob, Bash, Write
-disallowedTools: Edit, NotebookEdit
+tools: Read, Grep, Glob, Bash
+disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: sonnet
+effort: medium
 ---
 
 # Session Analyzer (Layer 5)
