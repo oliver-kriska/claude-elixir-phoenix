@@ -1,6 +1,6 @@
 {
-  "skill": "verify",
-  "skill_path": "plugins/elixir-phoenix/skills/verify/SKILL.md",
+  "skill": "deslop",
+  "skill_path": "plugins/elixir-phoenix/skills/deslop/SKILL.md",
   "dimensions": {
     "completeness": {
       "weight": 0.15,
@@ -24,6 +24,11 @@
           "type": "section_exists",
           "section": "Usage",
           "desc": "Has Usage section"
+        },
+        {
+          "type": "frontmatter_field",
+          "field": "argument-hint",
+          "desc": "Has argument-hint"
         },
         {
           "type": "content_present",
@@ -55,8 +60,8 @@
         {
           "type": "line_count",
           "target": 100,
-          "tolerance": 95,
-          "desc": "Near 100-line target (195 max)"
+          "tolerance": 85,
+          "desc": "Near 100-line target (185 max)"
         },
         {
           "type": "max_section_lines",

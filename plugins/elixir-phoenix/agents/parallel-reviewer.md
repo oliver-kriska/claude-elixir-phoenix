@@ -273,9 +273,27 @@ Wait for ALL agents to FULLY complete using TaskOutput. If
 TaskOutput shows the agent is still running, wait and check
 again. NEVER proceed while any agent is still running.
 
+**Cross-Validation** (before compression):
+
+Read all review output files. For each finding, check:
+
+1. **Contradictions**: Does another agent disagree? (e.g., security says "fine",
+   iron-law-judge says "violation"). Tag as [DISPUTED] with both perspectives.
+2. **Code verification**: Does the code ACTUALLY contain what the finding claims?
+   Re-read the specific lines mentioned. Tag false positives as [UNVERIFIED].
+3. **Severity consistency**: If two agents flag the same issue at different
+   severities, use the higher one.
+
+Tag each finding: [VALIDATED], [DISPUTED], or [UNVERIFIED].
+Remove findings tagged [UNVERIFIED] from the final output.
+Present [DISPUTED] findings with both perspectives for user decision.
+
+This catches false N+1 reports and phantom security issues (42%+ hallucination
+rate in niche domains — FActScore paper).
+
 **Context Supervision** (when `summaries_dir` provided):
 
-After all 4 agents complete, spawn context-supervisor:
+After cross-validation, spawn context-supervisor:
 
 ```
 Agent(subagent_type: "context-supervisor", mode: "bypassPermissions", prompt: """
