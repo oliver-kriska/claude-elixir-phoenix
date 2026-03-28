@@ -1,19 +1,19 @@
 {
   "skill": "learn-from-fix",
   "should_trigger": [
-    "I fixed the LiveView mount async issue \u2014 capture this pattern",
+    "I fixed the LiveView mount async issue",
     "That decimal field mistake was serious. Document this learning?",
     "The Oban idempotency bug broke production. Record this lesson?",
     "I finally got the `^` pinning rule right. Update knowledge base?",
     "You caught my Iron Law violation. Prevent this next time?"
   ],
   "should_not_trigger": [
-    "Help me debug this N+1 query in my code \u2014 /investigate",
-    "Show me the right Ecto query pattern for this \u2014 /ecto-patterns",
-    "Review my LiveView component for performance issues \u2014 /review",
-    "How do I validate fields in a changeset? \u2014 /ecto-patterns",
-    "Scan the codebase for N+1 anti-patterns please \u2014 /n1-check",
-    "Audit the project health across architecture and security \u2014 /audit",
-    "Give me Phoenix context design patterns for this domain \u2014 /phoenix-contexts"
+    "Help me debug this N+1 query in my code",
+    "Show me the right Ecto query pattern for this",
+    "Review my LiveView component for performance issues",
+    "How do I validate fields in a changeset?",
+    "Scan the codebase for N+1 anti-patterns please",
+    "Audit the project health across architecture and security",
+    "Give me Phoenix context design patterns for this domain"
   ]
 }

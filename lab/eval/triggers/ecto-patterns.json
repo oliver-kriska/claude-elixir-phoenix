@@ -8,8 +8,19 @@
     "How do I use Ecto.Multi for atomic transactions?"
   ],
   "should_not_trigger": [
-    "Scan my codebase for N+1 queries and fix them \u2014 n1-check",
-    "My LiveView form isn't updating when socket assigns change \u2014 liveview-patterns",
-    "Audit the project for technical debt and code quality \u2014 techdebt"
+    "Scan my codebase for N+1 queries and fix them",
+    "My LiveView form isn't updating when socket assigns change",
+    "Audit the project for technical debt and code quality"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "ecto preloads", "axis": "terse"},
+    {"prompt": "changset validaton not workign for embeded schema", "axis": "typo"},
+    {"prompt": "I have a users table and a posts table and I need to add tags that can belong to multiple posts, what's the right way to model this with Ecto schemas and migrations and also handle the changesets", "axis": "verbose"},
+    {"prompt": "write the migration and then write the query to fetch with preloads", "axis": "multi_intent"},
+    {"prompt": "how do I structure this join table", "axis": "context_dependent"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "find all the N+1 queries in my codebase", "axis": "confusable", "confusable_with": "n1-check"},
+    {"prompt": "the Accounts context is getting too big, how should I split it", "axis": "confusable", "confusable_with": "phoenix-contexts"}
   ]
 }

@@ -8,13 +8,24 @@
     "Change the controller response format to JSON"
   ],
   "should_not_trigger": [
-    "Why isn't my form submitting correctly \u2014 belongs to investigate (bug report)",
-    "Refactor the user context to separate concerns \u2014 belongs to plan (large refactor)",
-    "Check my authentication code for security issues \u2014 belongs to security (security review)",
-    "Fix the component that's not rendering at all \u2014 belongs to investigate (bug)",
-    "What command should I use for this task \u2014 belongs to help (navigation)",
-    "Validate my schema design before implementation \u2014 belongs to plan (design validation)",
-    "Check for N+1 queries in the user loader \u2014 belongs to n1-check (specific analysis)",
-    "Generate API documentation for this endpoint \u2014 belongs to document (documentation)"
+    "Why isn't my form submitting correctly",
+    "Refactor the user context to separate concerns",
+    "Check my authentication code for security issues",
+    "Fix the component that's not rendering at all",
+    "What command should I use for this task",
+    "Validate my schema design before implementation",
+    "Check for N+1 queries in the user loader",
+    "Generate API documentation for this endpoint"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "fix typo", "axis": "terse"},
+    {"prompt": "chang the buttn color to blue", "axis": "typo"},
+    {"prompt": "I just need to add a single field to the schema, add the migration, update the changeset cast, and update the form template to show it, nothing fancy", "axis": "verbose"},
+    {"prompt": "rename the column and update the template", "axis": "multi_intent"},
+    {"prompt": "update this config value", "axis": "context_dependent"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "the button click does nothing, figure out why", "axis": "confusable", "confusable_with": "investigate"},
+    {"prompt": "implement the next task from my plan", "axis": "confusable", "confusable_with": "work"}
   ]
 }

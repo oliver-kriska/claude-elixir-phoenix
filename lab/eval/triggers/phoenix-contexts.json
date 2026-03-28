@@ -4,16 +4,16 @@
     "Should I split the Accounts context into Auth and Profiles?",
     "Guide me on Phoenix 1.8 Scope struct for authorization",
     "How to structure context boundaries for a marketplace app?",
-    "Router pipelines and scope blocks \u2014 best practices?",
+    "Router pipelines and scope blocks",
     "PubSub broadcasting between Accounts and Admin contexts?"
   ],
   "should_not_trigger": [
-    "My form validation isn't working, debug it \u2014 ecto-patterns",
-    "Ecto queries are slow, N+1 issue? \u2014 ecto-patterns or perf",
-    "Implement GitHub OAuth login \u2014 security",
-    "LiveView assigns using too much memory \u2014 assigns-audit",
-    "Review my code for architectural debt \u2014 review or boundaries",
-    "How do I build a GenServer? \u2014 elixir-idioms",
-    "Writing tests for controller endpoints \u2014 testing"
+    "My form validation isn't working, debug it",
+    "Ecto queries are slow, N+1 issue?",
+    "Implement GitHub OAuth login",
+    "LiveView assigns using too much memory",
+    "Review my code for architectural debt",
+    "How do I build a GenServer?",
+    "Writing tests for controller endpoints"
   ]
 }

@@ -5,6 +5,42 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Eval set overlap analysis & hardening** — 4-phase eval hardening based on
+  15 research papers (Gao et al. ICML 2023, Oren et al. ICLR 2024, Ribeiro et al.
+  ACL 2020, Kiela et al. NAACL 2021, Shihab et al. 2025, and others)
+- **Phase 1: Strip routing hints** — Removed 344 indirect contamination hints
+  (em-dashes, arrows, parenthetical annotations) from 40 trigger files.
+  Per Oren et al. ICLR 2024, these constituted textbook test set contamination
+- **Phase 2: Hard prompt tier** — Added CheckList-inspired hard prompts (terse,
+  typo, multi-intent, verbose, confusable, context-dependent) to 10 trigger files.
+  Hard tier uses 50% accuracy / 40% recall thresholds vs 75%/60% for standard
+- **Phase 3: Proxy-gold tracking** — Autoresearch now spot-checks behavioral
+  accuracy (gold metric) alongside structural scores (proxy metric). Reverts if
+  behavioral drops below 60% or diverges >10% from proxy (Gao et al. ICML 2023).
+  SPIN convergence detector warns when proxy delta < 0.001 for 5+ iterations
+- **Phase 4: Dynamic eval corpus tools** — `generate_hard_corpus.py` (Dynabench-
+  inspired adversarial prompt generator via Sonnet) and `generate_confusable_pairs.py`
+  (confusion matrix targeting for hard negatives per Suresh & Ong EMNLP 2021)
+- **Evaluator Stress Test** (`evaluator_stress_test.py`) — Detects gameable
+  matchers via semantics-preserving perturbations (Shihab et al. arXiv 2507.05619)
+- **`strip_hints.py`** — One-time script to strip routing hint annotations from
+  trigger test prompts (supports --dry-run, --stats)
+
+### Changed
+
+- **`trigger_scorer.py`** — Refactored to support two-tier scoring (standard/hard),
+  confusion matrix building, per-axis metadata preservation
+- **`behavioral.py`** — Added hard-tier assertions with lower thresholds
+- **`run-iteration.py`** — Added behavioral spot-check, proxy-gold divergence
+  tracking, SPIN convergence detection to `cmd_eval`
+- **`program.md`** — Updated to 8 dimensions, added proxy-gold tracking section
+- **`generate_triggers.py`** — Removed hint instruction that caused indirect
+  contamination in negative prompts
+
 ## [2.6.0] - 2026-03-27
 
 ### Added

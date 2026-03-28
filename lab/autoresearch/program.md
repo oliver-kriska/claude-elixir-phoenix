@@ -27,10 +27,27 @@
 
 ## Scoring
 
-- 7 dimensions: completeness, accuracy, conciseness, triggering, safety, clarity, specificity
-- Composite = weighted average (0.20, 0.15, 0.15, 0.10, 0.10, 0.15, 0.15)
+- 8 dimensions: completeness, accuracy, conciseness, triggering, safety, clarity, specificity, **behavioral**
+- Structural composite = weighted average (0.20, 0.15, 0.15, 0.10, 0.10, 0.15, 0.15)
+- Behavioral (8th dimension) = haiku routing accuracy on trigger test prompts
+  - Standard tier: should_trigger/should_not_trigger (threshold: 75% accuracy)
+  - Hard tier: terse/typo/multi-intent/confusable prompts (threshold: 50% accuracy)
+  - Scored via `trigger_scorer.py`, cached in `lab/eval/triggers/results/`
+- `cmd_eval` now spot-checks behavioral accuracy for the mutated skill (~$0.01, ~30s)
 - Eval definitions: `lab/eval/evals/{skill}.json` (skill-specific) or default
 - Scorer: `python3 -m lab.eval.scorer {skill_path}`
+
+## Proxy-Gold Tracking (Gao et al., ICML 2023)
+
+The structural composite is the **proxy** reward model. Behavioral trigger
+accuracy is the **gold** reward model. Per "Scaling Laws for Reward Model
+Overoptimization," proxy reward increases monotonically while gold reward
+peaks then declines when overoptimized.
+
+- `cmd_eval` logs both `proxy_score` and `gold_score` in output
+- REVERT if behavioral accuracy drops below 60%
+- REVERT if proxy improves but behavioral regresses by >10% (divergence)
+- SPIN convergence: warn when proxy delta < 0.001 for 5+ iterations
 
 ## Keep Threshold
 

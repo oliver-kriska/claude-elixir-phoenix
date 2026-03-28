@@ -8,10 +8,22 @@
     "Build a real-time chat feature with WebSockets and presence"
   ],
   "should_not_trigger": [
-    "Why is my save failing with this Ecto error? \u2014 /phx:investigate (debugging specific error)",
-    "Add an email field to the user registration form \u2014 /phx:quick (small single-file change)",
-    "Show me examples of GenServer patterns \u2014 /phx:elixir-idioms (reference skill, not implementation planning)",
-    "Can you review my authentication implementation? \u2014 /phx:review (code review, not planning)",
-    "Let me implement the plan we designed \u2014 /phx:work (execution phase, plan already exists)"
+    "Why is my save failing with this Ecto error?",
+    "Add an email field to the user registration form",
+    "Show me examples of GenServer patterns",
+    "Can you review my authentication implementation?",
+    "Let me implement the plan we designed"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "billing system", "axis": "terse"},
+    {"prompt": "I need to add user roles, permissions, an admin panel, and also integrate with Stripe for payments, and maybe add webhooks too", "axis": "verbose"},
+    {"prompt": "plan the notfication systm with emial and push", "axis": "typo"},
+    {"prompt": "architect how we should split the monolith context into bounded contexts", "axis": "confusable"},
+    {"prompt": "review the auth gaps then plan the fixes", "axis": "multi_intent"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "build the entire invoicing system end to end with tests and deploy", "axis": "confusable", "confusable_with": "full"},
+    {"prompt": "implement the tasks from my plan", "axis": "confusable", "confusable_with": "work"},
+    {"prompt": "add a phone field to the user profile", "axis": "confusable", "confusable_with": "quick"}
   ]
 }

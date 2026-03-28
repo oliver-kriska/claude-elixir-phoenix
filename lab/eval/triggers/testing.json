@@ -5,13 +5,13 @@
     "How do I set up Mox to mock an external API?",
     "Build test factories with ExMachina for my accounts context",
     "Write tests for this LiveView component using LiveViewTest",
-    "This async test keeps failing randomly \u2014 what's causing it?"
+    "This async test keeps failing randomly"
   ],
   "should_not_trigger": [
-    "Build a LiveView form for user signup \u2014 liveview-patterns",
-    "App crashes when I migrate the database, help debug \u2014 investigate",
-    "Add OAuth authentication to my Phoenix API \u2014 security",
-    "Review my controller code and suggest improvements \u2014 review",
-    "How should I organize contexts in a new project? \u2014 init"
+    "Build a LiveView form for user signup",
+    "App crashes when I migrate the database, help debug",
+    "Add OAuth authentication to my Phoenix API",
+    "Review my controller code and suggest improvements",
+    "How should I organize contexts in a new project?"
   ]
 }

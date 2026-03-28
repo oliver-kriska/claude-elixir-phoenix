@@ -4,14 +4,26 @@
     "Review my authentication changes for security vulnerabilities",
     "Check this code for Oban anti-patterns before I commit",
     "Can you review this LiveView component for performance issues?",
-    "Review these Ecto changes \u2014 want to catch edge cases",
+    "Review these Ecto changes",
     "Go over this PR for potential bugs"
   ],
   "should_not_trigger": [
-    "Verify this compiles and all tests pass \u2014 verify",
-    "Analyze the project for technical debt \u2014 techdebt",
-    "Help me fix this N+1 query \u2014 investigate",
-    "Grill me harder on these changes \u2014 challenge",
-    "Implement this feature quickly \u2014 quick"
+    "Verify this compiles and all tests pass",
+    "Analyze the project for technical debt",
+    "Help me fix this N+1 query",
+    "Grill me harder on these changes",
+    "Implement this feature quickly"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "look over this", "axis": "terse"},
+    {"prompt": "reveiw my ecto changset code plz", "axis": "typo"},
+    {"prompt": "I pushed some changes to the orders context yesterday and also touched the payment controller, can you look at all of it and tell me if I missed anything obvious before I open a PR", "axis": "verbose"},
+    {"prompt": "review the auth module and then investigate why tests fail", "axis": "multi_intent"},
+    {"prompt": "check these changes for problems", "axis": "context_dependent"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "the form save silently fails, figure out why", "axis": "confusable", "confusable_with": "investigate"},
+    {"prompt": "grill me on these changes, don't go easy", "axis": "confusable", "confusable_with": "challenge"},
+    {"prompt": "run mix compile and mix test to make sure everything passes", "axis": "confusable", "confusable_with": "verify"}
   ]
 }

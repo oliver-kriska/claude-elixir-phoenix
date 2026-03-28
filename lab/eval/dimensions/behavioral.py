@@ -3,6 +3,16 @@
 Uses cached trigger test results from lab/eval/triggers/results/.
 If no cached results exist, returns a neutral score (dimension skipped).
 Run trigger_scorer.py first to populate cache.
+
+Two tiers:
+  - Standard: should_trigger / should_not_trigger (thresholds: 75% accuracy, 80% precision, 60% recall)
+  - Hard: hard_should_trigger / hard_should_not_trigger (threshold: 50% accuracy)
+    Hard prompts test terse, typo-laden, multi-intent, and confusable-pair routing.
+
+Research basis:
+  - CheckList (Ribeiro et al., ACL 2020) — capabilities × test types matrix
+  - Proving Test Set Contamination (Oren et al., ICLR 2024) — uncontaminated negatives
+  - "Not All Negatives are Equal" (Suresh & Ong, EMNLP 2021) — confusable pairs
 """
 
 import json
@@ -42,35 +52,61 @@ def score(content: str, dimension: EvalDimension, skill_path: str = "", plugin_r
 
     assertions = []
 
-    # Assertion 1: Overall accuracy
-    accuracy = data.get("accuracy", 0)
+    # --- Standard tier assertions ---
+
+    # Use standard-tier metrics if available, fall back to combined
+    standard = data.get("standard", data)
+
+    accuracy = standard.get("accuracy", 0)
     min_accuracy = 0.75  # 6/8 correct is the minimum
     assertions.append(AssertionResult(
         id="behavioral-accuracy",
         check_type="trigger_accuracy",
-        description="Trigger accuracy >= 75%",
+        description="Standard trigger accuracy >= 75%",
         passed=accuracy >= min_accuracy,
-        evidence=f"Trigger accuracy: {accuracy:.0%} ({data.get('correct', 0)}/{data.get('total', 0)})",
+        evidence=f"Standard accuracy: {accuracy:.0%} ({standard.get('correct', 0)}/{standard.get('total', 0)})",
     ))
 
-    # Assertion 2: Precision (no false triggers)
-    precision = data.get("precision", 0)
+    precision = standard.get("precision", 0)
     assertions.append(AssertionResult(
         id="behavioral-precision",
         check_type="trigger_precision",
-        description="Trigger precision >= 80%",
+        description="Standard trigger precision >= 80%",
         passed=precision >= 0.80,
-        evidence=f"Precision: {precision:.0%} (TP={data.get('tp', 0)}, FP={data.get('fp', 0)})",
+        evidence=f"Standard precision: {precision:.0%} (TP={standard.get('tp', 0)}, FP={standard.get('fp', 0)})",
     ))
 
-    # Assertion 3: Recall (no missed triggers)
-    recall = data.get("recall", 0)
+    recall = standard.get("recall", 0)
     assertions.append(AssertionResult(
         id="behavioral-recall",
         check_type="trigger_recall",
-        description="Trigger recall >= 60%",
+        description="Standard trigger recall >= 60%",
         passed=recall >= 0.60,
-        evidence=f"Recall: {recall:.0%} (TP={data.get('tp', 0)}, FN={data.get('fn', 0)})",
+        evidence=f"Standard recall: {recall:.0%} (TP={standard.get('tp', 0)}, FN={standard.get('fn', 0)})",
     ))
+
+    # --- Hard tier assertions (CheckList-inspired) ---
+    # Lower thresholds: hard prompts are deliberately adversarial
+    # Neutral if no hard prompts exist yet (don't penalize)
+
+    hard = data.get("hard")
+    if hard and hard.get("total", 0) > 0:
+        hard_accuracy = hard.get("accuracy", 0)
+        assertions.append(AssertionResult(
+            id="behavioral-hard-accuracy",
+            check_type="trigger_hard_accuracy",
+            description="Hard trigger accuracy >= 50%",
+            passed=hard_accuracy >= 0.50,
+            evidence=f"Hard accuracy: {hard_accuracy:.0%} ({hard.get('correct', 0)}/{hard.get('total', 0)})",
+        ))
+
+        hard_recall = hard.get("recall", 0)
+        assertions.append(AssertionResult(
+            id="behavioral-hard-recall",
+            check_type="trigger_hard_recall",
+            description="Hard trigger recall >= 40%",
+            passed=hard_recall >= 0.40,
+            evidence=f"Hard recall: {hard_recall:.0%} (TP={hard.get('tp', 0)}, FN={hard.get('fn', 0)})",
+        ))
 
     return DimensionResult.from_assertions("behavioral", assertions)

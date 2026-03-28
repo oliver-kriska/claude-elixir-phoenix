@@ -2,16 +2,16 @@
   "skill": "pr-review",
   "should_trigger": [
     "I got review comments on my PR, help me address them",
-    "Here's a PR with feedback: https://github.com/myorg/myproject/pull/123 \u2014 respond to comments",
+    "Here's a PR with feedback: https://github.com/myorg/myproject/pull/123",
     "The reviewer flagged an N+1 query, how should I fix it?",
     "Draft responses to these review comments and fix the code",
     "Check if the reviewer's suggestions follow our iron laws"
   ],
   "should_not_trigger": [
-    "Review my new auth module for security issues \u2014 belongs to /phx:review",
-    "Challenge my LiveView component approach \u2014 belongs to /phx:challenge",
-    "Triage and categorize these review findings \u2014 belongs to /phx:triage",
-    "Debug this timeout in my test suite \u2014 belongs to /phx:investigate",
-    "Show me LiveView patterns for streams \u2014 belongs to /phx:liveview-patterns"
+    "Review my new auth module for security issues",
+    "Challenge my LiveView component approach",
+    "Triage and categorize these review findings",
+    "Debug this timeout in my test suite",
+    "Show me LiveView patterns for streams"
   ]
 }

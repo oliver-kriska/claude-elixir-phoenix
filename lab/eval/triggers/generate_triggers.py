@@ -64,16 +64,16 @@ Generate EXACTLY this JSON (no markdown, no explanation):
 {{
   "skill": "{skill_name}",
   "should_trigger": [
-    "prompt1 — realistic user request that SHOULD load {skill_name}",
-    "prompt2 — different phrasing, same intent",
-    "prompt3 — casual/informal version",
-    "prompt4 — edge case still in {skill_name}'s domain",
-    "prompt5 — another scenario {skill_name} handles"
+    "realistic user request that SHOULD load {skill_name}",
+    "different phrasing, same intent",
+    "casual/informal version",
+    "edge case still in {skill_name}'s domain",
+    "another scenario {skill_name} handles"
   ],
   "should_not_trigger": [
-    "prompt6 — similar but belongs to a DIFFERENT skill (name which one)",
-    "prompt7 — too generic, no specific skill needed",
-    "prompt8 — adjacent domain but different skill"
+    "similar-sounding prompt that belongs to a different skill",
+    "too generic, no specific skill needed",
+    "adjacent domain but different skill"
   ]
 }}
 
@@ -81,6 +81,7 @@ RULES:
 - Prompts must be realistic — what a real developer would actually type
 - should_trigger: Must clearly match {skill_name}'s description
 - should_not_trigger: Must NOT match {skill_name} but COULD match another skill or none
+- CRITICAL: Do NOT annotate prompts with skill names, dashes, or hints about which skill they belong to. Each prompt must stand alone as a realistic user message with NO metadata
 - Mix formal and casual phrasing
 - Include Elixir/Phoenix-specific terms where natural
 - Keep each prompt 5-20 words

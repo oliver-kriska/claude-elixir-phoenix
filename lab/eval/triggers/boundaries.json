@@ -8,10 +8,10 @@
     "Validate our module dependencies for architecture review"
   ],
   "should_not_trigger": [
-    "Add authentication checks to the accounts controller \u2014 security",
-    "Create a new payments context with refunds handling \u2014 phoenix-contexts",
-    "These queries are slow, optimize the dashboard \u2014 perf",
-    "Validate this changeset and add constraints \u2014 ecto-patterns",
-    "Help me refactor this LiveView component \u2014 liveview-patterns"
+    "Add authentication checks to the accounts controller",
+    "Create a new payments context with refunds handling",
+    "These queries are slow, optimize the dashboard",
+    "Validate this changeset and add constraints",
+    "Help me refactor this LiveView component"
   ]
 }

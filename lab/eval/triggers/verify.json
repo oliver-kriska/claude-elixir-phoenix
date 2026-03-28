@@ -8,10 +8,10 @@
     "Run verification on my changes"
   ],
   "should_not_trigger": [
-    "Run the unit tests for the auth module \u2014 testing",
-    "Review my code changes \u2014 review",
-    "Check for N+1 queries \u2014 n1-check",
-    "This test is failing, help me debug \u2014 investigate",
-    "How do I structure this LiveView form \u2014 liveview-patterns"
+    "Run the unit tests for the auth module",
+    "Review my code changes",
+    "Check for N+1 queries",
+    "This test is failing, help me debug",
+    "How do I structure this LiveView form"
   ]
 }

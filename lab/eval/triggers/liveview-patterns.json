@@ -8,8 +8,19 @@
     "Build a reusable modal component with proper lifecycle management"
   ],
   "should_not_trigger": [
-    "Write ExUnit tests for my live view's handle_event \u2014 testing",
-    "How do I preload database associations for my dropdown? \u2014 ecto-patterns",
-    "Set up an Oban worker to process background tasks \u2014 oban"
+    "Write ExUnit tests for my live view's handle_event",
+    "How do I preload database associations for my dropdown?",
+    "Set up an Oban worker to process background tasks"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "liveview streams", "axis": "terse"},
+    {"prompt": "phx-clik event not fiering in my componet", "axis": "typo"},
+    {"prompt": "I have a page that shows a list of items and when I click one it should open a modal with a form and when I submit the form it should update the list in real time using PubSub but I can't figure out how to wire it all together", "axis": "verbose"},
+    {"prompt": "add a JS hook for the chart and handle the callback in handle_event", "axis": "multi_intent"},
+    {"prompt": "how do I make this update in real time", "axis": "context_dependent"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "write tests for my LiveView handle_event callbacks", "axis": "confusable", "confusable_with": "testing"},
+    {"prompt": "should I put this logic in the LiveView or the context module", "axis": "confusable", "confusable_with": "phoenix-contexts"}
   ]
 }

@@ -5,7 +5,7 @@
     "that worked! capture the race condition fix in the docs",
     "save this liveview memory leak solution for future reference",
     "the changeset validation issue is solved, document the pattern",
-    "spent hours debugging the presence update race\u2014now we have the fix, save it"
+    "spent hours debugging the presence update race"
   ],
   "should_not_trigger": [
     "why is my form submission failing? (investigate)",

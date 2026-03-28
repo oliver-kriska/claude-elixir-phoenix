@@ -4,14 +4,14 @@
     "Audit my dashboard LiveView socket assigns for memory usage",
     "Find which assigns aren't being used in my user form",
     "Which assigns should be temporary_assigns instead?",
-    "My event list LiveView assigns keep growing \u2014 help optimize",
+    "My event list LiveView assigns keep growing",
     "Inventory all assigns and flag which need to use streams"
   ],
   "should_not_trigger": [
-    "How should I structure my LiveView components? \u2014 liveview-patterns",
-    "My form submission is broken \u2014 investigate",
-    "Audit my project for overall health \u2014 audit",
-    "Show me LiveView lifecycle best practices \u2014 liveview-patterns",
-    "Performance is slow in my dashboard \u2014 perf"
+    "How should I structure my LiveView components?",
+    "My form submission is broken",
+    "Audit my project for overall health",
+    "Show me LiveView lifecycle best practices",
+    "Performance is slow in my dashboard"
   ]
 }
