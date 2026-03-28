@@ -1,6 +1,6 @@
 ---
 name: tidewave-integration
-description: "Provide Tidewave MCP runtime tools for Phoenix development — runtime debugging, smoke testing, live state inspection. Use when evaluating Elixir code in a running app, inspecting live process state, checking application logs, querying the dev database via SQL, introspecting Ecto schemas at runtime, or looking up exact-version hex library docs."
+description: "Provide Tidewave MCP runtime tools for Phoenix development — execute Elixir expressions in a running app, inspect live GenServer/process state, query dev database via project_eval or execute_sql_query, check application logs. Use when user needs to evaluate code at runtime, inspect live state, run ad-hoc SQL, or smoke-test a running Phoenix app. NOT for fetching hex library documentation (use hexdocs-fetcher), NOT for LiveView assign memory analysis (use assigns-audit)."
 effort: low
 user-invocable: false
 ---

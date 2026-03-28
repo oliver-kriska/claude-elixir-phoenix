@@ -1,6 +1,6 @@
 ---
 name: phx:quick
-description: Implement small Phoenix changes without planning. Use when the user gives a direct instruction to add, update, fix, create, or change something — like adding a field validation, updating router routes, fixing a component for a new prop, creating a migration, or changing a controller response format. Single-file edits under 50 lines. Skip for bug investigation, code review, or large refactors.
+description: "Implement focused Phoenix changes (up to 3 files, under 50 lines) without planning overhead. Use when user says 'add a field', 'update this route', 'fix this component', 'create a migration', 'change the response format', or gives any direct single-step instruction. NOT for bug investigation (use investigate), code review (use review), multi-step features (use plan), or large refactors (use full)."
 effort: low
 ---
 

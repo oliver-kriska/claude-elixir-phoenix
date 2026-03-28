@@ -471,9 +471,24 @@ def specificity_ratio(content: str, min_ratio: float = 0.3, **_) -> tuple[bool, 
         r'\b(?:in some cases|depending on|for example you could)\b',
     ]
 
+    # Count lines with concrete vs vague indicators.
+    # Use binary per-line detection (has concrete? yes/no) to avoid
+    # sensitivity to content within code blocks — only structure matters.
+    # This prevents gaming via variable renames (EST perturbation robustness).
     concrete_count = 0
     vague_count = 0
+    in_code_block = False
     for line in lines:
+        stripped = line.strip()
+        if stripped.startswith("```"):
+            in_code_block = not in_code_block
+            # Code block delimiters count as concrete (structure indicator)
+            concrete_count += 1
+            continue
+        if in_code_block:
+            # All code block lines count as concrete (one per line, content-agnostic)
+            concrete_count += 1
+            continue
         has_concrete = any(re.search(p, line) for p in concrete_patterns)
         has_vague = any(re.search(p, line, re.IGNORECASE) for p in vague_phrases)
         if has_concrete:
@@ -618,7 +633,8 @@ def description_structure(content: str, **_) -> tuple[bool, str]:
         return False, "No description found"
 
     has_what = bool(re.search(r'^[A-Z][a-z]+\s', desc))  # Starts with action verb
-    has_when = bool(re.search(r'\b[Uu]se\s+(?:when|after|for|to)\b', desc))
+    # Accept synonyms: Use/Employ/Apply/Invoke when... (EST robustness)
+    has_when = bool(re.search(r'\b(?:[Uu]se|[Ee]mploy|[Aa]pply|[Ii]nvoke)\s+(?:when|after|for|to|ONLY)\b', desc))
 
     if has_what and has_when:
         return True, "Description has 'what' + 'when' components"

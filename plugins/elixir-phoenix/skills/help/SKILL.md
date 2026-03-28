@@ -1,6 +1,6 @@
 ---
 name: phx:help
-description: "Navigate Elixir/Phoenix plugin commands — recommend the right /phx: command, skill, or agent for planning, review, debug, deploy, ecto, liveview, or test tasks. Use when the user asks 'which command', 'what should I use', 'how do I', or needs help choosing between plugin workflows. DO NOT trigger for /help (built-in CLI command)."
+description: "Recommend the right /phx: command for a task. Use when user explicitly asks 'which command should I use', 'what /phx command', 'help me choose a command', or 'what's the right workflow for X'. MUST NOT trigger for how-to questions about Elixir/Phoenix code (use relevant pattern skills), NEVER trigger for /help (built-in CLI command), DO NOT trigger for broad questions about the plugin."
 argument-hint: "[description of what you want to do]"
 ---
 
@@ -86,7 +86,7 @@ After recommending, always add:
 
 ## Iron Laws
 
-1. **ONE recommendation** — don't dump the full catalog, pick the best match
+1. **ONE recommendation** — NEVER dump the full catalog, pick the best match
 2. **MAX ONE clarifying question** — don't interrogate, make your best guess
 3. **Show exact syntax** — `/phx:plan Add user notifications` not just "use the plan command"
 4. **Context over keywords** — existing plans + git state matter more than word matching
