@@ -17,11 +17,23 @@
     {"prompt": "the dashbord endpont is realy slow, mayb memeory leak", "axis": "typo"},
     {"prompt": "our app is getting slower and slower over time, users are complaining about the main feed taking forever to load, I think it might be the database but could also be the GenServer bottleneck or maybe LiveView assigns bloat, not sure where to start", "axis": "verbose"},
     {"prompt": "profile the index page and fix the slow queries", "axis": "multi_intent"},
-    {"prompt": "this endpoint takes 3 seconds", "axis": "context_dependent"}
+    {"prompt": "this endpoint takes 3 seconds", "axis": "context_dependent"},
+    {"prompt": "why is this so slow", "axis": "terse"},
+    {"prompt": "the app is crawling, users r complaining", "axis": "casual"},
+    {"prompt": "memory keeps going up, probly a leak somewhere", "axis": "casual"},
+    {"prompt": "genservr bottlenck on the notificaton worker i think", "axis": "typo"},
+    {"prompt": "users say the app hangs when theres >500 records", "axis": "casual"},
+    {"prompt": "our p99 latency is garbage on the search endpoint", "axis": "casual"},
+    {"prompt": "profle the api, somethings eating cpu", "axis": "typo"},
+    {"prompt": "timeout on the export csv endpoint, probly ecto", "axis": "casual"}
   ],
   "hard_should_not_trigger": [
     {"prompt": "scan for N+1 patterns across the repo", "axis": "confusable", "confusable_with": "n1-check"},
     {"prompt": "the form crashes when I submit, debug it", "axis": "confusable", "confusable_with": "investigate"},
-    {"prompt": "check LiveView assign sizes for memory issues", "axis": "confusable", "confusable_with": "assigns-audit"}
+    {"prompt": "check LiveView assign sizes for memory issues", "axis": "confusable", "confusable_with": "assigns-audit"},
+    {"prompt": "this query is slow", "axis": "confusable", "confusable_with": "ecto-patterns"},
+    {"prompt": "find all the places were doing N+1", "axis": "confusable", "confusable_with": "n1-check"},
+    {"prompt": "the form is broken when lots of data loads", "axis": "confusable", "confusable_with": "investigate"},
+    {"prompt": "review my query for efficiency", "axis": "confusable", "confusable_with": "review"}
   ]
 }

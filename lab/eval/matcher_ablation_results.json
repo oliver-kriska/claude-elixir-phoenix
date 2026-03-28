@@ -1,0 +1,360 @@
+{
+  "summary": {
+    "total_skills": 40,
+    "total_unique_checks": 38,
+    "signal_checks": 10,
+    "noise_checks": 28
+  },
+  "signal": [
+    {
+      "key": "specificity:description_structure:Description has what+when components",
+      "check_type": "description_structure",
+      "description": "Description has what+when components",
+      "dimension": "specificity",
+      "skills_affected": 3,
+      "total_abs_composite_delta": 0.12,
+      "impacts": [
+        {
+          "skill": "audit",
+          "composite_delta": 0.04,
+          "dimension_delta": 0.333333
+        },
+        {
+          "skill": "challenge",
+          "composite_delta": 0.04,
+          "dimension_delta": 0.333333
+        },
+        {
+          "skill": "document",
+          "composite_delta": 0.04,
+          "dimension_delta": 0.333333
+        }
+      ]
+    },
+    {
+      "key": "specificity:specificity_ratio:Specificity ratio (>20% concrete content)",
+      "check_type": "specificity_ratio",
+      "description": "Specificity ratio (>20% concrete content)",
+      "dimension": "specificity",
+      "skills_affected": 3,
+      "total_abs_composite_delta": 0.06,
+      "impacts": [
+        {
+          "skill": "audit",
+          "composite_delta": -0.02,
+          "dimension_delta": -0.166667
+        },
+        {
+          "skill": "challenge",
+          "composite_delta": -0.02,
+          "dimension_delta": -0.166667
+        },
+        {
+          "skill": "document",
+          "composite_delta": -0.02,
+          "dimension_delta": -0.166667
+        }
+      ]
+    },
+    {
+      "key": "specificity:has_examples:Has code examples",
+      "check_type": "has_examples",
+      "description": "Has code examples",
+      "dimension": "specificity",
+      "skills_affected": 3,
+      "total_abs_composite_delta": 0.06,
+      "impacts": [
+        {
+          "skill": "audit",
+          "composite_delta": -0.02,
+          "dimension_delta": -0.166667
+        },
+        {
+          "skill": "challenge",
+          "composite_delta": -0.02,
+          "dimension_delta": -0.166667
+        },
+        {
+          "skill": "document",
+          "composite_delta": -0.02,
+          "dimension_delta": -0.166667
+        }
+      ]
+    },
+    {
+      "key": "triggering:description_no_vague:No vague words in description",
+      "check_type": "description_no_vague",
+      "description": "No vague words in description",
+      "dimension": "triggering",
+      "skills_affected": 1,
+      "total_abs_composite_delta": 0.033333,
+      "impacts": [
+        {
+          "skill": "challenge",
+          "composite_delta": -0.033333,
+          "dimension_delta": -0.333333
+        }
+      ]
+    },
+    {
+      "key": "completeness:frontmatter_field:Has name field",
+      "check_type": "frontmatter_field",
+      "description": "Has name field",
+      "dimension": "completeness",
+      "skills_affected": 1,
+      "total_abs_composite_delta": 0.025,
+      "impacts": [
+        {
+          "skill": "challenge",
+          "composite_delta": 0.025,
+          "dimension_delta": 0.166667
+        }
+      ]
+    },
+    {
+      "key": "completeness:frontmatter_field:Has description field",
+      "check_type": "frontmatter_field",
+      "description": "Has description field",
+      "dimension": "completeness",
+      "skills_affected": 1,
+      "total_abs_composite_delta": 0.025,
+      "impacts": [
+        {
+          "skill": "challenge",
+          "composite_delta": 0.025,
+          "dimension_delta": 0.166667
+        }
+      ]
+    },
+    {
+      "key": "completeness:has_iron_laws:At least 3 Iron Laws",
+      "check_type": "has_iron_laws",
+      "description": "At least 3 Iron Laws",
+      "dimension": "completeness",
+      "skills_affected": 1,
+      "total_abs_composite_delta": 0.025,
+      "impacts": [
+        {
+          "skill": "challenge",
+          "composite_delta": -0.025,
+          "dimension_delta": -0.166667
+        }
+      ]
+    },
+    {
+      "key": "completeness:section_exists:Has Usage section",
+      "check_type": "section_exists",
+      "description": "Has Usage section",
+      "dimension": "completeness",
+      "skills_affected": 1,
+      "total_abs_composite_delta": 0.025,
+      "impacts": [
+        {
+          "skill": "challenge",
+          "composite_delta": -0.025,
+          "dimension_delta": -0.166667
+        }
+      ]
+    },
+    {
+      "key": "triggering:description_length:Description in sweet spot",
+      "check_type": "description_length",
+      "description": "Description in sweet spot",
+      "dimension": "triggering",
+      "skills_affected": 1,
+      "total_abs_composite_delta": 0.016667,
+      "impacts": [
+        {
+          "skill": "challenge",
+          "composite_delta": 0.016667,
+          "dimension_delta": 0.166667
+        }
+      ]
+    },
+    {
+      "key": "triggering:description_keywords:Enough domain keywords",
+      "check_type": "description_keywords",
+      "description": "Enough domain keywords",
+      "dimension": "triggering",
+      "skills_affected": 1,
+      "total_abs_composite_delta": 0.016667,
+      "impacts": [
+        {
+          "skill": "challenge",
+          "composite_delta": 0.016667,
+          "dimension_delta": 0.166667
+        }
+      ]
+    }
+  ],
+  "noise": [
+    {
+      "key": "accuracy:valid_agent_refs:All agent references valid",
+      "check_type": "valid_agent_refs",
+      "description": "All agent references valid",
+      "dimension": "accuracy"
+    },
+    {
+      "key": "accuracy:valid_file_refs:All reference file paths valid",
+      "check_type": "valid_file_refs",
+      "description": "All reference file paths valid",
+      "dimension": "accuracy"
+    },
+    {
+      "key": "accuracy:valid_skill_refs:All skill references valid",
+      "check_type": "valid_skill_refs",
+      "description": "All skill references valid",
+      "dimension": "accuracy"
+    },
+    {
+      "key": "clarity:action_density:Action density (>25% actionable lines)",
+      "check_type": "action_density",
+      "description": "Action density (>25% actionable lines)",
+      "dimension": "clarity"
+    },
+    {
+      "key": "clarity:action_density:Action density (>20% actionable lines)",
+      "check_type": "action_density",
+      "description": "Action density (>20% actionable lines)",
+      "dimension": "clarity"
+    },
+    {
+      "key": "clarity:action_density:Action density (>10% actionable lines \u2014 reference skill)",
+      "check_type": "action_density",
+      "description": "Action density (>10% actionable lines \u2014 reference skill)",
+      "dimension": "clarity"
+    },
+    {
+      "key": "clarity:no_duplication:No cross-section duplication",
+      "check_type": "no_duplication",
+      "description": "No cross-section duplication",
+      "dimension": "clarity"
+    },
+    {
+      "key": "clarity:workflow_step_coverage:No missing workflow steps",
+      "check_type": "workflow_step_coverage",
+      "description": "No missing workflow steps",
+      "dimension": "clarity"
+    },
+    {
+      "key": "completeness:content_present:Has References section",
+      "check_type": "content_present",
+      "description": "Has References section",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:content_present:Mentions deployment concepts",
+      "check_type": "content_present",
+      "description": "Mentions deployment concepts",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:content_present:Mentions Ecto core concepts",
+      "check_type": "content_present",
+      "description": "Mentions Ecto core concepts",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:content_present:Mentions Elixir idioms",
+      "check_type": "content_present",
+      "description": "Mentions Elixir idioms",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:content_present:Mentions LiveView lifecycle",
+      "check_type": "content_present",
+      "description": "Mentions LiveView lifecycle",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:content_present:Mentions Oban concepts",
+      "check_type": "content_present",
+      "description": "Mentions Oban concepts",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:content_present:Mentions context concepts",
+      "check_type": "content_present",
+      "description": "Mentions context concepts",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:content_present:Mentions auth concepts",
+      "check_type": "content_present",
+      "description": "Mentions auth concepts",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:content_present:Mentions testing concepts",
+      "check_type": "content_present",
+      "description": "Mentions testing concepts",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:frontmatter_field:Has argument-hint",
+      "check_type": "frontmatter_field",
+      "description": "Has argument-hint",
+      "dimension": "completeness"
+    },
+    {
+      "key": "completeness:has_iron_laws:At least 1 Iron Laws",
+      "check_type": "has_iron_laws",
+      "description": "At least 1 Iron Laws",
+      "dimension": "completeness"
+    },
+    {
+      "key": "conciseness:content_absent:No filler phrases",
+      "check_type": "content_absent",
+      "description": "No filler phrases",
+      "dimension": "conciseness"
+    },
+    {
+      "key": "conciseness:line_count:Near 100-line target (185 max)",
+      "check_type": "line_count",
+      "description": "Near 100-line target (185 max)",
+      "dimension": "conciseness"
+    },
+    {
+      "key": "conciseness:line_count:Near 100-line target (195 max)",
+      "check_type": "line_count",
+      "description": "Near 100-line target (195 max)",
+      "dimension": "conciseness"
+    },
+    {
+      "key": "conciseness:line_count:Near 100-line target (150 max)",
+      "check_type": "line_count",
+      "description": "Near 100-line target (150 max)",
+      "dimension": "conciseness"
+    },
+    {
+      "key": "conciseness:max_section_lines:No section exceeds 45 lines",
+      "check_type": "max_section_lines",
+      "description": "No section exceeds 45 lines",
+      "dimension": "conciseness"
+    },
+    {
+      "key": "safety:content_present:Has explicit prohibitions or critical rules",
+      "check_type": "content_present",
+      "description": "Has explicit prohibitions or critical rules",
+      "dimension": "safety"
+    },
+    {
+      "key": "safety:has_iron_laws:At least 3 Iron Laws",
+      "check_type": "has_iron_laws",
+      "description": "At least 3 Iron Laws",
+      "dimension": "safety"
+    },
+    {
+      "key": "safety:has_iron_laws:At least 1 Iron Laws",
+      "check_type": "has_iron_laws",
+      "description": "At least 1 Iron Laws",
+      "dimension": "safety"
+    },
+    {
+      "key": "safety:no_dangerous_patterns:No unsafe code patterns",
+      "check_type": "no_dangerous_patterns",
+      "description": "No unsafe code patterns",
+      "dimension": "safety"
+    }
+  ]
+}

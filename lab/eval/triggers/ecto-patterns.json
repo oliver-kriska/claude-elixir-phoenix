@@ -17,10 +17,22 @@
     {"prompt": "changset validaton not workign for embeded schema", "axis": "typo"},
     {"prompt": "I have a users table and a posts table and I need to add tags that can belong to multiple posts, what's the right way to model this with Ecto schemas and migrations and also handle the changesets", "axis": "verbose"},
     {"prompt": "write the migration and then write the query to fetch with preloads", "axis": "multi_intent"},
-    {"prompt": "how do I structure this join table", "axis": "context_dependent"}
+    {"prompt": "how do I structure this join table", "axis": "context_dependent"},
+    {"prompt": "whats the right way to do a polymorphic assoc in ecto", "axis": "casual"},
+    {"prompt": "changeset keeps rejecting valid data idk why", "axis": "casual"},
+    {"prompt": "multi step transacton with Ecto.Muliti, whats the patern", "axis": "typo"},
+    {"prompt": "need to add soft deletes to orders schema", "axis": "casual"},
+    {"prompt": "how do u do upserts in ecto, on_conflict stuff", "axis": "casual"},
+    {"prompt": "Repo.insert_all vs Repo.insert in a loop, whats the move", "axis": "casual"},
+    {"prompt": "my migratoin keeps timing out on big table, need to do it online", "axis": "typo"},
+    {"prompt": "virtual fields vs computed, when to use which", "axis": "casual"}
   ],
   "hard_should_not_trigger": [
     {"prompt": "find all the N+1 queries in my codebase", "axis": "confusable", "confusable_with": "n1-check"},
-    {"prompt": "the Accounts context is getting too big, how should I split it", "axis": "confusable", "confusable_with": "phoenix-contexts"}
+    {"prompt": "the Accounts context is getting too big, how should I split it", "axis": "confusable", "confusable_with": "phoenix-contexts"},
+    {"prompt": "the query is super slow, profile it", "axis": "confusable", "confusable_with": "perf"},
+    {"prompt": "why is my changeset silently failing, no errors shown", "axis": "confusable", "confusable_with": "investigate"},
+    {"prompt": "this query is slow, analyze it", "axis": "confusable", "confusable_with": "perf"},
+    {"prompt": "should I put the query logic in the schema module or the context", "axis": "confusable", "confusable_with": "phoenix-contexts"}
   ]
 }

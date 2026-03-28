@@ -13,5 +13,22 @@
     "Triage and categorize these review findings",
     "Debug this timeout in my test suite",
     "Show me LiveView patterns for streams"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "theres comments on my PR, help me deal with em", "axis": "casual"},
+    {"prompt": "reviewer wants me to fix the n+1 they flaggd", "axis": "typo"},
+    {"prompt": "address pr feedback", "axis": "terse"},
+    {"prompt": "https://github.com/myco/app/pull/47 got feedback, can u go thru the comments and fix what makes sense", "axis": "casual"},
+    {"prompt": "someone left a bunch of nits on my pr, handle it", "axis": "casual"},
+    {"prompt": "pr #42 has coments, fix waht makes sense and push", "axis": "typo"},
+    {"prompt": "respond to the review feedback on my open PR", "axis": "casual"},
+    {"prompt": "reviewer says my error handling is wrong, see the pr thread", "axis": "casual"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "look over my code before I open a PR", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "check my changes for issues", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "grill me on this before I push", "axis": "confusable", "confusable_with": "challenge"},
+    {"prompt": "sanity check my changes before I open a PR", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "find issues in my code before merging", "axis": "confusable", "confusable_with": "review"}
   ]
 }

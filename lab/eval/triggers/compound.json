@@ -13,5 +13,23 @@
     "review my code for potential security issues (review)",
     "scan this code for N+1 query problems (n1-check)",
     "what are the best practices for error handling? (ecto-patterns)"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "that fixed it, save this for next time", "axis": "casual"},
+    {"prompt": "ok it works now, document what we did", "axis": "casual"},
+    {"prompt": "compund the fix", "axis": "typo"},
+    {"prompt": "nice that worked! spent like 2 hrs on that race condition, lets not forget the solution", "axis": "casual"},
+    {"prompt": "capture this", "axis": "terse"},
+    {"prompt": "write that down so we dont hit this again", "axis": "casual"},
+    {"prompt": "TIL about ecto multi rollbacks, save this solution", "axis": "casual"},
+    {"prompt": "we spent forever on that timezone bug, log the fix", "axis": "casual"},
+    {"prompt": "thta was a nasty one, compound it", "axis": "typo"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "figure out why the test is failing", "axis": "confusable", "confusable_with": "investigate"},
+    {"prompt": "look over the fix I just made", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "whats the pattern for handling this kind of error", "axis": "confusable", "confusable_with": "ecto-patterns"},
+    {"prompt": "document how the auth flow works", "axis": "confusable", "confusable_with": "phoenix-contexts"},
+    {"prompt": "that fix looks wrong, review it again", "axis": "confusable", "confusable_with": "review"}
   ]
 }

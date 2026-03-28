@@ -22,10 +22,22 @@
     {"prompt": "chang the buttn color to blue", "axis": "typo"},
     {"prompt": "I just need to add a single field to the schema, add the migration, update the changeset cast, and update the form template to show it, nothing fancy", "axis": "verbose"},
     {"prompt": "rename the column and update the template", "axis": "multi_intent"},
-    {"prompt": "update this config value", "axis": "context_dependent"}
+    {"prompt": "update this config value", "axis": "context_dependent"},
+    {"prompt": "just add the damn field already", "axis": "frustrated"},
+    {"prompt": "swap the redirect from /users to /dashboard", "axis": "casual"},
+    {"prompt": "add validat_length to the name feild, max 255", "axis": "typo"},
+    {"prompt": "make the button say Save instead of Submit", "axis": "casual"},
+    {"prompt": "add phx-click to the delete btn", "axis": "terse"},
+    {"prompt": "drop the unused col from the migratoin", "axis": "typo"},
+    {"prompt": "wire up the is_admin bool to the user form, cast + migration + template", "axis": "casual"},
+    {"prompt": "just change the flash msg text", "axis": "terse"}
   ],
   "hard_should_not_trigger": [
     {"prompt": "the button click does nothing, figure out why", "axis": "confusable", "confusable_with": "investigate"},
-    {"prompt": "implement the next task from my plan", "axis": "confusable", "confusable_with": "work"}
+    {"prompt": "implement the next task from my plan", "axis": "confusable", "confusable_with": "work"},
+    {"prompt": "update the whole auth flow to use scopes", "axis": "confusable", "confusable_with": "plan"},
+    {"prompt": "change the query to preload comments, its doing n+1", "axis": "confusable", "confusable_with": "ecto-patterns"},
+    {"prompt": "the form isn't saving, something broke", "axis": "confusable", "confusable_with": "investigate"},
+    {"prompt": "add stripe webhooks and background processing for payments", "axis": "confusable", "confusable_with": "plan"}
   ]
 }

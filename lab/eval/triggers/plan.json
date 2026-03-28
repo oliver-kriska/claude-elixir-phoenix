@@ -19,11 +19,26 @@
     {"prompt": "I need to add user roles, permissions, an admin panel, and also integrate with Stripe for payments, and maybe add webhooks too", "axis": "verbose"},
     {"prompt": "plan the notfication systm with emial and push", "axis": "typo"},
     {"prompt": "architect how we should split the monolith context into bounded contexts", "axis": "confusable"},
-    {"prompt": "review the auth gaps then plan the fixes", "axis": "multi_intent"}
+    {"prompt": "review the auth gaps then plan the fixes", "axis": "multi_intent"},
+    {"prompt": "k lets plan this out", "axis": "terse"},
+    {"prompt": "need to add stripe integration, its gonna touch payments and users", "axis": "casual"},
+    {"prompt": "so we need invites, team roles, maybe an audit trail? lmk how to structure", "axis": "casual"},
+    {"prompt": "pls desing the notificaton pipeline befroe I start codng", "axis": "typo"},
+    {"prompt": "how shld we break this down, theres like 5 contexts involved", "axis": "casual"},
+    {"prompt": "ok before I write any code lets figure out the approach for multi-tenant", "axis": "casual"},
+    {"prompt": "need a plan for refactring the ordrs pipeline, its a mess rn", "axis": "typo"},
+    {"prompt": "map out the work for adding SSO, gonna need oauth provider + session mgmt + migration", "axis": "casual"},
+    {"prompt": "break this feature down into steps pls", "axis": "terse"}
   ],
   "hard_should_not_trigger": [
     {"prompt": "build the entire invoicing system end to end with tests and deploy", "axis": "confusable", "confusable_with": "full"},
     {"prompt": "implement the tasks from my plan", "axis": "confusable", "confusable_with": "work"},
-    {"prompt": "add a phone field to the user profile", "axis": "confusable", "confusable_with": "quick"}
+    {"prompt": "add a phone field to the user profile", "axis": "confusable", "confusable_with": "quick"},
+    {"prompt": "I need to think about how to structure the auth module", "axis": "confusable", "confusable_with": "phoenix-contexts"},
+    {"prompt": "why is the registration flow broken", "axis": "confusable", "confusable_with": "investigate"},
+    {"prompt": "just scaffold the users crud real quick", "axis": "confusable", "confusable_with": "quick"},
+    {"prompt": "i want to understand why the checkout is failing before we redesign it", "axis": "confusable", "confusable_with": "investigate"},
+    {"prompt": "go ahead and build the notification system", "axis": "confusable", "confusable_with": "full"},
+    {"prompt": "how should the billing context be organized", "axis": "confusable", "confusable_with": "phoenix-contexts"}
   ]
 }

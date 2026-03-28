@@ -17,11 +17,23 @@
     {"prompt": "liveveiw crashs on munt, no eror mesage", "axis": "typo"},
     {"prompt": "something is wrong with the form, it just sits there, I click save and nothing happens, no error, no flash, no redirect, the logs show the request but I have no idea where to even start looking", "axis": "verbose"},
     {"prompt": "broken preloads", "axis": "terse"},
-    {"prompt": "why is my test flaky and also the page is slow sometimes", "axis": "multi_intent"}
+    {"prompt": "why is my test flaky and also the page is slow sometimes", "axis": "multi_intent"},
+    {"prompt": "the form is broken again", "axis": "casual"},
+    {"prompt": "wtf is happening with the assigns", "axis": "frustrated"},
+    {"prompt": "theres a bug in accounts context", "axis": "typo"},
+    {"prompt": "idk why but clicking save just does nothing now, worked yesterday", "axis": "casual"},
+    {"prompt": "test passes locally but blows up in ci, no idea", "axis": "casual"},
+    {"prompt": "somethings wrong w the channel, users get disconnectd randomly", "axis": "typo"},
+    {"prompt": "mount is returning :ok but page is blank??", "axis": "frustrated"},
+    {"prompt": "ecto constraint error but i have no clue which constraint", "axis": "casual"}
   ],
   "hard_should_not_trigger": [
     {"prompt": "check my auth code for issues before I merge", "axis": "confusable", "confusable_with": "review"},
     {"prompt": "the dashboard query is slow, profile it", "axis": "confusable", "confusable_with": "perf"},
-    {"prompt": "scan for missing preloads in my associations", "axis": "confusable", "confusable_with": "n1-check"}
+    {"prompt": "scan for missing preloads in my associations", "axis": "confusable", "confusable_with": "n1-check"},
+    {"prompt": "something feels off about this code, look it over before I push", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "this page is taking forever to load", "axis": "confusable", "confusable_with": "perf"},
+    {"prompt": "the changeset isnt working right, show me the correct pattern", "axis": "confusable", "confusable_with": "ecto-patterns"},
+    {"prompt": "quick fix the redirect thats going to the wrong page", "axis": "confusable", "confusable_with": "quick"}
   ]
 }

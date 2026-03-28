@@ -8,6 +8,10 @@
 #   ./lab/eval/run_eval.sh --agents     # Score all agents only
 #   ./lab/eval/run_eval.sh --changed    # Only changed since last eval (default)
 #   ./lab/eval/run_eval.sh --triggers   # Re-run behavioral trigger tests (~$1.50, ~60min)
+#   ./lab/eval/run_eval.sh --est        # Evaluator stress test (find gameable matchers)
+#   ./lab/eval/run_eval.sh --neighbors  # Neighbor regression test for changed skills
+#   ./lab/eval/run_eval.sh --ablation   # Matcher ablation (find noise matchers)
+#   ./lab/eval/run_eval.sh --consistency # Router consistency test (haiku 5x per prompt)
 #
 # Exit codes:
 #   0 = all pass (>= 0.95)
@@ -191,6 +195,22 @@ case "$MODE" in
         echo "--- Behavioral Triggers (all, ~\$1.50) ---"
         echo "  This takes ~60 minutes..."
         python3 -m lab.eval.trigger_scorer --all --summary
+        ;;
+    --est)
+        echo "--- Evaluator Stress Test (find gameable matchers) ---"
+        python3 -m lab.eval.evaluator_stress_test
+        ;;
+    --neighbors)
+        echo "--- Neighbor Regression Test (changed skills + confusable neighbors) ---"
+        python3 -m lab.eval.neighbor_regression --changed || FAILURES=$((FAILURES + 1))
+        ;;
+    --ablation)
+        echo "--- Matcher Ablation (find noise matchers) ---"
+        python3 -m lab.eval.matcher_ablation
+        ;;
+    --consistency)
+        echo "--- Router Consistency (haiku 5x per prompt) ---"
+        python3 -m lab.eval.consistency_test --all --runs 5
         ;;
     --ci)
         echo "--- CI Gate: Lint + All Skills + All Agents ---"
