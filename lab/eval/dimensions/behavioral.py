@@ -33,17 +33,18 @@ def score(content: str, dimension: EvalDimension, skill_path: str = "", plugin_r
     cache_path = os.path.join(TRIGGERS_RESULTS_DIR, f"{skill_name}.json")
 
     if not os.path.isfile(cache_path):
-        # No cached results — return neutral (don't penalize skills without trigger tests)
+        # No cached results — penalize to incentivize running trigger tests
+        # score=0.5 instead of 1.0: untested skills shouldn't get free behavioral points
         return DimensionResult(
             dimension="behavioral",
-            score=1.0,
-            passed=0, failed=0, total=0,
+            score=0.5,
+            passed=0, failed=1, total=1,
             assertions=[AssertionResult(
                 id="behavioral-0",
                 check_type="trigger_accuracy",
                 description="Trigger test results cached",
-                passed=True,
-                evidence=f"No trigger cache for {skill_name} — skipping (neutral)",
+                passed=False,
+                evidence=f"No trigger cache for {skill_name} — run trigger_scorer.py first",
             )],
         )
 

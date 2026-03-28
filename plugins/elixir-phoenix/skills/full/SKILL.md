@@ -1,6 +1,6 @@
 ---
 name: phx:full
-description: Use for large features spanning multiple contexts, new domain modules, or when the user wants autonomous end-to-end implementation. Runs the full plan-implement-review-compound cycle with specialist agents and Iron Laws enforcement.
+description: Use for large Elixir/Phoenix features spanning multiple contexts, new domain modules, or when the user wants autonomous end-to-end implementation. Runs six phases — discover, plan, work, verify, review, compound — with specialist agents and Iron Laws enforcement. NOT for small changes (use quick) or when you already have a plan (use work).
 effort: high
 argument-hint: <feature description>
 ---

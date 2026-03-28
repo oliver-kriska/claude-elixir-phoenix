@@ -186,16 +186,18 @@ def description_keywords(content: str, min: int = 5, keywords: list[str] | None 
     if keywords:
         found = [kw for kw in keywords if kw.lower() in desc]
     else:
-        # Default Elixir/Phoenix domain keywords
+        # Domain keywords — includes Elixir/Phoenix terms and skill-specific verbs
+        # Excludes only trivially generic words (do, use, pattern)
         domain_keywords = [
             "elixir", "phoenix", "liveview", "ecto", "oban", "genserver", "plug",
             "migration", "changeset", "schema", "query", "preload", "pubsub",
             "component", "mount", "handle_event", "handle_info", "assign",
             "stream", "socket", "router", "controller", "context", "repo",
-            "test", "exunit", "mox", "factory", "credo", "dialyzer",
+            "exunit", "mox", "factory", "credo", "dialyzer",
             "security", "auth", "session", "token", "deploy", "docker", "fly",
             "debug", "investigate", "audit", "review", "plan", "verify",
-            "refactor", "performance", "optimize", "iron law",
+            "refactor", "performance", "optimize", "n+1", "iron law",
+            "test", "workflow", "constraint", "pr comment",
         ]
         found = [kw for kw in domain_keywords if kw in desc]
 
@@ -230,7 +232,7 @@ def valid_skill_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
                 break
 
     if not plugin_root or not os.path.isdir(os.path.join(plugin_root, "skills")):
-        return True, "Cannot locate plugin root — skipping skill ref check"
+        return False, "Cannot locate plugin root — skill ref check requires plugin_root"
 
     skills_dir = os.path.join(plugin_root, "skills")
     existing_skills = set(os.listdir(skills_dir))
@@ -270,7 +272,7 @@ def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
                 break
 
     if not plugin_root or not os.path.isdir(os.path.join(plugin_root, "agents")):
-        return True, "Cannot locate plugin root — skipping agent ref check"
+        return False, "Cannot locate plugin root — agent ref check requires plugin_root"
 
     agents_dir = os.path.join(plugin_root, "agents")
     existing_agents = {f.replace(".md", "") for f in os.listdir(agents_dir) if f.endswith(".md")}
@@ -322,7 +324,7 @@ def valid_file_refs(content: str, skill_path: str = "", **_) -> tuple[bool, str]
         return True, "No own-skill reference file paths found"
 
     if not skill_path:
-        return True, "No skill_path provided — skipping file ref check"
+        return False, "No skill_path provided — file ref check requires skill_path"
 
     skill_dir = os.path.dirname(skill_path)
     missing = []

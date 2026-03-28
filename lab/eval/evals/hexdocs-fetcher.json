@@ -100,8 +100,8 @@
       "checks": [
         {
           "type": "action_density",
-          "min_ratio": 0.1,
-          "desc": "Action density (>10% actionable lines)"
+          "min_ratio": 0.2,
+          "desc": "Action density (>20% actionable lines)"
         },
         {
           "type": "no_duplication",
@@ -114,8 +114,8 @@
       "checks": [
         {
           "type": "specificity_ratio",
-          "min_ratio": 0.15,
-          "desc": "Concrete over vague (>15% specific lines)"
+          "min_ratio": 0.2,
+          "desc": "Specificity ratio (>20% concrete content)"
         },
         {
           "type": "has_examples",
