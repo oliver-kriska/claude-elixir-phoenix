@@ -8,10 +8,10 @@
     "Permission fatigue killing productivity. Stop asking and auto-allow mix."
   ],
   "should_not_trigger": [
-    "Review my code for N+1 queries \u2014 n1-check skill",
-    "My mix compile is failing with errors. Debug them. \u2014 investigate skill",
-    "Set up the plugin in my project. \u2014 init skill",
-    "Help me choose between plan and quick mode. \u2014 help skill",
-    "Check my code for performance bottlenecks. \u2014 perf skill"
+    "Review my code for N+1 queries",
+    "My mix compile is failing with errors. Debug them.",
+    "Set up the plugin in my project.",
+    "Help me choose between plan and quick mode.",
+    "Check my code for performance bottlenecks."
   ]
 }

@@ -1,6 +1,6 @@
 ---
 name: phx:audit
-description: Project health audit across 5 areas (architecture, performance, security, tests, dependencies) using parallel specialist agents. Use quarterly, before major releases, after large refactors, or when onboarding. Also use when the user mentions "project health", "code quality overview", "how healthy is this codebase", or any request for holistic assessment.
+description: Run a whole-project health audit across 5 areas (architecture, performance, security, tests, dependencies) using parallel specialist agents. Use quarterly, before major releases, after large refactors, or when onboarding to a new codebase. Also use when the user mentions "project health", "code quality overview", "how healthy is this codebase". NOT for analyzing specific module boundaries (use boundaries) or reviewing specific changes (use review).
 effort: high
 argument-hint: [--quick|--full|--focus=area|--since=commit]
 ---

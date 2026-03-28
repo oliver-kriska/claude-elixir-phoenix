@@ -8,10 +8,32 @@
     "Where are we accessing associations without preloading?"
   ],
   "should_not_trigger": [
-    "How do I structure Ecto queries properly? \u2192 ecto-patterns (broad Ecto guidance, not audit)",
-    "My API endpoint times out, debug it \u2192 investigate (debugging specific error, not N+1 audit)",
-    "Optimize our database performance overall \u2192 perf (broader optimization, not N+1 focused)",
-    "Review my PR for code issues \u2192 review (general code review, not specific N+1 audit)",
-    "Design a user-posts relationship schema \u2192 ecto-patterns (schema design, not query audit)"
+    "How do I structure Ecto queries properly?",
+    "My API endpoint times out, debug it",
+    "Optimize our database performance overall",
+    "Review my PR for code issues",
+    "Design a user-posts relationship schema"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "n+1 queries", "axis": "terse"},
+    {"prompt": "check for n plus 1 quries in my repo", "axis": "typo"},
+    {"prompt": "I noticed the user list page is making like 50 database calls when there are 50 users, I think we're loading associations inside a loop somewhere but I'm not sure where, can you find all the places this is happening", "axis": "verbose"},
+    {"prompt": "find missing preloads and also check if we have any Repo calls in Enum.map", "axis": "multi_intent"},
+    {"prompt": "pretty sure theres n+1s all over the place", "axis": "casual"},
+    {"prompt": "find the preload gaps", "axis": "terse"},
+    {"prompt": "we're loaidng assocs in a loop somwhere, find it", "axis": "typo"},
+    {"prompt": "grep the repo for Repo.get inside Enum.each or Enum.map", "axis": "casual"},
+    {"prompt": "are we preloading evrything we should be", "axis": "typo"},
+    {"prompt": "the users index makes way too many queries", "axis": "casual"},
+    {"prompt": "find repo calls inside comprehensions", "axis": "casual"},
+    {"prompt": "n+1 scan pls", "axis": "terse"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "how do I write an efficient preload query with joins", "axis": "confusable", "confusable_with": "ecto-patterns"},
+    {"prompt": "the admin dashboard is slow, analyze why", "axis": "confusable", "confusable_with": "perf"},
+    {"prompt": "optimize my ecto queries", "axis": "confusable", "confusable_with": "perf"},
+    {"prompt": "show me the right way to preload nested associations", "axis": "confusable", "confusable_with": "ecto-patterns"},
+    {"prompt": "the index page is slow, debug it", "axis": "confusable", "confusable_with": "perf"},
+    {"prompt": "why is my association nil when I access it", "axis": "confusable", "confusable_with": "investigate"}
   ]
 }

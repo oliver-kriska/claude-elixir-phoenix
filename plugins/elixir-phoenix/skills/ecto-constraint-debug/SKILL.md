@@ -1,6 +1,6 @@
 ---
 name: ecto-constraint-debug
-description: Debug Ecto constraint violations - trace triggers, check migrations, find duplicate data. Use when seeing unique_constraint, foreign_key_constraint, or check_constraint errors.
+description: Debug Ecto constraint violations — unique constraint errors, foreign key failures, check constraint rejections, data integrity issues. Use when seeing Ecto.ConstraintError, unique_violation, foreign_key_violation, or when a changeset silently fails on insert/update due to database constraints.
 effort: medium
 ---
 

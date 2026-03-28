@@ -1,0 +1,263 @@
+{
+  "skills": {
+    "assigns-audit": {
+      "accuracy": 0.9,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "total": 10
+    },
+    "audit": {
+      "accuracy": 0.8095,
+      "precision": 0.8,
+      "recall": 0.9231,
+      "total": 21,
+      "hard_accuracy": 0.9231
+    },
+    "boundaries": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 10
+    },
+    "brief": {
+      "accuracy": 0.9167,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "total": 12
+    },
+    "call-tracing": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 8
+    },
+    "challenge": {
+      "accuracy": 0.875,
+      "precision": 0.8235,
+      "recall": 1.0,
+      "total": 24,
+      "hard_accuracy": 0.7857
+    },
+    "compound-docs": {
+      "accuracy": 0.875,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "total": 8
+    },
+    "compound": {
+      "accuracy": 0.9167,
+      "precision": 1.0,
+      "recall": 0.8571,
+      "total": 24,
+      "hard_accuracy": 0.9286
+    },
+    "deploy": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 8
+    },
+    "document": {
+      "accuracy": 0.7,
+      "precision": 0.6667,
+      "recall": 0.8,
+      "total": 10
+    },
+    "ecto-constraint-debug": {
+      "accuracy": 0.9,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "total": 10
+    },
+    "ecto-patterns": {
+      "accuracy": 0.7778,
+      "precision": 0.75,
+      "recall": 1.0,
+      "total": 27,
+      "hard_accuracy": 0.7368
+    },
+    "elixir-idioms": {
+      "accuracy": 0.875,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "total": 8
+    },
+    "examples": {
+      "accuracy": 0.9,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "total": 10
+    },
+    "full": {
+      "accuracy": 0.8438,
+      "precision": 1.0,
+      "recall": 0.7059,
+      "total": 32,
+      "hard_accuracy": 0.8
+    },
+    "help": {
+      "accuracy": 0.6667,
+      "precision": 0.5714,
+      "recall": 0.8,
+      "total": 12
+    },
+    "hexdocs-fetcher": {
+      "accuracy": 0.875,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "total": 8
+    },
+    "init": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 8
+    },
+    "intent-detection": {
+      "accuracy": 0.9,
+      "precision": 1.0,
+      "recall": 0.8,
+      "total": 10
+    },
+    "intro": {
+      "accuracy": 0.875,
+      "precision": 1.0,
+      "recall": 0.8,
+      "total": 8
+    },
+    "investigate": {
+      "accuracy": 0.9286,
+      "precision": 0.9444,
+      "recall": 0.9444,
+      "total": 28,
+      "hard_accuracy": 0.9
+    },
+    "learn-from-fix": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 12
+    },
+    "liveview-patterns": {
+      "accuracy": 0.7407,
+      "precision": 0.7391,
+      "recall": 0.9444,
+      "total": 27,
+      "hard_accuracy": 0.7368
+    },
+    "n1-check": {
+      "accuracy": 0.7143,
+      "precision": 0.68,
+      "recall": 1.0,
+      "total": 28,
+      "hard_accuracy": 0.6667
+    },
+    "oban": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 10
+    },
+    "perf": {
+      "accuracy": 0.8571,
+      "precision": 0.8182,
+      "recall": 1.0,
+      "total": 28,
+      "hard_accuracy": 0.8
+    },
+    "permissions": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 10
+    },
+    "phoenix-contexts": {
+      "accuracy": 0.7692,
+      "precision": 0.7,
+      "recall": 1.0,
+      "total": 26,
+      "hard_accuracy": 0.6429
+    },
+    "plan": {
+      "accuracy": 0.9394,
+      "precision": 1.0,
+      "recall": 0.8947,
+      "total": 33,
+      "hard_accuracy": 0.9565
+    },
+    "pr-review": {
+      "accuracy": 0.9565,
+      "precision": 1.0,
+      "recall": 0.9231,
+      "total": 23,
+      "hard_accuracy": 0.9231
+    },
+    "quick": {
+      "accuracy": 0.5625,
+      "precision": 1.0,
+      "recall": 0.2222,
+      "total": 32,
+      "hard_accuracy": 0.4211
+    },
+    "research": {
+      "accuracy": 0.8333,
+      "precision": 0.7143,
+      "recall": 1.0,
+      "total": 12
+    },
+    "review": {
+      "accuracy": 0.8667,
+      "precision": 0.8889,
+      "recall": 0.8889,
+      "total": 30,
+      "hard_accuracy": 0.85
+    },
+    "security": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 10
+    },
+    "techdebt": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 8
+    },
+    "testing": {
+      "accuracy": 0.9,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "total": 10
+    },
+    "tidewave-integration": {
+      "accuracy": 0.625,
+      "precision": 1.0,
+      "recall": 0.4,
+      "total": 8
+    },
+    "triage": {
+      "accuracy": 1.0,
+      "precision": 1.0,
+      "recall": 1.0,
+      "total": 10
+    },
+    "verify": {
+      "accuracy": 0.9,
+      "precision": 0.8333,
+      "recall": 1.0,
+      "total": 10
+    },
+    "work": {
+      "accuracy": 0.931,
+      "precision": 0.9444,
+      "recall": 0.9444,
+      "total": 29,
+      "hard_accuracy": 0.8947
+    }
+  },
+  "average_accuracy": 0.8783,
+  "average_hard_accuracy": 0.7977,
+  "skills_tested": 40,
+  "skills_with_hard": 15
+}

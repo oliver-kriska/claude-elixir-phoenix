@@ -8,8 +8,8 @@
     "Smoke test the user registration flow against the live app"
   ],
   "should_not_trigger": [
-    "How do I structure changeset validations properly? \u2192 ecto-patterns",
-    "The test suite is failing, figure out why \u2192 investigate",
-    "Add validation logic to the product schema \u2192 quick"
+    "How do I structure changeset validations properly?",
+    "The test suite is failing, figure out why",
+    "Add validation logic to the product schema"
   ]
 }

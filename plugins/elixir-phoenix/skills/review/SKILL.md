@@ -1,6 +1,6 @@
 ---
 name: phx:review
-description: Review code with parallel specialist agents covering tests, security, Ecto, LiveView, and Oban patterns. Use after any implementation to catch bugs, security vulnerabilities, and anti-patterns before committing. Even quick changes benefit from at least a targeted review track.
+description: Review YOUR OWN Elixir/Phoenix code with parallel specialist agents covering tests, security, Ecto, LiveView, and Oban patterns. Use after any implementation to catch bugs, security vulnerabilities, and anti-patterns before committing. Optionally focus on specific areas with --focus test|security|oban|deploy|iron-laws|all. NOT for responding to PR feedback from others (use pr-review).
 effort: high
 argument-hint: [test|security|oban|deploy|iron-laws|all]
 disable-model-invocation: true

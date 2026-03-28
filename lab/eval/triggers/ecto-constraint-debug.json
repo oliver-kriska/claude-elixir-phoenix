@@ -1,17 +1,17 @@
 {
   "skill": "ecto-constraint-debug",
   "should_trigger": [
-    "Unique constraint error on users email \u2014 how do I find the duplicate data?",
-    "Foreign key constraint violation when deleting \u2014 trace where this is referenced",
-    "Check constraint failing on product prices table \u2014 debug this",
+    "Unique constraint error on users email",
+    "Foreign key constraint violation when deleting",
+    "Check constraint failing on product prices table",
     "Constraint violation in my Ecto test, need to fix the root cause",
     "Database trigger conflicting with unique constraint, need to check migration"
   ],
   "should_not_trigger": [
-    "How do I add a unique constraint to my schema? \u2014 ecto-patterns",
-    "Scan my code for N+1 queries \u2014 n1-check",
-    "Best practices for designing Ecto schemas \u2014 ecto-patterns",
-    "My app has a database error during deployment \u2014 investigate",
-    "Help me design referential integrity for users \u2014 ecto-patterns"
+    "How do I add a unique constraint to my schema?",
+    "Scan my code for N+1 queries",
+    "Best practices for designing Ecto schemas",
+    "My app has a database error during deployment",
+    "Help me design referential integrity for users"
   ]
 }

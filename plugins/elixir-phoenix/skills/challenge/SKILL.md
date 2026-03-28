@@ -1,6 +1,6 @@
 ---
 name: phx:challenge
-description: Challenge mode reviews - rigorous questioning before approving changes. Use when you want thorough scrutiny of Ecto changes, LiveView events, or PR readiness.
+description: "Challenge code with rigorous senior-engineer scrutiny before approving Ecto changes, LiveView events, or PR readiness. Harder than /phx:review — challenges assumptions, checks edge cases, and won't approve until issues are addressed. Use when the user says grill me, challenge this, or don't go easy on me. NOT for standard code review (use review) or PR comment responses (use pr-review)."
 effort: high
 argument-hint: ecto | liveview | pr
 ---

@@ -8,8 +8,8 @@
     "Where does the user_id come from in this nested function?"
   ],
   "should_not_trigger": [
-    "Debug why my authentication is failing \u2014 investigate",
-    "Teach me Ecto patterns for transactions \u2014 ecto-patterns",
-    "Verify my context boundaries follow best practices \u2014 boundaries"
+    "Debug why my authentication is failing",
+    "Teach me Ecto patterns for transactions",
+    "Verify my context boundaries follow best practices"
   ]
 }

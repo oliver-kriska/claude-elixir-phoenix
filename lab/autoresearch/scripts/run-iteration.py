@@ -210,9 +210,47 @@ def cmd_score(args):
     }))
 
 
+def _spot_check_behavioral(skill_name: str) -> dict | None:
+    """Spot-check behavioral trigger accuracy for one skill.
+
+    Runs haiku-based routing test on the mutated skill only (~$0.01, ~30s).
+    Returns trigger metrics dict or None if no trigger file exists.
+
+    Research basis:
+      - Gao et al. (ICML 2023) "Scaling Laws for Reward Model Overoptimization"
+        — track proxy (structural) vs gold (behavioral) to detect divergence
+      - Karwowski et al. (ICLR 2024) "Goodhart's Law in RL"
+        — early stopping when proxy stops correlating with gold
+    """
+    try:
+        from lab.eval.trigger_scorer import (
+            load_trigger_file, score_skill_triggers, load_all_descriptions,
+        )
+    except ImportError:
+        return None
+
+    trigger_data = load_trigger_file(skill_name)
+    if not trigger_data:
+        return None
+
+    all_descs = load_all_descriptions()
+    result = score_skill_triggers(skill_name, trigger_data, all_descs)
+    return {
+        "accuracy": result.get("accuracy", 0),
+        "precision": result.get("precision", 0),
+        "recall": result.get("recall", 0),
+        "standard_accuracy": result.get("standard", {}).get("accuracy"),
+        "hard_accuracy": result.get("hard", {}).get("accuracy") if result.get("hard") else None,
+    }
+
+
 def cmd_eval(args):
-    """Evaluate mutation: score + checks + compare against previous."""
-    # Score
+    """Evaluate mutation: score + checks + compare against previous.
+
+    Includes behavioral spot-check (proxy-gold divergence tracking)
+    per Gao et al. ICML 2023.
+    """
+    # Score (structural — proxy metric)
     result = score_one(args.skill)
     new_composite = result["composite"]
 
@@ -222,12 +260,13 @@ def cmd_eval(args):
     # Read previous best from journal
     journal = read_journal_tail(50)
     prev_best = 0.0
+    prev_behavioral = None
     for entry in journal:
         if entry.get("skill") == args.skill and entry.get("kept"):
             prev_best = max(prev_best, entry.get("new_composite", 0))
+            if entry.get("behavioral"):
+                prev_behavioral = entry["behavioral"].get("accuracy")
     if prev_best == 0.0:
-        # No prior journal entry — use current score as baseline comparison
-        # (caller should have scored before mutation)
         prev_best = new_composite
 
     improved = new_composite >= prev_best
@@ -239,6 +278,26 @@ def cmd_eval(args):
     elif not improved:
         reason = f"regression: {prev_best:.3f} -> {new_composite:.3f}"
 
+    # Behavioral spot-check (gold metric) — Gao et al. ICML 2023
+    behavioral = _spot_check_behavioral(args.skill)
+    if behavioral:
+        # Gate: revert if behavioral accuracy drops below threshold
+        if behavioral["accuracy"] < 0.60:
+            verdict = "REVERT"
+            reason = f"trigger accuracy below threshold: {behavioral['accuracy']:.0%}"
+        # Warn on proxy-gold divergence (structural improves but behavioral doesn't)
+        if prev_behavioral is not None and improved:
+            behavioral_delta = behavioral["accuracy"] - prev_behavioral
+            if behavioral_delta < -0.10:
+                verdict = "REVERT"
+                reason = f"proxy-gold divergence: structural +{new_composite - prev_best:.3f} but behavioral {behavioral_delta:+.0%}"
+
+    # SPIN convergence detector (Chen et al., ICML 2024)
+    convergence_warning = None
+    iteration_count = get_iteration_count()
+    if abs(new_composite - prev_best) < 0.001 and iteration_count > 5:
+        convergence_warning = "SPIN convergence: proxy metric saturated — consider expanding eval dimensions"
+
     output = {
         "skill": args.skill,
         "composite": new_composite,
@@ -248,6 +307,11 @@ def cmd_eval(args):
         "checks_output": checks_output if not checks_passed else "PASSED",
         "verdict": verdict,
         "reason": reason,
+        # Proxy-gold tracking (Gao et al. ICML 2023)
+        "proxy_score": new_composite,
+        "gold_score": behavioral["accuracy"] if behavioral else None,
+        "behavioral": behavioral,
+        "convergence_warning": convergence_warning,
         "dimensions": {k: round(v["score"], 4) for k, v in result["dimensions"].items()},
         "failing": [
             {"dim": k, "check": a["desc"], "evidence": a["evidence"][:80]}

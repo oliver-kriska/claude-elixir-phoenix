@@ -5,11 +5,28 @@
     "Run a health audit before the v2.0 release",
     "Give me a code quality assessment of the whole project",
     "Do you have time for a quarterly project health check?",
-    "We finished a big refactor\u2014how's the codebase health now?"
+    "We finished a big refactor"
   ],
   "should_not_trigger": [
-    "Strengthen our authentication and session security \u2014 security skill",
-    "Find all the N+1 query problems in our code \u2014 n1-check skill",
-    "Are our Phoenix context boundaries properly isolated? \u2014 boundaries skill"
+    "Strengthen our authentication and session security",
+    "Find all the N+1 query problems in our code",
+    "Are our Phoenix context boundaries properly isolated?"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "how bad is this codebase", "axis": "casual"},
+    {"prompt": "helth check", "axis": "typo"},
+    {"prompt": "we just inherited this project, give me the lay of the land", "axis": "casual"},
+    {"prompt": "run the full audit before we release next week", "axis": "casual"},
+    {"prompt": "new to this codebase, give me the big picture", "axis": "casual"},
+    {"prompt": "rate this project out of 10", "axis": "terse"},
+    {"prompt": "we're onboading a new dev, whats the state of things", "axis": "typo"},
+    {"prompt": "is this codebase in good shape or are we sitting on a timebomb", "axis": "casual"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "find all the technical debt", "axis": "confusable", "confusable_with": "techdebt"},
+    {"prompt": "review my recent changes for issues", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "check the project for N+1 queries and missing preloads", "axis": "confusable", "confusable_with": "n1-check"},
+    {"prompt": "review all the changes from last sprint", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "whats the overall perf situation, any bottlenecks", "axis": "confusable", "confusable_with": "perf"}
   ]
 }

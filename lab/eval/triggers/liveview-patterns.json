@@ -8,8 +8,31 @@
     "Build a reusable modal component with proper lifecycle management"
   ],
   "should_not_trigger": [
-    "Write ExUnit tests for my live view's handle_event \u2014 testing",
-    "How do I preload database associations for my dropdown? \u2014 ecto-patterns",
-    "Set up an Oban worker to process background tasks \u2014 oban"
+    "Write ExUnit tests for my live view's handle_event",
+    "How do I preload database associations for my dropdown?",
+    "Set up an Oban worker to process background tasks"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "liveview streams", "axis": "terse"},
+    {"prompt": "phx-clik event not fiering in my componet", "axis": "typo"},
+    {"prompt": "I have a page that shows a list of items and when I click one it should open a modal with a form and when I submit the form it should update the list in real time using PubSub but I can't figure out how to wire it all together", "axis": "verbose"},
+    {"prompt": "add a JS hook for the chart and handle the callback in handle_event", "axis": "multi_intent"},
+    {"prompt": "how do I make this update in real time", "axis": "context_dependent"},
+    {"prompt": "assign_async vs task, which one for this", "axis": "casual"},
+    {"prompt": "the stream is not updating when i push new items", "axis": "casual"},
+    {"prompt": "how do i wire up a JS hook to talk to my liveview", "axis": "casual"},
+    {"prompt": "presense tracking keeps showing stale users", "axis": "typo"},
+    {"prompt": "form_for vs to_form, which one in liveview 0.20", "axis": "casual"},
+    {"prompt": "how do i handle the phx-submit when theres nested inputs for embeds", "axis": "casual"},
+    {"prompt": "slots r confusing, show me how to do a table component w header slots", "axis": "casual"},
+    {"prompt": "my uploads keep timing out, whats the pattern for large files in LV", "axis": "casual"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "write tests for my LiveView handle_event callbacks", "axis": "confusable", "confusable_with": "testing"},
+    {"prompt": "should I put this logic in the LiveView or the context module", "axis": "confusable", "confusable_with": "phoenix-contexts"},
+    {"prompt": "the liveview is using too much memory", "axis": "confusable", "confusable_with": "perf"},
+    {"prompt": "my liveview crashes on mount with no error", "axis": "confusable", "confusable_with": "investigate"},
+    {"prompt": "the component is getting too complex, how to split it across contexts", "axis": "confusable", "confusable_with": "phoenix-contexts"},
+    {"prompt": "add a phx-click handler to this button", "axis": "confusable", "confusable_with": "quick"}
   ]
 }

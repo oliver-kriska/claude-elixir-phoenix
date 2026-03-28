@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-skills eval-agents test ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-skills eval-agents eval-est eval-neighbors eval-ablation eval-consistency test ci clean
 
 # Default target
 help: ## Show available commands
@@ -39,6 +39,18 @@ eval-skills: ## Score all skills only
 
 eval-agents: ## Score all agents only
 	@bash lab/eval/run_eval.sh --agents
+
+eval-est: ## Evaluator stress test (find gameable matchers)
+	@bash lab/eval/run_eval.sh --est
+
+eval-neighbors: ## Neighbor regression (changed skills + confusable neighbors)
+	@bash lab/eval/run_eval.sh --neighbors
+
+eval-ablation: ## Matcher ablation (find noise matchers)
+	@bash lab/eval/run_eval.sh --ablation
+
+eval-consistency: ## Router consistency test (haiku 5x per prompt)
+	@bash lab/eval/run_eval.sh --consistency
 
 # --- Test ---
 

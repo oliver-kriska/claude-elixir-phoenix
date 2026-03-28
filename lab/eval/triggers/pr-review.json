@@ -2,16 +2,33 @@
   "skill": "pr-review",
   "should_trigger": [
     "I got review comments on my PR, help me address them",
-    "Here's a PR with feedback: https://github.com/myorg/myproject/pull/123 \u2014 respond to comments",
+    "Here's a PR with feedback: https://github.com/myorg/myproject/pull/123",
     "The reviewer flagged an N+1 query, how should I fix it?",
     "Draft responses to these review comments and fix the code",
     "Check if the reviewer's suggestions follow our iron laws"
   ],
   "should_not_trigger": [
-    "Review my new auth module for security issues \u2014 belongs to /phx:review",
-    "Challenge my LiveView component approach \u2014 belongs to /phx:challenge",
-    "Triage and categorize these review findings \u2014 belongs to /phx:triage",
-    "Debug this timeout in my test suite \u2014 belongs to /phx:investigate",
-    "Show me LiveView patterns for streams \u2014 belongs to /phx:liveview-patterns"
+    "Review my new auth module for security issues",
+    "Challenge my LiveView component approach",
+    "Triage and categorize these review findings",
+    "Debug this timeout in my test suite",
+    "Show me LiveView patterns for streams"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "theres comments on my PR, help me deal with em", "axis": "casual"},
+    {"prompt": "reviewer wants me to fix the n+1 they flaggd", "axis": "typo"},
+    {"prompt": "address pr feedback", "axis": "terse"},
+    {"prompt": "https://github.com/myco/app/pull/47 got feedback, can u go thru the comments and fix what makes sense", "axis": "casual"},
+    {"prompt": "someone left a bunch of nits on my pr, handle it", "axis": "casual"},
+    {"prompt": "pr #42 has coments, fix waht makes sense and push", "axis": "typo"},
+    {"prompt": "respond to the review feedback on my open PR", "axis": "casual"},
+    {"prompt": "reviewer says my error handling is wrong, see the pr thread", "axis": "casual"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "look over my code before I open a PR", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "check my changes for issues", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "grill me on this before I push", "axis": "confusable", "confusable_with": "challenge"},
+    {"prompt": "sanity check my changes before I open a PR", "axis": "confusable", "confusable_with": "review"},
+    {"prompt": "find issues in my code before merging", "axis": "confusable", "confusable_with": "review"}
   ]
 }

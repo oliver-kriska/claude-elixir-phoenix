@@ -2,7 +2,7 @@
   "skill": "intent-detection",
   "should_trigger": [
     "not sure where to start with this user module work",
-    "how should I approach this — bug fix or full refactor",
+    "how should I approach this",
     "what's the right workflow for making these changes",
     "I have mixed intents here: fix the bug and then refactor the context",
     "route me to the right command for this ambiguous task"

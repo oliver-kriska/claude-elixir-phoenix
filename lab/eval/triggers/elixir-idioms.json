@@ -8,8 +8,8 @@
     "Create a custom mix task for database cleanup"
   ],
   "should_not_trigger": [
-    "How do I optimize my Ecto queries for performance? \u2014 belongs to ecto-patterns/perf",
-    "Design a context module to organize business logic \u2014 belongs to phoenix-contexts",
-    "Set up an Oban worker for async email delivery \u2014 belongs to oban"
+    "How do I optimize my Ecto queries for performance?",
+    "Design a context module to organize business logic",
+    "Set up an Oban worker for async email delivery"
   ]
 }

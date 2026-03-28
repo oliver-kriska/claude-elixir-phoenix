@@ -1,6 +1,6 @@
 ---
 name: hexdocs-fetcher
-description: "Retrieves HexDocs documentation for Elixir/Phoenix/Hex libraries with automatic HTML-to-markdown conversion for context savings. Use when looking up Elixir library docs on hexdocs.pm instead of raw web requests. Handles module docs, function docs, guides, and changelogs for any Hex package."
+description: "Look up Elixir library documentation from hexdocs.pm — module docs, function docs, guides, and changelogs for any Hex package. Use when the user says 'show me the docs for X', 'how do I use Y library', or needs API reference for Ecto, Phoenix, Oban, or any Hex dependency. Converts HTML to markdown for context savings."
 effort: low
 ---
 

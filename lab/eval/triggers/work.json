@@ -8,10 +8,33 @@
     "Execute all the tasks in my plan now"
   ],
   "should_not_trigger": [
-    "Create a plan for implementing payments \u2014 /phx:plan",
-    "Review the code for security issues \u2014 /phx:review",
-    "Explain the plan to me step by step \u2014 /phx:brief",
-    "What's the best way to query associations? \u2014 /phx:ecto-patterns",
-    "Why is the form validation failing? \u2014 /phx:investigate"
+    "Create a plan for implementing payments",
+    "Review the code for security issues",
+    "Explain the plan to me step by step",
+    "What's the best way to query associations?",
+    "Why is the form validation failing?"
+  ],
+  "hard_should_trigger": [
+    {"prompt": "start implementing", "axis": "terse"},
+    {"prompt": "contniue the wrk on the plan", "axis": "typo"},
+    {"prompt": "I have a plan file at .claude/plans/auth-redesign/plan.md with a bunch of unchecked tasks, I want to pick up where I left off yesterday and keep going through the checklist", "axis": "verbose"},
+    {"prompt": "resume work on auth and then start the billing tasks", "axis": "multi_intent"},
+    {"prompt": "keep going", "axis": "context_dependent"},
+    {"prompt": "pick up where we left off on the auth plan", "axis": "casual"},
+    {"prompt": "k next task", "axis": "terse"},
+    {"prompt": "got the plan ready, lets crank thru the checklist", "axis": "casual"},
+    {"prompt": "contniue wrking on .claude/plans/billing/plan.md plz", "axis": "typo"},
+    {"prompt": "lets knock out the remaining checkboxes", "axis": "casual"},
+    {"prompt": "resume", "axis": "terse"},
+    {"prompt": "i left off at task 4 yesterday, pick it back up", "axis": "casual"},
+    {"prompt": "execute the plan in .claude/plans/auth-rework/plan.md", "axis": "casual"}
+  ],
+  "hard_should_not_trigger": [
+    {"prompt": "just add a tooltip to the button, nothing big", "axis": "confusable", "confusable_with": "quick"},
+    {"prompt": "build the entire inventory system from scratch with tests and review", "axis": "confusable", "confusable_with": "full"},
+    {"prompt": "whats left to do on the plan", "axis": "confusable", "confusable_with": "brief"},
+    {"prompt": "plan the next sprint tasks", "axis": "confusable", "confusable_with": "plan"},
+    {"prompt": "build the whole feature from scratch including tests", "axis": "confusable", "confusable_with": "full"},
+    {"prompt": "fix the failing task in my plan", "axis": "confusable", "confusable_with": "investigate"}
   ]
 }
