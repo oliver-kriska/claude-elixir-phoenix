@@ -5,6 +5,17 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **Ultraplan awareness in `/phx:plan` completion dialog** — After generating a plan,
+  users now see "Refine with Ultraplan" as an option alongside existing choices. This
+  hands the plan to Claude Code on the web for browser-based review with inline comments,
+  emoji reactions, and section-level feedback, then execute on web (creates PR) or
+  teleport back to terminal. Updated plan SKILL.md, planning-workflow reference, and
+  CLAUDE.md workflow routing.
+
 ## [2.8.0] - 2026-04-03
 
 ### Added

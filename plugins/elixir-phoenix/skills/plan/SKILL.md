@@ -95,9 +95,11 @@ Enhances an existing plan instead of creating a new one:
        |
    /phx:plan --existing (optional enhancement)
        |
-   ASK USER -> /phx:work .claude/plans/{feature}/plan.md
-       |
-/phx:review → /phx:compound
+   ASK USER ─┬─> /phx:work .claude/plans/{feature}/plan.md
+              │       |
+              │   /phx:review → /phx:compound
+              │
+              └─> /ultraplan (refine in browser, execute on web or teleport back)
 ```
 
 ## Notes
@@ -114,11 +116,23 @@ After writing `.claude/plans/{slug}/plan.md`:
 1. Summarize: task count, phases, key decisions
 2. Use `AskUserQuestion` with options:
    - "Start in fresh session" (recommended for 5+ tasks)
+   - "Refine with Ultraplan" (rich browser review — inline comments, revisions)
    - "Get a briefing" (`/phx:brief` — interactive walkthrough)
    - "Start here"
    - "Review the plan"
    - "Adjust the plan"
 3. Wait for user response. Never auto-start work.
+
+**When user selects "Refine with Ultraplan"**, print:
+
+```
+Run: /ultraplan <one-line summary of the plan>
+
+This opens the plan in Claude Code on the web where you can:
+- Leave inline comments on specific sections
+- Ask Claude to revise sections based on feedback
+- Execute on the web (creates PR) or send back to terminal
+```
 
 **When user selects "Start in fresh session"**, print:
 

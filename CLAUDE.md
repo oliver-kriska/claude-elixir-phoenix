@@ -666,6 +666,7 @@ When working on code, automatically consult relevant reference documentation bef
 | Small change (<50 lines) | `/phx:quick` |
 | Brainstorm, explore ideas, unclear scope | `/phx:brainstorm` |
 | New feature (clear scope) | `/phx:plan` then `/phx:work` |
+| Refine plan in browser with rich review | `/phx:plan` then choose "Refine with Ultraplan" |
 | Understand a plan | `/phx:brief` |
 | Enhance existing plan | `/phx:plan --existing` |
 | Large feature (new domain) | `/phx:full` |
@@ -689,6 +690,9 @@ When working on code, automatically consult relevant reference documentation bef
 | Validate plugin against docs | `/docs-check` |
 
 **Workflow Commands**: `/phx:brainstorm` (optional) -> `/phx:plan` -> `/phx:brief` (optional) -> `/phx:plan --existing` (optional) -> `/phx:work` -> `/phx:review` -> `/phx:triage` (optional) -> `/phx:compound`
+
+**Ultraplan path**: After `/phx:plan`, choose "Refine with Ultraplan" to hand the plan to Claude Code on the web
+for browser-based review with inline comments, then execute on web (creates PR) or teleport back to terminal.
 
 **Review → Follow-up Plan**: After `/phx:review`, if findings reveal scope gaps or missing coverage, use `/phx:plan .claude/plans/{slug}/reviews/{review}.md` to create a follow-up plan from review output.
 

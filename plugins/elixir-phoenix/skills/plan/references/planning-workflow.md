@@ -252,10 +252,18 @@ count, phase names, key scope). Then use `AskUserQuestion`:
 For single plan:
 
 - **Start in fresh session** (recommended for 5+ tasks)
+- **Refine with Ultraplan** -- rich browser review with inline comments and revisions (research preview)
 - **Get a briefing** -- interactive walkthrough via `/phx:brief`
 - **Start here** -- in current session (fine for small plans)
 - **Review the plan** -- walk through phases in detail
 - **Adjust the plan** -- tell me what to change
+
+**When user selects "Refine with Ultraplan"**, print instructions
+to run `/ultraplan <one-line summary>`. This hands the plan to
+Claude Code on the web for browser-based review with inline
+comments, emoji reactions, and section-level feedback. The user
+can then execute on the web (creates PR) or teleport the plan
+back to their terminal for local execution.
 
 Do NOT say "Start Phase 1" — `/phx:work` runs the whole plan.
 
