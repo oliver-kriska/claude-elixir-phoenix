@@ -26,11 +26,11 @@ Cycles back automatically if review finds issues.
 │                       /phx:full {feature}                        │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  │
-│  │Discover│→ │  Plan  │→ │  Work  │→ │ Verify │→ │ Review │→ │Compound│→Done│
-│  │ Assess │  │[Pn-Tm] │  │Execute │  │  Full  │  │4 Agents│  │Capture │     │
-│  │ Decide │  │ Phases │  │ Tasks  │  │  Loop  │  │Parallel│  │ Solve  │     │
-│  └───┬────┘  └────────┘  └────────┘  └───┬────┘  └────────┘  └────────┘     │
+│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  │
+│  │Discover│→ │  Plan  │→ │  Plan  │→ │  Work  │→ │ Verify │→ │ Review │→ │Compound│→Done│
+│  │ Assess │  │[Pn-Tm] │  │ Review │  │Execute │  │  Full  │  │4 Agents│  │Capture │     │
+│  │ Decide │  │ Phases │  │Personas│  │ Tasks  │  │  Loop  │  │Parallel│  │ Solve  │     │
+│  └───┬────┘  └────────┘  └────────┘  └────────┘  └───┬────┘  └────────┘  └────────┘     │
 │       │                            ↑      │    ↑              │         │
 │       ├── "just do it" ────────────┤      │    │              │         │
 │       ├── "plan it" ──┐            │      ↓    │              │         │
@@ -54,7 +54,7 @@ Cycles back automatically if review finds issues.
 ## State Machine
 
 ```
-STATES: INITIALIZING → DISCOVERING → PLANNING → WORKING →
+STATES: INITIALIZING → DISCOVERING → PLANNING → PLAN_REVIEWING → WORKING →
         VERIFYING → REVIEWING → COMPLETED → COMPOUNDING | BLOCKED
 ```
 
@@ -65,6 +65,7 @@ entry and `completed` on exit:
 ```
 TaskCreate({subject: "Discover & assess complexity", activeForm: "Discovering..."})
 TaskCreate({subject: "Plan feature", activeForm: "Planning..."})
+TaskCreate({subject: "Review plan", activeForm: "Reviewing plan..."})
 TaskCreate({subject: "Implement tasks", activeForm: "Working..."})
 TaskCreate({subject: "Verify implementation", activeForm: "Verifying..."})
 TaskCreate({subject: "Review with specialists", activeForm: "Reviewing..."})
@@ -89,7 +90,7 @@ Stop with INCOMPLETE status when limits exceeded. List remaining work and recomm
 ## Integration
 
 ```text
-/phx:full = /phx:plan → /phx:work → /phx:verify → /phx:review → (fix → /phx:verify) → /phx:compound
+/phx:full = /phx:plan → /phx:plan-review → /phx:work → /phx:verify → /phx:review → (fix → /phx:verify) → /phx:compound
 ```
 
 Use Ralph Wiggum Loop for fully autonomous execution:

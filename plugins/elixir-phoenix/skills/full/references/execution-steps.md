@@ -64,6 +64,29 @@ Run `/phx:plan {feature}` (with `--detail comprehensive` for "research it"):
 
 **Exit condition**: Plan file exists with checkboxes.
 
+## Step 3b: Plan Review Phase
+
+Run `/phx:plan-review mode:headless {plan-path}`:
+
+Dispatch parallel persona agents to review the plan document
+before implementation begins. Agents check for:
+
+- **Coherence**: Contradictions, terminology drift, wrong counts
+- **Feasibility**: Can this be built with current codebase patterns?
+- **Security** (conditional): Iron Laws 10-12 compliance in planned approach
+- **Scope** (conditional): Scope creep, unnecessary abstractions
+- **Elixir architecture** (conditional): Ecto/LiveView/OTP Iron Law compliance
+
+**Auto-fixes** (one clear correct fix) are applied to the plan
+silently. **Strategic findings** (need judgment) are logged but
+do not block the pipeline — they are reported at completion.
+
+**Skip conditions**: Skip if user chose "just do it" in discovery
+(no plan exists). Skip for plans with <= 2 implementation units
+(too small to benefit from review overhead).
+
+**Exit condition**: Plan reviewed, auto-fixes applied.
+
 ## Step 4: Work Phase (Loop)
 
 Run `/phx:work .claude/plans/{feature}/plan.md`:
