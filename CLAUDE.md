@@ -669,6 +669,8 @@ When working on code, automatically consult relevant reference documentation bef
 | Understand a plan | `/phx:brief` |
 | Enhance existing plan | `/phx:plan --existing` |
 | Large feature (new domain) | `/phx:full` |
+| Autonomous pipeline (clear scope) | `/phx:lfg` |
+| Parallel autonomous pipeline | `/phx:slfg` |
 | Review code | `/phx:review` |
 | Triage review findings | `/phx:triage` |
 | Capture solved problem | `/phx:compound` |
@@ -692,7 +694,7 @@ When working on code, automatically consult relevant reference documentation bef
 
 **Review → Follow-up Plan**: After `/phx:review`, if findings reveal scope gaps or missing coverage, use `/phx:plan .claude/plans/{slug}/reviews/{review}.md` to create a follow-up plan from review output.
 
-**Standalone**: `/phx:quick`, `/phx:full`, `/phx:investigate`, `/phx:verify`, `/phx:research`, `/phx:brainstorm`, `/phx:help`, `/phx:permissions`
+**Standalone**: `/phx:quick`, `/phx:full`, `/phx:lfg`, `/phx:slfg`, `/phx:investigate`, `/phx:verify`, `/phx:research`, `/phx:brainstorm`, `/phx:help`, `/phx:permissions`
 
 **Analysis**: `/ecto:n1-check`, `/lv:assigns`, `/phx:boundaries`, `/phx:trace`, `/phx:techdebt`
 

@@ -81,6 +81,8 @@ Not everything needs the full cycle:
 |---------|------------|------|
 | `/phx:quick` | Bug fixes, small features (<100 lines) | ~2 min |
 | `/phx:full` | New features, autonomous plan-work-verify-review | ~10 min |
+| `/phx:lfg` | Clear features, strict linear pipeline, no interaction | ~8 min |
+| `/phx:slfg` | Same as lfg but parallel work + parallel review | ~5 min |
 | `/phx:investigate` | Debugging — checks obvious things first | ~3 min |
 
 ### Decision Guide
@@ -314,6 +316,8 @@ The plugin works best when all layers are active: `/phx:init` for persistent rul
 |---------|---------|
 | `/phx:quick <task>` | Fast implementation, skip ceremony |
 | `/phx:full <feature>` | Autonomous plan-work-review cycle |
+| `/phx:lfg <feature>` | Strict linear pipeline, zero interaction |
+| `/phx:slfg <feature>` | Swarm parallel pipeline, faster delivery |
 | `/phx:investigate <bug>` | Structured bug investigation |
 | `/phx:verify` | Run all quality checks |
 | `/phx:research <topic>` | Research with parallel workers, Tidewave-first |

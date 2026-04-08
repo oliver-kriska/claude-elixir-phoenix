@@ -52,6 +52,8 @@ Map the user's situation to one of these categories:
 | **Resume work** | Existing plan with unchecked tasks | `/phx:work --continue` |
 | **Post-fix** | "that worked", solved a hard bug | `/phx:compound` |
 | **Full cycle** | Large feature, new domain area | `/phx:full` |
+| **Autonomous pipeline** | Clear feature, zero interaction | `/phx:lfg` |
+| **Parallel pipeline** | Clear feature, parallel tasks | `/phx:slfg` |
 | **Project health** | "audit", "tech debt", "overall quality" | `/phx:audit`, `/phx:techdebt` |
 | **Deployment** | "deploy", "release", "production" | `/phx:verify` then deploy skill |
 | **Permissions** | "too many prompts", "allow", "permission fatigue" | `/phx:permissions` |

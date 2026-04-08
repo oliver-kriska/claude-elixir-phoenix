@@ -75,6 +75,20 @@ These commands form a connected pipeline — each reads the previous phase's out
 - **Output**: All workflow artifacts
 - **Caution**: Best for well-defined features; complex ones benefit from manual phase control
 
+### `/phx:lfg <description>` — Autonomous linear pipeline
+
+- **When**: Clear, well-scoped feature — want zero-interaction plan→work→verify→review→compound
+- **Input**: Feature description
+- **Output**: All workflow artifacts + compound knowledge
+- **Difference from full**: Strict linear pipeline with no discovery phase or cycle-back. Simpler and faster for clear scope
+
+### `/phx:slfg <description>` — Swarm parallel pipeline
+
+- **When**: Same as lfg but feature has independent implementation units that can parallelize
+- **Input**: Feature description
+- **Output**: All workflow artifacts + compound knowledge
+- **Difference from lfg**: Work phase uses parallel subagents, review+verify run concurrently
+
 ## Standalone Commands
 
 ### `/phx:quick <description>` — Fast implementation
@@ -215,14 +229,15 @@ These commands form a connected pipeline — each reads the previous phase's out
 | Intermittent / race condition | `/phx:investigate` |
 | Test failing, obvious assertion | Fix directly |
 
-### When to use `/phx:full` vs manual phases
+### When to use `/phx:full` vs `/phx:lfg` vs `/phx:slfg` vs manual
 
 | Signal | Use |
 |--------|-----|
-| Well-defined feature, clear scope | `/phx:full` |
+| Clear scope, zero interaction wanted | `/phx:lfg` |
+| Clear scope, independent tasks, want speed | `/phx:slfg` |
+| Large/ambiguous, may need discovery or replanning | `/phx:full` |
 | Exploratory, may pivot | `/phx:plan` then decide |
 | Want control between phases | Manual: plan → work → review |
-| Large feature, new domain | `/phx:full` (handles complexity) |
 
 ### When to use `/phx:review` vs `/phx:verify`
 
@@ -254,6 +269,8 @@ New feature:     /phx:plan → /phx:work → /phx:review → /phx:compound
 Quick fix:       /phx:quick
 Bug:             /phx:investigate
 Full auto:       /phx:full
+Linear pipeline: /phx:lfg
+Swarm pipeline:  /phx:slfg
 Pre-PR:          /phx:verify → /phx:review
 Research:        /phx:research [topic]
 Evaluate lib:    /phx:research --library [name]

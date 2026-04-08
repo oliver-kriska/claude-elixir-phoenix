@@ -5,6 +5,22 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **`/phx:lfg` — Autonomous feature pipeline** — Strict sequential pipeline
+  (plan -> work -> verify -> review -> compound -> done) that runs to completion
+  without manual gates. Inspired by Compound Engineering's LFG workflow, adapted
+  for Elixir/Phoenix with Iron Laws enforcement and `mix compile --warnings-as-errors`
+  verification at every phase boundary. Best for clear, well-scoped features where
+  discovery and replanning are not needed.
+- **`/phx:slfg` — Swarm autonomous pipeline** — Same pipeline as LFG but uses
+  swarm mode for parallel execution. Work phase launches parallel subagents for
+  independent implementation units. Review and verify run concurrently in a parallel
+  phase, followed by sequential autofix. Delivers faster for plans with independent
+  task units.
+
 ## [2.8.0] - 2026-04-03
 
 ### Added
