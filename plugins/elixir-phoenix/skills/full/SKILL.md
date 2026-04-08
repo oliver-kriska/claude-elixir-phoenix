@@ -108,8 +108,8 @@ Use Ralph Wiggum Loop for fully autonomous execution:
 5. **Agent output is findings, not fixes** — Review agents report issues. Only the WORKING state makes code changes
 6. **Skip redundant review agents** — In REVIEWING phase: skip
    verification-runner (work phase already verified), skip iron-law-judge
-   if PostToolUse hooks verified all files. For <200 lines changed,
-   spawn only elixir-reviewer + security-analyzer (if auth files)
+   if PostToolUse hooks verified all files. Always spawn correctness-reviewer.
+   Spawn adversarial-reviewer for >=50 lines or high-risk domains
 7. **ZERO narration in autonomous mode** — This is a HARD rule, not
    a suggestion. NEVER write "Let me now...", "Now I need to...",
    "I'll now...", "Next, I will...", or any preamble before a tool

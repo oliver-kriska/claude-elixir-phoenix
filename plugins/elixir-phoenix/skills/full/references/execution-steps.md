@@ -108,14 +108,16 @@ WHILE unchecked tasks exist:
 
 Run `/phx:review`:
 
-Spawn 4 parallel review agents:
+Spawn parallel review agents (selection based on diff size and content):
 
-| Agent | Focus |
-|-------|-------|
-| elixir-reviewer | Idioms, patterns, code quality |
-| testing-reviewer | Test coverage, patterns |
-| security-analyzer | Security issues |
-| verification-runner | Full test suite |
+| Agent | Focus | When |
+|-------|-------|------|
+| elixir-reviewer | Idioms, patterns, code quality | Always |
+| correctness-reviewer | Logic errors, state bugs, cross-file invariants | Always |
+| adversarial-reviewer | Failure scenarios, composition failures, cascades | >=50 lines or high-risk |
+| testing-reviewer | Test coverage, patterns | Test files changed |
+| security-analyzer | Security issues | Auth files changed |
+| verification-runner | Full test suite | If not already run |
 
 **Exit condition**: Review complete.
 
