@@ -64,6 +64,29 @@ Run `/phx:plan {feature}` (with `--detail comprehensive` for "research it"):
 
 **Exit condition**: Plan file exists with checkboxes.
 
+## Step 3b: Plan Review Phase
+
+Run `/phx:plan-review mode:headless {plan-path}`:
+
+Dispatch parallel persona agents to review the plan document
+before implementation begins. Agents check for:
+
+- **Coherence**: Contradictions, terminology drift, wrong counts
+- **Feasibility**: Can this be built with current codebase patterns?
+- **Security** (conditional): Iron Laws 10-12 compliance in planned approach
+- **Scope** (conditional): Scope creep, unnecessary abstractions
+- **Elixir architecture** (conditional): Ecto/LiveView/OTP Iron Law compliance
+
+**Auto-fixes** (one clear correct fix) are applied to the plan
+silently. **Strategic findings** (need judgment) are logged but
+do not block the pipeline — they are reported at completion.
+
+**Skip conditions**: Skip if user chose "just do it" in discovery
+(no plan exists). Skip for plans with <= 2 implementation units
+(too small to benefit from review overhead).
+
+**Exit condition**: Plan reviewed, auto-fixes applied.
+
 ## Step 4: Work Phase (Loop)
 
 Run `/phx:work .claude/plans/{feature}/plan.md`:
@@ -85,14 +108,16 @@ WHILE unchecked tasks exist:
 
 Run `/phx:review`:
 
-Spawn 4 parallel review agents:
+Spawn parallel review agents (selection based on diff size and content):
 
-| Agent | Focus |
-|-------|-------|
-| elixir-reviewer | Idioms, patterns, code quality |
-| testing-reviewer | Test coverage, patterns |
-| security-analyzer | Security issues |
-| verification-runner | Full test suite |
+| Agent | Focus | When |
+|-------|-------|------|
+| elixir-reviewer | Idioms, patterns, code quality | Always |
+| correctness-reviewer | Logic errors, state bugs, cross-file invariants | Always |
+| adversarial-reviewer | Failure scenarios, composition failures, cascades | >=50 lines or high-risk |
+| testing-reviewer | Test coverage, patterns | Test files changed |
+| security-analyzer | Security issues | Auth files changed |
+| verification-runner | Full test suite | If not already run |
 
 **Exit condition**: Review complete.
 

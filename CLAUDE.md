@@ -669,6 +669,7 @@ When working on code, automatically consult relevant reference documentation bef
 | Understand a plan | `/phx:brief` |
 | Enhance existing plan | `/phx:plan --existing` |
 | Large feature (new domain) | `/phx:full` |
+| Review a plan before implementing | `/phx:plan-review` |
 | Review code | `/phx:review` |
 | Triage review findings | `/phx:triage` |
 | Capture solved problem | `/phx:compound` |
@@ -688,7 +689,10 @@ When working on code, automatically consult relevant reference documentation bef
 | Monitor skill effectiveness | `/skill-monitor` |
 | Validate plugin against docs | `/docs-check` |
 
-**Workflow Commands**: `/phx:brainstorm` (optional) -> `/phx:plan` -> `/phx:brief` (optional) -> `/phx:plan --existing` (optional) -> `/phx:work` -> `/phx:review` -> `/phx:triage` (optional) -> `/phx:compound`
+**Workflow Commands**:
+`/phx:brainstorm` (optional) -> `/phx:plan` -> `/phx:plan-review` (optional) ->
+`/phx:brief` (optional) -> `/phx:plan --existing` (optional) -> `/phx:work` ->
+`/phx:review` -> `/phx:triage` (optional) -> `/phx:compound`
 
 **Review → Follow-up Plan**: After `/phx:review`, if findings reveal scope gaps or missing coverage, use `/phx:plan .claude/plans/{slug}/reviews/{review}.md` to create a follow-up plan from review output.
 

@@ -80,7 +80,7 @@ Not everything needs the full cycle:
 | Command | When to Use | Time |
 |---------|------------|------|
 | `/phx:quick` | Bug fixes, small features (<100 lines) | ~2 min |
-| `/phx:full` | New features, autonomous plan-work-verify-review | ~10 min |
+| `/phx:full` | New features, autonomous plan-work-verify-review (includes plan review) | ~10 min |
 | `/phx:investigate` | Debugging — checks obvious things first | ~3 min |
 
 ### Decision Guide
@@ -313,11 +313,13 @@ The plugin works best when all layers are active: `/phx:init` for persistent rul
 | Command | Purpose |
 |---------|---------|
 | `/phx:quick <task>` | Fast implementation, skip ceremony |
-| `/phx:full <feature>` | Autonomous plan-work-review cycle |
+| `/phx:full <feature>` | Autonomous plan-work-review cycle (includes plan review) |
+| `/phx:plan-review` | Review plan docs before implementing |
 | `/phx:investigate <bug>` | Structured bug investigation |
 | `/phx:verify` | Run all quality checks |
 | `/phx:research <topic>` | Research with parallel workers, Tidewave-first |
 | `/phx:pr-review <PR#>` | Address PR review comments |
+| `/phx:plan-review` | Review plan docs before implementing |
 | `/phx:permissions` | Scan sessions, recommend safe Bash permissions |
 | `/phx:help [description]` | Interactive command advisor — helps pick the right command |
 

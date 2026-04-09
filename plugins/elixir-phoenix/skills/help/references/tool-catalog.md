@@ -75,6 +75,15 @@ These commands form a connected pipeline — each reads the previous phase's out
 - **Output**: All workflow artifacts
 - **Caution**: Best for well-defined features; complex ones benefit from manual phase control
 
+### `/phx:plan-review [path]` — Plan document review
+
+- **When**: After `/phx:plan`, before `/phx:work` — catch bad requirements before implementing
+- **Input**: Plan file path (or auto-detects most recent)
+- **Output**: Auto-fixed plan + findings for user judgment
+- **Agents**: coherence, feasibility, security (conditional), scope-guardian (conditional), elixir-architecture (conditional)
+- **Difference from /phx:review**: Reviews the *plan document*, not code
+- **Note**: Also runs automatically as part of `/phx:full` (headless mode)
+
 ## Standalone Commands
 
 ### `/phx:quick <description>` — Fast implementation
@@ -223,6 +232,7 @@ These commands form a connected pipeline — each reads the previous phase's out
 | Exploratory, may pivot | `/phx:plan` then decide |
 | Want control between phases | Manual: plan → work → review |
 | Large feature, new domain | `/phx:full` (handles complexity) |
+| Want plan reviewed before work | `/phx:plan` → `/phx:plan-review` → `/phx:work` |
 
 ### When to use `/phx:review` vs `/phx:verify`
 
@@ -250,10 +260,10 @@ These load automatically when you edit matching files:
 ## Workflow Cheat Sheet
 
 ```text
-New feature:     /phx:plan → /phx:work → /phx:review → /phx:compound
+New feature:     /phx:plan → /phx:plan-review → /phx:work → /phx:review → /phx:compound
 Quick fix:       /phx:quick
 Bug:             /phx:investigate
-Full auto:       /phx:full
+Full auto:       /phx:full (includes plan-review)
 Pre-PR:          /phx:verify → /phx:review
 Research:        /phx:research [topic]
 Evaluate lib:    /phx:research --library [name]

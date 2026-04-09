@@ -66,6 +66,8 @@ based on the diff, then spawn selected agents in ONE message (parallel):**
 | Agent | subagent_type | When to spawn |
 |-------|---------------|---------------|
 | Elixir Reviewer | `elixir-phoenix:elixir-reviewer` | **Always** |
+| Correctness Reviewer | `elixir-phoenix:correctness-reviewer` | **Always** — traces execution paths for logic errors, state bugs, cross-file invariant violations |
+| Adversarial Reviewer | `elixir-phoenix:adversarial-reviewer` | >=50 lines changed OR touches auth/payments/PubSub/GenServer state/external APIs. Constructs failure scenarios |
 | Iron Law Judge | `elixir-phoenix:iron-law-judge` | Only if >200 lines changed AND auth/LiveView/Oban files in diff. **Skip** if PostToolUse hooks already verified all files (hooks check Iron Laws on every Edit/Write) |
 | Verification Runner | `elixir-phoenix:verification-runner` | Only if `mix test` has NOT been run in this session. **Skip** if `/phx:work` just passed all verification tiers |
 | Security Analyzer | `elixir-phoenix:security-analyzer` | Auth/session/password/token files changed |
@@ -73,9 +75,9 @@ based on the diff, then spawn selected agents in ONE message (parallel):**
 | Oban Specialist | `elixir-phoenix:oban-specialist` | Worker files changed (*_worker.ex) |
 | Deploy Validator | `elixir-phoenix:deployment-validator` | Dockerfile/fly.toml/runtime.exs changed |
 
-**Agent count**: Min 1, max 5. For <200 lines changed: spawn only
-elixir-reviewer + security-analyzer (if auth files). Log selection
-rationale in review output.
+**Agent count**: Min 1, max 7. For <50 lines changed: spawn only
+elixir-reviewer + correctness-reviewer. Log selection rationale in
+review output.
 Spawn with `mode: "bypassPermissions"` and `run_in_background: true`.
 
 **For focused reviews — spawn the specified agent only:**
@@ -87,6 +89,8 @@ Spawn with `mode: "bypassPermissions"` and `run_in_background: true`.
 | `oban` | `elixir-phoenix:oban-specialist` |
 | `deploy` | `elixir-phoenix:deployment-validator` |
 | `iron-laws` | `elixir-phoenix:iron-law-judge` |
+| `correctness` | `elixir-phoenix:correctness-reviewer` |
+| `adversarial` | `elixir-phoenix:adversarial-reviewer` |
 
 Zero agents spawned = skill failure.
 

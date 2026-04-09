@@ -5,6 +5,36 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+
+### Added
+
+- **`/phx:plan-review` — Multi-persona plan review** — Review plan and requirements
+  documents through parallel persona agents before implementation. Dispatches
+  coherence, feasibility, and conditional reviewers (security, scope-guardian,
+  elixir-architecture) that check plans against Iron Laws and Phoenix conventions.
+  Auto-fixes clear issues, presents strategic questions for user judgment. Inspired
+  by Compound Engineering's document-review skill. Can be used standalone or runs
+  automatically as part of `/phx:full` in headless mode.
+- **`/phx:full` now includes plan review** — After the PLANNING phase and before
+  WORKING, `/phx:full` runs `/phx:plan-review mode:headless` to catch Iron Law
+  violations, scope creep, and feasibility issues in the plan before implementation
+  begins. Auto-fixes are applied silently; strategic findings are reported at
+  completion. Skipped for "just do it" discovery choice or plans with <= 2 units.
+- **`correctness-reviewer` agent** — Always-on code review agent that traces
+  execution paths to find logic errors, state management bugs, nil propagation,
+  race conditions, and cross-file invariant violations. Mentally executes code
+  with concrete values at boundaries. Catches bugs that pass tests because nobody
+  thought to test that input.
+- **`adversarial-reviewer` agent** — Conditional code review agent (>=50 changed
+  lines or high-risk domains) that constructs failure scenarios rather than checking
+  patterns. Hunts for assumption violations, composition failures across Phoenix
+  contexts, cascade failures in GenServer/Oban/PubSub chains, and abuse cases.
+  Specifically designed to catch cross-file state invariant bugs like counter drift.
+- **`/phx:review` now spawns correctness and adversarial reviewers** — Correctness
+  reviewer is always-on. Adversarial reviewer activates for large diffs or high-risk
+  domains. Both integrated into `/phx:full` review phase.
+
 ## [2.8.0] - 2026-04-03
 
 ### Added

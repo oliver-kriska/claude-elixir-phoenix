@@ -26,11 +26,11 @@ Cycles back automatically if review finds issues.
 │                       /phx:full {feature}                        │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                  │
-│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  │
-│  │Discover│→ │  Plan  │→ │  Work  │→ │ Verify │→ │ Review │→ │Compound│→Done│
-│  │ Assess │  │[Pn-Tm] │  │Execute │  │  Full  │  │4 Agents│  │Capture │     │
-│  │ Decide │  │ Phases │  │ Tasks  │  │  Loop  │  │Parallel│  │ Solve  │     │
-│  └───┬────┘  └────────┘  └────────┘  └───┬────┘  └────────┘  └────────┘     │
+│  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  │
+│  │Discover│→ │  Plan  │→ │  Plan  │→ │  Work  │→ │ Verify │→ │ Review │→ │Compound│→Done│
+│  │ Assess │  │[Pn-Tm] │  │ Review │  │Execute │  │  Full  │  │4 Agents│  │Capture │     │
+│  │ Decide │  │ Phases │  │Personas│  │ Tasks  │  │  Loop  │  │Parallel│  │ Solve  │     │
+│  └───┬────┘  └────────┘  └────────┘  └────────┘  └───┬────┘  └────────┘  └────────┘     │
 │       │                            ↑      │    ↑              │         │
 │       ├── "just do it" ────────────┤      │    │              │         │
 │       ├── "plan it" ──┐            │      ↓    │              │         │
@@ -54,7 +54,7 @@ Cycles back automatically if review finds issues.
 ## State Machine
 
 ```
-STATES: INITIALIZING → DISCOVERING → PLANNING → WORKING →
+STATES: INITIALIZING → DISCOVERING → PLANNING → PLAN_REVIEWING → WORKING →
         VERIFYING → REVIEWING → COMPLETED → COMPOUNDING | BLOCKED
 ```
 
@@ -65,6 +65,7 @@ entry and `completed` on exit:
 ```
 TaskCreate({subject: "Discover & assess complexity", activeForm: "Discovering..."})
 TaskCreate({subject: "Plan feature", activeForm: "Planning..."})
+TaskCreate({subject: "Review plan", activeForm: "Reviewing plan..."})
 TaskCreate({subject: "Implement tasks", activeForm: "Working..."})
 TaskCreate({subject: "Verify implementation", activeForm: "Verifying..."})
 TaskCreate({subject: "Review with specialists", activeForm: "Reviewing..."})
@@ -89,7 +90,7 @@ Stop with INCOMPLETE status when limits exceeded. List remaining work and recomm
 ## Integration
 
 ```text
-/phx:full = /phx:plan → /phx:work → /phx:verify → /phx:review → (fix → /phx:verify) → /phx:compound
+/phx:full = /phx:plan → /phx:plan-review → /phx:work → /phx:verify → /phx:review → (fix → /phx:verify) → /phx:compound
 ```
 
 Use Ralph Wiggum Loop for fully autonomous execution:
@@ -107,8 +108,8 @@ Use Ralph Wiggum Loop for fully autonomous execution:
 5. **Agent output is findings, not fixes** — Review agents report issues. Only the WORKING state makes code changes
 6. **Skip redundant review agents** — In REVIEWING phase: skip
    verification-runner (work phase already verified), skip iron-law-judge
-   if PostToolUse hooks verified all files. For <200 lines changed,
-   spawn only elixir-reviewer + security-analyzer (if auth files)
+   if PostToolUse hooks verified all files. Always spawn correctness-reviewer.
+   Spawn adversarial-reviewer for >=50 lines or high-risk domains
 7. **ZERO narration in autonomous mode** — This is a HARD rule, not
    a suggestion. NEVER write "Let me now...", "Now I need to...",
    "I'll now...", "Next, I will...", or any preamble before a tool
