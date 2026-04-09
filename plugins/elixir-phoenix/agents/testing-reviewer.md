@@ -138,11 +138,13 @@ end
 
 Write review to `.claude/plans/{slug}/reviews/testing-review.md` (path provided by orchestrator):
 
+Begin your response with a counts line so orchestrators can route without
+reading the full report:
+
 ```markdown
 # Test Review: {file_path}
 
-## Summary
-{Brief assessment}
+**Counts: {N} critical, {N} warnings, {N} suggestions — {N} test files reviewed**
 
 ## Iron Law Violations
 {List any violations of the iron laws}
@@ -160,6 +162,9 @@ Write review to `.claude/plans/{slug}/reviews/testing-review.md` (path provided 
 ```
 
 Do NOT include "Good Practices Observed" — only report issues found.
+
+If 0 issues found, report:
+"**Counts: 0 critical, 0 warnings, 0 suggestions — {N} test files reviewed. All clean.**"
 
 ## Analysis Process
 

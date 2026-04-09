@@ -174,13 +174,15 @@ Check for:
 Write detailed findings to {output_dir}/correctness.md.
 
 Max 2000 words. Write your detailed analysis to the file specified.
-Return ONLY a summary in your response.
+Return ONLY a counts line + summary in your response.
 
 Output format:
+**Counts: {N} critical, {N} warnings, {N} suggestions — {N} files reviewed**
 ## Correctness & Style Review
 ### Critical Issues (Must Fix)
 ### Warnings (Should Fix)
 ### Style Suggestions
+If a category has 0 findings, write: "### {Category}: 0 issues found"
 Do NOT include "What's Done Well" — only report issues found.
 """, run_in_background: true)
 
@@ -202,14 +204,16 @@ Check for:
 Write detailed findings to {output_dir}/security.md.
 
 Max 2000 words. Write your detailed analysis to the file specified.
-Return ONLY a summary in your response.
+Return ONLY a counts line + summary in your response.
 
 Output format:
+**Counts: {N} critical, {N} warnings, {N} auth gaps — {N} files reviewed**
 ## Security Review
 ### Critical Vulnerabilities
 ### Security Warnings
 ### Authorization Gaps
-Only report issues found — do NOT list "N/A" categories or clean checks.
+If a category has 0 findings, write: "### {Category}: 0 issues found"
+Do NOT list "N/A" categories or clean checks beyond the counts line.
 """, run_in_background: true)
 
 Agent(subagent_type: "general-purpose", mode: "bypassPermissions", prompt: """
@@ -230,13 +234,15 @@ Check for:
 Write detailed findings to {output_dir}/testing.md.
 
 Max 2000 words. Write your detailed analysis to the file specified.
-Return ONLY a summary in your response.
+Return ONLY a counts line + summary in your response.
 
 Output format:
+**Counts: {N} coverage gaps, {N} quality issues, {N} suggestions — {N} files reviewed**
 ## Testing Review
 ### Missing Test Coverage
 ### Test Quality Issues
 ### Pattern Recommendations
+If a category has 0 findings, write: "### {Category}: 0 issues found"
 Do NOT include "What's Done Well" — only report gaps and issues.
 """, run_in_background: true)
 
@@ -255,9 +261,10 @@ Run these commands and report results:
 Write detailed findings to {output_dir}/verification.md.
 
 Max 2000 words. Write your detailed analysis to the file specified.
-Return ONLY a summary in your response.
+Return ONLY a counts line + summary in your response.
 
 Output format:
+**Counts: {N} passed, {N} failed, {N} skipped — 5 checks run**
 ## Verification Results
 ### Compilation: PASS/FAIL
 ### Formatting: PASS/FAIL
@@ -296,6 +303,9 @@ Read `{summaries_dir}/review-consolidated.md` for synthesis.
 When no `summaries_dir` provided, synthesize directly from
 the 4 agent outputs (no supervisor needed for ad-hoc reviews).
 
+Use agent counts lines for routing: if all agents report 0 critical
+and 0 warnings, verdict is Approved. No need to read full reports.
+
 Merge findings into unified report:
 
 ```markdown
@@ -307,6 +317,7 @@ Merge findings into unified report:
 - **Blocking Issues**: {count}
 - **Warnings**: {count}
 - **Suggestions**: {count}
+- **Files Reviewed**: {count}
 
 ## Quick Verdict
 

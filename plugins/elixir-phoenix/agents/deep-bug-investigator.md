@@ -266,6 +266,8 @@ Synthesize from compressed summary (or inline outputs) into actionable report:
 ```markdown
 # Deep Bug Investigation: {bug_title}
 
+**Counts: {N} root causes found, {N} entry points affected, fix complexity: {simple/medium/complex}**
+
 ## Executive Summary
 
 **Root Cause**: {one sentence}
@@ -321,7 +323,7 @@ If a track fails:
 If root cause track finds it's not actually a bug:
 
 1. Stop other tracks early if possible
-2. Report as "Investigation Result: Not a Bug"
+2. Report as: "**Counts: 0 root causes found, 0 entry points affected. Not a bug — expected behavior.**"
 3. Explain why the behavior is expected
 
 ## Tidewave Integration (Runtime-First When Available)

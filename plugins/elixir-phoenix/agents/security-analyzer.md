@@ -165,8 +165,13 @@ config :my_app, secret_key_base: System.get_env("SECRET_KEY_BASE")
 
 Write audit to `.claude/plans/{slug}/reviews/security-audit.md` (path provided by orchestrator):
 
+Begin your response with a counts line so orchestrators can route without
+reading the full report:
+
 ```markdown
 # Security Audit: {app_name}
+
+**Counts: {N} critical, {N} high, {N} medium, {N} low — {N} categories checked**
 
 ## Executive Summary
 {Brief risk assessment}
@@ -217,8 +222,11 @@ The user should run these manually (this agent has no Bash access):
 **Output efficiency**: Only report issues found. Do NOT list "N/A"
 categories, "Status: OK" sections, or clean checks. A checklist
 item that passes is NOT worth reporting — it wastes 56%+ of output
-tokens (confirmed across 56 sessions). One summary line suffices:
-"Checked auth, input validation, SQL injection, XSS, CSRF, secrets: all clean."
+tokens (confirmed across 56 sessions).
+
+If 0 vulnerabilities found, report:
+"**Counts: 0 critical, 0 high, 0 medium, 0 low — 7 categories checked. All clean.**
+Checked: auth, input validation, SQL injection, XSS, CSRF, secrets, headers."
 
 ## Analysis Process
 

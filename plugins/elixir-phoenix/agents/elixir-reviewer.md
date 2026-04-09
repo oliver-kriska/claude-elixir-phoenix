@@ -153,12 +153,16 @@ end
 
 ## Output Format
 
+Begin your response with a counts line so orchestrators can route without
+reading the full report:
+
 ```markdown
 # Code Review: {file/PR}
 
+**Counts: {N} critical, {N} warnings, {N} suggestions — {N} files reviewed**
+
 ## Summary
 - **Status**: ✅ Approved / ⚠️ Changes Requested / ❌ Needs Rework
-- **Issues Found**: {count}
 
 ## Critical Issues
 1. **{location}**: {description}
@@ -182,6 +186,9 @@ end
 
 Do NOT include "What's Good" sections — only report issues found.
 Positive feedback wastes tokens for zero actionable value.
+
+If 0 issues found across all categories, report:
+"**Counts: 0 critical, 0 warnings, 0 suggestions — {N} files reviewed. All clean.**"
 
 ## Dialyzer Patterns
 

@@ -239,6 +239,9 @@ suffices: "Checked {N} of 22 Iron Laws: {N} violations found."
 or per-law "checked and clean" confirmations. These waste 60%+ of
 output tokens for zero actionable value (confirmed across 56 sessions).
 
+If 0 violations found, report:
+"**Violations found: 0 — {N} files scanned, {N} of 22 Iron Laws checked. All clean.**"
+
 ## Confidence Levels
 
 - **DEFINITE**: Pattern is unambiguous (e.g., `String.to_atom(`, `:float` for money fields, `raw(@`)

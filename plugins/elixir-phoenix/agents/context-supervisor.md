@@ -34,6 +34,9 @@ For each file:
 - Read contents
 - Estimate tokens (character count / 4)
 - Record filename and topic
+- Extract **Counts:** line if present (agents emit pre-computed
+  aggregates as their first line — use these for strategy selection
+  and deduplication without parsing full content)
 
 ### Step 2: Strategy Selection
 
@@ -116,6 +119,7 @@ Write **`{output_dir}/consolidated.md`** (or caller-specified name):
 ```markdown
 # Consolidated Summary
 
+**Totals: {N} blockers, {N} warnings, {N} suggestions across {N} files**
 **Strategy**: {Index|Compress|Aggressive}
 **Input**: {N} files, ~{total}k tokens
 **Output**: ~{output}k tokens ({compression}% reduction)
@@ -134,6 +138,10 @@ Write **`{output_dir}/consolidated.md`** (or caller-specified name):
 
 - {filename}: No findings extracted — review manually
 ```
+
+When all input files report 0 findings (via their Counts lines),
+write a minimal output:
+"**Totals: 0 blockers, 0 warnings, 0 suggestions. All {N} tracks clean.**"
 
 ## Error Handling
 
