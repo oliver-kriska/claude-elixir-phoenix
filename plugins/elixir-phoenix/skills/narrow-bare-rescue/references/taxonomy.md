@@ -1,8 +1,11 @@
 # Exception Taxonomy for Rescue Narrowing
 
-Verified exception types by work category. Use these as the default sets when narrowing bare rescues, and add to them only when you can point to a specific call in the rescue body that raises the extra type.
+Verified exception types by work category. Use these as the default sets when narrowing bare
+rescues, and add to them only when you can point to a specific call in the rescue body that
+raises the extra type.
 
-All entries were validated against the deps of a real Phoenix codebase during the ENA-8976 audit. When a library updates, re-verify by running:
+All entries were validated against the deps of a production Phoenix codebase during a
+rescue-narrowing audit. When a library updates, re-verify by running:
 
 ```bash
 grep -rn "defexception" deps/<libname>/lib/
@@ -167,6 +170,7 @@ Never write `rescue _ ->` around `String.to_existing_atom` — the ArgumentError
 ```
 
 Pattern:
+
 ```elixir
 case Form.input_value(form, :structure_type) do
   val when is_atom(val) -> val
@@ -230,7 +234,9 @@ end
 [NimbleCSV.ParseError, MatchError, ArgumentError]
 ```
 
-**Gotcha:** only `NimbleCSV.ParseError` is public. The RFC4180-specific structs (`NimbleCSV.RFC4180.RowLengthError`, etc.) are **internal** and will fail to compile if referenced. Verified by grepping deps:
+**Gotcha:** only `NimbleCSV.ParseError` is public. The RFC4180-specific structs
+(`NimbleCSV.RFC4180.RowLengthError`, etc.) are **internal** and will fail to compile if
+referenced. Verified by grepping deps:
 
 ```bash
 grep -rn "defexception" deps/nimble_csv/lib/
@@ -298,6 +304,10 @@ These should almost never appear in a narrowed rescue list, because catching the
 | `BadFunctionError` | Calling a non-function; must propagate |
 | `BadArityError` | Wrong number of args at a fun call; must propagate |
 
-If a narrowed rescue list includes any of these, re-examine whether the original bare rescue was genuinely meant to suppress them (rare) or was accidentally hiding bugs (common).
+If a narrowed rescue list includes any of these, re-examine whether the original bare rescue
+was genuinely meant to suppress them (rare) or was accidentally hiding bugs (common).
 
-**Exceptions to the exclusion:** `FunctionClauseError` and `ArgumentError` have legitimate non-bug uses (e.g., `:erlang.binary_to_existing_atom/1` raises `ArgumentError` on unknown input, which is legitimate data). Include them only when you can point to a call in the body that raises them as a data signal, not as a programmer error.
+**Exceptions to the exclusion:** `FunctionClauseError` and `ArgumentError` have legitimate
+non-bug uses (e.g., `:erlang.binary_to_existing_atom/1` raises `ArgumentError` on unknown
+input, which is legitimate data). Include them only when you can point to a call in the body
+that raises them as a data signal, not as a programmer error.
