@@ -4,6 +4,10 @@ Verified exception types by work category. Use these as the default sets when na
 rescues, and add to them only when you can point to a specific call in the rescue body that
 raises the extra type.
 
+**Last validated:** 2026-04 against Elixir 1.19 / OTP 28. Libraries occasionally rename
+exception modules between minor versions — if you're narrowing against a newer dep, confirm
+the names still exist before committing or you'll hit `(CompileError) module is not available`.
+
 All entries were validated against the deps of a production Phoenix codebase during a
 rescue-narrowing audit. When a library updates, re-verify by running:
 
