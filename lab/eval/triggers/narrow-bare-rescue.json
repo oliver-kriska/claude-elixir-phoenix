@@ -1,0 +1,17 @@
+{
+  "skill": "narrow-bare-rescue",
+  "should_trigger": [
+    "Audit this module for bare rescues and narrow them to explicit exception lists",
+    "This rescue _ -> clause is swallowing a KeyError from a typo — can you fix it across the module?",
+    "Run a secure-coding pass on lib/my_app/util/ to narrow the broad rescue clauses",
+    "All these rescue e -> blocks are catching everything including programmer bugs — clean them up",
+    "I want to refactor our error handling so compile-time bugs aren't silently swallowed by rescues"
+  ],
+  "should_not_trigger": [
+    "Convert this case statement into a with chain for cleaner error handling — elixir-idioms",
+    "Add retry logic to this Oban worker when the API call fails — oban",
+    "This ecto query is returning {:error, :not_found} — wrap it in a context function — phoenix-contexts",
+    "Investigate why this test is failing with a MatchError — investigate",
+    "Handle the {:error, changeset} case in this LiveView handle_event — liveview-patterns"
+  ]
+}

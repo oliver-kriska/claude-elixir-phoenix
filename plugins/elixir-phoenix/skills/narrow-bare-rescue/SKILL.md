@@ -1,6 +1,6 @@
 ---
 name: narrow-bare-rescue
-description: "Narrow bare `rescue _ ->` / `rescue e ->` in Elixir to explicit exception lists so programmer bugs propagate instead of being swallowed. Use for rescue cleanup, secure-coding audits, exception review, or refactoring error handling."
+description: "Narrow bare `rescue _ ->` / `rescue e ->` so UndefinedFunctionError, KeyError, and typos propagate instead of being swallowed. Use for auditing rescues, secure-coding review, exception review, refactoring error handling in Elixir."
 effort: medium
 user-invocable: true
 argument-hint: "[file_path | directory | --all]"
