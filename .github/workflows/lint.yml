@@ -163,3 +163,81 @@ jobs:
       - name: Score all agents (5 dimensions)
         run: |
           python3 -m lab.eval.agent_scorer --all 2>&1 | tee /dev/stderr | tail -1 | grep -q "perfect"
+
+  port-validate:
+    name: Multi-agent Port Drift Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+
+      - name: Install PyYAML
+        run: pip install pyyaml
+
+      - name: Verify targets/ matches port.py output
+        run: python3 -m scripts.port --check
+
+      - name: Codex description budget check
+        run: |
+          python3 -c "
+          import json, sys
+          from pathlib import Path
+          total = 0
+          for skill_md in Path('targets/codex/skills').glob('*/SKILL.md'):
+              import yaml
+              text = skill_md.read_text()
+              if not text.startswith('---'):
+                  continue
+              _, fm, _ = text.split('---', 2)
+              data = yaml.safe_load(fm) or {}
+              total += len((data.get('description') or '').encode('utf-8'))
+          budget = 8000
+          print(f'codex description budget: {total}/{budget} bytes')
+          if total > budget:
+              sys.exit(f'BUDGET EXCEEDED: {total} > {budget}')
+          "
+
+      - name: Iron Laws YAML consistency
+        run: |
+          python3 -c "
+          import sys
+          from pathlib import Path
+          from scripts.port_lib.iron_laws import load_laws
+          from scripts.port_lib.frontmatter import parse_file
+
+          # 1. laws.yaml well-formed.
+          laws = load_laws()
+          assert len(laws) >= 22, f'expected >=22 laws, got {len(laws)}'
+          for law in laws:
+              for required in ('number', 'title', 'body', 'category'):
+                  assert required in law, f'law {law.get(\"number\")} missing {required}'
+
+          # 2. Auto-load reference skills in targets/codex have the inlined block.
+          # Source-of-truth check: look at original plugins/elixir-phoenix/skills/<name>
+          # to determine which skills are reference (no \`:\` in name).
+          source_skills = Path('plugins/elixir-phoenix/skills')
+          auto_load_source_names = {
+              s.name for s in source_skills.iterdir()
+              if s.is_dir() and ':' not in (parse_file(s / 'SKILL.md').data.get('name') or '')
+          }
+
+          missing = []
+          for codex_skill in Path('targets/codex/skills').iterdir():
+              if not codex_skill.is_dir():
+                  continue
+              # Codex normalized name == source name when no namespace.
+              if codex_skill.name in auto_load_source_names:
+                  text = (codex_skill / 'SKILL.md').read_text()
+                  if '## Iron Laws (Inlined)' not in text:
+                      missing.append(codex_skill.name)
+
+          if missing:
+              sys.exit(f'Reference skills missing Iron Laws block in targets/codex/: {missing}')
+          print(f'Iron Laws YAML: {len(laws)} laws, {len(auto_load_source_names)} auto-load skills, all inlined ✓')
+          "

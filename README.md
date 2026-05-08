@@ -103,6 +103,28 @@ git clone https://github.com/oliver-kriska/claude-elixir-phoenix.git
 claude --plugin-dir ./claude-elixir-phoenix/plugins/elixir-phoenix
 ```
 
+### Other coding agents
+
+This plugin also ports to **Codex CLI**, **OpenCode**, and **Pi**.
+See [`docs/multi-agent/`](docs/multi-agent/README.md) for install and
+tradeoffs per agent.
+
+| Agent       | Install                                                                    |
+|-------------|----------------------------------------------------------------------------|
+| Codex       | `codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --sparse targets/codex` |
+| OpenCode    | `"plugin": ["oliver-kriska/opencode-elixir-phoenix"]` in `opencode.json`   |
+| Pi          | `pi install git:github.com/oliver-kriska/pi-elixir-phoenix`                |
+
+Multi-agent capability matrix (v2.9.0):
+
+| Feature                   | Claude | Codex            | OpenCode             | Pi                  |
+|---------------------------|:------:|:----------------:|:--------------------:|:-------------------:|
+| Skills auto-load          | yes    | yes              | yes                  | yes                 |
+| Slash commands            | yes    | `$skill-name`    | `/skill-name`        | `/skill-name`       |
+| Sub-agents                | yes    | TOML drop (21)   | `.opencode/agent/` (21) | extension dispatch |
+| Hooks                     | 9 events | 6 events       | TS module            | TS extensions       |
+| Iron Laws (auto-injected) | yes    | inlined per skill| system-prompt transform | session_start extension |
+
 ## Getting Started
 
 New to the plugin? Run the interactive tutorial:

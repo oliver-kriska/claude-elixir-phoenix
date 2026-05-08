@@ -1,0 +1,183 @@
+#!/usr/bin/env python3
+"""Multi-target port driver.
+
+Generates `targets/<agent>/` directories from `plugins/elixir-phoenix/`.
+
+Usage:
+    python3 -m scripts.port                       # build all targets
+    python3 -m scripts.port --target codex        # build single target
+    python3 -m scripts.port --check               # build to a temp dir,
+                                                  # diff vs committed targets/,
+                                                  # exit 1 on drift
+"""
+
+from __future__ import annotations
+
+import argparse
+import filecmp
+import shutil
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+from .port_lib import codex, opencode, pi
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+SOURCE_DIR = REPO_ROOT / "plugins" / "elixir-phoenix"
+TARGETS_DIR = REPO_ROOT / "targets"
+
+BUILDERS = {
+    "codex": codex.build,
+    "pi": pi.build,
+    "opencode": opencode.build,
+}
+
+CODEX_DESC_BUDGET = 8000  # bytes; spec ceiling 8192, we leave 192-byte margin
+
+
+def _build_one(target: str, out_dir: Path) -> dict:
+    builder = BUILDERS[target]
+    return builder(SOURCE_DIR, out_dir)
+
+
+def _build_all(base_out: Path) -> dict:
+    results = {}
+    for target in BUILDERS:
+        out_dir = base_out / target
+        results[target] = _build_one(target, out_dir)
+    return results
+
+
+_DIFF_IGNORE = {".gitkeep", ".DS_Store"}
+
+
+def _diff_dirs(a: Path, b: Path) -> list[str]:
+    """Recursively compare two directories. Return list of differing paths."""
+    differences: list[str] = []
+    cmp = filecmp.dircmp(a, b, ignore=list(_DIFF_IGNORE))
+
+    def _walk(c: filecmp.dircmp, prefix: str = "") -> None:
+        for name in c.left_only:
+            differences.append(f"missing in target: {prefix}{name}")
+        for name in c.right_only:
+            differences.append(f"extra in target: {prefix}{name}")
+        for name in c.diff_files:
+            differences.append(f"differs: {prefix}{name}")
+        for sub_name, sub_cmp in c.subdirs.items():
+            _walk(sub_cmp, prefix + sub_name + "/")
+
+    _walk(cmp)
+    return differences
+
+
+# User-managed sidecar files (not generated): preserved by builders and
+# seeded into temp dirs during drift check so the temp build sees the same
+# overrides as the committed tree.
+_USER_CONFIG_FILES = {
+    "codex": ["descriptions_short.yaml"],
+    "pi": [],
+    "opencode": [],
+}
+
+
+def _check_drift(targets_to_check: list[str]) -> int:
+    """Build to temp dir, diff against committed `targets/`, exit 1 on drift."""
+    with tempfile.TemporaryDirectory() as tmp:
+        tmp_path = Path(tmp)
+        any_drift = False
+        for target in targets_to_check:
+            tmp_target = tmp_path / target
+            tmp_target.mkdir(parents=True, exist_ok=True)
+            committed = TARGETS_DIR / target
+            for sidecar in _USER_CONFIG_FILES.get(target, []):
+                src = committed / sidecar
+                if src.exists():
+                    shutil.copyfile(src, tmp_target / sidecar)
+            _build_one(target, tmp_target)
+
+            committed = TARGETS_DIR / target
+            if not committed.exists():
+                print(f"[port-validate] target dir missing: {committed}", file=sys.stderr)
+                any_drift = True
+                continue
+
+            differences = _diff_dirs(tmp_target, committed)
+            if differences:
+                any_drift = True
+                print(f"[port-validate] DRIFT in {target}/:", file=sys.stderr)
+                for diff in differences:
+                    print(f"  - {diff}", file=sys.stderr)
+            else:
+                print(f"[port-validate] {target}: OK")
+
+        if any_drift:
+            print(
+                "\n[port-validate] FAIL — run `make port` and commit the result.",
+                file=sys.stderr,
+            )
+            return 1
+    return 0
+
+
+def _enforce_codex_budget(result: dict) -> int:
+    desc_bytes = result.get("description_bytes", 0)
+    if desc_bytes > CODEX_DESC_BUDGET:
+        print(
+            f"[codex] DESCRIPTION BUDGET EXCEEDED: {desc_bytes} > {CODEX_DESC_BUDGET} bytes",
+            file=sys.stderr,
+        )
+        print(
+            "[codex] Trim skill descriptions or add `descriptions_short.yaml` mapping.",
+            file=sys.stderr,
+        )
+        return 1
+    print(f"[codex] description budget: {desc_bytes}/{CODEX_DESC_BUDGET} bytes ✓")
+    return 0
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(prog="scripts.port")
+    parser.add_argument(
+        "--target",
+        choices=list(BUILDERS.keys()),
+        action="append",
+        help="Target to build (repeatable). Default: all.",
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Build to temp dir; diff vs committed targets/; fail on drift.",
+    )
+    args = parser.parse_args()
+
+    targets = args.target or list(BUILDERS.keys())
+
+    if args.check:
+        return _check_drift(targets)
+
+    rc = 0
+
+    # Regenerate CLAUDE.md's Iron Laws subsection from `iron-laws/laws.yaml`
+    # FIRST, so target builds copy the updated CLAUDE.md into their AGENTS.md.
+    # Idempotent: prints "already up to date" if no change.
+    try:
+        from . import inject_claude_md  # type: ignore[attr-defined]
+
+        rc |= inject_claude_md.main()
+    except Exception as exc:  # pragma: no cover — regen is best-effort
+        print(f"[port] inject-claude-md skipped: {exc}", file=sys.stderr)
+
+    for target in targets:
+        out_dir = TARGETS_DIR / target
+        out_dir.mkdir(parents=True, exist_ok=True)
+        result = _build_one(target, out_dir)
+        print(f"[{target}] built: {result}")
+        if target == "codex":
+            rc |= _enforce_codex_budget(result)
+
+    return rc
+
+
+if __name__ == "__main__":
+    sys.exit(main())

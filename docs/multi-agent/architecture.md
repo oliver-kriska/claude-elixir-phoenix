@@ -1,0 +1,106 @@
+# Architecture: source-of-truth, port pipeline, publish flow
+
+## Source of truth
+
+```
+oliver-kriska/claude-elixir-phoenix/        ← this repo
+├── plugins/elixir-phoenix/                  ← canonical, hand-written
+│   ├── .claude-plugin/plugin.json           (2.8.9 → 2.9.0 → 3.0.0)
+│   ├── skills/         (43)
+│   ├── agents/         (21)
+│   └── hooks/          (hooks.json + 19 scripts)
+├── iron-laws/laws.yaml                      ← Phase 2D, 22-law canonical YAML
+├── targets/                                  ← generated, checked in
+│   ├── codex/          .codex-plugin/, skills/, .mcp.json, descriptions_short.yaml
+│   ├── pi/             package.json, skills/, prompts/
+│   └── opencode/       package.json, .opencode/{skill,command}/, server.ts
+├── scripts/
+│   ├── port.py                               ← driver
+│   ├── publish.py                            ← subtree split + force-push
+│   └── port_lib/
+│       ├── frontmatter.py                    ← YAML read/write
+│       ├── skill_transforms.py               ← name normalize, refs, slash cmds, iron laws
+│       ├── iron_laws.py                      ← parse from CLAUDE.md / laws.yaml
+│       ├── codex.py
+│       ├── pi.py
+│       └── opencode.py
+└── docs/multi-agent/                         ← per-target docs (this directory)
+```
+
+## Port pipeline
+
+`scripts/port.py` is the driver. It reads `plugins/elixir-phoenix/`,
+loads the 22 Iron Laws (currently from `CLAUDE.md`, switching to
+`iron-laws/laws.yaml` in Phase 2D), and runs each target's `build()`
+function in `port_lib/<target>.py`.
+
+Per-skill transforms applied to all non-Claude targets:
+
+1. **Frontmatter** — agentskills.io fields (`name`, `description`,
+   `license`) at top level; Claude extensions (`effort`, `allowed-tools`,
+   `permissionMode`, etc.) folded into `metadata:`.
+2. **Name normalization** — `phx:plan` → `phx-plan`. Filesystem dirs
+   and slash-command names use the dash form.
+3. **Reference paths** — `${CLAUDE_SKILL_DIR}/references/X.md` →
+   `references/X.md` (relative to skill directory).
+4. **Slash commands** — `/phx:foo` → `$phx-foo` (Codex) or `/phx-foo`
+   (Pi/OpenCode).
+5. **Iron Laws inlining** — only for auto-load reference skills (those
+   with bare names, no `:` namespace) on targets without a
+   SubagentStart-equivalent (Codex today). Idempotent on rebuild.
+
+## Drift check
+
+```
+make port-validate    # = python3 -m scripts.port --check
+```
+
+Builds each target into a temp dir, recursively diffs against the
+committed `targets/` tree, fails on mismatch with a list of differing
+files. CI runs this on every PR.
+
+## Codex 8 KB description budget
+
+Codex's plugin manifest has an 8 KB ceiling on the sum of `description:`
+fields across all skills. The pipeline tracks this:
+
+- `scripts/port.py` sums `description:` bytes after generation
+- Exits non-zero if `> 8000` (192-byte safety margin under the spec ceiling)
+- `targets/codex/descriptions_short.yaml` — manual override map keyed on
+  normalized skill name; values replace canonical descriptions in the
+  generated `targets/codex/skills/<name>/SKILL.md`
+
+Current sum: 7,612 bytes (388-byte margin).
+
+## Publish flow
+
+Codex installs sparsely from this repo — no mirror. Pi and OpenCode
+each have a dedicated mirror:
+
+- `oliver-kriska/pi-elixir-phoenix`
+- `oliver-kriska/opencode-elixir-phoenix`
+
+`scripts/publish.py` runs `git subtree split --prefix=targets/<target>`
+to derive a clean SHA, then force-pushes to the mirror's `main` branch.
+`make publish-pi` / `make publish-opencode` are the entry points.
+
+Triggered automatically by `.github/workflows/publish-mirrors.yml` on a
+release tag (`v*`). Workflow uses a `MIRROR_PUSH_TOKEN` secret with
+write access to both mirror repos. Concurrency group keyed on
+`publish-mirrors-<ref>` prevents racing pushes.
+
+## Why force-push?
+
+The mirror is a *projection* of `targets/<agent>/` at a specific
+release tag. Each tag is a clean snapshot; the mirror's git history is
+not meaningful. Force-push keeps the mirror linear and avoids accidental
+divergence (someone editing the mirror by hand).
+
+## Versioning
+
+- `2.9.0` — Phase 1 complete: skills + commands working on 4 agents
+- `2.9.x` patch series — Phase 2 lands per-target
+  - 2.9.1 — Codex sub-agents + hooks
+  - 2.9.2 — OpenCode sub-agents + hooks
+  - 2.9.3 — Pi extensions
+- `3.0.0` — full feature parity across 4 agents

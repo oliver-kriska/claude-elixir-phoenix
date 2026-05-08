@@ -1,0 +1,25 @@
+{
+  "name": "elixir-phoenix-codex",
+  "version": "2.9.0",
+  "description": "Elixir/Phoenix/LiveView development with specialist agents, Iron Laws, and Tidewave MCP integration",
+  "keywords": [
+    "elixir",
+    "phoenix",
+    "liveview",
+    "ecto",
+    "oban",
+    "otp"
+  ],
+  "author": {
+    "name": "Oliver Kriska"
+  },
+  "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "interface": {
+    "skills": "skills/",
+    "commands": "skills/",
+    "agents": "agents-toml/",
+    "hooks": "hooks/hooks.json",
+    "mcp": ".mcp.json"
+  }
+}

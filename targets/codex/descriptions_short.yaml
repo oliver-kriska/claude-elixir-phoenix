@@ -1,0 +1,18 @@
+# Codex skill description overrides.
+#
+# Codex's plugin manifest has an 8 KB ceiling on the sum of `description:`
+# fields across all skills. The current sum is well under (7612/8000), but
+# this file lets us tighten any single skill's description without editing
+# the canonical SKILL.md.
+#
+# Format:
+#   <normalized-skill-name>: "shorter description"
+#
+# Example:
+#   phx-plan: "Plan multi-domain Phoenix features."
+#
+# The port pipeline (scripts/port_lib/codex.py) reads this map and replaces
+# `description:` in the generated `targets/codex/skills/<name>/SKILL.md`.
+# If a key is missing, the canonical description is used unchanged.
+
+# (intentionally empty — overrides only when budget pressure requires)

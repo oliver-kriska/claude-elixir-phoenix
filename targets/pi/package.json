@@ -1,0 +1,30 @@
+{
+  "name": "pi-elixir-phoenix",
+  "version": "2.9.0",
+  "description": "Elixir/Phoenix/LiveView development with specialist agents, Iron Laws, and Tidewave MCP integration",
+  "keywords": [
+    "elixir",
+    "phoenix",
+    "liveview",
+    "ecto",
+    "oban",
+    "otp",
+    "pi-package"
+  ],
+  "author": {
+    "name": "Oliver Kriska"
+  },
+  "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "engines": {
+    "pi": ">=0.1.0"
+  },
+  "pi": {
+    "skills": "skills/",
+    "prompts": "prompts/",
+    "extensions": [
+      "./extensions/iron-laws.ts",
+      "./extensions/orchestration.ts"
+    ]
+  }
+}

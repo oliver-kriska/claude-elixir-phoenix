@@ -1,0 +1,130 @@
+# Single source of truth for all 22 Iron Laws.
+#
+# Loaded by:
+#   - scripts/port_lib/iron_laws.py (port pipeline, full body)
+#   - plugins/elixir-phoenix/hooks/scripts/inject-iron-laws.sh (Claude SubagentStart, shortform)
+#   - All targets' Iron-Law content, via the port pipeline
+#
+# Editing rules:
+#   - The `number:` field is the canonical Iron Law number referenced in CLAUDE.md
+#     and skill bodies. Don't renumber existing laws — append new ones at the end.
+#   - `category:` groups laws for documentation rendering. Existing categories:
+#     liveview, ecto, oban, security, otp, elixir, verification.
+#   - `title:` is a short, ALL-CAPS-VERB phrase. Used as the bullet header in port output.
+#   - `body:` is one sentence explaining the rule and (where useful) the alternative.
+#     Used for full-body rendering (CLAUDE.md, port-pipeline-inlined skills).
+#   - `shortform:` (optional) is the one-line version used by the SubagentStart hook
+#     where context budget is tight. Falls back to `title` if absent.
+#
+# After editing this file:
+#   1. Run `make port` to regenerate `targets/`.
+#   2. The Claude-side hook reads this file at runtime — no rebuild needed.
+
+laws:
+  - number: 1
+    category: liveview
+    title: NO unconditional DB queries in mount
+    body: "Mount runs twice. Default: `assign_async`. SEO routes: `connected?` + cache-backed disconnected branch (dead-render IS the crawler-indexed HTML)"
+    shortform: "NO unconditional DB queries in mount — use assign_async (or connected? + cache-backed branch for SEO routes)"
+  - number: 2
+    category: liveview
+    title: ALWAYS use streams for lists >100 items
+    body: "Regular assigns = O(n) memory per user"
+    shortform: "ALWAYS use streams for lists >100 items"
+  - number: 3
+    category: liveview
+    title: CHECK `connected?/1` before PubSub subscribe
+    body: "Prevents double subscriptions"
+    shortform: "CHECK connected?/1 before PubSub subscribe"
+  - number: 4
+    category: ecto
+    title: NEVER use `:float` for money
+    body: "Use `:decimal` or `:integer` (cents)"
+    shortform: "NEVER use :float for money — use :decimal or :integer (cents)"
+  - number: 5
+    category: ecto
+    title: ALWAYS pin values with `^` in queries
+    body: "Never interpolate user input"
+    shortform: "ALWAYS pin values with ^ in queries — never interpolate user input"
+  - number: 6
+    category: ecto
+    title: SEPARATE QUERIES for `has_many`, JOIN for `belongs_to`
+    body: "Avoids row multiplication"
+    shortform: "SEPARATE QUERIES for has_many, JOIN for belongs_to"
+  - number: 7
+    category: oban
+    title: Jobs MUST be idempotent
+    body: "Safe to retry"
+    shortform: "Jobs MUST be idempotent, args use STRING keys, never store structs in args"
+  - number: 8
+    category: oban
+    title: Args use STRING keys, not atoms
+    body: "Pattern match `%{\"user_id\" => id}`"
+  - number: 9
+    category: oban
+    title: NEVER store structs in args
+    body: "Store IDs, not `%User{}`"
+  - number: 10
+    category: security
+    title: NO `String.to_atom` with user input
+    body: "Atom exhaustion DoS"
+    shortform: "NO String.to_atom with user input — atom exhaustion DoS"
+  - number: 11
+    category: security
+    title: AUTHORIZE in EVERY LiveView `handle_event`
+    body: "Don't trust mount authorization"
+    shortform: "AUTHORIZE in EVERY LiveView handle_event"
+  - number: 12
+    category: security
+    title: NEVER use `raw/1` with untrusted content
+    body: "XSS vulnerability"
+    shortform: "NEVER use raw/1 with untrusted content — XSS"
+  - number: 13
+    category: otp
+    title: NO process without runtime reason
+    body: "Processes model concurrency/state/isolation, NOT code structure"
+    shortform: "NO process without runtime reason — processes model concurrency/state/isolation"
+  - number: 14
+    category: otp
+    title: SUPERVISE ALL LONG-LIVED PROCESSES
+    body: "Never bare `GenServer.start_link`/`Agent.start_link` in production. Use supervision trees"
+    shortform: "SUPERVISE ALL LONG-LIVED PROCESSES"
+  - number: 15
+    category: ecto
+    title: NO IMPLICIT CROSS JOINS
+    body: "`from(a in A, b in B)` without `on:` creates Cartesian product"
+    shortform: "NO IMPLICIT CROSS JOINS — from(a in A, b in B) without on: creates Cartesian product"
+  - number: 16
+    category: elixir
+    title: "@external_resource FOR COMPILE-TIME FILES"
+    body: "Modules reading files at compile time MUST declare `@external_resource`"
+    shortform: "@external_resource FOR COMPILE-TIME FILES"
+  - number: 17
+    category: ecto
+    title: DEDUP BEFORE `cast_assoc` WITH SHARED DATA
+    body: "Deduplicate shared child records before building changesets, not inside them"
+    shortform: "DEDUP BEFORE cast_assoc WITH SHARED DATA"
+  - number: 18
+    category: liveview
+    title: CHECK CHANGESET ERRORS BEFORE UI DEBUGGING
+    body: "When a form save produces no visible error but no expected side effect, check `{:error, changeset}` first"
+  - number: 19
+    category: ecto
+    title: HIDDEN INPUTS FOR ALL REQUIRED EMBEDDED FIELDS
+    body: "Every required field in an embedded schema MUST have a `hidden_input` if not directly editable"
+    shortform: "HIDDEN INPUTS FOR ALL REQUIRED EMBEDDED FIELDS"
+  - number: 20
+    category: elixir
+    title: WRAP THIRD-PARTY LIBRARY APIs
+    body: "Always facade external dependency APIs behind a project-owned module. Enables swapping libraries without touching callers"
+    shortform: "WRAP THIRD-PARTY LIBRARY APIs behind project-owned modules"
+  - number: 21
+    category: liveview
+    title: NEVER use `assign_new` for values refreshed every mount
+    body: "`assign_new` skips the function if the key exists. Use `assign/3` for locale, current user, or any value that must be set on every mount"
+    shortform: "NEVER use assign_new for values refreshed every mount"
+  - number: 22
+    category: verification
+    title: VERIFY BEFORE CLAIMING DONE
+    body: "Never say \"should work\" or \"this fixes it.\" Run `mix compile && mix test` and show the result. If you can't verify, explicitly state what remains unverified"
+    shortform: "VERIFY BEFORE CLAIMING DONE — run mix compile && mix test, never say should work"

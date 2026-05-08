@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents test validate ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents test validate ci clean port port-validate publish-pi publish-opencode
 
 # Default target
 help: ## Show available commands
@@ -56,9 +56,23 @@ test-quick: ## Run pytest (no verbose, fast)
 validate: ## Run claude plugin validate on plugin structure
 	@claude plugin validate plugins/elixir-phoenix
 
+# --- Multi-agent port pipeline ---
+
+port: ## Regenerate targets/{codex,pi,opencode}/ from plugins/elixir-phoenix/
+	@python3 -m scripts.port
+
+port-validate: ## Verify targets/ matches port.py output (CI gate)
+	@python3 -m scripts.port --check
+
+publish-pi: ## Subtree-split + force-push targets/pi to mirror repo
+	@python3 -m scripts.publish --target pi
+
+publish-opencode: ## Subtree-split + force-push targets/opencode to mirror repo
+	@python3 -m scripts.publish --target opencode
+
 # --- CI (full pipeline) ---
 
-ci: lint test validate eval-all ## Full CI: lint + test + validate + eval (same as GitHub Actions)
+ci: lint test validate eval-all port-validate ## Full CI: lint + test + validate + eval + port-validate
 
 # --- Clean ---
 
