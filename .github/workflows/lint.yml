@@ -205,6 +205,11 @@ jobs:
 
       - name: Iron Laws YAML consistency
         run: |
+          # Drift check above already regenerated targets/pi and targets/opencode
+          # in temp dirs. For consistency assertions we re-run port to populate
+          # the on-disk tree (codex was already updated by drift check; pi/opencode
+          # are gitignored so we materialize them here for verification only).
+          python3 -m scripts.port --target codex
           python3 -c "
           import sys
           from pathlib import Path
@@ -219,8 +224,6 @@ jobs:
                   assert required in law, f'law {law.get(\"number\")} missing {required}'
 
           # 2. Auto-load reference skills in targets/codex have the inlined block.
-          # Source-of-truth check: look at original plugins/elixir-phoenix/skills/<name>
-          # to determine which skills are reference (no \`:\` in name).
           source_skills = Path('plugins/elixir-phoenix/skills')
           auto_load_source_names = {
               s.name for s in source_skills.iterdir()
@@ -231,7 +234,6 @@ jobs:
           for codex_skill in Path('targets/codex/skills').iterdir():
               if not codex_skill.is_dir():
                   continue
-              # Codex normalized name == source name when no namespace.
               if codex_skill.name in auto_load_source_names:
                   text = (codex_skill / 'SKILL.md').read_text()
                   if '## Iron Laws (Inlined)' not in text:

@@ -80,9 +80,21 @@ _USER_CONFIG_FILES = {
     "opencode": [],
 }
 
+# Targets whose generated tree is committed to this repo and must match
+# `port.py` output exactly. Codex installs sparsely from `targets/codex/`
+# in this repo, so it MUST stay in sync. Pi and OpenCode are generated at
+# release time and force-pushed to dedicated mirror repos — they get a
+# build-only smoke test instead of a drift check.
+_COMMITTED_TARGETS = {"codex"}
+
 
 def _check_drift(targets_to_check: list[str]) -> int:
-    """Build to temp dir, diff against committed `targets/`, exit 1 on drift."""
+    """Build to temp dir, diff against committed `targets/`, exit 1 on drift.
+
+    For non-committed targets (Pi, OpenCode), this only verifies the build
+    succeeds without raising — drift can't be measured against a
+    non-checked-in tree.
+    """
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
         any_drift = False
@@ -90,13 +102,26 @@ def _check_drift(targets_to_check: list[str]) -> int:
             tmp_target = tmp_path / target
             tmp_target.mkdir(parents=True, exist_ok=True)
             committed = TARGETS_DIR / target
+
             for sidecar in _USER_CONFIG_FILES.get(target, []):
                 src = committed / sidecar
                 if src.exists():
                     shutil.copyfile(src, tmp_target / sidecar)
-            _build_one(target, tmp_target)
 
-            committed = TARGETS_DIR / target
+            try:
+                _build_one(target, tmp_target)
+            except Exception as exc:
+                print(
+                    f"[port-validate] {target}: BUILD FAILED — {exc}",
+                    file=sys.stderr,
+                )
+                any_drift = True
+                continue
+
+            if target not in _COMMITTED_TARGETS:
+                print(f"[port-validate] {target}: build OK (not drift-checked — mirrored at release)")
+                continue
+
             if not committed.exists():
                 print(f"[port-validate] target dir missing: {committed}", file=sys.stderr)
                 any_drift = True

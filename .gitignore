@@ -12,6 +12,13 @@
 !/docs/multi-agent/
 /analysis/
 
+# Multi-agent port: only `targets/codex/` is checked in (Codex installs sparsely
+# from this repo). Pi and OpenCode targets are generated at release time and
+# force-pushed to dedicated mirror repos by `.github/workflows/publish-mirrors.yml`.
+# Generate locally via `make port` if needed for inspection.
+/targets/pi/
+/targets/opencode/
+
 # Node.js (for linting tools)
 node_modules/
 

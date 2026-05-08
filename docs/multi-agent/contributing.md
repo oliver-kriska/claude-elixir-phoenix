@@ -23,13 +23,16 @@ Edit canonical files only:
 Then run:
 
 ```bash
-make port           # regenerate targets/
-make port-validate  # confirm no drift
+make port           # regenerate targets/{codex,pi,opencode}/
+make port-validate  # codex: drift check; pi/opencode: build smoke test
 make eval           # score changed skills/agents
 ```
 
-Commit both the source change and the regenerated `targets/`. CI will
-fail on drift if the two get out of sync.
+Commit the source change and the regenerated `targets/codex/`. The
+`targets/pi/` and `targets/opencode/` trees are gitignored — they're
+generated locally for testing but only mirrored to dedicated repos at
+release time. CI fails on Codex drift if source and `targets/codex/`
+get out of sync.
 
 ## Editing target-specific transforms
 
