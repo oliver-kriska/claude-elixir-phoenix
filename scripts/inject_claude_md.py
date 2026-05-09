@@ -17,13 +17,10 @@ If markers are missing, the script exits non-zero with a clear error.
 from __future__ import annotations
 
 import sys
-from pathlib import Path
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
-CLAUDE_MD = REPO_ROOT / "CLAUDE.md"
-LAWS_YAML = REPO_ROOT / "iron-laws" / "laws.yaml"
+from .port_lib import CLAUDE_MD, LAWS_YAML
 
 BEGIN_MARKER = "<!-- IRON-LAWS-BEGIN -->"
 END_MARKER = "<!-- IRON-LAWS-END -->"

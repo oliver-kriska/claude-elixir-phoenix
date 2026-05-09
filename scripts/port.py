@@ -20,11 +20,8 @@ import sys
 import tempfile
 from pathlib import Path
 
-from .port_lib import codex, opencode, pi
-
-REPO_ROOT = Path(__file__).resolve().parent.parent
-SOURCE_DIR = REPO_ROOT / "plugins" / "elixir-phoenix"
-TARGETS_DIR = REPO_ROOT / "targets"
+from .port_lib import SOURCE_PLUGIN_DIR as SOURCE_DIR
+from .port_lib import TARGETS_DIR, codex, opencode, pi
 
 BUILDERS = {
     "codex": codex.build,

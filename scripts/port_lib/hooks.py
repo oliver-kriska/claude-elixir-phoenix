@@ -37,28 +37,35 @@ CODEX_SUPPORTED_EVENTS = {
 CODEX_DROPPED_EVENTS = {"PostToolUseFailure", "SubagentStart", "StopFailure"}
 
 
+def _scripts_referenced_in(hooks_doc: dict) -> set[str]:
+    """Return the set of `*.sh` filenames referenced by any hook command."""
+    seen: set[str] = set()
+    for configs in (hooks_doc.get("hooks") or {}).values():
+        for cfg in configs:
+            for h in cfg.get("hooks", []):
+                cmd = h.get("command", "")
+                for token in cmd.split("/"):
+                    if token.endswith(".sh"):
+                        seen.add(token)
+    return seen
+
+
 def render_codex_hooks(
     source_hooks_dir: Path, source_hooks_json: Path, out_dir: Path
 ) -> dict:
     """Generate `targets/codex/hooks/{hooks.json,scripts/*.sh}`.
 
     Rewrites `${CLAUDE_PLUGIN_ROOT}` to `${CODEX_PLUGIN_ROOT}` in script paths
-    inside `hooks.json`. Shell scripts are copied verbatim — they're
-    file/syscall side-effecty and don't reference Claude internals.
+    inside `hooks.json`. Only ships shell scripts that the resulting
+    `hooks.json` actually references — scripts orphaned by event-dropping
+    (e.g. PostToolUseFailure scripts when that event isn't supported by Codex)
+    are left out instead of shipping as dead weight.
     """
     out_hooks_dir = out_dir / "hooks"
     out_scripts_dir = out_hooks_dir / "scripts"
     if out_scripts_dir.exists():
         shutil.rmtree(out_scripts_dir)
     out_scripts_dir.mkdir(parents=True, exist_ok=True)
-
-    # Copy all source scripts. Their content is bash and target-agnostic.
-    copied_scripts = 0
-    for script in source_hooks_dir.glob("*.sh"):
-        dest = out_scripts_dir / script.name
-        shutil.copyfile(script, dest)
-        dest.chmod(0o755)
-        copied_scripts += 1
 
     # Rewrite hooks.json: keep only supported events, swap PLUGIN_ROOT var.
     source = json.loads(source_hooks_json.read_text(encoding="utf-8"))
@@ -74,9 +81,10 @@ def render_codex_hooks(
         )
         out_hooks[event] = rewritten
 
-    # Generate SessionStart helper that drops sub-agent TOMLs into ~/.codex/agents/
+    # SessionStart helper script body. Written below only if hooks.json
+    # actually references it (it does, via install_entry).
     install_agents = out_scripts_dir / "install-codex-agents.sh"
-    install_agents.write_text(
+    install_agents_body = (
         "#!/usr/bin/env bash\n"
         "# SessionStart hook: copy bundled sub-agent TOMLs into ~/.codex/agents/.\n"
         'set -eu\n'
@@ -86,10 +94,8 @@ def render_codex_hooks(
         '[ -d "$SOURCE_DIR" ] || exit 0\n'
         'mkdir -p "$TARGET_DIR"\n'
         'cp -f "$SOURCE_DIR"/*.toml "$TARGET_DIR/" 2>/dev/null || true\n'
-        'echo "[install-codex-agents] copied $(ls "$SOURCE_DIR"/*.toml 2>/dev/null | wc -l) agents"\n',
-        encoding="utf-8",
+        'echo "[install-codex-agents] copied $(ls "$SOURCE_DIR"/*.toml 2>/dev/null | wc -l) agents"\n'
     )
-    install_agents.chmod(0o755)
 
     # Wire the install script into SessionStart so the bundled TOMLs actually
     # reach `~/.codex/agents/` on startup. Prepended to the existing list
@@ -112,8 +118,29 @@ def render_codex_hooks(
         json.dumps(out_doc, indent=2) + "\n", encoding="utf-8"
     )
 
+    # Only ship scripts that the final hooks.json references. The synthetic
+    # install-codex-agents.sh (added above) is referenced by SessionStart,
+    # so it's included naturally. Scripts orphaned by event-drop (e.g. the
+    # PostToolUseFailure / StopFailure / SubagentStart scripts) are skipped.
+    referenced = _scripts_referenced_in(out_doc)
+    copied_scripts = 0
+    for script in source_hooks_dir.glob("*.sh"):
+        if script.name not in referenced:
+            continue
+        dest = out_scripts_dir / script.name
+        shutil.copyfile(script, dest)
+        dest.chmod(0o755)
+        copied_scripts += 1
+
+    # install-codex-agents.sh is generated, not copied from source — write it
+    # only if SessionStart references it (always true given install_entry).
+    if "install-codex-agents.sh" in referenced:
+        install_agents.write_text(install_agents_body, encoding="utf-8")
+        install_agents.chmod(0o755)
+        copied_scripts += 1
+
     return {
-        "scripts_copied": copied_scripts + 1,
+        "scripts_copied": copied_scripts,
         "events_kept": sorted(out_hooks.keys()),
         "events_dropped": sorted(dropped),
     }

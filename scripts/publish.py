@@ -21,7 +21,7 @@ import subprocess
 import sys
 from pathlib import Path
 
-REPO_ROOT = Path(__file__).resolve().parent.parent
+from .port_lib import REPO_ROOT
 
 MIRROR_REMOTES = {
     "pi": "https://github.com/oliver-kriska/pi-elixir-phoenix.git",

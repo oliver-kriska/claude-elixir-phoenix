@@ -1,7 +1,7 @@
 ---
 name: phx-compound
 description: Capture solved problems as searchable solution docs. Use after fixing
-  bugs, when "that worked", or after successful /phx:review or /phx:investigate.
+  bugs, when "that worked", or after successful $phx-review or $phx-investigate.
 metadata:
   effort: low
   argument-hint:

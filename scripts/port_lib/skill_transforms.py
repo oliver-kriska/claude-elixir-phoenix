@@ -71,6 +71,12 @@ def transform_frontmatter(data: dict, target: str) -> dict:
             # Unknown field — preserve in metadata to avoid silent loss.
             metadata[key] = value
 
+    # Description text frequently mentions slash commands (`Use after /phx:foo`)
+    # — rewrite those to the per-target form so the description doesn't
+    # contradict the body's invocation syntax.
+    if isinstance(out.get("description"), str):
+        out["description"] = rewrite_slash_commands(out["description"], target)
+
     if metadata:
         out["metadata"] = metadata
     return out

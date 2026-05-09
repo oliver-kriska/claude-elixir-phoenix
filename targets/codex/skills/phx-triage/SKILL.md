@@ -1,7 +1,7 @@
 ---
 name: phx-triage
 description: Triage review findings interactively — approve, skip, or prioritize each
-  issue. Use after /phx:review to filter findings before fixing.
+  issue. Use after $phx-review to filter findings before fixing.
 metadata:
   effort: low
   argument-hint:

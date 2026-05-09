@@ -9,21 +9,17 @@ the same `load_laws()` API to callers either way.
 from __future__ import annotations
 
 import re
-from pathlib import Path
-from typing import List
 
 import yaml
 
-REPO_ROOT = Path(__file__).resolve().parents[2]
-CLAUDE_MD = REPO_ROOT / "CLAUDE.md"
-LAWS_YAML = REPO_ROOT / "iron-laws" / "laws.yaml"
+from . import CLAUDE_MD, LAWS_YAML
 
 _LAW_LINE_RE = re.compile(r"^\s*(\d+)\.\s+\*\*([^*]+)\*\*\s*-\s*(.+?)\s*$")
 _SECTION_HEADER = "## Iron Laws Enforcement"
 _TERMINATING_HEADER = "### Violation Response"
 
 
-def _parse_claude_md(text: str) -> List[dict]:
+def _parse_claude_md(text: str) -> list[dict]:
     """Extract the 22-law numbered list out of CLAUDE.md.
 
     Returns a list of dicts: ``{"number": int, "title": str, "body": str}``.
@@ -47,7 +43,7 @@ def _parse_claude_md(text: str) -> List[dict]:
     except StopIteration:
         end = len(lines)
 
-    laws: List[dict] = []
+    laws: list[dict] = []
     current_category = "general"
     for line in lines[start:end]:
         if line.startswith("### "):
@@ -76,14 +72,14 @@ def _parse_claude_md(text: str) -> List[dict]:
     return laws
 
 
-def _parse_yaml(text: str) -> List[dict]:
+def _parse_yaml(text: str) -> list[dict]:
     data = yaml.safe_load(text) or {}
     if "laws" not in data:
         raise ValueError("iron-laws/laws.yaml missing top-level `laws:` key")
     return list(data["laws"])
 
 
-def load_laws() -> List[dict]:
+def load_laws() -> list[dict]:
     """Load the canonical Iron Laws.
 
     Prefers `iron-laws/laws.yaml` when present (Phase 2D), falls back to
@@ -94,6 +90,6 @@ def load_laws() -> List[dict]:
     return _parse_claude_md(CLAUDE_MD.read_text(encoding="utf-8"))
 
 
-def render_bullets(laws: List[dict]) -> List[str]:
+def render_bullets(laws: list[dict]) -> list[str]:
     """Format laws as `**TITLE** — body` bullet strings."""
     return [f"**{law['title']}** — {law['body']}" for law in laws]

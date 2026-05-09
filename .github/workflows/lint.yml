@@ -205,11 +205,10 @@ jobs:
 
       - name: Iron Laws YAML consistency
         run: |
-          # Drift check above already regenerated targets/pi and targets/opencode
-          # in temp dirs. For consistency assertions we re-run port to populate
-          # the on-disk tree (codex was already updated by drift check; pi/opencode
-          # are gitignored so we materialize them here for verification only).
-          python3 -m scripts.port --target codex
+          # Read-only: assertions against `targets/codex/` (already drift-checked
+          # above) and against `iron-laws/laws.yaml`. Does NOT mutate the working
+          # tree — the previous version called `make port` mid-job which made
+          # this step fragile if anything later expected the original state.
           python3 -c "
           import sys
           from pathlib import Path
@@ -242,4 +241,47 @@ jobs:
           if missing:
               sys.exit(f'Reference skills missing Iron Laws block in targets/codex/: {missing}')
           print(f'Iron Laws YAML: {len(laws)} laws, {len(auto_load_source_names)} auto-load skills, all inlined ✓')
+          "
+
+      - name: No source slash-command leakage in targets/codex
+        run: |
+          # Negative-form CI assertion: rewrite_slash_commands rewrites /phx:foo
+          # to \$phx-foo for Codex. Test that NO old form remains anywhere in
+          # the generated tree (SKILL.md bodies AND references/*.md).
+          # Catches regressions of the same class as the B1 review finding.
+          if grep -rE '/phx:[a-z-]+|/lv:[a-z-]+|/ecto:[a-z-]+' targets/codex/skills/ \
+                --include='*.md' \
+                | grep -v 'IRON-LAWS' >/tmp/leaks.txt 2>&1 && [ -s /tmp/leaks.txt ]; then
+            echo "Found stale /phx:|/lv:|/ecto: command syntax in targets/codex/:"
+            head -20 /tmp/leaks.txt
+            exit 1
+          fi
+          echo "No source slash-command syntax leaked into targets/codex/ ✓"
+
+      - name: Every Codex hook script is wired
+        run: |
+          # Catches the B2 class of bug: a script generated under
+          # targets/codex/hooks/scripts/ but never referenced from hooks.json
+          # ships as dead code (e.g. install-codex-agents.sh in the original
+          # PR before review). Allow-list scripts that exist for documentation
+          # or out-of-band invocation.
+          python3 -c "
+          import json, sys
+          from pathlib import Path
+          hooks_json = json.loads(Path('targets/codex/hooks/hooks.json').read_text())
+          referenced = set()
+          for ev_configs in (hooks_json.get('hooks') or {}).values():
+              for cfg in ev_configs:
+                  for h in cfg.get('hooks', []):
+                      cmd = h.get('command', '')
+                      for token in cmd.split('/'):
+                          if token.endswith('.sh'):
+                              referenced.add(token)
+          shipped = {p.name for p in Path('targets/codex/hooks/scripts').glob('*.sh')}
+          # Allow-list: scripts that are intentionally not auto-fired (none today).
+          allow = set()
+          orphans = (shipped - referenced) - allow
+          if orphans:
+              sys.exit(f'Codex ships dead scripts (no hooks.json reference): {sorted(orphans)}')
+          print(f'All {len(shipped)} Codex hook scripts wired into hooks.json ✓')
           "

@@ -12,6 +12,16 @@ TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty')
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 [[ -n "$COMMAND" ]] || exit 0
 
+# Skip pattern matching when the command is a `gh` API call that
+# only TRANSPORTS the dangerous string (PR body, issue body, comment, etc.)
+# rather than executing it. The string lives inside a `--body` heredoc and
+# goes to a remote API; nothing local runs it. Matching on substrings of
+# documentation is a recurrent false-positive class. See plan/multi-agent-port
+# scratchpad for the original incident.
+if echo "$COMMAND" | grep -qE '^[[:space:]]*gh[[:space:]]+(pr|issue|release)[[:space:]]+(create|edit|comment)\b'; then
+  exit 0
+fi
+
 # Block destructive database operations
 if echo "$COMMAND" | grep -qE 'mix ecto\.(reset|drop)'; then
   cat >&2 <<MSG
