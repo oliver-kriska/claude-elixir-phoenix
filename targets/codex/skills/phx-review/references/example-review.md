@@ -85,8 +85,8 @@ end
 
 How would you like to proceed?
 
-- `/phx:plan` — Replan the fixes (for complex/architectural issues)
-- `/phx:work .claude/plans/magic-link-auth/plan.md` — Fix directly
+- `$phx-plan` — Replan the fixes (for complex/architectural issues)
+- `$phx-work .claude/plans/magic-link-auth/plan.md` — Fix directly
 - I'll handle it myself
 
 ```

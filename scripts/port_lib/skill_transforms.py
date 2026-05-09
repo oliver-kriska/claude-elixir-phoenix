@@ -95,6 +95,39 @@ def rewrite_reference_paths(body: str, target: str) -> str:
     return _CLAUDE_REF_RE.sub(r"references/\1", body)
 
 
+def port_references(refs_src, refs_dst, target: str) -> None:
+    """Copy a `references/` subtree, applying body transforms to each `.md`.
+
+    Markdown files are run through `rewrite_reference_paths` and
+    `rewrite_slash_commands` so cross-skill links and `/phx:foo` invocations
+    are correct for the target. Non-markdown files (images, JSON, etc.) are
+    copied verbatim. The destination is reset before writing.
+    """
+    import shutil
+    from pathlib import Path
+
+    refs_src = Path(refs_src)
+    refs_dst = Path(refs_dst)
+
+    if refs_dst.exists():
+        shutil.rmtree(refs_dst)
+    refs_dst.mkdir(parents=True)
+
+    for src in refs_src.rglob("*"):
+        if src.is_dir():
+            continue
+        rel = src.relative_to(refs_src)
+        out = refs_dst / rel
+        out.parent.mkdir(parents=True, exist_ok=True)
+        if src.suffix == ".md":
+            text = src.read_text(encoding="utf-8")
+            text = rewrite_reference_paths(text, target)
+            text = rewrite_slash_commands(text, target)
+            out.write_text(text, encoding="utf-8")
+        else:
+            out.write_bytes(src.read_bytes())
+
+
 def rewrite_slash_commands(body: str, target: str) -> str:
     """Rewrite `/phx:foo` references for the given target's invocation style.
 

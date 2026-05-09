@@ -1,6 +1,6 @@
 # Execution Guide
 
-Step-by-step execution details for `/phx:work`.
+Step-by-step execution details for `$phx-work`.
 
 ## Contents
 
@@ -295,7 +295,7 @@ Don't commit after every task. Instead:
 2. **After blockers**: Commit working state before human intervention
 3. **After completion**: Ask user about final commit
 
-### Branch Strategy (for /phx:full)
+### Branch Strategy (for $phx-full)
 
 ```bash
 git checkout -b feature/{feature-slug}
@@ -338,5 +338,5 @@ After 3 failures, create blocker in progress file:
 - Check hash_password/1 implementation
 - Verify unique constraint handling
 
-**Resume**: `/phx:work plan.md --from P2-T3`
+**Resume**: `$phx-work plan.md --from P2-T3`
 ```

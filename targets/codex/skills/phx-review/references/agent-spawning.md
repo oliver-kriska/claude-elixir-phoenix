@@ -1,7 +1,7 @@
 # Review Agent Spawning Reference
 
 Detailed tables and prompt templates for spawning review specialists.
-Referenced by `/phx:review` Step 2.
+Referenced by `$phx-review` Step 2.
 
 ## Agent Selection Table
 
@@ -9,7 +9,7 @@ Referenced by `/phx:review` Step 2.
 |-------|---------------|---------------|
 | Elixir Reviewer | `elixir-phoenix:elixir-reviewer` | **Always** |
 | Iron Law Judge | `elixir-phoenix:iron-law-judge` | Only if >200 lines changed AND auth/LiveView/Oban files in diff. **Skip** if PostToolUse hooks already verified all files |
-| Verification Runner | `elixir-phoenix:verification-runner` | Only if `mix test` has NOT been run in this session. **Skip** if `/phx:work` just passed all verification tiers |
+| Verification Runner | `elixir-phoenix:verification-runner` | Only if `mix test` has NOT been run in this session. **Skip** if `$phx-work` just passed all verification tiers |
 | Security Analyzer | `elixir-phoenix:security-analyzer` | Auth/session/password/token files changed |
 | Testing Reviewer | `elixir-phoenix:testing-reviewer` | Test files changed OR new public functions |
 | Oban Specialist | `elixir-phoenix:oban-specialist` | Worker files changed (*_worker.ex) |

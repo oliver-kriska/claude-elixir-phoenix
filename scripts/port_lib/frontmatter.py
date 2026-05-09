@@ -33,16 +33,19 @@ class Frontmatter:
         return f"{DELIMITER}\n{head}\n{DELIMITER}\n{self.body}"
 
 
-def parse(text: str) -> Frontmatter:
+def parse(text: str, source: str | None = None) -> Frontmatter:
     """Split a markdown file into (frontmatter dict, body string).
 
     If the file does not start with `---`, returns Frontmatter(data={}, body=text).
+
+    If the file starts with `---` but has no closing delimiter, raises
+    `ValueError` with the source path (when provided) — silently treating
+    malformed files as bodyless caused confusing `KeyError`s downstream.
     """
     if not text.startswith(DELIMITER):
         return Frontmatter(data={}, body=text)
 
     lines = text.splitlines(keepends=True)
-    # Find the closing delimiter (first line == "---" after line 0).
     end_idx = None
     for i, line in enumerate(lines[1:], start=1):
         if line.strip() == DELIMITER:
@@ -50,21 +53,27 @@ def parse(text: str) -> Frontmatter:
             break
 
     if end_idx is None:
-        # Malformed: opener but no closer. Treat entire file as body.
-        return Frontmatter(data={}, body=text)
+        prefix = f"{source}: " if source else ""
+        raise ValueError(
+            f"{prefix}malformed frontmatter — opener `---` without closer"
+        )
 
     yaml_block = "".join(lines[1:end_idx])
     body = "".join(lines[end_idx + 1 :])
     data = yaml.safe_load(yaml_block) or {}
     if not isinstance(data, dict):
-        raise ValueError(f"Frontmatter must be a mapping, got {type(data).__name__}")
+        prefix = f"{source}: " if source else ""
+        raise ValueError(
+            f"{prefix}frontmatter must be a mapping, got {type(data).__name__}"
+        )
     return Frontmatter(data=data, body=body)
 
 
 def parse_file(path) -> Frontmatter:
     from pathlib import Path
 
-    return parse(Path(path).read_text(encoding="utf-8"))
+    p = Path(path)
+    return parse(p.read_text(encoding="utf-8"), source=str(p))
 
 
 def write_file(path, fm: Frontmatter) -> None:

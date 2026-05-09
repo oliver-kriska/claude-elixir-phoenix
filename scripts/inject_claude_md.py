@@ -76,40 +76,58 @@ def _render_section(laws: list[dict]) -> str:
     return "\n".join(lines)
 
 
-def main() -> int:
+def render_expected(laws: list[dict] | None = None) -> str:
+    """Return what CLAUDE.md SHOULD look like given the YAML.
+
+    Pure: doesn't read or write `CLAUDE.md`. Used by `port.py --check` to
+    detect `laws.yaml` ↔ `CLAUDE.md` drift without mutating the working tree.
+    """
+    if laws is None:
+        data = yaml.safe_load(LAWS_YAML.read_text(encoding="utf-8")) or {}
+        laws = data.get("laws") or []
+
     text = CLAUDE_MD.read_text(encoding="utf-8")
     if BEGIN_MARKER not in text or END_MARKER not in text:
+        raise RuntimeError(
+            f"CLAUDE.md missing markers {BEGIN_MARKER!r} / {END_MARKER!r}"
+        )
+
+    rendered = _render_section(laws)
+    pre, _, rest = text.partition(BEGIN_MARKER)
+    _, _, post = rest.partition(END_MARKER)
+    return pre + BEGIN_MARKER + "\n\n" + rendered + "\n\n" + END_MARKER + post
+
+
+def is_up_to_date() -> bool:
+    """True iff `CLAUDE.md`'s Iron Laws section matches the YAML."""
+    return CLAUDE_MD.read_text(encoding="utf-8") == render_expected()
+
+
+def main(check_only: bool = False) -> int:
+    try:
+        new_text = render_expected()
+    except RuntimeError as exc:
+        print(f"[inject-claude-md] {exc}", file=sys.stderr)
+        return 1
+
+    current = CLAUDE_MD.read_text(encoding="utf-8")
+    if new_text == current:
+        if not check_only:
+            print("[inject-claude-md] CLAUDE.md already up to date.")
+        return 0
+
+    if check_only:
         print(
-            f"[inject-claude-md] CLAUDE.md missing markers {BEGIN_MARKER!r} / {END_MARKER!r}",
+            "[inject-claude-md] CLAUDE.md is OUT OF DATE relative to iron-laws/laws.yaml.\n"
+            "  Run `make port` and commit the result.",
             file=sys.stderr,
         )
         return 1
 
-    data = yaml.safe_load(LAWS_YAML.read_text(encoding="utf-8"))
-    laws = data.get("laws") or []
-    rendered = _render_section(laws)
-
-    pre, _, rest = text.partition(BEGIN_MARKER)
-    _, _, post = rest.partition(END_MARKER)
-
-    new_text = (
-        pre
-        + BEGIN_MARKER
-        + "\n\n"
-        + rendered
-        + "\n\n"
-        + END_MARKER
-        + post
-    )
-
-    if new_text == text:
-        print("[inject-claude-md] CLAUDE.md already up to date.")
-        return 0
-
     CLAUDE_MD.write_text(new_text, encoding="utf-8")
-    print(f"[inject-claude-md] regenerated section ({len(laws)} laws)")
+    print("[inject-claude-md] regenerated Iron Laws section")
     return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(check_only="--check" in sys.argv[1:]))

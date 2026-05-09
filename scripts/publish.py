@@ -17,10 +17,8 @@ via `codex plugin marketplace add <repo> --sparse targets/codex`.
 from __future__ import annotations
 
 import argparse
-import shutil
 import subprocess
 import sys
-import tempfile
 from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent

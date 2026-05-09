@@ -16,7 +16,6 @@ from __future__ import annotations
 import argparse
 import filecmp
 import shutil
-import subprocess
 import sys
 import tempfile
 from pathlib import Path
@@ -94,10 +93,19 @@ def _check_drift(targets_to_check: list[str]) -> int:
     For non-committed targets (Pi, OpenCode), this only verifies the build
     succeeds without raising — drift can't be measured against a
     non-checked-in tree.
+
+    Also verifies that `CLAUDE.md`'s Iron Laws section is in sync with
+    `iron-laws/laws.yaml`. Read-only: does not mutate the working tree.
     """
+    from . import inject_claude_md as _icmd
+
+    rc = 0
+    if _icmd.main(check_only=True) != 0:
+        rc = 1
+
     with tempfile.TemporaryDirectory() as tmp:
         tmp_path = Path(tmp)
-        any_drift = False
+        any_drift = bool(rc)
         for target in targets_to_check:
             tmp_target = tmp_path / target
             tmp_target.mkdir(parents=True, exist_ok=True)

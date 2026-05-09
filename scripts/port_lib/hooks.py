@@ -74,11 +74,6 @@ def render_codex_hooks(
         )
         out_hooks[event] = rewritten
 
-    out_doc = {"hooks": out_hooks, "_meta": {"dropped_events": sorted(dropped)}}
-    (out_hooks_dir / "hooks.json").write_text(
-        json.dumps(out_doc, indent=2) + "\n", encoding="utf-8"
-    )
-
     # Generate SessionStart helper that drops sub-agent TOMLs into ~/.codex/agents/
     install_agents = out_scripts_dir / "install-codex-agents.sh"
     install_agents.write_text(
@@ -95,6 +90,27 @@ def render_codex_hooks(
         encoding="utf-8",
     )
     install_agents.chmod(0o755)
+
+    # Wire the install script into SessionStart so the bundled TOMLs actually
+    # reach `~/.codex/agents/` on startup. Prepended to the existing list
+    # (or to a new entry if SessionStart wasn't in the source) so it runs first.
+    install_entry = {
+        "matcher": "*",
+        "hooks": [
+            {
+                "type": "command",
+                "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/install-codex-agents.sh",
+                "timeout": 30,
+                "statusMessage": "Installing Codex sub-agents...",
+            }
+        ],
+    }
+    out_hooks.setdefault("SessionStart", []).insert(0, install_entry)
+
+    out_doc = {"hooks": out_hooks, "_meta": {"dropped_events": sorted(dropped)}}
+    (out_hooks_dir / "hooks.json").write_text(
+        json.dumps(out_doc, indent=2) + "\n", encoding="utf-8"
+    )
 
     return {
         "scripts_copied": copied_scripts + 1,

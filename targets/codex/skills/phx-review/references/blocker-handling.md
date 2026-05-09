@@ -18,7 +18,7 @@ Review is **findings-only**. It does NOT:
 - Modify any files outside `.claude/plans/{slug}/reviews/`
 - Start fixing issues
 
-Task creation and planning happen in `/phx:plan` after the user decides.
+Task creation and planning happen in `$phx-plan` after the user decides.
 
 ## Review Outcomes
 
@@ -26,7 +26,7 @@ Task creation and planning happen in `/phx:plan` after the user decides.
 
 ```
 Review complete. No blockers found.
-Ready for: /phx:learn-from-fix (capture lessons)
+Ready for: $phx-learn-from-fix (capture lessons)
 ```
 
 **If PASS WITH WARNINGS:**
@@ -34,7 +34,7 @@ Ready for: /phx:learn-from-fix (capture lessons)
 ```
 Review complete. {n} warnings noted.
 Warnings logged but not blocking.
-Ready for: /phx:learn-from-fix (capture lessons)
+Ready for: $phx-learn-from-fix (capture lessons)
 ```
 
 **If REQUIRES CHANGES:**
@@ -49,8 +49,8 @@ Review found {n} untested public functions/callbacks:
 
 How would you like to proceed?
 
-- `/phx:plan` — Plan tests for these functions
-- `/phx:work` — Write tests directly
+- `$phx-plan` — Plan tests for these functions
+- `$phx-work` — Write tests directly
 - I'll handle it myself
 ```
 
@@ -66,9 +66,9 @@ Review found {actual count} blockers ({actual count} warnings):
 
 How would you like to proceed?
 
-- `/phx:plan .claude/plans/{slug}/reviews/{file}.md` — Replan fixes
+- `$phx-plan .claude/plans/{slug}/reviews/{file}.md` — Replan fixes
   (best for complex or architectural issues)
-- `/phx:work` — Fix directly
+- `$phx-work` — Fix directly
   (best for simple, isolated fixes)
 - I'll handle it myself
 ```

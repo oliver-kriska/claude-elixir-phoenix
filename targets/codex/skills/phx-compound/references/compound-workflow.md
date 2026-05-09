@@ -18,7 +18,7 @@ Each documented solution reduces future debugging time. After
 #### From Arguments
 
 ```
-/phx:compound Fixed N+1 query in UserListLive — was missing preload on posts
+$phx-compound Fixed N+1 query in UserListLive — was missing preload on posts
 ```
 
 Extract: module=UserListLive, symptom=N+1, root_cause=missing preload
@@ -122,7 +122,7 @@ If the solution matches any of these, suggest promotion:
 
 ## Integration with Other Skills
 
-- `/phx:learn-from-fix` captures quick patterns in `common-mistakes.md`
-- `/phx:compound` captures detailed solutions with full context
-- `/phx:investigate` searches `.claude/solutions/` before investigating
-- `/phx:plan` consults for known risks in planned areas
+- `$phx-learn-from-fix` captures quick patterns in `common-mistakes.md`
+- `$phx-compound` captures detailed solutions with full context
+- `$phx-investigate` searches `.claude/solutions/` before investigating
+- `$phx-plan` consults for known risks in planned areas

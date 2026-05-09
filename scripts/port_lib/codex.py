@@ -24,12 +24,13 @@ from pathlib import Path
 import yaml
 
 from .agents import render_codex_agent
-from .frontmatter import Frontmatter, parse, parse_file
+from .frontmatter import Frontmatter, parse_file
 from .hooks import render_codex_hooks
 from .iron_laws import load_laws, render_bullets
 from .skill_transforms import (
     inline_iron_laws,
     normalize_skill_name,
+    port_references,
     rewrite_reference_paths,
     rewrite_slash_commands,
     transform_frontmatter,
@@ -98,13 +99,11 @@ def _port_skill(
     new_fm = Frontmatter(data=new_fm_data, body=body)
     (out_dir / "SKILL.md").write_text(new_fm.dump(), encoding="utf-8")
 
-    # Copy references/ verbatim (paths already rewritten in body).
+    # Port references/ — markdown files go through the same transforms
+    # as the SKILL.md body (refs paths + slash commands), non-md verbatim.
     refs_src = src.parent / "references"
     if refs_src.is_dir():
-        refs_dst = out_dir / "references"
-        if refs_dst.exists():
-            shutil.rmtree(refs_dst)
-        shutil.copytree(refs_src, refs_dst)
+        port_references(refs_src, out_dir / "references", TARGET)
 
     return len((new_fm_data.get("description") or "").encode("utf-8"))
 

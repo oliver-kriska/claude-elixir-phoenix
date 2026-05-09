@@ -35,12 +35,19 @@ bullets = [f"- {law['shortform']}" for law in laws if law.get("shortform")]
 prefix = "Elixir/Phoenix Iron Laws (NON-NEGOTIABLE):"
 content = prefix + "\n" + "\n".join(bullets)
 
-print(json.dumps({
-    "hookSpecificOutput": {
-        "hookEventName": "SubagentStart",
-        "additionalContext": content,
-    }
-}))
+# Match jq's envelope shape: pretty-printed with 2-space indent, raw UTF-8 (no
+# ensure_ascii escaping). This keeps the wire-level output byte-identical to
+# the hardcoded fallback path.
+print(json.dumps(
+    {
+        "hookSpecificOutput": {
+            "hookEventName": "SubagentStart",
+            "additionalContext": content,
+        }
+    },
+    ensure_ascii=False,
+    indent=2,
+))
 PY
 }
 

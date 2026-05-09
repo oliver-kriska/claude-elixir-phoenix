@@ -67,7 +67,7 @@ stage and priorities:
 ### "Fix everything" without thinking
 
 If you approve every finding, you didn't need triage. Either
-skip triage and go straight to `/phx:plan`, or be more
+skip triage and go straight to `$phx-plan`, or be more
 selective about what's worth fixing now.
 
 ### "Skip everything" to ship faster

@@ -118,6 +118,17 @@
     ],
     "SessionStart": [
       {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/install-codex-agents.sh",
+            "timeout": 30,
+            "statusMessage": "Installing Codex sub-agents..."
+          }
+        ]
+      },
+      {
         "matcher": "",
         "hooks": [
           {

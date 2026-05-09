@@ -15,6 +15,7 @@ from .frontmatter import Frontmatter, parse_file
 from .hooks import render_pi_extensions
 from .skill_transforms import (
     normalize_skill_name,
+    port_references,
     rewrite_reference_paths,
     rewrite_slash_commands,
     transform_frontmatter,
@@ -38,10 +39,7 @@ def _port_skill(src: Path, dst_root: Path) -> None:
 
     refs_src = src.parent / "references"
     if refs_src.is_dir():
-        refs_dst = out_dir / "references"
-        if refs_dst.exists():
-            shutil.rmtree(refs_dst)
-        shutil.copytree(refs_src, refs_dst)
+        port_references(refs_src, out_dir / "references", TARGET)
 
 
 def _is_command_skill(fm_data: dict) -> bool:
