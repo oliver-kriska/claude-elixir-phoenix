@@ -285,3 +285,21 @@ jobs:
               sys.exit(f'Codex ships dead scripts (no hooks.json reference): {sorted(orphans)}')
           print(f'All {len(shipped)} Codex hook scripts wired into hooks.json ✓')
           "
+
+      - name: Agent count parity (source vs targets/codex)
+        run: |
+          # Catches silent agent-loss: source has N agents, builder must emit N TOMLs.
+          # If the source gains an agent and the builder skips it (parse error
+          # swallowed, name collision, etc.), this trips before the mirror publishes.
+          python3 -c "
+          import sys
+          from pathlib import Path
+          source_count = len(list(Path('plugins/elixir-phoenix/agents').glob('*.md')))
+          target_count = len(list(Path('targets/codex/agents-toml').glob('*.toml')))
+          if source_count != target_count:
+              sys.exit(
+                  f'Agent count mismatch: source has {source_count} .md files, '
+                  f'targets/codex/agents-toml has {target_count} .toml files'
+              )
+          print(f'Agent count parity: {source_count} source ↔ {target_count} codex ✓')
+          "

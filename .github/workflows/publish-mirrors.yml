@@ -54,6 +54,16 @@ jobs:
       - name: Verify targets/ are up to date
         run: python3 -m scripts.port --check
 
+      - name: Run full CI gate before publishing mirrors
+        run: |
+          # Tag pushes can bypass main-branch CI (e.g. a tag pushed to a
+          # feature branch), so we re-run the full eval gate here. Without
+          # this, a broken release tag could publish broken content to the
+          # `pi-elixir-phoenix` and `opencode-elixir-phoenix` mirror repos.
+          # Reuses the same eval target as the lint workflow.
+          pip install -r requirements.txt
+          make eval-ci
+
       - name: Configure git identity
         run: |
           git config user.name "phxagents-bot"
