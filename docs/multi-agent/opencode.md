@@ -79,3 +79,26 @@ opencode
 ```
 
 In the chat, `/phx-help` should list commands. If it does, install path is good.
+
+## Running with local models
+
+Johanna Larsson's [Running local models on M4](https://jola.dev/posts/running-local-models-on-m4)
+(May 2026) tests OpenCode against `qwen3.5-9b@q4_k_s` on a 24 GB M4 MacBook
+Pro via LM Studio with thinking enabled — about 40 tok/s, 128 K context.
+Sampling that worked for her:
+
+```
+temperature=0.6, top_p=0.95, top_k=20, min_p=0.0,
+presence_penalty=0.0, repetition_penalty=1.0
+```
+
+Plus `{%- set enable_thinking = true %}` in the LM Studio prompt template.
+
+The model handled tight interactive edits (e.g. four parallel
+`length(list) > 0 → list != []` Credo rewrites) but failed multi-step
+recovery (a `mix.lock` merge conflict — diagnosed but forgot to apply the
+edit). Treat a local 9 B in this slot as a step-by-step pair, not an
+autonomous loop — the plugin's orchestration agents will struggle here.
+
+Models she rated unusable for this workflow: Qwen 3.6 Q3, GPT-OSS 20B,
+Devstral Small 24B. Gemma 4B ran but struggled with tool use.

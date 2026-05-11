@@ -94,3 +94,16 @@ pi
 
 In the chat: `/phx-help` should produce the command list. `/phx-quick add
 a unique index on users.email` should produce a migration.
+
+## Running with local models
+
+Jola's [Running local models on M4](https://jola.dev/posts/running-local-models-on-m4)
+covers Pi alongside OpenCode — see the OpenCode page's "Running with local
+models" section for the exact model tag (`qwen3.5-9b@q4_k_s`), sampling
+settings, and the LM Studio `enable_thinking` template flag.
+
+Her Pi-specific note: it "feels a bit snappier" than OpenCode but ships
+with fewer sensible defaults, so expect to spend more time tweaking the
+agent surface itself before the plugin's commands feel right. Same
+9 B-class caveat applies — local works for step-by-step interactive use,
+not autonomous orchestration.
