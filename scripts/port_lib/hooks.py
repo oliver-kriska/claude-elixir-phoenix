@@ -69,6 +69,19 @@ def render_codex_hooks(
 
     # Rewrite hooks.json: keep only supported events, swap PLUGIN_ROOT var.
     source = json.loads(source_hooks_json.read_text(encoding="utf-8"))
+
+    # Defensive assertion: every event in source must be classified as either
+    # supported or explicitly dropped. If the source plugin gains a new event
+    # we haven't classified yet, fail loudly so we update one set or the other
+    # — silently dropping it would lose behavior on Codex.
+    source_events = set((source.get("hooks") or {}).keys())
+    unclassified = source_events - (CODEX_SUPPORTED_EVENTS | CODEX_DROPPED_EVENTS)
+    if unclassified:
+        raise ValueError(
+            f"Codex hook port: source has unclassified events {sorted(unclassified)}. "
+            f"Add to CODEX_SUPPORTED_EVENTS or CODEX_DROPPED_EVENTS in port_lib/hooks.py."
+        )
+
     out_hooks: dict[str, list] = {}
     dropped: list[str] = []
 
@@ -113,7 +126,11 @@ def render_codex_hooks(
     }
     out_hooks.setdefault("SessionStart", []).insert(0, install_entry)
 
-    out_doc = {"hooks": out_hooks, "_meta": {"dropped_events": sorted(dropped)}}
+    # `dropped_events` was previously emitted as a `_meta` block in hooks.json,
+    # but that's non-standard schema and risks strict-validation rejection.
+    # The list is documented in `docs/multi-agent/hooks.md` instead and
+    # returned to the caller below for build-time logging.
+    out_doc = {"hooks": out_hooks}
     (out_hooks_dir / "hooks.json").write_text(
         json.dumps(out_doc, indent=2) + "\n", encoding="utf-8"
     )
@@ -175,13 +192,15 @@ export const Hooks: Plugin = {
   },
 
   // PostToolUse — format Elixir, verify Iron Laws, warn on debug statements.
+  // Fire-and-forget so the editor doesn't block on three subprocesses per
+  // .ex/.exs save. stderr is intentionally discarded; formatters write back
+  // to disk and the Iron Law verifier surfaces violations on the next tool
+  // invocation that reads the file.
   "tool.execute.after": async ({ tool, args, result }) => {
     if (tool === "Edit" || tool === "Write") {
       const path = (args?.file_path ?? args?.path ?? "") as string;
       if (path.endsWith(".ex") || path.endsWith(".exs")) {
-        // Side-effect handlers (format, iron-law-verifier, debug-statement-warning)
-        // are spawned as bash subprocesses to keep parity with the Claude pipeline.
-        const { spawnSync } = await import("child_process");
+        const { spawn } = await import("child_process");
         const pluginRoot = process.env.OPENCODE_PLUGIN_ROOT ?? ".";
         const scripts = [
           `${pluginRoot}/hooks/scripts/format-elixir.sh`,
@@ -189,7 +208,12 @@ export const Hooks: Plugin = {
           `${pluginRoot}/hooks/scripts/debug-statement-warning.sh`,
         ];
         for (const script of scripts) {
-          spawnSync("bash", [script], { env: { ...process.env, FILE_PATH: path } });
+          const child = spawn("bash", [script], {
+            env: { ...process.env, FILE_PATH: path },
+            stdio: "ignore",
+            detached: true,
+          });
+          child.unref();
         }
       }
     }

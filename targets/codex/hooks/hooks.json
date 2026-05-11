@@ -206,12 +206,5 @@
         ]
       }
     ]
-  },
-  "_meta": {
-    "dropped_events": [
-      "PostToolUseFailure",
-      "StopFailure",
-      "SubagentStart"
-    ]
   }
 }
