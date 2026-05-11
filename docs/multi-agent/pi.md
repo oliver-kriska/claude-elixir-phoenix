@@ -42,14 +42,32 @@ The 14 reference skills auto-load on file context.
 - `package.json` with `pi-package` keyword for gallery discovery
 - `engines.pi: ">=0.1.0"`
 
+## Phase 2C TS extensions — scaffold, API surface unverified
+
+`targets/pi/extensions/{iron-laws,orchestration}.ts` ship in v2.9.0 but
+should be treated as **code-not-yet-active**. They reference an API
+surface (`pi.command`, `ctx.invoke_prompt`, `pi.system_prompt_append`,
+`pi.root`, `pi.on`) and an import (`@pi-ai/extensions`) that have not
+been verified against the actual published Pi package
+(`@earendil-works/pi-coding-agent`). Phase 2C ships the TS as the
+intended contract; runtime verification lands in v3.0.0 after a real
+Pi smoke test.
+
+Practical impact for v2.9.0 users:
+
+- Skills + slash commands (43 + 29) work today via Pi's native
+  agentskills.io and prompt-template loading — no extension required.
+- The Iron Laws and orchestration extensions may fail to load at
+  `pi install` time. If so, Pi continues without them and the rest of
+  the package still works. The skills' inlined Iron Laws and
+  per-skill Iron Law headers carry the same content.
+
 ## What's deferred to v3.0.0
 
-- TS extensions:
-  - `targets/pi/extensions/iron-laws.ts` — `tool_call` interceptor +
-    `session_start` injection
-  - `targets/pi/extensions/orchestration.ts` — Plan→Work→Review cycle
+- TS extension API verification against `@earendil-works/pi-coding-agent`
+  (rename imports, fix any signature mismatches)
 - Specialist agent prompt templates dispatched by extension
-- Decision: `@tintinweb/pi-subagents` vs native — see Phase 2C
+- Decision: `@tintinweb/pi-subagents` vs native — see Phase 2C in `plan.md`
 
 ## Tradeoffs vs. Claude Code
 
