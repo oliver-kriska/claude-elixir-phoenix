@@ -24,8 +24,12 @@ laws:
   - number: 1
     category: liveview
     title: NO unconditional DB queries in mount
-    body: "Mount runs twice. Default: `assign_async`. SEO routes: `connected?` + cache-backed disconnected branch (dead-render IS the crawler-indexed HTML)"
-    shortform: "NO unconditional DB queries in mount — use assign_async (or connected? + cache-backed branch for SEO routes)"
+    body: >-
+      Mount runs twice. Default: `assign_async`. SEO routes: `connected?`
+      + cache-backed disconnected branch (dead-render IS the crawler-indexed HTML)
+    shortform: >-
+      NO unconditional DB queries in mount — use assign_async
+      (or connected? + cache-backed branch for SEO routes)
   - number: 2
     category: liveview
     title: ALWAYS use streams for lists >100 items
@@ -116,15 +120,21 @@ laws:
   - number: 20
     category: elixir
     title: WRAP THIRD-PARTY LIBRARY APIs
-    body: "Always facade external dependency APIs behind a project-owned module. Enables swapping libraries without touching callers"
+    body: >-
+      Always facade external dependency APIs behind a project-owned module.
+      Enables swapping libraries without touching callers
     shortform: "WRAP THIRD-PARTY LIBRARY APIs behind project-owned modules"
   - number: 21
     category: liveview
     title: NEVER use `assign_new` for values refreshed every mount
-    body: "`assign_new` skips the function if the key exists. Use `assign/3` for locale, current user, or any value that must be set on every mount"
+    body: >-
+      `assign_new` skips the function if the key exists. Use `assign/3` for
+      locale, current user, or any value that must be set on every mount
     shortform: "NEVER use assign_new for values refreshed every mount"
   - number: 22
     category: verification
     title: VERIFY BEFORE CLAIMING DONE
-    body: "Never say \"should work\" or \"this fixes it.\" Run `mix compile && mix test` and show the result. If you can't verify, explicitly state what remains unverified"
+    body: >-
+      Never say "should work" or "this fixes it." Run `mix compile && mix test`
+      and show the result. If you can't verify, explicitly state what remains unverified
     shortform: "VERIFY BEFORE CLAIMING DONE — run mix compile && mix test, never say should work"

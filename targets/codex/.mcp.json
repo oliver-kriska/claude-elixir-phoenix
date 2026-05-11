@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "tidewave": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@tidewave/mcp"
+      ],
+      "env": {}
+    }
+  }
+}

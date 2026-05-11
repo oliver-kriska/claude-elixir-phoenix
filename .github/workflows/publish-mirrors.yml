@@ -29,7 +29,10 @@ jobs:
         target: [pi, opencode]
     steps:
       - name: Skip if not selected (workflow_dispatch)
-        if: github.event_name == 'workflow_dispatch' && github.event.inputs.target != 'all' && github.event.inputs.target != matrix.target
+        if: >-
+          github.event_name == 'workflow_dispatch'
+          && github.event.inputs.target != 'all'
+          && github.event.inputs.target != matrix.target
         run: |
           echo "Skipping ${{ matrix.target }} (selected: ${{ github.event.inputs.target }})"
           exit 0
@@ -59,7 +62,8 @@ jobs:
       - name: Publish ${{ matrix.target }}
         env:
           MIRROR_PUSH_TOKEN: ${{ secrets.MIRROR_PUSH_TOKEN }}
+          MIRROR_REPO: ${{ matrix.target == 'pi' && 'pi-elixir-phoenix' || 'opencode-elixir-phoenix' }}
         run: |
           # Reconfigure remote to use the mirror PAT.
-          REMOTE_URL="https://x-access-token:${MIRROR_PUSH_TOKEN}@github.com/oliver-kriska/${{ matrix.target == 'pi' && 'pi-elixir-phoenix' || 'opencode-elixir-phoenix' }}.git"
+          REMOTE_URL="https://x-access-token:${MIRROR_PUSH_TOKEN}@github.com/oliver-kriska/${MIRROR_REPO}.git"
           python3 -m scripts.publish --target ${{ matrix.target }} --remote "$REMOTE_URL"
