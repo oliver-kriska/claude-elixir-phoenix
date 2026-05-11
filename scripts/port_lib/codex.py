@@ -23,6 +23,7 @@ from pathlib import Path
 
 import yaml
 
+from . import CLAUDE_MD
 from .agents import render_codex_agent
 from .frontmatter import Frontmatter, parse_file
 from .hooks import render_codex_hooks
@@ -169,11 +170,9 @@ def build(source_dir: Path, out_dir: Path) -> dict:
     )
 
     # CLAUDE.md / AGENTS.md companion files (informational; Codex reads AGENTS.md)
-    repo_root = source_dir.parent.parent
-    claude_md = repo_root / "CLAUDE.md"
-    if claude_md.exists():
-        shutil.copyfile(claude_md, out_dir / "CLAUDE.md")
-        shutil.copyfile(claude_md, out_dir / "AGENTS.md")
+    if CLAUDE_MD.exists():
+        shutil.copyfile(CLAUDE_MD, out_dir / "CLAUDE.md")
+        shutil.copyfile(CLAUDE_MD, out_dir / "AGENTS.md")
 
     # ---- Phase 2A: agents (TOML) and hooks ----
     agents_src = source_dir / "agents"

@@ -12,6 +12,7 @@ import json
 import shutil
 from pathlib import Path
 
+from . import CLAUDE_MD
 from .agents import render_opencode_agent
 from .frontmatter import Frontmatter, parse_file
 from .hooks import render_opencode_mcp_block, render_opencode_server_ts
@@ -147,10 +148,8 @@ def build(source_dir: Path, out_dir: Path) -> dict:
         (agents_out / filename).write_text(content, encoding="utf-8")
         agent_count += 1
 
-    repo_root = source_dir.parent.parent
-    claude_md = repo_root / "CLAUDE.md"
-    if claude_md.exists():
-        shutil.copyfile(claude_md, out_dir / "AGENTS.md")
+    if CLAUDE_MD.exists():
+        shutil.copyfile(CLAUDE_MD, out_dir / "AGENTS.md")
 
     return {
         "target": TARGET,

@@ -11,6 +11,7 @@ import json
 import shutil
 from pathlib import Path
 
+from . import CLAUDE_MD
 from .frontmatter import Frontmatter, parse_file
 from .hooks import render_pi_extensions
 from .skill_transforms import (
@@ -127,11 +128,9 @@ def build(source_dir: Path, out_dir: Path) -> dict:
     # Phase 2C: extensions (iron-laws.ts + orchestration.ts)
     ext_info = render_pi_extensions(out_dir)
 
-    repo_root = source_dir.parent.parent
-    claude_md = repo_root / "CLAUDE.md"
-    if claude_md.exists():
-        shutil.copyfile(claude_md, out_dir / "CLAUDE.md")
-        shutil.copyfile(claude_md, out_dir / "AGENTS.md")
+    if CLAUDE_MD.exists():
+        shutil.copyfile(CLAUDE_MD, out_dir / "CLAUDE.md")
+        shutil.copyfile(CLAUDE_MD, out_dir / "AGENTS.md")
 
     # README placeholder (Phase 1B will overwrite with full docs).
     readme = out_dir / "README.md"
