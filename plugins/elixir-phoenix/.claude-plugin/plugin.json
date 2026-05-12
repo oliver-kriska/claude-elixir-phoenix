@@ -1,6 +1,6 @@
 {
   "name": "elixir-phoenix",
-  "version": "2.8.9",
+  "version": "2.9.0",
   "description": "Elixir/Phoenix/LiveView development with specialist agents, Iron Laws, and Tidewave MCP integration",
   "keywords": ["elixir", "phoenix", "liveview", "ecto", "oban", "otp"],
   "author": {

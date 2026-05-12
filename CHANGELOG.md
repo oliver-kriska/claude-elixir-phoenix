@@ -5,6 +5,30 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.9.0] - 2026-05-12
+
+### Added
+
+- **`/phx:deps-audit` — Hex dependency supply-chain audit (Phase 1).** Audits
+  Hex dep updates against an 8-rule MVP catalogue: bidi Unicode chars
+  (Trojan Source CVE-2021-42574), `Code.eval_*`/`:erlang.apply` at module
+  scope, compile-time `System.cmd`/`:os.cmd`/`Port.open`,
+  `:erlang.binary_to_term/1` without `:safe`, new `:git`/`:path` deps,
+  maintainer changes between releases (Hex API), large base64 blobs, and
+  typosquats (Levenshtein ≤ 2 + 1000× download delta). Three operating
+  modes: B (working vs HEAD, default), C (working vs `--base <ref>`), and A
+  (`--preview [pkg...]` — locked vs Hex API latest). Wraps `mix hex.audit`
+  (always), `mix_audit` (GHSA, if installed), and `osv-scanner` (OSV.dev, if
+  installed) for CVE coverage; never auto-installs missing tools. Output:
+  markdown triage table with `diff.hex.pm` links + JSON sidecar at
+  `.claude/deps-audit/last-run.json` for future PreToolUse-hook
+  integration (Phase 3). Eval composite **1.000** across 8 dimensions.
+  Smoke test ships under `skills/deps-audit/smoke-test/smoke.sh` —
+  7/7 fixtures (clean + 6 rule-triggering) pass in <1s. Phase 2
+  (differential analysis, LLM triage, ledger) and Phase 3 (PreToolUse hook,
+  multi-agent) deferred. Routing wired into `/phx:help` (new "Dep update
+  audit" category) and `/phx:intro` cheat sheets.
+
 ## [2.8.9] - 2026-05-08
 
 ### Changed
