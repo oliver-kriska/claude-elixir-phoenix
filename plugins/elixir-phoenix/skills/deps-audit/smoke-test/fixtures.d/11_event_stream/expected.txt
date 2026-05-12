@@ -1,0 +1,2 @@
+# Rule 2 must fire on Code.eval_string at module scope.
+rule:2 op:>= count:1

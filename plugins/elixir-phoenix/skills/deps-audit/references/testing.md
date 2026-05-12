@@ -18,43 +18,65 @@ The plugin's PostToolUse hook (`format-elixir.sh`) treats every committed
 
 Committing these would (a) flag the plugin's own format hook on every
 write and (b) imply the plugin authors endorse the code as exemplary
-Elixir. Both bad. Storing the fixture content as heredocs inside
-`smoke-test/smoke.sh` keeps them version-controlled without polluting the
-plugin's lint surface.
+Elixir. Both bad. Storing the fixture content as `setup.sh` heredocs
+under `smoke-test/fixtures.d/<name>/` keeps them version-controlled
+without polluting the plugin's lint surface.
+
+## Harness layout (Phase 2)
+
+```
+smoke-test/
+├── runner.sh             # driver — loads every fixtures.d/<name>/
+├── lib/detectors.sh      # shared rule detectors (perl/grep/awk)
+├── fixtures.d/<name>/    # one dir per fixture
+│   ├── setup.sh          # heredoc'd fixture content, writes into $FIXTURE_DIR
+│   └── expected.txt      # rule:N op:>= count:1 assertions
+└── corpus.d/             # on-demand loader for real Hex tarballs
+    ├── fetch.sh
+    └── README.md
+```
+
+`runner.sh` discovers fixtures automatically — drop a new directory in
+`fixtures.d/` and it runs next pass.
 
 ## Running the smoke test
 
 ```bash
-bash plugins/elixir-phoenix/skills/deps-audit/smoke-test/smoke.sh
+bash plugins/elixir-phoenix/skills/deps-audit/smoke-test/runner.sh
 ```
 
 Expected output (~1 second):
 
 ```
-ok   - clean: 0 findings across rules 1,2,3,4,7
-ok   - rule 1: 1 finding(s) on bidi fixture
-ok   - rule 2: 1 finding(s) on Code.eval fixture
-ok   - rule 3: 1 finding(s) on compile-exec fixture
-ok   - rule 4: 1 finding(s) on binary_to_term fixture
-ok   - rule 5: 1 new :git dep(s) detected
-ok   - rule 7: 1 finding(s) on base64 fixture
+Running 7 fixture(s) under .../fixtures.d:
+  ok 00_clean rule:1 == 0 (got 0)
+  ok 00_clean rule:2 == 0 (got 0)
+  ok 00_clean rule:3 == 0 (got 0)
+  ok 00_clean rule:4 == 0 (got 0)
+  ok 00_clean rule:7 == 0 (got 0)
+  ok 01_bidi rule:1 >= 1 (got 1)
+  ok 02_eval rule:2 >= 1 (got 1)
+  ok 03_compile_exec rule:3 >= 1 (got 1)
+  ok 04_binary_to_term rule:4 >= 1 (got 1)
+  ok 05_git_dep rule:5 >= 1 (got 1)
+  ok 07_base64 rule:7 >= 1 (got 1)
 
-smoke OK (6 rule fixtures + 1 clean fixture passed)
+smoke: 7 pass, 0 fail
 ```
 
-Exit `0` = all pass. Exit `1` + `FAIL: ...` line on stderr otherwise.
+Exit `0` = all pass. Exit `1` with `fail` lines otherwise.
 
 ## Coverage matrix
 
 | Rule | Fixture | Detector under test | Asserts |
 |------|---------|---------------------|---------|
-| Rule 1 (bidi) | `r1/` — file with raw U+202E byte | perl `[\x{202A}-\x{202E}\x{2066}-\x{2069}\x{200E}\x{200F}\x{061C}]` | ≥1 finding |
-| Rule 2 (eval) | `r2/` — top-level `Code.eval_string(@payload)` | grep `^[[:space:]]*Code\.eval_(string|quoted)\(` | ≥1 finding |
-| Rule 3 (compile exec) | `r3/` — `System.cmd` inside `__before_compile__` | awk scope tracker | ≥1 finding |
-| Rule 4 (binary_to_term) | `r4/` — `:erlang.binary_to_term(blob)` | grep `:erlang\.binary_to_term\([^,]+\)\s*$` | ≥1 finding |
-| Rule 5 (new :git dep) | `r5_old/` + `r5_new/` — new `git:` keyword | grep diff of `git:` count | ≥1 new dep |
-| Rule 7 (base64) | `r7/` — 308-char base64 literal | perl `"[A-Za-z0-9+/]{256,}={0,2}"` | ≥1 finding |
-| All | `clean/` — benign module | All 5 single-tarball rules | 0 findings each |
+| Rule 1 (bidi) | `01_bidi/` — file with raw U+202E byte | perl `[\x{202A}-\x{202E}\x{2066}-\x{2069}\x{200E}\x{200F}\x{061C}]` | ≥1 finding |
+| Rule 2 (eval) | `02_eval/` — top-level `Code.eval_string(@payload)` | grep `^[[:space:]]*Code\.eval_(string\|quoted)\(` | ≥1 finding |
+| Rule 3 (compile exec) | `03_compile_exec/` — `System.cmd` inside `__before_compile__` | awk scope tracker | ≥1 finding |
+| Rule 4 (binary_to_term) | `04_binary_to_term/` — `:erlang.binary_to_term(blob)` | grep `:erlang\.binary_to_term\([^,]+\)\s*$` | ≥1 finding |
+| Rule 5 (new :git dep) | `05_git_dep/{old,new}` — new `git:` keyword | grep diff of `git:` count | ≥1 new dep |
+| Rule 7 (base64) | `07_base64/` — 308-char base64 literal | perl `"[A-Za-z0-9+/]{256,}={0,2}"` | ≥1 finding |
+| All | `00_clean/` — benign module | All 5 single-tarball rules | 0 findings each |
 
 **Rules 6 and 8 are not smoke-tested** — both require live Hex API calls
 and would make the smoke flaky/slow. They have unit-test stubs in
@@ -79,13 +101,13 @@ detector worth fixing.
 
 ## When to update fixtures
 
-- A new rule lands → add a new `r<N>/` block in `smoke.sh` plus an
-  assertion.
-- An existing detector changes its output shape → adjust the assertion,
-  not the fixture, unless the fixture itself no longer represents the
-  hostile pattern.
-- A detector emits unexpected findings on the `clean/` fixture → that's
-  a false positive regression. Investigate before relaxing the assertion.
+- A new rule lands → add a new `fixtures.d/<NN>_<name>/` directory with
+  `setup.sh` + `expected.txt`. Runner picks it up automatically.
+- An existing detector changes its output shape → adjust the
+  `expected.txt` assertion, not the fixture, unless the fixture itself
+  no longer represents the hostile pattern.
+- A detector emits unexpected findings on `00_clean/` → that's a false
+  positive regression. Investigate before relaxing the assertion.
 
 ## Phase 2 test plan
 
@@ -100,6 +122,6 @@ detector worth fixing.
 ## CI integration
 
 For now the smoke test is run manually. To wire into the eval pipeline,
-add a `smoke` target in `Makefile` whose recipe is
-`@bash plugins/elixir-phoenix/skills/deps-audit/smoke-test/smoke.sh` —
-deferred to a follow-up PR since Phase 1 doesn't yet require CI gating.
+add a `smoke` target in `Makefile` whose recipe runs `runner.sh` from
+the harness root. Deferred until corpus fetch from `corpus.d/fetch.sh`
+is reliable enough for CI gating (it depends on hex.pm reachability).

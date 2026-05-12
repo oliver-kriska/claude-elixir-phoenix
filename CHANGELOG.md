@@ -5,6 +5,74 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2026-05-12
+
+### Added — `/phx:deps-audit` Phase 2: differential, ledger, LLM triage, SARIF
+
+- **NDJSON differential mode** — second findings pass on OLD tarball, then
+  set-subtract via `scripts/diff_findings.py`. Carried findings downgrade
+  to INFO; only net-new signals surface at full severity. Polymorphic
+  keying per rule (file-scoped / mix.exs / package-scoped) with regex-walk
+  `fn_name` fallback when AST emitters skip it.
+- **`hex_vet.exs` audit ledger** — cargo-vet-style trust ledger at project
+  root (visible in PR review). Schema supports `:safe_to_deploy`,
+  `:safe_to_run`, `:does_not_implement_crypto` criteria. Lock-vs-ledger
+  disagreement: lock wins; orphan ledger entries emit INFO.
+- **`/phx:deps-vet` skill** — interactive Hex package vetter. Reads/creates
+  `hex_vet.exs`, runs Phase 1 rules against the named package, prompts
+  via `AskUserQuestion` for verdict, round-trips through
+  `Code.format_string!` + `inspect/2`. Companion `mix phx.deps_vet`
+  deferred to Phase 3+ as separate `phx_deps_vet` Hex package.
+- **`/phx:deps-vet --seed`** — opt-in import of curated 29-package seed
+  ledger (`priv/hex_vet_seed.exs`) covering Phoenix + Ecto + crypto +
+  telemetry + dev/test deps. 90-day staleness warning. Monthly
+  regeneration via `.github/workflows/seed-regen.yml`.
+- **`hex-deps-triager` agent** — sonnet, low effort, bypassPermissions.
+  Triages high-score packages (`score > 10`) into structured
+  `{confidence, verdict, rationale, fp_reasons[]}` JSON. Cannot invent
+  findings (1:1 mapping enforced + post-call validator).
+- **Two-tier LLM triage flow** — per-package triager writes JSON →
+  `context-supervisor` (haiku) consolidates to `triage/consolidated.md`.
+  Main skill reads only consolidated file (~95% context saving).
+- **`--sarif <path>` flag** — SARIF 2.1.0 emission with stable
+  `phx-deps-audit/rule-<N>` ruleIds, level mapping (block→error,
+  warn→warning, info→note), physicalLocation + logicalLocations.
+  Compatible with VS Code sarif-viewer + GitHub upload-sarif@v3.
+- **Optional Semgrep layer** — `priv/semgrep/elixir-supply-chain.yaml`
+  with 7 starter rules. Soft dep; skipped cleanly if `semgrep` absent.
+- **Optional YARA layer** — `priv/yara/hex-malware.yar` with 6 byte-pattern
+  rules. Soft dep; defense-in-depth for cross-ecosystem attack
+  signatures (event-stream/flatmap-stream, BEAM magic in source).
+- **Smoke harness refactor** — single `smoke.sh` replaced by `runner.sh` +
+  `lib/detectors.sh` + per-fixture `fixtures.d/<name>/{setup.sh,
+  expected.txt}`. Auto-discovers fixtures; supports diff fixtures via
+  `{old,new}` subdirs. Phase 1's 6 fixtures migrated + 5 new
+  (axios_combined, event_stream, homoglyph, obfuscated_typosquat,
+  nif_blob). 12 fixtures pass.
+- **Real-Hex corpus loader** — `smoke-test/corpus.d/fetch.sh` with
+  `--batch` and `--prune`. 85-entry benign baseline in `benign-100.txt`.
+- **VCR cassette format** — JSON cassettes for Rules 6 (maintainer change)
+  and 8 (typosquat) Hex API endpoints. SHA-pinned via `_meta.json`.
+  `HEX_API_BASE=file://...` switches smoke offline. Format spec in
+  `references/cassettes.md`; cassette files deferred to follow-up.
+- **Skill checklist reference** — `references/skill-checklist.md` bakes in
+  Phase 1's eval-scorer + lint quirks (literal `## Iron Laws` heading,
+  description ≤200 chars, argument-hint YAML quoting, `git add` before
+  `make eval`).
+- **`/phx:deps-vet` routing in `/phx:help`** — new "Manual dep vetting"
+  row. Intro tutorial cheat sheets (sections 4 + 8) updated.
+
+### Changed
+
+- **`emit()` helper** — honors `${FINDINGS_FILE}` env var (defaults to
+  `findings.jsonl`). Required for OLD-pass to write to `findings.old.jsonl`.
+- **`run_all_rules` master loop** — emits NEW and OLD findings in the same
+  pass when `DIFFERENTIAL=1` (default). Invokes
+  `scripts/diff_findings.py` at end.
+- **Iron Law 6 in `/phx:deps-audit`** — was "No LLM detection; LLM triage
+  is Phase 2." Now describes threshold-gated triage with advisory-only
+  verdicts (severity unchanged, ordering only).
+
 ## [2.9.0] - 2026-05-12
 
 ### Added

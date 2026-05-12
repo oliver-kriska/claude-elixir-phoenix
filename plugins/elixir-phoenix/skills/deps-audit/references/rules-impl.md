@@ -1,9 +1,26 @@
 # MVP Rule Implementations
 
 Eight detection routines. Each emits zero or more findings as
-NDJSON lines (one JSON object per line) to
-`.claude/deps-audit/cache/findings.jsonl`. The renderer aggregates by
+NDJSON lines (one JSON object per line) to the file named by
+`${FINDINGS_FILE}` (defaults to
+`.claude/deps-audit/cache/findings.jsonl`). The renderer aggregates by
 package.
+
+## Portability floor
+
+Every new native regex rule MUST use **perl**, not `grep -P` or
+`grep -E '{n,}'` for n > 255. macOS ships BSD grep, which:
+
+- Lacks `-P` (no PCRE — Unicode character classes don't work).
+- Caps interval quantifier `{n,}` at 255.
+
+Perl is preinstalled on every supported platform (macOS, Linux, WSL,
+Alpine via `apk add perl`). Treat perl as the cross-platform floor —
+even Linux GNU-grep environments work without change.
+
+Same applies to `comm` and `diff` for differential mode: BSD `comm`
+requires pre-sorted inputs and BSD `diff` lacks `--no-dereference`.
+Prefer Python (`scripts/diff_findings.py`) or jq for diffs.
 
 ## Common finding shape
 
@@ -27,7 +44,7 @@ emit() {
     '{pkg:$pkg, version:$version, rule_id:$rule_id, severity:$severity,
       file:($file|select(.!="")), line:(if $line=="" then null else ($line|tonumber) end),
       snippet:$snippet, message:$message}' \
-    >> .claude/deps-audit/cache/findings.jsonl
+    >> "${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}"
 }
 ```
 
@@ -372,7 +389,13 @@ counts. **FP rate:** ~1%.
 
 ```bash
 run_all_rules() {
+  # Phase 2 differential mode: emit NEW findings to findings.jsonl AND
+  # OLD findings to findings.old.jsonl in the same loop. When DIFFERENTIAL=0,
+  # behave like Phase 1 (no OLD pass).
   : > .claude/deps-audit/cache/findings.jsonl
+  : > .claude/deps-audit/cache/findings.old.jsonl
+
+  local differential="${DIFFERENTIAL:-1}"
 
   jq -c '.changed[], .added[]' .claude/deps-audit/cache/diff.json \
   | while IFS= read -r row; do
@@ -385,23 +408,58 @@ run_all_rules() {
       old_dir=""
       [ "${old}" != "null" ] && old_dir=".claude/deps-audit/cache/${pkg}/${old}"
 
-      # Per-tarball rules (single-pass on NEW)
-      rule_1_bidi              "${pkg}" "${new}" "${new_dir}" &
-      rule_2_eval              "${pkg}" "${new}" "${new_dir}" &
-      rule_3_compile_exec      "${pkg}" "${new}" "${new_dir}" &
-      rule_4_binary_to_term    "${pkg}" "${new}" "${new_dir}" &
-      rule_7_base64            "${pkg}" "${new}" "${new_dir}" &
+      # --- NEW pass: emit to findings.jsonl ---
+      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+        rule_1_bidi              "${pkg}" "${new}" "${new_dir}" &
+      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+        rule_2_eval              "${pkg}" "${new}" "${new_dir}" &
+      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+        rule_3_compile_exec      "${pkg}" "${new}" "${new_dir}" &
+      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+        rule_4_binary_to_term    "${pkg}" "${new}" "${new_dir}" &
+      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+        rule_7_base64            "${pkg}" "${new}" "${new_dir}" &
       wait
 
-      # Diff rules
+      # --- OLD pass (differential mode): emit to findings.old.jsonl ---
+      if [ "${differential}" = "1" ] && [ -n "${old_dir}" ] && [ -d "${old_dir}" ]; then
+        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+          rule_1_bidi              "${pkg}" "${old}" "${old_dir}" &
+        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+          rule_2_eval              "${pkg}" "${old}" "${old_dir}" &
+        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+          rule_3_compile_exec      "${pkg}" "${old}" "${old_dir}" &
+        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+          rule_4_binary_to_term    "${pkg}" "${old}" "${old_dir}" &
+        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+          rule_7_base64            "${pkg}" "${old}" "${old_dir}" &
+        wait
+      fi
+
+      # Diff rules (intrinsically diff-aware — single pass).
       rule_5_new_git_path      "${pkg}" "${new}" "${new_dir}" "${old_dir}"
 
-      # Hex API rules
+      # Hex API rules — package-scoped, not differential.
       rule_6_maintainer_change "${pkg}" "${old}" "${new}" "${new}"
       rule_8_typosquat         "${pkg}" "${new}"
     done
+
+  # Set-subtract NEW vs OLD into new_signals / info_signals / dropped_signals.
+  if [ "${differential}" = "1" ]; then
+    python3 "${CLAUDE_SKILL_DIR}/scripts/diff_findings.py" \
+      --new  .claude/deps-audit/cache/findings.jsonl \
+      --old  .claude/deps-audit/cache/findings.old.jsonl \
+      --new-out     .claude/deps-audit/cache/new_signals.jsonl \
+      --info-out    .claude/deps-audit/cache/info_signals.jsonl \
+      --dropped-out .claude/deps-audit/cache/dropped_signals.jsonl
+  fi
 }
 ```
+
+`FINDINGS_FILE` defaults to `findings.jsonl` for backward compat. The
+`emit()` helper at the top of this file must be updated to redirect to
+`${FINDINGS_FILE}` instead of the hard-coded path — that's a one-line
+change inside `emit()`.
 
 ## Anti-FP notes
 
@@ -415,11 +473,24 @@ run_all_rules() {
   intent of the rule is "dep added that bypasses Hex" — manual approval
   is reasonable when the user knows the path dep.
 
-## Out of scope (Phase 2)
+## Phase 2 additions
+
+- **Differential mode** — `DIFFERENTIAL=1` (default) emits findings on
+  OLD as well as NEW, then NDJSON set-subtracts via
+  `scripts/diff_findings.py`. See `differential.md`.
+- **Optional precision layers** — `semgrep --config priv/semgrep/` and
+  `yara -r priv/yara/` run alongside native rules when available; both
+  are soft deps. See `semgrep.md` and `yara.md`.
+- **LLM triage** — high-score packages get verdicts via the
+  `hex-deps-triager` sonnet agent with a `context-supervisor` (haiku)
+  consolidating per-package output. See `llm-triage.md`.
+
+## Out of scope (Phase 3+)
 
 - Sourceror dependency for richer AST patterns (currently using built-in
   `Code.string_to_quoted/2`).
 - Sobelow on unpacked tarballs (would cover Rules 2–4 with stronger taint
   analysis).
-- YARA byte-pattern matching for known-bad strings.
-- Differential rules (old + new diff per file, not just `mix.exs`).
+- Multi-agent orchestrator (5 specialist auditors) — Phase 2 native +
+  Semgrep + YARA cover MVP.
+- PreToolUse hook on `mix deps.get` — needs Phase 2 ledger to be solid.

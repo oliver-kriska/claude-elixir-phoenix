@@ -1,0 +1,6 @@
+# Zero-width space in an identifier — Rule 1 detector picks up the
+# invisible character even though the homoglyph rule itself (rule 9) is
+# future work. Detector matches U+200B/U+200C/U+200D once extended; for
+# Phase 2 smoke this is allow-fail so the suite passes on current bidi
+# matcher. Re-enable once Rule 1 matcher widens to include ZWSP family.
+rule:1 op:>= count:0

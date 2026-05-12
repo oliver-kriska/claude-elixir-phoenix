@@ -2,7 +2,7 @@
 name: phx:deps-audit
 description: Audit Hex dep updates for supply-chain security risk — bidi chars, compile-time exec, maintainer changes, typosquats, CVEs. Use after mix deps.update or to review PRs touching mix.lock.
 effort: medium
-argument-hint: "[--base <ref> | --preview [pkg...]] [--json]"
+argument-hint: "[--base <ref> | --preview [pkg...]] [--json] [--sarif <path>] [--no-differential] [--no-llm]"
 allowed-tools: Read, Grep, Glob, Bash, WebFetch
 ---
 
@@ -34,7 +34,10 @@ against changed packages, enriches with Hex API metadata, wraps existing tools
 5. **NEVER run the audit on already-committed lock changes silently** —
    tell the user which mode (A/B/C) is active and which `(old, new)` pairs
    resolved.
-6. **No LLM detection.** This skill is deterministic. LLM triage is Phase 2.
+6. **LLM triage only above threshold.** Native rules + Semgrep + YARA
+   are deterministic. The `hex-deps-triager` agent runs only when score
+   > 10 (1 BLOCK or 3+ WARNs), and its verdicts are advisory — never
+   auto-suppress a finding without human review.
 
 ## Operating Modes
 
@@ -107,6 +110,32 @@ Cap at 5 req/sec. Cache 7 days under `.claude/deps-audit/cache/hex-api/`.
 See `${CLAUDE_SKILL_DIR}/references/hex-api.md` for endpoint contracts,
 caching strategy, Rule 6/8 detection, and Levenshtein implementation.
 
+### Step 5.5: Apply `hex_vet.exs` ledger (if present)
+
+If `hex_vet.exs` exists at project root, vetted-version findings are
+**downgraded to INFO**. Unvetted versions retain their severity.
+Lock-vs-ledger disagreement: lock wins (`references/hex-vet.md` §
+"Lock-vs-ledger disagreement").
+
+Use `/phx:deps-vet <pkg> <version>` (separate skill) to add entries.
+
+### Step 5.7: Differential subtract
+
+When run with `DIFFERENTIAL=1` (default), findings that existed in the
+OLD tarball are downgraded to INFO. Net-new signals reach the renderer
+at full severity. See `${CLAUDE_SKILL_DIR}/references/differential.md`.
+
+### Step 5.8: LLM triage (when score > threshold)
+
+For packages where the aggregate score exceeds 10, the
+`hex-deps-triager` sonnet agent reads finding + diff windows and
+produces structured verdicts (`confidence`, `verdict`, `rationale`,
+`fp_reasons[]`). A `context-supervisor` (haiku) consolidates verdicts
+across packages into `triage/consolidated.md`. Main skill reads only
+the consolidated file.
+
+See `${CLAUDE_SKILL_DIR}/references/llm-triage.md`.
+
 ### Step 6: Score & render
 
 Per-package weighted sum: BLOCK = 10, WARN = 3, INFO = 1.
@@ -137,5 +166,11 @@ sidecar schema, exit-code rubric, and `--quiet` mode.
 - `${CLAUDE_SKILL_DIR}/references/tarball-fetcher.md` — `mix hex.package fetch` wrapper, parallel fetch, cache pruning
 - `${CLAUDE_SKILL_DIR}/references/external-tools.md` — `mix hex.audit`, `mix_audit`, `osv-scanner` wrappers
 - `${CLAUDE_SKILL_DIR}/references/hex-api.md` — endpoint contracts, rate limit, Rule 6/8 helpers
-- `${CLAUDE_SKILL_DIR}/references/output-renderer.md` — markdown layout, JSON schema v1, exit-code rubric
+- `${CLAUDE_SKILL_DIR}/references/output-renderer.md` — markdown layout, JSON schema v1, exit-code rubric, SARIF emission
 - `${CLAUDE_SKILL_DIR}/references/testing.md` — smoke-test runner, fixture coverage matrix, why heredocs not `.ex`
+- `${CLAUDE_SKILL_DIR}/references/differential.md` — Phase 2 NDJSON set-subtract, polymorphic keys, added-package mode
+- `${CLAUDE_SKILL_DIR}/references/llm-triage.md` — Phase 2 hex-deps-triager + context-supervisor pattern, threshold gating
+- `${CLAUDE_SKILL_DIR}/references/semgrep.md` — Phase 2 optional precision layer (soft dep)
+- `${CLAUDE_SKILL_DIR}/references/yara.md` — Phase 2 byte-pattern layer (soft dep)
+- `${CLAUDE_SKILL_DIR}/references/skill-checklist.md` — eval scorer + lint gotchas baked in from Phase 1
+- `${CLAUDE_SKILL_DIR}/references/sarif.md` — Phase 2 `--sarif` flag, SARIF 2.1.0 mapping, GitHub upload-sarif

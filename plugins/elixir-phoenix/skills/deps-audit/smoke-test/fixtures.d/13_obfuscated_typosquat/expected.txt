@@ -1,0 +1,3 @@
+# Rule 1 catches the U+202E. Rule 8 (typosquat detection via Hex API)
+# would also fire — but requires a cassette; covered by cassettes/.
+rule:1 op:>= count:1
