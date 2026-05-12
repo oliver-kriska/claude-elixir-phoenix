@@ -173,3 +173,85 @@ export HEX_API_BASE="file://${HARNESS_ROOT}/../test-assets/hex-api-cassettes"
 ```
 
 Per-fixture `expected.txt` then asserts on `rule:6` / `rule:8` counts.
+
+## Lifecycle — Phase 3 monthly regen + drift detection
+
+Cassettes captured ad-hoc go stale without a refresh schedule. Phase 3
+ships a monthly regeneration workflow and drift detection at audit
+runtime.
+
+### Monthly regen workflow
+
+`.github/workflows/cassette-regen.yml` runs on the 5th of every month
+(staggered from the seed-regen run on the 1st) and on manual
+`workflow_dispatch`:
+
+1. Check out repo, install jq + Python 3.
+2. Iterate over the top-100 seed list (`smoke-test/corpus.d/benign-100.txt`).
+3. For each package, call `bash priv/cassettes/capture.sh <pkg>` against
+   live `https://hex.pm/api`. The script updates `_meta.json` SHA
+   entries.
+4. If any cassette content changed, open a PR via
+   `peter-evans/create-pull-request@v6` with summary "Monthly cassette
+   regen: N packages updated."
+
+### 403 fallback
+
+Some org GitHub policies deny `GITHUB_TOKEN` PR creation
+("Actions cannot create pull requests"). The workflow checks the
+`create-pull-request` action's exit + status, and on 403:
+
+1. Uploads the regenerated `test-assets/hex-api-cassettes/` tree as a
+   workflow artifact (90-day retention).
+2. Writes a job summary: "cassettes regenerated as artifact; PR
+   creation requires a repo admin to enable
+   Settings → Actions → Allow GitHub Actions to create pull requests."
+3. Exits 0 — the regen ran successfully even if the PR didn't.
+4. Optional: posts to `${SLACK_WEBHOOK_URL}` if the secret exists.
+
+The artifact path is `cassettes-regen-<run-id>.zip`. Maintainers
+download it, run `tar xf …`, commit manually.
+
+### Drift detection at audit runtime
+
+The audit body reads `_meta.json` before consuming any cassette:
+
+```bash
+expected_sha=$(jq -r ".files[\"${cassette}\"].sha256" "${meta_path}")
+actual_sha=$(shasum -a 256 "${cassette_path}" | awk '{print $1}')
+if [ "${expected_sha}" != "${actual_sha}" ]; then
+  echo "phx-deps-audit: cassette stale — ${cassette} (sha mismatch)" >&2
+  # Continue, but emit INFO so the renderer surfaces "stale cassette" in output.
+  emit_finding rule:6 severity:info \
+    "Cassette ${cassette} SHA drift — consider regenerating."
+fi
+```
+
+Drift on a single cassette doesn't fail the audit. It surfaces in
+the renderer's "carried-over risks" section. If >10% of cassettes
+drift in one run, the renderer's tail prints a one-liner pointing
+at the regen workflow.
+
+### Per-PR capture pattern (manual)
+
+When a user adds a `hex_vet.exs` entry for a package without a
+cassette, document the manual flow in the PR:
+
+```bash
+bash plugins/elixir-phoenix/skills/deps-audit/priv/cassettes/capture.sh <pkg> <ver>
+git add plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+```
+
+Reviewers should diff the cassette body and the `_meta.json` SHA
+update together — a maintainer change in the captured response
+should match the package's actual maintainer history. This catches
+the scenario where a malicious cassette is committed alongside a
+seemingly-benign code change.
+
+### Why monthly, not weekly
+
+Weekly regen would catch drift sooner but doubles the PR noise. The
+audit body's drift detection covers the "I haven't run regen in 6
+weeks" case by surfacing stale cassettes as INFO — users get a clear
+nudge without the maintainer overhead of weekly merges. Re-evaluate
+after the first 6 months of operation.

@@ -52,6 +52,14 @@ each. Apply this list **before** running `make eval`.
   the description, the cache invalidates on its own.
 - Use `make eval-fix` to see exact failures and get auto-fix
   suggestions.
+- **Agents use a different scorer than skills.** `make eval` routes
+  correctly. Manual scoring during development must pick the right one:
+  - Skills → `python3 -m lab.eval.scorer <path>`
+  - Agents → `python3 -m lab.eval.agent_scorer <path>`
+  - Running `scorer.py` against an agent over-restricts (skill-shaped
+    thresholds applied to agent content) and fails on dimensions the
+    agent scorer skips. If a manual run reports completeness-0 on an
+    obviously-complete agent, you used the wrong scorer.
 
 ## Agent-specific
 

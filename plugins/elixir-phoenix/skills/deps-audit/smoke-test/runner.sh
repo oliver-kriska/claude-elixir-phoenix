@@ -123,6 +123,17 @@ main() {
 
   echo
   echo "smoke: ${pass_count} pass, ${fail_count} fail"
+
+  if [ "${SKIP_SARIF:-0}" != "1" ] && [ -x "${HARNESS_ROOT}/sarif-round-trip.sh" ]; then
+    echo
+    echo "SARIF round-trip:"
+    if "${HARNESS_ROOT}/sarif-round-trip.sh"; then
+      :
+    else
+      fail_count=$((fail_count + 1))
+    fi
+  fi
+
   [ "${fail_count}" -eq 0 ]
 }
 

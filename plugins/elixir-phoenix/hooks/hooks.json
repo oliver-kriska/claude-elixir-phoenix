@@ -112,6 +112,13 @@
             "type": "command",
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "if": "Bash(*mix deps.*)",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/deps-audit-gate.sh",
+            "timeout": 5,
+            "statusMessage": "Tiered deps audit..."
           }
         ]
       }

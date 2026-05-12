@@ -5,6 +5,80 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.0.0] - 2026-05-12
+
+### Added — `/phx:deps-audit` Phase 3: PreToolUse gate + tri-mode policy + CI
+
+- **Tiered PreToolUse deps-audit-gate hook** — fires on
+  `mix deps.{get,update,compile}`. Tier 0 (lock-SHA cache hit,
+  <200ms) → Tier 1 (rule 1 bidi + rule 5 new `:git`/`:path` deps,
+  <2s) → Tier 2 (opt-in full pipeline). `PHX_SKIP_DEPS_AUDIT=1`
+  escape hatch. Smoke-tested across `false` / `:new_only` /
+  `:strict` modes.
+- **Tri-mode `block_on_unvetted`** — atom replaces Phase 2 boolean:
+  `false | :new_only | :strict | :full`. `:new_only` is the new
+  default for fresh ledgers (blocks ADDS of unvetted versions but
+  allows re-locks of historical un-audited pkgs). Boolean `true`
+  auto-migrates to `:strict` with deprecation warning.
+- **`cache_signature.json`** — version-skew protection. Cache
+  records `plugin_version + rules_checksum + generated_at`; on
+  mismatch, drops the cache tree and rebuilds rather than risking
+  stale verdicts after a plugin upgrade.
+- **SARIF round-trip smoke** — `scripts/findings_to_sarif.py`
+  converts NDJSON to SARIF 2.1.0; `smoke-test/sarif-round-trip.sh`
+  validates structure (12 assertions: ruleId presence, level mapping,
+  startLine on file-scoped, ruleId-stability prefix, etc.). Optional
+  schemastore.org schema validation when `jsonschema` installed.
+- **Cassette lifecycle workflow** —
+  `.github/workflows/cassette-regen.yml` runs on the 5th of each
+  month, regenerates `_meta.json` SHA index, opens PR via
+  `peter-evans/create-pull-request@v6`. Org-policy 403 fallback
+  uploads as workflow artifact + summary message. New
+  `priv/cassettes/capture.sh` helper (smoke-tested end-to-end).
+- **`--ci` flag + CI integration samples** — non-interactive mode
+  with strict exit codes (0/1/2). GitHub Actions, CircleCI,
+  GitLab CI, Drone CI workflow samples. `mix format` post-Write
+  pattern documented for `.exs` data files in regen workflows.
+- **Solutions auto-feed** — after a BLOCK-severity finding, the
+  audit prompts for `/phx:compound`. Solution doc lands at
+  `.claude/solutions/supply-chain/<pkg>-<pattern>.md`; future
+  audits grep that directory and pre-elevate matching snippets.
+  Prompt-and-confirm only; never auto-write.
+- **Distributed imports v1** — `imports:` table in `hex_vet.exs`
+  with explicit allow-list (only `elixir-phoenix-plugin` seed
+  recognized in v1). 24h cache TTL. Attribution in renderer
+  output. Multi-org imports stay drafted until single-import
+  cycle proves trust-chain hygiene.
+- **Hex.pm trusted-publishers tracking doc** — plugin's hybrid
+  stance for when registry-side attestation (hexpm#1193) ships.
+  Placeholder Rule 9, gated on upstream adoption.
+- **Plugin-authoring contributor docs** — `omitClaudeMd` vs
+  `SubagentStart` Iron Laws injection distinction (Iron Laws stay
+  enforced via hook even when CLAUDE.md is omitted). `agent_scorer`
+  vs `scorer` usage clarification (manual scoring during dev must
+  pick the right one).
+
+### Changed
+
+- Empty `hex_vet.exs` stub defaults to `policy.block_on_unvetted:
+  :new_only` (was `false` in Phase 2) — opt-in to enforcement on
+  additions without blocking historical locks.
+- `deps-audit` SKILL `argument-hint` adds `--ci`, `--strict`,
+  `--llm` flags alongside the Phase 2 surface.
+- Differential cache namespace adds plugin-version dimension —
+  cold rebuild on first audit after upgrade is intentional, not
+  a bug.
+
+### Notes
+
+- Phase 3 components dropped from this release: 5-agent runtime
+  orchestrator (`hex-deps-triager` already covers the LLM
+  surface), companion `phx_deps_vet` Hex package (deferred to
+  follow-up in a separate repo).
+- Sequencing gate not formally met (Phase 2 shipped same day);
+  release proceeds with the `:new_only` default keeping
+  workflow friction minimal until real-world signal accrues.
+
 ## [2.10.0] - 2026-05-12
 
 ### Added — `/phx:deps-audit` Phase 2: differential, ledger, LLM triage, SARIF
