@@ -5,7 +5,7 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.0.1] - 2026-05-12
+## [2.11.1] - 2026-05-12
 
 ### Fixed — CRITICAL: `deps-audit-gate.sh` policy parser silently downgraded enforcement
 
@@ -27,7 +27,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   grep -v '^\s*#' hex_vet.exs | grep block_on_unvetted | tail -1
   ```
 
-  Anyone running v3.0.0 with a commented `hex_vet.exs` should upgrade
+  Anyone running v2.11.0 with a commented `hex_vet.exs` should upgrade
   immediately.
 
 ### Added
@@ -35,13 +35,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `smoke-test/gate-test.sh` end-to-end harness for the PreToolUse
   gate's policy parser + block enforcement (separate from the
   rule-detector fixtures.d/ harness). Three gate fixtures:
-  `15_commented_policy` (the v3.0.0 regression), `16_multi_policy_warning`
+  `15_commented_policy` (the v2.11.0 regression), `16_multi_policy_warning`
   (last-wins + duplicate-key warning), `17_clean_strict` (sanity:
   no spurious multi-match warning on clean ledgers).
 - runner.sh now chains gate-test.sh after SARIF round-trip; bypassable
   via `SKIP_GATE_TEST=1` for the same reasons SARIF is bypassable.
 
-## [3.0.0] - 2026-05-12
+## [2.11.0] - 2026-05-12
 
 ### Added — `/phx:deps-audit` Phase 3: PreToolUse gate + tri-mode policy + CI
 
