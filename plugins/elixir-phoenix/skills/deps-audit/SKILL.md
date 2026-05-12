@@ -2,7 +2,7 @@
 name: phx:deps-audit
 description: Audit Hex dep updates for supply-chain security risk — bidi chars, compile-time exec, maintainer changes, typosquats, CVEs. Use after mix deps.update or to review PRs touching mix.lock.
 effort: medium
-argument-hint: "[--base <ref> | --preview [pkg...]] [--json] [--sarif <path>] [--no-differential] [--no-llm]"
+argument-hint: "[--base <ref> | --preview [pkg...]] [--json] [--sarif <path>] [--ci] [--strict] [--no-differential] [--no-llm | --llm]"
 allowed-tools: Read, Grep, Glob, Bash, WebFetch
 ---
 
@@ -114,8 +114,8 @@ caching strategy, Rule 6/8 detection, and Levenshtein implementation.
 
 If `hex_vet.exs` exists at project root, vetted-version findings are
 **downgraded to INFO**. Unvetted versions retain their severity.
-Lock-vs-ledger disagreement: lock wins (`references/hex-vet.md` §
-"Lock-vs-ledger disagreement").
+Lock-vs-ledger disagreement: lock wins. See the deps-vet skill's
+hex-vet schema doc for the "Lock-vs-ledger disagreement" section.
 
 Use `/phx:deps-vet <pkg> <version>` (separate skill) to add entries.
 
@@ -150,27 +150,31 @@ Output:
 `${CLAUDE_SKILL_DIR}/references/output-renderer.md` for table format,
 sidecar schema, exit-code rubric, and `--quiet` mode.
 
-## What This Skill Will NOT Do
+## Out of scope / Phase 3 surface
 
-- Modify `mix.lock`, `mix.exs`, or any project file (non-mutating by design)
-- Run network calls beyond Hex API GET requests
-- Auto-install missing tools
-- Block `mix deps.get` / `mix deps.update` (Phase 3 hook does that)
+- **NEVER modify** `mix.lock`, `mix.exs`, or any project file (non-mutating)
+- **NEVER auto-install** missing tools (warn + skip)
+- **Gate** `mix deps.{get,update,compile}` via `deps-audit-gate.sh`. See `references/hook.md`.
+- **Prompt** for `/phx:compound` after BLOCK findings — corpus self-feeds.
+- **Emit** SARIF 2.1.0 via `--sarif <path>` and gate CI via `--ci`.
 
 ## References
 
 - `${CLAUDE_SKILL_DIR}/references/heuristics.md` — full 35-rule catalogue
-- `${CLAUDE_SKILL_DIR}/references/rules-impl.md` — bash + `mix run -e` implementations for the 8 MVP rules
+- `${CLAUDE_SKILL_DIR}/references/rules-impl.md` — bash + `mix run -e` for the 8 MVP rules
 - `${CLAUDE_SKILL_DIR}/references/operating-modes.md` — Mode A/B/C resolver
-- `${CLAUDE_SKILL_DIR}/references/diff-resolver.md` — shell snippets, lock parser, JSON output contract
-- `${CLAUDE_SKILL_DIR}/references/tarball-fetcher.md` — `mix hex.package fetch` wrapper, parallel fetch, cache pruning
-- `${CLAUDE_SKILL_DIR}/references/external-tools.md` — `mix hex.audit`, `mix_audit`, `osv-scanner` wrappers
-- `${CLAUDE_SKILL_DIR}/references/hex-api.md` — endpoint contracts, rate limit, Rule 6/8 helpers
-- `${CLAUDE_SKILL_DIR}/references/output-renderer.md` — markdown layout, JSON schema v1, exit-code rubric, SARIF emission
-- `${CLAUDE_SKILL_DIR}/references/testing.md` — smoke-test runner, fixture coverage matrix, why heredocs not `.ex`
-- `${CLAUDE_SKILL_DIR}/references/differential.md` — Phase 2 NDJSON set-subtract, polymorphic keys, added-package mode
-- `${CLAUDE_SKILL_DIR}/references/llm-triage.md` — Phase 2 hex-deps-triager + context-supervisor pattern, threshold gating
-- `${CLAUDE_SKILL_DIR}/references/semgrep.md` — Phase 2 optional precision layer (soft dep)
-- `${CLAUDE_SKILL_DIR}/references/yara.md` — Phase 2 byte-pattern layer (soft dep)
-- `${CLAUDE_SKILL_DIR}/references/skill-checklist.md` — eval scorer + lint gotchas baked in from Phase 1
-- `${CLAUDE_SKILL_DIR}/references/sarif.md` — Phase 2 `--sarif` flag, SARIF 2.1.0 mapping, GitHub upload-sarif
+- `${CLAUDE_SKILL_DIR}/references/diff-resolver.md` — shell snippets, lock parser
+- `${CLAUDE_SKILL_DIR}/references/tarball-fetcher.md` — fetch wrapper, parallel cap, cache prune
+- `${CLAUDE_SKILL_DIR}/references/external-tools.md` — `mix_audit`, `osv-scanner` wrappers
+- `${CLAUDE_SKILL_DIR}/references/hex-api.md` — endpoint contracts, rate limit, Rule 6/8
+- `${CLAUDE_SKILL_DIR}/references/output-renderer.md` — markdown, JSON v1, exit codes, SARIF
+- `${CLAUDE_SKILL_DIR}/references/testing.md` — smoke runner, fixture matrix
+- `${CLAUDE_SKILL_DIR}/references/differential.md` — Phase 2 NDJSON set-subtract, cache_signature
+- `${CLAUDE_SKILL_DIR}/references/llm-triage.md` — Phase 2 triager + supervisor, threshold gating
+- `${CLAUDE_SKILL_DIR}/references/semgrep.md` / `yara.md` — Phase 2 precision layers (soft deps)
+- `${CLAUDE_SKILL_DIR}/references/cassettes.md` — Phase 3 monthly regen + drift detection
+- `${CLAUDE_SKILL_DIR}/references/sarif.md` — `--sarif` flag, SARIF 2.1.0 mapping
+- `${CLAUDE_SKILL_DIR}/references/hook.md` — Phase 3 tiered PreToolUse gate
+- `${CLAUDE_SKILL_DIR}/references/ci-integration.md` — Phase 3 `--ci` flag, CI workflow samples
+- `${CLAUDE_SKILL_DIR}/references/trusted-publishers.md` — Hex.pm upstream tracking
+- `${CLAUDE_SKILL_DIR}/references/skill-checklist.md` — eval scorer + lint gotchas

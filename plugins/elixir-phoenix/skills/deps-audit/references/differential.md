@@ -149,6 +149,38 @@ the cache namespace changes too — stale findings can't bleed into a
 post-update run. Older `<rules-checksum>` directories are GC'd by
 `fetch.sh --prune` together with tarballs.
 
+### Plugin-version skew (Phase 3 hardening)
+
+`<rules-checksum>` alone catches rule-body changes but not changes in
+the **runner** (scoring weights, severity mapping, post-processing).
+A plugin upgrade that ships a new scorer with the same rules will
+silently reuse stale verdicts.
+
+Phase 3 writes `.claude/deps-audit/cache/cache_signature.json` at
+audit start:
+
+```json
+{
+  "plugin_version": "3.0.0",
+  "rules_checksum": "a1b2c3d4e5f6",
+  "generated_at": "2026-05-15T10:23:00Z"
+}
+```
+
+On cache read, the audit verifies both `plugin_version` and
+`rules_checksum` match the current run. On mismatch:
+
+1. Drop the entire `.claude/deps-audit/cache/findings/` tree
+2. Drop `last-run.json` (Phase 1 sidecar — also runner-versioned)
+3. Write a fresh `cache_signature.json`
+4. Log `cache invalidated: plugin upgraded from X.Y.Z to A.B.C` to stderr
+
+No migration is attempted — cold rebuild is bounded (a 20-pkg PR
+re-audits in ~60s on a warm tarball cache) and migration logic is too
+fragile to maintain across major bumps. The tarball cache
+(`<pkg>/<version>/contents/`) is preserved across signature drops —
+tarballs are content-addressed and version-independent.
+
 ## When the differ is NOT used
 
 - `--no-differential` — debugging mode; emits Phase 1 findings.jsonl

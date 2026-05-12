@@ -53,10 +53,73 @@ intentionally — that file is ephemeral run state, not durable trust.
   ],
   policy: %{
     criteria_required: :safe_to_deploy,
-    block_on_unvetted: false  # Phase 2 default; Phase 3 promotes to true
+    block_on_unvetted: :new_only  # Phase 3 default; see Tri-mode section
   }
 }
 ```
+
+### Tri-mode `block_on_unvetted` (Phase 3)
+
+Phase 2 shipped a boolean. Real-world deployment exposed two
+failure modes: `false` is too loose for teams serious about
+supply-chain hygiene; `true` (strict) breaks every existing repo
+before its ledger is seeded. Phase 3 replaces the boolean with an
+atom that fits the actual workflow shape.
+
+| Mode | Hook behavior | When to pick |
+|------|---------------|--------------|
+| `false` | Warn-only; `mix deps.get` exits 0 | Phase 2 compat; opt-out |
+| `:new_only` | Block if PR ADDS an unvetted version; allow re-locks of already-locked unvetted pkgs | **Recommended default** for new projects |
+| `:strict` | Block ANY `mix deps.get` while any locked version is unvetted | Mature ledger; enforce on whole graph |
+| `:full` | Run Tier 2 audit pipeline (Semgrep + YARA + LLM) then apply `:strict` rules | High-stakes (financial, healthcare); accept 30-90s per `mix deps.get` |
+
+**Why `:new_only` is the default:** strict mode fails CI on
+existing repos before seed import; warn is too loose for teams
+serious about supply-chain. `:new_only` blocks the specific risk
+(introducing an unvetted dep) without holding the team hostage on
+historical un-audited locks.
+
+### Migration from Phase 2 boolean
+
+The hook reads `policy.block_on_unvetted` and normalizes:
+
+```elixir
+defp normalize_block_mode(false), do: false
+defp normalize_block_mode(true) do
+  IO.warn("""
+  block_on_unvetted: true is deprecated and will be removed in v4.0.
+  Replaced with :strict (same semantics). For new projects, consider
+  :new_only — blocks only NEW unvetted versions, allows re-locks.
+  """)
+  :strict
+end
+defp normalize_block_mode(mode) when mode in [:new_only, :strict, :full], do: mode
+defp normalize_block_mode(other) do
+  raise "Invalid block_on_unvetted: #{inspect(other)} — must be one of: false, :new_only, :strict, :full"
+end
+```
+
+The one-time `IO.warn` surfaces in `mix deps.get` output. Migrate
+to `:strict` (drop-in) or `:new_only` (recommended) to silence.
+
+### `:new_only` semantics
+
+"New" means: the package+version pair in the **current** `mix.lock`
+was NOT in `mix.lock` at the hook's reference commit (default:
+`origin/main`, override via `PHX_DEPS_AUDIT_BASE`). The reference
+diff isolates additions:
+
+```bash
+git show "${PHX_DEPS_AUDIT_BASE:-origin/main}":mix.lock 2>/dev/null \
+  > /tmp/mix.lock.base
+diff <(awk '/^  "[^"]+":/' /tmp/mix.lock.base) \
+     <(awk '/^  "[^"]+":/' mix.lock) \
+  | grep '^>' | sed 's/^> *//'
+```
+
+Each added line is one `<pkg>: <version>` pair; block if any added
+pair is missing from `audits`. Re-locks of already-locked unvetted
+pkgs are ignored — those are pre-existing tech debt, not new risk.
 
 ### Criteria atoms
 
@@ -74,13 +137,15 @@ softer match (logged, never trusted).
 
 ### Empty ledger stub
 
-Used when `hex_vet.exs` doesn't exist:
+Used when `hex_vet.exs` doesn't exist. New ledgers default to
+`:new_only` (Phase 3) — opt-in to enforcement on the additions
+without blocking historical un-audited locks:
 
 ```elixir
 %{
   imports: %{},
   audits: [],
-  policy: %{criteria_required: :safe_to_deploy, block_on_unvetted: false}
+  policy: %{criteria_required: :safe_to_deploy, block_on_unvetted: :new_only}
 }
 ```
 
@@ -173,3 +238,96 @@ the top-100 list and then layer in project-specific audits.
 
 The seed is regenerated monthly; entries older than 90 days emit a
 stale-warning. See `seed.md` for the regeneration job.
+
+## Distributed imports (Phase 3 — single-source v1)
+
+cargo-vet supports trusting other organizations' audit ledgers via
+the `imports:` table. Phase 3 ships **explicit allow-list v1**: any
+import URL listed in `imports` must be opted into per-project — no
+implicit trust, no transitive imports.
+
+### Schema
+
+```elixir
+imports: %{
+  # key = canonical handle, value = ledger URL
+  "elixir-phoenix-plugin" =>
+    "https://raw.githubusercontent.com/oliver-kriska/claude-elixir-phoenix/main/plugins/elixir-phoenix/skills/deps-vet/priv/hex_vet_seed.exs"
+}
+```
+
+The handle (left side) is the attribution the renderer uses when a
+finding is downgraded via an imported audit: "vetted via
+`elixir-phoenix-plugin` (imported)". The URL (right side) must
+resolve to a file with the same `hex_vet.exs` map shape (`audits:` is
+the only key consumed; `imports:` of the imported ledger is ignored
+to prevent transitive trust chains).
+
+### v1 allow-list
+
+Phase 3 v1 hardcodes the recognized import set:
+
+```elixir
+@allowed_imports %{
+  "elixir-phoenix-plugin" =>
+    "https://raw.githubusercontent.com/oliver-kriska/claude-elixir-phoenix/main/plugins/elixir-phoenix/skills/deps-vet/priv/hex_vet_seed.exs"
+}
+```
+
+Imports listed in `hex_vet.exs` that aren't in `@allowed_imports` are
+**ignored with stderr warning**, never silently trusted. Multi-org
+imports (Phoenix team, EEF, etc.) stay drafted until the trust-chain
+semantics are battle-tested through one full cycle of single-import
+production use.
+
+### Fetch + cache
+
+Imports fetch on first use and cache 24h under
+`.claude/deps-audit/cache/imports/<handle>.exs`. On cache miss or
+TTL expiry, re-fetch via `curl -fsSL`. Fetch failures fall back to
+the cached copy with a "stale import" stderr warning.
+
+### Lookup precedence
+
+```text
+project audits         (hex_vet.exs `audits:`)
+        ↓ not found
+imported audits        (each allowed import, parallel)
+        ↓ not found
+unvetted               (Phase 1 rules apply at full severity)
+```
+
+A local audit always wins over an import — explicit project trust
+is more durable than implicit shared trust. Conflicts (local
+`:safe_to_run` vs import `:safe_to_deploy`) resolve to local.
+
+### Attribution in output
+
+The renderer surfaces import provenance:
+
+```text
+phoenix 1.7.21 — vetted via elixir-phoenix-plugin (imported), :safe_to_deploy
+plug    1.16.1 — vetted locally (oliver@ideax.sk, 2026-05-12), :safe_to_deploy
+unknown 0.1.0  — unvetted (no local or imported audit)
+```
+
+Reviewers see exactly where the trust came from. Out-of-policy
+imports (anything not in the allow-list) get a one-time stderr
+warning `ignored import: <handle> — not in v1 allow-list` but
+never silently downgrade severity.
+
+### Publishing your org's audit ledger
+
+The plugin's seed file is the reference shape. Mirror the pattern:
+
+1. Maintain an `hex_vet.exs` (or any `.exs` returning the same map)
+   in a repository your team controls.
+2. Open a PR to add your URL to the plugin's `@allowed_imports`.
+3. Add a `README` covering: review process, criteria meaning for
+   your org, signing/checksums.
+4. Cross-reference: your `hex_vet.exs` lists `imports:` of
+   `elixir-phoenix-plugin` for symmetry.
+
+Allow-list reviews enforce trust-chain hygiene: a malicious import
+URL would compromise every plugin user. The plugin maintainers are
+the final gate.

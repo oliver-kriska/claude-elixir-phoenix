@@ -56,8 +56,7 @@ in the confirmation prompt.
 
 ## Regeneration
 
-Monthly CI job (`.github/workflows/seed-regen.yml` — to be added in
-Component 7):
+Monthly CI job (`.github/workflows/seed-regen.yml`):
 
 1. Query `https://hex.pm/api/packages?sort=downloads` for top-100.
 2. For each, run Phase 1 rules + check Hex retirement.
@@ -66,6 +65,23 @@ Component 7):
 
 The job runs under the plugin's CI identity; the PR is human-reviewed
 before merge. No auto-merge for security artifacts.
+
+### Org-policy 403 fallback
+
+Some org GitHub policies deny `GITHUB_TOKEN` PR creation. The seed-
+regen and cassette-regen workflows both apply the same fallback
+pattern when `peter-evans/create-pull-request@v6` exits with 403:
+
+1. Upload the regenerated artifact (`priv/hex_vet_seed.exs` for seed,
+   the cassettes tree for cassettes) as a workflow artifact.
+2. Write a job summary explaining the policy and pointing to
+   `Settings → Actions → Allow GitHub Actions to create and approve
+   pull requests`.
+3. Exit 0 — the regen succeeded even if the PR didn't.
+
+Maintainers download the artifact, commit manually. The fallback is
+the same in `cassette-regen.yml`; see `deps-audit/references/cassettes.md`
+"403 fallback".
 
 ## When to NOT use the seed
 
