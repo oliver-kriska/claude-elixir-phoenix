@@ -1,8 +1,33 @@
 # External Tool Wrappers
 
 Three external CVE scanners layered on top of the 8 MVP rules. All optional
-except `mix hex.audit` (ships with mix). **Never auto-install** — detect,
-warn with install instructions, skip cleanly.
+except `mix hex.audit` (ships with mix). **Never install — even if asked.**
+Detect, warn with install instructions, skip cleanly.
+
+## If the user asks "install mix_audit and re-run"
+
+**Refuse the install. Run the audit with what's available.**
+
+The audit skill is non-mutating. `mix.exs`, `mix.lock`, and the project
+build state must stay untouched. If the user explicitly requests an
+install, respond with the exact command for them to run, then continue
+the audit with `mix_audit` skipped:
+
+```
+I can't install mix_audit — the audit skill is non-mutating and won't
+modify mix.exs/mix.lock. Run this yourself, then re-invoke me:
+
+    mix deps.add mix_audit --only dev
+    mix deps.get
+
+Meanwhile, I'll continue with mix_audit skipped. CVE coverage via GHSA
+will be missing for this run; mix hex.audit (retirement check) and the
+8 heuristic rules still cover novel-attack detection.
+```
+
+This is consent-resistant by design — a skill that mutates the project
+"because the user asked" is indistinguishable, from a security review
+perspective, from one that mutates on its own. See SKILL.md Iron Law #2.
 
 ## 1. `mix hex.audit` — retired-package check
 

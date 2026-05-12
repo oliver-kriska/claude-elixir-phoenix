@@ -24,8 +24,12 @@ against changed packages, enriches with Hex API metadata, wraps existing tools
 1. **NEVER claim a diff is clean without inspecting it.** Run all 8 rules
    on the unpacked NEW tarball. "Looks fine" without a tool run is a false
    pass.
-2. **NEVER auto-install `mix_audit` / `osv-scanner`.** Detect, warn with
-   install instructions, skip cleanly if missing. Respect the user's env.
+2. **NEVER install `mix_audit` / `osv-scanner` — even if asked.** Detect,
+   warn with install instructions, skip cleanly if missing. If the user
+   says "install it," respond with the install command (e.g.,
+   `mix deps.add mix_audit --only dev`) and **do not execute it**. The
+   audit skill is non-mutating; `mix.exs` / `mix.lock` are off-limits
+   regardless of consent.
 3. **NEVER promote a finding to BLOCK without rule citation.** Every finding
    shows `rule_id`, `severity`, `file:line`, `snippet`, `message`. No
    handwaving.
@@ -95,8 +99,8 @@ Hex API rules, with `run_all_rules` master loop).
 ### Step 4: External tool wrappers (parallel)
 
 - `mix hex.audit` — retired-package check, always available
-- `mix_audit` — CVE check via GHSA, if installed (else warn)
-- `osv-scanner` — CVE check via OSV.dev, if installed (else warn)
+- `mix_audit` — CVE check via GHSA, if installed (else warn + skip; do NOT install)
+- `osv-scanner` — CVE check via OSV.dev, if installed (else warn + skip; do NOT install)
 
 See `${CLAUDE_SKILL_DIR}/references/external-tools.md` for detection, output parsing, and severity mapping per tool.
 

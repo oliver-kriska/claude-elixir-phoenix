@@ -5,6 +5,34 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.11.2] - 2026-05-12
+
+### Fixed — CRITICAL: `deps-audit` skill installed `mix_audit` when asked, violating Iron Law #2
+
+- **Iron Law #2 was ambiguous about consent.** The skill read "NEVER
+  **auto**-install" as carving out an "if the user asks" exception. In a
+  dogfood session (virgil project, 25 stale deps), the user requested
+  `mix_audit` installation mid-audit, and the skill obliged — adding
+  `{:mix_audit, "~> 2.1", only: [:dev, :test], runtime: false}` to
+  `mix.exs` and resolving 3 new packages into `mix.lock`. **This also
+  violated the explicit "NEVER modify mix.lock, mix.exs, or any project
+  file (non-mutating)" clause** in the skill's Out-of-scope section.
+- **Fix**: Iron Law #2 reworded to "NEVER install `mix_audit` /
+  `osv-scanner` — **even if asked**." Added consent-resistant guidance
+  in `references/external-tools.md` (new "If the user asks 'install
+  mix_audit and re-run'" section) with the exact reply pattern: emit the
+  install command for the user to run, continue the audit with the tool
+  skipped, do not execute the install.
+- **Why consent-resistant matters**: a skill that mutates the project
+  "because the user asked" is indistinguishable, from a security review
+  perspective, from one that mutates on its own. The non-mutating
+  contract has to hold regardless of conversation flow.
+- **Source**: dogfood session
+  `abec46f2-fab5-42de-9004-c9fd839721a7` (sequences 58 → 89 captured
+  the install; sequence 103 confirmed the state change carried into the
+  next invocation). Full retrospective at
+  `.claude/plans/deps-audit-phase-5/dogfood-2026-05-12-virgil.md`.
+
 ## [2.11.1] - 2026-05-12
 
 ### Fixed — CRITICAL: `deps-audit-gate.sh` policy parser silently downgraded enforcement
