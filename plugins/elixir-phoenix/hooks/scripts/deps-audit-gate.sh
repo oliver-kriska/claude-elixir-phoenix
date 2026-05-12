@@ -44,17 +44,33 @@ CACHE_DIR="$PROJECT_ROOT/.claude/deps-audit"
 LAST_RUN="$CACHE_DIR/last-run.json"
 HEX_VET="$PROJECT_ROOT/hex_vet.exs"
 
-# Read policy mode (default :new_only when ledger exists, :false when absent)
+# Read policy mode (default :new_only when ledger exists, :false when absent).
+#
+# Parser hardening (v3.0.1 hotfix): strip Elixir line-comments (# ...) BEFORE
+# matching, and take the LAST uncommented match. Elixir map literals follow
+# last-assignment-wins semantics at compile time, so we mirror that. The
+# previous head -1 of the raw file silently picked up commented examples like
+# `# block_on_unvetted: false  # see migration guide` and downgraded
+# enforcement — fail-open in the worst possible direction.
 read_policy_mode() {
   if [[ ! -f "$HEX_VET" ]]; then
     echo "false"
     return
   fi
-  # Quick grep extraction — full eval is too slow for hook budget
-  local mode
-  mode=$(grep -oE 'block_on_unvetted:[[:space:]]*[:a-z_]+(false|true)?' "$HEX_VET" \
-         | head -1 \
-         | sed -E 's/.*block_on_unvetted:[[:space:]]*//')
+  local stripped matches count mode
+  stripped=$(sed 's/#.*$//' "$HEX_VET")
+  matches=$(printf '%s\n' "$stripped" \
+            | grep -oE 'block_on_unvetted:[[:space:]]*(:[a-z_]+|true|false)' \
+            | sed -E 's/.*block_on_unvetted:[[:space:]]*//')
+  if [[ -n "$matches" ]]; then
+    count=$(printf '%s\n' "$matches" | wc -l | tr -d ' ')
+  else
+    count=0
+  fi
+  if [[ "$count" -gt 1 ]]; then
+    echo "phx-deps-audit: hex_vet.exs has $count uncommented block_on_unvetted keys; using last (Elixir map-literal semantics)" >&2
+  fi
+  mode=$(printf '%s\n' "$matches" | tail -1)
   case "$mode" in
     "false"|":new_only"|":strict"|":full") echo "$mode" ;;
     "true")

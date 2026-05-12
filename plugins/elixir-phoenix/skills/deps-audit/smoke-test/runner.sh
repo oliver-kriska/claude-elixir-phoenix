@@ -134,6 +134,15 @@ main() {
     fi
   fi
 
+  if [ "${SKIP_GATE_TEST:-0}" != "1" ] && [ -x "${HARNESS_ROOT}/gate-test.sh" ]; then
+    echo
+    if "${HARNESS_ROOT}/gate-test.sh"; then
+      :
+    else
+      fail_count=$((fail_count + 1))
+    fi
+  fi
+
   [ "${fail_count}" -eq 0 ]
 }
 
