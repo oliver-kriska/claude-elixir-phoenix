@@ -108,8 +108,10 @@ jobs:
             echo "- Packages processed: ${{ steps.regen.outputs.updated_count }}"
             echo "- Drift detected: ${{ steps.drift.outputs.drift }}"
             if [ "${{ steps.drift.outputs.drift }}" = "true" ] && [ "${{ steps.open_pr.outcome }}" = "failure" ]; then
-              echo "- **PR creation FAILED (likely 403).** Cassettes uploaded as artifact \`cassettes-regen-${{ github.run_id }}\`."
-              echo "- To enable PR creation: Settings → Actions → Allow GitHub Actions to create and approve pull requests."
+              echo "- **PR creation FAILED (likely 403).** Cassettes uploaded as"
+              echo "  artifact \`cassettes-regen-${{ github.run_id }}\`."
+              echo "- To enable PR creation: Settings → Actions → Allow GitHub"
+              echo "  Actions to create and approve pull requests."
             elif [ "${{ steps.drift.outputs.drift }}" = "true" ]; then
               echo "- PR opened: chore/hex-api-cassette-regen"
             else

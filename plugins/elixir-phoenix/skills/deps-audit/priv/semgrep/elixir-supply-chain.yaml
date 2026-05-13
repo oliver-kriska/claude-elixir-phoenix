@@ -24,8 +24,9 @@ rules:
     pattern-either:
       - pattern: Code.eval_string($PAYLOAD)
       - pattern: Code.eval_quoted($PAYLOAD)
-    pattern-not: Code.eval_string("$LITERAL")
-    pattern-not: Code.eval_quoted("$LITERAL")
+    pattern-not-either:
+      - pattern: Code.eval_string("$LITERAL")
+      - pattern: Code.eval_quoted("$LITERAL")
 
   - id: elixir-dynamic-system-cmd
     message: System.cmd with variable first argument
