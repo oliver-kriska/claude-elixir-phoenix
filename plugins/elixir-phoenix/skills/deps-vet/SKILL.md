@@ -1,6 +1,6 @@
 ---
 name: phx:deps-vet
-description: "Record a vetted Hex package version in hex_vet.exs after review — manages the audit ledger, not the scanner. Use to approve a dep after /phx:deps-audit findings or to initialize hex_vet.exs."
+description: "Record a vetted Hex package version in hex_vet.exs after a security review — manages the audit ledger, not the scanner. Use to approve a dep after /phx:deps-audit findings or to initialize hex_vet.exs."
 argument-hint: "<pkg> <version> | --seed | --list | --check"
 effort: medium
 ---
