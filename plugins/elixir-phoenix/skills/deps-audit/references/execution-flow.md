@@ -126,3 +126,29 @@ no diff), and 10-lite (no headline, just table).
 Numbers from the 2026-05-12 virgil dogfood (25 packages, ~75s default).
 Older tarball-fetcher.md claimed 5-10 min was realistic; that was
 pessimistic — the 4-way parallel fetcher is actually fast.
+
+## `--trace` flag (Iron Law #1 auditability)
+
+The 2026-05-13 enaia-main dogfood surfaced a verification gap: when
+the audit reports "8 rules clean", there's no on-disk evidence the
+rules actually ran. The tmpdir is gone, no Bash trace is captured by
+ccrider, and a fast model could in principle synthesize a plausible
+verdict from the lock-diff text alone — exactly the Iron Law #1 false
+pass.
+
+`--trace` writes a verifiable audit log to
+`.claude/deps-audit/last-run.trace.log` documenting every shell command
+the audit ran (one per line, prefixed with timestamp + duration):
+
+```
+2026-05-13T11:01:50.123Z [3.4s] mix hex.package fetch decimal 2.3.0 --unpack -o /tmp/phx-deps-audit-XXX/tarballs/decimal/2.3.0
+2026-05-13T11:01:53.501Z [3.1s] mix hex.package fetch decimal 2.4.1 --unpack -o /tmp/phx-deps-audit-XXX/tarballs/decimal/2.4.1
+2026-05-13T11:01:56.612Z [0.4s] grep -rP '[\x{202a}-\x{202e}\x{2066}-\x{2069}]' /tmp/phx-deps-audit-XXX/tarballs/decimal/2.4.1
+...
+```
+
+The trace file is the single piece of evidence that Iron Law #1 was
+upheld for a given run. It's not under `${AUDIT_TMPDIR}` — it survives
+audit completion so a reviewer can verify after the fact. The model
+SHOULD enable `--trace` by default when the gate hook is configured
+(`policy.exs` exists), and otherwise leave it opt-in.

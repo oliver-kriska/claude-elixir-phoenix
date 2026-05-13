@@ -137,6 +137,29 @@ runner's own `mktemp -d`, NOT inside `AUDIT_TMPDIR`. This is by
 design: fixtures must be runnable without the full audit driver
 established. The fixture conventions are documented in `testing.md`.
 
+## One-time migration: clean stale `.claude/deps-audit/cache/`
+
+Projects audited under Phase 1-4 may have leftover tarballs at
+`.claude/deps-audit/cache/<pkg>/<version>/`. These are cruft under the
+ephemeral model — never read, never refreshed, just disk noise.
+
+The driver SHOULD remove this directory at startup, once, if present:
+
+```bash
+# Run BEFORE establishing AUDIT_TMPDIR. Idempotent.
+migrate_stale_cache() {
+  local stale=".claude/deps-audit/cache"
+  if [ -d "${stale}" ]; then
+    echo "info: removing stale Phase 1-4 cache at ${stale}" >&2
+    rm -rf "${stale}"
+  fi
+}
+```
+
+This is a one-shot cleanup, not a recurring prune (there's no cache
+to prune anymore). After the first v2.12.0 run on a project, the
+directory stays gone.
+
 ## Hook compatibility
 
 The Phase 3 PreToolUse gate hook (`deps-audit-gate.sh`) reads

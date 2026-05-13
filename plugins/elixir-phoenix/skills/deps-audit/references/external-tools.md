@@ -79,6 +79,7 @@ To enable:
   # or add to mix.exs:
   # {:mix_audit, "~> 2.1", only: [:dev, :test], runtime: false}
 EOF
+    _mix_audit_warn_cve_corpus_overlap >&2 || true
     return 0
   fi
 
@@ -179,6 +180,49 @@ _mix_audit_run_with_lock() {
     # keep the run offline-fast and non-mutating.
     mix deps.audit --format json 2>/dev/null > "${out_path}"
   )
+}
+
+# Internal: when mix_audit is skipped because not installed, check if
+# the diff contains packages with recent EEF CNA CVEs and emit a loud
+# alert. The 2026-05-13 enaia-main dogfood exposed this gap: a diff
+# touched `decimal 2.3 → 2.4`, `phoenix 1.8.5 → 1.8.7`, `postgrex 0.22.0
+# → 0.22.2` — all three patch real EEF CNA CVEs (32686/32689/32687) —
+# and the audit emitted the same generic "install mix_audit" hint as
+# for any other skip, with no signal that this specific diff would have
+# triggered three CVE matches.
+#
+# The corpus list is hand-curated from cna.erlef.org and refreshed in
+# tandem with smoke fixtures (corpus.d/). Conservative pattern: only
+# packages with at least one published CVE in the last 12 months.
+_mix_audit_warn_cve_corpus_overlap() {
+  local diff_json="${AUDIT_TMPDIR:-}/diff.json"
+  [ -f "${diff_json}" ] || return 0
+
+  # Subset of EEF CNA-tracked Hex packages with recent CVEs. Keep
+  # narrow — false positives here erode trust faster than misses.
+  local corpus="decimal phoenix postgrex bandit cowlib plug ecto"
+  local hits=()
+  for pkg in ${corpus}; do
+    if jq -e --arg p "${pkg}" '.changed[]? | select(.package == $p)' \
+         "${diff_json}" >/dev/null 2>&1; then
+      hits+=("${pkg}")
+    fi
+  done
+
+  [ "${#hits[@]}" -eq 0 ] && return 0
+
+  cat <<EOF
+
+🚨 mix_audit is not installed AND this diff touches packages with
+   known recent CVEs on the EEF CNA list: ${hits[*]}
+
+   The audit cannot confirm whether this update patches or introduces
+   any of those CVEs. Install mix_audit and re-run for coverage:
+
+     mix archive.install hex mix_audit
+
+   Canonical Elixir CVE list: https://cna.erlef.org/cves/
+EOF
 }
 
 # Internal: warn if the GHSA cache is staler than GHSA_MAX_AGE_HOURS.

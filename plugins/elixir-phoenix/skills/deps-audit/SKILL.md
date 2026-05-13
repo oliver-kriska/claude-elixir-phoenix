@@ -2,7 +2,7 @@
 name: phx:deps-audit
 description: Audit Hex dep updates for supply-chain security risk — bidi chars, compile-time exec, maintainer changes, typosquats, CVEs. Use after mix deps.update or to review PRs touching mix.lock.
 effort: medium
-argument-hint: "[--base <ref> | --preview [pkg...]] [--quick] [--json] [--sarif <path>] [--ci] [--strict] [--no-differential] [--no-llm | --llm]"
+argument-hint: "[--base <ref> | --preview [pkg...]] [--quick] [--json] [--sarif <path>] [--ci] [--strict] [--no-differential] [--no-llm | --llm] [--trace]"
 allowed-tools: Read, Grep, Glob, Bash, WebFetch
 ---
 
@@ -23,7 +23,8 @@ against changed packages, enriches with Hex API metadata, wraps existing tools
 
 1. **NEVER claim a diff is clean without inspecting it.** Run all 8 rules
    on the unpacked NEW tarball. "Looks fine" without a tool run is a false
-   pass.
+   pass. **Always write `.claude/deps-audit/last-run.json`** — its absence
+   is evidence the audit didn't actually run.
 2. **NEVER install `mix_audit` / `osv-scanner` — even if asked.** Detect,
    warn with install instructions, skip cleanly if missing. If the user
    says "install it," respond with the install command (e.g.,
@@ -151,7 +152,7 @@ Risk band: 0 clean · 1–5 low · 6–15 medium · 16+ high.
 Output:
 
 1. **Stdout:** markdown table — `pkg | old → new | risk | findings | diff.hex.pm | maintainer-change` plus a per-package detail section for any non-clean row.
-2. **Sidecar:** `.claude/deps-audit/last-run.json` with full structured findings (consumed by future Phase 3 PreToolUse hook).
+2. **Sidecar (MANDATORY):** Write `.claude/deps-audit/last-run.json`. The Phase 3 gate reads this; an audit that doesn't write it is a no-op for the gate. Always emit, even on clean runs.
 
 `--json` flag emits JSON to stdout instead of markdown. See
 `${CLAUDE_SKILL_DIR}/references/output-renderer.md` for table format,
