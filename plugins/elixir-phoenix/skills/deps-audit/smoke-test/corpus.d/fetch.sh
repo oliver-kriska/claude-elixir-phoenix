@@ -10,7 +10,7 @@
 #   bash smoke-test/corpus.d/fetch.sh --prune  # drop tarballs >30 days old
 #
 # Cache layout:
-#   .claude/deps-audit/cache/corpus/<pkg>/<version>/
+#   ${AUDIT_TMPDIR}/corpus/<pkg>/<version>/
 #     ├── <pkg>-<version>.tar          # raw Hex tarball
 #     └── contents/                    # extracted source
 #

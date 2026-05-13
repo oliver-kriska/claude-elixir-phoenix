@@ -141,7 +141,7 @@ account takeover, and typosquatting. Each finding shape:
 - Rule 7 (base64) dominates noise. If FP rate exceeds 10% in real use,
   raise threshold to 512 chars or add more exclude directories.
 - Rule 8 (typosquat) requires daily refresh of top-500 list. Cache in
-  `.claude/deps-audit/cache/top-500.json` with 24h TTL.
+  `${AUDIT_TMPDIR}/hex-api/top-500.json` with 24h TTL.
 - Rule 6 (maintainer change) needs cross-referencing release timestamps
   with owner-list timestamps. Hex API `inserted_at` per release helps.
 

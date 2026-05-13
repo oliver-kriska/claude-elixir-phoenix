@@ -5,6 +5,109 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.12.0] - 2026-05-13
+
+### Changed — `deps-audit` cache architecture: persistent → per-run ephemeral
+
+The skill no longer maintains a persistent `.claude/deps-audit/cache/`
+directory. Every audit invocation creates a fresh `${AUDIT_TMPDIR}`
+(via `mktemp -d`), writes all working artifacts there (tarballs,
+Hex API metadata, mix_audit JSON, findings NDJSON, CVE diffs), and
+removes the tmpdir on exit via a driver-level `trap "rm -rf ${AUDIT_TMPDIR}" EXIT`.
+
+Rationale (2026-05-13 design review):
+
+1. **Cache invalidation is hard.** Rules drift between releases; stale
+   findings can silently bypass updated logic. The planned Phase 4
+   `cache_signature.json` skew-protection was complexity that ephemeral
+   storage sidesteps entirely.
+2. **Reproducibility.** A "no vulnerabilities" verdict must reflect
+   *today's* GHSA cache and *today's* Hex API — not last week's. Persistent
+   caches encourage false-comfort in supply-chain tooling.
+3. **Latency cost is bounded.** A 25-package audit takes 60-90s cold (per
+   virgil dogfood). The 4-way parallel tarball fetcher is the same in
+   both architectures; re-auditing identical locks is a rare workflow.
+
+**Persistent files retained (unchanged):**
+
+- `.claude/deps-audit/last-run.json` — sidecar consumed by Phase 3 PreToolUse gate
+- `.claude/deps-audit/policy.exs` — Phase 3 gate policy config (user-owned)
+
+**Removed:**
+
+- `prune_cache()` function in `references/tarball-fetcher.md` — obsoleted by EXIT trap
+- `cache_signature.json` plan from Phase 4 — irrelevant without persistent cache
+- All `.claude/deps-audit/cache/` paths across references (migrated to `${AUDIT_TMPDIR}/`)
+
+**Migration:** existing projects with `.claude/deps-audit/cache/` from
+pre-2.12 releases can safely `rm -rf .claude/deps-audit/cache/` — the new
+code never reads or writes there. Keep `last-run.json` and `policy.exs`.
+
+New reference: `references/audit-tmpdir.md` documents the storage contract.
+
+### Added — `deps-audit` Phase 5: differential CVE + default 8-rule + EEF CNA corpus
+
+The audit now reports **what each dep update actually patched**, not just
+"no current vulnerabilities." The 2026-05-12 virgil dogfood (25-package
+update) surfaced 4 CVEs patched in real time — all silently passing the
+old skill because `mix_audit` only sees the post-update lock state.
+
+- **Differential CVE pass.** New `scripts/diff_cves.py` runs `mix_audit`
+  against both OLD and NEW `mix.lock` (tmpdir-copy strategy, never mutates
+  the real lock) and categorizes findings as `patched` / `introduced` /
+  `still_exposed`. Reference: `references/differential-cve.md`. Findings
+  surface as a security-changelog headline ("🚨 4 of 25 updates patched
+  real CVEs") in `references/output-renderer.md`.
+- **Default 8-rule scan with streaming progress.** Removed the runtime
+  choice prompt that let users silently skip heuristics. The full scan
+  is now the default and streams `[N/M] pkg ver — phase verb...` lines
+  so the wait feels active. Add `--quick` flag to opt out (CVE +
+  retirement only, <10s target). Reference: `references/execution-flow.md`.
+- **GHSA freshness check.** `_mix_audit_check_ghsa_freshness` warns when
+  the local GHSA advisory cache is >24h old (override via
+  `GHSA_MAX_AGE_HOURS`). Recent disclosures hit the EEF CNA list faster
+  than mix_audit's weekly refresh cadence — postgrex CVE-2026-32687 was
+  disclosed the same day as the virgil dogfood and would have been
+  missed by a stale cache.
+- **EEF CNA corpus.** 5 real-world CVE fixtures under
+  `smoke-test/corpus.d/eef-cna/`: decimal, bandit, phoenix, postgrex,
+  cowlib. New `smoke-test/cve-diff-runner.sh` harness validates them.
+  All 5 corpus fixtures + 3 synthetic fixtures (`20_cve_patched`,
+  `21_cve_introduced`, `22_cve_still_exposed`) pass.
+- **Latency budget docs.** `references/tarball-fetcher.md` now documents
+  realistic wall times (60-90s for 25 packages, not 5-10 min) based on
+  the virgil dogfood measurements.
+- **SKILL.md change held to ~4 lines.** Argument-hint adds `--quick`,
+  Execution Flow gets a 2-line preface pointing to `execution-flow.md`,
+  and 2 reference entries link the new docs. SKILL.md stays at the
+  185-line hard limit (currently 184).
+
+### Fixed — `deps-audit` Phase 5 hardening (from internal review)
+
+- **Test harness silent SKIP** (`smoke-test/cve-diff-runner.sh`): a
+  fixture missing `setup.sh` or `expected.txt` previously passed the
+  suite without incrementing `fail_count`. Now flagged as `fail` and
+  the runner exits non-zero. Found by `testing-reviewer` post-Phase-5.
+- **`_mix_audit_run_with_lock` env leak** (`references/external-tools.md`):
+  subshell now `unset`s `MIX_DEPS_PATH MIX_BUILD_PATH MIX_LOCKFILE
+  MIX_PROJECT MIX_ENV` before `mix deps.audit`. Defense-in-depth for
+  Iron Law #2 — a hostile shell env could otherwise redirect Mix back
+  to the real project. Found by `security-analyzer` post-Phase-5.
+- **`cp lock_src` error handling** (`references/external-tools.md`):
+  failed lock copy now bubbles `return 2` to the caller. Previously a
+  typo'd `OLD_LOCK_FILE` silently produced a false-green "no
+  vulnerabilities" report — the worst possible failure mode for a
+  security tool. Also added `cp -L` to dereference symlinks.
+  Found by `security-analyzer` post-Phase-5.
+
+### Out of scope (deferred)
+
+- Companion `phx_deps_vet` Hex package — Phase 6+.
+- Distributed audit imports (cargo-vet `imports`) — Phase 6+.
+- OTP-level CVE detection (SSH, inets, public_key) — not Hex-tracked;
+  needs separate OTP version detection layer.
+- Auto-refresh of GHSA cache via PreToolUse — Phase 6.
+
 ## [2.11.2] - 2026-05-12
 
 ### Fixed — CRITICAL: `deps-audit` skill installed `mix_audit` when asked, violating Iron Law #2

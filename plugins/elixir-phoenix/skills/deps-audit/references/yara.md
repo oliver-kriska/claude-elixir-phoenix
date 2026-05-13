@@ -77,7 +77,7 @@ parse_yara_output_to_ndjson() {
         --arg message "YARA: ${current_rule}" \
         '{pkg:$pkg, version:$version, rule_id:$rule_id, severity:$severity,
           file:$file, line:null, snippet:$snippet, message:$message}' \
-      >> "${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}"
+      >> "${FINDINGS_FILE:-${AUDIT_TMPDIR}/findings.jsonl}"
     fi
   done
 }

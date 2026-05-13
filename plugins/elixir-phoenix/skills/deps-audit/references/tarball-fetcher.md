@@ -1,35 +1,42 @@
-# Tarball Fetcher — Cached `mix hex.package fetch`
+# Tarball Fetcher — `mix hex.package fetch` (ephemeral, per-run)
 
 Fetches and unpacks Hex tarballs for both old and new versions of each
-changed package. Caches under `.claude/deps-audit/cache/<pkg>/<version>/`.
+changed package. All artifacts live in `${AUDIT_TMPDIR}/tarballs/` and
+are removed by the driver's EXIT trap (see `audit-tmpdir.md`).
 
-## Cache layout
+## Tmpdir layout
 
 ```
-.claude/deps-audit/
-├── cache/
-│   ├── lock.old              # diff-resolver: HEAD/base mix.lock
-│   ├── lock.new              # diff-resolver: working mix.lock
-│   ├── diff.json             # diff-resolver: {changed, added, removed}
-│   ├── hex-api/
-│   │   ├── packages/<pkg>.json        # Hex API cache (7-day TTL)
-│   │   └── top-500.json                # daily TTL
+${AUDIT_TMPDIR}/
+├── lock.old              # diff-resolver: HEAD/base mix.lock
+├── lock.new              # diff-resolver: working mix.lock
+├── diff.json             # diff-resolver: {changed, added, removed}
+├── hex-api/
+│   ├── packages/<pkg>.json
+│   └── top-500.json
+├── tarballs/
 │   ├── phoenix/
-│   │   ├── 1.7.14/                     # unpacked tarball — old
-│   │   └── 1.7.20/                     # unpacked tarball — new
+│   │   ├── 1.7.14/        # unpacked tarball — old
+│   │   └── 1.7.20/        # unpacked tarball — new
 │   └── <pkg>/<version>/
-└── last-run.json             # renderer: structured findings sidecar
+├── mix-audit.json
+└── cves_{old,new}.json
 ```
+
+`.claude/deps-audit/last-run.json` is the only **persistent** output —
+written at the end of rendering, just before the tmpdir is torn down.
 
 ## Single-version fetch
 
 ```bash
 fetch_version() {
   local pkg="$1" version="$2"
-  local dest=".claude/deps-audit/cache/${pkg}/${version}"
+  : "${AUDIT_TMPDIR:?AUDIT_TMPDIR not set}"
+  local dest="${AUDIT_TMPDIR}/tarballs/${pkg}/${version}"
 
-  # Cache hit: directory exists and has `hex_metadata.config` (always present
-  # in a valid Hex tarball)
+  # Skip if already fetched this run (e.g., transitive dep listed twice
+  # in the diff). The audit is ephemeral, so this is the only kind of
+  # cache hit that exists.
   if [ -f "${dest}/hex_metadata.config" ]; then
     return 0
   fi
@@ -59,7 +66,7 @@ fetch_from_diff() {
     (.changed[] | [.[0], .[1], .[2]]),
     (.added[]   | [.[0], "_skip_old_", .[2]]),
     (.removed[] | [.[0], .[1], "_skip_new_"])
-  ' .claude/deps-audit/cache/diff.json \
+  ' "${AUDIT_TMPDIR}/diff.json" \
   | while IFS= read -r row; do
       pkg=$(echo "$row" | jq -r '.[0]')
       old=$(echo "$row" | jq -r '.[1]')
@@ -77,46 +84,72 @@ fetch. Both forms produce a single tarball; rules that need both versions
 
 ## Parallelism
 
-Wrap the inner loop with `xargs -P 4`:
+**4-way parallel fetch is the default.** Wrap the inner loop with
+`xargs -P 4`:
 
 ```bash
-jq -r '...' .claude/deps-audit/cache/diff.json \
+jq -r '...' "${AUDIT_TMPDIR}/diff.json" \
   | xargs -P 4 -I{} bash -c 'fetch_version $@' _ {}
 ```
 
 Cap at 4 parallel fetches — `hex.pm` is fine with this and avoids
-rate-limit headers (`X-Ratelimit-Remaining`).
+rate-limit headers (`X-Ratelimit-Remaining`). Higher concurrency
+(`-P 8` or `-P 16`) trips Hex CDN throttling without meaningful speedup.
 
-## Cache pruning
+## Latency budget
 
-Prune cache entries older than 30 days. Run lazily — once per audit, before
-fetching:
+Measured on the 2026-05-12 virgil dogfood (25-package update,
+residential ISP). The ephemeral-tmpdir architecture means **every run
+pays the cold-fetch cost** — there is no on-disk cache to reuse between
+audit invocations.
 
-```bash
-prune_cache() {
-  find .claude/deps-audit/cache \
-    -mindepth 2 -maxdepth 2 -type d -mtime +30 \
-    -print -exec rm -rf {} +
-}
-```
+| Diff size | Wall time |
+|-----------|-----------|
+| 1-5 packages | 15-25s |
+| 10-25 packages | **60-90s** |
+| 50-100 packages | 3-5 min |
+| 200+ packages | 8-15 min |
 
-`-mtime +30` is access-time on macOS by default; use `-amin` or set
-`COPYFILE_DISABLE` if needed for cross-platform. Cache files are
-content-addressable (pkg@version) so re-fetch on cache miss is cheap.
+Earlier docs claimed 5-10 min was realistic for 25 packages and assumed
+a persistent cache could amortize the cost. That was wrong on both
+counts: the 4-way parallel fetcher is fast, and re-auditing identical
+locks is a rare workflow (people don't re-audit a lock they haven't
+touched).
+
+**Implications for UX:**
+
+- Default scan on a 25-package update completes in ~75s total. The
+  user sees streaming progress (see `execution-flow.md`) so the wait
+  feels active, not stalled.
+- `--quick` mode skips the tarball fetch entirely (it doesn't need
+  unpacked sources — `mix_audit` and `mix hex.audit` read the lock).
+  Target latency: <10s for 25 packages.
+- The `${AUDIT_TMPDIR}` is wiped on driver exit. There is no "second
+  run is faster" — by design.
+
+## No prune step
+
+Pre-Phase-5 versions of this fetcher included a `prune_cache()` walking
+`.claude/deps-audit/cache/` and removing entries older than 30 days.
+**That function is gone.** The driver's `trap "rm -rf ${AUDIT_TMPDIR}" EXIT`
+makes pruning irrelevant — every audit starts fresh and ends clean.
+
+If you're upgrading from a pre-2.12 release and `.claude/deps-audit/cache/`
+exists in your project, it's safe to delete: `rm -rf .claude/deps-audit/cache/`.
+The new code never writes there. Keep `.claude/deps-audit/last-run.json`
+and `.claude/deps-audit/policy.exs` — those are the persistent hook
+contract.
 
 ## `.gitignore` rule
 
-`.claude/deps-audit/cache/` is generated, never committed. Add to
-project `.gitignore` if not already covered by `.claude/` wildcard:
-
-```
-.claude/deps-audit/cache/
-```
+The `${AUDIT_TMPDIR}` lives under `${TMPDIR}` (system temp), not in the
+project tree — no .gitignore entry needed for the working artifacts.
 
 Keep `.claude/deps-audit/last-run.json` tracked? **Default: ignore.**
-It's a snapshot that becomes stale; the next audit regenerates it. Phase 3
-PreToolUse hook reads it to detect "recently audited" but the file is
-expected to be local.
+It's a snapshot that becomes stale; the next audit regenerates it.
+Phase 3 PreToolUse hook reads it to detect "recently audited" but the
+file is expected to be local. `.claude/deps-audit/policy.exs` (Phase 3
+gate config) is user-owned — track or ignore per your team's policy.
 
 ## Failure modes
 
@@ -125,8 +158,8 @@ expected to be local.
 | Network timeout to `hex.pm` | Print warning, retry once, then BLOCK with exit 2 |
 | Package not on `hex.pm` (e.g., `:git` dep) | Skip with note, audit proceeds |
 | Disk full | Bail immediately — `mix hex.package fetch` will fail loudly |
-| Concurrent audit on same project | Cache writes are idempotent; safe to run twice |
-| Cache directory unwritable | Fall back to `${TMPDIR}/phx-deps-audit` |
+| Concurrent audit on same project | Each run has its own `mktemp -d`; no contention |
+| `${TMPDIR}` unwritable | Driver `mktemp -d` fails at startup, returns 2 |
 
 ## Hex API alternative (transport-only)
 

@@ -33,6 +33,98 @@ Risk emoji used in markdown for skim-readability:
 (Emoji is the *only* place this skill uses Unicode glyphs in output; the
 rest of the renderer is ASCII to keep diff/grep-friendly.)
 
+## Security-changelog headline (Phase 5)
+
+When `diff_cves.py` emits any `patched`, `introduced`, or `still_exposed`
+findings, the renderer **prepends a headline section** before the
+package table. This is the actionable narrative the 2026-05-12 virgil
+dogfood revealed was missing.
+
+### Render order
+
+```
+1. (BLOCK headline)    introduced + still_exposed CVEs    ← if any
+2. (INFO  headline)    patched CVEs (the security changelog)
+3.                     existing markdown table
+4.                     per-package detail sections
+5.                     editorial framing (major bumps, etc.)
+```
+
+`patched` is `info` severity but lifts to the headline regardless —
+it's the user-facing security story for the update.
+
+### Patched (informational, lifted to top)
+
+```markdown
+# Hex Dependency Audit — Mode B (working vs HEAD)
+
+🚨 4 of 25 updates patched real CVEs. You were exposed:
+
+- decimal 2.3.0 → 3.1.0: CVE-2026-32686 (high) — DoS via unbounded exponent
+  Disclosed 2026-05-07. 6 days exposed.
+- bandit 1.10.3 → 1.11.0: CVE-2026-39805 (high) — HTTP/1.1 request smuggling
+  Disclosed 2026-05-01. 12 days exposed. (+1 more CVE in this bump)
+- phoenix 1.8.5 → 1.8.7: CVE-2026-32689 (high) — long-poll NDJSON DoS
+  Disclosed 2026-05-05. 8 days exposed.
+- postgrex 0.22.0 → 0.22.1: CVE-2026-32687 (critical) — SQL injection in Notifications.listen/3
+  Disclosed 2026-05-12. 1 day exposed.
+
+**Recommendation:** ship these updates ASAP.
+```
+
+Format spec:
+
+- Leading `🚨 N of M` line ONLY when patched findings exist — single
+  emoji per report, never per-finding.
+- One bullet per (package, GHSA) pair. Bundle multi-CVE bumps with
+  `(+N more CVE in this bump)` to keep the list scannable.
+- `Disclosed YYYY-MM-DD. N days exposed.` from `exposure_days` field.
+- Final line: "**Recommendation: ship these updates ASAP.**"
+
+### Introduced (regression — BLOCK at top)
+
+```markdown
+🛑 BLOCKED — 1 update INTRODUCED a CVE (regression):
+
+- examplepkg 1.0.0 → 1.0.1: CVE-2026-99999 (critical) — Compromised release introduces RCE
+  Disclosed 2026-05-10. This update should NOT be merged.
+
+This is a regression: the OLD version did not have this CVE; the NEW
+version does. Investigate the release (`mix hex.package diff <pkg> <old> <new>`)
+before proceeding.
+```
+
+Format spec:
+
+- `🛑 BLOCKED — N update(s) INTRODUCED a CVE`
+- Bullet per finding, ending "This update should NOT be merged."
+- Followup line with the `mix hex.package diff` command stub.
+
+### Still exposed (didn't fix it — BLOCK at top)
+
+```markdown
+🛑 BLOCKED — 1 CVE STILL EXPOSED after this update:
+
+- decimal 2.3.0 → 2.3.1: CVE-2026-32686 (high) — DoS via unbounded exponent
+  The fix is in decimal >= 3.0.0; this bump did not address the CVE.
+  Disclosed 2026-05-07.
+
+**Recommendation:** bump further (mix deps.update decimal to >= 3.0.0).
+```
+
+Format spec:
+
+- `🛑 BLOCKED — N CVE(s) STILL EXPOSED after this update`
+- Include `patched_versions` constraint from advisory ("fix is in X >= Y").
+- Recommend a more-aggressive bump.
+
+### Combining
+
+If both `introduced` and `still_exposed` exist, render both headlines
+(introduced first — it's the more urgent failure mode). `patched` only
+renders if NO blockers exist for the same packages — the user has
+bigger problems than the security changelog when something is blocked.
+
 ## Markdown table — top section
 
 ```markdown
@@ -48,6 +140,11 @@ Tools run: mix hex.audit ✓ · mix_audit ✓ · osv-scanner ✗ (not installed)
 | req     | 0.5.0 → 0.5.1 | 🔴 high (23) | 2× BLOCK · 1× WARN — maintainer changed | [view](https://diff.hex.pm/diff/req/0.5.0..0.5.1) |
 | **new_logger** (added) | — → 0.1.0 | 🔴 high (10) | 1× BLOCK: typosquat of `logger` (50× DLs) | [view](https://hex.pm/packages/new_logger) |
 ```
+
+When the security-changelog headline above already covered a package,
+the table still includes it (consistent grain) — but the per-package
+detail section refers back to the headline rather than repeating CVE
+text.
 
 ## Markdown — per-package detail (only for non-clean)
 
@@ -181,15 +278,15 @@ human review needed." Exit `3` separates "you can't trust this audit" from
 
 ## Implementation entry point
 
-The renderer reads `.claude/deps-audit/cache/findings.json` (a flat array
+The renderer reads `${AUDIT_TMPDIR}/findings.json` (a flat array
 written by each rule + tool wrapper) and the original `diff.json` from the
 resolver, then emits both outputs.
 
 ```bash
 render() {
   local fmt="${1:-markdown}"
-  local findings=".claude/deps-audit/cache/findings.json"
-  local diff=".claude/deps-audit/cache/diff.json"
+  local findings="${AUDIT_TMPDIR}/findings.json"
+  local diff="${AUDIT_TMPDIR}/diff.json"
 
   case "${fmt}" in
     markdown) render_markdown "${diff}" "${findings}" ;;

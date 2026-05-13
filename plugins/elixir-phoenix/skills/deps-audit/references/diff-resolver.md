@@ -49,12 +49,12 @@ Approximate — works for vanilla `:hex` entries, may misparse `:git` /
 ## Mode B — working vs HEAD
 
 ```bash
-mkdir -p .claude/deps-audit/cache
+: "${AUDIT_TMPDIR:?AUDIT_TMPDIR not set — driver must establish per-run tmpdir}"
 
-git show HEAD:mix.lock > .claude/deps-audit/cache/lock.old 2>/dev/null \
-  || echo '%{}' > .claude/deps-audit/cache/lock.old
+git show HEAD:mix.lock > "${AUDIT_TMPDIR}/lock.old" 2>/dev/null \
+  || echo '%{}' > "${AUDIT_TMPDIR}/lock.old"
 
-cp mix.lock .claude/deps-audit/cache/lock.new
+cp mix.lock "${AUDIT_TMPDIR}/lock.new"
 ```
 
 Then run the parser on both files and diff in Elixir:
@@ -66,15 +66,15 @@ mix run --no-deps-check --no-compile -e '
     Map.new(map, fn {k, v} -> {k, elem(v, 2)} end)
   end
 
-  old_map = parse.(".claude/deps-audit/cache/lock.old")
-  new_map = parse.(".claude/deps-audit/cache/lock.new")
+  old_map = parse.("${AUDIT_TMPDIR}/lock.old")
+  new_map = parse.("${AUDIT_TMPDIR}/lock.new")
 
   changed = for {pkg, nv} <- new_map, ov = old_map[pkg], nv != ov, do: {pkg, ov, nv}
   added   = for {pkg, nv} <- new_map, !Map.has_key?(old_map, pkg), do: {pkg, nil, nv}
   removed = for {pkg, ov} <- old_map, !Map.has_key?(new_map, pkg), do: {pkg, ov, nil}
 
   IO.puts(Jason.encode!(%{changed: changed, added: added, removed: removed}))
-' > .claude/deps-audit/cache/diff.json
+' > ${AUDIT_TMPDIR}/diff.json
 ```
 
 If `Jason` isn't available (some early-stage projects), substitute
@@ -86,7 +86,7 @@ text.
 Identical to Mode B but substitute the HEAD source:
 
 ```bash
-git show "${BASE_REF}:mix.lock" > .claude/deps-audit/cache/lock.old 2>/dev/null \
+git show "${BASE_REF}:mix.lock" > ${AUDIT_TMPDIR}/lock.old 2>/dev/null \
   || { echo "ERROR: ${BASE_REF}:mix.lock not found"; exit 2; }
 ```
 
@@ -108,7 +108,7 @@ mix run --no-deps-check --no-compile -e '
   Map.new(map, fn {k, v} -> {k, elem(v, 2)} end)
   |> Jason.encode!()
   |> IO.puts()
-' > .claude/deps-audit/cache/lock.locked.json
+' > ${AUDIT_TMPDIR}/lock.locked.json
 
 # Latest side — query Hex API for each requested package
 for pkg in "$@"; do
@@ -116,7 +116,7 @@ for pkg in "$@"; do
     -H "Accept: application/vnd.hex+json" \
     "https://hex.pm/api/packages/${pkg}" \
   | jq -r '.releases[0].version' \
-  > ".claude/deps-audit/cache/${pkg}.latest"
+  > "${AUDIT_TMPDIR}/${pkg}.latest"
 done
 ```
 
@@ -134,7 +134,7 @@ If no packages specified, expand to all keys from `mix.lock` (still capped).
 ## Output contract
 
 The resolver emits one JSON object to
-`.claude/deps-audit/cache/diff.json`:
+`${AUDIT_TMPDIR}/diff.json`:
 
 ```json
 {

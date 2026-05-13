@@ -37,7 +37,7 @@ has stated this is the polite ceiling. Enforce client-side:
 ```bash
 hex_api_get() {
   local path="$1"
-  local cache=".claude/deps-audit/cache/hex-api/${path//\//_}.json"
+  local cache="${AUDIT_TMPDIR}/hex-api/${path//\//_}.json"
   local ttl_seconds=$((7 * 86400))    # 7 days
 
   if [ -f "${cache}" ]; then
@@ -75,7 +75,7 @@ Override with `--no-cache` for debugging.
 
 ```bash
 fetch_top_500() {
-  local cache=".claude/deps-audit/cache/hex-api/top-500.json"
+  local cache="${AUDIT_TMPDIR}/hex-api/top-500.json"
   local ttl_seconds=$((24 * 3600))
 
   if [ -f "${cache}" ]; then
@@ -156,7 +156,7 @@ typosquat_check() {
   jq -r --arg pkg "${pkg}" '
     .[] | select(.name != $pkg)
         | [.name, .downloads.all] | @tsv
-  ' .claude/deps-audit/cache/hex-api/top-500.json \
+  ' ${AUDIT_TMPDIR}/hex-api/top-500.json \
   | while IFS=$'\t' read -r candidate dl_count; do
       local dist
       dist=$(levenshtein "${pkg}" "${candidate}")

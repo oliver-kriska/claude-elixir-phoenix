@@ -2,7 +2,7 @@
 name: phx:deps-audit
 description: Audit Hex dep updates for supply-chain security risk — bidi chars, compile-time exec, maintainer changes, typosquats, CVEs. Use after mix deps.update or to review PRs touching mix.lock.
 effort: medium
-argument-hint: "[--base <ref> | --preview [pkg...]] [--json] [--sarif <path>] [--ci] [--strict] [--no-differential] [--no-llm | --llm]"
+argument-hint: "[--base <ref> | --preview [pkg...]] [--quick] [--json] [--sarif <path>] [--ci] [--strict] [--no-differential] [--no-llm | --llm]"
 allowed-tools: Read, Grep, Glob, Bash, WebFetch
 ---
 
@@ -55,6 +55,9 @@ See `${CLAUDE_SKILL_DIR}/references/operating-modes.md` for full resolver logic.
 
 ## Execution Flow
 
+Default = full 8-rule scan with streaming progress. `--quick` opts out
+to CVE + retirement only. See `${CLAUDE_SKILL_DIR}/references/execution-flow.md`.
+
 ### Step 1: Resolve the diff
 
 Parse the `mix.lock` Erlang term format for both old and new sources. Emit a
@@ -65,18 +68,18 @@ rules).
 
 See `${CLAUDE_SKILL_DIR}/references/diff-resolver.md` for shell + `mix run -e` snippets per mode and the JSON output contract.
 
-### Step 2: Fetch tarballs (cached)
+### Step 2: Fetch tarballs (per-run tmpdir)
 
 For each `(pkg, old, new)`:
 
 ```
-mix hex.package fetch <pkg> <old> --unpack -o .claude/deps-audit/cache/<pkg>/<old>/
-mix hex.package fetch <pkg> <new> --unpack -o .claude/deps-audit/cache/<pkg>/<new>/
+mix hex.package fetch <pkg> <old> --unpack -o ${AUDIT_TMPDIR}/tarballs/<pkg>/<old>/
+mix hex.package fetch <pkg> <new> --unpack -o ${AUDIT_TMPDIR}/tarballs/<pkg>/<new>/
 ```
 
-Skip fetch if cache exists. Prune cache entries >30 days old. See
-`${CLAUDE_SKILL_DIR}/references/tarball-fetcher.md` for the bulk-fetch
-wrapper, parallelism cap, and failure modes.
+All ephemeral artifacts live under `${AUDIT_TMPDIR}` (driver-owned, removed
+on exit). See `${CLAUDE_SKILL_DIR}/references/audit-tmpdir.md` and
+`${CLAUDE_SKILL_DIR}/references/tarball-fetcher.md`.
 
 ### Step 3: Run the 8 MVP rules on each NEW tarball
 
@@ -110,7 +113,7 @@ See `${CLAUDE_SKILL_DIR}/references/external-tools.md` for detection, output par
 - `GET /api/packages/:name/releases/:version` — per-release publisher
 - Compute: `days_since_publish`, `owner_age_days`, `download_velocity`
 
-Cap at 5 req/sec. Cache 7 days under `.claude/deps-audit/cache/hex-api/`.
+Cap at 5 req/sec. Per-run cache under `${AUDIT_TMPDIR}/hex-api/`.
 See `${CLAUDE_SKILL_DIR}/references/hex-api.md` for endpoint contracts,
 caching strategy, Rule 6/8 detection, and Levenshtein implementation.
 
@@ -173,12 +176,9 @@ sidecar schema, exit-code rubric, and `--quiet` mode.
 - `${CLAUDE_SKILL_DIR}/references/hex-api.md` — endpoint contracts, rate limit, Rule 6/8
 - `${CLAUDE_SKILL_DIR}/references/output-renderer.md` — markdown, JSON v1, exit codes, SARIF
 - `${CLAUDE_SKILL_DIR}/references/testing.md` — smoke runner, fixture matrix
-- `${CLAUDE_SKILL_DIR}/references/differential.md` — Phase 2 NDJSON set-subtract, cache_signature
-- `${CLAUDE_SKILL_DIR}/references/llm-triage.md` — Phase 2 triager + supervisor, threshold gating
+- `${CLAUDE_SKILL_DIR}/references/differential.md` / `llm-triage.md` — Phase 2 NDJSON subtract + triager
 - `${CLAUDE_SKILL_DIR}/references/semgrep.md` / `yara.md` — Phase 2 precision layers (soft deps)
-- `${CLAUDE_SKILL_DIR}/references/cassettes.md` — Phase 3 monthly regen + drift detection
-- `${CLAUDE_SKILL_DIR}/references/sarif.md` — `--sarif` flag, SARIF 2.1.0 mapping
-- `${CLAUDE_SKILL_DIR}/references/hook.md` — Phase 3 tiered PreToolUse gate
-- `${CLAUDE_SKILL_DIR}/references/ci-integration.md` — Phase 3 `--ci` flag, CI workflow samples
-- `${CLAUDE_SKILL_DIR}/references/trusted-publishers.md` — Hex.pm upstream tracking
-- `${CLAUDE_SKILL_DIR}/references/skill-checklist.md` — eval scorer + lint gotchas
+- `${CLAUDE_SKILL_DIR}/references/cassettes.md` / `sarif.md` / `hook.md` / `ci-integration.md` — Phase 3 surface
+- `${CLAUDE_SKILL_DIR}/references/trusted-publishers.md` / `skill-checklist.md` — upstream + eval
+- `${CLAUDE_SKILL_DIR}/references/audit-tmpdir.md` — Phase 5 per-run ephemeral storage contract
+- `${CLAUDE_SKILL_DIR}/references/execution-flow.md` / `differential-cve.md` — Phase 5 default scan + CVE diff

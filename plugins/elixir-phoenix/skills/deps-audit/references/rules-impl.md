@@ -3,7 +3,7 @@
 Eight detection routines. Each emits zero or more findings as
 NDJSON lines (one JSON object per line) to the file named by
 `${FINDINGS_FILE}` (defaults to
-`.claude/deps-audit/cache/findings.jsonl`). The renderer aggregates by
+`${AUDIT_TMPDIR}/findings.jsonl`). The renderer aggregates by
 package.
 
 ## Portability floor
@@ -44,13 +44,13 @@ emit() {
     '{pkg:$pkg, version:$version, rule_id:$rule_id, severity:$severity,
       file:($file|select(.!="")), line:(if $line=="" then null else ($line|tonumber) end),
       snippet:$snippet, message:$message}' \
-    >> "${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}"
+    >> "${FINDINGS_FILE:-${AUDIT_TMPDIR}/findings.jsonl}"
 }
 ```
 
 All rules below assume `$pkg` and `$ver` are set and `$tarball_dir` points
 to the unpacked NEW version (e.g.,
-`.claude/deps-audit/cache/phoenix/1.7.20/`).
+`${AUDIT_TMPDIR}/tarballs/phoenix/1.7.20/`).
 
 ---
 
@@ -392,46 +392,46 @@ run_all_rules() {
   # Phase 2 differential mode: emit NEW findings to findings.jsonl AND
   # OLD findings to findings.old.jsonl in the same loop. When DIFFERENTIAL=0,
   # behave like Phase 1 (no OLD pass).
-  : > .claude/deps-audit/cache/findings.jsonl
-  : > .claude/deps-audit/cache/findings.old.jsonl
+  : > ${AUDIT_TMPDIR}/findings.jsonl
+  : > ${AUDIT_TMPDIR}/findings.old.jsonl
 
   local differential="${DIFFERENTIAL:-1}"
 
-  jq -c '.changed[], .added[]' .claude/deps-audit/cache/diff.json \
+  jq -c '.changed[], .added[]' ${AUDIT_TMPDIR}/diff.json \
   | while IFS= read -r row; do
       pkg=$(echo "${row}" | jq -r '.[0]')
       old=$(echo "${row}" | jq -r '.[1]')
       new=$(echo "${row}" | jq -r '.[2]')
       [ "${new}" = "null" ] && continue
 
-      new_dir=".claude/deps-audit/cache/${pkg}/${new}"
+      new_dir="${AUDIT_TMPDIR}/tarballs/${pkg}/${new}"
       old_dir=""
-      [ "${old}" != "null" ] && old_dir=".claude/deps-audit/cache/${pkg}/${old}"
+      [ "${old}" != "null" ] && old_dir="${AUDIT_TMPDIR}/tarballs/${pkg}/${old}"
 
       # --- NEW pass: emit to findings.jsonl ---
-      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+      FINDINGS_FILE="${FINDINGS_FILE:-${AUDIT_TMPDIR}/findings.jsonl}" \
         rule_1_bidi              "${pkg}" "${new}" "${new_dir}" &
-      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+      FINDINGS_FILE="${FINDINGS_FILE:-${AUDIT_TMPDIR}/findings.jsonl}" \
         rule_2_eval              "${pkg}" "${new}" "${new_dir}" &
-      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+      FINDINGS_FILE="${FINDINGS_FILE:-${AUDIT_TMPDIR}/findings.jsonl}" \
         rule_3_compile_exec      "${pkg}" "${new}" "${new_dir}" &
-      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+      FINDINGS_FILE="${FINDINGS_FILE:-${AUDIT_TMPDIR}/findings.jsonl}" \
         rule_4_binary_to_term    "${pkg}" "${new}" "${new_dir}" &
-      FINDINGS_FILE="${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}" \
+      FINDINGS_FILE="${FINDINGS_FILE:-${AUDIT_TMPDIR}/findings.jsonl}" \
         rule_7_base64            "${pkg}" "${new}" "${new_dir}" &
       wait
 
       # --- OLD pass (differential mode): emit to findings.old.jsonl ---
       if [ "${differential}" = "1" ] && [ -n "${old_dir}" ] && [ -d "${old_dir}" ]; then
-        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+        FINDINGS_FILE=${AUDIT_TMPDIR}/findings.old.jsonl \
           rule_1_bidi              "${pkg}" "${old}" "${old_dir}" &
-        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+        FINDINGS_FILE=${AUDIT_TMPDIR}/findings.old.jsonl \
           rule_2_eval              "${pkg}" "${old}" "${old_dir}" &
-        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+        FINDINGS_FILE=${AUDIT_TMPDIR}/findings.old.jsonl \
           rule_3_compile_exec      "${pkg}" "${old}" "${old_dir}" &
-        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+        FINDINGS_FILE=${AUDIT_TMPDIR}/findings.old.jsonl \
           rule_4_binary_to_term    "${pkg}" "${old}" "${old_dir}" &
-        FINDINGS_FILE=.claude/deps-audit/cache/findings.old.jsonl \
+        FINDINGS_FILE=${AUDIT_TMPDIR}/findings.old.jsonl \
           rule_7_base64            "${pkg}" "${old}" "${old_dir}" &
         wait
       fi
@@ -447,11 +447,11 @@ run_all_rules() {
   # Set-subtract NEW vs OLD into new_signals / info_signals / dropped_signals.
   if [ "${differential}" = "1" ]; then
     python3 "${CLAUDE_SKILL_DIR}/scripts/diff_findings.py" \
-      --new  .claude/deps-audit/cache/findings.jsonl \
-      --old  .claude/deps-audit/cache/findings.old.jsonl \
-      --new-out     .claude/deps-audit/cache/new_signals.jsonl \
-      --info-out    .claude/deps-audit/cache/info_signals.jsonl \
-      --dropped-out .claude/deps-audit/cache/dropped_signals.jsonl
+      --new  ${AUDIT_TMPDIR}/findings.jsonl \
+      --old  ${AUDIT_TMPDIR}/findings.old.jsonl \
+      --new-out     ${AUDIT_TMPDIR}/new_signals.jsonl \
+      --info-out    ${AUDIT_TMPDIR}/info_signals.jsonl \
+      --dropped-out ${AUDIT_TMPDIR}/dropped_signals.jsonl
   fi
 }
 ```

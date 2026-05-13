@@ -36,7 +36,7 @@ maintainers via Hex.pm (security, deprecated, invalid, renamed, etc.).
 
 ```bash
 hex_audit() {
-  mix hex.audit 2>&1 | tee .claude/deps-audit/cache/hex-audit.txt
+  mix hex.audit 2>&1 | tee "${AUDIT_TMPDIR}/hex-audit.txt"
 }
 ```
 
@@ -55,7 +55,7 @@ awk '
   /^[a-z_][a-z0-9_]* [0-9]/ { pkg=$1; ver=$2 }
   /Reason:/ { reason=$2 }
   /Message:/ { msg=substr($0, 11); print pkg"|"ver"|"reason"|"msg }
-' .claude/deps-audit/cache/hex-audit.txt
+' "${AUDIT_TMPDIR}/hex-audit.txt"
 ```
 
 Severity mapping: `security` → BLOCK · `invalid` / `deprecated` / `renamed`
@@ -82,8 +82,149 @@ EOF
     return 0
   fi
 
-  mix deps.audit --format json 2>/dev/null \
-    > .claude/deps-audit/cache/mix-audit.json
+  local lock_file="${LOCK_FILE:-mix.lock}"
+  local out_path="${MIX_AUDIT_OUT:-${AUDIT_TMPDIR:?AUDIT_TMPDIR not set}/mix-audit.json}"
+
+  # GHSA freshness check (Phase 5). If the cache directory is >N hours
+  # old, emit a WARN — recent disclosures may be missing. Threshold is
+  # 24h by default; override via GHSA_MAX_AGE_HOURS.
+  _mix_audit_check_ghsa_freshness >&2 || true
+
+  if [ "${lock_file}" = "mix.lock" ]; then
+    # Fast path: scan the project as-is.
+    mix deps.audit --format json 2>/dev/null > "${out_path}"
+  else
+    # Differential path: scan against a non-default lock. We MUST NOT
+    # mutate the project's mix.lock (Iron Law #2). Strategy: copy the
+    # project to a tmpdir, swap in the requested lock, run mix
+    # deps.audit, discard.
+    _mix_audit_run_with_lock "${lock_file}" "${out_path}"
+  fi
+}
+
+# Phase 5 — differential CVE pass.
+#
+# Run mix_audit against both OLD and NEW mix.lock states to detect
+# CVEs patched by the update (the actionable narrative — "you were
+# exposed for N days"). Use tmpdir copy strategy because:
+#   - MIX_LOCKFILE env var is not Mix-supported as of 1.18.
+#   - git worktree mutates .git/ and creates branch state.
+#   - tmpdir copy is the simplest non-mutating option.
+#
+# Inputs (env):
+#   OLD_LOCK_FILE — path to OLD mix.lock (e.g., from `git show HEAD:mix.lock`)
+#   NEW_LOCK_FILE — path to NEW mix.lock (default: working mix.lock)
+#
+# Outputs (under per-run tmpdir — see references/audit-tmpdir.md):
+#   ${AUDIT_TMPDIR}/cves_old.json
+#   ${AUDIT_TMPDIR}/cves_new.json
+mix_audit_diff() {
+  local old_lock="${OLD_LOCK_FILE:?OLD_LOCK_FILE required for differential pass}"
+  local new_lock="${NEW_LOCK_FILE:-mix.lock}"
+  : "${AUDIT_TMPDIR:?AUDIT_TMPDIR not set — driver must establish per-run tmpdir first}"
+
+  LOCK_FILE="${old_lock}" MIX_AUDIT_OUT="${AUDIT_TMPDIR}/cves_old.json" \
+    mix_audit_run
+
+  LOCK_FILE="${new_lock}" MIX_AUDIT_OUT="${AUDIT_TMPDIR}/cves_new.json" \
+    mix_audit_run
+}
+
+# Internal: run mix deps.audit against an arbitrary mix.lock without
+# mutating the project. Copies project to tmpdir, swaps lock, runs.
+#
+# Defense-in-depth for Iron Law #2: unsets MIX_* env vars that could
+# otherwise redirect Mix back to the real project (MIX_DEPS_PATH,
+# MIX_LOCKFILE, MIX_PROJECT, etc.). MIX_HOME is preserved so the Hex
+# cache is reused.
+_mix_audit_run_with_lock() {
+  local lock_src="$1" out_path="$2"
+
+  # Fail fast if the requested lock doesn't exist. Silent fall-through
+  # would produce a false-green ("no vulnerabilities") report — the
+  # worst possible failure mode for a security tool.
+  if [ ! -f "${lock_src}" ]; then
+    echo "ERROR: lock file not found: ${lock_src}" >&2
+    return 2
+  fi
+
+  local tmpdir
+  tmpdir="$(mktemp -d -t deps-audit-XXXXXX)" || {
+    echo "ERROR: mktemp failed" >&2
+    return 2
+  }
+  # Trap cleanup at function scope — caller may have its own EXIT trap.
+  # shellcheck disable=SC2064
+  trap "rm -rf '${tmpdir}'" RETURN
+
+  # Reflink/hardlink-friendly copy. Exclude _build and deps to keep
+  # the copy cheap; mix will resolve deps from Hex cache anyway.
+  cp mix.exs "${tmpdir}/" 2>/dev/null || true
+  [ -f mix.exs.lock ] && cp mix.exs.lock "${tmpdir}/" 2>/dev/null || true
+  [ -d config ] && cp -R config "${tmpdir}/" 2>/dev/null || true
+  # cp -L: dereference symlinks (don't trust a symlinked lock to point
+  # where the caller thinks). Bubble cp failure to the caller.
+  if ! cp -L "${lock_src}" "${tmpdir}/mix.lock"; then
+    echo "ERROR: cannot copy ${lock_src} to tmpdir" >&2
+    return 2
+  fi
+
+  (
+    cd "${tmpdir}" || exit 1
+    # Defense-in-depth: scrub MIX_* vars that could redirect Mix to
+    # the real project. Keep MIX_HOME (Hex cache reuse) and PATH.
+    unset MIX_DEPS_PATH MIX_BUILD_PATH MIX_LOCKFILE MIX_PROJECT MIX_ENV
+    # mix deps.audit doesn't require deps to be fetched — it reads the
+    # lock and queries the local GHSA cache. Avoid `mix deps.get` to
+    # keep the run offline-fast and non-mutating.
+    mix deps.audit --format json 2>/dev/null > "${out_path}"
+  )
+}
+
+# Internal: warn if the GHSA cache is staler than GHSA_MAX_AGE_HOURS.
+# The mix_audit Hex package ships its advisory database as part of the
+# Hex archive; it's refreshed when the user runs `mix deps.audit`
+# directly, but the cache itself can lag behind cna.erlef.org.
+_mix_audit_check_ghsa_freshness() {
+  local max_age="${GHSA_MAX_AGE_HOURS:-24}"
+  local cache_dir=""
+
+  # Locate the GHSA advisory cache. mix_audit stores it under
+  # _build/<env>/lib/mix_audit/priv/advisories/ when installed as a dep,
+  # or under ~/.mix/archives/ when installed as an archive. Try both.
+  for candidate in \
+    "_build/dev/lib/mix_audit/priv/advisories" \
+    "_build/test/lib/mix_audit/priv/advisories" \
+    "$HOME/.mix/archives/mix_audit"*; do
+    if [ -d "${candidate}" ]; then
+      cache_dir="${candidate}"
+      break
+    fi
+  done
+
+  [ -z "${cache_dir}" ] && return 0  # Can't locate cache — skip warn.
+
+  local mtime now age_hours
+  # macOS stat -f %m, GNU stat -c %Y. Try both.
+  mtime="$(stat -f %m "${cache_dir}" 2>/dev/null || stat -c %Y "${cache_dir}" 2>/dev/null)"
+  [ -z "${mtime}" ] && return 0
+
+  now="$(date +%s)"
+  age_hours=$(( (now - mtime) / 3600 ))
+
+  if [ "${age_hours}" -gt "${max_age}" ]; then
+    cat <<EOF
+WARN: GHSA advisory cache is ${age_hours} hours old (>${max_age}h threshold).
+Recent disclosures (last 7 days) may be missing. Refresh with:
+
+    mix deps.update mix_audit  # if installed as dep
+    mix archive.install hex mix_audit --force  # if installed as archive
+
+Canonical Elixir CVE list: https://cna.erlef.org/cves/
+EOF
+    return 1
+  fi
+  return 0
 }
 ```
 
@@ -109,6 +250,55 @@ Severity mapping: `critical` / `high` → BLOCK · `moderate` → WARN ·
 **FP rate:** ~0% (advisory DB is curated). Coverage gap: GHSA has fewer Hex
 entries than npm/RustSec, so absence is not proof of safety.
 
+## 2a. GHSA cache freshness (Phase 5)
+
+`mix_audit` ships its GHSA advisory database as part of the Hex package
+or archive. The advisory DB is **not** refreshed automatically on each
+`mix deps.audit` invocation — it updates only when the user explicitly
+runs `mix deps.update mix_audit` or `mix archive.install hex mix_audit
+--force`.
+
+This matters because the EEF CNA disclosure cadence has accelerated:
+14 Hex package CVEs were published in April-May 2026 alone (e.g.,
+`postgrex 0.22.0 → 0.22.1` patched a SQL-injection CVE disclosed
+**the same day** the 2026-05-12 virgil dogfood ran). A 1-week-old
+advisory cache will miss these.
+
+**Behavior:** `mix_audit_run` checks the mtime of the GHSA advisory
+directory before running. If older than `GHSA_MAX_AGE_HOURS` (default
+24), it emits a WARN to stderr with refresh instructions and a link to
+the canonical EEF CNA list (<https://cna.erlef.org/cves/>).
+
+**How to refresh manually:**
+
+```bash
+# If installed as a dep in mix.exs:
+mix deps.update mix_audit
+
+# If installed as a Mix archive:
+mix archive.install hex mix_audit --force
+
+# Verify freshness:
+ls -la _build/dev/lib/mix_audit/priv/advisories/ | head
+```
+
+**Override the threshold:**
+
+```bash
+GHSA_MAX_AGE_HOURS=72 /phx:deps-audit  # tolerate 3-day-old cache
+GHSA_MAX_AGE_HOURS=1  /phx:deps-audit  # paranoid mode
+```
+
+**Future (Phase 6+):** auto-refresh via a PreToolUse hook that watches
+for `mix deps.audit` invocations and triggers `mix deps.update mix_audit`
+if the cache is >24h old. Deferred until we can prove the refresh
+itself is non-flaky (Hex registry can rate-limit or 503).
+
+**Why not a `mix deps.update`?** Mutating `mix.lock` violates Iron
+Law #2. The wrapper warns and continues — the user must refresh
+explicitly. This is consent-resistant by the same logic as the
+mix_audit-install refusal above.
+
 ## 3. `osv-scanner` — CVE check via OSV.dev
 
 Standalone Go binary (`go install github.com/google/osv-scanner@latest`).
@@ -130,7 +320,7 @@ EOF
   osv-scanner \
     --lockfile mix.lock \
     --format json \
-  > .claude/deps-audit/cache/osv-scan.json 2>/dev/null || true
+  > "${AUDIT_TMPDIR}/osv-scan.json" 2>/dev/null || true
 }
 ```
 

@@ -141,7 +141,7 @@ run_semgrep() {
         '{pkg:$pkg, version:$version, rule_id:("semgrep/" + $rule_id),
           severity: (if $severity == "error" then "block" elif $severity == "warning" then "warn" else "info" end),
           file:$file, line:$line, snippet:$snippet, message:$message}' \
-      >> "${FINDINGS_FILE:-.claude/deps-audit/cache/findings.jsonl}"
+      >> "${FINDINGS_FILE:-${AUDIT_TMPDIR}/findings.jsonl}"
     done
 }
 ```

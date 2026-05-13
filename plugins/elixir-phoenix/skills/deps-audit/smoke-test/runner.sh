@@ -65,6 +65,14 @@ run_fixture() {
   local fixture_path="$1"
   local fixture_name
   fixture_name="$(basename "${fixture_path}")"
+
+  # Phase 5: CVE-diff fixtures (2X_cve_*) are exercised by
+  # cve-diff-runner.sh — they use cve-diff: assertions, not rule:N
+  # detector counts. Skip them here to avoid silent passes.
+  case "${fixture_name}" in
+    2[0-9]_cve_*) return ;;
+  esac
+
   local setup="${fixture_path}/setup.sh"
   local expected="${fixture_path}/expected.txt"
 

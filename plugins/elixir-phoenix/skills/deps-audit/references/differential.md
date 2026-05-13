@@ -98,12 +98,12 @@ benefit from differential mode (the package itself is the unit).
 Once both NDJSON streams exist, the skill body invokes:
 
 ```bash
-python3 ${CLAUDE_SKILL_DIR}/scripts/diff_findings.py \
-    --new  .claude/deps-audit/cache/findings.jsonl \
-    --old  .claude/deps-audit/cache/findings.old.jsonl \
-    --new-out     .claude/deps-audit/cache/new_signals.jsonl \
-    --info-out    .claude/deps-audit/cache/info_signals.jsonl \
-    --dropped-out .claude/deps-audit/cache/dropped_signals.jsonl
+python3 "${CLAUDE_SKILL_DIR}/scripts/diff_findings.py" \
+    --new  "${AUDIT_TMPDIR}/findings.jsonl" \
+    --old  "${AUDIT_TMPDIR}/findings.old.jsonl" \
+    --new-out     "${AUDIT_TMPDIR}/new_signals.jsonl" \
+    --info-out    "${AUDIT_TMPDIR}/info_signals.jsonl" \
+    --dropped-out "${AUDIT_TMPDIR}/dropped_signals.jsonl"
 ```
 
 The renderer (see `output-renderer.md`) consumes `new_signals.jsonl`
@@ -125,61 +125,23 @@ caller already knows the package was vetted at this version via
 `hex_vet.exs` (see `hex-vet.md`), and even then the ledger applies a
 downgrade rather than full skip.
 
-## Cache invalidation
+## No persistent cache
 
-The Phase 1 cache stores tarballs under
-`.claude/deps-audit/cache/<pkg>/<version>/` and prunes after 30 days.
-Phase 2 adds findings caching:
+As of v2.12.0, the audit maintains no on-disk findings cache. Every run
+writes findings.jsonl / findings.old.jsonl / *_signals.jsonl into
+`${AUDIT_TMPDIR}` and the driver's EXIT trap removes everything when
+the audit completes. See `audit-tmpdir.md` for the full storage
+contract.
 
-```
-.claude/deps-audit/cache/findings/
-└── <rules-checksum>/
-    └── <pkg>/<old>-<new>/
-        ├── findings.jsonl
-        ├── findings.old.jsonl
-        └── diff/
-            ├── new_signals.jsonl
-            ├── info_signals.jsonl
-            └── dropped_signals.jsonl
-```
+This obsoletes earlier plans for `<rules-checksum>`-keyed cache
+directories and the `cache_signature.json` plugin-version-skew
+guard — without a persistent cache, neither problem exists. Every
+audit reflects the current rule set, current scorer, current GHSA
+advisories, and the current Hex API state.
 
-`<rules-checksum>` is the first 12 hex chars of
-`sha256(<rules-impl.md mtime> || <git commit SHA>)`. When rules change,
-the cache namespace changes too — stale findings can't bleed into a
-post-update run. Older `<rules-checksum>` directories are GC'd by
-`fetch.sh --prune` together with tarballs.
-
-### Plugin-version skew (Phase 3 hardening)
-
-`<rules-checksum>` alone catches rule-body changes but not changes in
-the **runner** (scoring weights, severity mapping, post-processing).
-A plugin upgrade that ships a new scorer with the same rules will
-silently reuse stale verdicts.
-
-Phase 3 writes `.claude/deps-audit/cache/cache_signature.json` at
-audit start:
-
-```json
-{
-  "plugin_version": "3.0.0",
-  "rules_checksum": "a1b2c3d4e5f6",
-  "generated_at": "2026-05-15T10:23:00Z"
-}
-```
-
-On cache read, the audit verifies both `plugin_version` and
-`rules_checksum` match the current run. On mismatch:
-
-1. Drop the entire `.claude/deps-audit/cache/findings/` tree
-2. Drop `last-run.json` (Phase 1 sidecar — also runner-versioned)
-3. Write a fresh `cache_signature.json`
-4. Log `cache invalidated: plugin upgraded from X.Y.Z to A.B.C` to stderr
-
-No migration is attempted — cold rebuild is bounded (a 20-pkg PR
-re-audits in ~60s on a warm tarball cache) and migration logic is too
-fragile to maintain across major bumps. The tarball cache
-(`<pkg>/<version>/contents/`) is preserved across signature drops —
-tarballs are content-addressed and version-independent.
+The latency cost is bounded: ~60-90s for a 25-package diff (per virgil
+dogfood), parallelized 4-way at the tarball fetcher. Re-auditing an
+unchanged lock is a rare workflow, so caching that case is low-value.
 
 ## When the differ is NOT used
 
