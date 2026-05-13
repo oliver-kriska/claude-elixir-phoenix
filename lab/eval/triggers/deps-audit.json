@@ -1,0 +1,23 @@
+{
+  "skill": "deps-audit",
+  "should_trigger": [
+    "I just ran mix deps.update — anything sketchy in the new versions?",
+    "Audit the dependencies before I merge this PR",
+    "Check the mix.lock changes on this branch for supply-chain risk",
+    "Is the new version of jason safe to upgrade to?",
+    "Scan our Hex packages for CVEs and malicious patterns",
+    "Review the deps bump in this PR before approving",
+    "Look at the mix.lock diff for anything suspicious",
+    "Phoenix bumped to 1.8.7 — verify the upgrade is clean",
+    "We're about to update 20 deps; can you check them first?",
+    "Run a supply-chain check on the postgrex update"
+  ],
+  "should_not_trigger": [
+    "Add a new dependency to mix.exs and run mix deps.get",
+    "Why is mix deps.compile failing with a missing header error?",
+    "Generate a new Phoenix LiveView for the dashboard",
+    "Fix the N+1 query in the user list",
+    "Help me write a changeset for the orders schema",
+    "What's the right way to test an Oban worker?"
+  ]
+}
