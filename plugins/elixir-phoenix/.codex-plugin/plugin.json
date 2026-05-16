@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "description": "Elixir/Phoenix/LiveView workflows for Claude Code and Codex.",
   "author": {
-    "name": "Oliver Kriska; Codex support by grahac",
-    "url": "https://github.com/grahac/claude-elixir-phoenix"
+    "name": "Oliver Kriska",
+    "url": "https://github.com/oliver-kriska/claude-elixir-phoenix"
   },
-  "homepage": "https://github.com/grahac/claude-elixir-phoenix",
-  "repository": "https://github.com/grahac/claude-elixir-phoenix",
+  "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
   "license": "MIT",
   "keywords": [
     "elixir",
@@ -22,14 +22,14 @@
     "displayName": "Elixir Phoenix",
     "shortDescription": "Phoenix-native planning, work, and review workflows.",
     "longDescription": "Elixir/Phoenix/LiveView development workflows with Codex-native skills adapted from the Claude Code plugin. It exposes planning, implementation, and review entrypoints using Codex tools and interaction patterns.",
-    "developerName": "grahac",
+    "developerName": "Oliver Kriska",
     "category": "Coding",
     "capabilities": [
       "Interactive",
       "Read",
       "Write"
     ],
-    "websiteURL": "https://github.com/grahac/claude-elixir-phoenix",
+    "websiteURL": "https://github.com/oliver-kriska/claude-elixir-phoenix",
     "defaultPrompt": [
       "phx plan a Phoenix feature",
       "phx work on a plan",
