@@ -1,146 +1,116 @@
 ---
 name: catchup
 description: "Summarize and review what changed while you were away. Use after a weekend, vacation, or flight to check missed PRs, git commits, Linear tickets, and meetings — one prioritized brief, not a firehose."
-effort: high
+effort: medium
 disable-model-invocation: true
-argument-hint: "[--since \"friday\"|\"2h\"|\"last-session\"] [--sources github,git,linear,calendar] [--depth quick|standard|deep] [--focus prs,reviews-requested,mentions,impact]"
-allowed-tools: Read, Grep, Glob, Bash, Write, WebFetch
+argument-hint: "[--since \"friday\"|\"2h\"|\"last-active\"|\"last-commit\"] [--sources github,git,linear,calendar] [--depth quick|standard|deep] [--focus prs,reviews-requested,mentions,impact]"
+allowed-tools: Read, Grep, Glob, Bash, Write, WebFetch, Agent
 ---
 
 # Catchup — Async-Team Return Briefing
 
-You've been away. Reconstruct "what happened and what needs me first"
-from multiple sources, then emit ONE prioritized Context Brief.
+You've been away. This skill is a **thin orchestrator**: it resolves
+the window + sources here, then delegates the I/O fan-out, impact
+analysis, and brief assembly to the `catchup-runner` agent (Sonnet) so
+your (often Opus) session does not pay for summarization. You only
+print what the agent returns.
 
 ## Usage
 
 ```
-/catchup
+/catchup                                  # since you were last active
 /catchup --since "friday"
 /catchup --since "2h" --focus reviews-requested
-/catchup --sources github,git --depth quick
+/catchup --since last-commit --depth deep
 ```
 
 ## Iron Laws
 
-1. **Detect every source before querying** — never assume Linear or
-   Calendar MCP exists. Probe, skip cleanly, note the gap in one line.
-2. **Excerpt-only** — never paste raw issue/PR/thread bodies into the
-   brief. One-line excerpts or summaries. Privacy default is opt-out.
-3. **Prioritize, don't dump** — every item must answer "why does this
-   need me". Drop noise (bot PRs, your own merged work, CI greens).
-4. **One brief file per run** — no fragmented output.
-5. **Never pass raw user input to a shell unquoted** — validate the
-   time ref against the grammar before it reaches `git`/`gh`.
-6. **Stop after the brief** — never auto-transition to another command.
+1. **Delegate the heavy work** — spawn `catchup-runner` (sonnet) for
+   fan-out + assembly. Do NOT run the `gh`/`git` fan-out in this
+   session; that defeats the cost/speed purpose.
+2. **Resolve the window here, once** — the agent must never re-resolve
+   it. Pass absolute `SINCE_*` values.
+3. **MCP runs here, not in the agent** — Linear/Calendar MCP tools are
+   unreliable in subagents. If present, fetch in this context and pass
+   the text to the agent; else mark absent.
+4. **Validate `--since` before any shell** — match the grammar; on no
+   match fall back to 24h and note the assumption.
+5. **Stop after the brief** — print the agent's summary, never
+   auto-transition to another command.
 
 ## Workflow
 
 ### 1. Parse arguments
 
-From `$ARGUMENTS` extract: `--since`, `--sources`, `--depth`,
-`--focus`. Defaults: `--since last-session`, all detected sources,
-`--depth standard`, no focus filter.
+From `$ARGUMENTS`: `--since`, `--sources`, `--depth`, `--focus`.
+Defaults: `--since last-active`, all detected sources, `--depth
+standard`, no focus.
 
-### 2. Resolve the time window
+### 2. Resolve the time window (here, in this context)
 
 Read `${CLAUDE_SKILL_DIR}/references/time-window.md`. Resolve calendar
 words (`friday`, `yesterday`, a date) in the **user's local timezone**
-(the machine running `/catchup` = the user's TZ), pivot through
-`SINCE_EPOCH`, then derive `SINCE_ISO` (UTC) for source queries. All
-sources are compared on that one absolute instant, so colleagues in
-other timezones are included correctly ("since *my* Friday"). Label
-must show the anchor TZ ("since Fri May 13 00:00 CEST (3d)"). For
-`last-session`, take the newest per-repo `*.jsonl` mtime (already an
-absolute instant); fall back to 24h with a noted assumption.
+(this machine = the user's TZ), pivot through `SINCE_EPOCH`, derive
+`SINCE_ISO` (UTC) + `SINCE_LABEL` (with TZ abbrev) + `LOCAL_TZ`.
 
-### 3. Detect sources (before any query)
+Default `last-active` = MAX of: newest Claude session mtime for this
+repo, your last own commit (`git log --author=<you> -1 --format=%ct`),
+your last own PR/review (`gh search prs --author=@me`). The latest
+footprint is "you were last here". Record which signal won. Variants:
+`last-session` (sessions only), `last-commit`/`last-mine` (your
+git/PR only). No signal → 24h, noted.
+
+### 3. Detect sources + pull MCP data (here)
 
 ```
-gh:       command -v gh && gh auth status         → github source ON
-git:      git rev-parse --is-inside-work-tree      → git source ON
-linear:   a Linear MCP tool is available           → linear source ON
-calendar: a Google Calendar MCP tool is available  → calendar source ON
+gh:   command -v gh && gh auth status               → github ON
+git:  git rev-parse --is-inside-work-tree           → git ON
+linear/calendar: a Linear / Google-Calendar MCP tool present?
 ```
 
-For every requested source that is OFF, record a one-line skip note
-for the brief's **Risks/assumptions** block (e.g. "Linear MCP absent —
-ticket signal harvested from commit/PR refs only"). Never hard-fail.
+If Linear/Calendar MCP is present, query it **in this context now**
+(assigned/updated tickets since `SINCE_ISO`; missed + today's
+meetings in `LOCAL_TZ`) and keep the short text as `LINEAR_DATA` /
+`CALENDAR_DATA`. If absent, set them to `absent` (the agent will
+proxy-harvest `XXX-####` refs for Linear; skip calendar with a note).
 
-### 4. Fan out (parallel where independent)
+### 4. Delegate to `catchup-runner` (Sonnet)
 
-Run independent source queries in ONE batch. Read
-`${CLAUDE_SKILL_DIR}/references/source-adapters.md` for the exact
-recipes. Summary:
+Spawn one agent, foreground, passing a self-contained prompt:
 
-- **GitHub** — `gh search prs`/`gh pr list`/`gh api` for PRs updated in
-  window, review-requested-of-you, your PRs with new comments/CI state.
-- **Git** — `git log --since` on the default branch and your local
-  branches, authored by others; surface migrations/lockfile churn.
-- **Linear** — if MCP ON: tickets assigned to you, status-changed,
-  new comments in window. If OFF: harvest `[A-Z]{2,}-\d+` ticket refs
-  from git/PR titles as a proxy and label them unverified.
-- **Calendar** — if MCP ON: meetings missed in window + today's agenda
-  in the user's TZ. If OFF: skip with a note.
-- **Your in-flight scope** — compute the file set you are currently
-  working on (open PR files, local feature-branch diffs vs default,
-  uncommitted working tree). Recipes in `source-adapters.md` §Impact.
+```
+Agent(subagent_type: "catchup-runner", prompt: """
+SINCE_EPOCH={…}  SINCE_ISO={…Z}  SINCE_LABEL="{… local TZ}"
+LOCAL_TZ={…}  SOURCES={github,git}  DEPTH={…}  FOCUS={…}
+OUT_PATH={cwd}/.claude/catchup/brief-{YYYY-MM-DD}.md
+LINEAR_DATA={text or "absent"}
+CALENDAR_DATA={text or "absent"}
+Window anchor signal: {which one won, for the Risks note}
+Do the gh+git fan-out, impact analysis, and brief assembly per your
+instructions. Write the file. Return ONLY the inline summary.
+""")
+```
 
-### 4b. Impact on your scope (the differentiator)
+The agent inlines all recipes (it cannot read this plugin's
+references). Do not re-implement its work here.
 
-Intersect *files moved by others* on the default branch in the window
-with *your in-flight scope* from step 4. Report, ranked above generic
-"what moved":
+### 5. Present + stop
 
-- **Direct overlap** — a specific file you're editing also changed
-  upstream → concrete conflict/semantic risk, name both sides.
-- **Adjacent** — same module/dir touched → "may affect your work".
-
-At `--depth deep`, read the incoming diff for overlapping files and
-write a one-line *semantic* impact ("ENA-9168 changed the survey
-schema your branch depends on — regen your migration"). This answers
-"how do these changes impact my current/future work", not just "what
-did I miss". `--focus impact` = brief is *only* this section.
-
-`--depth quick` = counts + top 3 per source, no excerpts. `standard` =
-prioritized items + one-line excerpts + impact overlap by filename.
-`deep` = + CI failure detail, cross-source links (PR ↔ ticket),
-per-file semantic impact analysis.
-
-### 5. Assemble the Context Brief
-
-Read `${CLAUDE_SKILL_DIR}/references/brief-format.md` and map findings
-onto the 10-element template scoped to a personal catch-up brief.
-Lead with **Intent** ("you've been off N days; do these 3 first"), a
-ranked **Top priorities** list, then an **Impact on your work** block
-(promote a direct overlap into Top priorities — it outranks a review
-request). Cross-link PRs to tickets when a shared `XXX-####` ref is
-found. Flag risks ("unmerged migration #10933 may conflict with your
-local branch `feat/foo`").
-
-### 6. Output
-
-- Write the full brief to `<cwd>/.claude/catchup/brief-<YYYY-MM-DD>.md`
-  (create the dir). One file per run; overwrite same-day reruns.
-- Print a tight inline summary: Intent line + numbered Top priorities +
-  per-source counts + any skipped-source notes. Keep it under ~25 lines
-  — the file holds the detail.
-
-### 7. Stop
-
-Present the summary and the brief path. **Do NOT** auto-invoke any
-other command. The user decides what to act on first.
+Print the agent's returned summary verbatim and the brief path.
+**Do NOT** auto-invoke any other command. The user decides what's
+first.
 
 ## Sources at MVP
 
 GitHub (`gh`), Git (`git`), Linear MCP (optional), Google Calendar MCP
-(optional). Slack/Gmail are **v2 opt-in** — never queried at MVP, never
-piped raw. Scheduling and per-project config are designed in
-`${CLAUDE_SKILL_DIR}/references/config-schema.md` but not built at MVP.
+(optional). Slack/Gmail are **v2 opt-in** — never queried, never piped
+raw. Scheduling + per-project config are designed in
+`${CLAUDE_SKILL_DIR}/references/config-schema.md`, not built at MVP.
 
 ## Graceful degradation contract
 
-A missing source degrades the brief, never breaks it. The minimum
-viable brief uses only `git log` (always available in a repo). Every
-absent source becomes one honest line under Risks/assumptions, so the
-reader knows what the brief does *not* cover.
+A missing source degrades the brief, never breaks it. `git log` alone
+(always available in a repo) is a valid minimum brief. Every absent or
+failed source becomes one honest line under the brief's
+Risks/assumptions block, so the reader knows what it does *not* cover.

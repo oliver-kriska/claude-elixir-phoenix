@@ -41,7 +41,9 @@ Relative durations (`2h`, `3d`) are TZ-agnostic deltas: `now - N`.
 
 | Input              | Resolution                                          |
 |--------------------|-----------------------------------------------------|
-| `last-session`     | (default) newest Claude session mtime, this repo    |
+| `last-active`      | (default) smartest: latest evidence *you* were here  |
+| `last-session`     | newest Claude session mtime, this repo only          |
+| `last-commit` / `last-mine` | your last own commit / PR / review, whichever newest |
 | `2h`, `90m`, `3d`  | `now - duration` (TZ-agnostic delta)                |
 | `yesterday`        | yesterday 00:00 **local TZ**                         |
 | `friday`, `monday` | most recent past occurrence, 00:00 **local TZ**      |
@@ -101,36 +103,52 @@ SINCE_DATE=${SINCE_ISO%%T*}
   `SINCE_EPOCH`/`SINCE_ISO` timestamp on each item before it enters the
   brief.
 
-## `last-session` auto-detect (default)
+## `last-active` auto-detect (default) — "since I was last here"
 
-Goal: "since I last had a Claude Code session in this project". File
-mtimes are already absolute instants — read them straight to epoch, no
-TZ handling needed.
+The default must answer "what changed **while I was away**", so the
+anchor is *the most recent moment we have hard evidence the user was
+working*. A commit or a PR is stronger proof of presence than a
+session file (which can be a background/scheduled run). Take the
+**MAX** of these absolute instants — the latest footprint is the
+correct lower bound: you were definitely here then; everything after
+is "while away". All are already absolute, so no TZ handling.
 
-1. Derive the per-project session dir:
+```bash
+SLUG=$(pwd | sed 's@/@-@g'); SDIR="$HOME/.claude/projects/$SLUG"
 
-   ```bash
-   SLUG=$(pwd | sed 's@/@-@g')           # /Users/x/Projects/foo -> -Users-x-Projects-foo
-   SDIR="$HOME/.claude/projects/$SLUG"
-   ```
+# 1. newest Claude session mtime for THIS repo (skip the live session:
+#    if newest mtime is within ~5 min of now, use the second-newest)
+S1=$(ls -t "$SDIR"/*.jsonl 2>/dev/null | head -1)
+E_SESS=$( [ -n "$S1" ] && { date -r "$S1" +%s 2>/dev/null || stat -c %Y "$S1"; } )
 
-2. Newest session activity → epoch directly:
+# 2. your last own commit anywhere in this repo (committer date, abs)
+GME=$(git config user.email)
+E_COMMIT=$(git log --all --author="$GME" -1 --format=%ct 2>/dev/null)
 
-   ```bash
-   LAST=$(ls -t "$SDIR"/*.jsonl 2>/dev/null | head -1)
-   SINCE_EPOCH=$(date -r "$LAST" +%s 2>/dev/null \
-              || stat -c %Y "$LAST")        # BSD -r / GNU stat
-   ```
+# 3. your last own PR / review / comment activity (if gh present)
+E_PR=$(gh search prs --author=@me --sort=updated --order=desc --limit 1 \
+        --json updatedAt --jq '.[0].updatedAt' 2>/dev/null \
+        | { read d; [ -n "$d" ] && { date -u -d "$d" +%s 2>/dev/null \
+            || date -u -j -f %Y-%m-%dT%H:%M:%SZ "$d" +%s; }; })
 
-   If the newest file's mtime is within ~5 min of now it is the live
-   session (empty window) — step to the second-newest. One file only →
-   fall back to 24h.
+# MAX of whatever resolved = "you were last here"
+SINCE_EPOCH=$(printf '%s\n' "$E_SESS" "$E_COMMIT" "$E_PR" \
+              | grep -E '^[0-9]+$' | sort -n | tail -1)
+```
 
-3. No signal → `SINCE_EPOCH=$((NOW - 86400))`, and add to the brief
-   Risks block: *"No prior session for this repo — defaulted to 24h."*
+Record in the brief which signal won, e.g. *"window anchored to your
+last commit `a1b2c3d` (Fri 18:42 CEST) — more recent than your last
+session here."* That transparency lets the reader sanity-check the
+boundary.
 
-4. Optional: if ccrider MCP is present, its last-session-for-cwd
-   timestamp can cross-check step 2. Not required.
+**Variants:** `last-session` = signal 1 only. `last-commit` /
+`last-mine` = MAX of signals 2 and 3 only (ignore session files —
+useful when you want "since I last *worked*", not "since Claude last
+ran here"). No signal at all → `SINCE_EPOCH=$((NOW - 86400))` and note
+*"No activity signal — defaulted to 24h."* in the Risks block.
+
+Optional cross-check: if ccrider MCP is present, its
+last-session-for-cwd timestamp can confirm signal 1. Not required.
 
 ## Producing `SINCE_LABEL`
 

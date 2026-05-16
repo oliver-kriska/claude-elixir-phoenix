@@ -1,10 +1,10 @@
 ---
 name: ketchup
 description: "Easter-egg alias for /catchup. Same return-from-absence briefing, squeezier name. Use exactly like /catchup — all flags pass through unchanged."
-effort: high
+effort: medium
 disable-model-invocation: true
-argument-hint: "[--since \"friday\"|\"2h\"|\"last-session\"] [--sources github,git,linear,calendar] [--depth quick|standard|deep] [--focus prs,reviews-requested,mentions,impact]"
-allowed-tools: Read, Grep, Glob, Bash, Write, WebFetch
+argument-hint: "[--since \"friday\"|\"2h\"|\"last-active\"|\"last-commit\"] [--sources github,git,linear,calendar] [--depth quick|standard|deep] [--focus prs,reviews-requested,mentions,impact]"
+allowed-tools: Read, Grep, Glob, Bash, Write, WebFetch, Agent
 ---
 
 # Ketchup 🍅 — alias for /catchup

@@ -53,6 +53,21 @@ routing row. Implements GitHub issue #47.
   ("since *my* Friday", not "since each author's local Friday"). Fixes
   a UTC-vs-local resolution bug (±14h). The brief's Timeline shows the
   anchor with its TZ abbrev.
+- **Sonnet delegation (cost/speed).** The `/catchup` skill is now a
+  thin orchestrator: it resolves the window + sources, then spawns a
+  new **`catchup-runner` agent (`model: sonnet`, `effort: medium`)**
+  for the `gh`/`git` fan-out, impact analysis, and brief assembly —
+  so the caller's (often Opus) session no longer pays for the bulk
+  I/O and summarization. MCP (Linear/Calendar) is still pulled in the
+  caller's context (subagent MCP is unreliable) and passed to the
+  agent. Skill `effort` lowered `high → medium`.
+- **Smarter default window — `last-active`.** Replaces `last-session`
+  as the default: takes the MAX of (newest Claude session mtime for
+  this repo, your last own commit's committer-date, your last own
+  PR/review activity). The latest footprint is the true "you were
+  last here" instant; the brief records which signal won. New
+  explicit values: `--since last-session` (sessions only),
+  `--since last-commit` / `last-mine` (your git/PR only).
 - **`/ketchup` 🍅 easter-egg alias.** A second slash-only skill
   (`skills/ketchup/`) that forwards verbatim to `/catchup` — same
   flags, same behavior, squeezier name.
