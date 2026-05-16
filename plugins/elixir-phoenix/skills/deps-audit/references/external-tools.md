@@ -91,6 +91,13 @@ EOF
   # 24h by default; override via GHSA_MAX_AGE_HOURS.
   _mix_audit_check_ghsa_freshness >&2 || true
 
+  # First `mix deps.audit` of a session triggers a full dependency
+  # compile (`Compiling N files (.ex)` for every dep). This is
+  # EXPECTED — `mix_audit` has `runtime: false` but `mix` still
+  # ensures the dep tree is built. It is slow (tens of seconds) and
+  # noisy, NOT a failure. Always send JSON to a file and only `tail`
+  # stdout for the verdict; never echo the raw compile log.
+
   if [ "${lock_file}" = "mix.lock" ]; then
     # Fast path: scan the project as-is.
     mix deps.audit --format json 2>/dev/null > "${out_path}"

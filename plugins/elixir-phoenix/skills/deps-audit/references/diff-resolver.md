@@ -29,12 +29,22 @@ Use `Code.eval_file/1` to get a proper map:
 mix run --no-deps-check --no-compile -e '
   lock = Code.eval_file("mix.lock") |> elem(0)
   for {pkg, tup} <- lock, do: IO.puts("#{pkg}\t#{elem(tup, 2)}")
-'
+' 2>/dev/null
 ```
 
 Output: tab-separated `pkg<TAB>version` lines. Reliable across all Hex
 versions. Requires the project to compile; for very early/broken states use
 the shell fallback below.
+
+> **Always redirect stderr.** Modern `mix.lock` files use quoted keys
+> (`"phoenix":`), so `Code.eval_file("mix.lock")` prints a
+> `found quoted keyword … please omit the quotes` **warning per
+> package** to stderr. On a 60-package lock that is tens of KB of
+> noise that gets persisted as an oversized tool result. The
+> `2>/dev/null` above is mandatory, not optional. **Never** inspect
+> the lock with `git diff … mix.lock | head` either — a real lock
+> diff is tens of KB and blows the tool-result budget; go straight to
+> `git show HEAD:mix.lock` + this parser.
 
 ## Parsing — Shell fallback (when Mix won't run)
 

@@ -67,6 +67,58 @@ The trap fires on:
 - Ctrl-C / SIGTERM (bash propagates these to EXIT)
 - Shell errors under `set -e` (also flow through EXIT)
 
+## Cross-tool-call handoff (CRITICAL — runtime reality)
+
+`audit_main()` above describes **one** long-lived shell. The actual
+runtime is different: each step of `/phx:deps-audit` is a **separate
+Bash tool call** with a fresh shell. Consequences:
+
+1. **`export AUDIT_TMPDIR` does NOT survive** between tool calls. The
+   var set in call N is gone in call N+1.
+2. **Shell functions do NOT survive** either. `export -f` is bash-only
+   (no-op under the user's zsh) and useless across calls regardless.
+3. **The EXIT trap in call N does NOT fire for call N+1.** Cleanup
+   must be an explicit final command (`rm -rf "$AUDIT_TMPDIR"`), not a
+   trap.
+
+**Pattern — persist the path, re-read it everywhere.** First command:
+
+```bash
+AUDIT_TMPDIR="$(mktemp -d -t phx-deps-audit-XXXXXX)"
+printf '%s' "$AUDIT_TMPDIR" > "${TMPDIR:-/tmp}/phx-audit-dir.txt"
+echo "AUDIT_TMPDIR=$AUDIT_TMPDIR"
+```
+
+Every subsequent command re-reads it as its first line:
+
+```bash
+AUDIT_TMPDIR="$(cat "${TMPDIR:-/tmp}/phx-audit-dir.txt")"
+```
+
+Final command tears down both:
+
+```bash
+AUDIT_TMPDIR="$(cat "${TMPDIR:-/tmp}/phx-audit-dir.txt")"
+rm -rf "$AUDIT_TMPDIR" "${TMPDIR:-/tmp}/phx-audit-dir.txt"
+```
+
+**Quoted-heredoc trap.** When a command writes a helper script via a
+heredoc, a *quoted* delimiter (`<<'EOF'`) does NOT expand
+`${AUDIT_TMPDIR}` — the script gets a literal `${AUDIT_TMPDIR}` that
+is empty in its own shell, so paths collapse to `/tarballs/...` and
+you get `mkdir: /tarballs: Read-only file system`. Either bake the
+resolved path in with an **unquoted** heredoc:
+
+```bash
+AUDIT_TMPDIR="$(cat "${TMPDIR:-/tmp}/phx-audit-dir.txt")"
+cat > "${AUDIT_TMPDIR}/fetch.sh" <<EOF
+AUDIT_TMPDIR="${AUDIT_TMPDIR}"
+EOF
+```
+
+…or keep the heredoc quoted and pass the path as `$1`. Never assume
+the helper inherits the env.
+
 If a subagent or helper spawns its own `mktemp -d` (e.g.,
 `_mix_audit_run_with_lock` for tmpdir lock-swap), that's a separate
 short-lived dir with its own `RETURN`/`EXIT` trap — nested cleanup,

@@ -7,6 +7,38 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [2.12.0] - 2026-05-13
 
+### Fixed — `deps-audit` / `deps-vet` reference robustness (2026-05-16 virgil dogfood)
+
+Two end-to-end dogfood runs in a real Phoenix project surfaced
+self-recovered dead-ends and one confirmation-accuracy bug. Both skills
+were functionally correct (Iron Laws upheld, sidecar/ledger written) —
+fixes target the reference implementations and prompt accuracy.
+
+- **deps-audit `audit-tmpdir.md`**: documented the cross-tool-call
+  reality — `export`/shell functions/`trap EXIT` do not survive between
+  separate Bash tool calls. Added the persist-path-to-file handoff
+  pattern and the quoted-heredoc trap (`mkdir: /tarballs: Read-only
+  file system` failure signature).
+- **deps-audit `tarball-fetcher.md`**: replaced the
+  `xargs … bash -c 'fetch_version'` pattern (needs `export -f`,
+  bash-only, dead under zsh) with a baked `${AUDIT_TMPDIR}/fetch.sh`.
+- **deps-audit `hex-api.md`**: promoted `python3 + urllib` to the
+  canonical `hex_api_get`/`fetch_top_500` impl (curl hit
+  `Malformed input to a URL function`); curl demoted to fallback.
+- **deps-audit `diff-resolver.md`**: mandated `2>/dev/null` on
+  `Code.eval_file("mix.lock")` (quoted-keyword warning per package) and
+  warned against `git diff … mix.lock | head` (oversized tool result).
+- **deps-audit `external-tools.md`**: noted `mix deps.audit` triggers
+  an expected first-run dependency recompile (not a failure).
+- **deps-vet** (Iron Law #6, new): confirmation prompts must show
+  **computed** counts. `--seed` now computes the criteria split and
+  new/overwrite/no-op counts from the loaded seed *before* the
+  `AskUserQuestion` (dogfood showed `26/4` presented vs real `23/7`).
+- **deps-vet `seed.md` / `SKILL.md`**: stopped claiming "top-100" (the
+  seed has ~30 entries); reframed as a pinned **provenance baseline,
+  not certification of the current `mix.lock`**, surfaced before
+  import. `--check` reads the lock with `2>/dev/null`.
+
 ### Changed — `deps-audit` cache architecture: persistent → per-run ephemeral
 
 The skill no longer maintains a persistent `.claude/deps-audit/cache/`

@@ -32,34 +32,44 @@ All require `Accept: application/vnd.hex+json` header.
 ## Rate limit
 
 **5 req/sec.** Hex API doesn't publish official limits but the Hex.pm team
-has stated this is the polite ceiling. Enforce client-side:
+has stated this is the polite ceiling.
+
+**Use `python3` + `urllib`, not curl.** A `curl "...${var}"` wrapper is
+fragile to whitespace/newline contamination in the interpolated path
+(dogfood: `curl: (3) Malformed input to a URL function`). `python3` is
+already a hard dependency of the audit and is robust here. Canonical:
 
 ```bash
-hex_api_get() {
-  local path="$1"
-  local cache="${AUDIT_TMPDIR}/hex-api/${path//\//_}.json"
-  local ttl_seconds=$((7 * 86400))    # 7 days
-
-  if [ -f "${cache}" ]; then
-    local age=$(( $(date +%s) - $(stat -f %m "${cache}" 2>/dev/null || stat -c %Y "${cache}") ))
-    [ "${age}" -lt "${ttl_seconds}" ] && cat "${cache}" && return 0
-  fi
-
-  mkdir -p "$(dirname "${cache}")"
-  curl -fsSL \
-    -H "Accept: application/vnd.hex+json" \
-    -H "User-Agent: phx-deps-audit/0.1 (+claude-elixir-phoenix)" \
-    "https://hex.pm/api/${path}" \
-  > "${cache}"
-
-  sleep 0.2   # 5 req/sec ceiling
-  cat "${cache}"
+hex_api_get() {  # usage: hex_api_get <api-path>   e.g. packages/phoenix
+  AUDIT_TMPDIR="$(cat "${TMPDIR:-/tmp}/phx-audit-dir.txt")"
+  python3 - "$1" "$AUDIT_TMPDIR" <<'PY'
+import sys, os, json, time, urllib.request, pathlib
+path, tmp = sys.argv[1].strip(), sys.argv[2]
+cache = pathlib.Path(tmp, "hex-api", path.replace("/", "_") + ".json")
+ttl = 7 * 86400
+if cache.is_file() and time.time() - cache.stat().st_mtime < ttl:
+    print(cache.read_text()); sys.exit(0)
+cache.parent.mkdir(parents=True, exist_ok=True)
+req = urllib.request.Request(
+    "https://hex.pm/api/" + path,
+    headers={"Accept": "application/vnd.hex+json",
+             "User-Agent": "phx-deps-audit/0.1 (+claude-elixir-phoenix)"})
+with urllib.request.urlopen(req, timeout=20) as r:
+    body = r.read().decode()
+cache.write_text(body)
+time.sleep(0.2)   # 5 req/sec ceiling
+print(body)
+PY
 }
 ```
 
-The `sleep 0.2` blocks the calling shell; with `xargs -P` the effective rate
-becomes `parallelism / 0.2`. Cap parallel Hex calls at 1 (or use a global
-mutex via `flock`).
+The `sleep 0.2` blocks the calling process; keep Hex calls serial
+(parallelism 1) or the effective rate becomes `parallelism / 0.2`.
+
+> **curl fallback** (only if `python3` is unavailable, which the audit
+> otherwise assumes): `curl -fsSL -H "Accept: application/vnd.hex+json"
+> "https://hex.pm/api/${path}"` — but trim the path first
+> (`path="${path//[$'\n\r\t ']/}"`) to avoid the malformed-URL failure.
 
 ## Cache TTL
 
@@ -75,22 +85,28 @@ Override with `--no-cache` for debugging.
 
 ```bash
 fetch_top_500() {
-  local cache="${AUDIT_TMPDIR}/hex-api/top-500.json"
-  local ttl_seconds=$((24 * 3600))
-
-  if [ -f "${cache}" ]; then
-    local age=$(( $(date +%s) - $(stat -f %m "${cache}" 2>/dev/null || stat -c %Y "${cache}") ))
-    [ "${age}" -lt "${ttl_seconds}" ] && return 0
-  fi
-
-  for page in 1 2 3 4 5 6 7; do
-    curl -fsSL \
-      -H "Accept: application/vnd.hex+json" \
-      "https://hex.pm/api/packages?sort=downloads&page=${page}"
-    sleep 0.5
-  done | jq -s 'add' > "${cache}"
+  AUDIT_TMPDIR="$(cat "${TMPDIR:-/tmp}/phx-audit-dir.txt")"
+  python3 - "$AUDIT_TMPDIR" <<'PY'
+import sys, time, json, urllib.request, pathlib
+cache = pathlib.Path(sys.argv[1], "hex-api", "top-500.json")
+if cache.is_file() and time.time() - cache.stat().st_mtime < 24 * 3600:
+    sys.exit(0)
+cache.parent.mkdir(parents=True, exist_ok=True)
+out = []
+for page in range(1, 8):
+    req = urllib.request.Request(
+        f"https://hex.pm/api/packages?sort=downloads&page={page}",
+        headers={"Accept": "application/vnd.hex+json"})
+    with urllib.request.urlopen(req, timeout=20) as r:
+        out += json.loads(r.read().decode())
+    time.sleep(0.5)
+cache.write_text(json.dumps(out))
+PY
 }
 ```
+
+> curl fallback: same `for page in 1..7; curl … | jq -s 'add'` loop as
+> before — use only if `python3` is missing.
 
 7 pages × 100 packages/page = 700 entries; we use the first 500 (the tail
 has thin signal for typosquat denominator anyway). Total fetch: ~3 seconds

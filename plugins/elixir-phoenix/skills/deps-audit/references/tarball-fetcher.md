@@ -84,12 +84,30 @@ fetch. Both forms produce a single tarball; rules that need both versions
 
 ## Parallelism
 
-**4-way parallel fetch is the default.** Wrap the inner loop with
-`xargs -P 4`:
+**4-way parallel fetch is the default.** Do **not** use
+`xargs … bash -c 'fetch_version …'` — that needs `export -f
+fetch_version`, which is bash-only (no-op under zsh) and does not
+survive across separate Bash tool calls anyway (see
+`audit-tmpdir.md` "Cross-tool-call handoff"). Materialize a
+self-contained script with the tmpdir path **baked in** (unquoted
+heredoc), then fan it out with `xargs`:
 
 ```bash
-jq -r '...' "${AUDIT_TMPDIR}/diff.json" \
-  | xargs -P 4 -I{} bash -c 'fetch_version $@' _ {}
+AUDIT_TMPDIR="$(cat "${TMPDIR:-/tmp}/phx-audit-dir.txt")"
+cat > "${AUDIT_TMPDIR}/fetch.sh" <<EOF
+#!/bin/bash
+AUDIT_TMPDIR="${AUDIT_TMPDIR}"
+pkg="\$1"; ver="\$2"
+out="\${AUDIT_TMPDIR}/tarballs/\${pkg}/\${ver}"
+mkdir -p "\$out"
+mix hex.package fetch "\$pkg" "\$ver" --unpack -o "\$out" >/dev/null 2>&1 \\
+  && echo "OK  \$pkg \$ver" || echo "ERR \$pkg \$ver"
+EOF
+chmod +x "${AUDIT_TMPDIR}/fetch.sh"
+
+jq -r '(.changed[]|"\(.[0]) \(.[2])"),(.added[]|"\(.[0]) \(.[2])")' \
+  "${AUDIT_TMPDIR}/diff.json" \
+  | xargs -P 4 -n 2 "${AUDIT_TMPDIR}/fetch.sh"
 ```
 
 Cap at 4 parallel fetches — `hex.pm` is fine with this and avoids

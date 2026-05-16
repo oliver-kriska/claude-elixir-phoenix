@@ -19,7 +19,7 @@ Run this BEFORE merging a `mix.lock` PR to certify new versions.
 
 ```text
 /phx:deps-vet phoenix 1.7.21      # vet a single package version
-/phx:deps-vet --seed              # import top-100 vetted seed (see C7)
+/phx:deps-vet --seed              # import curated baseline seed (~30 pkgs)
 /phx:deps-vet --list              # show existing ledger entries
 /phx:deps-vet --check             # cross-check mix.lock vs ledger
 ```
@@ -39,6 +39,11 @@ Run this BEFORE merging a `mix.lock` PR to certify new versions.
    appends drift over time.
 5. **Always show findings before prompting.** The user must see what's
    being vetted. No silent `:safe_to_deploy` defaults.
+6. **Confirmation counts are COMPUTED, never estimated.** Any number in
+   an `AskUserQuestion` (criteria split, new/overwrite/no-op) MUST be
+   derived from the loaded data *before* prompting — e.g.
+   `Enum.frequencies_by(seed.audits, & &1.criteria)`. Eyeballing the
+   file and approving on wrong numbers corrupts the consent.
 
 ## Execution flow
 
@@ -55,10 +60,21 @@ Else:
 ### Step 2: Branch by mode
 
 - **`<pkg> <version>`** → single-vet path (Step 3-7).
-- **`--seed`** → copy `priv/hex_vet_seed.exs` into the project ledger;
-  ask before overwriting existing entries.
+- **`--seed`** → import `priv/hex_vet_seed.exs`. Before prompting,
+  `Code.eval_file/1` the seed and **compute** (Iron Law #6): the
+  `criteria` split (`Enum.frequencies_by(seed.audits, & &1.criteria)`)
+  and, against any existing ledger, exact new / overwrite / no-op
+  counts. Put those computed numbers in the `AskUserQuestion`. Also
+  state up front that the seed is a **provenance baseline, not
+  certification of your current `mix.lock`** (per Iron Law #2, seed
+  versions older than the locked ones stay unvetted). Ask before
+  overwriting existing entries.
 - **`--list`** → render the audits table; exit.
-- **`--check`** → compare ledger entries with `mix.lock`; warn on drift.
+- **`--check`** → compare ledger entries with `mix.lock`; warn on
+  drift. Read the lock via `Code.eval_file("mix.lock")` with
+  **`2>/dev/null`** — modern locks have quoted keys and emit a
+  `found quoted keyword` warning per package (tens of KB of noise that
+  gets persisted as an oversized tool result otherwise).
 
 ### Step 3: Fetch the tarball (single-vet)
 
@@ -124,7 +140,7 @@ Confirm to user: "Added `<pkg>` `<version>` to hex_vet.exs."
 ## References
 
 - `${CLAUDE_SKILL_DIR}/references/hex-vet.md` — schema, parser, lookup
-- `${CLAUDE_SKILL_DIR}/references/seed.md` — `--seed` flag, top-100 list
+- `${CLAUDE_SKILL_DIR}/references/seed.md` — `--seed` flag, curated baseline
 - `${CLAUDE_SKILL_DIR}/../deps-audit/references/rules-impl.md` — the
   same rules `/phx:deps-audit` runs
 

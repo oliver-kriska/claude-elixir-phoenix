@@ -1,9 +1,17 @@
-# Seed ledger — top-100 vetted Hex packages
+# Seed ledger — curated baseline of vetted Hex packages
 
 `priv/hex_vet_seed.exs` ships with the plugin and provides a
-**curated baseline of audits** for the top-100 most-downloaded Hex
-packages. Importing it skips the manual review of common deps and
-lets a new project start with a meaningful ledger.
+**curated baseline of audits** for a hand-picked set of high-trust,
+high-download Hex packages (currently ~30 — the monthly CI job in
+"Regeneration" grows this toward the top-100).
+
+It is a **provenance baseline, not certification of your project's
+current `mix.lock`.** Seed versions are pinned; per `hex_vet.exs`
+Iron Law #2 (lock wins), any locked version *newer* than the seed
+entry stays unvetted. On an up-to-date stack the seed may certify
+few or none of your actual locked deps — surface this to the user
+*before* import, not after. The seed's lasting value is the trusted
+provenance record + `:new_only` enforcement of *future* additions.
 
 ## Iron Laws (seed-specific)
 
@@ -29,7 +37,7 @@ Same map shape as `hex_vet.exs`, but lives at
   audits: [
     %{package: "jason",   version: "1.4.4",  criteria: :safe_to_deploy, ...},
     %{package: "phoenix", version: "1.7.21", criteria: :safe_to_deploy, ...},
-    # ... 98 more
+    # ... ~28 more
   ]
 }
 ```
@@ -39,16 +47,23 @@ Same map shape as `hex_vet.exs`, but lives at
 ```text
 /phx:deps-vet --seed
 
-  Step 1: Load priv/hex_vet_seed.exs.
+  Step 1: Code.eval_file priv/hex_vet_seed.exs.
   Step 2: Check generated_at; warn if > 90 days.
-  Step 3: AskUserQuestion:
-            "Import 100 top-package audits into hex_vet.exs?
-             - <count> new entries
-             - <count> would overwrite existing audits
-             - <count> already match (no-op)"
-  Step 4: On Yes: dedupe + merge + write back via Code.format_string!.
+  Step 3: COMPUTE before prompting (Iron Law #6):
+            - total = length(seed.audits)
+            - split = Enum.frequencies_by(seed.audits, & &1.criteria)
+            - vs existing ledger: new / overwrite / no-op counts
+  Step 4: AskUserQuestion (numbers are the computed values, never
+          estimates):
+            "Import <total> curated audits into hex_vet.exs?
+             - <split[:safe_to_deploy]> :safe_to_deploy,
+               <split[:safe_to_run]> :safe_to_run (+ any others)
+             - <new> new · <overwrite> overwrite · <no-op> no-op
+             Note: provenance baseline — seed versions are pinned;
+             newer locked versions stay unvetted (lock wins)."
+  Step 5: On Yes: dedupe + merge + write back via Code.format_string!.
           On No: exit without modification.
-  Step 5: Confirm: "Imported <N> entries; ledger now has <total>."
+  Step 6: Confirm: "Imported <N> entries; ledger now has <total>."
 ```
 
 Existing audits never get silently overwritten — overwrites surface
