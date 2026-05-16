@@ -18,5 +18,13 @@
 # v3.0.0: deps-audit + deps-vet (merged from main's 2.9.0) pushed the
 # canonical sum to 8036/8000. These two overrides bring it back under
 # budget while keeping the routing keywords.
-phx-deps-audit: "Audit Hex deps for supply-chain risk — bidi, compile-time exec, typosquats, CVEs. Use after mix deps.update or on mix.lock diffs."
-phx-deps-vet: "Record a vetted Hex package in hex_vet.exs after a security review. Use to approve a dep after /phx:deps-audit findings."
+# Folded scalars keep these under yamllint's 120-char line limit; the
+# parsed value is a single space-joined string. Use Codex's `$phx-`
+# command form (not `/phx:`) — overrides bypass the slash-rewrite, and
+# the CI leak assertion forbids source-form `/phx:` in targets/codex.
+phx-deps-audit: >-
+  Audit Hex deps for supply-chain risk — bidi, compile-time exec,
+  typosquats, CVEs. Use after mix deps.update or on mix.lock diffs.
+phx-deps-vet: >-
+  Record a vetted Hex package in hex_vet.exs after a security review.
+  Use to approve a dep after $phx-deps-audit findings.

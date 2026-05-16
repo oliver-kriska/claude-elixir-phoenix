@@ -1,7 +1,7 @@
 ---
 name: phx-deps-vet
 description: Record a vetted Hex package in hex_vet.exs after a security review. Use
-  to approve a dep after /phx:deps-audit findings.
+  to approve a dep after $phx-deps-audit findings.
 metadata:
   argument-hint: <pkg> <version> | --seed | --list | --check
   effort: medium
