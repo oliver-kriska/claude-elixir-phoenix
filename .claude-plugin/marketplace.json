@@ -18,6 +18,16 @@
       "source": "./plugins/elixir-phoenix",
       "category": "development",
       "tags": ["elixir", "phoenix", "liveview", "oban", "ecto"]
+    },
+    {
+      "name": "catchup",
+      "description": "Async-team return-from-absence briefing — /catchup fans out to GitHub, git, Linear, and calendar, then emits one prioritized Context Brief instead of a firehose. Framework-agnostic.",
+      "author": {
+        "name": "Oliver Kriska"
+      },
+      "source": "./plugins/catchup",
+      "category": "productivity",
+      "tags": ["productivity", "briefing", "async-team", "github", "linear"]
     }
   ]
 }

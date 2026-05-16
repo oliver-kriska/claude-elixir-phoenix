@@ -5,6 +5,57 @@ All notable changes to the Elixir/Phoenix Claude Code plugin.
 Format: [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.10.0] - 2026-05-16
+
+Adds a second, **framework-agnostic companion plugin** to the
+`oliver-kriska` marketplace: `catchup`. It is a fully independent
+plugin (own `.claude-plugin/plugin.json`, own version `0.1.0`, own
+README) — installed separately and **not** coupled to Elixir/Phoenix.
+The `elixir-phoenix` bump to 2.10.0 is the marketplace release vehicle
+(single root CHANGELOG); the only `elixir-phoenix`-internal changes
+this release are the README companion section and a `/phx:help`
+routing row. Implements GitHub issue #47.
+
+### Added
+
+- **`catchup` plugin — `/catchup` return-from-absence briefing.**
+  Standalone plugin at `plugins/catchup/`, second entry in
+  `.claude-plugin/marketplace.json`. User-triggered skill
+  (`disable-model-invocation`, slash-only). Fans out to GitHub (`gh`),
+  git, Linear MCP, and Google Calendar MCP, then emits **one**
+  prioritized brief in the 10-element Context Brief Framework scoped to
+  a personal catch-up (Intent + ranked priorities, what moved, conflict
+  risks, timeline). Flags: `--since` (incl. `last-session` mtime
+  auto-detect), `--sources`, `--depth quick|standard|deep`, `--focus`.
+  Writes `.claude/catchup/brief-<date>.md` + a ≤25-line inline summary.
+- **Impact-on-your-scope analysis** (issue #47, @druyang). First-class
+  brief block: intersects files moved on the default branch by others
+  in the window with the reader's in-flight scope (open-PR files, local
+  feature-branch diffs, working tree); classifies **direct** vs
+  **adjacent** overlap; `--depth deep` reads incoming diffs for
+  per-file *semantic* impact; `--focus impact` narrows the brief to
+  only this. Answers "how do these changes affect *my* work", not just
+  "what did I miss".
+- **Graceful-degradation contract.** Sources are detected before
+  query; a missing source becomes one honest line in the brief's
+  Risks/assumptions block, never an error. `git log` is the
+  always-available floor (valid minimum brief). No-Linear-MCP proxy:
+  harvests `[A-Z]{2,}-\d+` ticket refs from commit/PR titles
+  (labelled unverified). Privacy default is excerpt-only; Slack/Gmail
+  are v2 opt-in. v2 surface (scheduling, `.claude/catchup.local.md`,
+  cross-project rollup) is pinned in `references/config-schema.md` but
+  not built.
+- Verified end-to-end against the busy multi-developer `EnaiaInc/enaia`
+  repo (Linear/Calendar MCP absent → degradation + proxy paths
+  exercised; real direct file overlaps surfaced across local branches,
+  `lib/enaia/cre.ex` hotspot).
+
+### Changed
+
+- `elixir-phoenix` README: added a "Companion plugin: `catchup`"
+  install section. `/phx:help`: added a "Returning after time off"
+  routing row pointing to `/catchup`.
+
 ## [2.9.0] - 2026-05-16
 
 Ships the `/phx:deps-audit` + `/phx:deps-vet` Hex/Elixir supply-chain
