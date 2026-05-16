@@ -150,6 +150,8 @@ Iron Laws are non-negotiable rules that every agent enforces. If your code viola
 |---------|-------------|
 | `/phx:verify` | Full check: compile, format, credo, test, dialyzer |
 | `/phx:audit` | 5-agent project health audit with scores |
+| `/phx:deps-audit` | Audit Hex dep updates for supply-chain risk |
+| `/phx:deps-vet` | Record vetted Hex packages in hex_vet.exs ledger |
 | `/ecto:n1-check` | Detect N+1 query patterns |
 | `/lv:assigns` | Audit LiveView socket assigns for memory |
 | `/phx:boundaries` | Check Phoenix context boundary violations |
@@ -328,6 +330,8 @@ The plugin works best when all layers are active: `/phx:init` for persistent rul
 | Command | Purpose |
 |---------|---------|
 | `/phx:audit` | Full project health audit |
+| `/phx:deps-audit` | Hex dep update supply-chain audit |
+| `/phx:deps-vet` | Hex package audit ledger (`hex_vet.exs`) |
 | `/phx:perf` | Performance analysis |
 | `/ecto:n1-check` | N+1 query detection |
 | `/lv:assigns` | LiveView memory audit |

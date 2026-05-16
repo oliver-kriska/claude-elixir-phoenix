@@ -1,0 +1,19 @@
+{
+  "skill": "deps-vet",
+  "should_trigger": [
+    "Mark phoenix 1.8.7 as vetted in our hex_vet ledger",
+    "Approve this version of jason — we reviewed it",
+    "Add an entry to hex_vet.exs for the new ecto version",
+    "Record that we audited postgrex 0.22.2",
+    "Sign off on the bandit upgrade for the audit ledger",
+    "Update the vetted-versions file for our deps",
+    "Initialize a hex_vet.exs for this project"
+  ],
+  "should_not_trigger": [
+    "Run a security audit on our Hex dependencies",
+    "Check the mix.lock diff for malicious patterns",
+    "Add jason to mix.exs",
+    "Update phoenix to the latest version",
+    "Why is our hex.audit failing?"
+  ]
+}

@@ -1,0 +1,120 @@
+name: Regenerate Hex API cassettes
+
+# Monthly regeneration of VCR cassettes under
+# plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+# used by Rules 6 + 8 for offline smoke testing.
+#
+# Captures fresh response bodies from hex.pm, updates the _meta.json SHA
+# index, and opens a PR. Falls back to a workflow artifact when org
+# policy blocks GITHUB_TOKEN PR creation.
+
+on:
+  schedule:
+    # 5th of month at 09:00 UTC (staggered from seed-regen on the 1st)
+    - cron: '0 9 5 * *'
+  workflow_dispatch:
+
+jobs:
+  regenerate:
+    name: Regenerate hex-api cassettes
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Install jq (preinstalled on ubuntu-latest but pin explicit)
+        run: jq --version
+
+      - name: Regenerate cassettes for seed top-100 + smoke fixtures
+        id: regen
+        run: |
+          set -u
+          seed_list="plugins/elixir-phoenix/skills/deps-audit/smoke-test/corpus.d/benign-100.txt"
+          if [ ! -f "${seed_list}" ]; then
+            echo "::error::seed list missing: ${seed_list}"
+            exit 1
+          fi
+
+          updated=0
+          while IFS= read -r line; do
+            pkg=$(echo "${line}" | awk '{print $1}')
+            ver=$(echo "${line}" | awk '{print $2}')
+            [ -z "${pkg}" ] && continue
+            bash plugins/elixir-phoenix/skills/deps-audit/priv/cassettes/capture.sh \
+              "${pkg}" "${ver}" \
+              || echo "::warning::capture failed for ${pkg} ${ver}"
+            updated=$((updated + 1))
+          done < "${seed_list}"
+
+          echo "updated_count=${updated}" >> "${GITHUB_OUTPUT}"
+
+      - name: Detect cassette drift
+        id: drift
+        run: |
+          # Diff the cassettes dir; empty diff means no PR needed
+          if git diff --quiet plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/; then
+            echo "drift=false" >> "${GITHUB_OUTPUT}"
+            echo "No cassette drift this run."
+          else
+            echo "drift=true" >> "${GITHUB_OUTPUT}"
+            git diff --stat plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+          fi
+
+      - name: Open PR (primary path)
+        id: open_pr
+        if: steps.drift.outputs.drift == 'true'
+        continue-on-error: true
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: 'chore(cassettes): monthly hex-api regen'
+          title: 'Monthly hex-api cassette regeneration'
+          body: |
+            Auto-generated PR refreshing VCR cassettes from `hex.pm/api`.
+
+            **Review checklist:**
+            - [ ] Diff per-cassette body for owner/release changes
+            - [ ] `_meta.json` SHA entries updated for changed cassettes
+            - [ ] No new package's owners list looks suspicious
+            - [ ] `captured_at` matches today's date
+          branch: chore/hex-api-cassette-regen
+          labels: |
+            cassette-regen
+            security
+            auto-pr
+
+      - name: 403 fallback — upload as artifact
+        if: steps.drift.outputs.drift == 'true' && steps.open_pr.outcome == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: cassettes-regen-${{ github.run_id }}
+          path: plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+          retention-days: 90
+
+      - name: Job summary
+        if: always()
+        run: |
+          {
+            echo "## Cassette regeneration summary"
+            echo
+            echo "- Packages processed: ${{ steps.regen.outputs.updated_count }}"
+            echo "- Drift detected: ${{ steps.drift.outputs.drift }}"
+            if [ "${{ steps.drift.outputs.drift }}" = "true" ] && [ "${{ steps.open_pr.outcome }}" = "failure" ]; then
+              echo "- **PR creation FAILED (likely 403).** Cassettes uploaded as"
+              echo "  artifact \`cassettes-regen-${{ github.run_id }}\`."
+              echo "- To enable PR creation: Settings → Actions → Allow GitHub"
+              echo "  Actions to create and approve pull requests."
+            elif [ "${{ steps.drift.outputs.drift }}" = "true" ]; then
+              echo "- PR opened: chore/hex-api-cassette-regen"
+            else
+              echo "- No drift; no PR needed."
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"

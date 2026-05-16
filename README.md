@@ -2,7 +2,7 @@
 
 **Claude Code is great. But it doesn't know that `assign_new` silently skips on reconnect, that `:float` will corrupt your money fields, or that your Oban job isn't idempotent.**
 
-This plugin does. It coordinates **20 specialist agents** that plan, implement,
+This plugin does. It coordinates **22 specialist agents** that plan, implement,
 review, and verify your Elixir/Phoenix code in parallel -- each with domain
 expertise, fresh context, and enforced [Iron Laws](#iron-laws-non-negotiable-rules)
 that catch the bugs your tests won't.
@@ -76,7 +76,7 @@ that prevent the mistakes Elixir developers actually make in production.
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-> **v2.8.0** -- 41 skills, 20 agents, 8-dimension quality eval, autoresearch self-improvement loop. Feedback welcome via [issues](https://github.com/oliver-kriska/claude-elixir-phoenix/issues).
+> **v2.9.0** -- 45 skills, 22 agents. Adds `/phx:deps-audit` + `/phx:deps-vet` Hex supply-chain suite. [Issues](https://github.com/oliver-kriska/claude-elixir-phoenix/issues) welcome.
 
 ## Installation
 
@@ -216,7 +216,7 @@ No more scattered files across `.claude/planning/`, `.claude/progress/`, `.claud
 
 ### Agent Hierarchy
 
-The plugin uses 20 agents organized into 3 tiers:
+The plugin uses 22 agents organized into 3 tiers:
 
 ```
                     ┌──────────────────────────────┐
@@ -538,7 +538,14 @@ The plugin enforces critical rules and **stops with an explanation** if code wou
 | `/phx:audit`         | Full project health audit with 5 parallel agents  |
 | `/phx:challenge`     | Rigorous review mode ("grill me")                 |
 
-## Agents (20)
+### Security & dependencies
+
+| Command                      | Description                                          |
+| ---------------------------- | ---------------------------------------------------- |
+| `/phx:deps-audit [--base R]` | Hex supply-chain audit (8 rules + CVE + differential) |
+| `/phx:deps-vet <pkg> <ver>`  | Manage the `hex_vet.exs` audit ledger (cargo-vet style) |
+
+## Agents (22)
 
 | Agent                        | Model  | Memory  | Role                                         |
 | ---------------------------- | ------ | ------- | -------------------------------------------- |
@@ -621,7 +628,7 @@ Every PR must pass the CI quality gate (lint + test + eval). Run locally before 
 ```bash
 make help             # Show all available commands
 make eval             # Quick: lint + score changed skills/agents only
-make eval-all         # Full structural: all 41 skills + all 20 agents
+make eval-all         # Full structural: all 45 skills + all 22 agents
 make eval-fix         # Auto-fix lint + show failures + suggest autoresearch
 make test             # 52 pytest tests for eval framework
 make ci               # Full CI: lint + test + eval (same as GitHub Actions)

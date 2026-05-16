@@ -1,0 +1,1 @@
+rule:4 op:>= count:1

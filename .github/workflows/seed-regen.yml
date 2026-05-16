@@ -1,0 +1,80 @@
+name: Regenerate hex_vet seed
+
+# Monthly regeneration of priv/hex_vet_seed.exs for /phx:deps-vet --seed.
+# Queries hex.pm for top-100 packages, runs Phase 1 audit rules against
+# each, and opens a PR with the updated seed. Human-reviewed before
+# merge — never auto-merged.
+
+on:
+  schedule:
+    # 1st of month at 09:00 UTC
+    - cron: '0 9 1 * *'
+  workflow_dispatch:
+
+jobs:
+  regenerate:
+    name: Regenerate seed ledger
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+
+      - name: Setup Erlang/Elixir
+        uses: erlef/setup-beam@v1
+        with:
+          otp-version: '27.x'
+          elixir-version: '1.18.x'
+
+      - name: Setup Python (for diff_findings.py + seed-regen helper)
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Fetch top-100 package list from hex.pm
+        id: fetch
+        run: |
+          curl -fsSL 'https://hex.pm/api/packages?sort=downloads&page=1' \
+            | jq -r '.[] | "\(.name) \(.latest_stable_version)"' \
+            > /tmp/top-100.txt
+          head -n 100 /tmp/top-100.txt > /tmp/top-100-cut.txt
+          wc -l /tmp/top-100-cut.txt
+
+      - name: Run deps-audit rules per package (sequential)
+        run: |
+          # Pseudocode — actual loop runs each package through the same
+          # rules-impl.md run_all_rules pipeline, aggregating to JSON.
+          # Output: /tmp/seed-audits.jsonl, one per cleanly-passing package.
+          echo "TODO: invoke phx:deps-audit per package, emit clean rows as audit entries"
+
+      - name: Compose new hex_vet_seed.exs
+        run: |
+          python3 plugins/elixir-phoenix/skills/deps-vet/scripts/compose_seed.py \
+            /tmp/seed-audits.jsonl \
+            > plugins/elixir-phoenix/skills/deps-vet/priv/hex_vet_seed.exs
+
+      - name: Format
+        run: mix format plugins/elixir-phoenix/skills/deps-vet/priv/hex_vet_seed.exs
+
+      - name: Open PR
+        uses: peter-evans/create-pull-request@v6
+        with:
+          commit-message: 'chore(seed): monthly hex_vet_seed regeneration'
+          title: 'Monthly hex_vet seed regeneration'
+          body: |
+            Auto-generated PR updating the `/phx:deps-vet --seed` ledger
+            from this month's top-100 hex.pm package list.
+
+            **Review checklist:**
+            - [ ] No previously-vetted packages got removed unexpectedly
+            - [ ] No new package shows BLOCK findings before vetting
+            - [ ] `generated_at` matches today's date
+            - [ ] Stale-warning (90d) won't trigger immediately on import
+          branch: chore/hex-vet-seed-regen
+          labels: |
+            seed-regen
+            security
+            auto-pr
