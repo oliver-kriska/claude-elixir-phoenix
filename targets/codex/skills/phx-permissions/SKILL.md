@@ -17,7 +17,7 @@ cross-reference with current `settings.json`, and recommend adding the missing o
 
 ## Usage
 
-`$phx-permissions [--days=14] [--dry-run]` — Scans session JSONL files, finds uncovered Bash commands, classifies risk, and recommends `settings.json` changes. Use `--dry-run` to preview without writing.
+`phx-permissions [--days=14] [--dry-run]` — Scans session JSONL files, finds uncovered Bash commands, classifies risk, and recommends `settings.json` changes. Use `--dry-run` to preview without writing.
 
 ## Arguments
 
@@ -123,6 +123,6 @@ Remove approved garbage entries. Report final counts.
 
 ## Related
 
-Long mix output flooding context? `$phx-mix-compression` installs rtk filters
+Long mix output flooding context? `phx-mix-compression` installs rtk filters
 that compress `mix test/credo/dialyzer/compile` output before it reaches the
 transcript (5-15% token savings on mix-heavy sessions).

@@ -47,10 +47,10 @@ mcp__tidewave__execute_sql_query "SELECT count(*) FROM users"
 
 ```bash
 # 1. Plan feature with specialist agents
-$phx-plan Add user avatars with S3 upload
+phx-plan Add user avatars with S3 upload
 
 # 2. After implementation, review with multiple perspectives
-$phx-review lib/my_app/accounts.ex  # Elixir idioms
+phx-review lib/my_app/accounts.ex  # Elixir idioms
 # Security analyzer runs automatically on auth code
 
 # 3. Before deployment
@@ -91,7 +91,7 @@ This plugin enforces non-negotiable rules across all agents:
 
 ```bash
 # 1. Start with obvious checks
-$phx-investigate Login failing after password reset
+phx-investigate Login failing after password reset
 
 # 2. Agent checks Ralph Wiggum list:
 #    - File saved? Compiled? Migrated?
@@ -106,10 +106,10 @@ $phx-investigate Login failing after password reset
 
 ```bash
 # 1. Research phase
-$phx-research Oban unique jobs best practices
+phx-research Oban unique jobs best practices
 
 # 2. Plan with context analysis
-$phx-plan Add daily digest email job
+phx-plan Add daily digest email job
 
 # 3. Agents coordinate:
 #    - hex-library-researcher evaluates deps
@@ -121,7 +121,7 @@ $phx-plan Add daily digest email job
 
 ```bash
 # 1. Run security analyzer on auth code
-$phx-review lib/my_app_web/controllers/session_controller.ex
+phx-review lib/my_app_web/controllers/session_controller.ex
 
 # 2. Check for common vulnerabilities:
 #    - SQL injection (parameterized queries?)
@@ -135,7 +135,7 @@ $phx-review lib/my_app_web/controllers/session_controller.ex
 | Situation | Use |
 |-----------|-----|
 | "How do I create a context?" | Official Phoenix guides |
-| "Is my context design idiomatic?" | Plugin's `$phx-review` |
+| "Is my context design idiomatic?" | Plugin's `phx-review` |
 | "How do I add LiveView?" | Official LiveView guides |
 | "Does my LiveView have memory issues?" | Plugin's Iron Laws |
 | "How do I deploy to Fly.io?" | Official deployment guide |

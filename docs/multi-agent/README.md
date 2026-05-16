@@ -31,7 +31,7 @@ See per-agent docs:
 | Feature                    | Claude | Codex             | OpenCode              | Pi                  |
 |----------------------------|:------:|:-----------------:|:---------------------:|:-------------------:|
 | Skills auto-load           | yes    | yes               | yes                   | yes                 |
-| Slash commands             | yes    | `$skill-name`     | `/skill-name`         | `/skill-name`       |
+| Command invocation         | `/phx:foo` | none — skills auto-load by description | `/skill-name` | `/skill-name` |
 | Sub-agents                 | yes (`Agent`) | TOML drop  | `.opencode/agent/`    | extension dispatch  |
 | Hooks                      | 9 events | 6 events        | TS module (4 hooks)   | TS extensions       |
 | Iron Laws (auto-injected)  | SubagentStart | inlined per skill | system-prompt transform | before_agent_start extension |

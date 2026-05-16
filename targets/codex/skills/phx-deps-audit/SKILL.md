@@ -51,9 +51,9 @@ against changed packages, enriches with Hex API metadata, wraps existing tools
 
 | Mode | Trigger | Old source | New source |
 |------|---------|-----------|-----------|
-| **B** (default) | `$phx-deps-audit` | `git show HEAD:mix.lock` | working `mix.lock` |
-| **C** (PR) | `$phx-deps-audit --base main` | `git show <ref>:mix.lock` | working `mix.lock` |
-| **A** (preview) | `$phx-deps-audit --preview httpoison` | locked version | Hex API latest |
+| **B** (default) | `phx-deps-audit` | `git show HEAD:mix.lock` | working `mix.lock` |
+| **C** (PR) | `phx-deps-audit --base main` | `git show <ref>:mix.lock` | working `mix.lock` |
+| **A** (preview) | `phx-deps-audit --preview httpoison` | locked version | Hex API latest |
 
 See `references/operating-modes.md` for full resolver logic.
 
@@ -128,7 +128,7 @@ If `hex_vet.exs` exists at project root, vetted-version findings are
 Lock-vs-ledger disagreement: lock wins. See the deps-vet skill's
 hex-vet schema doc for the "Lock-vs-ledger disagreement" section.
 
-Use `$phx-deps-vet <pkg> <version>` (separate skill) to add entries.
+Use `phx-deps-vet <pkg> <version>` (separate skill) to add entries.
 
 ### Step 5.7: Differential subtract
 
@@ -166,7 +166,7 @@ sidecar schema, exit-code rubric, and `--quiet` mode.
 - **NEVER modify** `mix.lock`, `mix.exs`, or any project file (non-mutating)
 - **NEVER auto-install** missing tools (warn + skip)
 - **Gate** `mix deps.{get,update,compile}` via `deps-audit-gate.sh`. See `references/hook.md`.
-- **Prompt** for `$phx-compound` after BLOCK findings — corpus self-feeds.
+- **Prompt** for `phx-compound` after BLOCK findings — corpus self-feeds.
 - **Emit** SARIF 2.1.0 via `--sarif <path>` and gate CI via `--ci`.
 
 ## References

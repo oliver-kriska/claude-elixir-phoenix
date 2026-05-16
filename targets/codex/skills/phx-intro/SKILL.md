@@ -57,8 +57,8 @@ For each section:
 After Section 6 (or when user stops):
 
 ```
-You're all set! Try `$phx-plan` with your next feature to see the workflow in action.
-Run `$phx-intro --section N` anytime to revisit a specific section.
+You're all set! Try `phx-plan` with your next feature to see the workflow in action.
+Run `phx-intro --section N` anytime to revisit a specific section.
 ```
 
 ## Notes

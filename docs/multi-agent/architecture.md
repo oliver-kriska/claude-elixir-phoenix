@@ -46,8 +46,10 @@ Per-skill transforms applied to all non-Claude targets:
    and slash-command names use the dash form.
 3. **Reference paths** — `${CLAUDE_SKILL_DIR}/references/X.md` →
    `references/X.md` (relative to skill directory).
-4. **Slash commands** — `/phx:foo` → `$phx-foo` (Codex) or `/phx-foo`
-   (Pi/OpenCode).
+4. **Slash commands** — `/phx:foo` → `` `phx-foo` `` (Codex: no `$`/`/`
+   invocation — skills auto-load by `description`, so a cross-reference is
+   just the skill name) or `/phx-foo` (Pi/OpenCode, which do have slash
+   invocation).
 5. **Iron Laws inlining** — only for auto-load reference skills (those
    with bare names, no `:` namespace) on targets without a
    SubagentStart-equivalent (Codex today). Idempotent on rebuild.

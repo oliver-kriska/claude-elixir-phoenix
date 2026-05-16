@@ -14,13 +14,13 @@
 ### Default: Auto-detect
 
 ```
-$phx-work  # Find most recent IN_PROGRESS plan, resume from first [ ]
+phx-work  # Find most recent IN_PROGRESS plan, resume from first [ ]
 ```
 
 ### From Specific Task
 
 ```
-$phx-work .claude/plans/auth/plan.md --from P2-T3
+phx-work .claude/plans/auth/plan.md --from P2-T3
 ```
 
 Skips directly to P2-T3 regardless of earlier unchecked tasks.
@@ -28,7 +28,7 @@ Skips directly to P2-T3 regardless of earlier unchecked tasks.
 ### Skip Blockers
 
 ```
-$phx-work .claude/plans/auth/plan.md --skip-blockers
+phx-work .claude/plans/auth/plan.md --skip-blockers
 ```
 
 Continues past tasks that previously failed with BLOCKER status.

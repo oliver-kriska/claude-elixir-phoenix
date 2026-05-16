@@ -40,7 +40,7 @@ Verification is tiered to balance speed and safety:
 **Files**: lib/my_app/accounts.ex:45
 
 **Action Required**: Human review needed
-**Resume**: `$phx-work plan.md --from P2-T3`
+**Resume**: `phx-work plan.md --from P2-T3`
 ```
 
 **Also write a DEAD-END entry** to the scratchpad so future

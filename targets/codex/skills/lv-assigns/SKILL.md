@@ -92,4 +92,4 @@ For each assign, estimate memory footprint:
 
 ## Usage
 
-Run `$lv-assigns path/to/live_view.ex` to generate an assigns inventory with memory estimates and optimization recommendations.
+Run `lv-assigns path/to/live_view.ex` to generate an assigns inventory with memory estimates and optimization recommendations.

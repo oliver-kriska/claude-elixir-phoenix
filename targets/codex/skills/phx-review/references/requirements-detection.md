@@ -1,6 +1,6 @@
 # Requirements Detection Reference
 
-How `$phx-review` finds the task / issue / spec whose requirements should be
+How `phx-review` finds the task / issue / spec whose requirements should be
 checked against the diff. Referenced by Step 1c of the review skill.
 
 ## Detection Priority
@@ -58,7 +58,7 @@ Any fetch can fail (MCP not installed, network, auth). On failure:
 ## Conversation-Context Reuse
 
 If the same session already called `mcp__linear__get_issue(ENA-8931)` (for
-example during `$phx-plan` or user exploration), the tool result is still
+example during `phx-plan` or user exploration), the tool result is still
 in context. Prefer reusing that over re-fetching:
 
 - Scan the last N messages for a `mcp__linear__get_issue` response whose
@@ -91,8 +91,8 @@ Sources tried:
 - Commits since main: none
 - `.claude/plans/`: no plan files present
 
-To force a source: `$phx-review ENA-8931`, `$phx-review #42`, or
-`$phx-review path/to/spec.md`.
+To force a source: `phx-review ENA-8931`, `phx-review #42`, or
+`phx-review path/to/spec.md`.
 ```
 
 This is the "we looked and couldn't find anything" alternative to silence

@@ -2,7 +2,7 @@
 
 > **READ-ONLY**: This file ships with the plugin. Do NOT edit it
 > at runtime — changes to cached plugin files are lost on update.
-> To capture new lessons, use `$phx-learn-from-fix` which writes to
+> To capture new lessons, use `phx-learn-from-fix` which writes to
 > project CLAUDE.md or auto-memory.
 
 Common Elixir/Phoenix mistakes and their fixes. Use as reference

@@ -13,9 +13,9 @@ Skip the planning ceremony. Get working code fast.
 ## Usage
 
 ```bash
-$phx-quick Add pagination to posts
-$phx-quick Fix the login redirect bug
-$phx-quick Add CSV export to reports
+phx-quick Add pagination to posts
+phx-quick Fix the login redirect bug
+phx-quick Add CSV export to reports
 ```
 
 ## Arguments
@@ -41,7 +41,7 @@ $phx-quick Add CSV export to reports
 ## Iron Laws
 
 1. **NEVER skip verification** — run `mix compile --warnings-as-errors` after every change, even in quick mode
-2. **DO NOT touch files outside the stated scope** — quick mode means minimal blast radius; if a fix requires changes across multiple domains, escalate to `$phx-plan`
+2. **DO NOT touch files outside the stated scope** — quick mode means minimal blast radius; if a fix requires changes across multiple domains, escalate to `phx-plan`
 3. **NEVER bypass security checks for speed** — auth, input validation, and XSS rules apply regardless of change size
 
 ## Rules in Quick Mode
@@ -110,7 +110,7 @@ If quick mode hits complexity:
 
 ```
 This needs more planning. Switching to normal mode.
-Run $phx-plan [task] for full analysis.
+Run phx-plan [task] for full analysis.
 ```
 
 ## Verification
@@ -123,7 +123,7 @@ run `mix ecto.migrate`. Then run `mix test test/path_test.exs` for affected test
 ## Example Session
 
 ```
-User: $phx-quick Add archived_at timestamp to posts
+User: phx-quick Add archived_at timestamp to posts
 
 Claude:
 1. Reading lib/my_app/blog/post.ex...

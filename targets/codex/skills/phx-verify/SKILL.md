@@ -111,7 +111,7 @@ Respect `preferred_envs` / `cli/0` for correct `MIX_ENV` on each command.
 
 ## Usage
 
-1. Run `$phx-verify` — discovery happens automatically
+1. Run `phx-verify` — discovery happens automatically
 2. Core checks run in order, adapted to project
 3. After pass, offered additional test commands (E2E, coverage)
 4. Commit only after all chosen checks pass

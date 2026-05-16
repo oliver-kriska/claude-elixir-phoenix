@@ -16,12 +16,12 @@ Comprehensive project-wide health assessment using 5 parallel specialist subagen
 ## Usage
 
 ```
-$phx-audit              # Full audit (default)
-$phx-audit --quick      # 2-3 minute pulse check
-$phx-audit --focus=security   # Deep dive single area
-$phx-audit --focus=performance
-$phx-audit --since abc123   # Incremental audit since commit
-$phx-audit --since HEAD~10  # Audit last 10 commits
+phx-audit              # Full audit (default)
+phx-audit --quick      # 2-3 minute pulse check
+phx-audit --focus=security   # Deep dive single area
+phx-audit --focus=performance
+phx-audit --since abc123   # Incremental audit since commit
+phx-audit --since HEAD~10  # Audit last 10 commits
 ```
 
 ## When to Use
@@ -146,16 +146,16 @@ Analyze only changes since a specific commit. Useful for pre-merge checks:
 
 Run `git diff --name-only <commit>...HEAD` to identify changed files, then run targeted audits on changed files only (skips full project scan).
 
-Combines with other flags: `$phx-audit --since HEAD~5 --focus=security`
+Combines with other flags: `phx-audit --since HEAD~5 --focus=security`
 
 ## Relationship to Other Commands
 
 | Command | Scope | Frequency |
 |---------|-------|-----------|
-| `$phx-review` | Changed files (diff) | Every PR |
-| `$phx-audit` | Entire project | Quarterly |
-| `$phx-boundaries` | Context structure | On-demand |
-| `$phx-verify` | Compile/test pass | Anytime |
+| `phx-review` | Changed files (diff) | Every PR |
+| `phx-audit` | Entire project | Quarterly |
+| `phx-boundaries` | Context structure | On-demand |
+| `phx-verify` | Compile/test pass | Anytime |
 
 ## References
 

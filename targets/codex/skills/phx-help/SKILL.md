@@ -14,9 +14,9 @@ Helps users find the right command, skill, or agent for their situation.
 ## Usage
 
 ```
-$phx-help                          # Analyze context, suggest commands
-$phx-help how do I debug this?     # Route to $phx-investigate
-$phx-help add a new feature        # Route to $phx-plan -> $phx-work
+phx-help                          # Analyze context, suggest commands
+phx-help how do I debug this?     # Route to phx-investigate
+phx-help add a new feature        # Route to phx-plan -> phx-work
 ```
 
 ## Arguments
@@ -44,22 +44,22 @@ Map the user's situation to one of these categories:
 
 | Category | Signals | Primary Commands |
 |----------|---------|-----------------|
-| **Starting out** | No plans, new to plugin | `$phx-intro` |
-| **Ideation** | "explore", "brainstorm", "not sure", "how to approach", "vague idea" | `$phx-brainstorm` |
-| **New feature** | "add", "build", "implement", multi-file | `$phx-plan` → `$phx-work` |
-| **Quick change** | Single file, <50 lines, "fix typo" | `$phx-quick` |
-| **Bug** | Error, stack trace, "broken", "failing" | `$phx-investigate` |
-| **Review** | "check", "review", PR ready | `$phx-review` |
-| **Performance** | "slow", "N+1", "memory" | `$phx-perf`, `$ecto-n1-check`, `$lv-assigns` |
-| **Research** | "how to", "best practice", "evaluate lib" | `$phx-research` |
-| **Resume work** | Existing plan with unchecked tasks | `$phx-work --continue` |
-| **Post-fix** | "that worked", solved a hard bug | `$phx-compound` |
-| **Full cycle** | Large feature, new domain area | `$phx-full` |
-| **Project health** | "audit", "tech debt", "overall quality" | `$phx-audit`, `$phx-techdebt` |
-| **Dep update audit** | "audit deps", "supply chain", "post-`mix deps.update`", "review mix.lock PR" | `$phx-deps-audit` |
-| **Manual dep vetting** | "vet this package", "approve dep", "trust ledger", "after $phx-deps-audit findings" | `$phx-deps-vet` |
-| **Deployment** | "deploy", "release", "production" | `$phx-verify` then deploy skill |
-| **Permissions** | "too many prompts", "allow", "permission fatigue" | `$phx-permissions` |
+| **Starting out** | No plans, new to plugin | `phx-intro` |
+| **Ideation** | "explore", "brainstorm", "not sure", "how to approach", "vague idea" | `phx-brainstorm` |
+| **New feature** | "add", "build", "implement", multi-file | `phx-plan` → `phx-work` |
+| **Quick change** | Single file, <50 lines, "fix typo" | `phx-quick` |
+| **Bug** | Error, stack trace, "broken", "failing" | `phx-investigate` |
+| **Review** | "check", "review", PR ready | `phx-review` |
+| **Performance** | "slow", "N+1", "memory" | `phx-perf`, `ecto-n1-check`, `lv-assigns` |
+| **Research** | "how to", "best practice", "evaluate lib" | `phx-research` |
+| **Resume work** | Existing plan with unchecked tasks | `phx-work --continue` |
+| **Post-fix** | "that worked", solved a hard bug | `phx-compound` |
+| **Full cycle** | Large feature, new domain area | `phx-full` |
+| **Project health** | "audit", "tech debt", "overall quality" | `phx-audit`, `phx-techdebt` |
+| **Dep update audit** | "audit deps", "supply chain", "post-`mix deps.update`", "review mix.lock PR" | `phx-deps-audit` |
+| **Manual dep vetting** | "vet this package", "approve dep", "trust ledger", "after phx-deps-audit findings" | `phx-deps-vet` |
+| **Deployment** | "deploy", "release", "production" | `phx-verify` then deploy skill |
+| **Permissions** | "too many prompts", "allow", "permission fatigue" | `phx-permissions` |
 
 ### Step 3: Respond or Clarify
 
@@ -87,14 +87,14 @@ Then recommend based on the answer.
 
 After recommending, always add:
 
-- "Run `$phx-help` anytime to get routing advice"
-- If they seem new: "Try `$phx-intro` for a full plugin walkthrough"
+- "Run `phx-help` anytime to get routing advice"
+- If they seem new: "Try `phx-intro` for a full plugin walkthrough"
 
 ## Iron Laws
 
 1. **ONE recommendation** — don't dump the full catalog, pick the best match
 2. **MAX ONE clarifying question** — don't interrogate, make your best guess
-3. **Show exact syntax** — `$phx-plan Add user notifications` not just "use the plan command"
+3. **Show exact syntax** — `phx-plan Add user notifications` not just "use the plan command"
 4. **Context over keywords** — existing plans + git state matter more than word matching
 5. **NEVER block** — if user already knows what they want, DO NOT redirect
 
@@ -102,4 +102,4 @@ After recommending, always add:
 
 - Complements `intent-detection` (auto-trigger) with explicit invocation
 - References same routing logic but adds interactive clarification
-- Can recommend `$phx-intro` for onboarding
+- Can recommend `phx-intro` for onboarding

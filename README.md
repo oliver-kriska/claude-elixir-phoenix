@@ -120,7 +120,7 @@ Multi-agent capability matrix (v3.0.0):
 | Feature                   | Claude | Codex            | OpenCode             | Pi                  |
 |---------------------------|:------:|:----------------:|:--------------------:|:-------------------:|
 | Skills auto-load          | yes    | yes              | yes                  | yes                 |
-| Slash commands            | yes    | `$skill-name`    | `/skill-name`        | `/skill-name`       |
+| Command invocation        | `/phx:foo` | none (skills auto-load) | `/skill-name` | `/skill-name` |
 | Sub-agents                | yes    | TOML drop (21)   | `.opencode/agent/` (21) | extension dispatch |
 | Hooks                     | 9 events | 6 events       | TS module            | TS extensions       |
 | Iron Laws (auto-injected) | yes    | inlined per skill| system-prompt transform | before_agent_start extension |

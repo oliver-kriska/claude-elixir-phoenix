@@ -76,9 +76,9 @@ Use Grep to search `.claude/solutions/` by symptom (e.g., `NotLoaded`), by tag (
 
 ## Integration
 
-- `$phx-compound` creates solution docs here
-- `$phx-investigate` searches here before debugging
-- `$phx-plan` consults for known risks
+- `phx-compound` creates solution docs here
+- `phx-investigate` searches here before debugging
+- `phx-plan` consults for known risks
 - `learn-from-fix` feeds into this system
 
 ## References

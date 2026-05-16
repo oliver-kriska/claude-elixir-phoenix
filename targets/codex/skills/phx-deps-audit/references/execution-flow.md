@@ -1,6 +1,6 @@
 # Execution Flow (Phase 5)
 
-Authoritative pacing for `$phx-deps-audit`. The SKILL.md "Execution Flow"
+Authoritative pacing for `phx-deps-audit`. The SKILL.md "Execution Flow"
 section is a thin pointer; the runtime contract lives here.
 
 ## Default = full scan
@@ -16,9 +16,9 @@ time, the skill reported "no findings," and a bidi-char trojan landed in
 the lock with no warning. **Removed.** Heuristics run by default.
 
 ```
-$phx-deps-audit          ← runs the full pipeline
-$phx-deps-audit --base main
-$phx-deps-audit --preview httpoison
+phx-deps-audit          ← runs the full pipeline
+phx-deps-audit --base main
+phx-deps-audit --preview httpoison
 ```
 
 ## `--quick`: CVE + retirement only
@@ -36,7 +36,7 @@ maintainer just wants to confirm no known-CVE updates are merging dirty.
 Target latency on a 25-package update: **<10s**.
 
 ```
-$phx-deps-audit --quick
+phx-deps-audit --quick
 ```
 
 Flag synonyms considered: `--cve-only`, `--no-heuristics`, `--fast`.

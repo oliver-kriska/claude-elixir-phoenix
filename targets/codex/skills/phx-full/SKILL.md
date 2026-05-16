@@ -17,16 +17,16 @@ Cycles back automatically if review finds issues.
 ## Usage
 
 ```
-$phx-full Add user authentication with magic links
-$phx-full Real-time notification system with Phoenix PubSub
-$phx-full Background job processing for email campaigns --max-cycles 5
+phx-full Add user authentication with magic links
+phx-full Real-time notification system with Phoenix PubSub
+phx-full Background job processing for email campaigns --max-cycles 5
 ```
 
 ## Workflow Overview
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                       $phx-full {feature}                        │
+│                       phx-full {feature}                        │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  │
@@ -49,7 +49,7 @@ $phx-full Background job processing for email campaigns --max-cycles 5
 │                                                                  │
 │  On Completion:                                                  │
 │  Auto-compound: Capture solved problems → .claude/solutions/     │
-│  Auto-suggest: $phx-document → $phx-learn-from-fix                       │
+│  Auto-suggest: phx-document → phx-learn-from-fix                       │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -77,7 +77,7 @@ TaskCreate({subject: "Capture solutions", activeForm: "Compounding..."})
 Set up `blockedBy` dependencies between phases (sequential).
 
 Run COMPOUNDING phase on COMPLETED to capture solved problems in `.claude/solutions/`.
-Suggest `$phx-document` for docs and `$phx-learn-from-fix` for quick pattern capture.
+Suggest `phx-document` for docs and `phx-learn-from-fix` for quick pattern capture.
 
 ## Cycle Limits
 
@@ -92,13 +92,13 @@ Stop with INCOMPLETE status when limits exceeded. List remaining work and recomm
 ## Integration
 
 ```text
-$phx-full = $phx-plan → $phx-work → $phx-verify → $phx-review → (fix → $phx-verify) → $phx-compound
+phx-full = phx-plan → phx-work → phx-verify → phx-review → (fix → phx-verify) → phx-compound
 ```
 
 Use Ralph Wiggum Loop for fully autonomous execution:
 
 ```bash
-/ralph-loop:ralph-loop "$phx-full {feature}" --completion-promise "DONE" --max-iterations 50
+/ralph-loop:ralph-loop "phx-full {feature}" --completion-promise "DONE" --max-iterations 50
 ```
 
 ## Iron Laws

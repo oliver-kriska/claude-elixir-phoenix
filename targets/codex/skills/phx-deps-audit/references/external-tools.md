@@ -336,8 +336,8 @@ ls -la _build/dev/lib/mix_audit/priv/advisories/ | head
 **Override the threshold:**
 
 ```bash
-GHSA_MAX_AGE_HOURS=72 $phx-deps-audit  # tolerate 3-day-old cache
-GHSA_MAX_AGE_HOURS=1  $phx-deps-audit  # paranoid mode
+GHSA_MAX_AGE_HOURS=72 phx-deps-audit  # tolerate 3-day-old cache
+GHSA_MAX_AGE_HOURS=1  phx-deps-audit  # paranoid mode
 ```
 
 **Future (Phase 6+):** auto-refresh via a PreToolUse hook that watches

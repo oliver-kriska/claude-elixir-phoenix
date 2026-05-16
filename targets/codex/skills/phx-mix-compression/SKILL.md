@@ -20,8 +20,8 @@ while preserving full failure blocks, compile errors, and stack traces. Net win:
 
 ## When to use
 
-- **Long sessions** — `$phx-work` or `$phx-full` hitting context limits from mix output
-- **Debugging loops** — `$phx-investigate` retrying `mix compile`/`mix test` repeatedly
+- **Long sessions** — `phx-work` or `phx-full` hitting context limits from mix output
+- **Debugging loops** — `phx-investigate` retrying `mix compile`/`mix test` repeatedly
 - **Dialyzer-heavy projects** — `mix dialyzer` output dominates the transcript
 
 ## Iron Laws

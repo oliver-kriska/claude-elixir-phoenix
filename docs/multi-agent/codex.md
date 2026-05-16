@@ -48,18 +48,23 @@ reads the Claude `.claude-plugin/marketplace.json`, so the Claude
 
 ## Usage
 
-Slash commands are invoked with `$skill-name` (Codex convention):
+> **Codex has no `$command` / `/command` invocation.** Verified against
+> codex-cli 0.130.0: plugin skills auto-load by their `description` —
+> exactly the Claude skill model. You **describe your task in plain
+> language** and the matching skill triggers. There is nothing to type
+> like `$phx-help`.
 
 ```
-$phx-quick add a unique constraint to the email column
-$phx-plan multi-tenant billing with Stripe webhooks
-$ecto-n1-check
-$lv-assigns
+add a unique constraint to the email column      → phx-quick skill
+plan multi-tenant billing with Stripe webhooks   → phx-plan skill
+this query looks like an N+1                      → ecto-n1-check skill
 ```
 
-The 14 reference skills (testing, oban, ecto-patterns, …) auto-load on
-file context. The 22 Iron Laws are **inlined** at the bottom of each
-auto-load skill body since Codex has no SubagentStart hook.
+The 14 file-context reference skills (testing, oban, ecto-patterns, …)
+auto-load when you touch matching files. The 31 workflow skills
+(`phx-plan`, `phx-work`, `phx-review`, …) trigger from their description.
+The 22 Iron Laws are **inlined** at the bottom of each auto-load skill
+body since Codex has no SubagentStart hook.
 
 ## Tidewave MCP
 
@@ -71,9 +76,9 @@ automatically.
 
 Full Phase 1 + Phase 2 parity — one release:
 
-- 43 skills loaded
-- 29 slash commands invokable as `$skill-name`
-- **21 sub-agents** as `agents-toml/<name>.toml`, copied into
+- 45 skills (14 file-context reference + 31 workflow skills like
+  `phx-plan`), all description-triggered — no typed commands
+- **22 sub-agents** as `agents-toml/<name>.toml`, copied into
   `~/.codex/agents/` by a SessionStart helper
 - **Hooks for 6 of 9 events** (PreToolUse, PostToolUse, SessionStart,
   Stop, PreCompact, PostCompact)
@@ -94,21 +99,30 @@ Full Phase 1 + Phase 2 parity — one release:
 - No `SubagentStart` → Iron Laws inlined per skill instead of injected
   globally. Adds ~600 bytes to each auto-load skill, but doesn't bleed
   into the description budget.
-- Slash commands use `$skill-name`, not `/phx:skill-name`. The pipeline
-  rewrites these in skill bodies; user muscle memory is the only friction.
+- No typed commands at all (Codex has no `$`/`/` invocation). Workflow
+  skills that are `/phx:plan` on Claude are description-triggered skills
+  here; the pipeline rewrites in-body cross-references to the bare skill
+  name (e.g. `` `phx-review` ``). Slightly less discoverable than a
+  command palette, but the routing is automatic.
 - 8 KB description budget is real. `descriptions_short.yaml` lets us
   override individual skill descriptions if any single edit pushes us
   over.
 
 ## Manual smoke test
 
-After install, run:
+After enabling the plugin in the picker, confirm the skills installed:
 
 ```bash
-$phx-help
-$phx-quick add a unique index on users.email
+ls ~/.codex/skills | grep -i phx     # phx-* skill dirs present
+ls ~/.codex/agents | grep -i elixir  # 22 agent TOMLs (SessionStart helper)
 ```
 
-If `$phx-help` produces a command list, the plugin is loaded.
-If `$phx-quick` produces an Ecto migration, the canonical workflow path
-is intact.
+Then in a `codex` session, just describe a task — don't type a command:
+
+```
+add a unique index on users.email
+```
+
+If Codex produces an Ecto migration following the plugin's patterns
+(and Iron Laws are respected), the workflow path is intact. Opening a
+`.ex` file should auto-load the matching reference skill.

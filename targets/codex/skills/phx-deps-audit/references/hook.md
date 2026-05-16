@@ -48,7 +48,7 @@ Only two Phase 1 rules run inline:
 Both rules are **zero false positive** by design and produce stable
 NDJSON findings compatible with the Phase 2 differ output. If both
 rules return clean, the gate prints a one-line stderr hint
-("`Run $phx-deps-audit for full pipeline`") and exits 0.
+("`Run phx-deps-audit for full pipeline`") and exits 0.
 
 Rules 2, 3, 4, 7, 8 are intentionally deferred to Tier 2 — they
 require unpacking tarballs and lose the <2s budget on the very first
@@ -58,11 +58,11 @@ new package.
 
 Tier 2 invocation is NOT chained from the hook. When `block_on_unvetted`
 is `:full`, the hook still only runs Tiers 0+1, blocks on Tier 1
-findings, and points the user at `$phx-deps-audit` for the full Tier 2
+findings, and points the user at `phx-deps-audit` for the full Tier 2
 pipeline. Reason: hook-budget exhaustion via the Bash 600s timeout is
 worse UX than an explicit "run the audit" message.
 
-The `$phx-deps-audit` skill body owns Tier 2 — when invoked manually,
+The `phx-deps-audit` skill body owns Tier 2 — when invoked manually,
 it can take 30-90s, run subagents, and update `last-run.json` so the
 next hook invocation gets a Tier 0 hit.
 
@@ -93,7 +93,7 @@ environments where the audit runs separately.
   Slowest path is git-fetch when `PHX_DEPS_AUDIT_BASE` is stale; users
   should pre-fetch in pre-commit or CI.
 - **Tier 2**: explicitly unbounded; only reached on user opt-in via
-  `$phx-deps-audit`.
+  `phx-deps-audit`.
 
 ## Failure modes
 

@@ -13,7 +13,7 @@ metadata:
 Plan a feature by spawning Elixir specialist agents, then output
 structured plan with checkboxes.
 
-## What Makes $phx-plan Different from /plan
+## What Makes phx-plan Different from /plan
 
 1. Spawns Elixir specialist agents for research
 2. Plans with `[ecto]`, `[liveview]`, `[oban]` task routing
@@ -24,10 +24,10 @@ structured plan with checkboxes.
 ## Usage
 
 ```
-$phx-plan Add user avatars with S3 upload
-$phx-plan .claude/plans/notifications/reviews/notifications-review.md
-$phx-plan Implement notifications --depth deep
-$phx-plan .claude/plans/auth/plan.md --existing
+phx-plan Add user avatars with S3 upload
+phx-plan .claude/plans/notifications/reviews/notifications-review.md
+phx-plan Implement notifications --depth deep
+phx-plan .claude/plans/auth/plan.md --existing
 ```
 
 ## Arguments
@@ -78,14 +78,14 @@ Enhances an existing plan instead of creating a new one:
 
 ## Iron Laws
 
-1. **NEVER auto-start $phx-work** — Always present plan and ask
+1. **NEVER auto-start phx-work** — Always present plan and ask
 2. **Research before assuming** — Web-search unfamiliar tech
 3. **Spawn agents selectively** — Only relevant, not all
 4. **NEVER write plan while agents still running**
 5. **NEVER skip input findings** — Every finding MUST have a task
 6. **Do NOT spawn hex-library-researcher for existing deps**
 7. **Skip research when planning from review/investigation** — When
-   input is a review file or `$phx-investigate` output, the findings
+   input is a review file or `phx-investigate` output, the findings
    ARE the research. Do NOT spawn agents to re-discover what the
    review already found. Convert findings directly to plan tasks.
    (Confirmed: 56-session analysis showed same findings discovered
@@ -94,13 +94,13 @@ Enhances an existing plan instead of creating a new one:
 ## Integration with Workflow
 
 ```text
-$phx-plan {feature}  <-- YOU ARE HERE
+phx-plan {feature}  <-- YOU ARE HERE
        |
-   $phx-plan --existing (optional enhancement)
+   phx-plan --existing (optional enhancement)
        |
-   ASK USER -> $phx-work .claude/plans/{feature}/plan.md
+   ASK USER -> phx-work .claude/plans/{feature}/plan.md
        |
-$phx-review → $phx-compound
+phx-review → phx-compound
 ```
 
 ## Notes
@@ -117,7 +117,7 @@ After writing `.claude/plans/{slug}/plan.md`:
 1. Summarize: task count, phases, key decisions
 2. Use `AskUserQuestion` with options:
    - "Start in fresh session" (recommended for 5+ tasks)
-   - "Get a briefing" (`$phx-brief` — interactive walkthrough)
+   - "Get a briefing" (`phx-brief` — interactive walkthrough)
    - "Start here"
    - "Review the plan"
    - "Adjust the plan"
@@ -128,8 +128,8 @@ After writing `.claude/plans/{slug}/plan.md`:
 ```
 1. Run `/new` to start a fresh session
 2. Then run one of:
-   $phx-work .claude/plans/{slug}/plan.md
-   $phx-full .claude/plans/{slug}/plan.md  (includes review + compound)
+   phx-work .claude/plans/{slug}/plan.md
+   phx-full .claude/plans/{slug}/plan.md  (includes review + compound)
 ```
 
 This is Iron Law #1. Violating it wastes user context.

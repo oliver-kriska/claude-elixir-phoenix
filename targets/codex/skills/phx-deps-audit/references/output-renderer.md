@@ -187,9 +187,9 @@ Layout rules:
 
 **Aggregate risk:** 🔴 high (1 package over threshold)
 
-Re-run after fix: `$phx-deps-audit`
-Inspect one package: `$phx-deps-audit --preview req`
-Compare against main: `$phx-deps-audit --base origin/main`
+Re-run after fix: `phx-deps-audit`
+Inspect one package: `phx-deps-audit --preview req`
+Compare against main: `phx-deps-audit --base origin/main`
 
 Detailed findings: `.claude/deps-audit/last-run.json`
 ```

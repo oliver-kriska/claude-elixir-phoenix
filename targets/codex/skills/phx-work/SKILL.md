@@ -1,6 +1,6 @@
 ---
 name: phx-work
-description: Execute Elixir/Phoenix plan tasks with progress tracking. Use after $phx-plan
+description: Execute Elixir/Phoenix plan tasks with progress tracking. Use after phx-plan
   to implement features with mix compile and mix test verification after each step,
   or --continue to resume interrupted work.
 metadata:
@@ -15,10 +15,10 @@ Execute tasks from a plan file with checkpoint tracking and verification.
 ## Usage
 
 ```
-$phx-work .claude/plans/user-auth/plan.md
-$phx-work .claude/plans/user-auth/plan.md --from P2-T3
-$phx-work --skip-blockers
-$phx-work  # Resumes most recent plan
+phx-work .claude/plans/user-auth/plan.md
+phx-work .claude/plans/user-auth/plan.md --from P2-T3
+phx-work --skip-blockers
+phx-work  # Resumes most recent plan
 ```
 
 ## Arguments
@@ -30,7 +30,7 @@ $phx-work  # Resumes most recent plan
 
 ## Iron Laws (NON-NEGOTIABLE)
 
-1. **NEVER auto-proceed** to $phx-review or any next workflow
+1. **NEVER auto-proceed** to phx-review or any next workflow
    phase -- always ask the user what to do next
 2. **AUTO-CONTINUE between plan phases** -- when Phase N completes,
    immediately start Phase N+1. Do NOT stop or ask for permission
@@ -58,7 +58,7 @@ Ask the user for plans with >3 tasks:
 Skip for plans with 3 or fewer simple tasks -- just start.
 
 > **Split warning**: Plans with >10 tasks risk 2-3 context
-> compactions. Suggest splitting via `$phx-plan` if not already.
+> compactions. Suggest splitting via `phx-plan` if not already.
 
 ## Step 2: Check Context (MANDATORY)
 
@@ -144,12 +144,12 @@ Summarize results with `AskUserQuestion`:
 > Implementation complete! {done}/{total} tasks finished.
 > {count} files modified across {count} phases.
 
-Options: 1. **Run review** (`$phx-review`) (Recommended),
-2. **Get a briefing** (`$phx-brief` — understand what was built),
+Options: 1. **Run review** (`phx-review`) (Recommended),
+2. **Get a briefing** (`phx-brief` — understand what was built),
 3. **Commit changes** (`/commit`), 4. **Continue manually**.
 
-With blockers: list them, offer **Replan** (`$phx-plan`),
-**Review first** (`$phx-review`), or **Handle myself**.
+With blockers: list them, offer **Replan** (`phx-plan`),
+**Review first** (`phx-review`), or **Handle myself**.
 
 **If blockers remain**, auto-write HANDOFF to scratchpad:
 
@@ -162,7 +162,7 @@ Key decisions: {brief list from this session}.
 
 Include context beyond checkboxes for fresh session resume.
 
-**NEVER** auto-start $phx-review or any other phase.
+**NEVER** auto-start phx-review or any other phase.
 
 ## Step 6: Check for Additional Plans
 
@@ -175,7 +175,7 @@ If pending plans exist, inform the user. Do NOT auto-start.
 ## Integration
 
 ```text
-$phx-plan → $phx-work (YOU ARE HERE) → $phx-review → $phx-compound
+phx-plan → phx-work (YOU ARE HERE) → phx-review → phx-compound
                  ↑ ASK USER before each transition
 ```
 

@@ -63,4 +63,4 @@ For each duplication found, report:
 
 ## Usage
 
-Run `$phx-techdebt` to analyze the codebase and generate a prioritized report of technical debt with specific remediation steps.
+Run `phx-techdebt` to analyze the codebase and generate a prioritized report of technical debt with specific remediation steps.

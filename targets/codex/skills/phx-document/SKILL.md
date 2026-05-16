@@ -16,9 +16,9 @@ Generate documentation for newly implemented features.
 ## Usage
 
 ```
-$phx-document .claude/plans/magic-link-auth/plan.md
-$phx-document magic link authentication
-$phx-document  # Auto-detect from recent plan
+phx-document .claude/plans/magic-link-auth/plan.md
+phx-document magic link authentication
+phx-document  # Auto-detect from recent plan
 ```
 
 ## Iron Laws
@@ -70,9 +70,9 @@ zero output (confirmed: session bb0a0454 wasted ~2K tokens on no-op).
 ## Integration with Workflow
 
 ```text
-$phx-plan → $phx-work → $phx-review
+phx-plan → phx-work → phx-review
        ↓
-$phx-document  ← YOU ARE HERE (optional, suggested after review passes)
+phx-document  ← YOU ARE HERE (optional, suggested after review passes)
 ```
 
 ## References

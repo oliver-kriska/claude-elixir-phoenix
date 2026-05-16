@@ -138,14 +138,22 @@ def rewrite_slash_commands(body: str, target: str) -> str:
     """Rewrite `/phx:foo` references for the given target's invocation style.
 
     - claude   : pass-through (`/phx:foo` is the native form).
-    - codex    : `/phx:foo` → `$phx-foo` (Codex slash-command convention).
+    - codex    : `/phx:foo` → `phx-foo` — Codex has NO `$`/`/` command
+      invocation; skills auto-load by `description`, so a cross-reference
+      is just the skill's bare name, not a typed command (verified vs
+      codex-cli 0.130.0). We do NOT add backticks: the slash command is
+      usually already inside a source code span (`` `/phx:foo all` ``),
+      and wrapping the replacement in another pair produces nested/broken
+      spans (`` ` `phx-foo` all` `` — MD038). Dropping just the `/` and
+      the `:` preserves whatever backticks the source author wrote:
+      `` `/phx:foo all` `` → `` `phx-foo all` ``; bare prose stays bare.
     - opencode : `/phx:foo` → `/phx-foo` (`:` not allowed in command names).
     - pi       : `/phx:foo` → `/phx-foo` (Pi prompt names).
     """
     if target == "claude":
         return body
     if target == "codex":
-        return _SLASH_CMD_RE.sub(r"$\1-\2", body)
+        return _SLASH_CMD_RE.sub(r"\1-\2", body)
     return _SLASH_CMD_RE.sub(r"/\1-\2", body)
 
 

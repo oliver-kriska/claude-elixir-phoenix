@@ -233,7 +233,7 @@ round-trip on a fixture before relying on it — version pinning matters.
 
 For projects using ad-hoc trust mechanisms (a comment in `mix.exs`,
 README sections, internal wiki pages), the seed-import flow
-(`$phx-deps-vet --seed`) lets a team bootstrap a real ledger from
+(`phx-deps-vet --seed`) lets a team bootstrap a real ledger from
 the top-100 list and then layer in project-specific audits.
 
 The seed is regenerated monthly; entries older than 90 days emit a

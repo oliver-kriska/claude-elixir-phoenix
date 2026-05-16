@@ -15,8 +15,8 @@ Install the Elixir/Phoenix plugin's behavioral instructions into the project's C
 ## Usage
 
 ```
-$phx-init           # First-time installation
-$phx-init --update  # Update existing installation with latest rules
+phx-init           # First-time installation
+phx-init --update  # Update existing installation with latest rules
 ```
 
 ## Iron Laws
@@ -94,8 +94,8 @@ Added to CLAUDE.md:
 - Iron Laws enforcement ({n} laws)
 - Verification rules
 
-Run $phx-init --update after plugin updates.
-Run $phx-audit for a full project health check.
+Run phx-init --update after plugin updates.
+Run phx-audit for a full project health check.
 ```
 
 ## Content Template
@@ -127,7 +127,7 @@ See `references/injectable-template.md` for full template with all placeholders 
 
 ## Validation
 
-After running `$phx-init`:
+After running `phx-init`:
 
 1. Check CLAUDE.md contains markers
 2. Verify detected stack matches actual project
@@ -149,6 +149,6 @@ After running `$phx-init`:
 
 | Command | When to Use |
 |---------|-------------|
-| `$phx-init` | First time, or after plugin updates |
-| `$phx-audit` | Periodic project health check |
-| `$phx-verify` | After code changes |
+| `phx-init` | First time, or after plugin updates |
+| `phx-audit` | Periodic project health check |
+| `phx-verify` | After code changes |

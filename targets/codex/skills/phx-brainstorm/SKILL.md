@@ -12,20 +12,20 @@ metadata:
 # Brainstorm — Adaptive Requirements Gathering
 
 Interactive interview → research → synthesis loop. Produces structured
-`interview.md` that `$phx-plan` detects and consumes (skipping clarification).
+`interview.md` that `phx-plan` detects and consumes (skipping clarification).
 
 ## Usage
 
 ```text
-$phx-brainstorm Add some kind of notification system
-$phx-brainstorm Improve authentication security
-$phx-brainstorm                    # starts with open question
+phx-brainstorm Add some kind of notification system
+phx-brainstorm Improve authentication security
+phx-brainstorm                    # starts with open question
 ```
 
 ## Workflow
 
 ```
-$phx-brainstorm {topic}
+phx-brainstorm {topic}
     |
     v
 [INTERVIEW] ←──────────────────┐
@@ -34,7 +34,7 @@ $phx-brainstorm {topic}
 [DECISION POINT]                |
     ├─ Research ──→ [RESEARCH] ─┘
     ├─ Continue interview ──────┘
-    ├─ Make a plan ──→ STOP (suggest $phx-plan {slug})
+    ├─ Make a plan ──→ STOP (suggest phx-plan {slug})
     ├─ Store & exit ──→ STOP (artifacts saved)
     └─ Discuss ──→ freeform ──→ [DECISION POINT]
 ```
@@ -86,7 +86,7 @@ Never let the conversation flow past this point without a formal choice.
 
    - **Research** — search codebase + internet for approaches (2 agents)
    - **Continue interview** — ask more questions
-   - **Make a plan** — I'll suggest: `$phx-plan .claude/plans/{slug}/interview.md`
+   - **Make a plan** — I'll suggest: `phx-plan .claude/plans/{slug}/interview.md`
    - **Store & exit** — save everything, come back later
    - **Discuss** — freeform conversation about what we've gathered
 
@@ -118,9 +118,9 @@ See `references/research-integration.md` for details.
 
 ## Iron Laws
 
-1. **NEVER auto-transition** to `$phx-plan` — always present as option, let user choose
+1. **NEVER auto-transition** to `phx-plan` — always present as option, let user choose
 2. **ONE question at a time** — never dump a question list
-3. **Always write artifacts** — `interview.md` is the contract with `$phx-plan`
+3. **Always write artifacts** — `interview.md` is the contract with `phx-plan`
 4. **Scan codebase between questions** — every question must be context-aware
 5. **AskUserQuestion at EVERY decision point** — never flow past without formal choice.
    This is the most critical law. After interview, after research, after discuss — ALWAYS
@@ -132,12 +132,12 @@ See `references/research-integration.md` for details.
 ## Integration
 
 ```
-$phx-brainstorm ──→ interview.md ──→ $phx-plan (skips clarification)
-                                 ──→ $phx-plan --existing (deepens)
+phx-brainstorm ──→ interview.md ──→ phx-plan (skips clarification)
+                                 ──→ phx-plan --existing (deepens)
                                  ──→ stored for later session
 ```
 
-Position: optional upstream of `$phx-plan` in workflow cycle.
+Position: optional upstream of `phx-plan` in workflow cycle.
 
 ## References
 

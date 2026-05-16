@@ -16,9 +16,9 @@ obvious, read errors literally.
 ## Usage
 
 ```
-$phx-investigate Users can't log in after password reset
-$phx-investigate FunctionClauseError in UserController.show
-$phx-investigate Complex auth bug --parallel
+phx-investigate Users can't log in after password reset
+phx-investigate FunctionClauseError in UserController.show
+phx-investigate Complex auth bug --parallel
 ```
 
 ## Arguments

@@ -70,7 +70,7 @@ The trap fires on:
 ## Cross-tool-call handoff (CRITICAL — runtime reality)
 
 `audit_main()` above describes **one** long-lived shell. The actual
-runtime is different: each step of `$phx-deps-audit` is a **separate
+runtime is different: each step of `phx-deps-audit` is a **separate
 Bash tool call** with a fresh shell. Consequences:
 
 1. **`export AUDIT_TMPDIR` does NOT survive** between tool calls. The

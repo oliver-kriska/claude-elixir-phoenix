@@ -17,9 +17,9 @@ and optionally apply code fixes.
 ## Usage
 
 ```
-$phx-pr-review 42              # Address comments on PR #42
-$phx-pr-review 42 --fix        # Address + apply code fixes
-$phx-pr-review https://...     # Full URL also works
+phx-pr-review 42              # Address comments on PR #42
+phx-pr-review 42 --fix        # Address + apply code fixes
+phx-pr-review https://...     # Full URL also works
 ```
 
 ## Arguments
@@ -112,7 +112,7 @@ Post each approved response as a reply using `gh api repos/{owner}/{repo}/pulls/
 ```text
 PR receives review comments
        ↓
-$phx-pr-review {number}  ← YOU ARE HERE
+phx-pr-review {number}  ← YOU ARE HERE
        ↓
    Fix code? → --fix flag applies changes
        ↓
@@ -126,8 +126,8 @@ $phx-pr-review {number}  ← YOU ARE HERE
 After addressing review comments, suggest follow-up:
 
 ```
-- `$phx-plan` — Create a plan if findings reveal scope gaps
-- `$phx-verify` — Run full verification before pushing
+- `phx-plan` — Create a plan if findings reveal scope gaps
+- `phx-verify` — Run full verification before pushing
 - Push changes — user handles git push
 ```
 

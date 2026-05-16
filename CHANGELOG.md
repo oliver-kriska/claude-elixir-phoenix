@@ -14,12 +14,15 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Codex installs sparsely from this repo; Pi and OpenCode are mirrored
   to dedicated GitHub repos at release-tag time.
 - **Codex target** (`targets/codex/`):
-  - 43 skills as `.codex-plugin/` ports with `interface{}` block
-  - 29 slash commands invoked as `$skill-name`
+  - 45 skills; `.codex-plugin/plugin.json` per Codex's actual spec
+    (top-level `skills`/`hooks`/`mcpServers`, `./`-prefixed; `interface`
+    is UX metadata only). Codex skills auto-load by `description` — there
+    is **no `$`/`/` command invocation** (same model as Claude skills);
+    in-body cross-references rewritten to the bare skill name.
   - Iron Laws inlined into 14 reference skills (Codex has no SubagentStart)
-  - `descriptions_short.yaml` override map; 7,612 / 8,000 byte budget
+  - `descriptions_short.yaml` override map; 7,863 / 8,000 byte budget
   - Tidewave MCP via stdio (`.mcp.json`)
-  - **21 sub-agents** as `agents-toml/<name>.toml` + SessionStart helper
+  - **22 sub-agents** as `agents-toml/<name>.toml` + SessionStart helper
     `install-codex-agents.sh` that copies into `~/.codex/agents/`
   - **Hooks** for 6 of 9 events (PreToolUse, PostToolUse, SessionStart,
     Stop, PreCompact, PostCompact). 3 dropped events (PostToolUseFailure,
@@ -103,6 +106,21 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `pi.on("tool_call")`, `pi.registerCommand`, `ctx.sendUserMessage`. Iron
   Laws are now baked into the extension at port time (no runtime file
   read). The package was renamed from `@mariozechner/` on 2026-05-07.
+- **Codex `plugin.json` was malformed and `$phx-foo` invocation was
+  fictional.** Live-testing on real codex-cli 0.130.0 (via the user's
+  `$phx` → "no matches" reproduction) exposed two deeper bugs the
+  source-`main` research had missed: (1) the generated
+  `.codex-plugin/plugin.json` nested `skills`/`hooks`/`mcpServers` inside
+  an `interface{}` block with non-spec keys, so Codex could not load the
+  plugin at all; (2) docs and the slash-command transform invented a
+  `$phx-foo` typed command — **Codex has no `$`/`/` invocation; skills
+  auto-load by `description` exactly like Claude**. Fixed
+  `_generate_plugin_json` to emit the spec-conformant top-level schema
+  (`skills`/`hooks`/`mcpServers` at root, UX-only `interface`, no
+  `commands`/`agents`), changed the codex slash-rewrite to ``/phx:foo`` →
+  `` `phx-foo` `` (a bare skill-name reference, not a typed command), and
+  corrected every doc (`README`, `docs/multi-agent/*`, capability
+  matrices) to the description-triggered model.
 
 ### Changed
 

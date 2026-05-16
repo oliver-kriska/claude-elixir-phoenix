@@ -246,8 +246,10 @@ jobs:
       - name: No source slash-command leakage in targets/codex
         run: |
           # Negative-form CI assertion: rewrite_slash_commands rewrites /phx:foo
-          # to \$phx-foo for Codex. Test that NO old form remains anywhere in
-          # the generated tree (SKILL.md bodies AND references/*.md).
+          # to `phx-foo` for Codex (a bare skill-name reference — Codex has no
+          # $/ command invocation; skills auto-load by description). Test that
+          # NO old /phx:foo form remains anywhere in the generated tree
+          # (SKILL.md bodies AND references/*.md).
           # Catches regressions of the same class as the B1 review finding.
           if grep -rE '/phx:[a-z-]+|/lv:[a-z-]+|/ecto:[a-z-]+' targets/codex/skills/ \
                 --include='*.md' \

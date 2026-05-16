@@ -16,7 +16,7 @@ When resuming an interrupted workflow:
 Example resume:
 
 ```bash
-$phx-full --resume magic-link-auth
+phx-full --resume magic-link-auth
 # Reads .claude/plans/magic-link-auth/plan.md
 # Finds first unchecked task: P2-T3
 # Resumes from P2-T3
@@ -25,7 +25,7 @@ $phx-full --resume magic-link-auth
 Or resume from specific task:
 
 ```bash
-$phx-work .claude/plans/magic-link-auth/plan.md --from P2-T3
+phx-work .claude/plans/magic-link-auth/plan.md --from P2-T3
 ```
 
 ## Ralph Wiggum Integration
@@ -33,7 +33,7 @@ $phx-work .claude/plans/magic-link-auth/plan.md --from P2-T3
 For fully autonomous execution, use with Ralph Wiggum Loop:
 
 ```bash
-/ralph-loop:ralph-loop "$phx-full {feature}" --completion-promise "DONE" --max-iterations 50
+/ralph-loop:ralph-loop "phx-full {feature}" --completion-promise "DONE" --max-iterations 50
 ```
 
 This enables:
@@ -57,8 +57,8 @@ The cycle stops automatically when:
 Optional checkpoints for human review:
 
 ```
-$phx-full {feature} --checkpoint-after plan
-$phx-full {feature} --checkpoint-after each-phase
+phx-full {feature} --checkpoint-after plan
+phx-full {feature} --checkpoint-after each-phase
 ```
 
 ## Rollback Points
@@ -99,5 +99,5 @@ TOTAL=$(grep -c '\[.*\] \[P' .claude/plans/${SLUG}/plan.md)
 echo "Progress: $COMPLETED / $TOTAL tasks complete"
 
 # Resume from first unchecked task
-$phx-work .claude/plans/${SLUG}/plan.md
+phx-work .claude/plans/${SLUG}/plan.md
 ```

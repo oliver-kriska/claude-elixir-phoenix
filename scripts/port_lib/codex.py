@@ -3,20 +3,28 @@
 Codex CLI reads `.codex-plugin/plugin.json` natively. The repo-root
 `.agents/plugins/marketplace.json` (Codex's native manifest, codex-only —
 NOT `.claude-plugin/marketplace.json`) points Codex at this `targets/codex`
-subtree via a `git-subdir` source:
+subtree via a `git-subdir` source. Install:
 
     codex plugin marketplace add <owner/repo> --ref <branch|tag|sha>
-    codex plugin add elixir-phoenix-codex --marketplace oliver-kriska
+    # then enable elixir-phoenix-codex in Codex's interactive plugin picker
 
-(`--sparse targets/codex` is an optional git checkout optimization, not a
-plugin filter, and is not required.) Skill auto-loading, `$skill-name`
-slash commands, and SessionStart-TOML agents are all native Codex features.
+(`--sparse` is an optional git checkout optimization, not a plugin filter.)
+
+Codex skills auto-load by their `description` — the SAME model as Claude
+skills. There is **no `$skill-name` / `/command` user invocation in Codex**;
+the user describes a task and the matching skill triggers. (Verified
+against codex-cli 0.130.0's `plugin-creator` spec + the bundled `linear`
+plugin.)
 
 Mapping decisions (see docs/multi-agent/codex.md):
   - skills: copied + transformed (namespaces stripped, refs rewritten,
-    Iron Laws inlined into auto-load skills since Codex has no SubagentStart)
-  - commands: skills work as-is via `$skill-name` invocation
-  - agents: TOML drop into `~/.codex/agents/` via SessionStart hook (Phase 2A)
+    Iron Laws inlined into auto-load skills since Codex has no SubagentStart).
+    Command skills (phx:plan, …) are normalized to `phx-plan` etc. and are
+    just description-triggered skills like the rest — not typed commands.
+  - manifest: top-level `skills`/`hooks`/`mcpServers` (`./`-prefixed);
+    no `commands`/`agents` fields exist in Codex's plugin spec.
+  - agents: TOML drop into `~/.codex/agents/` via SessionStart hook,
+    independent of plugin.json
   - hooks: 6/9 events supported; PostToolUseFailure / SubagentStart /
     StopFailure are dropped, others ported
   - mcp: stdio transport only (no SSE) → `targets/codex/.mcp.json`
@@ -67,21 +75,42 @@ def _is_auto_load(source_name: str) -> bool:
 
 
 def _generate_plugin_json(source_manifest: dict) -> dict:
-    """Build `.codex-plugin/plugin.json` from the source plugin manifest."""
+    """Build `.codex-plugin/plugin.json` per Codex's actual manifest spec.
+
+    Verified against codex-cli 0.130.0's bundled plugin spec
+    (`~/.codex/skills/.system/plugin-creator/references/plugin-json-spec.md`)
+    and a real bundled plugin (`linear`):
+
+    - `skills` / `hooks` / `mcpServers` are **top-level** keys with
+      `./`-prefixed relative paths — NOT nested under `interface`.
+    - The key is `mcpServers` (not `mcp`).
+    - There is **no `commands` and no `agents` manifest field** in Codex.
+      Codex skills auto-load by their `description` (same model as Claude);
+      they are not `$name`-invoked commands. The 22 agent TOMLs install
+      via the SessionStart hook, independent of this manifest.
+    - `interface` is UX-presentation metadata only.
+    """
     return {
         "name": f"{source_manifest['name']}-codex",
         "version": source_manifest["version"],
         "description": source_manifest["description"],
-        "keywords": source_manifest.get("keywords", []),
         "author": source_manifest.get("author", {}),
         "homepage": source_manifest.get("homepage"),
         "repository": source_manifest.get("repository"),
+        "keywords": source_manifest.get("keywords", []),
+        "skills": "./skills/",
+        "hooks": "./hooks/hooks.json",
+        "mcpServers": "./.mcp.json",
         "interface": {
-            "skills": "skills/",
-            "commands": "skills/",
-            "agents": "agents-toml/",
-            "hooks": "hooks/hooks.json",
-            "mcp": ".mcp.json",
+            "displayName": "Elixir/Phoenix (Codex)",
+            "shortDescription": "Elixir/Phoenix/LiveView dev: skills, "
+            "Iron Laws, Tidewave MCP.",
+            "longDescription": source_manifest["description"],
+            "developerName": source_manifest.get("author", {}).get(
+                "name", "Oliver Kriska"
+            ),
+            "category": "Developer Tools",
+            "capabilities": [],
         },
     }
 

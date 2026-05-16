@@ -16,16 +16,16 @@ explain issues — do NOT create tasks or fix anything.
 ## Usage
 
 ```
-$phx-review                          # Auto-detects task ID from branch/commits
-$phx-review test                     # Review test files only
-$phx-review security                 # Run security audit only
-$phx-review oban                     # Review Oban workers only
-$phx-review deploy                   # Validate deployment config
-$phx-review iron-laws                # Check Iron Law violations only
-$phx-review ENA-8931                 # Force Linear issue
-$phx-review #42                      # Force GitHub issue
-$phx-review .claude/plans/auth/plan.md    # Force plan / spec file
-$phx-review --no-requirements        # Skip requirements coverage check
+phx-review                          # Auto-detects task ID from branch/commits
+phx-review test                     # Review test files only
+phx-review security                 # Run security audit only
+phx-review oban                     # Review Oban workers only
+phx-review deploy                   # Validate deployment config
+phx-review iron-laws                # Check Iron Law violations only
+phx-review ENA-8931                 # Force Linear issue
+phx-review #42                      # Force GitHub issue
+phx-review .claude/plans/auth/plan.md    # Force plan / spec file
+phx-review --no-requirements        # Skip requirements coverage check
 ```
 
 ## Arguments
@@ -75,7 +75,7 @@ will emit `NOT AVAILABLE` rather than block the review.
 **NEVER** analyze code yourself — use the Agent tool only. Zero agents = failure.
 
 1. Create a Claude Code task per agent via `TaskCreate` and `TaskUpdate` to `in_progress`
-2. For `$phx-review` or `$phx-review all`: select agents dynamically per the
+2. For `phx-review` or `phx-review all`: select agents dynamically per the
    selection table in `references/agent-spawning.md`
 3. For focused reviews (`test|security|oban|deploy|iron-laws`): spawn only the
    matching specialist from the focused mode table in the same reference
@@ -158,10 +158,10 @@ thing the user sees.
 anything.
 
 **On BLOCKED or REQUIRES CHANGES**: Show finding count by severity,
-then offer via `AskUserQuestion`: `$phx-triage` (recommended), `$phx-plan`,
+then offer via `AskUserQuestion`: `phx-triage` (recommended), `phx-plan`,
 fix directly, or "I'll handle it myself".
 
-**On PASS / PASS WITH WARNINGS**: Suggest `$phx-compound`, `$phx-learn-from-fix`.
+**On PASS / PASS WITH WARNINGS**: Suggest `phx-compound`, `phx-learn-from-fix`.
 
 **Convention extraction**: After presenting findings, offer: "Any findings
 to suppress or enforce as conventions?" See `references/conventions.md`.
@@ -170,12 +170,12 @@ to suppress or enforce as conventions?" See `references/conventions.md`.
 
 1. **Review is READ-ONLY** — Find and explain, never fix
 2. **NEVER auto-fix after review** — Always ask the user first
-3. **Always offer both paths**: `$phx-plan` and `$phx-work`
+3. **Always offer both paths**: `phx-plan` and `phx-work`
 4. **Research before claiming** — Agents MUST research before
    making claims about CI/CD or external services
 
 ## Integration
 
-`$phx-plan` → `$phx-work` → `$phx-review` (YOU ARE HERE) → Blocked? `$phx-triage` or `$phx-plan` | Pass? `$phx-compound`
+`phx-plan` → `phx-work` → `phx-review` (YOU ARE HERE) → Blocked? `phx-triage` or `phx-plan` | Pass? `phx-compound`
 
 See: `references/review-template.md`, `references/example-review.md`, `references/blocker-handling.md`, `references/requirements-detection.md`
