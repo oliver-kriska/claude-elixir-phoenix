@@ -44,11 +44,15 @@ From `$ARGUMENTS` extract: `--since`, `--sources`, `--depth`,
 
 ### 2. Resolve the time window
 
-Read `${CLAUDE_SKILL_DIR}/references/time-window.md` and resolve
-`--since` to an absolute `SINCE_ISO` timestamp + a human label
-("3 days, since Fri May 13"). For `last-session`, map the current
-working dir to `~/.claude/projects/-<slug>/` and take the newest
-`*.jsonl` mtime; fall back to 24h with a noted assumption if no signal.
+Read `${CLAUDE_SKILL_DIR}/references/time-window.md`. Resolve calendar
+words (`friday`, `yesterday`, a date) in the **user's local timezone**
+(the machine running `/catchup` = the user's TZ), pivot through
+`SINCE_EPOCH`, then derive `SINCE_ISO` (UTC) for source queries. All
+sources are compared on that one absolute instant, so colleagues in
+other timezones are included correctly ("since *my* Friday"). Label
+must show the anchor TZ ("since Fri May 13 00:00 CEST (3d)"). For
+`last-session`, take the newest per-repo `*.jsonl` mtime (already an
+absolute instant); fall back to 24h with a noted assumption.
 
 ### 3. Detect sources (before any query)
 

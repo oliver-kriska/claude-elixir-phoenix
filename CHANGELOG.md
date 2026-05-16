@@ -45,6 +45,17 @@ routing row. Implements GitHub issue #47.
   are v2 opt-in. v2 surface (scheduling, `.claude/catchup.local.md`,
   cross-project rollup) is pinned in `references/config-schema.md` but
   not built.
+- **Timezone-correct windows.** Calendar words (`friday`, `yesterday`,
+  a date) resolve in the **user's local TZ** (the machine running
+  `/catchup`), pivot through a single `SINCE_EPOCH`, then derive a UTC
+  `SINCE_ISO`. Every source is compared on that one absolute instant,
+  so colleagues in other timezones are included from *your* boundary
+  ("since *my* Friday", not "since each author's local Friday"). Fixes
+  a UTC-vs-local resolution bug (±14h). The brief's Timeline shows the
+  anchor with its TZ abbrev.
+- **`/ketchup` 🍅 easter-egg alias.** A second slash-only skill
+  (`skills/ketchup/`) that forwards verbatim to `/catchup` — same
+  flags, same behavior, squeezier name.
 - Verified end-to-end against the busy multi-developer `EnaiaInc/enaia`
   repo (Linear/Calendar MCP absent → degradation + proxy paths
   exercised; real direct file overlaps surfaced across local branches,
