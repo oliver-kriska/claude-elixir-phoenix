@@ -11,13 +11,26 @@ a `git-subdir` source.
 Verified against `codex-cli 0.130.0`.
 
 ```bash
-# 1. Register the marketplace (one-time)
+# 1. Register the marketplace SOURCE (one-time — this does NOT install
+#    anything; it only writes ~/.codex/config.toml).
 codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --ref main
 
-# 2. Enable the plugin in Codex's interactive plugin picker:
-#    run `codex`, open the plugin list, Space to toggle
-#    `elixir-phoenix-codex` on.
+# 2. ACTIVATE the plugin (load-bearing — without this the plugin is
+#    completely inert): run `codex`, open the plugin picker, Space-toggle
+#    `elixir-phoenix-codex` ON, then restart the session.
+
+# 3. Verify activation took (skills are copied into ~/.codex/skills/):
+ls ~/.codex/skills | grep -i phx     # must list phx-* dirs
 ```
+
+> **Step 2 is not optional.** `codex plugin marketplace add` only
+> registers a *source* — it installs no skills. Until you toggle
+> `elixir-phoenix-codex` ON in the picker, a Codex session's skill
+> registry will not contain a single `phx-*` skill and the plugin has
+> zero effect (verified empirically: a session run after only step 1
+> listed 9 unrelated skills and no Iron Laws). If `ls ~/.codex/skills`
+> shows no `phx-*` dirs, the plugin is **not** active no matter what the
+> picker appeared to show — re-toggle and restart.
 
 Notes:
 
@@ -29,6 +42,12 @@ Notes:
   `codex plugin marketplace add` only registers the marketplace; plugin
   enable/disable lives in the interactive picker (Space to toggle, the
   `[*]/[-]` list).
+- **`marketplace add` is idempotent and does NOT re-pull a newer ref.**
+  If you registered an older revision (or a PR branch that has since
+  moved), the cached checkout is stale. Force a refresh with
+  `codex plugin marketplace remove oliver-kriska` then `add … --ref …`
+  again (or `codex plugin marketplace upgrade`). Re-toggle in the picker
+  afterward.
 - `--sparse <path>` is an optional git sparse-checkout speedup, **not** a
   plugin filter — the manifest already scopes the install. Omit it unless
   the full-repo checkout is too large for you.

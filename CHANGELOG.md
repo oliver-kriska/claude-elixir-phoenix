@@ -121,6 +121,15 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `` `phx-foo` `` (a bare skill-name reference, not a typed command), and
   corrected every doc (`README`, `docs/multi-agent/*`, capability
   matrices) to the description-triggered model.
+- **Codex install docs didn't make the picker-activation step
+  load-bearing.** ccrider forensics on a failed real-CLI test proved
+  `codex plugin marketplace add` only registers a *source* (writes
+  `~/.codex/config.toml`) and installs **zero** skills — the plugin is
+  inert until `elixir-phoenix-codex` is toggled ON in the interactive
+  picker (which copies skills into `~/.codex/skills/`). `docs/multi-agent/codex.md`
+  now flags step 2 as mandatory, adds a `ls ~/.codex/skills | grep phx`
+  activation check, and documents that `marketplace add` is idempotent
+  (no re-pull of a moved ref — use `remove` + `add` or `upgrade`).
 
 ### Changed
 
