@@ -80,6 +80,12 @@ def _generate_package_json(source_manifest: dict) -> dict:
         "homepage": source_manifest.get("homepage"),
         "repository": source_manifest.get("repository"),
         "engines": {"pi": ">=0.1.0"},
+        "devDependencies": {
+            # Type-only import in extensions/*.ts. The Pi runtime supplies
+            # the API at load time; this pins the typings to the current
+            # (renamed) package scope — see docs/multi-agent/pi.md.
+            "@earendil-works/pi-coding-agent": ">=0.74.0",
+        },
         "pi": {
             "skills": "skills/",
             "prompts": "prompts/",
@@ -140,9 +146,11 @@ def build(source_dir: Path, out_dir: Path) -> dict:
             f"{source_manifest['description']}\n\n"
             f"## Install\n\n"
             f"```bash\n"
-            f"pi install git:github.com/oliver-kriska/pi-elixir-phoenix\n"
+            f"# From a local checkout of this generated tree:\n"
+            f"pi install ./targets/pi      # add -l for project-local scope\n"
             f"```\n\n"
-            f"See `docs/multi-agent/pi.md` in the source repo for tradeoffs.\n",
+            f"See `docs/multi-agent/pi.md` in the source repo for the mirror\n"
+            f"install path and tradeoffs.\n",
             encoding="utf-8",
         )
 

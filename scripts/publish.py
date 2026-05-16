@@ -11,7 +11,8 @@ Usage:
     python3 -m scripts.publish --target pi --remote https://github.com/oliver-kriska/pi-elixir-phoenix.git
 
 Codex is *not* a mirror target: Codex installs directly from the source repo
-via `codex plugin marketplace add <repo> --sparse targets/codex`.
+via `codex plugin marketplace add <owner/repo> --ref <ref>` (the repo-root
+`.agents/plugins/marketplace.json` points it at the `targets/codex` subtree).
 """
 
 from __future__ import annotations

@@ -158,6 +158,10 @@ skills:
 - Preload relevant skills via `skills:` field
 - Add `omitClaudeMd: true` for read-only agents (no Write tool) — they don't need commit/PR/lint
   guidelines from CLAUDE.md. Iron Laws are injected via SubagentStart hook. Enforced by eval.
+  - **Iron Laws injection ≠ CLAUDE.md inclusion.** `omitClaudeMd: true` skips the project
+    CLAUDE.md body (commit rules, lint guidance, scope cues). It does NOT suppress Iron Laws —
+    the `SubagentStart` hook injects them via `hookSpecificOutput.additionalContext` on every
+    subagent spawn. Set `omitClaudeMd: true` freely on read-only agents; Iron Laws stay enforced.
 - Keep under 300 lines
 
 ### Skills

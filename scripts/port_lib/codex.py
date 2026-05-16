@@ -1,9 +1,16 @@
 """Codex target builder.
 
-Codex CLI reads `.codex-plugin/plugin.json` natively and accepts a sparse
-install (`codex plugin marketplace add <repo> --sparse targets/codex`).
-Skill auto-loading, slash commands as `$skill-name`, and SessionStart-TOML
-agents are all native Codex features.
+Codex CLI reads `.codex-plugin/plugin.json` natively. The repo-root
+`.agents/plugins/marketplace.json` (Codex's native manifest, codex-only —
+NOT `.claude-plugin/marketplace.json`) points Codex at this `targets/codex`
+subtree via a `git-subdir` source:
+
+    codex plugin marketplace add <owner/repo> --ref <branch|tag|sha>
+    codex plugin add elixir-phoenix-codex --marketplace oliver-kriska
+
+(`--sparse targets/codex` is an optional git checkout optimization, not a
+plugin filter, and is not required.) Skill auto-loading, `$skill-name`
+slash commands, and SessionStart-TOML agents are all native Codex features.
 
 Mapping decisions (see docs/multi-agent/codex.md):
   - skills: copied + transformed (namespaces stripped, refs rewritten,

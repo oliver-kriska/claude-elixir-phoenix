@@ -1,0 +1,21 @@
+{
+  "name": "oliver-kriska",
+  "interface": {
+    "displayName": "Oliver Kriska — Codex plugins"
+  },
+  "plugins": [
+    {
+      "name": "elixir-phoenix-codex",
+      "source": {
+        "source": "git-subdir",
+        "url": "oliver-kriska/claude-elixir-phoenix",
+        "path": "targets/codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_USE"
+      },
+      "category": "development"
+    }
+  ]
+}

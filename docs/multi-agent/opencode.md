@@ -16,7 +16,20 @@ Add to your `opencode.json`:
 ```
 
 OpenCode resolves the GitHub shorthand and pulls the mirror repo
-(`oliver-kriska/opencode-elixir-phoenix`). No npm publish required.
+(`oliver-kriska/opencode-elixir-phoenix`). No npm publish required. The
+explicit, officially-documented forms also work:
+
+```json
+{
+  "plugin": [
+    "oliver-kriska/opencode-elixir-phoenix@git+https://github.com/oliver-kriska/opencode-elixir-phoenix.git",
+    "file:///absolute/path/to/targets/opencode/server.ts"
+  ]
+}
+```
+
+Use the `file://` form to test the locally generated `targets/opencode/`
+tree before the mirror exists.
 
 ## Usage
 
@@ -43,24 +56,29 @@ hook injects them dynamically (cleaner than Claude's PostToolUse approach).
 - MCP config sits inside `opencode.json` (the `mcp` block) — no separate
   `.mcp.json` to maintain.
 
-## What works (v2.9.0)
+## What ships (v3.0.0)
+
+Full Phase 1 + Phase 2 parity — one release:
 
 - 43 skills under `.opencode/skill/`
 - 29 commands under `.opencode/command/`
-- `AGENTS.md` (Claude's `CLAUDE.md` aliased)
-- `package.json` with `engines.opencode: ">=0.1.0"`, `exports["./server"]`
-- Stub `server.ts` (no hooks yet)
-- `bunfig.toml`
-
-## What's deferred to v3.0.0
-
-- Sub-agents into `.opencode/agent/<name>.md` — Phase 2B
-- TS hooks module:
-  - `tool.execute.before` — block dangerous ops port
-  - `tool.execute.after` — format / iron-law / debug ports
+- **21 sub-agents** under `.opencode/agent/<name>.md` (`mode: subagent`)
+- **Full TS hooks module** in `server.ts` (typed `@opencode-ai/plugin`):
+  - `tool.execute.before` — block dangerous ops
+  - `tool.execute.after` — format / iron-law / debug (fire-and-forget)
   - `experimental.chat.system.transform` — Iron Law injection
   - `event` filter — SessionStart-equivalent
-- MCP block written into `opencode.json` (Tidewave)
+- Tidewave MCP snippet (`opencode.mcp.json`) to splice into `opencode.json`
+- `AGENTS.md` (Claude's `CLAUDE.md` aliased)
+- `package.json` with `engines.opencode: ">=0.1.0"`, `exports["./server"]`
+- `bunfig.toml`
+
+API verified 2026-05-16: `tool.execute.after` and
+`experimental.chat.system.transform` are current in `sst/opencode`; no
+breaking changes since the port was written. Note
+`experimental.chat.system.transform` input has no user-message text — it
+is a static system-prompt append (push to `output.system`), which is
+exactly how Iron Laws are injected here.
 
 ## Tradeoffs vs. Claude Code
 
@@ -68,7 +86,7 @@ hook injects them dynamically (cleaner than Claude's PostToolUse approach).
 - No `descriptions_short.yaml` budget pressure — OpenCode has no listing
   byte ceiling.
 - Mirror repo means commits to source don't reach OpenCode users until
-  a release tag is pushed. Use prereleases (`v2.9.0-alpha.X`) to ship
+  a release tag is pushed. Use prereleases (`v3.0.0-alpha.X`) to ship
   quickly during development.
 
 ## Manual smoke test

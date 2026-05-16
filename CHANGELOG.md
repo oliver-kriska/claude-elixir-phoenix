@@ -72,8 +72,44 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   - `sub-agents.md` — per-target agent strategy + field-mapping reference
   - `hooks.md` — full event support matrix + dropped-event rationale
 - Root README updated with multi-agent install table and capability matrix.
-- `.claude-plugin/marketplace.json` — second plugin entry
-  `elixir-phoenix-codex` with `agent: codex` and `source: ./targets/codex`.
+- `.agents/plugins/marketplace.json` — Codex's native marketplace manifest
+  (repo root, codex-only), listing only `elixir-phoenix-codex` via a
+  `git-subdir` source pointing at `targets/codex/`.
+
+### Fixed (post-review — @druyang, #46)
+
+- **Codex install command was wrong.** Docs said
+  `codex plugin marketplace add … --branch … --sparse targets/codex`
+  followed by `codex plugin install …`. Verified against codex-cli
+  0.130.0: the flag is `--ref` (no `--branch`); `--sparse` is an optional
+  checkout speedup, not a plugin filter; and there is **no
+  `codex plugin install`/`add`** — `codex plugin marketplace add`
+  registers the marketplace and the plugin is enabled in the interactive
+  picker. All install docs (README, `docs/multi-agent/*`, port-script
+  docstrings) corrected.
+- **Codex showed two plugins** (`elixir-phoenix-codex` *and* the Claude
+  `elixir-phoenix`). Root cause: the repo only shipped
+  `.claude-plugin/marketplace.json` (which lists both), and Codex falls
+  back to it when no `.agents/plugins/marketplace.json` exists. Fix: add a
+  codex-only `.agents/plugins/marketplace.json` and drop the
+  `elixir-phoenix-codex` entry from `.claude-plugin/marketplace.json`
+  (Claude-only again). Verified on codex-cli 0.130.0: when both manifests
+  exist Codex reads only `.agents/plugins/marketplace.json`.
+- **Pi extension API was fabricated.** The scaffold imported
+  `@pi-ai/extensions` and called `pi.command` / `pi.system_prompt_append`
+  / `ctx.invoke_prompt` / `pi.root` — none exist. Rewritten against the
+  verified `@earendil-works/pi-coding-agent` (>=0.74.0) API:
+  default-export factory, `pi.on("before_agent_start") → {systemPrompt}`,
+  `pi.on("tool_call")`, `pi.registerCommand`, `ctx.sendUserMessage`. Iron
+  Laws are now baked into the extension at port time (no runtime file
+  read). The package was renamed from `@mariozechner/` on 2026-05-07.
+
+### Changed
+
+- Version is **3.0.0**, not 2.9.0 — `main` shipped the `/phx:deps-audit`
+  suite as 2.9.0 in the interim. The multi-agent port takes the 3.0.0
+  slot (full parity in one release). OpenCode API re-verified against
+  `sst/opencode` (2026-05-16) — no breaking changes; no code change.
 
 ### Notes for users
 

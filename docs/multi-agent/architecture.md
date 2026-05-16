@@ -4,8 +4,11 @@
 
 ```
 oliver-kriska/claude-elixir-phoenix/        ← this repo
+├── .claude-plugin/marketplace.json          ← Claude marketplace (Claude-only)
+├── .agents/plugins/marketplace.json         ← Codex marketplace (codex-only,
+│                                              git-subdir → targets/codex)
 ├── plugins/elixir-phoenix/                  ← canonical, hand-written
-│   ├── .claude-plugin/plugin.json           (2.8.9 → 2.9.0 → 3.0.0)
+│   ├── .claude-plugin/plugin.json           (2.9.0 → 3.0.0)
 │   ├── skills/         (43)
 │   ├── agents/         (21)
 │   └── hooks/          (hooks.json + 19 scripts)
@@ -63,13 +66,19 @@ CI runs this on every PR.
 
 ### Why is `targets/codex/` checked in but `targets/{pi,opencode}/` not?
 
-Codex installs sparsely from this repo:
+Codex installs directly from this repo — no mirror:
 
 ```
-codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --sparse targets/codex
+codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --ref main
 ```
 
-The directory MUST exist in the source repo for that command to work.
+Codex reads the repo-root `.agents/plugins/marketplace.json` (its native
+manifest path — verified on codex-cli 0.130.0; it takes precedence over,
+and fully suppresses, the Claude `.claude-plugin/marketplace.json`). That
+manifest lists only `elixir-phoenix-codex` and points at the
+`targets/codex/` subtree via a `git-subdir` source, so the directory MUST
+exist in the source repo. (`--sparse <path>` is an optional checkout
+speedup, not the install mechanism.)
 
 Pi and OpenCode install from dedicated mirror repos. Those mirrors are
 force-pushed by `publish-mirrors.yml` at release-tag time — the source
@@ -116,9 +125,13 @@ divergence (someone editing the mirror by hand).
 
 ## Versioning
 
-- `2.9.0` — Phase 1 complete: skills + commands working on 4 agents
-- `2.9.x` patch series — Phase 2 lands per-target
-  - 2.9.1 — Codex sub-agents + hooks
-  - 2.9.2 — OpenCode sub-agents + hooks
-  - 2.9.3 — Pi extensions
-- `3.0.0` — full feature parity across 4 agents
+- `2.9.0` — taken by the `/phx:deps-audit` + `/phx:deps-vet` supply-chain
+  suite (shipped from `main`, unrelated to the multi-agent port).
+- `3.0.0` — multi-agent port: full Phase 1 + Phase 2 parity across all
+  4 agents in a single release (skills + commands + sub-agents + hooks).
+  Phase 1 and Phase 2 were originally planned as a `2.9.x` patch series;
+  they were consolidated into one `3.0.0` release instead.
+
+Pi's TS extensions ship in `3.0.0` as an unverified scaffold (see
+[`pi.md`](pi.md)); their runtime API verification is a post-release
+smoke-test item, not a separate version.

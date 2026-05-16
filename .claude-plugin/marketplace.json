@@ -18,17 +18,6 @@
       "source": "./plugins/elixir-phoenix",
       "category": "development",
       "tags": ["elixir", "phoenix", "liveview", "oban", "ecto"]
-    },
-    {
-      "name": "elixir-phoenix-codex",
-      "description": "Codex-flavoured Elixir/Phoenix plugin (sparse install of targets/codex). Skills + commands; sub-agents and hooks land in v3.0.0.",
-      "author": {
-        "name": "Oliver Kriska"
-      },
-      "source": "./targets/codex",
-      "category": "development",
-      "tags": ["elixir", "phoenix", "liveview", "codex"],
-      "agent": "codex"
     }
   ]
 }
