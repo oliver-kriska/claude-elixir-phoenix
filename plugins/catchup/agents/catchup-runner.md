@@ -79,9 +79,26 @@ git log "origin/$DEFBR" --since="$SINCE_ISO" --pretty='%s' | grep -oE '[A-Z]{2,}
 ## Impact on your scope (the differentiator)
 
 `MOVED` = files in the by-others commits above (`--name-only`, dedup).
-`MINE` = union of: files in your open PRs
-(`gh pr diff <n> --name-only`), local non-default branch diffs vs
-`git merge-base $b origin/$DEFBR`, and `git status --porcelain`.
+
+`MINE` = files you actually have in flight. **Bound the branch scan —
+never iterate every local branch** (big repos have hundreds of stale
+ones; unbounded = a firehose and slow). In-flight = your own,
+recently-touched:
+
+```bash
+CUT=$(( $(date +%s) - 60*86400 ))           # 60-day recency window
+git for-each-ref --sort=-committerdate refs/heads \
+  --format='%(refname:short)|%(committerdate:unix)|%(authoremail)' \
+| awk -F'|' -v me="$GME" -v def="$DEFBR" -v cut="$CUT" \
+    '$1!=def && $2>cut && index($3,me)>0 {print $1}' | head -15
+```
+
+`MINE` = union of: files in your open PRs (`gh pr diff <n>
+--name-only`), `git diff --name-only $(git merge-base $b
+origin/$DEFBR) $b` for each **bounded** branch above, and `git status
+--porcelain`. Always include the current branch + working tree even if
+outside the 60-day cut. State the bound in the brief ("scanned your 7
+branches active in 60d, not all N").
 
 - **Direct** = exact path in both → name the incoming commit/PR/ticket
   AND which of your PRs/branches owns it. Promote into Top priorities.

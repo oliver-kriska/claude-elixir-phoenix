@@ -128,17 +128,27 @@ for n in $(gh pr list --repo "$REPO" --author @me --state open \
             --json number --jq '.[].number'); do
   gh pr diff "$n" --name-only 2>/dev/null
 done
-# 2. local feature branches vs the default branch
-for b in $(git for-each-ref --format='%(refname:short)' refs/heads); do
-  [ "$b" = "$DEFBR" ] && continue
+# 2. local branches — BOUNDED to your own, active in the last 60d.
+#    Never iterate every branch: big repos have hundreds of stale
+#    ones (enaia: 400+) → unbounded scan is a firehose and slow.
+CUT=$(( $(date +%s) - 60*86400 ))
+for b in $(git for-each-ref --sort=-committerdate refs/heads \
+     --format='%(refname:short)|%(committerdate:unix)|%(authoremail)' \
+   | awk -F'|' -v me="$GME_E" -v def="$DEFBR" -v cut="$CUT" \
+       '$1!=def && $2>cut && index($3,me)>0 {print $1}' | head -15); do
   mb=$(git merge-base "$b" "origin/$DEFBR" 2>/dev/null) || continue
   git diff --name-only "$mb" "$b"
 done
+# always include the current branch + working tree (even if older)
+cur=$(git branch --show-current)
+[ -n "$cur" ] && [ "$cur" != "$DEFBR" ] && \
+  git diff --name-only "$(git merge-base "$cur" origin/$DEFBR)" "$cur"
 # 3. uncommitted working tree
 git status --porcelain | awk '{print $2}'
 ```
 
-Collect all of B into `MINE` (sorted unique).
+Collect all of B into `MINE` (sorted unique). State the bound in the
+brief: *"scanned your N branches active in 60d, not all 400."*
 
 **C. Intersect and classify:**
 
