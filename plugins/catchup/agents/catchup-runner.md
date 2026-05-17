@@ -74,7 +74,7 @@ git fetch --quiet origin "$DEFBR" 2>/dev/null || true
 git log "origin/$DEFBR" --since="$SINCE_ISO" --no-merges --pretty=format:'%h%x09%an%x09%ae%x09%s' | awk -F'\t' -v me="$GME" '$3!=me'
 # risk scan — per-commit diff-tree (NOT `git log --name-only`: log
 # history-simplification silently drops files for many commits; on
-# enaia it under-counted 140→44, which would MISS a landed migration):
+# a busy repo it under-counted 140→44, which would MISS a landed migration):
 git log "origin/$DEFBR" --since="$SINCE_ISO" --no-merges --format='%h %s' \
 | while read -r h rest; do \
     git diff-tree --no-commit-id --name-only -r "$h" \
@@ -90,7 +90,7 @@ git log "origin/$DEFBR" --since="$SINCE_ISO" --pretty='%s' | grep -oE '[A-Z]{2,}
 commit hashes (tab sep), then `git diff-tree --no-commit-id
 --name-only -r $h` per hash and `sort -u`. **Never `git log
 --name-only`** for this — log simplification drops file lists for many
-commits (verified on enaia: 44 vs the true 140), which would silently
+commits (verified on a busy repo: 44 vs the true 140), which would silently
 hide real conflicts:
 
 ```bash

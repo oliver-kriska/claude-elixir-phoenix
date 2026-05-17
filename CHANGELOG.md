@@ -71,10 +71,10 @@ routing row. Implements GitHub issue #47.
 - **`/ketchup` 🍅 easter-egg alias.** A second slash-only skill
   (`skills/ketchup/`) that forwards verbatim to `/catchup` — same
   flags, same behavior, squeezier name.
-- Verified end-to-end against the busy multi-developer `EnaiaInc/enaia`
-  repo (Linear/Calendar MCP absent → degradation + proxy paths
-  exercised; real direct file overlaps surfaced across local branches,
-  `lib/enaia/cre.ex` hotspot).
+- Verified end-to-end against a busy multi-developer production repo
+  (Linear/Calendar MCP absent → degradation + proxy paths exercised;
+  real direct file overlaps surfaced across local branches, a
+  high-churn core module as the hotspot).
 
 ### Changed
 
@@ -86,7 +86,7 @@ routing row. Implements GitHub issue #47.
 
 Ships the `/phx:deps-audit` + `/phx:deps-vet` Hex/Elixir supply-chain
 suite. Built across five internal phases and two real-project dogfood
-passes (enaia-main, virgil) and consolidated into a single release —
+passes (two production apps) and consolidated into a single release —
 none of the interim 2.10.0–2.12.0 bumps were ever tagged or shipped
 (last release was v2.8.8).
 
@@ -392,15 +392,15 @@ none of the interim 2.10.0–2.12.0 bumps were ever tagged or shipped
   `# | Requirement | Status | Evidence`, classifying each stated
   requirement as MET / PARTIAL / UNMET / UNCLEAR. This formalizes the
   cross-check pattern already done manually in session `ba3f7890`
-  (2026-04-17, enaia-main) where the table was titled
-  "Cross-check against Linear ENA-8931 acceptance criteria".
+  (2026-04-17, a production repo) where the table was titled
+  "Cross-check against Linear PROJ-8931 acceptance criteria".
 - **Auto-detection of the requirements source** (no argument required).
   `/phx:review` now tries, in priority order:
-  1. Explicit `$ARGUMENTS` (path to `.md`, `ENA-8931`, or `#42`)
+  1. Explicit `$ARGUMENTS` (path to `.md`, `PROJ-8931`, or `#42`)
   2. Conversation context (recent `mcp__linear__get_issue` / `gh issue view`
      results are reused — no re-fetch)
   3. Git branch regex (`[A-Za-z][A-Za-z0-9_]+-\d+`, matching branches like
-     `ena-8278-extraction-scaffolding`)
+     `proj-8278-extraction-scaffolding`)
   4. Commit subjects since main (`[A-Z]+-\d+` or `#\d+`)
   5. Most recently modified `.claude/plans/*/plan.md` (extracts only
      `- [x]` completed items)
@@ -409,7 +409,7 @@ none of the interim 2.10.0–2.12.0 bumps were ever tagged or shipped
   Extracts requirements from the source, Greps the diff for evidence,
   classifies each item. Spawned in parallel with other review agents
   when a source is detected.
-- **New Usage**: `/phx:review ENA-8931`, `/phx:review #42`,
+- **New Usage**: `/phx:review PROJ-8931`, `/phx:review #42`,
   `/phx:review --no-requirements`.
 - **New reference**: `skills/review/references/requirements-detection.md`
   documents sources, regexes, fetch commands, and failure handling.

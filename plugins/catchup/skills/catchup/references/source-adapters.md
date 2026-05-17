@@ -117,8 +117,8 @@ The differentiator (issue #47, druyang): not just "what did I miss" but
 
 ```bash
 # DO NOT use `git log --name-only` here: log history-simplification
-# silently drops the file list for many commits (verified on enaia —
-# one-pass gave 44 files, the true union is 140). Get the non-me
+# silently drops the file list for many commits (verified on a busy
+# real repo — one-pass gave 44 files, the true union was 140). Get the non-me
 # commit hashes first (no --name-only, tab sep — hashes/emails never
 # contain a tab), then union per-commit `git diff-tree`, which is
 # exact and parent-aware.
@@ -139,7 +139,7 @@ for n in $(gh pr list --repo "$REPO" --author @me --state open \
 done
 # 2. local branches — BOUNDED to your own, active in the last 60d.
 #    Never iterate every branch: big repos have hundreds of stale
-#    ones (enaia: 400+) → unbounded scan is a firehose and slow.
+#    ones (real repos: 400+) → unbounded scan is a firehose and slow.
 CUT=$(( $(date +%s) - 60*86400 ))
 for b in $(git for-each-ref --sort=-committerdate refs/heads \
      --format='%(refname:short)%09%(committerdate:unix)%09%(authoremail)' \
@@ -186,7 +186,7 @@ say so in one line and skip the Impact block — don't fabricate risk.
 - issues whose state changed in the window
 - new comments on issues you're assigned to or created
 
-Keep each to one line: `ENA-1234 "title" → InProgress (by @x)`. Never
+Keep each to one line: `PROJ-1234 "title" → InProgress (by @x)`. Never
 dump full descriptions/comment threads (Iron Law 2).
 
 **MCP OFF (no-Linear proxy):** harvest ticket refs from the GitHub/git
@@ -197,7 +197,7 @@ grep -oE '[A-Z]{2,}-[0-9]+' <<<"$ALL_PR_AND_COMMIT_TITLES" | sort -u
 ```
 
 Present them as *"tickets referenced in recent merges (unverified — no
-Linear MCP): ENA-9132, ENA-4498…"*. This still tells the user which
+Linear MCP): PROJ-412, PROJ-449…"*. This still tells the user which
 work areas moved, without Linear access.
 
 ## Calendar
@@ -215,7 +215,7 @@ included."* Do not attempt ICS/web fallback at MVP.
 ## Cross-source linking (depth: standard/deep)
 
 When a PR title and a Linear ticket (or harvested ref) share an
-`XXX-####` token, link them in the brief: `PR #10933 ↔ ENA-8797`. This
+`XXX-####` token, link them in the brief: `PR #1093 ↔ PROJ-318`. This
 is the bit generic digests cannot do and is the plugin's differentiator
 — a unified view, not four parallel inboxes.
 

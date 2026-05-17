@@ -47,7 +47,7 @@ You've been off {SINCE_LABEL}. Do these first:
 |---|------|------------------|------|
 | 1 | Review PR #1234 "…" | review-requested 2d ago, blocking {author} | {url} |
 | 2 | CI red on your PR #1180 | {check} failed after merge of #1150 | {url} |
-| 3 | ENA-9132 moved to In Review | assigned to you, awaiting your input | {url} |
+| 3 | PROJ-412 moved to In Review | assigned to you, awaiting your input | {url} |
 
 ## Impact on your work
 _Upstream changes that touch files/areas you have in flight._
@@ -60,7 +60,7 @@ _Upstream changes that touch files/areas you have in flight._
 
 ## What moved (Scope In)
 **GitHub** ({n} PRs, {m} pinged you)
-- #1150 "…" merged by @x — touches {area} ↔ ENA-8797
+- #1150 "…" merged by @x — touches {area} ↔ PROJ-318
 - @y commented on your #1180: "{≤1-line excerpt}"
 
 **Git** (default branch +{k} commits by others)
@@ -68,7 +68,7 @@ _Upstream changes that touch files/areas you have in flight._
 - your branch `feat/foo` is {behind} behind origin/{def}
 
 **Linear** ({source state})
-- ENA-9132 → In Review (by @x){, or: "unverified refs (no MCP): ENA-9132, ENA-4498"}
+- PROJ-412 → In Review (by @x){, or: "unverified refs (no MCP): PROJ-412, PROJ-571"}
 
 **Calendar** ({source state})
 - Missed: {meeting} (you were required)
@@ -110,29 +110,29 @@ Risks: {one-liner if any}.  Full brief → .claude/catchup/brief-{date}.md
   per-file *semantic* impact (read the incoming diff: what about your
   in-flight work it affects — schema, signature, behavior).
 
-## Worked example (illustrative, enaia-shaped)
+## Worked example (illustrative, generic)
 
 > **Intent** — You've been off 3 days (since Fri May 13 00:00 CEST).
 >
-> 1. Review **PR #10933** "Account autocomplete component" — review
->    requested of you Sat, blocking @Víctor.
-> 2. Your **PR #10707** went red — `mix test` failed after #11067 merged.
-> 3. **ENA-9168** moved to In Review, assigned to you.
+> 1. Review **PR #1093** "Account autocomplete component" — review
+>    requested of you Sat, blocking @teammate.
+> 2. Your **PR #1070** went red — `mix test` failed after #1106 merged.
+> 3. **PROJ-916** moved to In Review, assigned to you.
 >
 > **Impact on your work**
 >
-> - ⚠ Direct — `lib/enaia/properties/survey.ex` changed by #11067
->   (ENA-9168) and is in your open PR #10707. The survey struct field
+> - ⚠ Direct — `lib/app/properties/survey.ex` changed by #1106
+>   (PROJ-916) and is in your open PR #1070. The survey struct field
 >   you read was renamed — your code won't compile after rebase.
-> - Adjacent — `lib/enaia_web/live/navbar*` touched by #10707
->   (ENA-4498); your branch `feat/ena-8800` works in the same LiveView.
+> - Adjacent — `lib/app_web/live/navbar*` touched by #1070
+>   (PROJ-449); your branch `feat/PROJ-880` works in the same LiveView.
 >
-> **Risks** — #11067 added `priv/repo/migrations/…_mcp_property_survey`
-> on `main`; your `feat/ena-8800` branch is 14 commits behind and has a
+> **Risks** — #1106 added `priv/repo/migrations/…_property_survey`
+> on `main`; your `feat/PROJ-880` branch is 14 commits behind and has a
 > migration of its own — rebase before generating a new one.
 >
-> **Linear** — unverified (no MCP this env): ENA-9132, ENA-4498,
-> ENA-7550, ENA-8797 referenced in merges since Fri.
+> **Linear** — unverified (no MCP this env): PROJ-412, PROJ-449,
+> PROJ-755, PROJ-318 referenced in merges since Fri.
 
 This is the bar: the reader spends two minutes, knows the first three
 moves, and knows exactly what the brief did **not** see.
