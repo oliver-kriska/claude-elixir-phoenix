@@ -99,6 +99,16 @@ references). Do not re-implement its work here.
 ### 5. Present + stop
 
 Print the agent's returned summary verbatim and the brief path.
+
+**If the agent returned no summary** (e.g. it hit its turn budget
+mid-assembly — the brief file is usually already written): do NOT
+re-summarize the brief yourself; that pulls the expensive step back
+into this (often Opus) session, defeating the delegation. Instead
+`SendMessage` the agent by the `agentId` from its stop usage:
+*"Return only the inline summary now."* — it finishes cheaply in
+Sonnet. Only if that also fails, read the brief's Intent + Top
+priorities section (not the whole file) and print that.
+
 **Do NOT** auto-invoke any other command. The user decides what's
 first.
 

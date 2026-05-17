@@ -6,7 +6,7 @@ disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: sonnet
 effort: medium
-maxTurns: 25
+maxTurns: 60
 omitClaudeMd: true
 ---
 
@@ -150,9 +150,25 @@ Ranking: direct-overlap conflict > red CI on your PR > review
 requested of you > assigned ticket moved > FYI. Cross-link PR↔ticket
 on shared `XXX-####`.
 
+## Tool economy (you have a turn budget)
+
+A busy repo can blow a naive turn budget — the first real run hit the
+cap mid-assembly. Stay economical:
+
+- **Batch shell.** One `bash` call can chain the gh identity probes,
+  the git fetch, and the commit/risk/MOVED pipelines (`&&`, write to
+  `/tmp` vars). Don't spend one turn per trivial command.
+- **Don't over-loop.** The per-commit `diff-tree` loop is fine (few
+  commits); never add a per-file or per-branch shell round-trip you
+  can fold into one awk/`comm`.
+- **Write the brief as soon as you have enough** (after impact), then
+  the summary return is your final, cheap step — so even a tight
+  budget still yields the file.
+
 ## Output
 
-1. Write the full brief to `OUT_PATH` (create parent dir).
+1. Write the full brief to `OUT_PATH` (create parent dir) — do this
+   **before** you risk running low, not as the very last thing.
 2. Return ONLY the inline summary (≤25 lines): Intent line, numbered
    top priorities with links, per-source counts, impact one-liner,
    any skipped-source notes, and the brief path. Nothing else — the
