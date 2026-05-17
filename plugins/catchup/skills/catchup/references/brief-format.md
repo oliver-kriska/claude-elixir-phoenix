@@ -59,9 +59,12 @@ _Upstream changes that touch files/areas you have in flight._
 - _(or)_ No overlap with your in-flight scope this window.
 
 ## What moved (Scope In)
-**GitHub** ({n} PRs, {m} pinged you)
+**GitHub** ({n} PRs, {m} pinged you) — _scoped to {repo}_
 - #1150 "…" merged by @x — touches {area} ↔ PROJ-318
 - @y commented on your #1180: "{≤1-line excerpt}"
+
+**Other repos** _(only when `--scope all`; {q} cross-repo items)_
+- {owner/other-repo} #42 review-requested of you 2d ago
 
 **Git** (default branch +{k} commits by others)
 - {sha} @x "{subject}"  ⚠ migration: priv/repo/migrations/…
@@ -75,6 +78,7 @@ _Upstream changes that touch files/areas you have in flight._
 - Today: 14:00 {meeting} — {TZ}
 
 ## Risks & assumptions
+- Repo-scoped to {repo}; cross-repo pings/reviews not shown (run with `--scope all`).
 - Unmerged migration in #1150 may conflict with your local `feat/foo`.
 - Linear MCP absent — ticket signal is proxy-harvested, unverified.
 - Window defaulted to 24h (no prior session found).

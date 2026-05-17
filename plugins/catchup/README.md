@@ -21,18 +21,26 @@ problem, regardless of stack.
 ## Usage
 
 ```
-/catchup                                  # since your last session here
+/catchup                                  # since you were last active here
 /catchup --since "friday"
 /catchup --since "2h" --focus reviews-requested
 /catchup --sources github,git --depth quick
+/catchup --scope all                      # include cross-repo pings/reviews
 ```
 
 | Flag | Default | Values |
 |------|---------|--------|
-| `--since` | `last-session` | `last-session`, `2h`/`3d`, `yesterday`, `friday`, a date |
+| `--since` | `last-active` | `last-active`, `last-session`, `last-commit`/`last-mine`, `2h`/`3d`, `yesterday`, `friday`, a date |
+| `--scope` | `repo` | `repo` (this repo only), `all` (cross-repo, listed separately) |
 | `--sources` | all detected | `github`, `git`, `linear`, `calendar` |
 | `--depth` | `standard` | `quick`, `standard`, `deep` |
-| `--focus` | none | `prs`, `reviews-requested`, `mentions` |
+| `--focus` | none | `prs`, `reviews-requested`, `mentions`, `impact` |
+
+**Scope.** Default is repo-scoped: every GitHub signal (reviews
+requested of you, notifications, mentions) is filtered to the repo you
+run `/catchup` in — a per-repo catch-up does not surface another repo's
+queue. `--scope all` re-includes cross-repo activity, listed in its own
+**Other repos** section, never mixed into this repo's lists.
 
 ## Sources (MVP)
 

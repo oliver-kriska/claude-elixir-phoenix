@@ -81,6 +81,44 @@ routing row. Implements GitHub issue #47.
 - `elixir-phoenix` README: added a "Companion plugin: `catchup`"
   install section. `/phx:help`: added a "Returning after time off"
   routing row pointing to `/catchup`.
+- **`catchup` is repo-scoped by default.** New `--scope repo|all`
+  flag (default `repo`). Every GitHub signal — review-requested,
+  notifications/mentions — is now filtered to the repo `/catchup` ran
+  in: review-requests use `gh pr list --repo "$REPO"
+  --search "review-requested:@me"` (was org-wide `gh search prs`),
+  and pings use the repo-scoped `/repos/$REPO/notifications` endpoint
+  (was cross-repo `/notifications?all=true`). `--scope all` re-enables
+  cross-repo, but those hits are listed in a separate **Other repos**
+  subsection and a Risks line, never folded into the repo's own lists.
+
+### Fixed
+
+- **`catchup` cross-repo leakage** (production finding). A brief run
+  inside one repo listed *other* repos' review queue, notifications,
+  and mentions (org-wide `gh search`/cross-repo `/notifications`),
+  contradicting the expectation that a per-repo catch-up is scoped to
+  that repo. Now repo-scoped by default; cross-repo is opt-in and
+  segregated (see Changed → `--scope`).
+- **`catchup-runner` turn budget** (production finding, ccrider-
+  verified). A busy real repo hit the agent's `maxTurns` mid-assembly
+  so it never returned the inline summary, forcing the (often Opus)
+  caller to re-summarize — defeating the Sonnet cost delegation.
+  `maxTurns 25 → 60`, added a "Tool economy" section (batch shell,
+  write the brief before risking the budget), and a skill-side
+  `SendMessage` fallback that finishes the summary cheaply in Sonnet
+  instead of in the caller.
+- **`catchup` correctness audit — 3 shell bugs.** (1) `git log
+  --name-only` over a range under-counts files ~70% due to history
+  simplification (real repo: 44 vs 140 ground truth — missed a landed
+  migration and a 14-file conflict); replaced with per-commit
+  `git diff-tree --no-commit-id --name-only -r`. (2) `awk -F'|'` on
+  commit subjects corrupts fields when a subject contains `|`
+  (e.g. `feat(a|b):`); switched to TAB (`%x09`) — macOS awk does not
+  accept `-F'\x1f'`. (3) Unbounded local-branch scan firehosed on a
+  400-branch repo; bounded to your own branches active in 60d, capped.
+- **`catchup` anonymization.** Removed client repo/ticket identifiers
+  from the distributed plugin and CHANGELOG; examples use generic
+  `PROJ-####` / `lib/app*` placeholders.
 
 ## [2.9.0] - 2026-05-16
 

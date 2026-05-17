@@ -25,29 +25,42 @@ REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner)
 DEFBR=$(gh repo view --json defaultBranchRef --jq .defaultBranchRef.name)
 ```
 
+**Scoping (important).** Default `--scope repo`: EVERY GitHub signal
+below is filtered to `$REPO`. A brief run inside one repo must never
+silently list another repo's reviews or notifications. `--scope all`
+is opt-in and its cross-repo hits go in a separate **Other repos**
+subsection, never mixed into this repo's lists.
+
 The four signals that matter on return:
 
-1. **Pinged you while away** — the single highest-signal call:
+1. **Pinged you while away** — repo-scoped notifications endpoint:
 
    ```bash
-   gh api "/notifications?since=$SINCE_ISO&all=true" \
-     --jq '.[] | {reason, title: .subject.title, type: .subject.type, repo: .repository.full_name, url: .subject.url}'
+   gh api "/repos/$REPO/notifications?since=$SINCE_ISO&all=true" \
+     --jq '.[] | {reason, title: .subject.title, type: .subject.type, url: .subject.url}'
    ```
 
    `reason` ∈ `review_requested`, `mention`, `assign`, `comment`,
-   `team_mention`. This is "what asked for me", cross-repo. Lead with it.
+   `team_mention`. This is "what asked for me, here". Lead with it.
+   `--scope all` also: `gh api "/notifications?since=$SINCE_ISO&all=true"`
+   then `select(.repository.full_name != $REPO)` for the Other-repos
+   subsection.
 
-2. **Review requested of you (open):**
+2. **Review requested of you (open), in this repo:**
 
    ```bash
-   gh search prs --review-requested=@me --state=open \
-     --json number,title,repository,url,updatedAt --limit 30
+   gh pr list --repo "$REPO" --search "review-requested:@me" \
+     --state open --json number,title,url,updatedAt --limit 30
    ```
+
+   `--scope all` also: `gh search prs --review-requested=@me
+   --state=open --json number,title,repository,url --limit 30`, then
+   filter out `$REPO` rows into the Other-repos subsection.
 
 3. **Your PRs with new activity / CI state:**
 
    ```bash
-   gh pr list --author @me --state open \
+   gh pr list --repo "$REPO" --author @me --state open \
      --search "updated:>=$SINCE_DATE" \
      --json number,title,url,reviewDecision,statusCheckRollup,updatedAt --limit 30
    ```
@@ -58,7 +71,8 @@ The four signals that matter on return:
 4. **PRs others moved in this repo (context, not action):**
 
    ```bash
-   gh pr list --state all --search "updated:>=$SINCE_DATE -author:$ME" \
+   gh pr list --repo "$REPO" --state all \
+     --search "updated:>=$SINCE_DATE -author:$ME" \
      --json number,title,author,state,url,mergedAt --limit 40
    ```
 

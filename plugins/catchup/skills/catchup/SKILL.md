@@ -3,7 +3,7 @@ name: catchup
 description: "Summarize and review what changed while you were away. Use after a weekend, vacation, or flight to check missed PRs, git commits, Linear tickets, and meetings — one prioritized brief, not a firehose."
 effort: medium
 disable-model-invocation: true
-argument-hint: "[--since \"friday\"|\"2h\"|\"last-active\"|\"last-commit\"] [--sources github,git,linear,calendar] [--depth quick|standard|deep] [--focus prs,reviews-requested,mentions,impact]"
+argument-hint: "[--since \"friday\"|\"2h\"|\"last-active\"|\"last-commit\"] [--scope repo|all] [--sources github,git,linear,calendar] [--depth quick|standard|deep] [--focus prs,reviews-requested,mentions,impact]"
 allowed-tools: Read, Grep, Glob, Bash, Write, WebFetch, Agent
 ---
 
@@ -22,7 +22,13 @@ print what the agent returns.
 /catchup --since "friday"
 /catchup --since "2h" --focus reviews-requested
 /catchup --since last-commit --depth deep
+/catchup --scope all                      # include cross-repo pings/reviews
 ```
+
+Default is **repo-scoped**: every GitHub signal (reviews requested,
+notifications, mentions) is filtered to the repo you ran it in. Pass
+`--scope all` to also include cross-repo activity, which is then listed
+in its own separate section — never mixed into this repo's lists.
 
 ## Iron Laws
 
@@ -38,14 +44,19 @@ print what the agent returns.
    match fall back to 24h and note the assumption.
 5. **Stop after the brief** — print the agent's summary, never
    auto-transition to another command.
+6. **Repo-scoped by default** — pass `SCOPE=repo` unless the user
+   passed `--scope all`. A brief run inside one repo must not leak
+   another repo's reviews/notifications. Cross-repo is opt-in only.
 
 ## Workflow
 
 ### 1. Parse arguments
 
-From `$ARGUMENTS`: `--since`, `--sources`, `--depth`, `--focus`.
-Defaults: `--since last-active`, all detected sources, `--depth
-standard`, no focus.
+From `$ARGUMENTS`: `--since`, `--scope`, `--sources`, `--depth`,
+`--focus`. Defaults: `--since last-active`, **`--scope repo`**, all
+detected sources, `--depth standard`, no focus. `--scope` accepts
+`repo` (default — every GitHub signal filtered to the current repo) or
+`all` (cross-repo allowed, listed in its own section).
 
 ### 2. Resolve the time window (here, in this context)
 
@@ -83,7 +94,7 @@ Spawn one agent, foreground, passing a self-contained prompt:
 ```
 Agent(subagent_type: "catchup-runner", prompt: """
 SINCE_EPOCH={…}  SINCE_ISO={…Z}  SINCE_LABEL="{… local TZ}"
-LOCAL_TZ={…}  SOURCES={github,git}  DEPTH={…}  FOCUS={…}
+LOCAL_TZ={…}  SOURCES={github,git}  SCOPE={repo|all}  DEPTH={…}  FOCUS={…}
 OUT_PATH={cwd}/.claude/catchup/brief-{YYYY-MM-DD}.md   # local date (date +%F), not UTC
 LINEAR_DATA={text or "absent"}
 CALENDAR_DATA={text or "absent"}
