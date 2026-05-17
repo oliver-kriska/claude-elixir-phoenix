@@ -69,16 +69,37 @@ GME=$(git config user.email)
 DEFBR=${DEFBR:-$(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null | sed 's@^origin/@@')}; DEFBR=${DEFBR:-main}
 git fetch --quiet origin "$DEFBR" 2>/dev/null || true
 # commits by others in window:
-git log "origin/$DEFBR" --since="$SINCE_ISO" --no-merges --pretty='%h|%an|%ae|%s' | awk -F'|' -v me="$GME" '$3!=me'
-# risk scan:
-git log "origin/$DEFBR" --since="$SINCE_ISO" --name-only --pretty=format:'%h %s' | grep -iE 'migrations?/|\.lock$|mix\.lock|package-lock|\.github/workflows/' | sort -u
+# TAB-delimited (%x09): subjects often contain '|' — never use '|' as
+# the field sep. macOS awk does not grok -F'\x1f'; a real tab does.
+git log "origin/$DEFBR" --since="$SINCE_ISO" --no-merges --pretty=format:'%h%x09%an%x09%ae%x09%s' | awk -F'\t' -v me="$GME" '$3!=me'
+# risk scan — per-commit diff-tree (NOT `git log --name-only`: log
+# history-simplification silently drops files for many commits; on
+# enaia it under-counted 140→44, which would MISS a landed migration):
+git log "origin/$DEFBR" --since="$SINCE_ISO" --no-merges --format='%h %s' \
+| while read -r h rest; do \
+    git diff-tree --no-commit-id --name-only -r "$h" \
+    | grep -qiE 'migrations?/|\.lock$|mix\.lock|package-lock|\.github/workflows/' \
+    && echo "$h $rest"; done
 # ticket-ref proxy when LINEAR_DATA=absent:
 git log "origin/$DEFBR" --since="$SINCE_ISO" --pretty='%s' | grep -oE '[A-Z]{2,}-[0-9]+' | sort -u
 ```
 
 ## Impact on your scope (the differentiator)
 
-`MOVED` = files in the by-others commits above (`--name-only`, dedup).
+`MOVED` = union of files in the by-others commits. Get the non-me
+commit hashes (tab sep), then `git diff-tree --no-commit-id
+--name-only -r $h` per hash and `sort -u`. **Never `git log
+--name-only`** for this — log simplification drops file lists for many
+commits (verified on enaia: 44 vs the true 140), which would silently
+hide real conflicts:
+
+```bash
+MOVED=$(git log "origin/$DEFBR" --since="$SINCE_ISO" --no-merges \
+  --pretty=format:'%H%x09%ae' \
+  | awk -F'\t' -v me="$GME" '$2!=me{print $1}' \
+  | while read -r h; do git diff-tree --no-commit-id --name-only -r "$h"; done \
+  | sort -u)
+```
 
 `MINE` = files you actually have in flight. **Bound the branch scan —
 never iterate every local branch** (big repos have hundreds of stale
@@ -88,8 +109,8 @@ recently-touched:
 ```bash
 CUT=$(( $(date +%s) - 60*86400 ))           # 60-day recency window
 git for-each-ref --sort=-committerdate refs/heads \
-  --format='%(refname:short)|%(committerdate:unix)|%(authoremail)' \
-| awk -F'|' -v me="$GME" -v def="$DEFBR" -v cut="$CUT" \
+  --format='%(refname:short)%09%(committerdate:unix)%09%(authoremail)' \
+| awk -F'\t' -v me="$GME" -v def="$DEFBR" -v cut="$CUT" \
     '$1!=def && $2>cut && index($3,me)>0 {print $1}' | head -15
 ```
 

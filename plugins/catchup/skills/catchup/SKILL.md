@@ -56,10 +56,11 @@ words (`friday`, `yesterday`, a date) in the **user's local timezone**
 
 Default `last-active` = MAX of: newest Claude session mtime for this
 repo, your last own commit (`git log --author=<you> -1 --format=%ct`),
-your last own PR/review (`gh search prs --author=@me`). The latest
-footprint is "you were last here". Record which signal won. Variants:
-`last-session` (sessions only), `last-commit`/`last-mine` (your
-git/PR only). No signal → 24h, noted.
+your last own PR **in this repo** (`gh pr list --repo <repo> --author
+@me --state all`, repo-scoped — a global search would anchor to other
+repos). The latest footprint is "you were last here". Record which
+signal won. Variants: `last-session` (sessions only),
+`last-commit`/`last-mine` (your git/PR only). No signal → 24h, noted.
 
 ### 3. Detect sources + pull MCP data (here)
 
@@ -83,7 +84,7 @@ Spawn one agent, foreground, passing a self-contained prompt:
 Agent(subagent_type: "catchup-runner", prompt: """
 SINCE_EPOCH={…}  SINCE_ISO={…Z}  SINCE_LABEL="{… local TZ}"
 LOCAL_TZ={…}  SOURCES={github,git}  DEPTH={…}  FOCUS={…}
-OUT_PATH={cwd}/.claude/catchup/brief-{YYYY-MM-DD}.md
+OUT_PATH={cwd}/.claude/catchup/brief-{YYYY-MM-DD}.md   # local date (date +%F), not UTC
 LINEAR_DATA={text or "absent"}
 CALENDAR_DATA={text or "absent"}
 Window anchor signal: {which one won, for the Risks note}

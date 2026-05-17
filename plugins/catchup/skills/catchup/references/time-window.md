@@ -125,11 +125,16 @@ E_SESS=$( [ -n "$S1" ] && { date -r "$S1" +%s 2>/dev/null || stat -c %Y "$S1"; }
 GME=$(git config user.email)
 E_COMMIT=$(git log --all --author="$GME" -1 --format=%ct 2>/dev/null)
 
-# 3. your last own PR / review / comment activity (if gh present)
-E_PR=$(gh search prs --author=@me --sort=updated --order=desc --limit 1 \
-        --json updatedAt --jq '.[0].updatedAt' 2>/dev/null \
+# 3. your last own PR activity IN THIS REPO (repo-scoped — a global
+#    `gh search prs --author=@me` is wrong here: it would anchor to
+#    activity in some *other* repo and miss a week of changes in this
+#    one). Often empty (you commit but don't author PRs) → just skip.
+REPO=$(gh repo view --json nameWithOwner --jq .nameWithOwner 2>/dev/null)
+E_PR=$( [ -n "$REPO" ] && gh pr list --repo "$REPO" --author @me \
+        --state all --limit 1 --json updatedAt \
+        --jq '.[0].updatedAt' 2>/dev/null \
         | { read d; [ -n "$d" ] && { date -u -d "$d" +%s 2>/dev/null \
-            || date -u -j -f %Y-%m-%dT%H:%M:%SZ "$d" +%s; }; })
+            || date -u -j -f "%Y-%m-%dT%H:%M:%SZ" "$d" +%s; }; })
 
 # MAX of whatever resolved = "you were last here"
 SINCE_EPOCH=$(printf '%s\n' "$E_SESS" "$E_COMMIT" "$E_PR" \

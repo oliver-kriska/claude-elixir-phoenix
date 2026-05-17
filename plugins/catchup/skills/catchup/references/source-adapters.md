@@ -81,9 +81,12 @@ git fetch --quiet origin "$DEFBR" 2>/dev/null || true
 Commits by **others** on the default branch in the window:
 
 ```bash
+# TAB sep (%x09): commit subjects often contain '|' (e.g.
+# "feat(a|b):") — '|' as -F would shift fields. Tab never appears in
+# a git subject; macOS awk handles -F'\t' but NOT -F'\x1f'.
 git log "origin/$DEFBR" --since="$SINCE_ISO" --no-merges \
-  --pretty='%h|%an|%ae|%ad|%s' --date=short \
-  | awk -F'|' -v me="$GME_E" '$3 != me'
+  --pretty=format:'%h%x09%an%x09%ae%x09%ad%x09%s' --date=short \
+  | awk -F'\t' -v me="$GME_E" '$3 != me'
 ```
 
 Risk scan — migrations / lockfiles / CI config touched while away
@@ -113,11 +116,17 @@ The differentiator (issue #47, druyang): not just "what did I miss" but
 **A. Files that moved upstream by others** in the window:
 
 ```bash
+# DO NOT use `git log --name-only` here: log history-simplification
+# silently drops the file list for many commits (verified on enaia —
+# one-pass gave 44 files, the true union is 140). Get the non-me
+# commit hashes first (no --name-only, tab sep — hashes/emails never
+# contain a tab), then union per-commit `git diff-tree`, which is
+# exact and parent-aware.
 MOVED=$(git log "origin/$DEFBR" --since="$SINCE_ISO" --no-merges \
-  --pretty='%H|%ae' --name-only \
-  | awk -F'|' -v me="$GME_E" '
-      /\|/ {skip=($2==me); next}
-      !skip && NF {print}' | sort -u)
+  --pretty=format:'%H%x09%ae' \
+  | awk -F'\t' -v me="$GME_E" '$2!=me{print $1}' \
+  | while read -r h; do git diff-tree --no-commit-id --name-only -r "$h"; done \
+  | sort -u)
 ```
 
 **B. Your in-flight scope** — the union of:
@@ -133,8 +142,8 @@ done
 #    ones (enaia: 400+) → unbounded scan is a firehose and slow.
 CUT=$(( $(date +%s) - 60*86400 ))
 for b in $(git for-each-ref --sort=-committerdate refs/heads \
-     --format='%(refname:short)|%(committerdate:unix)|%(authoremail)' \
-   | awk -F'|' -v me="$GME_E" -v def="$DEFBR" -v cut="$CUT" \
+     --format='%(refname:short)%09%(committerdate:unix)%09%(authoremail)' \
+   | awk -F'\t' -v me="$GME_E" -v def="$DEFBR" -v cut="$CUT" \
        '$1!=def && $2>cut && index($3,me)>0 {print $1}' | head -15); do
   mb=$(git merge-base "$b" "origin/$DEFBR" 2>/dev/null) || continue
   git diff --name-only "$mb" "$b"
