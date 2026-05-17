@@ -88,6 +88,23 @@ only; confirm each item's timestamp against `SINCE_EPOCH` before it
 enters the brief. Drop `dependabot`/`renovate`/`github-actions` unless
 `FOCUS` asks. `DEPTH=quick` → counts + top 3, skip the per-PR calls.
 
+### Timestamp discipline (bites hardest in `--scope all`)
+
+GitHub `updatedAt`/`createdAt` and notification times are **UTC
+(trailing `Z`)**. Two hard rules — a narrow window punishes both:
+
+1. **Each item is judged on its OWN controlling timestamp ≥
+   `SINCE_EPOCH`.** Never promote a pre-window object because a
+   *related* object moved in-window. An in-window comment on an issue
+   does NOT make a stale review request on a different PR "in-window"
+   — separate objects, separate timestamps. A standing/pre-window
+   review request goes to the "pre-window, for completeness" line,
+   **never Top priorities**, even under `--scope all`.
+2. **Render clock times in `LOCAL_TZ`.** Convert the `Z` value before
+   printing (`TZ=$LOCAL_TZ date -r <epoch>`). Never print a UTC value
+   with a local-TZ label — `06:36:23Z` is `08:36 CEST`, not
+   `06:36 CEST`. If unsure, print the ISO `Z` and label it UTC.
+
 ## Git recipes (always available — the floor)
 
 ```bash

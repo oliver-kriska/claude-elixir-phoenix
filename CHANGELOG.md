@@ -116,6 +116,17 @@ routing row. Implements GitHub issue #47.
   (e.g. `feat(a|b):`); switched to TAB (`%x09`) — macOS awk does not
   accept `-F'\x1f'`. (3) Unbounded local-branch scan firehosed on a
   400-branch repo; bounded to your own branches active in 60d, capped.
+- **`catchup` cross-repo timestamp discipline** (`--scope all`
+  production finding). On a narrow window a `--scope all` brief (1)
+  printed GitHub's UTC `updatedAt` (`06:36:23Z`) with a local-TZ
+  label (`06:36 CEST`, actually `08:36 CEST`), and (2) promoted a
+  *pre-window* standing review request to "do first" by bundling it
+  with an unrelated in-window issue update. `catchup-runner` +
+  `source-adapters` now state two hard rules: judge each item on its
+  *own* controlling timestamp ≥ `SINCE_EPOCH` (a related in-window
+  object never drags a pre-window object into Top priorities — it
+  goes to the "pre-window, for completeness" line), and convert `Z`
+  → `LOCAL_TZ` before printing any clock time.
 - **`catchup` anonymization.** Removed client repo/ticket identifiers
   from the distributed plugin and CHANGELOG; examples use generic
   `PROJ-####` / `lib/app*` placeholders.

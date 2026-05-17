@@ -31,6 +31,13 @@ silently list another repo's reviews or notifications. `--scope all`
 is opt-in and its cross-repo hits go in a separate **Other repos**
 subsection, never mixed into this repo's lists.
 
+**Timestamp discipline.** GitHub times are UTC (`Z`). Judge each item
+on *its own* controlling timestamp ≥ `SINCE_EPOCH` — never promote a
+pre-window object because a related object moved in-window; a standing
+review request is "pre-window, for completeness", not a Top priority.
+Convert `Z` → `LOCAL_TZ` before printing a clock time; never label a
+UTC value with a local TZ (`06:36:23Z` is `08:36 CEST`).
+
 The four signals that matter on return:
 
 1. **Pinged you while away** — repo-scoped notifications endpoint:
