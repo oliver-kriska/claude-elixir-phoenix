@@ -73,7 +73,7 @@ jobs:
         id: open_pr
         if: steps.drift.outputs.drift == 'true'
         continue-on-error: true
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: 'chore(cassettes): monthly hex-api regen'
           title: 'Monthly hex-api cassette regeneration'

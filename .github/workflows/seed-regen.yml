@@ -60,7 +60,7 @@ jobs:
         run: mix format plugins/elixir-phoenix/skills/deps-vet/priv/hex_vet_seed.exs
 
       - name: Open PR
-        uses: peter-evans/create-pull-request@v6
+        uses: peter-evans/create-pull-request@v8
         with:
           commit-message: 'chore(seed): monthly hex_vet_seed regeneration'
           title: 'Monthly hex_vet seed regeneration'
