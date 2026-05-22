@@ -30,7 +30,7 @@ jobs:
           elixir-version: '1.18.x'
 
       - name: Setup Python (for diff_findings.py + seed-regen helper)
-        uses: actions/setup-python@v5
+        uses: actions/setup-python@v6
         with:
           python-version: '3.12'
 
