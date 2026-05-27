@@ -6,7 +6,6 @@ description: Address PR review comments on Elixir/Phoenix code — fetch comment
 metadata:
   effort: high
   argument-hint: <PR number or URL> [--fix]
-  disable-model-invocation: true
 ---
 
 # PR Review Response

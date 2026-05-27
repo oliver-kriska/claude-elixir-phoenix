@@ -258,6 +258,10 @@ def extract_token_usage(messages):
 
     Total prompt tokens per turn = input_tokens + cache_creation + cache_read.
     Compaction is inferred when prompt tokens drop >40% between consecutive turns.
+
+    Extended fields (2026-05-23): cache TTL split (ephemeral_5m vs ephemeral_1h),
+    per-turn hit rate array, cache decay events (TTL expiry vs compaction),
+    per-model token breakdown, first-turn baseline.
     """
     turns = []
     models = []
@@ -278,6 +282,15 @@ def extract_token_usage(messages):
         output_tokens = usage.get("output_tokens", 0) or 0
         prompt_tokens = input_tokens + cache_creation + cache_read
 
+        # Cache TTL split (1h extended vs default 5m). Absent in older sessions.
+        cc_detail = usage.get("cache_creation") or {}
+        cache_create_5m = cc_detail.get("ephemeral_5m_input_tokens", 0) or 0
+        cache_create_1h = cc_detail.get("ephemeral_1h_input_tokens", 0) or 0
+
+        # Per-turn hit rate: cached portion of incoming context this turn.
+        denom = input_tokens + cache_creation + cache_read
+        hit_rate = round(cache_read / denom, 4) if denom else 0.0
+
         model = inner.get("model")
         if model:
             models.append(model)
@@ -287,23 +300,66 @@ def extract_token_usage(messages):
             "prompt_tokens": prompt_tokens,
             "input_tokens": input_tokens,
             "cache_creation_tokens": cache_creation,
+            "cache_creation_5m": cache_create_5m,
+            "cache_creation_1h": cache_create_1h,
             "cache_read_tokens": cache_read,
             "output_tokens": output_tokens,
+            "hit_rate": hit_rate,
         })
 
     if not turns:
         return None
 
     prompt_seq = [t["prompt_tokens"] for t in turns]
+    cache_read_seq = [t["cache_read_tokens"] for t in turns]
+    cache_create_seq = [t["cache_creation_tokens"] for t in turns]
     max_prompt = max(prompt_seq)
 
+    # Compaction events: prompt drops >40% (existing logic).
     compaction_events = 0
+    compaction_turns = set()
     pre_compaction_max = max_prompt
     for i in range(1, len(prompt_seq)):
         if prompt_seq[i - 1] > 10_000 and prompt_seq[i] < prompt_seq[i - 1] * 0.6:
             if compaction_events == 0:
                 pre_compaction_max = max(prompt_seq[:i])
             compaction_events += 1
+            compaction_turns.add(i)
+
+    # Cache decay events: cache_read drops >50% from prior turn AND not a
+    # compaction AND prior turn had meaningful cache. Indicates TTL expiry.
+    cache_decay_events = []
+    for i in range(1, len(cache_read_seq)):
+        prev_cr = cache_read_seq[i - 1]
+        curr_cr = cache_read_seq[i]
+        if prev_cr < 10_000 or i in compaction_turns:
+            continue
+        if curr_cr < prev_cr * 0.5:
+            cache_decay_events.append({
+                "turn_index": i,
+                "prev_cache_read": prev_cr,
+                "cache_read": curr_cr,
+                "drop_pct": round((prev_cr - curr_cr) / prev_cr * 100, 1),
+                "cache_creation_this_turn": cache_create_seq[i],
+            })
+
+    # Per-model breakdown: input/output/cache split by model (investigates
+    # Sonnet/Haiku underuse vs Opus hypothesis from LinkedIn thread).
+    model_breakdown = {}
+    for t in turns:
+        m = t["model"] or "unknown"
+        b = model_breakdown.setdefault(m, {
+            "turns": 0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "cache_creation_tokens": 0,
+            "cache_read_tokens": 0,
+        })
+        b["turns"] += 1
+        b["input_tokens"] += t["input_tokens"]
+        b["output_tokens"] += t["output_tokens"]
+        b["cache_creation_tokens"] += t["cache_creation_tokens"]
+        b["cache_read_tokens"] += t["cache_read_tokens"]
 
     primary_model = Counter(models).most_common(1)[0][0] if models else None
     ctx_window = get_context_window(primary_model)
@@ -312,20 +368,46 @@ def extract_token_usage(messages):
         round(pre_compaction_max / ctx_window * 100, 1) if ctx_window else None
     )
 
+    total_input = sum(t["input_tokens"] for t in turns)
+    total_output = sum(t["output_tokens"] for t in turns)
+    total_cache_create = sum(t["cache_creation_tokens"] for t in turns)
+    total_cache_create_5m = sum(t["cache_creation_5m"] for t in turns)
+    total_cache_create_1h = sum(t["cache_creation_1h"] for t in turns)
+    total_cache_read = sum(t["cache_read_tokens"] for t in turns)
+    total_billable = total_input + total_cache_create + total_cache_read + total_output
+    overall_hit_rate = (
+        round(total_cache_read / total_billable, 4) if total_billable else 0.0
+    )
+    pct_1h_writes = (
+        round(total_cache_create_1h / total_cache_create * 100, 1)
+        if total_cache_create else None
+    )
+
+    # First-turn baseline = system prompt + tool defs + CLAUDE.md + memory.
+    first_turn_baseline = turns[0]["cache_creation_tokens"] if turns else 0
+
     return {
         "primary_model": primary_model,
         "models_used": sorted(set(models)),
         "context_window": ctx_window,
         "turn_count_with_tokens": len(turns),
-        "total_input_tokens": sum(t["input_tokens"] for t in turns),
-        "total_output_tokens": sum(t["output_tokens"] for t in turns),
-        "total_cache_creation_tokens": sum(t["cache_creation_tokens"] for t in turns),
-        "total_cache_read_tokens": sum(t["cache_read_tokens"] for t in turns),
+        "total_input_tokens": total_input,
+        "total_output_tokens": total_output,
+        "total_cache_creation_tokens": total_cache_create,
+        "total_cache_creation_5m_tokens": total_cache_create_5m,
+        "total_cache_creation_1h_tokens": total_cache_create_1h,
+        "pct_1h_cache_writes": pct_1h_writes,
+        "total_cache_read_tokens": total_cache_read,
+        "overall_cache_hit_rate": overall_hit_rate,
+        "per_turn_cache_hit_rates": [t["hit_rate"] for t in turns],
         "max_prompt_tokens": max_prompt,
         "max_ctx_pct": max_ctx_pct,
         "pre_compaction_max_tokens": pre_compaction_max,
         "pre_compaction_ctx_pct": pre_compaction_ctx_pct,
         "compaction_events_inferred": compaction_events,
+        "cache_decay_events": cache_decay_events,
+        "first_turn_baseline_tokens": first_turn_baseline,
+        "model_breakdown": model_breakdown,
     }
 
 

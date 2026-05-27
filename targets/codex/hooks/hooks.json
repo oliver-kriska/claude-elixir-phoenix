@@ -92,6 +92,7 @@
         "hooks": [
           {
             "type": "command",
+            "if": "Edit(*.ex)|Edit(*.exs)|Edit(*.heex)|Edit(*.eex)|Edit(*.leex)|Write(*.ex)|Write(*.exs)|Write(*.heex)|Write(*.eex)|Write(*.leex)",
             "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/security-reminder.sh",
             "timeout": 15
           },
@@ -174,7 +175,10 @@
           },
           {
             "type": "command",
-            "command": "echo 'Elixir/Phoenix plugin loaded \u2014 describe your task and I'\\''ll suggest the right workflow'"
+            "command": "echo",
+            "args": [
+              "Elixir/Phoenix plugin loaded \u2014 describe your task and I'll suggest the right workflow"
+            ]
           }
         ]
       }

@@ -258,6 +258,13 @@ Defined in `hooks/hooks.json`:
 - `PostCompact` uses `exit 2` + stderr to warn Claude (same pattern as PostToolUse)
 - `StopFailure` uses `exit 2` + stderr and writes to scratchpad file
 
+**MCP tool hooks (CC 2.1.118+)** — hooks can call MCP tools directly via
+`type: "mcp_tool"`. Required fields: `server`, `tool`; optional `input` with
+`${tool_input.field}` substitution. Caveat: SessionStart and Setup fire before
+MCP servers finish connecting, so for service detection prefer a direct probe
+(see `detect-tidewave.sh`); reserve `mcp_tool` hooks for PreToolUse / PostToolUse
+/ Stop where the connection is already live.
+
 ### Tidewave Integration
 
 When Tidewave MCP available:
@@ -421,6 +428,12 @@ Only trim when content is purely informational and not execution-critical.
 - [ ] `CHANGELOG.md` updated with all changes under new version heading
 - [ ] README updated
 - [ ] `/phx:intro` tutorial content still accurate (commands, agents, features)
+
+> **Tagging note**: `claude plugin tag` (CC 2.1.118+) does NOT work for this
+> repo. It expects `.claude-plugin/plugin.json` at the repo root, but this
+> is a marketplace layout — the plugin lives at
+> `plugins/elixir-phoenix/.claude-plugin/plugin.json`. Tagging stays manual:
+> `git tag vX.Y.Z && git push --tags`.
 
 ### Versioning
 

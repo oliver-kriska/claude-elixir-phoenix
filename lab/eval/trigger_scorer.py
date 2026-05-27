@@ -1,20 +1,28 @@
 #!/usr/bin/env python3
-"""Behavioral trigger evaluation using haiku.
+"""Behavioral trigger evaluation against a routing-judge model.
 
-Tests whether Claude routes user prompts to the correct skill
-by sending all skill descriptions + one test prompt to haiku.
+Tests whether the chosen model routes user prompts to the correct skill
+by sending all skill descriptions + one test prompt to the judge.
+
+Default judge is claude-haiku-4-5. Use --model to evaluate against other
+models (sonnet, opus, full IDs). Per-model results are cached separately so
+haiku/sonnet baselines stay independent.
 
 Usage:
-    python3 -m lab.eval.trigger_scorer --skill plan       # Test one skill
-    python3 -m lab.eval.trigger_scorer --all               # Test all skills with triggers
-    python3 -m lab.eval.trigger_scorer --all --cache       # Use cached results (no API calls)
+    python3 -m lab.eval.trigger_scorer --skill plan
+    python3 -m lab.eval.trigger_scorer --all
+    python3 -m lab.eval.trigger_scorer --all --cache               # Reuse cached results
+    python3 -m lab.eval.trigger_scorer --all --model sonnet        # Evaluate against sonnet
+    python3 -m lab.eval.trigger_scorer --skill plan --model claude-sonnet-4-6
 
-Cost: ~$0.001 per test prompt, ~$0.04 for all 40 skills × 8 prompts.
+Cost: ~$0.001 per test prompt on haiku, ~$0.04 for all 45 skills × ~8 prompts.
+Sonnet is roughly 12× more expensive per call.
 """
 
 import argparse
 import json
 import os
+import re
 import subprocess
 import sys
 from datetime import datetime, timezone
@@ -30,6 +38,45 @@ from lab.eval.triggers.deviation_classifier import classify_failures
 PLUGIN_ROOT = os.path.join(PROJECT_ROOT, "plugins", "elixir-phoenix")
 TRIGGERS_DIR = os.path.join(EVAL_DIR, "triggers")
 RESULTS_DIR = os.path.join(TRIGGERS_DIR, "results")
+DEFAULT_MODEL = "claude-haiku-4-5"
+
+# CC CLI accepts both aliases and full IDs. Canonicalize so 'haiku' and
+# 'claude-haiku-4-5' share one cache rather than two.
+MODEL_ALIASES = {
+    "haiku": "claude-haiku-4-5",
+    "sonnet": "claude-sonnet-4-6",
+    "opus": "claude-opus-4-7",
+}
+
+
+def canonicalize_model(model: str) -> str:
+    """Resolve a model alias (`haiku`, `sonnet`, `opus`) to its full ID."""
+    return MODEL_ALIASES.get(model, model)
+
+
+def _model_slug(model: str) -> str:
+    """Filesystem-safe slug for a model identifier."""
+    return re.sub(r"[^A-Za-z0-9_.-]+", "-", model).strip("-")
+
+
+def cache_dir_for_model(model: str) -> str:
+    """Where to read/write cached per-skill results for this model.
+
+    Default haiku keeps the legacy flat path so existing caches stay valid.
+    Other models get a per-model subdirectory to keep baselines independent.
+    """
+    model = canonicalize_model(model)
+    if model == DEFAULT_MODEL:
+        return RESULTS_DIR
+    return os.path.join(RESULTS_DIR, "by-model", _model_slug(model))
+
+
+def aggregate_path_for_model(model: str) -> str:
+    """Where to persist the multi-skill aggregate for this model."""
+    model = canonicalize_model(model)
+    if model == DEFAULT_MODEL:
+        return os.path.join(RESULTS_DIR, "_aggregate.json")
+    return os.path.join(cache_dir_for_model(model), "_aggregate.json")
 
 
 def load_all_descriptions() -> dict[str, str]:
@@ -58,8 +105,8 @@ def load_trigger_file(skill_name: str) -> dict | None:
         return json.load(f)
 
 
-def ask_haiku(all_descriptions: dict[str, str], prompt: str) -> list[str]:
-    """Ask haiku which skill(s) it would load for a given prompt."""
+def ask_model(all_descriptions: dict[str, str], prompt: str, model: str = DEFAULT_MODEL) -> list[str]:
+    """Ask the chosen routing-judge model which skill(s) it would load for a given prompt."""
     desc_list = "\n".join(f"- {name}: {desc[:150]}" for name, desc in all_descriptions.items())
 
     system_prompt = f"""You are testing skill routing for a Claude Code plugin.
@@ -77,7 +124,7 @@ List at most 3 skills, ordered by relevance."""
         result = subprocess.run(
             [
                 "claude", "-p", system_prompt,
-                "--model", "haiku",
+                "--model", model,
                 "--output-format", "text",
                 "--max-budget-usd", "0.50",
                 "--no-session-persistence",
@@ -132,15 +179,16 @@ def score_triggers(request: ScoreRequest) -> ScoreResult:
     should_trigger = triggers.get("should_trigger", [])
     should_not = triggers.get("should_not_trigger", [])
 
+    judge_model = request.model or DEFAULT_MODEL
     results = []
     for prompt in should_trigger:
-        chosen = ask_haiku(all_descriptions, prompt)
+        chosen = ask_model(all_descriptions, prompt, judge_model)
         results.append({
             "prompt": prompt, "expected": True, "chosen": chosen,
             "correct": skill_name in chosen,
         })
     for prompt in should_not:
-        chosen = ask_haiku(all_descriptions, prompt)
+        chosen = ask_model(all_descriptions, prompt, judge_model)
         results.append({
             "prompt": prompt, "expected": False, "chosen": chosen,
             "correct": skill_name not in chosen,
@@ -179,6 +227,7 @@ def score_triggers(request: ScoreRequest) -> ScoreResult:
             "correct": correct_count,
             "tp": tp, "fp": fp, "fn": fn, "tn": tn,
             "timestamp": datetime.now(timezone.utc).isoformat(),
+            "model": judge_model,
             "results": results,
             "deviations": [d.to_dict() for d in deviations],
         },
@@ -204,24 +253,31 @@ def score_skill_triggers(
     triggers: dict,
     all_descriptions: dict[str, str],
     use_cache: bool = False,
+    model: str = DEFAULT_MODEL,
 ) -> dict:
     """Backwards-compatible wrapper. Builds ScoreRequest, calls score_triggers,
-    returns the legacy dict shape. Writes cache file (legacy callers expect this)."""
+    returns the legacy dict shape. Writes cache file (legacy callers expect this).
+
+    Cache is per-model: haiku uses the legacy flat path, other models get
+    a per-model subdirectory under results/by-model/{slug}/.
+    """
+    cache_dir = cache_dir_for_model(model)
     request = ScoreRequest(
         target_path="",
         target_kind="trigger",
         target_name=skill_name,
         use_cache=use_cache,
-        cache_dir=RESULTS_DIR,
+        cache_dir=cache_dir,
         triggers=triggers,
         all_descriptions=all_descriptions,
+        model=model,
     )
     result = score_triggers(request)
     score_data = result.to_dict()
 
     if not result.cache_hit:
-        os.makedirs(RESULTS_DIR, exist_ok=True)
-        cache_path = os.path.join(RESULTS_DIR, f"{skill_name}.json")
+        os.makedirs(cache_dir, exist_ok=True)
+        cache_path = os.path.join(cache_dir, f"{skill_name}.json")
         with open(cache_path, "w") as f:
             json.dump(score_data, f, indent=2)
             f.write("\n")
@@ -230,23 +286,29 @@ def score_skill_triggers(
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Test skill trigger accuracy with haiku")
+    parser = argparse.ArgumentParser(description="Test skill trigger accuracy against a routing-judge model")
     parser.add_argument("--skill", help="Test one skill")
     parser.add_argument("--all", action="store_true", help="Test all skills with trigger files")
     parser.add_argument("--cache", action="store_true", help="Use cached results")
     parser.add_argument("--summary", action="store_true", help="Print summary only")
+    parser.add_argument(
+        "--model",
+        default=DEFAULT_MODEL,
+        help=f"Routing-judge model (alias like 'sonnet' or full ID). Default: {DEFAULT_MODEL}",
+    )
     args = parser.parse_args()
 
     all_descriptions = load_all_descriptions()
+    judge_model = canonicalize_model(args.model)
 
     if args.skill:
         triggers = load_trigger_file(args.skill)
         if not triggers:
             print(f"No trigger file for {args.skill}", file=sys.stderr)
             sys.exit(1)
-        result = score_skill_triggers(args.skill, triggers, all_descriptions, args.cache)
+        result = score_skill_triggers(args.skill, triggers, all_descriptions, args.cache, model=judge_model)
         if args.summary:
-            print(f"{args.skill}: accuracy={result['accuracy']:.0%} precision={result['precision']:.0%} recall={result['recall']:.0%}")
+            print(f"{args.skill} [{judge_model}]: accuracy={result['accuracy']:.0%} precision={result['precision']:.0%} recall={result['recall']:.0%}")
         else:
             print(json.dumps(result, indent=2))
 
@@ -255,26 +317,29 @@ def main():
         total_accuracy = 0
         results = {}
 
+        print(f"Judge model: {judge_model}\n")
         for name in sorted(all_descriptions.keys()):
             triggers = load_trigger_file(name)
             if not triggers:
                 continue
             print(f"  Testing {name}...", end=" ", flush=True)
-            result = score_skill_triggers(name, triggers, all_descriptions, args.cache)
+            result = score_skill_triggers(name, triggers, all_descriptions, args.cache, model=judge_model)
             results[name] = result
             total_accuracy += result["accuracy"]
             skills_tested += 1
             print(f"accuracy={result['accuracy']:.0%} (P={result['precision']:.0%} R={result['recall']:.0%})")
 
         avg = total_accuracy / skills_tested if skills_tested else 0
-        print(f"\n{skills_tested} skills tested, average accuracy: {avg:.0%}")
+        print(f"\n{skills_tested} skills tested against {judge_model}, average accuracy: {avg:.0%}")
 
         if not args.summary:
             # Save aggregate
-            aggregate_path = os.path.join(RESULTS_DIR, "_aggregate.json")
+            aggregate_path = aggregate_path_for_model(judge_model)
+            os.makedirs(os.path.dirname(aggregate_path), exist_ok=True)
             with open(aggregate_path, "w") as f:
                 json.dump({
                     "timestamp": datetime.now(timezone.utc).isoformat(),
+                    "model": judge_model,
                     "skills_tested": skills_tested,
                     "average_accuracy": round(avg, 4),
                     "per_skill": {k: {"accuracy": v["accuracy"], "precision": v["precision"], "recall": v["recall"]}

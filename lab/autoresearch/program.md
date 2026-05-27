@@ -4,6 +4,7 @@
 
 1. Fix accuracy issues: stale cross-references, missing agents/skills
 2. Improve conciseness: compress bloated sections, move detail to references/
+   (NEVER by trimming a protected section — see "Protected Sections" below)
 3. Strengthen Iron Laws: add missing prohibitions, ensure min coverage
 4. Improve triggering: add domain keywords to generic descriptions
 5. Fill completeness gaps: missing sections, undocumented flags
@@ -24,6 +25,18 @@
 - `CLAUDE.md`
 - `CHANGELOG.md`
 - `README.md`
+
+## Protected Sections (Frozen — append-only)
+
+The `## Iron Laws` section of every SKILL.md is **slow state**: hard-won
+prohibitions that must never erode. The loop MAY append a new Iron Law but MUST
+NEVER delete or reword an existing one. This is a hard invariant, not a scored
+tradeoff — `checks.sh` (check #7, via `scripts/protected_sections.py`) compares
+the mutation against git HEAD and forces REVERT if any existing law disappears.
+
+Rationale: SkillOpt (arXiv 2605.23904) measured that removing this fast/slow
+guarantee cost 22 points on SpreadsheetBench. Conciseness gains must come from
+the fast state (patterns, examples, prose), never from the protected section.
 
 ## Scoring
 

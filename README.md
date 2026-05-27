@@ -76,7 +76,7 @@ that prevent the mistakes Elixir developers actually make in production.
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-> **v2.9.0** -- 45 skills, 22 agents. Adds `/phx:deps-audit` + `/phx:deps-vet` Hex supply-chain suite. [Issues](https://github.com/oliver-kriska/claude-elixir-phoenix/issues) welcome.
+> **v2.10.0** -- new framework-agnostic **`catchup`** companion plugin: `/catchup` return-from-absence briefing. [Issues](https://github.com/oliver-kriska/claude-elixir-phoenix/issues) welcome.
 
 ## Installation
 
@@ -89,6 +89,31 @@ that prevent the mistakes Elixir developers actually make in production.
 # Install the plugin
 /plugin install elixir-phoenix
 ```
+
+> **Multi-stack tip — project-scope enable.** This plugin is opinionated for
+> Elixir/Phoenix. If you work across multiple language stacks, prefer enabling
+> it per-project rather than globally — drop this into `<project>/.claude/settings.json`:
+>
+> ```json
+> { "enabledPlugins": { "elixir-phoenix@oliver-kriska": true } }
+> ```
+>
+> Hooks self-gate on `mix.exs` presence (v2.10.1+), so global enable is safe
+> — project-scoping is just a tidiness preference.
+
+### Companion plugin: `catchup`
+
+The same marketplace also ships **`catchup`** — a framework-agnostic
+`/catchup` return-from-absence briefing (PRs, reviews, git, Linear,
+calendar → one prioritized Context Brief, including which upstream
+changes touch *your* in-flight files). Independent plugin, separate
+manifest, install only if you want it:
+
+```bash
+/plugin install catchup@oliver-kriska
+```
+
+See `plugins/catchup/README.md`. Not coupled to Elixir/Phoenix.
 
 ### From Local Path (for development)
 

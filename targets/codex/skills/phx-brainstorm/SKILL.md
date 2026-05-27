@@ -6,7 +6,6 @@ description: Brainstorm Elixir/Phoenix features — explore ideas, compare appro
 metadata:
   effort: high
   argument-hint: <topic or feature idea>
-  disable-model-invocation: true
 ---
 
 # Brainstorm — Adaptive Requirements Gathering

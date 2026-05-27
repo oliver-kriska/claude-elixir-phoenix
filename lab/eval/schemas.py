@@ -159,6 +159,7 @@ class ScoreRequest:
     # Trigger-specific:
     triggers: dict[str, Any] | None = None       # Loaded should_trigger/should_not data
     all_descriptions: dict[str, str] | None = None
+    model: str = "claude-haiku-4-5"              # Routing-judge model (trigger scorer)
 
 
 @dataclass
@@ -197,6 +198,8 @@ class ScoreResult:
                 "timestamp": self.metadata.get("timestamp", ""),
                 "results": self.metadata.get("results", []),
             }
+            if "model" in self.metadata:
+                base["model"] = self.metadata["model"]
             if "deviations" in self.metadata:
                 base["deviations"] = self.metadata["deviations"]
             return base

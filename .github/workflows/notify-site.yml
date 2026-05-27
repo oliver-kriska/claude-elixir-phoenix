@@ -1,0 +1,31 @@
+name: Notify Docs Site
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "plugins/elixir-phoenix/skills/**"
+      - "plugins/elixir-phoenix/agents/**"
+      - "plugins/elixir-phoenix/.claude-plugin/plugin.json"
+      - "CLAUDE.md"
+      - "CHANGELOG.md"
+  workflow_dispatch:
+
+jobs:
+  dispatch:
+    name: Dispatch rebuild to phxagents-site
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Send repository_dispatch event
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.SITE_DISPATCH_TOKEN }}
+          repository: oliver-kriska/phxagents-site
+          event-type: plugin-content-changed
+          client-payload: |
+            {
+              "sha": "${{ github.sha }}",
+              "ref": "${{ github.ref }}",
+              "message": "Plugin content changed on main (${{ github.event_name }} by ${{ github.actor }})"
+            }

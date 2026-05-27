@@ -36,6 +36,8 @@ node_modules/
 !.claude/cc-changelog/
 # Fetched CC changelog (193KB, re-downloadable)
 .claude/cc-changelog/changelog-cache.md
+# cc-changelog skill runtime cache (nested .claude inside the skill dir)
+.claude/skills/cc-changelog/.claude/
 .claude/skills/analyze-sessions/references/session-index.json
 # Runtime artifacts (docs-cache, reports, summaries)
 .claude/docs-check/

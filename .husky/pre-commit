@@ -1,41 +1,78 @@
 #!/bin/sh
+# Pre-commit: scope-gated checks. Each check runs only when its file type is
+# staged. Matches `make ci` for the staged subset — keep in sync.
 
-# Run markdown linting on staged .md files
-STAGED_MD_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.md$' || true)
+STAGED_MD=$(git diff --cached --name-only --diff-filter=ACM | grep '\.md$' || true)
+STAGED_JSON=$(git diff --cached --name-only --diff-filter=ACM | grep '\.json$' || true)
+STAGED_SH=$(git diff --cached --name-only --diff-filter=ACM | grep '\.sh$' || true)
+STAGED_SKILL_AGENT=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^plugins/[^/]+/(skills|agents)/' || true)
+STAGED_EVAL_FW=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^lab/eval/' || true)
 
-if [ -n "$STAGED_MD_FILES" ]; then
-  echo "Linting staged Markdown files..."
-
-  # Check if markdownlint is available
-  if command -v npx &> /dev/null; then
-    echo "$STAGED_MD_FILES" | xargs npx markdownlint --ignore node_modules --ignore docs --ignore reports
-    if [ $? -ne 0 ]; then
+# Markdown lint
+if [ -n "$STAGED_MD" ]; then
+  echo "→ Linting Markdown..."
+  if command -v npx >/dev/null 2>&1; then
+    if ! echo "$STAGED_MD" | xargs npx markdownlint --ignore node_modules --ignore docs --ignore reports; then
       echo ""
-      echo "Markdown lint errors found. Fix them or run:"
-      echo "  npm run lint:fix"
-      echo ""
+      echo "Markdown lint errors. Fix or run: npm run lint:fix"
       exit 1
     fi
   else
-    echo "Warning: npx not found, skipping markdown lint"
+    echo "  npx not found, skipping markdown lint"
   fi
 fi
 
-# Validate JSON files
-STAGED_JSON_FILES=$(git diff --cached --name-only --diff-filter=ACM | grep '\.json$' || true)
-
-if [ -n "$STAGED_JSON_FILES" ]; then
-  echo "Validating staged JSON files..."
-
-  for file in $STAGED_JSON_FILES; do
-    if [ -f "$file" ]; then
-      python3 -m json.tool "$file" > /dev/null 2>&1
-      if [ $? -ne 0 ]; then
-        echo "Invalid JSON: $file"
-        exit 1
-      fi
+# JSON validation
+if [ -n "$STAGED_JSON" ]; then
+  echo "→ Validating JSON..."
+  for f in $STAGED_JSON; do
+    [ -f "$f" ] || continue
+    if ! python3 -m json.tool "$f" > /dev/null 2>&1; then
+      echo "Invalid JSON: $f"
+      exit 1
     fi
   done
 fi
 
-echo "Pre-commit checks passed!"
+# Shell script checks (bash syntax + shellcheck if available)
+if [ -n "$STAGED_SH" ]; then
+  echo "→ Checking shell scripts..."
+  for f in $STAGED_SH; do
+    [ -f "$f" ] || continue
+    if ! bash -n "$f"; then
+      echo "Bash syntax error: $f"
+      exit 1
+    fi
+  done
+  if command -v shellcheck >/dev/null 2>&1; then
+    # shellcheck disable=SC2086  # intentional word-splitting of newline-separated paths
+    if ! shellcheck $STAGED_SH; then
+      echo "shellcheck failed"
+      exit 1
+    fi
+  else
+    echo "  shellcheck not installed, skipping (brew install shellcheck)"
+  fi
+fi
+
+# Plugin eval (only when skills/agents change)
+if [ -n "$STAGED_SKILL_AGENT" ]; then
+  echo "→ Running plugin eval (changed skills/agents)..."
+  if ! make eval > /tmp/precommit-eval.log 2>&1; then
+    echo "Plugin eval failed. See /tmp/precommit-eval.log or run: make eval-fix"
+    tail -30 /tmp/precommit-eval.log
+    exit 1
+  fi
+fi
+
+# Eval framework tests (only when lab/eval/ changes)
+if [ -n "$STAGED_EVAL_FW" ]; then
+  echo "→ Running eval framework tests..."
+  if ! python3 -m pytest lab/eval/tests/ -q > /tmp/precommit-test.log 2>&1; then
+    echo "Tests failed. See /tmp/precommit-test.log"
+    tail -30 /tmp/precommit-test.log
+    exit 1
+  fi
+fi
+
+echo "✔ Pre-commit checks passed"

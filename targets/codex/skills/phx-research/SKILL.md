@@ -5,7 +5,6 @@ description: Research Elixir/Phoenix topics or evaluate Hex libraries (--library
   ElixirForum, GitHub.
 metadata:
   effort: high
-  disable-model-invocation: true
 ---
 
 # Research Elixir Topic

@@ -21,7 +21,7 @@ Commands that cannot cause data loss or security issues.
 | `cat *` | Read-only file content |
 | `head *`, `tail *` | Read-only file content |
 | `wc *` | Read-only counting |
-| `find *` | Read-only file search |
+| `find *` | Read-only file search (CC 2.1.113+: `find -exec` / `find -delete` are excluded — these still prompt) |
 | `grep *`, `rg *` | Read-only content search |
 | `which *`, `where *` | Read-only path lookup |
 | `echo *` | Output only |

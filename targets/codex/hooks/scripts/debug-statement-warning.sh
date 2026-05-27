@@ -3,6 +3,10 @@
 # Extends AutoHarness action-verifier pattern — catches IO.inspect,
 # dbg(), IO.puts in production code (not tests).
 
+# Skip in non-Elixir projects (defense in depth — issue #55)
+proj="${CLAUDE_PROJECT_DIR:-$PWD}"
+[ -f "$proj/mix.exs" ] || exit 0
+
 FILE_PATH=$(cat | jq -r '.tool_input.file_path // empty')
 [[ -z "$FILE_PATH" ]] && exit 0
 

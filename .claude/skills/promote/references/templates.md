@@ -135,40 +135,31 @@ Best used opportunistically, not for every release.
 
 ## CodeSnap Rendering
 
-Two visual presets:
-
-### claude-dark (benchmarks/releases)
+**ALWAYS render via the config file, never inline color flags.**
+Current `codesnap` ignores a single-color `--background` when a theme
+gradient is set ("candy" theme → bright green gradient). The config's
+structured `background.stops` is the only reliable override. This is
+the canonical command (matches every prior correct card, e.g. v280):
 
 ```bash
-codesnap -f {input}.txt -o {output}.png \
-  --mac-window-bar true \
+codesnap \
+  -f scratchpad/x-posts/{version}-table.txt \
+  -o scratchpad/x-posts/{version}-card.png \
+  --config scratchpad/x-posts/codesnap-claude-dark.json \
   --title "claude-elixir-phoenix {version}" \
-  --code-font-family "JetBrains Mono" \
-  --background "#0f1115" \
-  --title-color "#e6e6e6" \
-  --watermark "claude-elixir-phoenix" \
-  --watermark-color "#8b949e" \
-  --shadow-radius 24 \
-  --has-border \
-  --border-color "#ffffff18" \
   -l text
 ```
 
-### claude-accent (launch/celebratory)
+`codesnap-claude-dark.json` (committed in `scratchpad/x-posts/`) sets
+the dark gradient (`#0f1115` → `#1a1f2b`), mac window bar, border,
+JetBrains Mono, and an **empty watermark**. Default for all
+releases. Always `Read` the output PNG to confirm: dark background,
+no green, no watermark, table aligned.
 
-```bash
-codesnap -f {input}.txt -o {output}.png \
-  --mac-window-bar true \
-  --title "claude-elixir-phoenix {version}" \
-  --code-font-family "JetBrains Mono" \
-  --background "#111827" \
-  --title-color "#fbbf24" \
-  --watermark "claude-elixir-phoenix" \
-  --watermark-color "#9ca3af" \
-  --shadow-radius 24 \
-  --has-border \
-  --border-color "#d977061a" \
-  -l text
-```
-
-Use `claude-dark` by default. Use `claude-accent` for major milestones (v3.0, initial announcement, etc.).
+> **Do NOT** use the old inline-flag form
+> (`--background "#0f1115" --watermark … --shadow-radius …`). It
+> rendered correctly in April but the current codesnap leaves the
+> green "candy" gradient and adds an unwanted watermark. For a
+> celebratory accent variant, copy the config to a `*-accent.json`
+> and change `background.stops` + `title_config.color` there — keep
+> it config-driven.

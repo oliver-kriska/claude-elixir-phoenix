@@ -89,6 +89,15 @@ for i, line in enumerate(lines):
     ERRORS=$((ERRORS + 1))
 }
 
+# 7. Protected-section invariant: Iron Laws are append-only (SkillOpt fast/slow split).
+#    A mutation may ADD an Iron Law but never delete or reword an existing one.
+#    Compares the working tree against git HEAD (last kept state). New skills not
+#    yet in HEAD are skipped — there is nothing to protect.
+PROTECT_OUT=$(python3 "$(dirname "$0")/protected_sections.py" "$SKILL_FILE" 2>/dev/null) || {
+    echo "${PROTECT_OUT:-FAIL: protected Iron Law eroded}"
+    ERRORS=$((ERRORS + 1))
+}
+
 if [ "$ERRORS" -gt 0 ]; then
     echo "CHECKS FAILED: $ERRORS errors"
     exit 1

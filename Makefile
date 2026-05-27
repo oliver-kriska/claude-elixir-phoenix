@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents test validate ci clean port port-validate publish-pi publish-opencode
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate ci clean port port-validate publish-pi publish-opencode
 
 # Default target
 help: ## Show available commands
@@ -33,6 +33,12 @@ eval-ci: ## CI gate: lint + all skills + all agents
 
 eval-triggers: ## Re-run behavioral trigger tests (~60 min, uses haiku)
 	@bash lab/eval/run_eval.sh --triggers
+
+eval-multimodel: ## Run trigger eval against sonnet (slow, ~$$3, ~3 hr). Override: MODEL=opus make eval-multimodel
+	@python3 -m lab.eval.trigger_scorer --all --model $${MODEL:-sonnet}
+
+eval-compare-models: ## Compare per-skill accuracy across models. Override: MODELS=haiku,sonnet,opus make eval-compare-models
+	@python3 -m lab.eval.compare_models --models $${MODELS:-haiku,sonnet}
 
 eval-tournament: ## Run tournament on weak skills (<75% trigger accuracy)
 	@python3 -m lab.tournament.description_tournament --weak

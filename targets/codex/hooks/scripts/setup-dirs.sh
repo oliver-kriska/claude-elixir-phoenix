@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
 # SessionStart hook: Create core workflow directories (other dirs created by skills on demand)
+
+# Skip in non-Elixir projects (cross-project bleed guard — issue #55).
+# Don't litter .claude/{plans,reviews,solutions,audit,...} into non-Elixir repos.
+proj="${CLAUDE_PROJECT_DIR:-$PWD}"
+[ -f "$proj/mix.exs" ] || exit 0
+
 mkdir -p .claude/plans .claude/reviews .claude/solutions .claude/audit .claude/skill-metrics .claude/research 2>/dev/null || true
 
 # Create persistent plugin data directory (survives plugin updates)

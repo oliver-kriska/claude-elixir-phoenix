@@ -6,6 +6,10 @@
 # PreCompact hookSpecificOutput only supports top-level fields.
 # Use "systemMessage" to inject context that survives compaction.
 
+# Skip in non-Elixir projects (cross-project bleed guard — issue #55)
+proj="${CLAUDE_PROJECT_DIR:-$PWD}"
+[ -f "$proj/mix.exs" ] || exit 0
+
 FULL_MODE=false
 ACTIVE_PLAN=false
 ACTIVE_WORK=false

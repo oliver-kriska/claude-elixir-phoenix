@@ -7,6 +7,11 @@
 
 set -eu
 
+# Skip in non-Elixir projects (cross-project bleed guard — issue #55).
+# Subagents in Rust/Python/etc. projects shouldn't get Phoenix Iron Laws.
+proj="${CLAUDE_PROJECT_DIR:-$PWD}"
+[ -f "$proj/mix.exs" ] || exit 0
+
 # Resolve repo root from CLAUDE_PLUGIN_ROOT or by walking up from this script.
 if [ -n "${CLAUDE_PLUGIN_ROOT:-}" ]; then
   PLUGIN_ROOT="$CLAUDE_PLUGIN_ROOT"

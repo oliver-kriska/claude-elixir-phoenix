@@ -4,6 +4,10 @@
 # Code validates LLM output, feeds specific violation back for retry.
 # Unlike security-reminder.sh (filename-based), this scans CODE CONTENT.
 
+# Skip in non-Elixir projects (defense in depth — issue #55)
+proj="${CLAUDE_PROJECT_DIR:-$PWD}"
+[ -f "$proj/mix.exs" ] || exit 0
+
 FILE_PATH=$(cat | jq -r '.tool_input.file_path // empty')
 if [[ -z "$FILE_PATH" ]]; then
   exit 0

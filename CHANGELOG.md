@@ -79,6 +79,23 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   (repo root, codex-only), listing only `elixir-phoenix-codex` via a
   `git-subdir` source pointing at `targets/codex/`.
 
+### Added (contributor)
+
+- **Protected-section invariant** in the autoresearch loop (contributor
+  tooling, not distributed). The `## Iron Laws` section of every SKILL.md is
+  now **append-only slow state**: the loop may add a law but a delete/reword
+  forces REVERT. Enforced as a hard gate via `checks.sh` check #7 (backed by
+  `lab/autoresearch/scripts/protected_sections.py`, which diffs the working
+  tree against git HEAD, prefix-stripped so renumbering is allowed), plus a
+  "Protected Sections" declaration in `lab/autoresearch/program.md`. Borrowed
+  from SkillOpt (arXiv 2605.23904), which measured this fast/slow guarantee at
+  ~22 points on SpreadsheetBench. A live test confirmed the necessity: the
+  8-dimension scorer is *blind* to single-law deletion (composite and `safety`
+  both stay 1.0, because the scorer is stateless and the `safety` dimension
+  only checks section presence + min count) — so the old soft gate would have
+  silently accepted dropping a security Iron Law. New tests:
+  `lab/autoresearch/tests/test_protected_sections.py` (10 cases).
+
 ### Fixed (post-review — @druyang, #46)
 
 - **Codex install command was wrong.** Docs said
@@ -148,11 +165,299 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Smoke tests against real Codex / Pi / OpenCode CLIs are pending — they
   need to run on Oliver's machine with the respective agents installed.
 
+## [2.10.5] - 2026-05-25
+
+Patch: route audit subagents to declared-model specialists instead of
+`general-purpose`, cutting Opus subagent volume per `/phx:audit` run.
+
+### Changed
+
+- `skills/audit/SKILL.md`: route 3 of 5 parallel audit subagents to
+  declared-model plugin specialists instead of `general-purpose` (which
+  inherits the parent session model, usually Opus). Architecture →
+  `phoenix-patterns-analyst` (sonnet), Security → `security-analyzer`
+  (opus), Test health → `testing-reviewer` (sonnet). Performance and
+  Dependency tracks kept on `general-purpose` with TODO notes — no plugin
+  specialist exists for project-wide perf or deps audit. Motivation: a
+  JSONL analysis of 4,561 local sessions found 61.6% of Task/Agent
+  invocations bypass the plugin via CC built-ins, materially explaining
+  why Sonnet+Haiku combined are only ~7% of total token spend despite 18
+  of 22 plugin agents declaring those models.
+
+## [2.10.4] - 2026-05-21
+
+Patch: fix force-push hook false-positive (issue #61) and the same
+scan-past-separator class in the two sibling rules.
+
+### Fixed
+
+- `block-dangerous-ops.sh` (PreToolUse) — the force-push regex
+  `git push.*(--force|-f)\b` matched `--force-with-lease` (in ERE,
+  `\b` is a word boundary and the hyphen after `--force` is non-word,
+  so the boundary triggered on the lease variant) AND scanned past
+  shell command separators, so an unrelated `&& gh ... --force-with-lease`
+  on the same line tripped the deny. The hook blocked the very command
+  its `permissionDecisionReason` recommended as the safer alternative.
+  Reported by @inou (issue #61) — hit on a Sprint 8 rebase cycle that
+  stranded three rebased branches. New ERE anchors on start-of-line or
+  shell separator (`;` `&` `|` `&&` `||`), keeps the scan inside the
+  current command (`[^;|&]*`), and requires the flag to end at a word
+  terminator (`([[:space:];&|]|$)`), so `--force-with-lease` is allowed
+  while real `--force`/`-f` are still blocked. The same anchor fix is
+  applied to the `mix ecto.(reset|drop)` and `MIX_ENV=prod mix` rules
+  in the same file, which had the identical scan-past-separator
+  failure mode (e.g. `echo "do not run mix ecto.reset" && mix test`
+  used to be denied).
+- New `plugins/elixir-phoenix/hooks/tests/block-dangerous-ops_test.sh`
+  regression harness — 41 cases covering real force-push, the lease
+  variant, scan-past-separator false positives, Elixir-only Ecto and
+  MIX_ENV rules, and the `mix.exs`-gated cross-project bleed (#55).
+  Run with `bash plugins/elixir-phoenix/hooks/tests/block-dangerous-ops_test.sh`.
+
+## [2.10.3] - 2026-05-20
+
+Patch release bundling two unreleased changes since v2.10.2: CC hook-API
+adoption from PR #56 and the eval-framework multi-model trigger scorer.
+
+### Added
+
+- `check-pending-plans.sh` (Stop hook) now surfaces `background_tasks[]`
+  and `session_crons[]` from hook input as terminal warnings — catches
+  forgotten `mix phx.server`, `iex -S mix`, `mix watch` processes and
+  pending `/schedule` jobs at session stop (CC 2.1.145+ field).
+- `block-dangerous-ops.sh` (PreToolUse) now emits structured JSON
+  output with `permissionDecision: "deny"`, a user-facing reason, and
+  `hookSpecificOutput.additionalContext` containing the safer
+  alternative. Thanks to the CC 2.1.110 fix that preserves
+  additionalContext on blocked tool calls, the safer alternative now
+  persists into Claude's next turn instead of being a one-shot stderr
+  message.
+- CLAUDE.md documents the new `type: "mcp_tool"` hook (CC 2.1.118+)
+  with its SessionStart caveat — MCP servers may not be connected at
+  SessionStart, so detection probes stay on direct HTTP / `curl`;
+  reserve `mcp_tool` for PreToolUse / PostToolUse / Stop where the
+  connection is live.
+- Release checklist documents that `claude plugin tag` (CC 2.1.118+) does
+  NOT work for this repo's marketplace layout (it expects
+  `.claude-plugin/plugin.json` at the repo root, but our plugin lives at
+  `plugins/elixir-phoenix/.claude-plugin/plugin.json`). Manual
+  `git tag vX.Y.Z` remains the canonical path.
+
+### Added (contributor)
+
+- Multi-model trigger eval — `lab/eval/trigger_scorer.py` gained a
+  `--model <alias_or_full_id>` flag (default `claude-haiku-4-5`,
+  preserves all existing behavior). Aliases (`haiku`/`sonnet`/`opus`)
+  canonicalize to full IDs so `--model haiku` and
+  `--model claude-haiku-4-5` share one cache. Non-default models land
+  in `lab/eval/triggers/results/by-model/{model}/`; per-result JSON
+  records the `model` field so caches are self-describing.
+- `lab/eval/compare_models.py` — N-way model comparator. Loads N
+  `_aggregate.json` files via `--models alias,alias,…` or
+  `--aggregates path…`, prints an ASCII table sorted by per-skill
+  spread with `↕`/`⚠` markers at 10%/20% disagreement, plus an
+  apples-to-apples intersection mean and pairwise delta when skill
+  sets differ. `--format json` for machine consumption.
+- `Makefile`: `MODEL=sonnet make eval-multimodel` (full per-model
+  sweep), `MODELS=haiku,sonnet make eval-compare-models` (cached
+  comparison). Foundation for verifying v3.0.0 multi-agent ports
+  (Codex/OpenCode/Pi) on non-Claude routing judges.
+  See issue #48, T1.3 Phase 1.
+
+### Changed
+
+- `block-dangerous-ops.sh` Elixir-specific branches (`mix ecto.reset`,
+  `mix ecto.drop`, `MIX_ENV=prod`) now self-gate on `mix.exs` presence,
+  matching the PR #55 cross-project-bleed pattern. The git force-push
+  branch remains intentionally global.
+- SessionStart welcome echo in `hooks.json` converted to `args: []`
+  exec form (CC 2.1.139+) to eliminate nested shell quoting.
+- `/phx:permissions` risk-classification flags that `Bash(find:*)`
+  allow rules no longer auto-approve `find -exec` / `find -delete`
+  (CC 2.1.113+ tightening).
+
+## [2.10.2] - 2026-05-20
+
+### Fixed
+
+- `/phx:research`, `/phx:brainstorm`, `/phx:perf`, `/phx:pr-review` failing
+  with "skill not listed" when invoked via slash command (issue #53,
+  reported by @bigardone). Root cause: `disable-model-invocation: true`
+  was still set on these four skills, triggering Claude Code bug
+  [#26251](https://github.com/anthropics/claude-code/issues/26251) where
+  the model refuses to invoke a skill via the Skill tool even when the
+  user typed the slash command. Removing the flag — matching the
+  precedent established in commit `f1fc494` (plan/review/investigate) —
+  restores reliable invocation across native CC and third-party CC
+  wrappers (Conductor, OpenCode, etc.), and lets the model see these
+  skills in its inventory so workflow chains
+  (`/phx:brainstorm → /phx:plan`, `intent-detection → /phx:research`)
+  resolve correctly.
+
+## [2.10.1] - 2026-05-20
+
+Patch release fixing cross-project bleed when the plugin is enabled globally
+(issue #55). All Elixir-specific hooks now self-gate on `mix.exs` presence —
+they no-op cleanly in non-Elixir repos instead of firing Phoenix Iron Laws on
+unrelated files. `security-reminder.sh` additionally tightens its filename
+match to eliminate false positives on parent directory names and non-source
+files.
+
+### Fixed
+
+- **Hooks now self-gate on `mix.exs` presence** — no Iron Laws, security
+  reminders, subagent context injection, `.claude/` directory creation, or
+  plan-STOP messages in non-Elixir projects when the plugin is enabled
+  globally. Affects: `security-reminder.sh`, `log-progress.sh`,
+  `inject-iron-laws.sh`, `precompact-rules.sh`, `setup-dirs.sh`,
+  `plan-stop-reminder.sh`, `format-elixir.sh`, `iron-law-verifier.sh`,
+  `debug-statement-warning.sh` (#55).
+- **`security-reminder.sh` filename matching tightened** — basename-only
+  match with word-boundary separators (`_.-`) and restricted to Elixir
+  source extensions (`.ex/.exs/.heex/.eex/.leex`). Eliminates false
+  positives like `tokenizer.cpp` (`token`), `/admin_panel/foo.ex` (parent
+  dir `admin`), `docs/session-notes.md` (wrong extension), and the
+  reporter's `session-state.md` case (#55).
+- **`hooks.json` Edit|Write block** — added `if:` extension filter for
+  `security-reminder.sh` as defense in depth alongside the script's
+  self-gating.
+
+### Changed
+
+- README install section: noted project-scope enable as a tidiness
+  preference for multi-stack developers (global enable is now safe).
+
+## [2.10.0] - 2026-05-16
+
+Adds a second, **framework-agnostic companion plugin** to the
+`oliver-kriska` marketplace: `catchup`. It is a fully independent
+plugin (own `.claude-plugin/plugin.json`, own version `0.1.0`, own
+README) — installed separately and **not** coupled to Elixir/Phoenix.
+The `elixir-phoenix` bump to 2.10.0 is the marketplace release vehicle
+(single root CHANGELOG); the only `elixir-phoenix`-internal changes
+this release are the README companion section and a `/phx:help`
+routing row. Implements GitHub issue #47.
+
+### Added
+
+- **`catchup` plugin — `/catchup` return-from-absence briefing.**
+  Standalone plugin at `plugins/catchup/`, second entry in
+  `.claude-plugin/marketplace.json`. User-triggered skill
+  (`disable-model-invocation`, slash-only). Fans out to GitHub (`gh`),
+  git, Linear MCP, and Google Calendar MCP, then emits **one**
+  prioritized brief in the 10-element Context Brief Framework scoped to
+  a personal catch-up (Intent + ranked priorities, what moved, conflict
+  risks, timeline). Flags: `--since` (incl. `last-session` mtime
+  auto-detect), `--sources`, `--depth quick|standard|deep`, `--focus`.
+  Writes `.claude/catchup/brief-<date>.md` + a ≤25-line inline summary.
+- **Impact-on-your-scope analysis** (issue #47, @druyang). First-class
+  brief block: intersects files moved on the default branch by others
+  in the window with the reader's in-flight scope (open-PR files, local
+  feature-branch diffs, working tree); classifies **direct** vs
+  **adjacent** overlap; `--depth deep` reads incoming diffs for
+  per-file *semantic* impact; `--focus impact` narrows the brief to
+  only this. Answers "how do these changes affect *my* work", not just
+  "what did I miss".
+- **Graceful-degradation contract.** Sources are detected before
+  query; a missing source becomes one honest line in the brief's
+  Risks/assumptions block, never an error. `git log` is the
+  always-available floor (valid minimum brief). No-Linear-MCP proxy:
+  harvests `[A-Z]{2,}-\d+` ticket refs from commit/PR titles
+  (labelled unverified). Privacy default is excerpt-only; Slack/Gmail
+  are v2 opt-in. v2 surface (scheduling, `.claude/catchup.local.md`,
+  cross-project rollup) is pinned in `references/config-schema.md` but
+  not built.
+- **Timezone-correct windows.** Calendar words (`friday`, `yesterday`,
+  a date) resolve in the **user's local TZ** (the machine running
+  `/catchup`), pivot through a single `SINCE_EPOCH`, then derive a UTC
+  `SINCE_ISO`. Every source is compared on that one absolute instant,
+  so colleagues in other timezones are included from *your* boundary
+  ("since *my* Friday", not "since each author's local Friday"). Fixes
+  a UTC-vs-local resolution bug (±14h). The brief's Timeline shows the
+  anchor with its TZ abbrev.
+- **Sonnet delegation (cost/speed).** The `/catchup` skill is now a
+  thin orchestrator: it resolves the window + sources, then spawns a
+  new **`catchup-runner` agent (`model: sonnet`, `effort: medium`)**
+  for the `gh`/`git` fan-out, impact analysis, and brief assembly —
+  so the caller's (often Opus) session no longer pays for the bulk
+  I/O and summarization. MCP (Linear/Calendar) is still pulled in the
+  caller's context (subagent MCP is unreliable) and passed to the
+  agent. Skill `effort` lowered `high → medium`.
+- **Smarter default window — `last-active`.** Replaces `last-session`
+  as the default: takes the MAX of (newest Claude session mtime for
+  this repo, your last own commit's committer-date, your last own
+  PR/review activity). The latest footprint is the true "you were
+  last here" instant; the brief records which signal won. New
+  explicit values: `--since last-session` (sessions only),
+  `--since last-commit` / `last-mine` (your git/PR only).
+- **`/ketchup` 🍅 easter-egg alias.** A second slash-only skill
+  (`skills/ketchup/`) that forwards verbatim to `/catchup` — same
+  flags, same behavior, squeezier name.
+- Verified end-to-end against a busy multi-developer production repo
+  (Linear/Calendar MCP absent → degradation + proxy paths exercised;
+  real direct file overlaps surfaced across local branches, a
+  high-churn core module as the hotspot).
+
+### Changed
+
+- `elixir-phoenix` README: added a "Companion plugin: `catchup`"
+  install section. `/phx:help`: added a "Returning after time off"
+  routing row pointing to `/catchup`.
+- **`catchup` is repo-scoped by default.** New `--scope repo|all`
+  flag (default `repo`). Every GitHub signal — review-requested,
+  notifications/mentions — is now filtered to the repo `/catchup` ran
+  in: review-requests use `gh pr list --repo "$REPO"
+  --search "review-requested:@me"` (was org-wide `gh search prs`),
+  and pings use the repo-scoped `/repos/$REPO/notifications` endpoint
+  (was cross-repo `/notifications?all=true`). `--scope all` re-enables
+  cross-repo, but those hits are listed in a separate **Other repos**
+  subsection and a Risks line, never folded into the repo's own lists.
+
+### Fixed
+
+- **`catchup` cross-repo leakage** (production finding). A brief run
+  inside one repo listed *other* repos' review queue, notifications,
+  and mentions (org-wide `gh search`/cross-repo `/notifications`),
+  contradicting the expectation that a per-repo catch-up is scoped to
+  that repo. Now repo-scoped by default; cross-repo is opt-in and
+  segregated (see Changed → `--scope`).
+- **`catchup-runner` turn budget** (production finding, ccrider-
+  verified). A busy real repo hit the agent's `maxTurns` mid-assembly
+  so it never returned the inline summary, forcing the (often Opus)
+  caller to re-summarize — defeating the Sonnet cost delegation.
+  `maxTurns 25 → 60`, added a "Tool economy" section (batch shell,
+  write the brief before risking the budget), and a skill-side
+  `SendMessage` fallback that finishes the summary cheaply in Sonnet
+  instead of in the caller.
+- **`catchup` correctness audit — 3 shell bugs.** (1) `git log
+  --name-only` over a range under-counts files ~70% due to history
+  simplification (real repo: 44 vs 140 ground truth — missed a landed
+  migration and a 14-file conflict); replaced with per-commit
+  `git diff-tree --no-commit-id --name-only -r`. (2) `awk -F'|'` on
+  commit subjects corrupts fields when a subject contains `|`
+  (e.g. `feat(a|b):`); switched to TAB (`%x09`) — macOS awk does not
+  accept `-F'\x1f'`. (3) Unbounded local-branch scan firehosed on a
+  400-branch repo; bounded to your own branches active in 60d, capped.
+- **`catchup` cross-repo timestamp discipline** (`--scope all`
+  production finding). On a narrow window a `--scope all` brief (1)
+  printed GitHub's UTC `updatedAt` (`06:36:23Z`) with a local-TZ
+  label (`06:36 CEST`, actually `08:36 CEST`), and (2) promoted a
+  *pre-window* standing review request to "do first" by bundling it
+  with an unrelated in-window issue update. `catchup-runner` +
+  `source-adapters` now state two hard rules: judge each item on its
+  *own* controlling timestamp ≥ `SINCE_EPOCH` (a related in-window
+  object never drags a pre-window object into Top priorities — it
+  goes to the "pre-window, for completeness" line), and convert `Z`
+  → `LOCAL_TZ` before printing any clock time.
+- **`catchup` anonymization.** Removed client repo/ticket identifiers
+  from the distributed plugin and CHANGELOG; examples use generic
+  `PROJ-####` / `lib/app*` placeholders.
+
 ## [2.9.0] - 2026-05-16
 
 Ships the `/phx:deps-audit` + `/phx:deps-vet` Hex/Elixir supply-chain
 suite. Built across five internal phases and two real-project dogfood
-passes (enaia-main, virgil) and consolidated into a single release —
+passes (two production apps) and consolidated into a single release —
 none of the interim 2.10.0–2.12.0 bumps were ever tagged or shipped
 (last release was v2.8.8).
 
@@ -458,15 +763,15 @@ none of the interim 2.10.0–2.12.0 bumps were ever tagged or shipped
   `# | Requirement | Status | Evidence`, classifying each stated
   requirement as MET / PARTIAL / UNMET / UNCLEAR. This formalizes the
   cross-check pattern already done manually in session `ba3f7890`
-  (2026-04-17, enaia-main) where the table was titled
-  "Cross-check against Linear ENA-8931 acceptance criteria".
+  (2026-04-17, a production repo) where the table was titled
+  "Cross-check against Linear PROJ-8931 acceptance criteria".
 - **Auto-detection of the requirements source** (no argument required).
   `/phx:review` now tries, in priority order:
-  1. Explicit `$ARGUMENTS` (path to `.md`, `ENA-8931`, or `#42`)
+  1. Explicit `$ARGUMENTS` (path to `.md`, `PROJ-8931`, or `#42`)
   2. Conversation context (recent `mcp__linear__get_issue` / `gh issue view`
      results are reused — no re-fetch)
   3. Git branch regex (`[A-Za-z][A-Za-z0-9_]+-\d+`, matching branches like
-     `ena-8278-extraction-scaffolding`)
+     `proj-8278-extraction-scaffolding`)
   4. Commit subjects since main (`[A-Z]+-\d+` or `#\d+`)
   5. Most recently modified `.claude/plans/*/plan.md` (extracts only
      `- [x]` completed items)
@@ -475,7 +780,7 @@ none of the interim 2.10.0–2.12.0 bumps were ever tagged or shipped
   Extracts requirements from the source, Greps the diff for evidence,
   classifies each item. Spawned in parallel with other review agents
   when a source is detected.
-- **New Usage**: `/phx:review ENA-8931`, `/phx:review #42`,
+- **New Usage**: `/phx:review PROJ-8931`, `/phx:review #42`,
   `/phx:review --no-requirements`.
 - **New reference**: `skills/review/references/requirements-detection.md`
   documents sources, regexes, fetch commands, and failure handling.

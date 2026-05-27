@@ -6,6 +6,11 @@
 # into unrelated plans whenever the user had more than one in flight
 # (issue #38). The /phx:work skill logs structured progress entries itself,
 # so the hook-driven append was both redundant and wrong.
+
+# Skip in non-Elixir projects (cross-project bleed guard — issue #55)
+proj="${CLAUDE_PROJECT_DIR:-$PWD}"
+[ -f "$proj/mix.exs" ] || exit 0
+
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 if [[ -n "$FILE_PATH" && -n "${CLAUDE_PLUGIN_DATA}" ]]; then

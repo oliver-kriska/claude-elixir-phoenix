@@ -3,7 +3,6 @@ name: phx:pr-review
 description: Address PR review comments on Elixir/Phoenix code — fetch comments, draft responses, optionally fix code. Use when the user shares a PR URL or mentions reviewer feedback.
 effort: high
 argument-hint: <PR number or URL> [--fix]
-disable-model-invocation: true
 ---
 
 # PR Review Response
