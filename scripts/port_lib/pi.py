@@ -56,18 +56,19 @@ def _generate_prompt(fm_data: dict, body: str, dst_root: Path) -> None:
     prompts_dir.mkdir(parents=True, exist_ok=True)
 
     # Pi prompts use `$1`/`$@` for argument interpolation. The body of a
-    # command skill is already a procedural template; we just prepend a
-    # frontmatter line indicating the prompt's expected args.
-    description = fm_data.get("description", "")
-    prompt = (
-        f"---\n"
-        f"name: {name}\n"
-        f"description: {description}\n"
-        f"args: $@\n"
-        f"---\n\n"
-        f"{body.lstrip()}"
+    # command skill is already a procedural template; we just prepend
+    # frontmatter indicating the prompt's expected args. Use Frontmatter.dump
+    # (yaml.safe_dump) rather than an f-string so descriptions containing `: `
+    # (e.g. "/phx:" or "domains:") are quoted and stay valid YAML.
+    fm = Frontmatter(
+        data={
+            "name": name,
+            "description": fm_data.get("description", ""),
+            "args": "$@",
+        },
+        body="\n" + body.lstrip(),
     )
-    (prompts_dir / f"{name}.md").write_text(prompt, encoding="utf-8")
+    (prompts_dir / f"{name}.md").write_text(fm.dump(), encoding="utf-8")
 
 
 def _generate_package_json(source_manifest: dict) -> dict:

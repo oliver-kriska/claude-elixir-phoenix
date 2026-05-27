@@ -26,7 +26,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
     `install-codex-agents.sh` that copies into `~/.codex/agents/`
   - **Hooks** for 6 of 9 events (PreToolUse, PostToolUse, SessionStart,
     Stop, PreCompact, PostCompact). 3 dropped events (PostToolUseFailure,
-    SubagentStart, StopFailure) recorded under `_meta.dropped_events`
+    SubagentStart, StopFailure) are documented in `docs/multi-agent/hooks.md`
+    and emitted in the `make port` build log (kept out of `hooks.json` to
+    avoid a non-standard `_meta` key that strict validators may reject)
 - **Pi target** (`targets/pi/`):
   - 43 skills as agentskills.io-native `SKILL.md` files
   - 29 prompt templates with `args: $@`
@@ -95,6 +97,39 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   only checks section presence + min count) — so the old soft gate would have
   silently accepted dropping a security Iron Law. New tests:
   `lab/autoresearch/tests/test_protected_sections.py` (10 cases).
+- **Multi-model routing-judge dispatch** in `lab/eval/trigger_scorer.py`
+  (T1.3 Phase 2, issue #48). `ask_model` now routes by model id: Claude ids via
+  the `claude` CLI (unchanged default), OpenAI-compatible ids (`gpt-*`, o-series,
+  `qwen*`, `llama*`, …) via an OpenAI-compatible HTTP API (stdlib `urllib`, no
+  new dependency) — so skill routing can be measured on the judges the
+  Codex/OpenCode/Pi ports actually run on. Auth via `OPENAI_API_KEY`
+  (+ optional `OPENAI_BASE_URL` for self-hosted endpoints); no key → graceful
+  no-op. 7 mocked tests in `lab/eval/tests/test_trigger_scorer_dispatch.py`.
+- **`port-validate` build-smoke checks.** `scripts/port.py --check` now
+  content-validates every built target (not just Codex drift): all generated
+  frontmatter must parse, and the OpenCode `server.ts` may only reference hook
+  scripts that were shipped. Catches the Pi/OpenCode bug class that drift-only
+  checking missed. Also made the Codex drift diff byte-accurate (content
+  re-check of `same_files`, since `dircmp` compares shallowly by stat).
+
+### Fixed (port hardening)
+
+- **OpenCode Iron Laws were a silent no-op.** `server.ts` read
+  `iron-laws/laws.yaml` at runtime via a `yaml` import, but the builder never
+  shipped that file (and the release mirror is a subtree split with no repo-root
+  `iron-laws/`), so injection fell back to a one-line stub — the plugin's #1
+  feature did nothing on OpenCode. Now the 22 laws are **baked into `server.ts`
+  at port time** (matching the Pi extension); no runtime fs/yaml dependency.
+- **OpenCode PostToolUse hooks were dead.** `server.ts` spawned
+  `format-elixir.sh` / `iron-law-verifier.sh` / `debug-statement-warning.sh`
+  from `hooks/scripts/`, but the builder shipped no scripts and passed input as
+  a `FILE_PATH` env var with `stdio:"ignore"` — the scripts read hook JSON on
+  stdin, so they no-op'd. Now the builder ships the three scripts and `server.ts`
+  pipes them the `{tool_input:{file_path}}` JSON they expect.
+- **Two Pi prompt templates were malformed YAML.** `pi.py` built prompt
+  frontmatter with an f-string, so descriptions containing a colon-space
+  sequence (`phx-help`, `phx-plan`) produced unparseable frontmatter. Now dumped via
+  `Frontmatter.dump()` (`yaml.safe_dump`); all 31 Pi prompts parse.
 
 ### Fixed (post-review — @druyang, #46)
 

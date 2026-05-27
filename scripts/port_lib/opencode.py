@@ -15,7 +15,11 @@ from pathlib import Path
 from . import CLAUDE_MD
 from .agents import render_opencode_agent
 from .frontmatter import Frontmatter, parse_file
-from .hooks import render_opencode_mcp_block, render_opencode_server_ts
+from .hooks import (
+    copy_opencode_hook_scripts,
+    render_opencode_mcp_block,
+    render_opencode_server_ts,
+)
 from .skill_transforms import (
     normalize_skill_name,
     port_references,
@@ -134,9 +138,11 @@ def build(source_dir: Path, out_dir: Path) -> dict:
         json.dumps(_generate_package_json(source_manifest), indent=2) + "\n",
         encoding="utf-8",
     )
-    # Phase 2B: full hooks module + Tidewave MCP snippet
+    # Phase 2B: full hooks module + Tidewave MCP snippet + the shell scripts
+    # server.ts spawns (without them the PostToolUse hooks silently no-op).
     render_opencode_server_ts(out_dir)
     render_opencode_mcp_block(out_dir)
+    hook_scripts = copy_opencode_hook_scripts(source_dir / "hooks" / "scripts", out_dir)
     (out_dir / "bunfig.toml").write_text(_BUNFIG, encoding="utf-8")
 
     # Phase 2B: agents
@@ -156,5 +162,6 @@ def build(source_dir: Path, out_dir: Path) -> dict:
         "skills": skill_count,
         "commands": command_count,
         "agents": agent_count,
+        "hook_scripts": hook_scripts,
         "out_dir": str(out_dir),
     }

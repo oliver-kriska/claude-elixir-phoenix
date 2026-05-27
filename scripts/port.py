@@ -15,6 +15,7 @@ from __future__ import annotations
 
 import argparse
 import filecmp
+import re
 import shutil
 import sys
 import tempfile
@@ -60,11 +61,58 @@ def _diff_dirs(a: Path, b: Path) -> list[str]:
             differences.append(f"extra in target: {prefix}{name}")
         for name in c.diff_files:
             differences.append(f"differs: {prefix}{name}")
+        # dircmp classifies same_files via a shallow (size+mtime) compare, which
+        # can mask a content change when stat signatures happen to match. Re-verify
+        # by content so the drift gate is byte-accurate.
+        for name in c.same_files:
+            if not filecmp.cmp(Path(c.left) / name, Path(c.right) / name, shallow=False):
+                differences.append(f"differs: {prefix}{name}")
         for sub_name, sub_cmp in c.subdirs.items():
             _walk(sub_cmp, prefix + sub_name + "/")
 
     _walk(cmp)
     return differences
+
+
+def _smoke_validate(target: str, target_dir: Path) -> list[str]:
+    """Content checks the drift diff can't catch — vital for non-committed
+    Pi/OpenCode targets, which only get a "build succeeded" check otherwise.
+
+    Catches the bug class where output is structurally wrong but the build
+    didn't raise: malformed generated frontmatter, or a hook module that
+    references runtime files the builder never shipped.
+    """
+    from .port_lib.frontmatter import parse
+
+    problems: list[str] = []
+
+    # 1. Every generated markdown that declares frontmatter must parse.
+    for md in sorted(target_dir.rglob("*.md")):
+        text = md.read_text(encoding="utf-8")
+        if not text.startswith("---"):
+            continue
+        try:
+            parse(text, source=str(md))
+        except Exception as exc:
+            rel = md.relative_to(target_dir)
+            problems.append(f"{target}: unparseable frontmatter {rel} — {exc}")
+
+    # 2. OpenCode server.ts must only reference scripts that were shipped, and
+    #    must not depend on a runtime iron-laws/laws.yaml read (not present in
+    #    the release mirror — laws are baked into the module instead).
+    server_ts = target_dir / "server.ts"
+    if server_ts.exists():
+        src = server_ts.read_text(encoding="utf-8")
+        for name in sorted(set(re.findall(r"hooks/scripts/([A-Za-z0-9._-]+\.sh)", src))):
+            if not (target_dir / "hooks" / "scripts" / name).is_file():
+                problems.append(
+                    f"{target}: server.ts spawns hooks/scripts/{name} but it was not shipped"
+                )
+        if "laws.yaml" in src and "readFile" in src:
+            problems.append(
+                f"{target}: server.ts reads iron-laws/laws.yaml at runtime — bake it instead"
+            )
+    return problems
 
 
 # User-managed sidecar files (not generated): preserved by builders and
@@ -123,8 +171,18 @@ def _check_drift(targets_to_check: list[str]) -> int:
                 any_drift = True
                 continue
 
+            # Content smoke check for every target (drift diff only covers
+            # committed targets; this is the only guard Pi/OpenCode get).
+            smoke = _smoke_validate(target, tmp_target)
+            if smoke:
+                any_drift = True
+                print(f"[port-validate] SMOKE FAILURES in {target}/:", file=sys.stderr)
+                for problem in smoke:
+                    print(f"  - {problem}", file=sys.stderr)
+
             if target not in _COMMITTED_TARGETS:
-                print(f"[port-validate] {target}: build OK (not drift-checked — mirrored at release)")
+                status = "build OK" if not smoke else "build FAILED smoke"
+                print(f"[port-validate] {target}: {status} (not drift-checked — mirrored at release)")
                 continue
 
             if not committed.exists():

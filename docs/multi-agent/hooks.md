@@ -20,9 +20,12 @@ pipeline handles the mapping.
 ## Codex (`targets/codex/hooks/`)
 
 `hooks.json` lists supported events with `${CODEX_PLUGIN_ROOT}` env-var
-substitution for script paths. Dropped events are recorded under
-`_meta.dropped_events`. All 19 source shell scripts copy verbatim — they
-take env-var input and don't reference Claude-internal state.
+substitution for script paths. Dropped events are listed in the support
+matrix above and emitted in the `make port` build log — they are kept out
+of `hooks.json` to avoid a non-standard `_meta` key that strict validators
+may reject. Source shell scripts referenced by the kept events copy verbatim
+(they take env-var input and don't reference Claude-internal state); scripts
+orphaned by a dropped event are skipped.
 
 The generated `install-codex-agents.sh` runs at SessionStart and copies
 sub-agent TOMLs into `~/.codex/agents/`.
@@ -63,7 +66,7 @@ Pi exposes hooks via TypeScript extensions. Two are shipped:
 - `orchestration.ts` — registers `phx-plan` / `phx-work` / `phx-review`
   command handlers that invoke prompt templates
 
-Pi doesn't have a Compact event today, so PreCompact / PostCompact / 
+Pi doesn't have a Compact event today, so PreCompact / PostCompact /
 StopFailure are simply dropped.
 
 ## Why drop events?

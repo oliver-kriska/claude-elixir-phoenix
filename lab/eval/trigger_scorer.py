@@ -4,9 +4,15 @@
 Tests whether the chosen model routes user prompts to the correct skill
 by sending all skill descriptions + one test prompt to the judge.
 
-Default judge is claude-haiku-4-5. Use --model to evaluate against other
-models (sonnet, opus, full IDs). Per-model results are cached separately so
-haiku/sonnet baselines stay independent.
+Default judge is claude-haiku-4-5 (the `claude` CLI). Use --model to evaluate
+against other models. Claude ids (sonnet, opus, full IDs) route through the
+CLI; OpenAI-compatible ids (gpt-*, o-series, qwen*, llama*, …) route through an
+OpenAI-compatible HTTP API — the judges the Codex/OpenCode/Pi ports run on.
+Per-model results are cached separately so baselines stay independent.
+
+Non-Claude models need `OPENAI_API_KEY` in the environment (and optionally
+`OPENAI_BASE_URL`, default https://api.openai.com/v1, for self-hosted
+qwen/llama endpoints). Without a key the OpenAI path is a no-op.
 
 Usage:
     python3 -m lab.eval.trigger_scorer --skill plan
@@ -14,6 +20,7 @@ Usage:
     python3 -m lab.eval.trigger_scorer --all --cache               # Reuse cached results
     python3 -m lab.eval.trigger_scorer --all --model sonnet        # Evaluate against sonnet
     python3 -m lab.eval.trigger_scorer --skill plan --model claude-sonnet-4-6
+    OPENAI_API_KEY=sk-… python3 -m lab.eval.trigger_scorer --all --model gpt-4o-mini
 
 Cost: ~$0.001 per test prompt on haiku, ~$0.04 for all 45 skills × ~8 prompts.
 Sonnet is roughly 12× more expensive per call.
@@ -25,6 +32,7 @@ import os
 import re
 import subprocess
 import sys
+import urllib.request
 from datetime import datetime, timezone
 
 EVAL_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -52,6 +60,28 @@ MODEL_ALIASES = {
 def canonicalize_model(model: str) -> str:
     """Resolve a model alias (`haiku`, `sonnet`, `opus`) to its full ID."""
     return MODEL_ALIASES.get(model, model)
+
+
+# Model-id prefixes routed to the OpenAI-compatible HTTP backend rather than the
+# `claude` CLI. Covers OpenAI (gpt/o-series) and self-hostable OpenAI-compatible
+# models (qwen/llama/etc.) reachable via OPENAI_BASE_URL — the judges the
+# Codex/OpenCode/Pi ports actually run on. See issue #48, T1.3 Phase 2.
+_OPENAI_PREFIXES = (
+    "gpt-", "gpt4", "o1", "o1-", "o3", "o3-", "o4", "o4-", "chatgpt",
+    "qwen", "deepseek", "mistral", "mixtral", "llama", "glm", "yi-", "gemma", "phi",
+)
+
+
+def provider_for_model(model: str) -> str:
+    """Classify a model id to a backend: 'anthropic' (the `claude` CLI) or
+    'openai' (OpenAI-compatible chat-completions HTTP API). Unknown ids default
+    to 'anthropic' so existing behavior is preserved."""
+    m = canonicalize_model(model).lower()
+    if m.startswith("claude") or m.startswith("anthropic"):
+        return "anthropic"
+    if m.startswith(_OPENAI_PREFIXES):
+        return "openai"
+    return "anthropic"
 
 
 def _model_slug(model: str) -> str:
@@ -105,11 +135,10 @@ def load_trigger_file(skill_name: str) -> dict | None:
         return json.load(f)
 
 
-def ask_model(all_descriptions: dict[str, str], prompt: str, model: str = DEFAULT_MODEL) -> list[str]:
-    """Ask the chosen routing-judge model which skill(s) it would load for a given prompt."""
+def _build_judge_prompt(all_descriptions: dict[str, str], prompt: str) -> str:
+    """The shared routing-judge prompt (identical across backends)."""
     desc_list = "\n".join(f"- {name}: {desc[:150]}" for name, desc in all_descriptions.items())
-
-    system_prompt = f"""You are testing skill routing for a Claude Code plugin.
+    return f"""You are testing skill routing for a Claude Code plugin.
 
 Given these available skills:
 {desc_list}
@@ -120,6 +149,28 @@ Which skill(s) should be loaded? Reply with ONLY the skill name(s), one per line
 If no skill should be loaded, reply with "none".
 List at most 3 skills, ordered by relevance."""
 
+
+def _parse_skill_lines(text: str) -> list[str]:
+    """Extract skill names from a judge response — one per line, bullets/numbers
+    and trailing explanations stripped. Shared by every backend."""
+    skills = []
+    for line in text.split("\n"):
+        line = line.strip().lstrip("-*0123456789.) ").strip()
+        # Remove explanations after dashes or parentheses
+        if " — " in line:
+            line = line.split(" — ")[0].strip()
+        if " (" in line:
+            line = line.split(" (")[0].strip()
+        if " -" in line:
+            line = line.split(" -")[0].strip()
+        line = line.strip("`").strip()
+        if line and line != "none" and not line.startswith("No "):
+            skills.append(line)
+    return skills
+
+
+def _ask_anthropic_cli(system_prompt: str, model: str) -> list[str]:
+    """Route via the `claude` CLI (the default, unchanged path)."""
     try:
         result = subprocess.run(
             [
@@ -131,29 +182,54 @@ List at most 3 skills, ordered by relevance."""
             ],
             capture_output=True, text=True, timeout=30,
         )
-
         if result.returncode != 0:
             return []
-
-        text = result.stdout.strip()
-        # Parse skill names from response — one per line, strip bullets/numbers
-        skills = []
-        for line in text.split("\n"):
-            line = line.strip().lstrip("-*0123456789.) ").strip()
-            # Remove explanations after dashes or parentheses
-            if " — " in line:
-                line = line.split(" — ")[0].strip()
-            if " (" in line:
-                line = line.split(" (")[0].strip()
-            if " -" in line:
-                line = line.split(" -")[0].strip()
-            line = line.strip("`").strip()
-            if line and line != "none" and not line.startswith("No "):
-                skills.append(line)
-        return skills
-
+        return _parse_skill_lines(result.stdout.strip())
     except (subprocess.TimeoutExpired, Exception):
         return []
+
+
+def _ask_openai_compatible(system_prompt: str, model: str) -> list[str]:
+    """Route via an OpenAI-compatible chat-completions HTTP API (gpt/o-series,
+    or self-hosted qwen/llama via OPENAI_BASE_URL). Auth from OPENAI_API_KEY.
+
+    No key configured → returns [] (graceful no-op, so CI without secrets just
+    skips rather than failing). Stdlib urllib only — adds no dependency."""
+    api_key = os.environ.get("OPENAI_API_KEY")
+    if not api_key:
+        return []
+    base_url = os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1").rstrip("/")
+    payload = json.dumps(
+        {
+            "model": canonicalize_model(model),
+            "messages": [{"role": "user", "content": system_prompt}],
+            "temperature": 0,
+            "max_tokens": 200,
+        }
+    ).encode("utf-8")
+    req = urllib.request.Request(
+        f"{base_url}/chat/completions",
+        data=payload,
+        headers={"Authorization": f"Bearer {api_key}", "Content-Type": "application/json"},
+        method="POST",
+    )
+    try:
+        with urllib.request.urlopen(req, timeout=30) as resp:
+            data = json.loads(resp.read().decode("utf-8"))
+        text = (data["choices"][0]["message"]["content"] or "").strip()
+        return _parse_skill_lines(text)
+    except Exception:
+        return []
+
+
+def ask_model(all_descriptions: dict[str, str], prompt: str, model: str = DEFAULT_MODEL) -> list[str]:
+    """Ask the chosen routing-judge model which skill(s) it would load for a
+    prompt. Dispatches to the `claude` CLI or an OpenAI-compatible HTTP API
+    based on the model id (see provider_for_model)."""
+    system_prompt = _build_judge_prompt(all_descriptions, prompt)
+    if provider_for_model(model) == "openai":
+        return _ask_openai_compatible(system_prompt, model)
+    return _ask_anthropic_cli(system_prompt, model)
 
 
 def score_triggers(request: ScoreRequest) -> ScoreResult:

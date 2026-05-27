@@ -33,6 +33,7 @@ See per-agent docs:
 | Skills auto-load           | yes    | yes               | yes                   | yes                 |
 | Command invocation         | `/phx:foo` | none — skills auto-load by description | `/skill-name` | `/skill-name` |
 | Sub-agents                 | yes (`Agent`) | TOML drop  | `.opencode/agent/`    | extension dispatch  |
+| Per-agent model / effort   | `model:`+`effort:` (haiku/sonnet/opus) | `model:` carried; session model in practice | `model:` carried; needs provider mapping | single model (`model`/`effort` dropped) |
 | Hooks                      | 9 events | 6 events        | TS module (4 hooks)   | TS extensions       |
 | Iron Laws (auto-injected)  | SubagentStart | inlined per skill | system-prompt transform | before_agent_start extension |
 | Tidewave MCP               | yes    | stdio             | http (snippet)        | extension config    |
@@ -54,3 +55,13 @@ generated; do not edit `targets/` by hand — run `make port`.
 - **Pi** is the lightweight option: agentskills.io-native, skills +
   prompt-template commands work without any extension; the TS
   orchestration/Iron-Laws extensions are best-effort (see [pi.md](pi.md)).
+
+> **Cost/speed model routing is a Claude Code advantage that does not fully
+> port.** Only Claude Code honors per-agent `model:` + `effort:` to route cheap
+> mechanical work (e.g. the haiku `context-supervisor`) to a small model and
+> orchestration to a large one. Codex and Pi run everything on the single
+> session model; OpenCode can set a per-agent model but needs provider mapping
+> and has no built-in haiku-class cheap tier. Skills, commands, and hooks port
+> with high fidelity — the cheap-model *economics* do not. Orchestration skills
+> (`phx-plan`, `phx-review`, `phx-audit`) keep their Claude model-routing
+> language; on other agents it is descriptive, not enforced.

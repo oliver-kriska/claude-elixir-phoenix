@@ -207,12 +207,16 @@ export const Hooks: Plugin = {
           `${pluginRoot}/hooks/scripts/iron-law-verifier.sh`,
           `${pluginRoot}/hooks/scripts/debug-statement-warning.sh`,
         ];
+        // The scripts read Claude's hook JSON on stdin
+        // (`.tool_input.file_path`), so feed them that exact shape rather than
+        // an env var. Fire-and-forget: pipe stdin, ignore output, unref so the
+        // editor never blocks on the three subprocesses.
+        const payload = JSON.stringify({ tool_input: { file_path: path } });
         for (const script of scripts) {
           const child = spawn("bash", [script], {
-            env: { ...process.env, FILE_PATH: path },
-            stdio: "ignore",
-            detached: true,
+            stdio: ["pipe", "ignore", "ignore"],
           });
+          child.stdin.end(payload);
           child.unref();
         }
       }
@@ -220,10 +224,10 @@ export const Hooks: Plugin = {
   },
 
   // experimental.chat.system.transform — inject Iron Laws at conversation start
-  // (cleaner equivalent of Claude's SubagentStart hook).
+  // (cleaner equivalent of Claude's SubagentStart hook). Laws are baked in at
+  // port time (no runtime fs/yaml dependency), matching the Pi extension.
   "experimental.chat.system.transform": async ({ system }) => {
-    const ironLaws = await loadIronLaws();
-    return `${system}\\n\\n${ironLaws}`;
+    return `${system}\\n\\n${IRON_LAWS}`;
   },
 
   // event filter — SessionStart-equivalent. Currently a no-op; placeholder for
@@ -235,31 +239,57 @@ export const Hooks: Plugin = {
   },
 };
 
-async function loadIronLaws(): Promise<string> {
-  const fs = await import("node:fs/promises");
-  const path = await import("node:path");
-  const root = process.env.OPENCODE_PLUGIN_ROOT ?? ".";
-  const yamlPath = path.join(root, "iron-laws", "laws.yaml");
-  try {
-    const yaml = await import("yaml");
-    const content = await fs.readFile(yamlPath, "utf-8");
-    const data = yaml.parse(content) ?? {};
-    const bullets = (data.laws ?? [])
-      .filter((law: any) => law.shortform)
-      .map((law: any) => `- ${law.shortform}`)
-      .join("\\n");
-    return `Elixir/Phoenix Iron Laws (NON-NEGOTIABLE):\\n${bullets}`;
-  } catch {
-    return "Elixir/Phoenix Iron Laws available in iron-laws/laws.yaml";
-  }
-}
+// Baked from iron-laws/laws.yaml by scripts/port.py at port time — do not edit
+// by hand. Carries no fs/yaml dependency and cannot drift from the source.
+const IRON_LAWS = __IRON_LAWS_JSON__;
 '''
 
 
+# Shell scripts the OpenCode server.ts spawns on .ex/.exs Edit/Write. These
+# must be shipped into the target; without them the format/verify/debug hooks
+# silently no-op. Keep in sync with the `scripts` array in OPENCODE_SERVER_TS
+# (the build-smoke check asserts every script server.ts references exists).
+OPENCODE_HOOK_SCRIPTS = (
+    "format-elixir.sh",
+    "iron-law-verifier.sh",
+    "debug-statement-warning.sh",
+)
+
+
 def render_opencode_server_ts(out_dir: Path) -> dict:
-    """Write `targets/opencode/server.ts` with the full hooks module."""
-    (out_dir / "server.ts").write_text(OPENCODE_SERVER_TS, encoding="utf-8")
+    """Write `targets/opencode/server.ts` with Iron Laws baked in at port time.
+
+    The laws are embedded as a JSON string literal (no runtime fs/yaml read),
+    matching the Pi extension — so the published mirror, which is a subtree
+    split of `targets/opencode/` with no repo-root `iron-laws/`, still injects
+    the full law list instead of a stub.
+    """
+    from .iron_laws import load_laws, render_bullets
+
+    laws_text = "Elixir/Phoenix Iron Laws (NON-NEGOTIABLE):\n" + "\n".join(
+        f"- {bullet}" for bullet in render_bullets(load_laws())
+    )
+    server_ts = OPENCODE_SERVER_TS.replace("__IRON_LAWS_JSON__", json.dumps(laws_text))
+    (out_dir / "server.ts").write_text(server_ts, encoding="utf-8")
     return {"server_ts": "generated"}
+
+
+def copy_opencode_hook_scripts(source_hooks_dir: Path, out_dir: Path) -> int:
+    """Copy the scripts server.ts spawns into `targets/opencode/hooks/scripts/`.
+
+    They read Claude's hook JSON on stdin and self-gate on `mix.exs`, so they
+    run unmodified under OpenCode (server.ts pipes them the same JSON shape).
+    """
+    out_scripts = out_dir / "hooks" / "scripts"
+    out_scripts.mkdir(parents=True, exist_ok=True)
+    copied = 0
+    for name in OPENCODE_HOOK_SCRIPTS:
+        src = source_hooks_dir / name
+        if src.is_file():
+            shutil.copyfile(src, out_scripts / name)
+            (out_scripts / name).chmod(0o755)
+            copied += 1
+    return copied
 
 
 def render_opencode_mcp_block(out_dir: Path) -> None:
