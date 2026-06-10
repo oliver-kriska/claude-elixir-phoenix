@@ -2,7 +2,7 @@
 # SessionStart hook: copy bundled sub-agent TOMLs into ~/.codex/agents/.
 set -eu
 TARGET_DIR="${HOME}/.codex/agents"
-PLUGIN_ROOT="${CODEX_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}"
+PLUGIN_ROOT="${PLUGIN_ROOT:-${CLAUDE_PLUGIN_ROOT:-$(cd "$(dirname "$0")/../.." && pwd)}}"
 SOURCE_DIR="${PLUGIN_ROOT}/agents-toml"
 [ -d "$SOURCE_DIR" ] || exit 0
 mkdir -p "$TARGET_DIR"

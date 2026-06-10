@@ -7,35 +7,35 @@
           {
             "type": "command",
             "if": "Edit(*.ex)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
             "timeout": 30,
             "statusMessage": "Formatting Elixir..."
           },
           {
             "type": "command",
             "if": "Edit(*.exs)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
             "timeout": 30,
             "statusMessage": "Formatting Elixir..."
           },
           {
             "type": "command",
             "if": "Edit(*.ex)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/iron-law-verifier.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/iron-law-verifier.sh",
             "timeout": 15,
             "statusMessage": "Verifying Iron Laws..."
           },
           {
             "type": "command",
             "if": "Edit(*.exs)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/iron-law-verifier.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/iron-law-verifier.sh",
             "timeout": 15,
             "statusMessage": "Verifying Iron Laws..."
           },
           {
             "type": "command",
             "if": "Edit(*.ex)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/debug-statement-warning.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/debug-statement-warning.sh",
             "timeout": 15,
             "statusMessage": "Checking for debug statements..."
           }
@@ -47,42 +47,42 @@
           {
             "type": "command",
             "if": "Write(*.ex)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
             "timeout": 30,
             "statusMessage": "Formatting Elixir..."
           },
           {
             "type": "command",
             "if": "Write(*.exs)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
             "timeout": 30,
             "statusMessage": "Formatting Elixir..."
           },
           {
             "type": "command",
             "if": "Write(*.ex)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/iron-law-verifier.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/iron-law-verifier.sh",
             "timeout": 15,
             "statusMessage": "Verifying Iron Laws..."
           },
           {
             "type": "command",
             "if": "Write(*.exs)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/iron-law-verifier.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/iron-law-verifier.sh",
             "timeout": 15,
             "statusMessage": "Verifying Iron Laws..."
           },
           {
             "type": "command",
             "if": "Write(*.ex)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/debug-statement-warning.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/debug-statement-warning.sh",
             "timeout": 15,
             "statusMessage": "Checking for debug statements..."
           },
           {
             "type": "command",
             "if": "Write(*plan.md)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/plan-stop-reminder.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/plan-stop-reminder.sh",
             "timeout": 15
           }
         ]
@@ -93,12 +93,12 @@
           {
             "type": "command",
             "if": "Edit(*.ex)|Edit(*.exs)|Edit(*.heex)|Edit(*.eex)|Edit(*.leex)|Write(*.ex)|Write(*.exs)|Write(*.heex)|Write(*.eex)|Write(*.leex)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/security-reminder.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/security-reminder.sh",
             "timeout": 15
           },
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/log-progress.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/log-progress.sh",
             "timeout": 15,
             "async": true
           }
@@ -111,13 +111,13 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh",
             "timeout": 10
           },
           {
             "type": "command",
             "if": "Bash(*mix deps.*)",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/deps-audit-gate.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/deps-audit-gate.sh",
             "timeout": 5,
             "statusMessage": "Tiered deps audit..."
           }
@@ -128,8 +128,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/freeze-gate.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/freeze-gate.sh",
             "timeout": 5
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/inject-iron-laws.sh",
+            "timeout": 10
           }
         ]
       }
@@ -140,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/install-codex-agents.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/install-codex-agents.sh",
             "timeout": 30,
             "statusMessage": "Installing Codex sub-agents..."
           }
@@ -151,19 +162,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/setup-dirs.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/setup-dirs.sh",
             "timeout": 15
           },
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/detect-tidewave.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/detect-tidewave.sh",
             "timeout": 30,
             "statusMessage": "Detecting Tidewave...",
             "async": true
           },
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/detect-ash.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/detect-ash.sh",
             "timeout": 3,
             "statusMessage": "Detecting Ash...",
             "async": true
@@ -175,18 +186,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/check-scratchpad.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/check-scratchpad.sh",
             "timeout": 15
           },
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/check-resume.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/check-resume.sh",
             "timeout": 30,
             "statusMessage": "Checking for resumable work..."
           },
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/check-branch-freshness.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/check-branch-freshness.sh",
             "timeout": 30,
             "async": true
           },
@@ -206,7 +217,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/precompact-rules.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/precompact-rules.sh",
             "timeout": 15
           }
         ]
@@ -217,7 +228,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/postcompact-verify.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/postcompact-verify.sh",
             "timeout": 15
           }
         ]
@@ -228,7 +239,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CODEX_PLUGIN_ROOT}/hooks/scripts/check-pending-plans.sh",
+            "command": "${PLUGIN_ROOT}/hooks/scripts/check-pending-plans.sh",
             "timeout": 15
           }
         ]
