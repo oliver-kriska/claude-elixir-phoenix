@@ -29,6 +29,11 @@ def test_provider_classification():
     assert provider_for_model("o3-mini") == "openai"
     assert provider_for_model("qwen2.5-coder") == "openai"
     assert provider_for_model("llama-3.3-70b") == "openai"
+    # Slash-form router ids (HF router / OpenRouter / vLLM) are always
+    # OpenAI-compatible — the claude CLI never uses org/model ids
+    assert provider_for_model("moonshotai/Kimi-K2.6") == "openai"
+    assert provider_for_model("zai-org/GLM-5") == "openai"
+    assert provider_for_model("kimi-k2") == "openai"
     # Unknown ids default to the CLI so existing behavior is preserved
     assert provider_for_model("some-unknown-model") == "anthropic"
 
@@ -102,9 +107,29 @@ def test_openai_swallows_errors(monkeypatch):
 
 
 def test_ask_model_dispatch(monkeypatch):
-    monkeypatch.setattr("lab.eval.trigger_scorer._ask_openai_compatible", lambda sp, m: ["OPENAI"])
-    monkeypatch.setattr("lab.eval.trigger_scorer._ask_anthropic_cli", lambda sp, m: ["ANTHROPIC"])
-    descs = {"plan": "Plan features"}
-    assert ask_model(descs, "x", "gpt-4o-mini") == ["OPENAI"]
-    assert ask_model(descs, "x", "claude-haiku-4-5") == ["ANTHROPIC"]
-    assert ask_model(descs, "x", "haiku") == ["ANTHROPIC"]
+    # Markers prove which backend ran; "plan"/"work" prove valid names pass through.
+    monkeypatch.setattr(
+        "lab.eval.trigger_scorer._ask_openai_compatible", lambda sp, m: ["plan", "OPENAI"]
+    )
+    monkeypatch.setattr(
+        "lab.eval.trigger_scorer._ask_anthropic_cli", lambda sp, m: ["work", "ANTHROPIC"]
+    )
+    descs = {"plan": "Plan features", "work": "Execute plans"}
+    assert ask_model(descs, "x", "gpt-4o-mini") == ["plan"]
+    assert ask_model(descs, "x", "claude-haiku-4-5") == ["work"]
+    assert ask_model(descs, "x", "haiku") == ["work"]
+
+
+def test_ask_model_filters_cot_prose(monkeypatch):
+    """Reasoning models (Kimi-K2.6) interleave chain-of-thought prose with the
+    answer; ask_model must drop every line that is not a real skill name."""
+    monkeypatch.setattr(
+        "lab.eval.trigger_scorer._ask_openai_compatible",
+        lambda sp, m: [
+            "The user wants to design a billing system.",
+            "plan",
+            'Looking at the available skills: `quick`: "Small fixes" does not apply.',
+        ],
+    )
+    descs = {"plan": "Plan features", "quick": "Small fixes"}
+    assert ask_model(descs, "x", "moonshotai/Kimi-K2.6") == ["plan"]

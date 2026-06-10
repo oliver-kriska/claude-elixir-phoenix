@@ -69,17 +69,23 @@ def canonicalize_model(model: str) -> str:
 _OPENAI_PREFIXES = (
     "gpt-", "gpt4", "o1", "o1-", "o3", "o3-", "o4", "o4-", "chatgpt",
     "qwen", "deepseek", "mistral", "mixtral", "llama", "glm", "yi-", "gemma", "phi",
+    "moonshot", "kimi",
 )
 
 
 def provider_for_model(model: str) -> str:
     """Classify a model id to a backend: 'anthropic' (the `claude` CLI) or
     'openai' (OpenAI-compatible chat-completions HTTP API). Unknown ids default
-    to 'anthropic' so existing behavior is preserved."""
+    to 'anthropic' so existing behavior is preserved.
+
+    Slash-form ids (`org/model`, e.g. `moonshotai/Kimi-K2.6`) are router ids
+    used by OpenAI-compatible gateways (HuggingFace router, OpenRouter,
+    vLLM/LiteLLM) — the `claude` CLI never uses them, so they route to the
+    OpenAI backend regardless of prefix."""
     m = canonicalize_model(model).lower()
     if m.startswith("claude") or m.startswith("anthropic"):
         return "anthropic"
-    if m.startswith(_OPENAI_PREFIXES):
+    if m.startswith(_OPENAI_PREFIXES) or "/" in m:
         return "openai"
     return "anthropic"
 
@@ -204,7 +210,11 @@ def _ask_openai_compatible(system_prompt: str, model: str) -> list[str]:
             "model": canonicalize_model(model),
             "messages": [{"role": "user", "content": system_prompt}],
             "temperature": 0,
-            "max_tokens": 200,
+            # Reasoning-style models (Kimi-K2.6, GLM, o-series via some routers)
+            # emit chain-of-thought prose in `content` before the answer; 200
+            # tokens truncated mid-reasoning (finish_reason=length) and every
+            # prompt scored as "no skill chosen". 4000 lets them finish.
+            "max_tokens": 4000,
         }
     ).encode("utf-8")
     req = urllib.request.Request(
@@ -214,11 +224,21 @@ def _ask_openai_compatible(system_prompt: str, model: str) -> list[str]:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
+        with urllib.request.urlopen(req, timeout=120) as resp:
             data = json.loads(resp.read().decode("utf-8"))
         text = (data["choices"][0]["message"]["content"] or "").strip()
         return _parse_skill_lines(text)
-    except Exception:
+    except Exception as e:
+        # Stay graceful (a failed call scores as "no skill chosen") but make the
+        # failure VISIBLE — a depleted-credits run (HTTP 402) once masqueraded
+        # as a completed eval with recall=0 across all 47 skills.
+        detail = ""
+        if isinstance(e, urllib.error.HTTPError):
+            try:
+                detail = f" {e.read(200).decode('utf-8', 'replace')}"
+            except Exception:
+                pass
+        print(f"  WARN judge call failed ({model}): {e}{detail}", file=sys.stderr)
         return []
 
 
@@ -228,8 +248,13 @@ def ask_model(all_descriptions: dict[str, str], prompt: str, model: str = DEFAUL
     based on the model id (see provider_for_model)."""
     system_prompt = _build_judge_prompt(all_descriptions, prompt)
     if provider_for_model(model) == "openai":
-        return _ask_openai_compatible(system_prompt, model)
-    return _ask_anthropic_cli(system_prompt, model)
+        raw = _ask_openai_compatible(system_prompt, model)
+    else:
+        raw = _ask_anthropic_cli(system_prompt, model)
+    # Keep only real skill names — reasoning models interleave the answer with
+    # chain-of-thought prose that line-parsing can't fully strip.
+    valid = set(all_descriptions)
+    return [s for s in raw if s in valid]
 
 
 def score_triggers(request: ScoreRequest) -> ScoreResult:
