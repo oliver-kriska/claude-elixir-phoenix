@@ -7,9 +7,8 @@
     {
       "name": "elixir-phoenix-codex",
       "source": {
-        "source": "git-subdir",
-        "url": "oliver-kriska/claude-elixir-phoenix",
-        "path": "targets/codex"
+        "source": "local",
+        "path": "./targets/codex"
       },
       "policy": {
         "installation": "AVAILABLE",
