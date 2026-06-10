@@ -6,7 +6,7 @@
 oliver-kriska/claude-elixir-phoenix/        ← this repo
 ├── .claude-plugin/marketplace.json          ← Claude marketplace (Claude-only)
 ├── .agents/plugins/marketplace.json         ← Codex marketplace (codex-only,
-│                                              git-subdir → targets/codex)
+│                                              local → ./targets/codex)
 ├── plugins/elixir-phoenix/                  ← canonical, hand-written
 │   ├── .claude-plugin/plugin.json           (2.9.0 → 3.0.0)
 │   ├── skills/         (43)
@@ -72,15 +72,20 @@ Codex installs directly from this repo — no mirror:
 
 ```
 codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --ref main
+codex plugin add elixir-phoenix-codex@oliver-kriska
 ```
 
 Codex reads the repo-root `.agents/plugins/marketplace.json` (its native
-manifest path — verified on codex-cli 0.130.0; it takes precedence over,
-and fully suppresses, the Claude `.claude-plugin/marketplace.json`). That
-manifest lists only `elixir-phoenix-codex` and points at the
-`targets/codex/` subtree via a `git-subdir` source, so the directory MUST
-exist in the source repo. (`--sparse <path>` is an optional checkout
-speedup, not the install mechanism.)
+manifest path — verified on codex-cli 0.130.0 and re-confirmed in 0.139.0
+source; it takes precedence over, and fully suppresses, the Claude
+`.claude-plugin/marketplace.json`). That manifest lists only
+`elixir-phoenix-codex` and points at `targets/codex/` via a **`local`
+source resolved inside the marketplace snapshot**, so the directory MUST
+be checked in. A `git-subdir` source does NOT work here — it clones the
+repo's default branch in a separate fetch that ignores the snapshot's
+`--ref` (verified on 0.139.0: install failed with "missing plugin.json"
+until the source was switched to `local`). (`--sparse <path>` is an
+optional checkout speedup, not the install mechanism.)
 
 Pi and OpenCode install from dedicated mirror repos. Those mirrors are
 force-pushed by `publish-mirrors.yml` at release-tag time — the source

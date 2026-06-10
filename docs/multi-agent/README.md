@@ -14,7 +14,7 @@ release.
 | Agent       | Install                                                                    |
 |-------------|----------------------------------------------------------------------------|
 | Claude Code | `/plugin install elixir-phoenix@oliver-kriska` (existing)                  |
-| Codex       | `codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --ref main` then enable in the picker |
+| Codex       | `codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --ref main` then `codex plugin add elixir-phoenix-codex@oliver-kriska` |
 | OpenCode    | `"plugin": ["oliver-kriska/opencode-elixir-phoenix"]` in `opencode.json`   |
 | Pi          | `pi install ./targets/pi` (local) — see [pi.md](pi.md) for the mirror      |
 
@@ -34,13 +34,14 @@ See per-agent docs:
 | Command invocation         | `/phx:foo` | none — skills auto-load by description | `/skill-name` | `/skill-name` |
 | Sub-agents                 | yes (`Agent`) | TOML drop  | `.opencode/agent/`    | extension dispatch  |
 | Per-agent model / effort   | `model:`+`effort:` (haiku/sonnet/opus) | `model:` carried; session model in practice | `model:` carried; needs provider mapping | single model (`model`/`effort` dropped) |
-| Hooks                      | 9 events | 6 events        | TS module (4 hooks)   | TS extensions       |
-| Iron Laws (auto-injected)  | SubagentStart | inlined per skill | system-prompt transform | before_agent_start extension |
+| Hooks                      | 9 events | 7 events (cli ≥0.133.0) | TS module (5 hooks) | TS extensions       |
+| Iron Laws (auto-injected)  | SubagentStart | SubagentStart + inlined per skill | system-prompt transform | before_agent_start extension |
 | Tidewave MCP               | yes    | stdio             | http (snippet)        | extension config    |
 | `descriptions_short.yaml`  | n/a    | yes               | n/a                   | n/a                 |
 
-`inlined` means the skill body has the laws appended, since the target
-lacks a SubagentStart-equivalent hook today (Codex). Rendering is
+Codex gained native `SubagentStart` in cli 0.133.0; the per-skill inlining
+stays as defence in depth because Codex hook execution is gated behind
+user-granted trust (see [codex.md](codex.md) → "Hook trust"). Rendering is
 generated; do not edit `targets/` by hand — run `make port`.
 
 ## When to use which agent

@@ -14,32 +14,34 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Codex installs sparsely from this repo; Pi and OpenCode are mirrored
   to dedicated GitHub repos at release-tag time.
 - **Codex target** (`targets/codex/`):
-  - 45 skills; `.codex-plugin/plugin.json` per Codex's actual spec
+  - 47 skills; `.codex-plugin/plugin.json` per Codex's actual spec
     (top-level `skills`/`hooks`/`mcpServers`, `./`-prefixed; `interface`
     is UX metadata only). Codex skills auto-load by `description` — there
     is **no `$`/`/` command invocation** (same model as Claude skills);
     in-body cross-references rewritten to the bare skill name.
-  - Iron Laws inlined into 14 reference skills (Codex has no SubagentStart)
-  - `descriptions_short.yaml` override map; 7,863 / 8,000 byte budget
+  - Iron Laws inlined into 16 reference skills — defence in depth
+    alongside the native SubagentStart hook (codex-cli ≥0.133.0)
+  - `descriptions_short.yaml` override map; 7,851 / 8,000 byte budget
   - Tidewave MCP via stdio (`.mcp.json`)
-  - **22 sub-agents** as `agents-toml/<name>.toml` + SessionStart helper
+  - **25 sub-agents** as `agents-toml/<name>.toml` + SessionStart helper
     `install-codex-agents.sh` that copies into `~/.codex/agents/`
-  - **Hooks** for 6 of 9 events (PreToolUse, PostToolUse, SessionStart,
-    Stop, PreCompact, PostCompact). 3 dropped events (PostToolUseFailure,
-    SubagentStart, StopFailure) are documented in `docs/multi-agent/hooks.md`
+  - **Hooks** for 7 of 9 events (PreToolUse, PostToolUse, SessionStart,
+    Stop, PreCompact, PostCompact, SubagentStart — codex-cli ≥0.133.0).
+    2 dropped events (PostToolUseFailure,
+    StopFailure) are documented in `docs/multi-agent/hooks.md`
     and emitted in the `make port` build log (kept out of `hooks.json` to
     avoid a non-standard `_meta` key that strict validators may reject)
 - **Pi target** (`targets/pi/`):
-  - 43 skills as agentskills.io-native `SKILL.md` files
-  - 29 prompt templates with `args: $@`
+  - 47 skills as agentskills.io-native `SKILL.md` files
+  - 31 prompt templates with `args: $@`
   - `package.json` with `pi-package` keyword for pi.dev gallery discovery
   - **TS extensions** (`extensions/iron-laws.ts`, `extensions/orchestration.ts`)
     — Iron Law injection at session_start, tool_call interception for
     dangerous bash, command dispatch for phx-plan/phx-work/phx-review
 - **OpenCode target** (`targets/opencode/`):
-  - 43 skills under `.opencode/skill/`
-  - 29 commands under `.opencode/command/`
-  - **21 sub-agents** under `.opencode/agent/<name>.md` with `mode: subagent`
+  - 47 skills under `.opencode/skill/`
+  - 31 commands under `.opencode/command/`
+  - **25 sub-agents** under `.opencode/agent/<name>.md` with `mode: subagent`
   - **Full TS hooks module** in `server.ts` with typed `@opencode-ai/plugin`:
     `tool.execute.before` (block-dangerous-ops), `tool.execute.after`
     (format/iron-law/debug), `experimental.chat.system.transform`
@@ -79,7 +81,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Root README updated with multi-agent install table and capability matrix.
 - `.agents/plugins/marketplace.json` — Codex's native marketplace manifest
   (repo root, codex-only), listing only `elixir-phoenix-codex` via a
-  `git-subdir` source pointing at `targets/codex/`.
+  `local` source pointing at `./targets/codex` (resolved inside the
+  marketplace snapshot, which is fetched at the `--ref` you give
+  `marketplace add` — a `git-subdir` source would clone the default
+  branch and ignore `--ref`).
 
 ### Added (contributor)
 
@@ -90,7 +95,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   new dependency) — so skill routing can be measured on the judges the
   Codex/OpenCode/Pi ports actually run on. Auth via `OPENAI_API_KEY`
   (+ optional `OPENAI_BASE_URL` for self-hosted endpoints); no key → graceful
-  no-op. 7 mocked tests in `lab/eval/tests/test_trigger_scorer_dispatch.py`.
+  no-op. 8 mocked tests in `lab/eval/tests/test_trigger_scorer_dispatch.py`.
 - **`port-validate` build-smoke checks.** `scripts/port.py --check` now
   content-validates every built target (not just Codex drift): all generated
   frontmatter must parse, and the OpenCode `server.ts` may only reference hook
@@ -168,6 +173,69 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   now flags step 2 as mandatory, adds a `ls ~/.codex/skills | grep phx`
   activation check, and documents that `marketplace add` is idempotent
   (no re-pull of a moved ref — use `remove` + `add` or `upgrade`).
+  *(Superseded on codex-cli 0.131.0+ — see the live-verification fixes
+  below: `codex plugin add` is non-interactive and skills load from the
+  plugin cache, not `~/.codex/skills/`.)*
+
+### Fixed (live verification on installed CLIs — 2026-06-10)
+
+Verified against codex-cli 0.139.0, opencode 1.17.2 (Bun 1.3.5), and
+`@earendil-works/pi-coding-agent` 0.79.1 type declarations:
+
+- **Codex marketplace source `git-subdir` → `local`.** A `git-subdir`
+  plugin source clones the repo's *default branch* in a separate fetch and
+  ignores the `--ref` given to `marketplace add` — `targets/codex/` doesn't
+  exist there until this branch merges, so `codex plugin add` failed with
+  "missing plugin.json". A `local` path resolves inside the marketplace
+  snapshot (fetched at `--ref`); install verified end-to-end on 0.139.0,
+  with all 47 skills listed in a live `codex exec` session.
+- **Codex install is now non-interactive.**
+  `codex plugin add elixir-phoenix-codex@oliver-kriska` (codex-cli 0.131.0+)
+  replaces the interactive picker step; skills load from the plugin cache
+  (`~/.codex/plugins/cache/…`), no longer copied to `~/.codex/skills/`.
+  Docs rewritten accordingly.
+- **`${CODEX_PLUGIN_ROOT}` never existed.** Codex injects `PLUGIN_ROOT`
+  (native) and `CLAUDE_PLUGIN_ROOT` (compat) into plugin hook env
+  (source-verified in `codex-rs/hooks/src/engine/discovery.rs`). Generated
+  `hooks.json` now uses `${PLUGIN_ROOT}`; the agents-install helper falls
+  back `PLUGIN_ROOT → CLAUDE_PLUGIN_ROOT → script-relative`.
+- **Codex `SubagentStart` ported** (supported since codex-cli 0.133.0,
+  PR #22782) — Iron Laws now inject into Codex subagents via
+  `additionalContext`, same contract as Claude Code. Codex hook coverage:
+  7 of 9 events (drops only PostToolUseFailure, StopFailure).
+- **Codex hook-trust limitation documented.** Plugin hooks load but were
+  not observed executing under `codex exec` on 0.139.0, even with
+  `--dangerously-bypass-hook-trust` (isolated probe plugin confirmed;
+  user-level `~/.codex/hooks.json` hooks do fire). Documented in
+  `docs/multi-agent/codex.md` with a manual agents-install fallback; the
+  per-skill Iron Laws inlining keeps the laws active regardless.
+- **OpenCode `server.ts` was structurally broken** against the real plugin
+  API: it default-exported a hooks object where opencode expects
+  `PluginModule { id, server }` with `server` a *function*
+  `(input) => Promise<Hooks>`; hooks destructured a single object where the
+  runtime passes `(input, output)` two parameters; and the system-prompt
+  transform returned a string where `output.system` is a `string[]` to be
+  pushed to. Rewritten per the typed `@opencode-ai/plugin` API and
+  **runtime-verified on opencode 1.17.2**: a real session attempting
+  `mix ecto.reset` was blocked by `tool.execute.before`. Also added
+  `experimental.session.compacting` (PreCompact equivalent — re-injects
+  Iron Laws across compaction).
+- **Pi extensions carried fabricated-API residue**: `event.tool` /
+  `event.args` (real: `toolName` / `input`), throw-to-block (real: typed
+  return `{ block: true, reason }`), and `ctx.sendUserMessage` (real:
+  `sendUserMessage` on the top-level `ExtensionAPI`). Fixed against the
+  0.79.1 type declarations; `targets/pi/package.json` now declares
+  `engines.node >=22.19.0` (required by Pi ≥0.75.0) and pins typings
+  `>=0.79.1`.
+- **Multi-model eval judge was silently broken for reasoning models.**
+  Kimi-K2.6 (the model Oliver's OpenCode/Pi sessions actually run) emits
+  chain-of-thought prose in `content`; `max_tokens: 200` truncated every
+  response mid-reasoning (`finish_reason: "length"`), scoring recall=0
+  across all 47 skills while looking like a completed run. Fixed:
+  `max_tokens: 4000`, parsed lines filtered to valid skill names, and
+  judge-call HTTP failures now WARN to stderr (a depleted-credits HTTP 402
+  produces the same all-zeros signature otherwise). Slash-form router ids
+  (`moonshotai/Kimi-K2.6`) route to the OpenAI-compatible path.
 
 ### Changed
 
@@ -183,8 +251,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   output; do not edit by hand.
 - Codex / OpenCode / Pi support ships skills, commands, sub-agents, and
   hooks in v3.0.0 — full Phase 1 + Phase 2 parity in one release.
-- Smoke tests against real Codex / Pi / OpenCode CLIs are pending — they
-  need to run on Oliver's machine with the respective agents installed.
+- Smoke-tested 2026-06-10 against installed CLIs: codex-cli 0.139.0
+  (end-to-end install + 47 skills listed in a live `codex exec` session),
+  opencode 1.17.2 / Bun 1.3.5 (runtime hook verification — `mix ecto.reset`
+  blocked in a real session), Pi 0.79.1 (static verification against the
+  published type declarations). Remaining manual check: Codex interactive
+  TUI hook-trust approval flow (plugin hooks did not execute under
+  `codex exec` on 0.139.0; see `docs/multi-agent/codex.md` → "Hook trust").
 
 ## [2.11.0] - 2026-06-08
 

@@ -136,7 +136,7 @@ tradeoffs per agent.
 
 | Agent       | Install                                                                    |
 |-------------|----------------------------------------------------------------------------|
-| Codex       | `codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --ref main` then enable in the picker |
+| Codex       | `codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --ref main` then `codex plugin add elixir-phoenix-codex@oliver-kriska` |
 | OpenCode    | `"plugin": ["oliver-kriska/opencode-elixir-phoenix"]` in `opencode.json`   |
 | Pi          | `pi install ./targets/pi` (local) — see `docs/multi-agent/pi.md`           |
 
@@ -146,9 +146,9 @@ Multi-agent capability matrix (v3.0.0):
 |---------------------------|:------:|:----------------:|:--------------------:|:-------------------:|
 | Skills auto-load          | yes    | yes              | yes                  | yes                 |
 | Command invocation        | `/phx:foo` | none (skills auto-load) | `/skill-name` | `/skill-name` |
-| Sub-agents                | yes    | TOML drop (21)   | `.opencode/agent/` (21) | extension dispatch |
-| Hooks                     | 9 events | 6 events       | TS module            | TS extensions       |
-| Iron Laws (auto-injected) | yes    | inlined per skill| system-prompt transform | before_agent_start extension |
+| Sub-agents                | yes    | TOML drop (25)   | `.opencode/agent/` (25) | extension dispatch |
+| Hooks                     | 9 events | 7 events (cli ≥0.133.0) | TS module (5 hooks) | TS extensions |
+| Iron Laws (auto-injected) | yes    | SubagentStart + inlined per skill | system-prompt transform | before_agent_start extension |
 
 ## Getting Started
 

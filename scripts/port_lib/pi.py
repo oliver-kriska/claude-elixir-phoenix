@@ -80,12 +80,16 @@ def _generate_package_json(source_manifest: dict) -> dict:
         "author": source_manifest.get("author", {}),
         "homepage": source_manifest.get("homepage"),
         "repository": source_manifest.get("repository"),
-        "engines": {"pi": ">=0.1.0"},
+        # Pi >=0.75.0 requires Node >=22.19.0 (the legacy-node20 dist-tag
+        # stays pinned at 0.74.2). Declared so npm/bun warn early.
+        "engines": {"pi": ">=0.1.0", "node": ">=22.19.0"},
         "devDependencies": {
             # Type-only import in extensions/*.ts. The Pi runtime supplies
-            # the API at load time; this pins the typings to the current
-            # (renamed) package scope — see docs/multi-agent/pi.md.
-            "@earendil-works/pi-coding-agent": ">=0.74.0",
+            # the API at load time; this pins the typings to the API the
+            # extensions were verified against (0.79.1 type declarations —
+            # toolName/input event shape, {block, reason} tool_call result,
+            # pi.sendUserMessage). See docs/multi-agent/pi.md.
+            "@earendil-works/pi-coding-agent": ">=0.79.1",
         },
         "pi": {
             "skills": "skills/",

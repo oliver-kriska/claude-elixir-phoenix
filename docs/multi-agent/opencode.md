@@ -44,8 +44,9 @@ OpenCode command names, so the namespace separator is rewritten to a dash):
 ```
 
 Reference skills auto-load on file context (Bun-native). The 22 Iron
-Laws are NOT inlined — Phase 2B's `experimental.chat.system.transform`
-hook injects them dynamically (cleaner than Claude's PostToolUse approach).
+Laws are NOT inlined — the `experimental.chat.system.transform` hook
+injects them dynamically (`output.system.push(...)`), and
+`experimental.session.compacting` re-injects them across compaction.
 
 ## Free wins on OpenCode
 
@@ -60,25 +61,36 @@ hook injects them dynamically (cleaner than Claude's PostToolUse approach).
 
 Full Phase 1 + Phase 2 parity — one release:
 
-- 43 skills under `.opencode/skill/`
-- 29 commands under `.opencode/command/`
-- **21 sub-agents** under `.opencode/agent/<name>.md` (`mode: subagent`)
-- **Full TS hooks module** in `server.ts` (typed `@opencode-ai/plugin`):
+- 47 skills under `.opencode/skill/`
+- 31 commands under `.opencode/command/`
+- **25 sub-agents** under `.opencode/agent/<name>.md` (`mode: subagent`)
+- **Full TS hooks module** in `server.ts` — a default-export
+  `PluginModule { id, server }` where `server` is a `Plugin` function
+  `(input) => Promise<Hooks>` (typed `@opencode-ai/plugin`):
   - `tool.execute.before` — block dangerous ops
   - `tool.execute.after` — format / iron-law / debug (fire-and-forget)
   - `experimental.chat.system.transform` — Iron Law injection
+  - `experimental.session.compacting` — Iron Laws survive compaction
   - `event` filter — SessionStart-equivalent
 - Tidewave MCP snippet (`opencode.mcp.json`) to splice into `opencode.json`
 - `AGENTS.md` (Claude's `CLAUDE.md` aliased)
 - `package.json` with `engines.opencode: ">=0.1.0"`, `exports["./server"]`
 - `bunfig.toml`
 
-API verified 2026-05-16: `tool.execute.after` and
-`experimental.chat.system.transform` are current in `sst/opencode`; no
-breaking changes since the port was written. Note
-`experimental.chat.system.transform` input has no user-message text — it
-is a static system-prompt append (push to `output.system`), which is
-exactly how Iron Laws are injected here.
+**Verified live on opencode 1.17.2 + Bun 1.3.5 (2026-06-10):**
+
+- `opencode debug skill` discovers all 47 skills from `.opencode/skill/`
+  (both `skill/` and `skills/` dirs are scanned)
+- `opencode debug config` resolves all 25 agents and 31 commands; the
+  `file://` plugin loads with zero errors
+- **Runtime hook test passed**: a real session
+  (`huggingface/moonshotai/Kimi-K2.6`) attempted `mix ecto.reset` and
+  `tool.execute.before` blocked it with the Iron Law message
+
+Every hook receives `(input, output)` as TWO parameters — single-object
+destructuring (`async ({ tool, args })`) silently reads `undefined`.
+`output.system` is a `string[]` (push, don't return). The `event` hook
+receives `{ event: { type, properties } }`, an object — not a string.
 
 ## Tradeoffs vs. Claude Code
 
@@ -97,6 +109,15 @@ opencode
 ```
 
 In the chat, `/phx-help` should list commands. If it does, install path is good.
+
+Non-interactive verification (no TTY needed):
+
+```bash
+opencode debug config | head -50    # plugin listed, no load errors
+opencode debug skill | head -50     # phx-* skills discovered
+opencode run -m <provider/model> "use bash to run: mix ecto.reset"
+# → BLOCKED: destructive ecto operation. Use a migration instead.
+```
 
 ## Running with local models
 

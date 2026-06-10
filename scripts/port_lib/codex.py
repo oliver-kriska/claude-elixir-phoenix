@@ -3,18 +3,20 @@
 Codex CLI reads `.codex-plugin/plugin.json` natively. The repo-root
 `.agents/plugins/marketplace.json` (Codex's native manifest, codex-only —
 NOT `.claude-plugin/marketplace.json`) points Codex at this `targets/codex`
-subtree via a `git-subdir` source. Install:
+subtree via a `local` source resolved inside the marketplace snapshot
+(NOT `git-subdir`, which clones the repo's default branch and ignores
+`--ref` — `targets/codex` doesn't exist there until this work merges).
+Install (verified end-to-end on codex-cli 0.139.0):
 
     codex plugin marketplace add <owner/repo> --ref <branch|tag|sha>
-    # then enable elixir-phoenix-codex in Codex's interactive plugin picker
+    codex plugin add elixir-phoenix-codex@<owner>   # non-interactive, 0.131.0+
 
 (`--sparse` is an optional git checkout optimization, not a plugin filter.)
 
 Codex skills auto-load by their `description` — the SAME model as Claude
 skills. There is **no `$skill-name` / `/command` user invocation in Codex**;
-the user describes a task and the matching skill triggers. (Verified
-against codex-cli 0.130.0's `plugin-creator` spec + the bundled `linear`
-plugin.)
+the user describes a task and the matching skill triggers. (Verified live
+on codex-cli 0.139.0: a `codex exec` session lists all 47 plugin skills.)
 
 Mapping decisions (see docs/multi-agent/codex.md):
   - skills: copied + transformed (namespaces stripped, refs rewritten,
