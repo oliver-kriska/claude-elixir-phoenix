@@ -1,8 +1,8 @@
 ---
 name: liveview-patterns
-description: 'Build LiveView: async data (assign_async), PubSub (check connected?),
-  phx-change events, form components/modals/uploads, streams for lists, live_patch.
-  Use when handling interactions, debugging events, or tracking Presence.'
+description: Build LiveView — assign_async, PubSub (check connected?), phx-change
+  events, forms, modals, uploads, streams, live_patch. Use for interactions, events,
+  or Presence.
 metadata:
   effort: medium
   user-invocable: false
@@ -14,6 +14,8 @@ metadata:
 ---
 
 # LiveView Patterns Reference
+
+> **Ash projects**: Use `ash-framework` skill for `AshPhoenix.Form`. Lifecycle: `AshPhoenix.Form.validate/3` on `phx-change`, `AshPhoenix.Form.submit/2` on submit, `to_form/1` for HEEx. Do not use `Ecto.Changeset.cast/3`.
 
 Reference for building with Phoenix LiveView 1.0/1.1.
 

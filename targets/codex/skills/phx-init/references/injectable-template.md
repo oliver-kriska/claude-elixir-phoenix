@@ -194,10 +194,16 @@ Standard Oban patterns DO NOT apply.
 ### ASH_SECTION (if Ash detected)
 
 ```markdown
-## Ash Framework — Different patterns
+## Ash Framework — Use ash-framework skill
 
-Ecto Iron Laws do NOT apply to Ash.Resource modules.
-Ash.Domain ≠ Phoenix Contexts. Consult Ash documentation.
+This project uses Ash Framework. Before writing ANY Ash code:
+
+1. Load the `ash-framework` skill — it owns all Ash patterns and Iron Laws
+2. Research: `mix usage_rules.search_docs "<topic>" -p ash -p ash_phoenix -p ash_postgres -p ash_authentication -p ash_oban`
+3. Module lookup: `mix usage_rules.docs Ash.Resource`
+4. Generators: `mix ash.gen.resource`, `mix ash.codegen`, `mix ash.gen.domain`
+
+Ash is a complement to Phoenix/Ecto — LiveView, security, and OTP Iron Laws still apply. For data access, prefer Ash actions via domain code interfaces over direct `Repo` calls.
 ```
 
 ### TIDEWAVE_SECTION (if Tidewave detected)

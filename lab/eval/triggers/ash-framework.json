@@ -1,0 +1,16 @@
+{
+  "skill": "ash-framework",
+  "should_trigger": [
+    "Add a policy to my Ash resource so only the owner can update the post",
+    "How do I define a code interface on my Ash domain for register_user?",
+    "My AshPhoenix.Form isn't validating on phx-change — what's wrong?",
+    "Generate an Ash resource for accounts with create and read actions",
+    "I changed a resource and need to regenerate the migration with mix ash.codegen",
+    "Should I use an aggregate or a calculation for the comment count on this Ash resource?"
+  ],
+  "should_not_trigger": [
+    "Write an Ecto changeset to validate the email field",
+    "My LiveView form isn't updating when socket assigns change",
+    "Set up an Oban worker to send welcome emails"
+  ]
+}

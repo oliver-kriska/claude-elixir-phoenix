@@ -14,6 +14,8 @@ metadata:
 
 # Elixir/Phoenix Security Reference
 
+> **Ash projects**: `AshAuthentication` has its own strategy/token patterns — use the `ash-framework` skill. CSRF, XSS, and secret management patterns below still apply.
+
 Quick reference for security patterns in Elixir/Phoenix.
 
 ## Iron Laws — Never Violate These

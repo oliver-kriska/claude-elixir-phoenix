@@ -2,7 +2,7 @@
 
 **Claude Code is great. But it doesn't know that `assign_new` silently skips on reconnect, that `:float` will corrupt your money fields, or that your Oban job isn't idempotent.**
 
-This plugin does. It coordinates **22 specialist agents** that plan, implement,
+This plugin does. It coordinates **25 specialist agents** that plan, implement,
 review, and verify your Elixir/Phoenix code in parallel -- each with domain
 expertise, fresh context, and enforced [Iron Laws](#iron-laws-non-negotiable-rules)
 that catch the bugs your tests won't.
@@ -241,7 +241,7 @@ No more scattered files across `.claude/planning/`, `.claude/progress/`, `.claud
 
 ### Agent Hierarchy
 
-The plugin uses 22 agents organized into 3 tiers:
+The plugin uses 25 agents organized into 3 tiers:
 
 ```
                     ┌──────────────────────────────┐
@@ -653,7 +653,7 @@ Every PR must pass the CI quality gate (lint + test + eval). Run locally before 
 ```bash
 make help             # Show all available commands
 make eval             # Quick: lint + score changed skills/agents only
-make eval-all         # Full structural: all 45 skills + all 22 agents
+make eval-all         # Full structural: all 47 skills + all 25 agents
 make eval-fix         # Auto-fix lint + show failures + suggest autoresearch
 make test             # 52 pytest tests for eval framework
 make ci               # Full CI: lint + test + eval (same as GitHub Actions)

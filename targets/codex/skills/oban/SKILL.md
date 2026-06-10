@@ -1,8 +1,8 @@
 ---
 name: oban
-description: Oban job processing — workers, perform/1 (OSS) and process/1 (Pro), queues,
-  cron, retries, unique jobs, idempotency, Oban Pro (Workflow, Batch, Chunk, Smart
-  Engine), Testing. Use when writing Oban workers, queue config, or debugging jobs.
+description: Oban jobs — workers, perform/1, process/1, queues, cron, retries, unique
+  jobs, idempotency, Oban Pro, testing. Use when writing workers, queue config, or
+  debugging jobs.
 metadata:
   effort: medium
   user-invocable: false

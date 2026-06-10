@@ -122,6 +122,16 @@
             "statusMessage": "Tiered deps audit..."
           }
         ]
+      },
+      {
+        "matcher": "Edit|Write|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/freeze-gate.sh",
+            "timeout": 5
+          }
+        ]
       }
     ],
     "PostToolUseFailure": [
@@ -168,6 +178,13 @@
             "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/detect-tidewave.sh",
             "timeout": 30,
             "statusMessage": "Detecting Tidewave...",
+            "async": true
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/detect-ash.sh",
+            "timeout": 3,
+            "statusMessage": "Detecting Ash...",
             "async": true
           }
         ]

@@ -83,20 +83,6 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added (contributor)
 
-- **Protected-section invariant** in the autoresearch loop (contributor
-  tooling, not distributed). The `## Iron Laws` section of every SKILL.md is
-  now **append-only slow state**: the loop may add a law but a delete/reword
-  forces REVERT. Enforced as a hard gate via `checks.sh` check #7 (backed by
-  `lab/autoresearch/scripts/protected_sections.py`, which diffs the working
-  tree against git HEAD, prefix-stripped so renumbering is allowed), plus a
-  "Protected Sections" declaration in `lab/autoresearch/program.md`. Borrowed
-  from SkillOpt (arXiv 2605.23904), which measured this fast/slow guarantee at
-  ~22 points on SpreadsheetBench. A live test confirmed the necessity: the
-  8-dimension scorer is *blind* to single-law deletion (composite and `safety`
-  both stay 1.0, because the scorer is stateless and the `safety` dimension
-  only checks section presence + min count) — so the old soft gate would have
-  silently accepted dropping a security Iron Law. New tests:
-  `lab/autoresearch/tests/test_protected_sections.py` (10 cases).
 - **Multi-model routing-judge dispatch** in `lab/eval/trigger_scorer.py`
   (T1.3 Phase 2, issue #48). `ask_model` now routes by model id: Claude ids via
   the `claude` CLI (unchanged default), OpenAI-compatible ids (`gpt-*`, o-series,
@@ -199,6 +185,109 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   hooks in v3.0.0 — full Phase 1 + Phase 2 parity in one release.
 - Smoke tests against real Codex / Pi / OpenCode CLIs are pending — they
   need to run on Oliver's machine with the respective agents installed.
+
+## [2.11.0] - 2026-06-08
+
+First-class Ash Framework support — an inline `ash-framework` skill (7 Iron
+Laws, 100% trigger accuracy), three specialist agents, `mix.exs` auto-detection,
+and Ash-aware output compression — plus the `/phx:freeze` scoped edit-lock and
+per-skill eval + trigger coverage across all 47 skills.
+
+### Added
+
+- **`ash-framework` skill** — Iron Laws, generator workflow, and tiered research protocol
+  (Tidewave → `usage_rules` → WebFetch hexdocs.pm) for Ash Framework projects. Iron Laws:
+  domain code interfaces, actor-on-query placement, generators first, codegen after resource
+  changes, actions over functions, never edit resource snapshots, no direct `Repo.*`.
+- **`ash-resource-designer` agent** (sonnet) — designs Ash resources with actions, policies,
+  relationships, and domain code interfaces. Outputs a design doc with generator commands and
+  code interface stubs.
+- **`ash-policy-reviewer` agent** (sonnet) — audits Ash policy coverage, `authorize?: false`
+  bypass patterns, actor placement at call sites, and check module correctness.
+- **`ash-query-optimizer` agent** (sonnet) — detects N+1 load patterns and surfaces the
+  "Ash way" across 8 Iron Laws and 9 anti-patterns: load+`length`/`count` → aggregates,
+  `count > 0` → `exists` aggregate, post-load `Enum.filter` → query-customized loads,
+  derived `Map.put` → calculations, multi-read + `Enum.uniq_by` → `Ash.Query.combination_of`,
+  direct `Repo.*` → Ash actions/aggregates, wide-resource reads → `Ash.Query.select`.
+- **Ash auto-detection** — `detect-ash.sh` SessionStart hook announces the `ash-framework`
+  skill (and `usage_rules` setup) when `:ash` appears in `mix.exs` or `use Ash.Resource`/
+  `use Ash.Domain` appears in `lib/`. `priv/resource_snapshots/**` added to the CLAUDE.md
+  auto-load table with a reminder that snapshots are owned by `mix ash.codegen`.
+- **`mix-compression` Ash filters** — added `[filters.mix-ash-codegen]` and
+  `[filters.mix-ash-migrate]` to `references/rtk-filters.toml`. Matches the same
+  compression model as `mix-ecto-migrate`: happy-path short-circuits to one-liner,
+  snapshot/migration file lists preserved verbatim, errors never stripped. Extends
+  the documented 5-15% per-session token reduction to Ash workflows.
+- **`freeze` skill + `freeze-gate.sh` hook** — scoped edit lock (`/phx:freeze`). Writes a
+  `.claude/.freeze` sentinel (allow-list of path prefixes, or empty = freeze everything);
+  a `PreToolUse` hook then denies `Edit`/`Write`/`NotebookEdit` outside the allow-list.
+  Use for read-only investigation or to keep a refactor inside specific dirs.
+
+### Changed
+
+- **Ash callouts in existing skills** — `ecto-constraint-debug`, `liveview-patterns`,
+  `phoenix-contexts`, `security`, and `testing` now route Ash projects to the
+  `ash-framework` skill. CLAUDE.md "Ash Framework Detection" rewritten to load the skill
+  and research via `usage_rules` rather than deferring to external docs.
+- **`mix-compression` install docs** — `rtk test` → `rtk verify` CLI syntax.
+
+### Fixed
+
+## [2.10.6] - 2026-06-04
+
+Patch: Elixir 1.20 type-system awareness across the verify/review path, plus
+contributor tooling — a `/release` skill and single-sourced markdownlint ignores.
+
+### Added
+
+- **Elixir 1.20 type-system awareness.** Elixir v1.20 (2026-06-03) completed
+  its first type-system milestone: the compiler now infers types and gradually
+  type-checks every program **without annotations**, reporting dead code and
+  *verified bugs* (guaranteed runtime failures) as `mix compile` warnings —
+  built-in, no Dialyzer/PLT. The practical impact for the plugin: on 1.20+
+  (OTP 27+), `mix compile --warnings-as-errors` — which `/phx:verify`,
+  `/phx:work` checkpoints, and the "fix CI" pattern run everywhere — now
+  **fails the build on type violations**. Changes:
+  - New reference `skills/elixir-idioms/references/elixir-120-type-system.md`:
+    the `dynamic()` mental model (refinable range, disjoint-only flagging),
+    guard/clause/map inference, how to read & fix a violation, and a
+    compiler-checker-vs-Dialyzer comparison table.
+  - `skills/elixir-idioms/SKILL.md`: reference pointer added.
+  - `skills/verify/SKILL.md` + `agents/verification-runner.md`: note that
+    `--warnings-as-errors` now surfaces type violations at the compile step,
+    and to suspect a newly-detected verified bug (not a regression) when a
+    previously-green build fails after a 1.20 bump.
+  - `agents/elixir-reviewer.md`: new "Type Checking (Compiler vs Dialyzer)"
+    note — the built-in checker is the first line of type safety,
+    complementary to (not redundant with) Dialyzer.
+- **Protected-section invariant** in the autoresearch loop (contributor
+  tooling, not distributed). The `## Iron Laws` section of every SKILL.md is
+  now **append-only slow state**: the loop may add a law but a delete/reword
+  forces REVERT. Enforced as a hard gate via `checks.sh` check #7 (backed by
+  `lab/autoresearch/scripts/protected_sections.py`, which diffs the working
+  tree against git HEAD, prefix-stripped so renumbering is allowed), plus a
+  "Protected Sections" declaration in `lab/autoresearch/program.md`. Borrowed
+  from SkillOpt (arXiv 2605.23904), which measured this fast/slow guarantee at
+  ~22 points on SpreadsheetBench. A live test confirmed the necessity: the
+  8-dimension scorer is *blind* to single-law deletion (composite and `safety`
+  both stay 1.0, because the scorer is stateless and the `safety` dimension
+  only checks section presence + min count) — so the old soft gate would have
+  silently accepted dropping a security Iron Law. New tests:
+  `lab/autoresearch/tests/test_protected_sections.py` (10 cases).
+- **`/release` contributor skill** for cutting plugin releases — bumps
+  `plugin.json`, finalizes the CHANGELOG, gates on `make ci`, tags `vX.Y.Z`,
+  and runs `gh release create`. Encodes the Release/Versioning checklist and
+  local gotchas as Iron Laws (`claude plugin tag` doesn't work for this
+  marketplace layout; `plugin.json` == CHANGELOG heading == tag; confirm before
+  the outward-facing publish; never force-push). `.claude/skills/release/` —
+  contributor tooling, not distributed.
+
+### Changed
+
+- **markdownlint ignores single-sourced** via `.markdownlintignore` (gitignore
+  syntax), de-duplicating the list across `package.json` and the Makefile and
+  excluding untracked non-source dirs (`social/`, `.rtk/`) so `make ci` stays
+  green on promo/cache content. Contributor tooling, not distributed.
 
 ## [2.10.5] - 2026-05-25
 
@@ -893,7 +982,7 @@ none of the interim 2.10.0–2.12.0 bumps were ever tagged or shipped
   (`elixir-reviewer`, `testing-reviewer`, `iron-law-judge`, `security-analyzer`,
   `oban-specialist`, `deployment-validator`, `verification-runner`,
   `parallel-reviewer`) previously declared `disallowedTools: Write, Edit,
-  NotebookEdit` and could not write to disk. The skill told them to write
+NotebookEdit` and could not write to disk. The skill told them to write
   findings to `.claude/plans/{slug}/reviews/{agent}.md`; the main context fell
   back to extracting from each agent's return message, producing the visible
   log line *"Agent didn't write the file. Let me read its output to extract
@@ -969,7 +1058,7 @@ none of the interim 2.10.0–2.12.0 bumps were ever tagged or shipped
 - **`disableSkillShellExecution` resilience** — Converted executable bash fenced blocks
   to inline prose instructions across 18 skills (14 BROKEN, 4 DEGRADED). Skills now
   instruct Claude via prose ("Run `mix compile`", "Use Grep to search...") instead of
-  `` ```bash `` blocks that CC may block when `disableSkillShellExecution` is enabled
+  ` ```bash ` blocks that CC may block when `disableSkillShellExecution` is enabled
   (CC v2.1.91). Tool-replaceable commands (`grep`, `cat`, `find`, `ls`) converted to
   Claude tool references (Grep, Read, Glob). Documentation/example blocks unchanged.
 - **Removed `disableModelInvocation` from plan, review, investigate** — The flag

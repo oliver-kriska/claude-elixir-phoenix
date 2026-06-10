@@ -30,7 +30,7 @@ while preserving full failure blocks, compile errors, and stack traces. Net win:
    `== Compilation error in`), test failures (`FAILURES`, `0 failures` — preserved
    even on short-circuit), dialyzer warnings, and stack traces with `file:line` MUST
    pass through unchanged
-2. **Verify after install** — run `rtk test mix-test` (or any filter name) to
+2. **Verify after install** — run `rtk verify` (or `rtk verify --filter mix-test`) to
    confirm the bundled test fixtures pass before declaring success
 3. **Never overwrite existing `.rtk/filters.toml`** — diff and merge instead
 
@@ -70,9 +70,8 @@ the filters they don't already have.
 ### Step 3: Verify filters work
 
 ```bash
-rtk test mix-test    # runs embedded [[tests.mix-test]] fixtures
-rtk test mix-credo
-rtk test mix-dialyzer
+rtk verify                       # runs all embedded [[tests.*]] fixtures
+rtk verify --filter mix-test     # one filter only
 ```
 
 Check that all report "passed". Flag and stop if any fail — usually means the

@@ -12,6 +12,8 @@ paths:
 
 # LiveView Patterns Reference
 
+> **Ash projects**: Use `ash-framework` skill for `AshPhoenix.Form`. Lifecycle: `AshPhoenix.Form.validate/3` on `phx-change`, `AshPhoenix.Form.submit/2` on submit, `to_form/1` for HEEx. Do not use `Ecto.Changeset.cast/3`.
+
 Reference for building with Phoenix LiveView 1.0/1.1.
 
 ## Iron Laws — Never Violate These

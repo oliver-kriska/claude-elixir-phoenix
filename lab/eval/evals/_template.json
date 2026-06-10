@@ -9,7 +9,8 @@
         {"type": "has_iron_laws", "min_count": 3, "desc": "At least 3 Iron Laws"},
         {"type": "section_exists", "section": "Usage", "desc": "Has Usage section"},
         {"type": "frontmatter_field", "field": "name", "desc": "Has name field"},
-        {"type": "frontmatter_field", "field": "description", "desc": "Has description field"}
+        {"type": "frontmatter_field", "field": "description", "desc": "Has description field"},
+        {"type": "has_gotchas", "min_count": 1, "weight": 0.5, "desc": "Has Gotchas section (bonus — failure-derived sharp edges; populate via /phx:compound)"}
       ]
     },
     "accuracy": {

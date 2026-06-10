@@ -1,0 +1,14 @@
+{
+  "skill": "mix-compression",
+  "should_trigger": [
+    "mix test output is flooding my context — can I compress it?",
+    "Install rtk filters to shrink mix compile and credo output",
+    "How do I reduce the token cost of long mix dialyzer runs?",
+    "Set up output filtering so mix deps.get noise doesn't fill the window"
+  ],
+  "should_not_trigger": [
+    "Run the test suite and fix the failing tests",
+    "Why is my Ecto query slow under load?",
+    "Set up a GenServer for background processing"
+  ]
+}

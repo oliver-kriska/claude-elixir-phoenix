@@ -1,8 +1,8 @@
 ---
 name: phx-full
-description: Use for large features spanning multiple contexts, new domain modules,
-  or when the user wants autonomous end-to-end implementation. Runs the full plan-implement-review-compound
-  cycle with specialist agents and Iron Laws enforcement.
+description: Run the full plan-implement-review-compound cycle with specialist agents
+  and Iron Laws. Use for large features spanning multiple contexts or autonomous end-to-end
+  implementation.
 metadata:
   effort: high
   argument-hint: <feature description>

@@ -49,15 +49,12 @@ hook didn't install. Check `~/.zshrc` for an `rtk init` block.
 After dropping filters into `.rtk/filters.toml`:
 
 ```bash
-rtk test mix-test       # runs [[tests.mix-test]] fixtures from filters.toml
-rtk test mix-credo
-rtk test mix-dialyzer
-rtk test mix-compile
-rtk test mix-deps-get
-rtk test mix-ecto-migrate
+rtk verify                              # run all embedded [[tests.*]] fixtures
+rtk verify --filter mix-test            # run fixtures for one filter only
+rtk verify --filter mix-ash-codegen
 ```
 
-Each should report "passed" for every test fixture. If any fail, the regex
+Each filter should report all fixtures as passed. If any fail, the regex
 patterns may not match your rtk version's regex engine — file an issue on
 the rtk repo.
 

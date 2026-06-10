@@ -11,6 +11,8 @@ paths:
 
 # Elixir Testing Reference
 
+> **Ash projects**: Use `DataCase` with `Ash.Test` helpers; test actions via domain code interfaces, not direct `Repo` calls. See `ash-framework` skill.
+
 Quick reference for Elixir testing patterns.
 
 ## Iron Laws — Never Violate These

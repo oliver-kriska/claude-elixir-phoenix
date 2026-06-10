@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: Send repository_dispatch event
-        uses: peter-evans/repository-dispatch@v3
+        uses: peter-evans/repository-dispatch@v4
         with:
           token: ${{ secrets.SITE_DISPATCH_TOKEN }}
           repository: oliver-kriska/phxagents-site

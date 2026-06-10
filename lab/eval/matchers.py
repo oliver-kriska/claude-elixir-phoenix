@@ -371,6 +371,34 @@ def has_iron_laws(content: str, min_count: int = 1, **_) -> tuple[bool, str]:
     return False, f"Iron Laws section has {best_count} items (min: {min_count})"
 
 
+def has_gotchas(content: str, min_count: int = 1, **_) -> tuple[bool, str]:
+    """Check for a Gotchas section with failure-derived items (soft/bonus signal).
+
+    Anthropic's "how we use skills" calls the Gotchas section the highest-signal
+    content in a skill — sharp edges learned from real failures, not restatements
+    of defaults. Wired as an opt-in soft check (see evals/_template.json), NOT a
+    default requirement, so existing skills without one are never penalized.
+    Same parse as has_iron_laws: case-insensitive header + numbered/bulleted items.
+    """
+    sections = get_sections(content)
+    best_count = 0
+    found_any = False
+
+    for name, body in sections.items():
+        if "gotcha" in name.lower():
+            found_any = True
+            items = re.findall(r'^\s*(?:\d+[\.\)]\s+|[-*]\s+)', body, re.MULTILINE)
+            if len(items) > best_count:
+                best_count = len(items)
+
+    if not found_any:
+        return False, "No Gotchas section found (optional — bonus if present)"
+
+    if best_count >= min_count:
+        return True, f"Gotchas section has {best_count} items (min: {min_count})"
+    return False, f"Gotchas section has {best_count} items (min: {min_count})"
+
+
 def no_dangerous_patterns(content: str, patterns: list[str] | None = None, **_) -> tuple[bool, str]:
     """Check content doesn't contain dangerous code patterns in examples.
 
@@ -655,6 +683,7 @@ MATCHERS = {
     "valid_agent_refs": valid_agent_refs,
     "valid_file_refs": valid_file_refs,
     "has_iron_laws": has_iron_laws,
+    "has_gotchas": has_gotchas,
     "no_dangerous_patterns": no_dangerous_patterns,
     # New: Clarity & Specificity (from SkillsBench, MePO, Anthropic docs)
     "action_density": action_density,

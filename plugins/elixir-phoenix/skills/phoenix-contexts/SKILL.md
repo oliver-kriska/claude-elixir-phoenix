@@ -7,6 +7,8 @@ user-invocable: false
 
 # Phoenix Contexts Reference
 
+> **Ash projects**: `Ash.Domain` replaces Phoenix contexts for data access — use the `ash-framework` skill. Context boundary and PubSub patterns still apply.
+
 Reference for designing and implementing Phoenix contexts (bounded contexts).
 
 ## Iron Laws — Never Violate These

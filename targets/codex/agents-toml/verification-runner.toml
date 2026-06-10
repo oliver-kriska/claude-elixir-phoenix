@@ -67,7 +67,9 @@ If `mix ci` or similar: run it, then uncovered steps. Skip to Step 7.
 
 ### Priority 3: Individual steps
 
-1. `mix compile --warnings-as-errors 2>&1` — always
+1. `mix compile --warnings-as-errors 2>&1` — always (Elixir 1.20+/OTP 27+: the
+   compiler's built-in type checker surfaces **type violations / verified bugs**
+   here — `--warnings-as-errors` fails on them, no Dialyzer required)
 2. `mix format --check-formatted 2>&1` — always
 3. `mix credo --strict 2>&1` — if installed
 4. `mix test --trace 2>&1` — use project alias if exists
@@ -117,7 +119,10 @@ Use correct `MIX_ENV` from `preferred_envs` for each command.
 
 ## Failure Handling
 
-- **Compile**: Report exact error with file:line, suggest fix
+- **Compile**: Report exact error with file:line, suggest fix. On 1.20+,
+  distinguish **type violations / verified bugs** (set-theoretic checker;
+  accepted-vs-supplied type) from ordinary warnings — these are almost always
+  real bugs, fix the code rather than silencing
 - **Format**: List files needing format, suggest `mix format`
 - **Credo**: Group by priority (A=must fix, B=should fix, C/D=consider)
 - **Test**: Test name, location, expected vs actual, investigation steps

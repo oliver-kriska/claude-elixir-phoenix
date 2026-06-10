@@ -105,3 +105,4 @@ For detailed patterns, see:
 - `${CLAUDE_SKILL_DIR}/references/anti-patterns.md` - Common mistakes and fixes
 - `${CLAUDE_SKILL_DIR}/references/mix-tasks.md` - Mix task naming, option parsing, shell output
 - `${CLAUDE_SKILL_DIR}/references/elixir-118-features.md` - Duration module, dbg improvements (1.18+)
+- `${CLAUDE_SKILL_DIR}/references/elixir-120-type-system.md` - Gradual type checker, `dynamic()`, verified bugs as compile warnings (1.20+, OTP 27+)

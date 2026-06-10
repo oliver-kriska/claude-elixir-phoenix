@@ -431,3 +431,103 @@ expected = """    warning: variable "assigns" is unused
     │                            ~~~~~~~
     │
     └─ lib/icon.ex:183:28: Iconify.Icon.prepare_icon_name/1"""
+
+# ============================================================================
+# mix ash.codegen — strip compile prefix, preserve snapshot/migration lists
+# ============================================================================
+[filters.mix-ash-codegen]
+description = "Compact mix ash.codegen — strip compile prefix, preserve snapshot and migration file lists"
+match_command = "^(?:[A-Z_][A-Z0-9_]*=\\S+\\s+)*mix\\s+ash\\.codegen(\\s|$)"
+strip_ansi = true
+filter_stderr = true
+
+match_output = [
+  { pattern = "No changes", message = "mix ash.codegen: no changes" },
+]
+
+strip_lines_matching = [
+  "^$",
+  "^\\s*$",
+  "^OK$",
+  "^Compiling \\d+ file",
+  "^Generated \\w+ app$",
+  "^\\d+> Compiling",
+  "^\\d+> Generated",
+]
+
+on_empty = "mix ash.codegen: ok"
+
+[[tests.mix-ash-codegen]]
+name = "no changes short-circuits"
+input = """
+Compiling 5 files (.ex)
+Generated my_app app
+
+No changes detected.
+OK
+"""
+expected = "mix ash.codegen: no changes"
+
+[[tests.mix-ash-codegen]]
+name = "snapshot and migration list preserved"
+input = """
+Compiling 5 files (.ex)
+Generated my_app app
+
+Snapshots Updated:
+  * priv/resource_snapshots/repo/accounts/user_v2.json
+
+Migrations Generated:
+  * priv/repo/migrations/20260511120000_migrate_resources2.exs
+"""
+expected = """Snapshots Updated:
+  * priv/resource_snapshots/repo/accounts/user_v2.json
+Migrations Generated:
+  * priv/repo/migrations/20260511120000_migrate_resources2.exs"""
+
+# ============================================================================
+# mix ash.migrate — strip compile prefix, preserve migration steps
+# ============================================================================
+[filters.mix-ash-migrate]
+description = "Compact mix ash.migrate — strip compile prefix, preserve migration steps"
+match_command = "^(?:[A-Z_][A-Z0-9_]*=\\S+\\s+)*mix\\s+ash\\.(migrate|rollback)(\\s|$)"
+strip_ansi = true
+filter_stderr = true
+
+match_output = [
+  { pattern = "\\[info\\] Migrations already up", message = "mix ash.migrate: up to date" },
+]
+
+strip_lines_matching = [
+  "^$",
+  "^\\s*$",
+  "^OK$",
+  "^Compiling \\d+ file",
+  "^Generated \\w+ app$",
+  "^\\d+> Compiling",
+  "^\\d+> Generated",
+]
+
+on_empty = "mix ash.migrate: ok"
+
+[[tests.mix-ash-migrate]]
+name = "already up short-circuits"
+input = """
+Compiling 2 files (.ex)
+Generated my_app app
+
+06:54:27.843 [info] Migrations already up
+"""
+expected = "mix ash.migrate: up to date"
+
+[[tests.mix-ash-migrate]]
+name = "migration steps preserved"
+input = """
+Compiling 2 files (.ex)
+Generated my_app app
+
+07:00:00.000 [info] == Running 20260511120000 MyApp.Repo.Migrations.MigrateResources2.up/0 forward
+07:00:00.000 [info] == Migrated 20260511120000 in 0.0s
+"""
+expected = """07:00:00.000 [info] == Running 20260511120000 MyApp.Repo.Migrations.MigrateResources2.up/0 forward
+07:00:00.000 [info] == Migrated 20260511120000 in 0.0s"""

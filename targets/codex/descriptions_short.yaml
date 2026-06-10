@@ -30,3 +30,31 @@ phx-deps-audit: >-
 phx-deps-vet: >-
   Record a vetted Hex package in hex_vet.exs after a security review.
   Use to approve a dep after phx-deps-audit findings.
+
+# v3.0.0 post-main-merge: main's 2.11.0 added ash-framework + freeze,
+# pushing the canonical sum to 8224/8000. Four more overrides restore
+# the margin while keeping each skill's routing keywords.
+ash-framework: >-
+  Ash Framework — resources, actions, policies, aggregates,
+  calculations, AshPhoenix.Form. Use when running mix ash.codegen or
+  editing Ash resources, domains, or code interfaces.
+freeze: >-
+  Freeze or scope which files can be edited — read-only investigate
+  lock or keep a refactor inside specific dirs. Sentinel + PreToolUse
+  hook.
+oban: >-
+  Oban jobs — workers, perform/1, process/1, queues, cron, retries,
+  unique jobs, idempotency, Oban Pro, testing. Use when writing
+  workers, queue config, or debugging jobs.
+phx-full: >-
+  Run the full plan-implement-review-compound cycle with specialist
+  agents and Iron Laws. Use for large features spanning multiple
+  contexts or autonomous end-to-end implementation.
+liveview-patterns: >-
+  Build LiveView — assign_async, PubSub (check connected?), phx-change
+  events, forms, modals, uploads, streams, live_patch. Use for
+  interactions, events, or Presence.
+lv-assigns: >-
+  Inspect LiveView socket assigns for memory bloat — missing
+  temporary_assigns, unbounded lists needing streams. Use when
+  LiveView memory grows.

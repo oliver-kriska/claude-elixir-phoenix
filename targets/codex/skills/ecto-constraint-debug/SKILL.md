@@ -9,6 +9,8 @@ metadata:
 
 # Ecto Constraint Debugging
 
+> **Ash projects**: Ash surfaces DB constraints through its own error DSL. Use the `ash-framework` skill — `mix usage_rules.search_docs "constraint" -p ash_postgres`.
+
 Systematic approach to diagnosing constraint violations. Load when you see `Ecto.ConstraintError`, `unique_constraint`, `foreign_key_constraint`, or constraint-related changeset errors.
 
 ## Iron Laws

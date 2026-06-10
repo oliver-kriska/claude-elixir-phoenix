@@ -39,8 +39,8 @@ Each phase reads from the previous phase's output. Plans become checkboxes. Chec
 
 | Feature | What It Does |
 |---------|-------------|
-| 20 specialist agents | Ecto, LiveView, security, OTP, Oban, deployment experts |
-| 38 skills | Commands for every phase of development |
+| 25 specialist agents | Ecto, LiveView, security, OTP, Oban, Ash, deployment experts |
+| 47 skills | Commands for every phase of development |
 | 22 Iron Laws | Non-negotiable rules enforced automatically |
 | Auto-loaded references | Context-aware docs loaded when you edit relevant files |
 | Tidewave integration | Runtime debugging when Tidewave MCP is connected |

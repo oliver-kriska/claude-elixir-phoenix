@@ -202,9 +202,21 @@ end
 Do NOT include "What's Good" sections — only report issues found.
 Positive feedback wastes tokens for zero actionable value.
 
+## Type Checking (Compiler vs Dialyzer)
+
+Elixir **1.20+** (OTP 27+) ships a built-in set-theoretic type checker that
+runs during `mix compile` — no annotations, no PLT. It reports **verified bugs**
+(disjoint calls, bad field access, out-of-bounds) and **dead/redundant clauses**
+as compiler warnings, caught by `--warnings-as-errors`. Treat these as the
+**first line** of type safety; they are almost always real bugs. This is
+**separate from and complementary to Dialyzer** (success typing + `@spec`
+contracts) below — not redundant. See
+`elixir-idioms/references/elixir-120-type-system.md`.
+
 ## Dialyzer Patterns
 
-**Always run Dialyzer** - it catches real bugs that tests miss.
+**Always run Dialyzer** - it catches real bugs that tests miss (`@spec`
+contracts, opaque misuse) the compiler checker does not.
 
 ### Critical Dialyzer Warnings
 

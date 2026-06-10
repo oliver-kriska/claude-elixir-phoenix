@@ -58,6 +58,13 @@ Strategy: Running `mix check` then asking about E2E
 
 `mix compile --warnings-as-errors` — always
 
+> **Elixir 1.20+ (OTP 27+)**: the compiler's built-in type checker emits **type
+> violations / verified bugs** as warnings, so `--warnings-as-errors` now fails
+> the build on them — no Dialyzer needed. If a previously-green build fails
+> after a 1.20 bump, suspect a newly-detected type violation, not a regression.
+> Read the message literally (accepted vs supplied type); it is almost always a
+> real bug. See `elixir-idioms/references/elixir-120-type-system.md`.
+
 ### Step 2: Format
 
 `mix format --check-formatted` — always (auto-fix with `mix format` if fails)

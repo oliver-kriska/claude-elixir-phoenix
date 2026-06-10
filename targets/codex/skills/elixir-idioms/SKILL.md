@@ -108,6 +108,7 @@ For detailed patterns, see:
 - `references/anti-patterns.md` - Common mistakes and fixes
 - `references/mix-tasks.md` - Mix task naming, option parsing, shell output
 - `references/elixir-118-features.md` - Duration module, dbg improvements (1.18+)
+- `references/elixir-120-type-system.md` - Gradual type checker, `dynamic()`, verified bugs as compile warnings (1.20+, OTP 27+)
 
 ## Iron Laws (Inlined)
 
