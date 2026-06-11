@@ -91,9 +91,14 @@ def _generate_package_json(source_manifest: dict) -> dict:
             # pi.sendUserMessage). See docs/multi-agent/pi.md.
             "@earendil-works/pi-coding-agent": ">=0.79.1",
         },
+        # Every resource value MUST be an array of paths/globs — Pi's
+        # addManifestEntries calls entries.filter(), so a bare string like
+        # "skills/" throws mid-loop and silently kills skill AND prompt
+        # discovery (extensions loaded only because they came first).
+        # Verified against pi 0.79.1 source + docs/packages.md.
         "pi": {
-            "skills": "skills/",
-            "prompts": "prompts/",
+            "skills": ["./skills"],
+            "prompts": ["./prompts"],
             "extensions": ["./extensions/iron-laws.ts", "./extensions/orchestration.ts"],
         },
     }

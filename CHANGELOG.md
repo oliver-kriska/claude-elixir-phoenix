@@ -227,6 +227,16 @@ Verified against codex-cli 0.139.0, opencode 1.17.2 (Bun 1.3.5), and
   0.79.1 type declarations; `targets/pi/package.json` now declares
   `engines.node >=22.19.0` (required by Pi ≥0.75.0) and pins typings
   `>=0.79.1`.
+- **Pi manifest values must be arrays — skills/prompts were silently
+  dropped** (found via Oliver's live `pi install` on 0.79.1, 2026-06-11).
+  `package.json` had `"skills": "skills/"` (a string); Pi's
+  `addManifestEntries` calls `entries.filter()`, so the string threw
+  mid-loop and killed discovery of skills AND prompts — and an existing
+  `pi` manifest suppresses the convention-directory fallback. Only the
+  extensions (already an array) loaded, so the TUI showed just the 3
+  orchestration commands. Fixed to `["./skills"]` / `["./prompts"]`;
+  verified live via an RPC-mode `get_commands` probe: all 47 skills +
+  31 prompts + 3 extension commands now load.
 - **Multi-model eval judge was silently broken for reasoning models.**
   Kimi-K2.6 (the model Oliver's OpenCode/Pi sessions actually run) emits
   chain-of-thought prose in `content`; `max_tokens: 200` truncated every

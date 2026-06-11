@@ -53,6 +53,18 @@ The 16 reference skills auto-load on file context.
 - `engines.pi: ">=0.1.0"`, `engines.node: ">=22.19.0"` (Pi 0.75.0 raised
   the Node minimum; the `legacy-node20` dist-tag stays at 0.74.2)
 
+**Live-verified on pi 0.79.1 (2026-06-11)**: `pi install ./targets/pi` +
+an RPC-mode `get_commands` probe confirms all 47 skills, all 31 prompt
+templates, and the 3 extension commands load.
+
+> **Manifest gotcha:** every value under the `pi` key in `package.json`
+> MUST be an **array** of paths/globs (`"skills": ["./skills"]`). A bare
+> string (`"skills": "skills/"`) throws inside Pi's manifest loop
+> (`entries.filter` on a string) and silently kills discovery of skills
+> AND prompts — and because a `pi` manifest exists, Pi also skips its
+> convention-directory fallback. Extensions still loaded (their value was
+> already an array), which made the failure look partial and confusing.
+
 ## TS extensions — verified against the 0.79.1 type declarations
 
 `targets/pi/extensions/{iron-laws,orchestration}.ts` target the Pi
