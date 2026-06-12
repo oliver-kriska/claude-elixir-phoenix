@@ -928,11 +928,11 @@ def detect_root_causes(findings):
     for cause in code_findings:
         cause_id = cause.get("id", "")
         cause_files = extract_file_paths(cause)
-        cause_words = _significant_words(cause.get("title", ""))
+        cause_words = significant_words(cause.get("title", ""))
 
         for symptom in symptom_findings:
             symptom_id = symptom.get("id", "")
-            symptom_words = _significant_words(symptom.get("title", ""))
+            symptom_words = significant_words(symptom.get("title", ""))
 
             # Check if they share significant title words (same topic)
             shared = cause_words & symptom_words

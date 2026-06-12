@@ -57,9 +57,8 @@ Agent(subagent_type="elixir-xray:review-prompt-generator", ...)
 ```
 
 Each agent reads the merged findings JSON and generates its artifact type.
-Pass `credo-generator` the path to `layers/claude-config.json` too — its
-`credo.custom_checks` lists existing checks so duplicates are skipped and
-reported as "already enforced by {Module}".
+Include `layers/claude-config.json` in the credo-generator prompt — it skips
+findings covered by `credo.custom_checks` ("already enforced by {Module}").
 All run in background, wait for all to complete.
 
 ### Step 4: Validate and Present Results

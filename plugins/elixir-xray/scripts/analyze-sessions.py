@@ -112,16 +112,45 @@ def sigmoid(raw):
 
 
 def safe_load_json(path):
-    """Load JSON from file with error handling."""
+    """Load JSON from file with error handling.
+
+    Supports both a single JSON document (ccrider output) and JSONL
+    (raw Claude Code transcripts from ~/.claude/projects/) — JSONL is
+    parsed line-by-line into a list of entries.
+    """
     try:
         with open(path, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except (json.JSONDecodeError, UnicodeDecodeError) as e:
-        print(f"Warning: Could not parse {path}: {e}", file=sys.stderr)
-        return None
+            text = f.read()
     except FileNotFoundError:
         print(f"Warning: File not found: {path}", file=sys.stderr)
         return None
+    except UnicodeDecodeError as e:
+        print(f"Warning: Could not parse {path}: {e}", file=sys.stderr)
+        return None
+
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        pass
+
+    # JSONL fallback: one JSON object per line
+    entries = []
+    bad_lines = 0
+    for line in text.splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        try:
+            entries.append(json.loads(line))
+        except json.JSONDecodeError:
+            bad_lines += 1
+    if entries:
+        if bad_lines:
+            print(f"Warning: JSONL parse skipped {bad_lines} bad lines in {path}", file=sys.stderr)
+        return entries
+
+    print(f"Warning: Could not parse {path}: not JSON or JSONL", file=sys.stderr)
+    return None
 
 
 # ─── Message Parsing ────────────────────────────────────────────────────────

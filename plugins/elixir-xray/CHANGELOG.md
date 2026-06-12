@@ -26,11 +26,28 @@ First stable release — updated to current repo conventions (elixir-phoenix v2.
 
 ### Fixed
 
+- **`merge-findings.py` crashed on every real scan** — `NameError` in
+  root-cause chain detection (`_significant_words` vs `significant_words`);
+  only reachable with real findings, so sample-free test runs missed it
 - Eval tooling: `make eval-xray` replaces broken `eval-inspector` target (stale
   plugin name after the elixir-inspector → elixir-xray rename)
 - Eval framework: `valid_agent_refs` matcher now resolves plugin-namespaced
   references (`subagent_type="elixir-xray:credo-generator"`)
 - CI: shellcheck now covers all plugins' `hooks/scripts/` and `scripts/` dirs
+- `test-pipeline.sh` no longer false-positives on inline (non-script) hook
+  commands; stale "INSPECTOR" wording in PreCompact hook message
+- All 36 pipeline tests pass; all 6 extractor scripts validated against a real
+  production project (custom-check extraction, AGENTS.md, PR retry confirmed)
+
+### Added (validation infrastructure)
+
+- `analyze-sessions.py` parses raw Claude Code JSONL transcripts directly —
+  Layer 5 no longer hard-requires ccrider MCP
+- Behavioral trigger fixtures for scan/apply/fix/compare/brief in
+  `lab/eval/triggers/xray-*.json` — measured 98% avg routing accuracy
+  (scan 92%, others 100%) against the co-installed 55-skill pool
+- Trigger eval framework supports multi-plugin pools and namespaced skill
+  names; `make eval` changed-mode now detects edits in any plugin
 
 ## [0.9.0-beta] - 2026-03-23
 

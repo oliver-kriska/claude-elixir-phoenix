@@ -384,7 +384,8 @@ for hook_type, entries in data.get('hooks', {}).items():
     for entry in entries:
         for hook in entry.get('hooks', []):
             cmd = hook.get('command', '')
-            if cmd:
+            # Only script-file references — skip inline commands (echo, etc.)
+            if cmd.startswith('\${CLAUDE_PLUGIN_ROOT}'):
                 print(cmd)
 " 2>/dev/null)
 
