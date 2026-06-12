@@ -7,6 +7,7 @@ description: |
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
+omitClaudeMd: true
 model: sonnet
 effort: medium
 ---

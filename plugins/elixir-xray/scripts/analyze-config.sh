@@ -29,8 +29,9 @@ Arguments:
 
 Output:
   JSON to stdout with keys:
-    has_claude_dir, claude_md, skills, skill_count, agents, agent_count,
-    hooks, commands, has_solutions, has_plans, plan_count, subdirectories
+    has_claude_dir, claude_md, agents_md, credo, skills, skill_count,
+    agents, agent_count, hooks, commands, has_solutions, has_plans,
+    plan_count, subdirectories
 
 Examples:
   ./analyze-config.sh /path/to/my-project
@@ -87,14 +88,86 @@ json_array_from_lines() {
 }
 
 # ---------------------------------------------------------------------------
+# AGENTS.md analysis (multi-agent projects — Codex, OpenCode — keep rules here)
+# ---------------------------------------------------------------------------
+
+AGENTS_MD="$REPO_PATH/AGENTS.md"
+agents_md_exists=false
+agents_md_lines=0
+agents_md_sections="[]"
+agents_md_rules="[]"
+agents_md_rule_count=0
+
+if [[ -f "$AGENTS_MD" ]]; then
+    agents_md_exists=true
+    agents_md_lines=$(wc -l < "$AGENTS_MD" | tr -d ' ')
+    agents_md_sections=$(grep -E '^#{1,6} ' "$AGENTS_MD" 2>/dev/null | head -50 | json_array_from_lines)
+    rules_raw=$(grep -E '\b(MUST|NEVER|ALWAYS|DO NOT)\b' "$AGENTS_MD" 2>/dev/null | head -100 || true)
+    agents_md_rules=$(echo "$rules_raw" | json_array_from_lines)
+    agents_md_rule_count=$(echo "$rules_raw" | grep -c . 2>/dev/null || echo 0)
+fi
+
+# ---------------------------------------------------------------------------
+# Existing custom Credo checks — so generators don't re-suggest them
+# ---------------------------------------------------------------------------
+
+credo_config_exists=false
+credo_config_path=""
+for candidate in "$REPO_PATH/.credo.exs" "$REPO_PATH/config/.credo.exs"; do
+    if [[ -f "$candidate" ]]; then
+        credo_config_exists=true
+        credo_config_path="${candidate#"$REPO_PATH/"}"
+        break
+    fi
+done
+
+custom_credo_checks="[]"
+custom_credo_check_count=0
+if [[ -d "$REPO_PATH/lib" ]]; then
+    custom_checks_raw=$(grep -rl "use Credo.Check" "$REPO_PATH/lib" --include="*.ex" 2>/dev/null | head -50)
+    if [[ -n "$custom_checks_raw" ]]; then
+        custom_credo_checks="["
+        first=true
+        while IFS= read -r check_file; do
+            [[ -z "$check_file" ]] && continue
+            rel_path="${check_file#"$REPO_PATH/"}"
+            module=$(grep -m1 -oE 'defmodule [A-Za-z0-9_.]+' "$check_file" 2>/dev/null | sed 's/defmodule //')
+            if [[ "$first" == true ]]; then
+                first=false
+            else
+                custom_credo_checks+=","
+            fi
+            custom_credo_checks+=$(printf '{"module":%s,"path":%s}' \
+                "$(json_string "$module")" \
+                "$(json_string "$rel_path")")
+            custom_credo_check_count=$((custom_credo_check_count + 1))
+        done <<< "$custom_checks_raw"
+        custom_credo_checks+="]"
+    fi
+fi
+
+# ---------------------------------------------------------------------------
 # Check .claude/ directory
 # ---------------------------------------------------------------------------
 
 if [[ ! -d "$CLAUDE_DIR" ]]; then
-    cat <<'EOF'
+    cat <<ENDJSON
 {
   "has_claude_dir": false,
   "claude_md": {"exists": false, "lines": 0, "sections": [], "rules_found": [], "rule_count": 0},
+  "agents_md": {
+    "exists": $agents_md_exists,
+    "lines": $agents_md_lines,
+    "sections": $agents_md_sections,
+    "rules_found": $agents_md_rules,
+    "rule_count": $agents_md_rule_count
+  },
+  "credo": {
+    "config_exists": $credo_config_exists,
+    "config_path": $(json_string "$credo_config_path"),
+    "custom_checks": $custom_credo_checks,
+    "custom_check_count": $custom_credo_check_count
+  },
   "skills": [],
   "skill_count": 0,
   "agents": [],
@@ -106,7 +179,7 @@ if [[ ! -d "$CLAUDE_DIR" ]]; then
   "plan_count": 0,
   "subdirectories": []
 }
-EOF
+ENDJSON
     exit 0
 fi
 
@@ -401,6 +474,19 @@ cat <<ENDJSON
     "sections": $claude_md_sections,
     "rules_found": $claude_md_rules,
     "rule_count": $claude_md_rule_count
+  },
+  "agents_md": {
+    "exists": $agents_md_exists,
+    "lines": $agents_md_lines,
+    "sections": $agents_md_sections,
+    "rules_found": $agents_md_rules,
+    "rule_count": $agents_md_rule_count
+  },
+  "credo": {
+    "config_exists": $credo_config_exists,
+    "config_path": $(json_string "$credo_config_path"),
+    "custom_checks": $custom_credo_checks,
+    "custom_check_count": $custom_credo_check_count
   },
   "skills": $skills_json,
   "skill_count": $skill_count,

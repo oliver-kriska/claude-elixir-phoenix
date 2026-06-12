@@ -2,12 +2,13 @@
 name: session-analyzer
 description: |
   Summarize pre-computed Claude session analysis data for X-Ray Layer 5.
-  Receives aggregated JSON from analyze-sessions.py --aggregate mode.
-  Identifies cross-session patterns worth automating.
+  Receives aggregated JSON from analyze-sessions.py, identifies
+  cross-session patterns worth automating.
   Use as part of /xray:scan pipeline — never invoke directly.
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
+omitClaudeMd: true
 model: sonnet
 effort: medium
 ---

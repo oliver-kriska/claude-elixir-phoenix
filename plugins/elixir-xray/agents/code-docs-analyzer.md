@@ -2,12 +2,13 @@
 name: code-docs-analyzer
 description: |
   Interpret pre-computed code and documentation data for X-Ray Layer 3.
-  Receives JSON from analyze-code.py, produces findings with YAML frontmatter.
-  Largest agent — covers naming, docs, i18n, testing, domain conventions.
+  Receives JSON from analyze-code.py; covers naming, docs, i18n, and
+  testing conventions.
   Use as part of /xray:scan pipeline — never invoke directly.
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
+omitClaudeMd: true
 model: sonnet
 effort: medium
 ---

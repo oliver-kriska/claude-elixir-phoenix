@@ -1,10 +1,10 @@
 ---
 name: xray:fix
 description: >
-  Implement the highest-ROI X-Ray finding directly in your Elixir project — creates Credo
-  checks in lib/, adds CI steps, appends Ecto and architecture rules to CLAUDE.md. Use after
-  /xray:scan when the user says fix the top issue, implement the finding, apply the quick win,
-  fix it, or wants to go from scan analysis to action immediately.
+  Implement the highest-ROI X-Ray finding in your Elixir project — create Credo
+  checks in lib/, add CI steps, append Ecto rules to CLAUDE.md. Use after
+  /xray:scan to fix the top issue or apply a quick win. For bulk generation
+  use /xray:apply.
 effort: medium
 argument-hint: "[finding-id]"
 ---

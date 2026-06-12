@@ -1,10 +1,10 @@
 ---
 name: xray:brief
 description: >
-  Walk through X-Ray scan findings interactively — explains each Ecto, LiveView, Credo,
-  or architecture finding with evidence, impact, and suggested fix. Use after /xray:scan when
-  the user wants to understand results, says explain findings, walk me through, what did you
-  find, or needs guided review before /xray:apply.
+  Walk through X-Ray scan findings interactively — explains each Ecto,
+  LiveView, or Credo finding with evidence, impact, and suggested fix. Use
+  after /xray:scan to understand results or get a guided review before
+  /xray:apply.
 effort: low
 argument-hint: "[report-path]"
 ---

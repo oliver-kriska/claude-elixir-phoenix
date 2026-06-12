@@ -18,14 +18,20 @@ Generate custom Credo checks from X-Ray scan findings.
 
 You receive the path to `findings-merged.json`. Read it and filter for findings where `artifact_types` contains `"credo-check"`.
 
+You may also receive the path to `claude-config.json` (Layer 4 output). Its
+`credo.custom_checks` array lists the project's EXISTING custom checks.
+
 ## Your Job
 
 For each applicable finding, generate a custom Credo check:
 
 1. Read the finding's category, title, evidence, and description
-2. Create a `.ex` file implementing `Credo.Check`
-3. Write to `.claude/xray/generated/credo-checks/{check_name}.ex`
-4. Also generate a `.credo.exs` config snippet
+2. **Skip findings already covered by an existing custom check** — compare the
+   finding against `credo.custom_checks` module names and paths. Report skipped
+   ones as "already enforced by {Module}" instead of generating a duplicate
+3. Create a `.ex` file implementing `Credo.Check`
+4. Write to `.claude/xray/generated/credo-checks/{check_name}.ex`
+5. Also generate a `.credo.exs` config snippet
 
 ## Check Naming
 

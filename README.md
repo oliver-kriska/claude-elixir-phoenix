@@ -77,6 +77,8 @@ that prevent the mistakes Elixir developers actually make in production.
 ```
 
 > **v2.10.0** -- new framework-agnostic **`catchup`** companion plugin: `/catchup` return-from-absence briefing. [Issues](https://github.com/oliver-kriska/claude-elixir-phoenix/issues) welcome.
+>
+> **New** -- **`elixir-xray`** companion plugin: `/xray:scan` 6-layer codebase analysis, `/xray:apply` generates Credo checks, skills, CI steps, and review prompts.
 
 ## Installation
 

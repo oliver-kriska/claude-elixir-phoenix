@@ -1,10 +1,9 @@
 ---
 name: xray:apply
 description: >
-  Generate Credo checks, Claude Code skills, CLAUDE.md rules, CI scripts, and review
-  prompts from X-Ray scan findings. Use when the user says generate artifacts,
-  create credo checks, apply findings, turn findings into rules, or asks now what
-  after a scan. Requires prior /xray:scan run.
+  Generate Credo checks, Claude Code skills, CLAUDE.md rules, CI scripts, and
+  review prompts from Elixir X-Ray scan findings. Use when asked to generate
+  artifacts or turn audit findings into rules. Requires a prior /xray:scan.
 effort: medium
 argument-hint: "[--pick|--credo|--skills|--ci|--review|--claude-md|--all]"
 ---
@@ -58,6 +57,9 @@ Agent(subagent_type="elixir-xray:review-prompt-generator", ...)
 ```
 
 Each agent reads the merged findings JSON and generates its artifact type.
+Pass `credo-generator` the path to `layers/claude-config.json` too — its
+`credo.custom_checks` lists existing checks so duplicates are skipped and
+reported as "already enforced by {Module}".
 All run in background, wait for all to complete.
 
 ### Step 4: Validate and Present Results

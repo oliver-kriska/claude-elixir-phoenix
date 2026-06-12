@@ -2,6 +2,36 @@
 
 All notable changes to the Elixir X-Ray plugin.
 
+## [1.0.0] - 2026-06-12
+
+First stable release — updated to current repo conventions (elixir-phoenix v2.11-era).
+
+### Added
+
+- `analyze-config.sh` extracts existing custom Credo checks (`credo.custom_checks`)
+  so `/xray:apply` and `/xray:fix` skip suggestions the project already enforces —
+  duplicates are reported as "already enforced by {Module}" (gap found in ENAIA validation)
+- `analyze-config.sh` reads AGENTS.md as a rules source (`agents_md` key) — parity
+  for multi-agent projects (Codex, OpenCode) that don't use CLAUDE.md
+- Both new extractions run even without a `.claude/` directory
+
+### Changed
+
+- All 6 read-only analyzer agents now set `omitClaudeMd: true` (v2.11 convention)
+- Skill and agent descriptions rewritten to ≤250 chars with explicit negative
+  triggers disambiguating scan/apply/fix/compare (all 6 skills + 17 agents score
+  1.000 in the 8-dimension eval)
+- `config-analyzer` and `credo-generator` prompts cross-reference existing custom
+  checks instead of re-suggesting them
+
+### Fixed
+
+- Eval tooling: `make eval-xray` replaces broken `eval-inspector` target (stale
+  plugin name after the elixir-inspector → elixir-xray rename)
+- Eval framework: `valid_agent_refs` matcher now resolves plugin-namespaced
+  references (`subagent_type="elixir-xray:credo-generator"`)
+- CI: shellcheck now covers all plugins' `hooks/scripts/` and `scripts/` dirs
+
 ## [0.9.0-beta] - 2026-03-23
 
 ### Added

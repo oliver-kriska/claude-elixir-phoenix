@@ -2,12 +2,13 @@
 name: architecture-analyzer
 description: |
   Interpret pre-computed architecture data for X-Ray Layer 6.
-  Receives JSON from analyze-architecture.sh, identifies boundary violations,
-  coupling issues, naming problems, and structural concerns.
+  Receives JSON from analyze-architecture.sh, identifies boundary
+  violations, coupling issues, and naming drift.
   Use as part of /xray:scan pipeline — never invoke directly.
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
+omitClaudeMd: true
 model: sonnet
 effort: medium
 ---

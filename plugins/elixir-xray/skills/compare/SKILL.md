@@ -1,10 +1,10 @@
 ---
 name: xray:compare
 description: >
-  Compare current X-Ray scan against a previous scan to show Credo, Ecto, and architecture
-  improvements, regressions, and trend lines. Use after running /xray:scan twice, or when asking
-  did we improve, what changed since last scan, show me progress, compare scans, what got fixed,
-  any regressions. Do NOT trigger for single audit or first-time scan.
+  Compare the current Elixir X-Ray scan against a previous one — Credo, Ecto,
+  and architecture improvements, regressions, trends. Use when asking did we
+  improve, what changed since last scan, or any regressions. NOT for a
+  first-time scan.
 effort: low
 argument-hint: "[previous-scan-path]"
 ---

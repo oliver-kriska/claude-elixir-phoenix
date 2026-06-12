@@ -1,11 +1,9 @@
 ---
 name: xray:scan
 description: >
-  Analyze Elixir/Phoenix codebase across 6 layers — git history, PRs, code patterns, config,
-  sessions, architecture. Finds recurring bugs, naming drift, auth gaps, Ecto anti-patterns,
-  and Credo violations. Use when auditing project health, finding tech debt, or asking
-  what keeps breaking, where are weak points, or how healthy is this codebase.
-  Do NOT trigger for single bug fixes or deployment tasks.
+  Analyze an Elixir/Phoenix codebase across 6 layers — git history, PRs, code,
+  config, sessions, architecture. Use when auditing project health, hunting
+  tech debt, or asking what keeps breaking. NOT for single bug fixes or deploys.
 effort: high
 argument-hint: "[--quick|--full|--deep|--fresh|--pr NUMBER|--gate measure|check|--focus=LAYER|--since=DATE]"
 ---
