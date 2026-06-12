@@ -6,6 +6,8 @@ disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: haiku
 effort: low
+maxTurns: 10
+omitClaudeMd: true
 skills:
   - boundaries
   - phoenix-contexts
@@ -53,8 +55,8 @@ mix xref callers MyApp.Accounts
 Find architectural issues:
 
 ```bash
-# Detect cycles
-mix xref graph --format cycles
+# Detect compile-time cycles (runtime cycles like verified_routes() are benign)
+mix xref graph --format cycles --label compile
 
 # If cycles exist, analyze each cycle's impact
 ```

@@ -1,19 +1,19 @@
 {
   "skill": "help",
   "should_trigger": [
-    "Which /phx command should I use to review code? \u2014 direct question about command choice",
-    "When should I use /phx:plan versus /phx:quick? \u2014 asking to compare workflow commands",
-    "What skill handles N+1 query detection? \u2014 navigating to specific skill",
-    "How do I know if I need /phx:investigate? \u2014 understanding when to use a command",
-    "Which command should I run for Oban worker debugging? \u2014 asking for command recommendation"
+    "Which /phx command should I use to review code?",
+    "When should I use /phx:plan versus /phx:quick?",
+    "What skill handles N+1 query detection?",
+    "How do I know if I need /phx:investigate?",
+    "Which command should I run for Oban worker debugging?"
   ],
   "should_not_trigger": [
-    "I'm building a feature but don't know which workflow to start \u2014 should use intent-detection (work request routing)",
-    "Show me all the plugin commands and what they do \u2014 should use intro (comprehensive walkthrough)",
-    "There's a bug in my LiveView form not rendering correctly \u2014 should use investigate (specific bug report)",
-    "Optimize my database queries for performance \u2014 should use perf (specific domain task)",
-    "/help \u2014 built-in CLI command, explicitly excluded from help skill",
-    "What's the right pattern for Phoenix plug middleware? \u2014 should use phoenix-contexts (reference skill)",
-    "Deploy this app to production with Docker \u2014 should use deploy (specific workflow skill)"
+    "I'm building a feature but don't know which workflow to start",
+    "Show me all the plugin commands and what they do",
+    "There's a bug in my LiveView form not rendering correctly",
+    "Optimize my database queries for performance",
+    "/help",
+    "What's the right pattern for Phoenix plug middleware?",
+    "Deploy this app to production with Docker"
   ]
 }

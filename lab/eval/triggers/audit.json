@@ -5,11 +5,11 @@
     "Run a health audit before the v2.0 release",
     "Give me a code quality assessment of the whole project",
     "Do you have time for a quarterly project health check?",
-    "We finished a big refactor\u2014how's the codebase health now?"
+    "We finished a big refactor—how's the codebase health now?"
   ],
   "should_not_trigger": [
-    "Strengthen our authentication and session security \u2014 security skill",
-    "Find all the N+1 query problems in our code \u2014 n1-check skill",
-    "Are our Phoenix context boundaries properly isolated? \u2014 boundaries skill"
+    "Strengthen our authentication and session security",
+    "Find all the N+1 query problems in our code",
+    "Are our Phoenix context boundaries properly isolated?"
   ]
 }

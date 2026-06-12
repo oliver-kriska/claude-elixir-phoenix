@@ -2,7 +2,7 @@
 
 **Claude Code is great. But it doesn't know that `assign_new` silently skips on reconnect, that `:float` will corrupt your money fields, or that your Oban job isn't idempotent.**
 
-This plugin does. It coordinates **20 specialist agents** that plan, implement,
+This plugin does. It coordinates **25 specialist agents** that plan, implement,
 review, and verify your Elixir/Phoenix code in parallel -- each with domain
 expertise, fresh context, and enforced [Iron Laws](#iron-laws-non-negotiable-rules)
 that catch the bugs your tests won't.
@@ -76,7 +76,7 @@ that prevent the mistakes Elixir developers actually make in production.
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-> **v2.5.1** -- 40 skills, 20 agents, 8-dimension quality eval, autoresearch self-improvement loop. Feedback welcome via [issues](https://github.com/oliver-kriska/claude-elixir-phoenix/issues).
+> **v2.10.0** -- new framework-agnostic **`catchup`** companion plugin: `/catchup` return-from-absence briefing. [Issues](https://github.com/oliver-kriska/claude-elixir-phoenix/issues) welcome.
 
 ## Installation
 
@@ -89,6 +89,31 @@ that prevent the mistakes Elixir developers actually make in production.
 # Install the plugin
 /plugin install elixir-phoenix
 ```
+
+> **Multi-stack tip — project-scope enable.** This plugin is opinionated for
+> Elixir/Phoenix. If you work across multiple language stacks, prefer enabling
+> it per-project rather than globally — drop this into `<project>/.claude/settings.json`:
+>
+> ```json
+> { "enabledPlugins": { "elixir-phoenix@oliver-kriska": true } }
+> ```
+>
+> Hooks self-gate on `mix.exs` presence (v2.10.1+), so global enable is safe
+> — project-scoping is just a tidiness preference.
+
+### Companion plugin: `catchup`
+
+The same marketplace also ships **`catchup`** — a framework-agnostic
+`/catchup` return-from-absence briefing (PRs, reviews, git, Linear,
+calendar → one prioritized Context Brief, including which upstream
+changes touch *your* in-flight files). Independent plugin, separate
+manifest, install only if you want it:
+
+```bash
+/plugin install catchup@oliver-kriska
+```
+
+See `plugins/catchup/README.md`. Not coupled to Elixir/Phoenix.
 
 ### From Local Path (for development)
 
@@ -148,13 +173,13 @@ and enforces [Iron Laws](#iron-laws-non-negotiable-rules) that prevent common El
 
 ### The Lifecycle
 
-The plugin implements a **Plan, Work, Verify, Review, Compound** lifecycle. Each phase produces artifacts in a namespaced directory:
+The plugin implements a **Brainstorm, Plan, Work, Verify, Review, Compound** lifecycle. Each phase produces artifacts in a namespaced directory:
 
 ```
-/phx:plan → /phx:work → /phx:verify → /phx:review → /phx:compound
-     │           │            │              │              │
-     ↓           ↓            ↓              ↓              ↓
-plans/{slug}/  (in namespace) (in namespace) (in namespace) solutions/
+/phx:brainstorm → /phx:plan → /phx:work → /phx:verify → /phx:review → /phx:compound
+       │               │           │            │              │              │
+       ↓               ↓           ↓            ↓              ↓              ↓
+  interview.md    plans/{slug}/  (in namespace) (in namespace) (in namespace) solutions/
 ```
 
 - **Plan** -- Research agents analyze your codebase in parallel, then synthesize a structured implementation plan
@@ -194,7 +219,7 @@ No more scattered files across `.claude/planning/`, `.claude/progress/`, `.claud
 
 ### Agent Hierarchy
 
-The plugin uses 20 agents organized into 3 tiers:
+The plugin uses 25 agents organized into 3 tiers:
 
 ```
                     ┌──────────────────────────────┐
@@ -476,6 +501,7 @@ The plugin enforces critical rules and **stops with an explanation** if code wou
 | Command                 | Description                                                  |
 | ----------------------- | ------------------------------------------------------------ |
 | `/phx:full <feature>`   | Full autonomous cycle (plan, work, verify, review, compound) |
+| `/phx:brainstorm <topic>` | Adaptive requirements gathering before planning            |
 | `/phx:plan <input>`     | Create implementation plan with specialist agents            |
 | `/phx:plan --existing`  | Enhance existing plan with deeper research                   |
 | `/phx:work <plan-file>` | Execute plan tasks with verification                         |
@@ -515,7 +541,14 @@ The plugin enforces critical rules and **stops with an explanation** if code wou
 | `/phx:audit`         | Full project health audit with 5 parallel agents  |
 | `/phx:challenge`     | Rigorous review mode ("grill me")                 |
 
-## Agents (20)
+### Security & dependencies
+
+| Command                      | Description                                          |
+| ---------------------------- | ---------------------------------------------------- |
+| `/phx:deps-audit [--base R]` | Hex supply-chain audit (8 rules + CVE + differential) |
+| `/phx:deps-vet <pkg> <ver>`  | Manage the `hex_vet.exs` audit ledger (cargo-vet style) |
+
+## Agents (22)
 
 | Agent                        | Model  | Memory  | Role                                         |
 | ---------------------------- | ------ | ------- | -------------------------------------------- |
@@ -598,7 +631,7 @@ Every PR must pass the CI quality gate (lint + test + eval). Run locally before 
 ```bash
 make help             # Show all available commands
 make eval             # Quick: lint + score changed skills/agents only
-make eval-all         # Full structural: all 40 skills + all 20 agents
+make eval-all         # Full structural: all 47 skills + all 25 agents
 make eval-fix         # Auto-fix lint + show failures + suggest autoresearch
 make test             # 52 pytest tests for eval framework
 make ci               # Full CI: lint + test + eval (same as GitHub Actions)
@@ -654,6 +687,12 @@ you can analyze your own sessions to find patterns that the plugin should handle
 # Trends: Windowed aggregates (7d/30d/all) from metrics ledger
 /session-trends
 /session-trends --compare baseline
+/session-trends --html out.html       # HTML report with ASCII bar charts
+
+# Pure context-window stats (max tokens, ctx %, compaction rate) across raw JSONL
+python3 .claude/skills/session-scan/references/compute-metrics.py \
+  --scan-jsonl ~/.claude/projects/<project-id>/ \
+  --since 2026-04-01 --html ctx-stats.html
 
 # Skill effectiveness monitoring (requires session-scan data)
 /skill-monitor                  # Dashboard: all skills
@@ -698,6 +737,10 @@ This plugin was built with insights from these articles, repositories, and tools
 - <https://github.com/anthropics/claude-plugins-official>
 - <https://github.com/anthropics/skills>
 - <https://github.com/rjs/shaping-skills>
+- <https://github.com/earendil-works/pi/blob/main/scripts/session-context-stats.mjs>
+  (badlogic — token usage / context % metrics, per-model + per-day breakdown,
+  and ASCII-bar HTML report layout borrowed for `compute-metrics.py --scan-jsonl`
+  and `/session-trends --html`)
 - <https://github.com/affaan-m/everything-claude-code>
 - <https://github.com/blader/theorist>
 - <https://github.com/tmchow/tmc-marketplace> (iterative-engineering plugin)

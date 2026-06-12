@@ -1,0 +1,14 @@
+{
+  "skill": "freeze",
+  "should_trigger": [
+    "Lock edits to just lib/app_web while I refactor this module",
+    "Freeze all edits — read-only investigation mode until I say otherwise",
+    "Only let yourself edit files under priv/repo for this task",
+    "Lift the edit lock, I'm done with the scoped change"
+  ],
+  "should_not_trigger": [
+    "Run the test suite and fix the failing tests",
+    "Investigate why the checkout page crashes on submit",
+    "Refactor this module to use a with chain instead of nested case"
+  ]
+}

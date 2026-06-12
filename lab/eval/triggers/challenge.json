@@ -8,10 +8,10 @@
     "Before I merge, challenge my stream implementation"
   ],
   "should_not_trigger": [
-    "Run a full code review on my changes \u2014 review skill",
-    "Verify my code compiles and tests pass \u2014 verify skill",
-    "Debug why my form isn't saving \u2014 investigate skill",
-    "Scan my codebase for technical debt \u2014 techdebt skill",
-    "Help me respond to this PR comment \u2014 pr-review skill"
+    "Run a full code review on my changes",
+    "Verify my code compiles and tests pass",
+    "Debug why my form isn't saving",
+    "Scan my codebase for technical debt",
+    "Help me respond to this PR comment"
   ]
 }

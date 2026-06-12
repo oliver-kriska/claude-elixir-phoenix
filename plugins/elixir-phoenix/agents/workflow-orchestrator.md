@@ -141,9 +141,9 @@ Track state in progress file at `.claude/plans/{slug}/progress.md`:
    relevant directories and patterns. Do NOT give vague prompts
    like "analyze the codebase."
 
-2. Wait for ALL agents to FULLY complete using TaskOutput. If
-   TaskOutput shows the agent is still running, wait and check
-   again. NEVER proceed while any agent is still running.
+2. Wait for ALL agents to FULLY complete — you'll be notified as each
+   finishes. Read each agent's output file to collect results. NEVER
+   proceed while any agent is still running.
 3. Synthesize findings into structured plan with:
    - Phases
    - Checkbox tasks with `[Pn-Tm][annotation]` format

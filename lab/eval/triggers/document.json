@@ -4,14 +4,14 @@
     "Add @moduledoc and @doc comments to the auth context module I just created",
     "Document the ProfileComponent LiveView component with proper @doc annotations",
     "Write documentation for the payment schema, including @doc for each field",
-    "Update the README to document the new user registration workflow feature",
+    "Add @moduledoc strings to all the modules under lib/myapp/billing/",
     "After the review, ensure all new code has proper @moduledoc and @doc comments"
   ],
   "should_not_trigger": [
-    "Fetch HexDocs to understand how to document a schema properly \u2014 hexdocs-fetcher",
-    "Scan the project and report which modules are missing documentation \u2014 audit",
-    "Show me examples of well-documented Phoenix components in the wild \u2014 examples",
-    "Let's capture the design decision we made about context boundaries \u2014 compound",
-    "Review my code and give feedback on whether it needs more documentation \u2014 review"
+    "Fetch HexDocs to understand how to document a schema properly",
+    "Scan the project and report which modules are missing documentation",
+    "Show me examples of well-documented Phoenix components in the wild",
+    "Let's capture the design decision we made about context boundaries",
+    "Review my code and give feedback on whether it needs more documentation"
   ]
 }

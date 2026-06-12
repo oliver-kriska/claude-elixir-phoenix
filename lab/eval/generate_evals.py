@@ -141,7 +141,7 @@ def generate_eval(skill_name: str, skill_path: str) -> dict:
 
     # --- Build triggering checks ---
     triggering_checks = [
-        {"type": "description_length", "min": 50, "max": 500, "desc": "Description in sweet spot"},
+        {"type": "description_length", "min": 50, "max": 250, "desc": "Description under 250-char plugin listing budget"},
         {"type": "description_keywords", "min": 3, "desc": "Enough domain keywords"},
         {"type": "description_no_vague", "desc": "No vague words in description"},
     ]

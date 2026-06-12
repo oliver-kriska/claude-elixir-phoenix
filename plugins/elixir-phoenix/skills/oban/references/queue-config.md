@@ -51,6 +51,41 @@ plugins: [
 ]
 ```
 
+## Smart Engine (Oban Pro)
+
+If using Oban Pro, switch to Smart Engine for multi-node features:
+
+```elixir
+config :my_app, Oban,
+  engine: Oban.Pro.Engines.Smart,
+  queues: [
+    default: [local_limit: 10, global_limit: 50],
+    api_calls: [
+      local_limit: 5,
+      rate_limit: [allowed: 100, period: 60]
+    ],
+    media: [local_limit: 3, global_limit: 10]
+  ]
+```
+
+- `local_limit` — per-node concurrency (replaces plain integer)
+- `global_limit` — cluster-wide concurrency cap
+- `rate_limit` — distributed rate limiting (check docs for algorithm/partition options)
+
+### Pro Plugin Config
+
+Pro plugins **enhance** OSS equivalents — swap the module name, don't run both:
+
+```elixir
+plugins: [
+  {Oban.Pro.Plugins.DynamicCron, crontab: [{"0 0 * * *", DailyWorker}]},
+  {Oban.Pro.Plugins.DynamicLifeline, rescue_interval: 60_000},
+  {Oban.Pro.Plugins.DynamicPruner, mode: {:max_age, {7, :days}}}
+  # Optional: DynamicQueues for runtime queue management
+  # Optional: DynamicPrioritizer for starvation prevention
+]
+```
+
 ## Production Checklist
 
 - [ ] Connection pool sized: `>= num_queues + sum(limits) + buffer`

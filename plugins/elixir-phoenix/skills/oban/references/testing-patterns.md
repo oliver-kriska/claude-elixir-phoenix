@@ -67,6 +67,44 @@ test "full workflow processes correctly" do
 end
 ```
 
+## Oban Pro Testing
+
+> If project uses Oban Pro, use `Oban.Pro.Testing` instead of `Oban.Testing`.
+> Pro.Testing API may vary between versions — check `mix hex.docs online oban_pro`.
+
+### Setup
+
+```elixir
+# In test helper or DataCase
+use Oban.Pro.Testing, repo: MyApp.Repo
+```
+
+### Drain Jobs
+
+```elixir
+# Pro uses drain_jobs/1 instead of drain_queue/2
+assert %{success: 3, failure: 0} = drain_jobs()
+drain_jobs(with_scheduled: true, with_recursion: true)
+```
+
+### Test Workflows and Batches
+
+```elixir
+# Workflow test — insert and drain
+test "ETL workflow completes" do
+  alias Oban.Pro.Workflow
+
+  Workflow.new()
+  |> Workflow.add(:extract, ExtractWorker.new(%{source: "test"}))
+  |> Workflow.add(:load, LoadWorker.new(%{}), deps: [:extract])
+  |> Oban.insert_all()
+
+  assert %{success: 2} = drain_jobs()
+end
+```
+
+---
+
 ## Anti-patterns
 
 ```elixir

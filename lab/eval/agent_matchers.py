@@ -69,7 +69,13 @@ def agent_tools_valid(content: str, **_) -> tuple[bool, str]:
 
 
 def agent_readonly_enforced(content: str, **_) -> tuple[bool, str]:
-    """Check that review/analysis agents have disallowedTools: Write, Edit, NotebookEdit."""
+    """Check that review/analysis agents block Edit and NotebookEdit.
+
+    Write is optional — review agents may need Write to save their own
+    findings file (e.g., `.claude/plans/{slug}/reviews/elixir.md`). The
+    critical protection is blocking source code modification (Edit) and
+    notebook modification (NotebookEdit), upholding Review Iron Law #1.
+    """
     fm = parse_frontmatter(content)
     name = str(fm.get("name", "")).lower()
     desc = str(fm.get("description", "")).lower()
@@ -85,18 +91,18 @@ def agent_readonly_enforced(content: str, **_) -> tuple[bool, str]:
 
     disallowed_raw = fm.get("disallowedTools", "")
     if not disallowed_raw:
-        return False, f"Read-only agent '{fm.get('name')}' missing disallowedTools (should have Write, Edit, NotebookEdit)"
+        return False, f"Read-only agent '{fm.get('name')}' missing disallowedTools (should block Edit, NotebookEdit)"
 
     if isinstance(disallowed_raw, list):
         disallowed = [t.strip() for t in disallowed_raw]
     else:
         disallowed = [t.strip() for t in str(disallowed_raw).split(",")]
 
-    required = {"Write", "Edit", "NotebookEdit"}
+    required = {"Edit", "NotebookEdit"}
     missing = required - set(disallowed)
     if missing:
         return False, f"Read-only agent missing disallowed: {sorted(missing)}"
-    return True, f"Read-only agent correctly blocks: {sorted(required & set(disallowed))}"
+    return True, f"Read-only agent correctly blocks source modification: {sorted(required)}"
 
 
 def agent_bypass_permissions(content: str, **_) -> tuple[bool, str]:
@@ -171,10 +177,61 @@ def agent_has_skills(content: str, plugin_root: str = "", **_) -> tuple[bool, st
     return True, f"All {len(skills)} preloaded skills exist"
 
 
+def agent_omit_claudemd(content: str, **_) -> tuple[bool, str]:
+    """Check that report-only agents have omitClaudeMd: true.
+
+    Claude Code source reveals read-only agents don't need the CLAUDE.md
+    hierarchy (commit/PR/lint guidelines). Adding omitClaudeMd: true reduces
+    subagent context overhead.
+
+    Agents that write source code (Edit allowed) NEED CLAUDE.md.
+    Agents that only write their own report file (Write allowed, Edit blocked)
+    are "report-only writers" and should still have omitClaudeMd: true.
+    """
+    fm = parse_frontmatter(content)
+    name = str(fm.get("name", "")).lower()
+
+    # Orchestrators that spawn subagents need CLAUDE.md
+    if name in WRITE_EXEMPT_NAMES:
+        if fm.get("omitClaudeMd"):
+            return False, f"Agent '{name}' has Write access — should NOT have omitClaudeMd"
+        return True, f"Agent '{name}' has Write access — correctly omits omitClaudeMd"
+
+    tools_raw = fm.get("tools", "")
+    if isinstance(tools_raw, list):
+        tools = [t.strip() for t in tools_raw]
+    else:
+        tools = [t.strip() for t in str(tools_raw).split(",")]
+
+    disallowed_raw = fm.get("disallowedTools", "")
+    if isinstance(disallowed_raw, list):
+        disallowed = [t.strip() for t in disallowed_raw]
+    else:
+        disallowed = [t.strip() for t in str(disallowed_raw).split(",")]
+
+    has_write = "Write" in tools
+    edit_blocked = "Edit" in disallowed
+
+    # Source-modifying agents (Edit allowed) need CLAUDE.md
+    if has_write and not edit_blocked:
+        if fm.get("omitClaudeMd"):
+            return False, "Agent can modify source (Write + Edit) — should NOT have omitClaudeMd"
+        return True, "Source-modifying agent correctly omits omitClaudeMd"
+
+    # Report-only writer (Write allowed, Edit blocked) or pure read-only:
+    # both should have omitClaudeMd: true
+    if fm.get("omitClaudeMd") is True:
+        if has_write:
+            return True, "Report-only writer correctly has omitClaudeMd: true"
+        return True, "Read-only agent correctly has omitClaudeMd: true"
+    return False, f"Agent '{fm.get('name')}' missing omitClaudeMd: true"
+
+
 AGENT_MATCHERS = {
     "agent_tools_valid": agent_tools_valid,
     "agent_readonly_enforced": agent_readonly_enforced,
     "agent_bypass_permissions": agent_bypass_permissions,
     "agent_model_appropriate": agent_model_appropriate,
     "agent_has_skills": agent_has_skills,
+    "agent_omit_claudemd": agent_omit_claudemd,
 }

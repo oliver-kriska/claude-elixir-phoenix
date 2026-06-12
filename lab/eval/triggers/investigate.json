@@ -8,8 +8,8 @@
     "Getting a socket timeout error in production logs"
   ],
   "should_not_trigger": [
-    "Set up OAuth with GitHub (should use: security)",
-    "LiveView assigns growing too large, memory exploding (should use: assigns-audit)",
-    "Show me how to test async operations (should use: testing)"
+    "Set up OAuth with GitHub",
+    "LiveView assigns growing too large, memory exploding",
+    "Show me how to test async operations"
   ]
 }

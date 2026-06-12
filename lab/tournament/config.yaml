@@ -1,0 +1,26 @@
+# Tournament configuration for skill description optimization.
+# Adapted from autoreason config_v2.yaml.
+
+# Models per role
+critic_model: haiku
+author_model: haiku
+synthesizer_model: haiku
+judge_model: haiku
+
+# Note: claude -p has no --temperature flag. Temperature differentiation is
+# achieved via system prompt tone guidance (e.g., "Be creative" for critic,
+# "Be consistent" for judge) embedded in prompts.py.
+
+# Tournament parameters
+num_judges: 3                 # PoLL: 3 small models > 1 large model
+max_passes: 20                # Hard ceiling per skill
+convergence_threshold: 2      # k=2 consecutive A wins = converged
+
+# Description constraints
+# Plugin listing-budget target (~8K budget / ~40 skills ≈ 200 chars).
+# CC hard cap is 1,536 as of v2.1.105 — we stay tighter on purpose.
+max_description_chars: 250
+
+# Cost controls
+max_budget_per_call: 0.50     # USD per claude CLI call
+call_timeout: 120             # Seconds per LLM call (haiku needs ~50-65s with full prompt)

@@ -3,6 +3,10 @@
 # remind Claude to STOP and present the plan to the user.
 # Skips in /phx:full autonomous mode (detected by progress.md with State).
 
+# Skip in non-Elixir projects (cross-project bleed guard — issue #55)
+proj="${CLAUDE_PROJECT_DIR:-$PWD}"
+[ -f "$proj/mix.exs" ] || exit 0
+
 INPUT=$(cat)
 FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 if [[ -z "$FILE_PATH" ]]; then

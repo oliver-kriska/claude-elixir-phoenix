@@ -1,15 +1,15 @@
 {
   "skill": "perf",
   "should_trigger": [
-    "This page is slow, can you check what's causing it? \u2014 slowness diagnosis",
-    "Getting timeout errors when importing large CSV files \u2014 timeouts",
-    "My LiveView is using a ton of memory \u2014 memory bloat",
-    "Need to optimize my user profile query before shipping \u2014 optimization before deploy",
-    "The notification GenServer is getting hammered under load \u2014 GenServer bottleneck"
+    "This page is slow, can you check what's causing it?",
+    "Getting timeout errors when importing large CSV files",
+    "My LiveView is using a ton of memory",
+    "Need to optimize my user profile query before shipping",
+    "The notification GenServer is getting hammered under load"
   ],
   "should_not_trigger": [
-    "Run the N+1 check on my code \u2014 should use n1-check (specialized N+1 scanner)",
-    "Why doesn't my changeset validation work? \u2014 should use investigate (correctness bug)",
-    "Do a full project audit \u2014 should use audit (broad health check, not perf-focused)"
+    "Run the N+1 check on my code",
+    "Why doesn't my changeset validation work?",
+    "Do a full project audit"
   ]
 }

@@ -2,9 +2,14 @@
 # SubagentStart hook: Inject Iron Laws into all spawned subagents via additionalContext.
 # Addresses the #1 session analysis finding: zero skill auto-loading in subagents.
 
+# Skip in non-Elixir projects (cross-project bleed guard — issue #55).
+# Subagents in Rust/Python/etc. projects shouldn't get Phoenix Iron Laws.
+proj="${CLAUDE_PROJECT_DIR:-$PWD}"
+[ -f "$proj/mix.exs" ] || exit 0
+
 jq -n '{hookSpecificOutput: {hookEventName: "SubagentStart", additionalContext:
 "Elixir/Phoenix Iron Laws (NON-NEGOTIABLE):
-- NO database queries in disconnected mount — use assign_async
+- NO unconditional DB queries in mount — use assign_async (or connected? + cache-backed branch for SEO routes)
 - ALWAYS use streams for lists >100 items
 - CHECK connected?/1 before PubSub subscribe
 - NEVER use :float for money — use :decimal or :integer (cents)

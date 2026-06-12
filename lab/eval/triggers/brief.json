@@ -1,19 +1,19 @@
 {
   "skill": "brief",
   "should_trigger": [
-    "Walk me through this plan before I start working on it \u2014 need understanding before execution",
-    "Explain the Ecto schema decisions in this plan \u2014 reviewing design choices interactively",
-    "Brief me on the LiveView component approach in this plan \u2014 understanding architecture details",
-    "Help me understand the reasoning behind this feature plan \u2014 walkthrough of key decisions",
-    "I need to present this plan to my team, walk me through it \u2014 explanation prep"
+    "Walk me through this plan before I start working on it",
+    "Explain the Ecto schema decisions in this plan",
+    "Brief me on the LiveView component approach in this plan",
+    "Help me understand the reasoning behind this feature plan",
+    "I need to present this plan to my team, walk me through it"
   ],
   "should_not_trigger": [
-    "Create a plan for adding image uploads to user profiles \u2014 belongs to plan skill",
-    "How do I write idiomatic Ecto changesets properly? \u2014 belongs to ecto-patterns skill",
-    "Implement the tasks from this plan step by step \u2014 belongs to work skill",
-    "Review the code I implemented for this feature \u2014 belongs to review skill",
-    "Is this the right approach or should I reconsider? \u2014 belongs to challenge skill",
-    "What are best practices for LiveView real-time updates? \u2014 belongs to liveview-patterns skill",
-    "I'm seeing strange query performance, help me debug it \u2014 belongs to investigate skill"
+    "Create a plan for adding image uploads to user profiles",
+    "How do I write idiomatic Ecto changesets properly?",
+    "Implement the tasks from this plan step by step",
+    "Review the code I implemented for this feature",
+    "Is this the right approach or should I reconsider?",
+    "What are best practices for LiveView real-time updates?",
+    "I'm seeing strange query performance, help me debug it"
   ]
 }

@@ -12,29 +12,41 @@ import json
 import os
 import sys
 
-from lab.eval.schemas import SkillScore, DimensionResult, AssertionResult
+from lab.eval.schemas import DimensionResult, AssertionResult, ScoreRequest, ScoreResult
 from lab.eval.matchers import (
     parse_frontmatter, frontmatter_field, description_length, line_count, max_section_lines,
     no_dangerous_patterns,
 )
 from lab.eval.agent_matchers import (
     agent_tools_valid, agent_readonly_enforced, agent_bypass_permissions,
-    agent_model_appropriate, agent_has_skills, ORCHESTRATOR_NAMES,
+    agent_model_appropriate, agent_has_skills, agent_omit_claudemd, ORCHESTRATOR_NAMES,
 )
 
 PLUGINS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "plugins")
 PLUGIN_ROOT = os.path.join(PLUGINS_DIR, "elixir-phoenix")
 
 
-def score_agent(agent_path: str) -> SkillScore:
-    """Score an agent across 5 dimensions."""
-    agent_path = os.path.abspath(agent_path)
+def score_agent(agent_path: str) -> ScoreResult:
+    """Score an agent across 5 dimensions. Backwards-compat: to_dict() emits
+    the legacy SkillScore shape.
+    """
+    request = ScoreRequest(
+        target_path=os.path.abspath(agent_path),
+        target_kind="agent",
+        plugin_root=os.path.abspath(PLUGIN_ROOT),
+    )
+    return score_agent_request(request)
+
+
+def score_agent_request(request: ScoreRequest) -> ScoreResult:
+    """Canonical entrypoint — accept ScoreRequest, return ScoreResult."""
+    agent_path = request.target_path
     with open(agent_path) as f:
         content = f.read()
 
     fm = parse_frontmatter(content)
     agent_name = fm.get("name", os.path.basename(agent_path).replace(".md", ""))
-    plugin_root = os.path.abspath(PLUGIN_ROOT)
+    plugin_root = request.plugin_root or os.path.abspath(PLUGIN_ROOT)
 
     # Determine if orchestrator (higher line limits)
     is_orchestrator = agent_name in ORCHESTRATOR_NAMES
@@ -91,6 +103,9 @@ def score_agent(agent_path: str) -> SkillScore:
     p, e = no_dangerous_patterns(content)
     safety_assertions.append(AssertionResult(id="safe-patterns", check_type="no_dangerous_patterns",
         description="No dangerous patterns", passed=p, evidence=e))
+    p, e = agent_omit_claudemd(content)
+    safety_assertions.append(AssertionResult(id="safe-omit-claudemd", check_type="agent_omit_claudemd",
+        description="Read-only agents have omitClaudeMd", passed=p, evidence=e))
     dimensions["safety"] = DimensionResult.from_assertions("safety", safety_assertions)
 
     # --- Consistency (0.15) ---
@@ -98,7 +113,7 @@ def score_agent(agent_path: str) -> SkillScore:
     p, e = agent_model_appropriate(content)
     consistency_assertions.append(AssertionResult(id="cons-model", check_type="agent_model_appropriate",
         description="Model matches effort", passed=p, evidence=e))
-    p, e = description_length(content, min=30, max=400)
+    p, e = description_length(content, min=30, max=250)
     consistency_assertions.append(AssertionResult(id="cons-desc-len", check_type="description_length",
         description="Description length OK", passed=p, evidence=e))
     dimensions["consistency"] = DimensionResult.from_assertions("consistency", consistency_assertions)
@@ -108,9 +123,10 @@ def score_agent(agent_path: str) -> SkillScore:
     total_weight = sum(weights.values())
     composite = sum(weights[d] * dim.score for d, dim in dimensions.items() if d in weights) / total_weight
 
-    return SkillScore(
-        skill_name=agent_name,
-        skill_path=agent_path,
+    return ScoreResult(
+        target_name=agent_name,
+        target_path=agent_path,
+        target_kind="agent",
         composite=composite,
         dimensions=dimensions,
     )

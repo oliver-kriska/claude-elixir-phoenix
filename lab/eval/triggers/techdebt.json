@@ -8,8 +8,8 @@
     "Before we implement payments, what needs refactoring?"
   ],
   "should_not_trigger": [
-    "Run the full project health audit for me \u2014 belongs to audit skill",
-    "Why is this query so slow? \u2014 belongs to perf skill",
-    "Scan the codebase for N+1 query problems \u2014 belongs to n1-check skill"
+    "Run the full project health audit for me",
+    "Why is this query so slow?",
+    "Scan the codebase for N+1 query problems"
   ]
 }

@@ -77,6 +77,39 @@ FINGERPRINT_KEYWORDS = {
 PHX_COMMAND_RE = re.compile(r"/phx:\w+")
 SKILL_COMMAND_RE = re.compile(r"/(?:phx|ecto|lv):[a-z][a-z0-9_-]*")
 
+# ─── Model Context Windows ────────────────────────────────────────────────────
+# Inspired by badlogic / earendil-works/pi session-context-stats.mjs
+# (https://github.com/earendil-works/pi/blob/main/scripts/session-context-stats.mjs)
+
+MODEL_CONTEXT_WINDOWS = {
+    "claude-opus-4-7": 200_000,
+    "claude-opus-4-7[1m]": 1_000_000,
+    "claude-opus-4-6": 200_000,
+    "claude-opus-4-6[1m]": 1_000_000,
+    "claude-sonnet-4-6": 200_000,
+    "claude-sonnet-4-6[1m]": 1_000_000,
+    "claude-sonnet-4-5": 200_000,
+    "claude-haiku-4-5": 200_000,
+    "claude-haiku-4-5-20251001": 200_000,
+    "claude-3-5-sonnet-20241022": 200_000,
+    "claude-3-5-haiku-20241022": 200_000,
+}
+
+
+def get_context_window(model):
+    """Look up context window for a model, with fuzzy matching."""
+    if not model:
+        return None
+    if model in MODEL_CONTEXT_WINDOWS:
+        return MODEL_CONTEXT_WINDOWS[model]
+    base = re.sub(r"\[1m\]$", "", model)
+    if base in MODEL_CONTEXT_WINDOWS:
+        return MODEL_CONTEXT_WINDOWS[base]
+    for known, ctx in MODEL_CONTEXT_WINDOWS.items():
+        if known in model:
+            return ctx
+    return None
+
 
 def sigmoid(raw):
     """Apply sigmoid normalization to raw friction score."""
@@ -214,6 +247,168 @@ def extract_timestamps(messages):
         if ts:
             timestamps.append(ts)
     return timestamps
+
+
+def extract_token_usage(messages):
+    """Extract per-turn token usage and model info.
+
+    Works on raw Claude Code JSONL entries (which have `message.usage` blocks
+    with cache_creation/cache_read breakdown). Returns None for ccrider-extracted
+    data without usage info.
+
+    Total prompt tokens per turn = input_tokens + cache_creation + cache_read.
+    Compaction is inferred when prompt tokens drop >40% between consecutive turns.
+
+    Extended fields (2026-05-23): cache TTL split (ephemeral_5m vs ephemeral_1h),
+    per-turn hit rate array, cache decay events (TTL expiry vs compaction),
+    per-model token breakdown, first-turn baseline.
+    """
+    turns = []
+    models = []
+
+    for msg in messages:
+        if not isinstance(msg, dict):
+            continue
+        inner = msg.get("message")
+        if not isinstance(inner, dict):
+            continue
+        usage = inner.get("usage")
+        if not isinstance(usage, dict):
+            continue
+
+        input_tokens = usage.get("input_tokens", 0) or 0
+        cache_creation = usage.get("cache_creation_input_tokens", 0) or 0
+        cache_read = usage.get("cache_read_input_tokens", 0) or 0
+        output_tokens = usage.get("output_tokens", 0) or 0
+        prompt_tokens = input_tokens + cache_creation + cache_read
+
+        # Cache TTL split (1h extended vs default 5m). Absent in older sessions.
+        cc_detail = usage.get("cache_creation") or {}
+        cache_create_5m = cc_detail.get("ephemeral_5m_input_tokens", 0) or 0
+        cache_create_1h = cc_detail.get("ephemeral_1h_input_tokens", 0) or 0
+
+        # Per-turn hit rate: cached portion of incoming context this turn.
+        denom = input_tokens + cache_creation + cache_read
+        hit_rate = round(cache_read / denom, 4) if denom else 0.0
+
+        model = inner.get("model")
+        if model:
+            models.append(model)
+
+        turns.append({
+            "model": model,
+            "prompt_tokens": prompt_tokens,
+            "input_tokens": input_tokens,
+            "cache_creation_tokens": cache_creation,
+            "cache_creation_5m": cache_create_5m,
+            "cache_creation_1h": cache_create_1h,
+            "cache_read_tokens": cache_read,
+            "output_tokens": output_tokens,
+            "hit_rate": hit_rate,
+        })
+
+    if not turns:
+        return None
+
+    prompt_seq = [t["prompt_tokens"] for t in turns]
+    cache_read_seq = [t["cache_read_tokens"] for t in turns]
+    cache_create_seq = [t["cache_creation_tokens"] for t in turns]
+    max_prompt = max(prompt_seq)
+
+    # Compaction events: prompt drops >40% (existing logic).
+    compaction_events = 0
+    compaction_turns = set()
+    pre_compaction_max = max_prompt
+    for i in range(1, len(prompt_seq)):
+        if prompt_seq[i - 1] > 10_000 and prompt_seq[i] < prompt_seq[i - 1] * 0.6:
+            if compaction_events == 0:
+                pre_compaction_max = max(prompt_seq[:i])
+            compaction_events += 1
+            compaction_turns.add(i)
+
+    # Cache decay events: cache_read drops >50% from prior turn AND not a
+    # compaction AND prior turn had meaningful cache. Indicates TTL expiry.
+    cache_decay_events = []
+    for i in range(1, len(cache_read_seq)):
+        prev_cr = cache_read_seq[i - 1]
+        curr_cr = cache_read_seq[i]
+        if prev_cr < 10_000 or i in compaction_turns:
+            continue
+        if curr_cr < prev_cr * 0.5:
+            cache_decay_events.append({
+                "turn_index": i,
+                "prev_cache_read": prev_cr,
+                "cache_read": curr_cr,
+                "drop_pct": round((prev_cr - curr_cr) / prev_cr * 100, 1),
+                "cache_creation_this_turn": cache_create_seq[i],
+            })
+
+    # Per-model breakdown: input/output/cache split by model (investigates
+    # Sonnet/Haiku underuse vs Opus hypothesis from LinkedIn thread).
+    model_breakdown = {}
+    for t in turns:
+        m = t["model"] or "unknown"
+        b = model_breakdown.setdefault(m, {
+            "turns": 0,
+            "input_tokens": 0,
+            "output_tokens": 0,
+            "cache_creation_tokens": 0,
+            "cache_read_tokens": 0,
+        })
+        b["turns"] += 1
+        b["input_tokens"] += t["input_tokens"]
+        b["output_tokens"] += t["output_tokens"]
+        b["cache_creation_tokens"] += t["cache_creation_tokens"]
+        b["cache_read_tokens"] += t["cache_read_tokens"]
+
+    primary_model = Counter(models).most_common(1)[0][0] if models else None
+    ctx_window = get_context_window(primary_model)
+    max_ctx_pct = round(max_prompt / ctx_window * 100, 1) if ctx_window else None
+    pre_compaction_ctx_pct = (
+        round(pre_compaction_max / ctx_window * 100, 1) if ctx_window else None
+    )
+
+    total_input = sum(t["input_tokens"] for t in turns)
+    total_output = sum(t["output_tokens"] for t in turns)
+    total_cache_create = sum(t["cache_creation_tokens"] for t in turns)
+    total_cache_create_5m = sum(t["cache_creation_5m"] for t in turns)
+    total_cache_create_1h = sum(t["cache_creation_1h"] for t in turns)
+    total_cache_read = sum(t["cache_read_tokens"] for t in turns)
+    total_billable = total_input + total_cache_create + total_cache_read + total_output
+    overall_hit_rate = (
+        round(total_cache_read / total_billable, 4) if total_billable else 0.0
+    )
+    pct_1h_writes = (
+        round(total_cache_create_1h / total_cache_create * 100, 1)
+        if total_cache_create else None
+    )
+
+    # First-turn baseline = system prompt + tool defs + CLAUDE.md + memory.
+    first_turn_baseline = turns[0]["cache_creation_tokens"] if turns else 0
+
+    return {
+        "primary_model": primary_model,
+        "models_used": sorted(set(models)),
+        "context_window": ctx_window,
+        "turn_count_with_tokens": len(turns),
+        "total_input_tokens": total_input,
+        "total_output_tokens": total_output,
+        "total_cache_creation_tokens": total_cache_create,
+        "total_cache_creation_5m_tokens": total_cache_create_5m,
+        "total_cache_creation_1h_tokens": total_cache_create_1h,
+        "pct_1h_cache_writes": pct_1h_writes,
+        "total_cache_read_tokens": total_cache_read,
+        "overall_cache_hit_rate": overall_hit_rate,
+        "per_turn_cache_hit_rates": [t["hit_rate"] for t in turns],
+        "max_prompt_tokens": max_prompt,
+        "max_ctx_pct": max_ctx_pct,
+        "pre_compaction_max_tokens": pre_compaction_max,
+        "pre_compaction_ctx_pct": pre_compaction_ctx_pct,
+        "compaction_events_inferred": compaction_events,
+        "cache_decay_events": cache_decay_events,
+        "first_turn_baseline_tokens": first_turn_baseline,
+        "model_breakdown": model_breakdown,
+    }
 
 
 # ─── Metric Computation ──────────────────────────────────────────────────────
@@ -755,6 +950,7 @@ def compute_session_metrics(data, session_id, project, date=None):
     skill_effectiveness = compute_skill_effectiveness(
         user_msgs, tool_calls, errors, messages
     )
+    token_usage = extract_token_usage(messages)
 
     # Tier 2 eligibility
     tier2_reasons = []
@@ -766,6 +962,8 @@ def compute_session_metrics(data, session_id, project, date=None):
         tier2_reasons.append("plugin commands used")
     if len(user_msgs) > 50:
         tier2_reasons.append("message_count > 50")
+    if token_usage and (token_usage.get("max_ctx_pct") or 0) >= 90:
+        tier2_reasons.append("max_ctx_pct >= 90")
     tier2_eligible = len(tier2_reasons) > 0
 
     return {
@@ -792,6 +990,7 @@ def compute_session_metrics(data, session_id, project, date=None):
         "file_hotspots": hotspots,
         "file_categories": categorize_files(list(files_edited)),
         "skill_effectiveness": skill_effectiveness,
+        "token_usage": token_usage,
         "session_chain": {"previous_session_id": None, "chain_length": 1},
         "tier2_eligible": tier2_eligible,
         "tier2_reason": " AND ".join(tier2_reasons) if tier2_reasons else None,
@@ -908,11 +1107,323 @@ def backfill_from_v1(extract_path):
         "file_hotspots": [],
         "file_categories": v1.get("file_categories", {}),
         "skill_effectiveness": {},
+        "token_usage": None,
         "session_chain": {"previous_session_id": None, "chain_length": 1},
         "tier2_eligible": friction_score > 0.35 or opportunity_score > 0.5,
         "tier2_reason": None,
         "tier2_completed": False,
     }
+
+
+# ─── Raw JSONL Token/Context Scanner ─────────────────────────────────────────
+# Inspired by badlogic / earendil-works/pi session-context-stats.mjs.
+# PI's script focuses purely on context-window economics; this mode brings
+# the same per-day / per-model / threshold-bucket view to our pipeline.
+
+
+def scan_raw_jsonl(jsonl_dir, since_dt=None):
+    """Scan raw Claude Code JSONL session files for token/context metrics.
+
+    Returns list of per-session summaries. Skips files without `message.usage`
+    blocks (e.g. legacy or non-assistant traffic only).
+    """
+    results = []
+    if not os.path.isdir(jsonl_dir):
+        return results
+
+    for fname in sorted(os.listdir(jsonl_dir)):
+        if not fname.endswith(".jsonl"):
+            continue
+        fpath = os.path.join(jsonl_dir, fname)
+        if since_dt:
+            try:
+                mtime = datetime.fromtimestamp(
+                    os.path.getmtime(fpath), tz=timezone.utc
+                )
+                if mtime < since_dt:
+                    continue
+            except OSError:
+                continue
+
+        messages = []
+        first_ts = None
+        last_ts = None
+        try:
+            with open(fpath, errors="ignore") as f:
+                for line in f:
+                    line = line.strip()
+                    if not line:
+                        continue
+                    try:
+                        e = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    messages.append(e)
+                    ts = e.get("timestamp")
+                    if isinstance(ts, str):
+                        if first_ts is None:
+                            first_ts = ts
+                        last_ts = ts
+        except OSError:
+            continue
+
+        if not messages:
+            continue
+
+        usage = extract_token_usage(messages)
+        if not usage:
+            continue
+
+        duration = None
+        if first_ts and last_ts:
+            try:
+                t1 = datetime.fromisoformat(first_ts.replace("Z", "+00:00"))
+                t2 = datetime.fromisoformat(last_ts.replace("Z", "+00:00"))
+                duration = round((t2 - t1).total_seconds() / 60, 1)
+            except (ValueError, TypeError):
+                pass
+
+        sid = fname.replace(".jsonl", "")
+        results.append({
+            "session_id": sid,
+            "date": first_ts[:10] if isinstance(first_ts, str) else None,
+            "duration_minutes": duration,
+            "turns": usage["turn_count_with_tokens"],
+            "primary_model": usage["primary_model"],
+            "models_used": usage["models_used"],
+            "context_window": usage["context_window"],
+            "max_prompt_tokens": usage["max_prompt_tokens"],
+            "max_ctx_pct": usage["max_ctx_pct"],
+            "pre_compaction_max_tokens": usage["pre_compaction_max_tokens"],
+            "pre_compaction_ctx_pct": usage["pre_compaction_ctx_pct"],
+            "compaction_events": usage["compaction_events_inferred"],
+            "total_input_tokens": usage["total_input_tokens"],
+            "total_output_tokens": usage["total_output_tokens"],
+            "total_cache_creation_tokens": usage["total_cache_creation_tokens"],
+            "total_cache_read_tokens": usage["total_cache_read_tokens"],
+        })
+    return results
+
+
+def _median(values):
+    if not values:
+        return None
+    s = sorted(values)
+    n = len(s)
+    if n % 2 == 1:
+        return s[n // 2]
+    return (s[n // 2 - 1] + s[n // 2]) / 2
+
+
+def aggregate_ctx_scan(sessions):
+    """Compute totals + per-day + per-model aggregates from scan_raw_jsonl output."""
+    if not sessions:
+        return {"count": 0, "totals": {}, "by_day": {}, "by_model": {}}
+
+    def _agg(group):
+        ctx_pcts = [s["max_ctx_pct"] for s in group if s["max_ctx_pct"] is not None]
+        pre_pcts = [
+            s["pre_compaction_ctx_pct"]
+            for s in group
+            if s["pre_compaction_ctx_pct"] is not None
+        ]
+        durations = [s["duration_minutes"] for s in group if s["duration_minutes"]]
+        return {
+            "count": len(group),
+            "avg_turns": round(sum(s["turns"] for s in group) / len(group), 1),
+            "avg_duration_min": round(sum(durations) / len(durations), 1) if durations else None,
+            "avg_max_tokens": round(sum(s["max_prompt_tokens"] for s in group) / len(group)),
+            "med_max_ctx_pct": round(_median(ctx_pcts), 1) if ctx_pcts else None,
+            "avg_max_ctx_pct": round(sum(ctx_pcts) / len(ctx_pcts), 1) if ctx_pcts else None,
+            "med_pre_compact_ctx_pct": round(_median(pre_pcts), 1) if pre_pcts else None,
+            "over_80_pct_count": sum(1 for p in ctx_pcts if p >= 80),
+            "over_90_pct_count": sum(1 for p in ctx_pcts if p >= 90),
+            "over_100_pct_count": sum(1 for p in ctx_pcts if p >= 100),
+            "compaction_rate_pct": round(
+                sum(1 for s in group if s["compaction_events"] > 0) / len(group) * 100, 1
+            ),
+        }
+
+    by_day = defaultdict(list)
+    by_model = defaultdict(list)
+    for s in sessions:
+        if s["date"]:
+            by_day[s["date"]].append(s)
+        if s["primary_model"]:
+            by_model[s["primary_model"]].append(s)
+
+    return {
+        "count": len(sessions),
+        "totals": _agg(sessions),
+        "by_day": {d: _agg(g) for d, g in sorted(by_day.items())},
+        "by_model": {m: _agg(g) for m, g in sorted(by_model.items())},
+    }
+
+
+# ─── ASCII / HTML Rendering ──────────────────────────────────────────────────
+# Bar-chart styling and HTML preformatted-text layout follow PI's
+# session-context-stats.mjs report (badlogic / earendil-works/pi).
+
+
+def render_ascii_bar(value, max_value, width=40):
+    """Render a horizontal bar using full/empty block characters."""
+    if value is None or max_value is None or max_value <= 0:
+        return "░" * width
+    ratio = max(0.0, min(1.0, value / max_value))
+    filled = round(ratio * width)
+    return "█" * filled + "░" * (width - filled)
+
+
+def render_ctx_scan_text(scan_result):
+    """Render scan_raw_jsonl + aggregate result as plain-text report."""
+    lines = []
+    t = scan_result["totals"]
+    if not t:
+        return "No sessions with token usage found."
+
+    lines.append("─── Totals " + "─" * 60)
+    lines.append(
+        f"  sessions: {t['count']}   avg_turns: {t['avg_turns']}   "
+        f"avg_duration: {t['avg_duration_min'] or '-'} min"
+    )
+    lines.append(
+        f"  avg_max_tokens: {t['avg_max_tokens']:,}   "
+        f"med_max_ctx: {t['med_max_ctx_pct']}%   "
+        f"med_pre_compact: {t['med_pre_compact_ctx_pct']}%"
+    )
+    lines.append(
+        f"  >=80%: {t['over_80_pct_count']}   >=90%: {t['over_90_pct_count']}   "
+        f">=100%: {t['over_100_pct_count']}   compaction_rate: {t['compaction_rate_pct']}%"
+    )
+    lines.append(
+        "  ctx usage: " + render_ascii_bar(t["med_max_ctx_pct"] or 0, 100)
+        + f"  {t['med_max_ctx_pct'] or 0}%"
+    )
+
+    lines.append("")
+    lines.append("─── By Day " + "─" * 60)
+    lines.append(
+        f"  {'date':<12} {'n':>4} {'turns':>6} {'maxTok':>9} "
+        f"{'medCtx%':>8} {'>=90':>5}   bar"
+    )
+    for d, g in scan_result["by_day"].items():
+        bar = render_ascii_bar(g["med_max_ctx_pct"] or 0, 100)
+        lines.append(
+            f"  {d:<12} {g['count']:>4} {g['avg_turns']:>6} "
+            f"{g['avg_max_tokens']:>9,} {(g['med_max_ctx_pct'] or 0):>7}% "
+            f"{g['over_90_pct_count']:>5}   {bar}"
+        )
+
+    lines.append("")
+    lines.append("─── By Model " + "─" * 58)
+    lines.append(
+        f"  {'model':<35} {'n':>4} {'turns':>6} {'maxTok':>9} "
+        f"{'medCtx%':>8} {'>=90':>5}   bar"
+    )
+    for m, g in scan_result["by_model"].items():
+        bar = render_ascii_bar(g["med_max_ctx_pct"] or 0, 100)
+        lines.append(
+            f"  {m:<35} {g['count']:>4} {g['avg_turns']:>6} "
+            f"{g['avg_max_tokens']:>9,} {(g['med_max_ctx_pct'] or 0):>7}% "
+            f"{g['over_90_pct_count']:>5}   {bar}"
+        )
+
+    return "\n".join(lines)
+
+
+def render_trends_text(trends_result):
+    """Render compute_trends() output as plain-text report with bars."""
+    lines = []
+    lines.append(f"Total sessions: {trends_result.get('total_sessions', 0)}")
+    lines.append(f"Computed at: {trends_result.get('computed_at', '-')}")
+    lines.append("")
+
+    windows = trends_result.get("windows", {})
+    lines.append("─── Window Comparison " + "─" * 50)
+    lines.append(
+        f"  {'metric':<28} {'7d':>8} {'30d':>8} {'all':>8}"
+    )
+    rows = [
+        ("sessions", "count"),
+        ("avg friction", "avg_friction"),
+        ("max friction", "max_friction"),
+        ("avg opportunity", "avg_opportunity"),
+        ("tier2 eligible %", "tier2_eligible_pct"),
+        ("plugin adoption %", "plugin_adoption_rate"),
+    ]
+    for label, key in rows:
+        v7 = windows.get("7d", {}).get(key, "-")
+        v30 = windows.get("30d", {}).get(key, "-")
+        vall = windows.get("all", {}).get(key, "-")
+        lines.append(f"  {label:<28} {str(v7):>8} {str(v30):>8} {str(vall):>8}")
+
+    # Friction bar (all-time vs 30d vs 7d)
+    lines.append("")
+    lines.append("─── Friction trend (avg, 0–1 scale) " + "─" * 35)
+    for w in ("all", "30d", "7d"):
+        v = windows.get(w, {}).get("avg_friction", 0) or 0
+        lines.append(f"  {w:<5} {render_ascii_bar(v, 1.0)}  {v}")
+
+    # Fingerprints
+    lines.append("")
+    lines.append("─── Fingerprint Distribution (all-time) " + "─" * 32)
+    fps = windows.get("all", {}).get("fingerprint_distribution", {})
+    fp_max = max(fps.values()) if fps else 1
+    for fp, n in fps.items():
+        lines.append(f"  {fp:<14} {render_ascii_bar(n, fp_max)}  {n}")
+
+    # Per-model token aggregates (if any entries had token_usage)
+    by_model = trends_result.get("by_model", {})
+    if by_model:
+        lines.append("")
+        lines.append("─── By Model (token usage) " + "─" * 45)
+        lines.append(
+            f"  {'model':<35} {'n':>4} {'medCtx%':>8} {'>=90':>5}   bar"
+        )
+        for m, g in by_model.items():
+            bar = render_ascii_bar(g.get("med_max_ctx_pct") or 0, 100)
+            lines.append(
+                f"  {m:<35} {g['count']:>4} "
+                f"{(g.get('med_max_ctx_pct') or 0):>7}% "
+                f"{g.get('over_90_pct_count', 0):>5}   {bar}"
+            )
+
+    mc = trends_result.get("memory_comparison")
+    if mc:
+        lines.append("")
+        lines.append("─── MEMORY.md Comparison " + "─" * 47)
+        for k, v in mc.items():
+            lines.append(f"  {k:<32} {v}")
+
+    return "\n".join(lines)
+
+
+def render_html_report(title, body_text, generated_at):
+    """Wrap pre-formatted body text in a minimal HTML page."""
+    safe_body = (
+        body_text.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+    )
+    return (
+        "<!DOCTYPE html>\n<html><head><meta charset=\"utf-8\">\n"
+        f"<title>{title}</title>\n"
+        "<style>\n"
+        "  body { font: 13px/1.5 ui-monospace, \"SF Mono\", Menlo, monospace;\n"
+        "         background: #f7f7f7; color: #222; margin: 0; padding: 24px; }\n"
+        "  h1 { font-size: 18px; margin: 0 0 4px; }\n"
+        "  .meta { color: #666; font-size: 12px; margin-bottom: 16px; }\n"
+        "  pre { background: white; padding: 16px; border: 1px solid #ddd;\n"
+        "        border-radius: 4px; overflow-x: auto; }\n"
+        "  .footer { margin-top: 12px; font-size: 11px; color: #888; }\n"
+        "  a { color: #555; }\n"
+        "</style></head><body>\n"
+        f"<h1>{title}</h1>\n"
+        f"<div class=\"meta\">Generated {generated_at}</div>\n"
+        f"<pre>{safe_body}</pre>\n"
+        "<div class=\"footer\">Bar-chart layout inspired by "
+        "<a href=\"https://github.com/earendil-works/pi/blob/main/scripts/session-context-stats.mjs\">"
+        "badlogic / earendil-works/pi session-context-stats.mjs</a>.</div>\n"
+        "</body></html>\n"
+    )
 
 
 # ─── Trends Computation ──────────────────────────────────────────────────────
@@ -998,10 +1509,43 @@ def compute_trends(metrics_path, memory_path=None, project_filter=None):
             "plugin_adoption_measured": f"{trends.get('all', {}).get('plugin_adoption_rate', 0)}%",
         }
 
+    # Per-model aggregates (only entries with token_usage have model info)
+    by_model = defaultdict(list)
+    for e in entries:
+        tu = e.get("token_usage") or {}
+        model = tu.get("primary_model")
+        if not model:
+            continue
+        by_model[model].append({
+            "max_ctx_pct": tu.get("max_ctx_pct"),
+            "max_prompt_tokens": tu.get("max_prompt_tokens", 0),
+            "compaction_events": tu.get("compaction_events_inferred", 0),
+            "friction_score": e.get("friction_score") or 0,
+            "plugin_opportunity_score": e.get("plugin_opportunity_score") or 0,
+        })
+
+    by_model_summary = {}
+    for model, group in by_model.items():
+        ctx_pcts = [g["max_ctx_pct"] for g in group if g["max_ctx_pct"] is not None]
+        by_model_summary[model] = {
+            "count": len(group),
+            "avg_friction": round(sum(g["friction_score"] for g in group) / len(group), 3),
+            "avg_opportunity": round(
+                sum(g["plugin_opportunity_score"] for g in group) / len(group), 3
+            ),
+            "med_max_ctx_pct": round(_median(ctx_pcts), 1) if ctx_pcts else None,
+            "avg_max_tokens": round(sum(g["max_prompt_tokens"] for g in group) / len(group)),
+            "over_90_pct_count": sum(1 for p in ctx_pcts if p >= 90),
+            "compaction_rate_pct": round(
+                sum(1 for g in group if g["compaction_events"] > 0) / len(group) * 100, 1
+            ),
+        }
+
     return {
         "computed_at": now.isoformat(),
         "total_sessions": len(entries),
         "windows": trends,
+        "by_model": by_model_summary,
         "memory_comparison": memory_comparison,
     }
 
@@ -1053,7 +1597,10 @@ def print_usage():
     print("Usage:")
     print("  python3 compute-metrics.py <messages.json> --session-id ID --project NAME")
     print("  python3 compute-metrics.py --batch <manifest.json>")
-    print("  python3 compute-metrics.py --trends <metrics.jsonl> [--memory MEMORY.md] [--project NAME]")
+    print("  python3 compute-metrics.py --trends <metrics.jsonl> [--memory MEMORY.md]")
+    print("                              [--project NAME] [--html OUTPUT.html]")
+    print("  python3 compute-metrics.py --scan-jsonl <jsonl-dir> [--since YYYY-MM-DD]")
+    print("                              [--html OUTPUT.html]")
     print("  python3 compute-metrics.py --backfill <extracts-dir/>")
     print("  python3 compute-metrics.py --help")
 
@@ -1085,8 +1632,64 @@ if __name__ == "__main__":
             idx = sys.argv.index("--project")
             if idx + 1 < len(sys.argv):
                 project_filter = sys.argv[idx + 1]
+        html_path = None
+        if "--html" in sys.argv:
+            idx = sys.argv.index("--html")
+            if idx + 1 < len(sys.argv):
+                html_path = sys.argv[idx + 1]
         result = compute_trends(sys.argv[2], memory_path, project_filter)
-        print(json.dumps(result, indent=2))
+        if html_path:
+            text = render_trends_text(result)
+            html = render_html_report(
+                "Session Trends", text, result.get("computed_at", "")
+            )
+            with open(html_path, "w") as f:
+                f.write(html)
+            print(f"Wrote HTML report: {html_path}")
+        else:
+            print(json.dumps(result, indent=2))
+
+    elif mode == "--scan-jsonl":
+        if len(sys.argv) < 3:
+            print("Error: --scan-jsonl requires a JSONL directory")
+            sys.exit(1)
+        jsonl_dir = sys.argv[2]
+        since_dt = None
+        if "--since" in sys.argv:
+            idx = sys.argv.index("--since")
+            if idx + 1 < len(sys.argv):
+                try:
+                    since_dt = datetime.fromisoformat(
+                        sys.argv[idx + 1]
+                    ).replace(tzinfo=timezone.utc)
+                except ValueError:
+                    print(f"Error: --since must be ISO date (YYYY-MM-DD), got {sys.argv[idx + 1]}")
+                    sys.exit(1)
+        html_path = None
+        if "--html" in sys.argv:
+            idx = sys.argv.index("--html")
+            if idx + 1 < len(sys.argv):
+                html_path = sys.argv[idx + 1]
+
+        sessions = scan_raw_jsonl(jsonl_dir, since_dt)
+        agg = aggregate_ctx_scan(sessions)
+        result = {
+            "scanned_dir": os.path.abspath(jsonl_dir),
+            "since": since_dt.isoformat() if since_dt else None,
+            "computed_at": datetime.now(timezone.utc).isoformat(),
+            **agg,
+            "sessions": sessions,
+        }
+        if html_path:
+            text = render_ctx_scan_text(agg)
+            html = render_html_report(
+                "Session Context Stats", text, result["computed_at"]
+            )
+            with open(html_path, "w") as f:
+                f.write(html)
+            print(f"Wrote HTML report: {html_path} ({len(sessions)} sessions)")
+        else:
+            print(json.dumps(result, indent=2, default=str))
 
     elif mode == "--backfill":
         if len(sys.argv) < 3:

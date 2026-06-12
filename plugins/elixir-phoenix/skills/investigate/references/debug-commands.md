@@ -2,20 +2,12 @@
 
 ## Quick Debug Commands
 
-```bash
-# Nuclear option - clean rebuild
-rm -rf _build deps && mix deps.get && mix compile
+Common debug commands:
 
-# Check what module exports
-mix run -e "IO.inspect MyModule.__info__(:functions)"
-
-# Interactive debugging
-iex -S mix phx.server
-# then: recompile()
-
-# Run single test with output
-mix test test/file_test.exs:42 --trace
-```
+- Clean rebuild: `rm -rf _build deps && mix deps.get && mix compile`
+- Check module exports: `mix run -e "IO.inspect MyModule.__info__(:functions)"`
+- Interactive debugging: `iex -S mix phx.server` (then `recompile()`)
+- Run single test with output: `mix test test/file_test.exs:42 --trace`
 
 ## Common Fixes
 

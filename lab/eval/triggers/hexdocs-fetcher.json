@@ -8,8 +8,8 @@
     "Look up the Plug.Router module docs"
   ],
   "should_not_trigger": [
-    "Research Ecto changeset best practices (\u2192 /ecto-patterns)",
-    "How should I authenticate users securely? (\u2192 /security)",
-    "Show me LiveView form examples (\u2192 /examples)"
+    "Research Ecto changeset best practices",
+    "How should I authenticate users securely?",
+    "Show me LiveView form examples"
   ]
 }

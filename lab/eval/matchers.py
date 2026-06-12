@@ -165,8 +165,16 @@ def frontmatter_field(content: str, field: str, expected: str | None = None, **_
     return True, f"Frontmatter '{field}': '{fm[field]}'"
 
 
-def description_length(content: str, min: int = 50, max: int = 300, **_) -> tuple[bool, str]:
-    """Check frontmatter description length is in sweet spot."""
+def description_length(content: str, min: int = 50, max: int = 250, **_) -> tuple[bool, str]:
+    """Check frontmatter description length is in sweet spot.
+
+    The 250-char target is a plugin-side listing-budget discipline, not a CC
+    hard cap. CC raised MAX_LISTING_DESC_CHARS from 250 to 1,536 in v2.1.105
+    (src/tools/SkillTool/prompt.ts). The skill-listing budget is still ~1% of
+    the context window (~8K chars); with ~40 skills, each description has
+    ~200 chars of listing budget on average. Longer descriptions crowd out
+    other skills in the listing, hurting routing across the whole plugin.
+    """
     fm = parse_frontmatter(content)
     desc = fm.get("description", "")
     if isinstance(desc, str):
@@ -361,6 +369,34 @@ def has_iron_laws(content: str, min_count: int = 1, **_) -> tuple[bool, str]:
     if best_count >= min_count:
         return True, f"Iron Laws section has {best_count} items (min: {min_count})"
     return False, f"Iron Laws section has {best_count} items (min: {min_count})"
+
+
+def has_gotchas(content: str, min_count: int = 1, **_) -> tuple[bool, str]:
+    """Check for a Gotchas section with failure-derived items (soft/bonus signal).
+
+    Anthropic's "how we use skills" calls the Gotchas section the highest-signal
+    content in a skill — sharp edges learned from real failures, not restatements
+    of defaults. Wired as an opt-in soft check (see evals/_template.json), NOT a
+    default requirement, so existing skills without one are never penalized.
+    Same parse as has_iron_laws: case-insensitive header + numbered/bulleted items.
+    """
+    sections = get_sections(content)
+    best_count = 0
+    found_any = False
+
+    for name, body in sections.items():
+        if "gotcha" in name.lower():
+            found_any = True
+            items = re.findall(r'^\s*(?:\d+[\.\)]\s+|[-*]\s+)', body, re.MULTILINE)
+            if len(items) > best_count:
+                best_count = len(items)
+
+    if not found_any:
+        return False, "No Gotchas section found (optional — bonus if present)"
+
+    if best_count >= min_count:
+        return True, f"Gotchas section has {best_count} items (min: {min_count})"
+    return False, f"Gotchas section has {best_count} items (min: {min_count})"
 
 
 def no_dangerous_patterns(content: str, patterns: list[str] | None = None, **_) -> tuple[bool, str]:
@@ -647,6 +683,7 @@ MATCHERS = {
     "valid_agent_refs": valid_agent_refs,
     "valid_file_refs": valid_file_refs,
     "has_iron_laws": has_iron_laws,
+    "has_gotchas": has_gotchas,
     "no_dangerous_patterns": no_dangerous_patterns,
     # New: Clarity & Specificity (from SkillsBench, MePO, Anthropic docs)
     "action_density": action_density,

@@ -8,10 +8,10 @@
     "How do I test if a job was enqueued with assert_enqueued?"
   ],
   "should_not_trigger": [
-    "Add two-factor authentication to the login flow \u2014 security",
-    "Should I split the accounts context into smaller modules? \u2014 phoenix-contexts",
-    "Why is this database query taking so long? \u2014 perf",
-    "How do I set up Docker for production deployment? \u2014 deploy",
-    "What's the best way to organize test factories? \u2014 testing"
+    "Add two-factor authentication to the login flow",
+    "Should I split the accounts context into smaller modules?",
+    "Why is this database query taking so long?",
+    "How do I set up Docker for production deployment?",
+    "What's the best way to organize test factories?"
   ]
 }

@@ -73,4 +73,24 @@ def score(content: str, dimension: EvalDimension, skill_path: str = "", plugin_r
         evidence=f"Recall: {recall:.0%} (TP={data.get('tp', 0)}, FN={data.get('fn', 0)})",
     ))
 
+    # Assertion 4: High-severity deviations — diagnostic, soft cap
+    deviations = data.get("deviations", []) or []
+    high_severity = [d for d in deviations if d.get("severity") == "high"]
+    max_high = 2
+    high_evidence = (
+        f"High-severity deviations: {len(high_severity)} (cap {max_high})"
+        if high_severity
+        else "No high-severity deviations"
+    )
+    if high_severity:
+        types = sorted({d.get("deviation_type", "?") for d in high_severity})
+        high_evidence += f" — types: {types}"
+    assertions.append(AssertionResult(
+        id="behavioral-deviations",
+        check_type="no_high_severity_deviations",
+        description=f"At most {max_high} high-severity deviations",
+        passed=len(high_severity) <= max_high,
+        evidence=high_evidence,
+    ))
+
     return DimensionResult.from_assertions("behavioral", assertions)

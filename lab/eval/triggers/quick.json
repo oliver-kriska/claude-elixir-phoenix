@@ -7,14 +7,21 @@
     "Create a migration to add a status field to users",
     "Change the controller response format to JSON"
   ],
+  "should_trigger_test": [
+    "Rename the :title field to :name in the Post schema",
+    "Add a unique constraint to the email column in the users table",
+    "Update the navbar component to show the user's avatar",
+    "Fix the typo in the error message on the login form",
+    "Add a new route for the /api/health endpoint"
+  ],
   "should_not_trigger": [
-    "Why isn't my form submitting correctly \u2014 belongs to investigate (bug report)",
-    "Refactor the user context to separate concerns \u2014 belongs to plan (large refactor)",
-    "Check my authentication code for security issues \u2014 belongs to security (security review)",
-    "Fix the component that's not rendering at all \u2014 belongs to investigate (bug)",
-    "What command should I use for this task \u2014 belongs to help (navigation)",
-    "Validate my schema design before implementation \u2014 belongs to plan (design validation)",
-    "Check for N+1 queries in the user loader \u2014 belongs to n1-check (specific analysis)",
-    "Generate API documentation for this endpoint \u2014 belongs to document (documentation)"
+    "Why isn't my form submitting correctly",
+    "Refactor the user context to separate concerns",
+    "Check my authentication code for security issues",
+    "Fix the component that's not rendering at all",
+    "What command should I use for this task",
+    "Validate my schema design before implementation",
+    "Check for N+1 queries in the user loader",
+    "Generate API documentation for this endpoint"
   ]
 }

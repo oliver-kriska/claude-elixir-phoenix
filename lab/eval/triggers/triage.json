@@ -1,7 +1,7 @@
 {
   "skill": "triage",
   "should_trigger": [
-    "I got 23 review findings \u2014 help me triage them?",
+    "I got 23 review findings",
     "Filter these review findings by severity?",
     "Which findings from the review should I fix first?",
     "Present each review finding for me to approve or skip?",

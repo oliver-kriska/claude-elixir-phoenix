@@ -3,11 +3,31 @@
 Full step-by-step details for `/phx:plan`. The SKILL.md has a
 summary; this reference has the complete workflow.
 
+## Interview Detection (from /phx:brainstorm)
+
+Before asking clarification questions, check for a pre-existing
+brainstorm interview:
+
+1. Check `$ARGUMENTS` for a path containing `interview.md`
+2. Check `.claude/plans/*/interview.md` for recent files (<24h)
+
+If found with `Status: COMPLETE`:
+
+- Read the interview.md Summary and Coverage Details
+- Skip clarification questions entirely — the interview IS the clarification
+- Use interview content as input for agent spawning (depth detection still applies)
+- Note in scratchpad: "Requirements from /phx:brainstorm interview"
+
+If found with `Status: IN_PROGRESS`:
+
+- Read what exists, note gaps in coverage
+- Ask ONLY about uncovered dimensions (don't re-ask covered ones)
+
 ## Clarification Questions (when requirements are fuzzy)
 
 When the description is vague, unclear, or missing key details,
-ask clarifying questions **one at a time** before planning. This
-replaces the need for a separate brainstorm command.
+and no brainstorm interview.md exists, ask clarifying questions
+**one at a time** before planning.
 
 **Signals that clarification is needed:**
 
@@ -106,10 +126,9 @@ prompts like "analyze the codebase."
 
 ## Waiting for Agents
 
-Call TaskOutput for each background agent. If TaskOutput shows
-the agent is still running, **wait and check again**. Do NOT
-proceed to plan generation until every agent status is
-"completed" (not "still running").
+You'll be notified as each background agent completes. Read each
+agent's output file to collect results. Do NOT proceed to plan
+generation until every agent has completed.
 
 Then read reports from `.claude/plans/{slug}/research/`.
 
@@ -266,8 +285,8 @@ plan with deeper research instead of creating a new one.
    `.claude/plans/{slug}/research/{topic}.md` and return ONLY a
    500-word summary. Spawn all in ONE Tool Use block with
    `run_in_background: true`
-4. **Wait for ALL agents** -- Call `TaskOutput(task_id, block: true)`
-   for every spawned agent. Do NOT proceed until all complete
+4. **Wait for ALL agents** -- You'll be notified as each completes.
+   Read each agent's output file. Do NOT proceed until all complete
 5. **Enhance plan** -- Add implementation detail, resolve spikes,
    add verification criteria, note risk from compound docs
 6. **Present diff summary** -- Show what was enhanced

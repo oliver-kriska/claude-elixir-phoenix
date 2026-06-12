@@ -27,6 +27,26 @@ Extracted by `compute-metrics.py` in the `skill_effectiveness` field:
 | `total_post_errors` | Error patterns in messages | Failures after skill |
 | `total_post_corrections` | Correction patterns in user messages | User redirections |
 | `led_to_action_count` | post_edits > 0 or post_test_runs > 0 | Skill produced action |
+| `trigger_user_slash` | OTel `invocation_trigger == "user-slash"` (CC ≥ 2.1.126) | User typed `/phx:foo` |
+| `trigger_proactive` | OTel `invocation_trigger == "claude-proactive"` (CC ≥ 2.1.126) | Claude auto-loaded the skill |
+| `trigger_nested` | OTel `invocation_trigger == "nested-skill"` (CC ≥ 2.1.126) | Skill invoked from inside another skill |
+| `trigger_unknown` | Pre-2.1.126 sessions or missing OTel | Source not recoverable |
+
+### OTel `claude_code.skill_activated` Schema
+
+Available CC ≥ 2.1.126. Each event carries:
+
+| Attribute | Values | Notes |
+|-----------|--------|-------|
+| `skill.name` | e.g. `"phx:plan"` | Plugin-prefixed skills include the plugin name |
+| `invocation_trigger` | `"user-slash"`, `"claude-proactive"`, `"nested-skill"` | Use this verbatim — do NOT infer for older events |
+| `session_id` | UUID | Joins to session metrics |
+
+`compute-metrics.py` should join OTel events on `session_id`,
+matching `skill.name` against invocation timestamps in the session
+transcript. When the join is missing (no OTel collector configured,
+or sessions older than 2.1.126), set `trigger_unknown` to
+`invocation_count` and skip auto-load gap analysis for that skill.
 
 ### Computed Signals
 
@@ -36,6 +56,8 @@ Extracted by `compute-metrics.py` in the `skill_effectiveness` field:
 | `avg_post_errors` | total_post_errors / invocation_count | 0+ | < 1.0 |
 | `avg_post_corrections` | total_post_corrections / invocation_count | 0+ | < 0.5 |
 | `dominant_outcome` | Most common outcome classification | enum | "effective" |
+| `proactive_trigger_rate` | trigger_proactive / (trigger_user_slash + trigger_proactive + trigger_nested) | 0-1 | > 0.2 (auto-loadable skills) |
+| `auto_load_gap` | proactive_trigger_rate == 0 AND not disable-model-invocation AND invocation_count >= 5 | bool | false |
 
 ### Outcome Classification
 
@@ -173,6 +195,14 @@ Output format for `.claude/skill-metrics/dashboard-{date}.json`:
         "friction": 1,
         "no_action": 0
       },
+      "trigger_distribution": {
+        "user-slash": 8,
+        "claude-proactive": 3,
+        "nested-skill": 1,
+        "unknown": 0
+      },
+      "proactive_trigger_rate": 0.25,
+      "auto_load_gap": false,
       "trend": "stable"
     }
   },
@@ -182,6 +212,12 @@ Output format for `.claude/skill-metrics/dashboard-{date}.json`:
       "reason": "effectiveness_score < 0.5",
       "score": 0.42,
       "recommendation": "Review error handling patterns"
+    },
+    {
+      "skill": "/phx:plan",
+      "reason": "auto_load_gap (proactive_trigger_rate == 0 over 9 invocations)",
+      "proactive_trigger_rate": 0.0,
+      "recommendation": "Tune description keywords — Claude routes only on explicit slash"
     }
   ]
 }

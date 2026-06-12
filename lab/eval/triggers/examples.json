@@ -8,10 +8,10 @@
     "What's a proper Oban worker implementation?"
   ],
   "should_not_trigger": [
-    "Debug this LiveView mount connection error \u2014 investigate",
-    "What are Phoenix security best practices? \u2014 security",
-    "Write tests for my Ecto changeset \u2014 testing",
-    "Deploy my app to Fly.io with releases \u2014 deploy",
-    "Why is my Ecto query slow? \u2014 perf"
+    "Debug this LiveView mount connection error",
+    "What are Phoenix security best practices?",
+    "Write tests for my Ecto changeset",
+    "Deploy my app to Fly.io with releases",
+    "Why is my Ecto query slow?"
   ]
 }

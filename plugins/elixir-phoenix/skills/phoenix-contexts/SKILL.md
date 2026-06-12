@@ -1,11 +1,13 @@
 ---
 name: phoenix-contexts
-description: "Provide Phoenix context module design patterns: creating/splitting contexts, adding context functions, cross-context boundaries, Scope struct (1.8+), Ecto.Multi, PubSub broadcasting, router pipelines, scope blocks, verified routes, plugs, controller delegation, JSON API controllers. Use when editing context modules, routers, controllers, or designing bounded domain boundaries."
+description: "Phoenix context design — creating/splitting contexts, Scope (1.8+), Ecto.Multi, PubSub, routers, plugs, controllers. Use when editing contexts, routers, or designing boundaries."
 effort: medium
 user-invocable: false
 ---
 
 # Phoenix Contexts Reference
+
+> **Ash projects**: `Ash.Domain` replaces Phoenix contexts for data access — use the `ash-framework` skill. Context boundary and PubSub patterns still apply.
 
 Reference for designing and implementing Phoenix contexts (bounded contexts).
 

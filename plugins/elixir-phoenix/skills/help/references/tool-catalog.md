@@ -6,10 +6,27 @@ Full catalog of all plugin commands, skills, and agents for `/phx:help` routing.
 
 These commands form a connected pipeline — each reads the previous phase's output.
 
+### `/phx:brainstorm <topic>` — Adaptive requirements gathering
+
+- **When**: Vague idea, unclear scope, want to explore before planning
+- **Input**: Topic or feature idea (can be very rough)
+- **Output**: `.claude/plans/{slug}/interview.md` with structured requirements
+- **Next step**: `/phx:plan` (detects interview.md, skips clarification)
+- **Agents used**: phoenix-patterns-analyst, web-researcher (research phase only)
+
+**When to use brainstorm vs plan:**
+
+| Signal | Use |
+|--------|-----|
+| Clear feature, know what you want | `/phx:plan` directly |
+| Vague idea, exploring options | `/phx:brainstorm` |
+| Multiple possible approaches | `/phx:brainstorm` (research phase) |
+| Requirements unclear, need to discuss | `/phx:brainstorm` |
+
 ### `/phx:plan <description>` — Create implementation plan
 
 - **When**: New feature, multi-file change, anything needing structure
-- **Input**: Feature description in natural language
+- **Input**: Feature description in natural language (or brainstorm interview.md)
 - **Output**: `.claude/plans/{slug}/plan.md` with checkboxed tasks
 - **Flags**: `--depth quick|standard|deep`, `--existing` (enhance existing plan)
 - **Next step**: `/phx:work .claude/plans/{slug}/plan.md`

@@ -1,15 +1,15 @@
 {
   "skill": "intro",
   "should_trigger": [
-    "Walk me through the Elixir/Phoenix plugin \u2014 user wants guided tour",
-    "New to the plugin\u2014what does it offer? \u2014 new user learning",
-    "Show me what /phx commands are available \u2014 wants overview of options",
-    "Explain the plugin features and workflow \u2014 learning how it works",
-    "I need a refresher on the plugin \u2014 user forgot what exists"
+    "Walk me through the Elixir/Phoenix plugin",
+    "New to the plugin—what does it offer?",
+    "Show me what /phx commands are available",
+    "Explain the plugin features and workflow",
+    "I need a refresher on the plugin"
   ],
   "should_not_trigger": [
-    "I'm adding auth to my app\u2014which /phx command should I use? \u2014 matches help",
-    "Scan my Ecto queries for N+1 issues \u2014 matches n1-check",
-    "Debug why my form isn't saving data \u2014 matches investigate"
+    "I'm adding auth to my app—which /phx command should I use?",
+    "Scan my Ecto queries for N+1 issues",
+    "Debug why my form isn't saving data"
   ]
 }

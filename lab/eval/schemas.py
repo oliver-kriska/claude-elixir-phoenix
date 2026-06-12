@@ -1,7 +1,7 @@
 """Data models for the plugin skill evaluation framework."""
 
 from dataclasses import dataclass, field
-from typing import Any
+from typing import Any, Literal
 import json
 
 
@@ -136,3 +136,98 @@ class EvalDefinition:
     def from_file(cls, path: str) -> "EvalDefinition":
         with open(path) as f:
             return cls.from_dict(json.load(f))
+
+
+# --- Unified scoring shapes (Future AGI-inspired) ---
+#
+# Architectural rule: scorers do NOT persist results, write caches, or print.
+# Callers handle all side effects. See lab/eval/README.md for the rationale.
+
+TargetKind = Literal["skill", "agent", "trigger"]
+
+
+@dataclass
+class ScoreRequest:
+    """Inputs to any scorer. Heterogeneous fields cover all three target kinds."""
+    target_path: str
+    target_kind: TargetKind
+    target_name: str = ""               # Resolved at construction or by scorer
+    eval_def: "EvalDefinition | None" = None
+    plugin_root: str = ""
+    use_cache: bool = False
+    cache_dir: str = ""
+    # Trigger-specific:
+    triggers: dict[str, Any] | None = None       # Loaded should_trigger/should_not data
+    all_descriptions: dict[str, str] | None = None
+    model: str = "claude-haiku-4-5"              # Routing-judge model (trigger scorer)
+
+
+@dataclass
+class ScoreResult:
+    """Output from any scorer. Single shape across skill/agent/trigger.
+    `metadata` absorbs target-specific fields (accuracy/precision/recall, deviations,
+    timestamps) without polluting the top-level shape.
+    """
+    target_name: str
+    target_path: str
+    target_kind: TargetKind
+    composite: float
+    dimensions: dict[str, "DimensionResult"] = field(default_factory=dict)
+    metadata: dict[str, Any] = field(default_factory=dict)
+    duration: float = 0.0
+    cache_hit: bool = False
+
+    def to_dict(self) -> dict[str, Any]:
+        """Emit consumer-facing dict. Shape depends on target_kind:
+        - skill/agent: legacy SkillScore.to_dict() shape (composite + dimensions)
+        - trigger:     legacy trigger result shape (accuracy/precision/recall + results)
+        """
+        if self.target_kind == "trigger":
+            # Locked schema: preserve key order for byte-stable diffs
+            base = {
+                "skill": self.target_name,
+                "accuracy": round(self.metadata.get("accuracy", 0.0), 4),
+                "precision": round(self.metadata.get("precision", 0.0), 4),
+                "recall": round(self.metadata.get("recall", 0.0), 4),
+                "total": self.metadata.get("total", 0),
+                "correct": self.metadata.get("correct", 0),
+                "tp": self.metadata.get("tp", 0),
+                "fp": self.metadata.get("fp", 0),
+                "fn": self.metadata.get("fn", 0),
+                "tn": self.metadata.get("tn", 0),
+                "timestamp": self.metadata.get("timestamp", ""),
+                "results": self.metadata.get("results", []),
+            }
+            if "model" in self.metadata:
+                base["model"] = self.metadata["model"]
+            if "deviations" in self.metadata:
+                base["deviations"] = self.metadata["deviations"]
+            return base
+        # skill/agent — legacy SkillScore shape
+        return {
+            "skill": self.target_name,
+            "skill_path": self.target_path,
+            "composite": round(self.composite, 4),
+            "dimensions": {
+                name: {
+                    "score": round(dim.score, 4),
+                    "passed": dim.passed,
+                    "failed": dim.failed,
+                    "total": dim.total,
+                    "assertions": [
+                        {
+                            "id": a.id,
+                            "type": a.check_type,
+                            "desc": a.description,
+                            "passed": a.passed,
+                            "evidence": a.evidence,
+                        }
+                        for a in dim.assertions
+                    ],
+                }
+                for name, dim in self.dimensions.items()
+            },
+        }
+
+    def to_json(self) -> str:
+        return json.dumps(self.to_dict())

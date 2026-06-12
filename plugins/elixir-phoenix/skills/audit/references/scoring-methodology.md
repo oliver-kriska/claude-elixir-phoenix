@@ -22,14 +22,14 @@ How health scores are calculated for each category.
 | Module naming consistency | 15 | -3 per inconsistency |
 | Fan-out <5 contexts per module | 15 | -5 per over-coupled module |
 | API surface reasonable (<30 funcs/context) | 15 | -5 per bloated context |
-| No circular dependencies | 15 | -10 per cycle |
+| No compile-time circular dependencies | 15 | -10 per cycle |
 | Folder structure follows conventions | 15 | -5 per deviation |
 
 **Commands used:**
 
 ```bash
 mix xref graph --format stats
-mix xref graph --format cycles
+mix xref graph --format cycles --label compile
 find lib -name "*.ex" -type f | wc -l
 ```
 

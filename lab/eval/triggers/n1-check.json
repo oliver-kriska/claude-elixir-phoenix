@@ -8,10 +8,10 @@
     "Where are we accessing associations without preloading?"
   ],
   "should_not_trigger": [
-    "How do I structure Ecto queries properly? \u2192 ecto-patterns (broad Ecto guidance, not audit)",
-    "My API endpoint times out, debug it \u2192 investigate (debugging specific error, not N+1 audit)",
-    "Optimize our database performance overall \u2192 perf (broader optimization, not N+1 focused)",
-    "Review my PR for code issues \u2192 review (general code review, not specific N+1 audit)",
-    "Design a user-posts relationship schema \u2192 ecto-patterns (schema design, not query audit)"
+    "How do I structure Ecto queries properly?",
+    "My API endpoint times out, debug it",
+    "Optimize our database performance overall",
+    "Review my PR for code issues",
+    "Design a user-posts relationship schema"
   ]
 }

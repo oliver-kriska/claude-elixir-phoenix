@@ -7,11 +7,18 @@
     "How should I architect role-based access control across contexts?",
     "Build a real-time chat feature with WebSockets and presence"
   ],
+  "should_trigger_test": [
+    "Plan out a multi-tenant SaaS feature with isolated data per organization",
+    "I need to restructure the user onboarding flow across 4 contexts",
+    "Design the data model and API for a marketplace with buyers and sellers",
+    "Map out the implementation for adding full-text search with PostgreSQL",
+    "Create a plan for migrating from Phoenix 1.7 scopes to 1.8 scopes"
+  ],
   "should_not_trigger": [
-    "Why is my save failing with this Ecto error? \u2014 /phx:investigate (debugging specific error)",
-    "Add an email field to the user registration form \u2014 /phx:quick (small single-file change)",
-    "Show me examples of GenServer patterns \u2014 /phx:elixir-idioms (reference skill, not implementation planning)",
-    "Can you review my authentication implementation? \u2014 /phx:review (code review, not planning)",
-    "Let me implement the plan we designed \u2014 /phx:work (execution phase, plan already exists)"
+    "Why is my save failing with this Ecto error?",
+    "Add an email field to the user registration form",
+    "Show me examples of GenServer patterns",
+    "Can you review my authentication implementation?",
+    "Let me implement the plan we designed"
   ]
 }

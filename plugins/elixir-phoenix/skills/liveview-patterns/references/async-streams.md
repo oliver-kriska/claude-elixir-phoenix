@@ -143,6 +143,53 @@ Cannot use `Enum.empty?` on streams. Use `:only-child`:
 """
 ```
 
+## SEO Dead-Render Pattern (cache-backed disconnected branch)
+
+The disconnected mount renders the HTML that Googlebot, GPTBot, ChatGPT-User,
+PerplexityBot, ClaudeBot, and JS-disabled clients see. For SEO-visible routes
+(marketing pages, articles, product listings, public catalogs) it IS correct
+to populate that render with real content. The wrong way is `Repo.all/1` on
+every dead render — that doubles DB load. The right way is cache-backed:
+
+```elixir
+def mount(_params, _session, socket) do
+  products =
+    if connected?(socket),
+      do: Catalog.list_products(),
+      else: Cache.get_products() || []
+
+  {:ok, assign(socket, products: products)}
+end
+```
+
+Cache backends that work well:
+
+- `:persistent_term.put/2` for content updated by an Oban cron (sitemap-style)
+- ETS for sub-microsecond lookups (Cachex, ConCache, hand-rolled GenServer)
+- Edge cache (Cloudflare, Fly.io edge) — set `cache-control: public` on the route
+
+Empty fallback is also acceptable when the page renders a skeleton via CSS:
+
+```elixir
+else: []  # template shows skeleton with `:only-child` rows
+```
+
+What NOT to do:
+
+```elixir
+# ❌ Doubles DB load — runs on dead render AND connect
+def mount(_params, _session, socket) do
+  products = Catalog.list_products()
+  {:ok, assign(socket, products: products)}
+end
+
+# ❌ Empty assign on private/authed routes — flicker, no SEO benefit
+# (use assign_async for private dashboards instead)
+```
+
+This pattern satisfies Iron Law #1 because the disconnected branch does NOT
+hit the database. The cache is populated by a background job, not the request.
+
 ## Anti-patterns
 
 ```elixir

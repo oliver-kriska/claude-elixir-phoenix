@@ -115,8 +115,8 @@ mix xref graph --sink MyApp.Accounts --format stats
 ### Check Circular Dependencies
 
 ```bash
-# Find cycles (problematic in compilation)
-mix xref graph --format cycles
+# Find compile-time cycles (runtime cycles like verified_routes() are benign)
+mix xref graph --format cycles --label compile
 
 # Output: No cycles found (good!)
 # Or: lib/a.ex -> lib/b.ex -> lib/a.ex (bad!)

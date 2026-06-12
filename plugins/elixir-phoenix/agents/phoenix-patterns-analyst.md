@@ -6,6 +6,7 @@ disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: sonnet
 effort: medium
+maxTurns: 15
 memory: project
 skills:
   - phoenix-contexts

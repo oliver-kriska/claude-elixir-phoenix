@@ -4,14 +4,14 @@
     "Review my authentication changes for security vulnerabilities",
     "Check this code for Oban anti-patterns before I commit",
     "Can you review this LiveView component for performance issues?",
-    "Review these Ecto changes \u2014 want to catch edge cases",
+    "Review these Ecto changes",
     "Go over this PR for potential bugs"
   ],
   "should_not_trigger": [
-    "Verify this compiles and all tests pass \u2014 verify",
-    "Analyze the project for technical debt \u2014 techdebt",
-    "Help me fix this N+1 query \u2014 investigate",
-    "Grill me harder on these changes \u2014 challenge",
-    "Implement this feature quickly \u2014 quick"
+    "Verify this compiles and all tests pass",
+    "Analyze the project for technical debt",
+    "Help me fix this N+1 query",
+    "Grill me harder on these changes",
+    "Implement this feature quickly"
   ]
 }

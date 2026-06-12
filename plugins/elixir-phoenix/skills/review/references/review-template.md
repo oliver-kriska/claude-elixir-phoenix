@@ -21,6 +21,23 @@ Write to `.claude/plans/{slug}/reviews/{feature}-review.md`:
 
 **Verdict**: PASS | PASS WITH WARNINGS | REQUIRES CHANGES | BLOCKED
 
+## Requirements Coverage (from {REQUIREMENTS_SOURCE})
+
+| # | Requirement | Status | Evidence |
+|---|-------------|--------|----------|
+| 1 | {requirement text, ~80 chars} | MET | `lib/foo.ex:42` |
+| 2 | {...} | PARTIAL | handler at `foo_live.ex:110`; no test for error branch |
+| 3 | {...} | UNMET | not found in diff |
+| 4 | {...} | UNCLEAR | UX requirement — manual verification needed |
+
+**Summary**: {n_met} MET · {n_partial} PARTIAL · {n_unmet} UNMET · {n_unclear} UNCLEAR
+
+*Omit this entire section if `--no-requirements` was passed. If detection
+failed, replace the table with a single line: `**NOT AVAILABLE** —
+{reason}`. Placement is intentional: this block precedes the per-severity
+findings because "did we deliver what we promised" is the user's first
+question.*
+
 ## Blockers ({n})
 
 ### 1. {Issue Title}
@@ -82,9 +99,9 @@ How would you like to proceed?
 
 | Verdict | Conditions |
 |---------|-----------|
-| **PASS** | No blockers, no warnings, suggestions only |
-| **PASS WITH WARNINGS** | No blockers, warnings present but not test-coverage gaps |
-| **REQUIRES CHANGES** | No Iron Law blockers, but test coverage gaps detected (see below) |
+| **PASS** | No blockers, no warnings, suggestions only, all requirements MET |
+| **PASS WITH WARNINGS** | No blockers, warnings present but not test-coverage gaps, OR some requirements PARTIAL |
+| **REQUIRES CHANGES** | No Iron Law blockers but test coverage gaps detected (see below), OR any requirement UNMET |
 | **BLOCKED** | Iron Law violations or critical security/data issues |
 
 ### REQUIRES CHANGES Triggers

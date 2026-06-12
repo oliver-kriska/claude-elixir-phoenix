@@ -6,6 +6,7 @@ disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: sonnet
 effort: medium
+omitClaudeMd: true
 maxTurns: 30
 skills:
   - call-tracing
@@ -233,9 +234,9 @@ Otherwise tracks return findings inline (skip compression).
 
 ### Phase 3: Compression (when output_dir provided)
 
-Wait for ALL subagents to FULLY complete using TaskOutput. If
-TaskOutput shows a subagent is still running, wait and check
-again. NEVER proceed while any subagent is still running.
+Wait for ALL subagents to FULLY complete — you'll be notified as each
+finishes. Read each subagent's output file to collect results. NEVER
+proceed while any subagent is still running.
 
 **When tracks wrote to `output_dir/tracks/`**, spawn a
 context-supervisor (haiku) to compress before synthesis:

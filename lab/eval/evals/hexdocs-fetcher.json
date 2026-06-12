@@ -67,7 +67,7 @@
         {
           "type": "description_length",
           "min": 50,
-          "max": 500,
+          "max": 250,
           "desc": "Description in sweet spot"
         },
         {

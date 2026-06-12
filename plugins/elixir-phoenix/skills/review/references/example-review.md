@@ -17,6 +17,18 @@
 
 **Verdict**: BLOCKED
 
+## Requirements Coverage (from Linear AUTH-142)
+
+| # | Requirement | Status | Evidence |
+|---|-------------|--------|----------|
+| 1 | Users can request a magic link by email | MET | `request_magic_link_live.ex:34` submit handler |
+| 2 | Clicking the link logs the user in | MET | `session_controller.ex:18` verify flow |
+| 3 | Tokens expire after 24 hours | UNMET | `auth.ex:45` — no expiry check (see Blocker #1) |
+| 4 | Rate-limit per email to 5 requests / hour | UNMET | no Hammer/PlugAttack usage in diff (see Warning #1) |
+| 5 | Failed attempts logged for audit | UNCLEAR | `Logger.warn` calls present, no structured audit trail — manual check |
+
+**Summary**: 2 MET · 0 PARTIAL · 2 UNMET · 1 UNCLEAR
+
 ## Blockers (1)
 
 ### 1. Magic Token Never Expires

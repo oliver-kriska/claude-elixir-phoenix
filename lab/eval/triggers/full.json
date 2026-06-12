@@ -8,12 +8,12 @@
     "I need a complete event management system spanning registrations, payments, emails, and dashboards"
   ],
   "should_not_trigger": [
-    "Fix the typo in the error message \u2014 quick skill (single small change)",
-    "Why is creating a post taking 5 seconds? \u2014 perf skill (performance analysis, not building)",
-    "Review this authentication code for security issues \u2014 review skill (code review, not implementation)",
-    "What's the best pattern for splitting contexts? \u2014 phoenix-contexts skill (reference, not feature building)",
-    "Just plan the new subscription feature for now \u2014 plan skill (planning phase only, not autonomous cycle)",
-    "Debug this flaky test that passes locally \u2014 investigate skill (bug debugging, not feature)",
-    "Find all duplicate code in the codebase \u2014 techdebt skill (codebase analysis, not building features)"
+    "Fix the typo in the error message",
+    "Why is creating a post taking 5 seconds?",
+    "Review this authentication code for security issues",
+    "What's the best pattern for splitting contexts?",
+    "Just plan the new subscription feature for now",
+    "Debug this flaky test that passes locally",
+    "Find all duplicate code in the codebase"
   ]
 }

@@ -11,7 +11,7 @@ from lab.eval.matchers import (
     content_present, grep_count,
     frontmatter_field,
     description_length, description_keywords, description_no_vague,
-    has_iron_laws, no_dangerous_patterns,
+    has_iron_laws, has_gotchas, no_dangerous_patterns,
     action_density, has_examples,
     workflow_step_coverage, description_structure,
 )
@@ -229,6 +229,28 @@ class TestHasIronLaws:
 
     def test_min_count(self):
         passed, _ = has_iron_laws(VALID_SKILL, min_count=10)
+        assert not passed
+
+
+class TestHasGotchas:
+    def test_has_items(self):
+        skill = VALID_SKILL + (
+            "\n## Gotchas\n\n"
+            "1. **Mount runs twice** — guard side effects with connected?/1\n"
+            "2. **Oban args are string keys** — match %{\"id\" => id}, not :id\n"
+        )
+        passed, evidence = has_gotchas(skill, min_count=2)
+        assert passed
+        assert "2 items" in evidence
+
+    def test_missing_section(self):
+        passed, evidence = has_gotchas(VALID_SKILL)
+        assert not passed
+        assert "optional" in evidence.lower()
+
+    def test_min_count(self):
+        skill = VALID_SKILL + "\n## Gotchas\n\n- One sharp edge\n"
+        passed, _ = has_gotchas(skill, min_count=3)
         assert not passed
 
 

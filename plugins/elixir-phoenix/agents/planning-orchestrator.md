@@ -504,9 +504,9 @@ Agent({
 })
 ```
 
-Wait for all agents to FULLY complete. If TaskOutput shows
-"still running", wait and check again. NEVER start writing
-the plan while any agent is still running.
+Wait for all agents to FULLY complete — you'll be notified as each
+finishes. Read each agent's output file to collect results. NEVER
+start writing the plan while any agent is still running.
 
 ## Memory
 

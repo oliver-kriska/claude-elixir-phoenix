@@ -1,6 +1,6 @@
 ---
 name: elixir-idioms
-description: "Reference OTP/BEAM patterns and core Elixir idioms — GenServer, Supervisor, Task, Registry, pattern matching, with chains, pipes, error tuples, mix tasks. Use when designing processes, supervision trees, refactoring language idioms, or debugging BEAM issues. NOT for Ecto/LiveView/Oban/Phoenix — use dedicated skills."
+description: "OTP/BEAM patterns and Elixir idioms — GenServer, Supervisor, Task, Registry, pattern matching, with chains, pipes. Use when designing processes or debugging BEAM issues."
 effort: medium
 user-invocable: false
 ---
@@ -105,3 +105,4 @@ For detailed patterns, see:
 - `${CLAUDE_SKILL_DIR}/references/anti-patterns.md` - Common mistakes and fixes
 - `${CLAUDE_SKILL_DIR}/references/mix-tasks.md` - Mix task naming, option parsing, shell output
 - `${CLAUDE_SKILL_DIR}/references/elixir-118-features.md` - Duration module, dbg improvements (1.18+)
+- `${CLAUDE_SKILL_DIR}/references/elixir-120-type-system.md` - Gradual type checker, `dynamic()`, verified bugs as compile warnings (1.20+, OTP 27+)

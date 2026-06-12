@@ -9,7 +9,7 @@ sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 from lab.eval.scorer import score_skill, find_all_skills, find_eval, default_eval
 from lab.eval.agent_scorer import score_agent, find_all_agents
-from lab.eval.schemas import EvalDefinition, SkillScore
+from lab.eval.schemas import EvalDefinition, ScoreResult
 
 
 PLUGIN_SKILLS_DIR = os.path.join(
@@ -29,7 +29,7 @@ class TestScoreSkill:
         if not os.path.isfile(plan_path):
             pytest.skip("Plugin not present")
         score = score_skill(plan_path)
-        assert isinstance(score, SkillScore)
+        assert isinstance(score, ScoreResult)
         assert 0.0 <= score.composite <= 1.0
         assert "completeness" in score.dimensions
         assert "accuracy" in score.dimensions
@@ -90,7 +90,7 @@ class TestScoreAgent:
         if not os.path.isfile(reviewer_path):
             pytest.skip("Plugin not present")
         score = score_agent(reviewer_path)
-        assert isinstance(score, SkillScore)
+        assert isinstance(score, ScoreResult)
         assert 0.0 <= score.composite <= 1.0
         assert "completeness" in score.dimensions
         assert "safety" in score.dimensions

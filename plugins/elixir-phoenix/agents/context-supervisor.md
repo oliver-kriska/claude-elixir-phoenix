@@ -6,6 +6,7 @@ disallowedTools: Edit, NotebookEdit, Bash, Agent
 permissionMode: bypassPermissions
 model: haiku
 effort: low
+maxTurns: 10
 ---
 
 # Context Supervisor

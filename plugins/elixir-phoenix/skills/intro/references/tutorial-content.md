@@ -39,8 +39,8 @@ Each phase reads from the previous phase's output. Plans become checkboxes. Chec
 
 | Feature | What It Does |
 |---------|-------------|
-| 20 specialist agents | Ecto, LiveView, security, OTP, Oban, deployment experts |
-| 38 skills | Commands for every phase of development |
+| 25 specialist agents | Ecto, LiveView, security, OTP, Oban, Ash, deployment experts |
+| 47 skills | Commands for every phase of development |
 | 22 Iron Laws | Non-negotiable rules enforced automatically |
 | Auto-loaded references | Context-aware docs loaded when you edit relevant files |
 | Tidewave integration | Runtime debugging when Tidewave MCP is connected |
@@ -54,6 +54,9 @@ Each phase reads from the previous phase's output. Plans become checkboxes. Chec
 For features that need planning and review:
 
 ```bash
+# 0. Brainstorm (optional) — explore requirements interactively
+/phx:brainstorm Add some kind of notification system
+
 # 1. Plan — spawns research agents, outputs checkbox plan
 /phx:plan Add user avatars with S3 upload
 
@@ -63,7 +66,9 @@ For features that need planning and review:
 # 2. Work — executes plan, checks off tasks, runs mix compile
 /phx:work .claude/plans/user-avatars/plan.md
 
-# 3. Review — parallel agents check Elixir idioms, security, tests
+# 3. Review — parallel agents check idioms, security, tests, and
+#    cross-check implementation vs. requirements (auto-detected from
+#    branch/commits, or pass `ENA-123` / `#42` / a plan/spec path)
 /phx:review
 
 # 4. Compound — capture what you learned for future reference
@@ -85,11 +90,13 @@ Not everything needs the full cycle:
 ```text
 Is it a bug?
   Yes --> /phx:investigate
-  No  --> Is it < 100 lines?
-            Yes --> /phx:quick
-            No  --> Do you want full autonomy?
-                      Yes --> /phx:full
-                      No  --> /phx:plan then /phx:work
+  No  --> Do you know what you want?
+            No  --> /phx:brainstorm
+            Yes --> Is it < 100 lines?
+                      Yes --> /phx:quick
+                      No  --> Do you want full autonomy?
+                                Yes --> /phx:full
+                                No  --> /phx:plan then /phx:work
 ```
 
 ### Deepening an Existing Plan
@@ -129,7 +136,7 @@ Iron Laws are non-negotiable rules that every agent enforces. If your code viola
 
 | Law | Why |
 |-----|-----|
-| No DB queries in disconnected mount | Would run twice, waste resources |
+| No unconditional DB queries in mount | Cache-backed branch OK for SEO |
 | Use streams for lists >100 items | Regular assigns = O(n) memory per user |
 | No `:float` for money | Floating point math loses precision |
 | Pin values with `^` in Ecto queries | Prevents SQL injection |
@@ -143,6 +150,8 @@ Iron Laws are non-negotiable rules that every agent enforces. If your code viola
 |---------|-------------|
 | `/phx:verify` | Full check: compile, format, credo, test, dialyzer |
 | `/phx:audit` | 5-agent project health audit with scores |
+| `/phx:deps-audit` | Audit Hex dep updates for supply-chain risk |
+| `/phx:deps-vet` | Record vetted Hex packages in hex_vet.exs ledger |
 | `/ecto:n1-check` | Detect N+1 query patterns |
 | `/lv:assigns` | Audit LiveView socket assigns for memory |
 | `/phx:boundaries` | Check Phoenix context boundary violations |
@@ -193,7 +202,7 @@ Format check **warns only** — it doesn't auto-fix (that would cause race condi
 The PreCompact hook detects active workflow phases (`/phx:plan`, `/phx:work`, `/phx:full`) and re-injects their critical rules
 before context compaction. This prevents "rule amnesia" where Claude loses behavioral constraints after context is compressed.
 
-Note: `verify-elixir.sh` exists in hooks.json but is a **no-op** (`exit 0`). Compilation was moved to `/phx:work` phase checkpoints for speed. The hook remains as a placeholder.
+Note: Compilation verification was moved to `/phx:work` phase checkpoints for speed. The `verify-elixir.sh` hook has been removed.
 
 ### Layer 2: Iron Laws in Skills (Behavioral)
 
@@ -266,7 +275,7 @@ Being honest about the gaps:
 
 | Check | Status | Why |
 |-------|--------|-----|
-| `mix compile --warnings-as-errors` | `/phx:work` checkpoints + `/phx:full` VERIFYING phase | `verify-elixir.sh` hook is a no-op — compilation runs in workflow steps |
+| `mix compile --warnings-as-errors` | `/phx:work` checkpoints + `/phx:full` VERIFYING phase | Compilation runs in workflow steps, not per-edit hooks |
 | `mix credo` | `/phx:full` VERIFYING phase + on-demand (`/phx:verify`) | Not run per-task edit, only between phases |
 | `mix test` | `/phx:full` VERIFYING phase + on-demand (`/phx:verify`) | Not run per-task, only between phases |
 | `mix dialyzer` | On-demand (`/phx:verify`) | Takes minutes, not seconds |
@@ -294,6 +303,7 @@ The plugin works best when all layers are active: `/phx:init` for persistent rul
 
 | Command | Phase |
 |---------|-------|
+| `/phx:brainstorm <topic>` | Adaptive requirements gathering |
 | `/phx:plan <feature>` | Plan with research agents |
 | `/phx:plan --existing <file>` | Enhance existing plan |
 | `/phx:brief [plan file]` | Interactive plan walkthrough |
@@ -320,6 +330,8 @@ The plugin works best when all layers are active: `/phx:init` for persistent rul
 | Command | Purpose |
 |---------|---------|
 | `/phx:audit` | Full project health audit |
+| `/phx:deps-audit` | Hex dep update supply-chain audit |
+| `/phx:deps-vet` | Hex package audit ledger (`hex_vet.exs`) |
 | `/phx:perf` | Performance analysis |
 | `/ecto:n1-check` | N+1 query detection |
 | `/lv:assigns` | LiveView memory audit |
@@ -335,6 +347,17 @@ The plugin works best when all layers are active: `/phx:init` for persistent rul
 | `/phx:examples` | Practical walkthroughs |
 | `/phx:learn-from-fix` | Capture a lesson from a fix |
 | `/phx:challenge` | Rigorous review mode |
+
+### Playing Nicely With Claude Code Built-Ins
+
+The plugin complements — it doesn't replace — CC's built-in features. A few that pair well with the Elixir workflow:
+
+- **Auto mode + xhigh effort (Opus 4.7, v2.1.111)**: run `/phx:full` hands-off. Auto mode routes permission prompts through a safety classifier instead of blocking on you.
+- **`/focus` (v2.1.110)**: hides intermediate tool output. Useful during long `/phx:work` or `/phx:full` runs when you only care about the final state.
+- **Recap (v2.1.108)**: CC summarizes what happened when you return to a session.
+  Our scratchpad (`.claude/plans/{slug}/scratchpad.md`) still captures what recap
+  can't — checkbox progress, subagent findings, deliberate handoffs.
+- **`/less-permission-prompts` (built-in, v2.1.111)**: generic Bash/MCP allowlist scanner. Use `/phx:permissions` for Elixir-specific recommendations (credo, mix, psql, Tidewave) on top of it.
 
 ### 3 Tips for Getting the Most Out of the Plugin
 

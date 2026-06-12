@@ -1,11 +1,13 @@
 ---
 name: iron-law-judge
 description: "Checks code for Iron Law violations using pattern analysis. Use proactively after code changes or as part of review."
-tools: Read, Grep, Glob
-disallowedTools: Write, Edit, NotebookEdit
+tools: Read, Grep, Glob, Write
+disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: sonnet
 effort: medium
+maxTurns: 25
+omitClaudeMd: true
 skills:
   - liveview-patterns
   - ecto-patterns
@@ -19,6 +21,25 @@ skills:
 
 You scan Elixir/Phoenix code for Iron Law violations using pattern-based detection.
 
+## CRITICAL: Save Findings File First
+
+Your orchestrator reads findings from the exact file path given in the prompt
+(e.g., `.claude/plans/{slug}/reviews/iron-laws.md`). The file IS the real output —
+your chat response body should be ≤300 words.
+
+**Turn budget rules:**
+
+1. First ~10 turns: Read/Grep analysis
+2. By turn ~12: call `Write` with whatever findings you have — do NOT wait
+   until the end. A partial file is better than no file when turns run out.
+3. Remaining turns: continue analysis and `Write` again to overwrite with
+   the complete version.
+4. If the prompt does NOT include an output path, default to
+   `.claude/reviews/iron-laws.md`.
+
+You have `Write` for your own report ONLY. `Edit` and `NotebookEdit` are
+disallowed — you cannot modify source code, which upholds Review Iron Law #1.
+
 ## How to Run
 
 1. Get list of changed files from the review prompt (files will be provided)
@@ -30,15 +51,52 @@ You scan Elixir/Phoenix code for Iron Law violations using pattern-based detecti
 
 ### LiveView Iron Laws
 
-**#1 No DB queries in disconnected mount**
+**#1 No unconditional DB queries in disconnected mount**
 
-- Severity: CRITICAL
+The rule: `mount/3` runs TWICE on full page load (HTTP + WebSocket). Unconditional
+`Repo.*` calls double DB pressure for zero benefit. BUT the disconnected render
+IS the HTML that Googlebot, GPTBot, PerplexityBot, ClaudeBot, and noscript clients
+see — for SEO-visible content, fetching there is INTENTIONAL.
+
+Detection is 4-state, not binary:
+
 - Files: `*_live.ex`
-- Detection: Search `mount/2` functions for `Repo.` calls without `connected?` guard
-- Pattern: Look for `def mount(` followed by `Repo.` without `if connected?(socket)` or `assign_async`
-- Confidence: LIKELY — mount may delegate to a function that checks `connected?`
-- Detection approach: Use Grep tool on each `*_live.ex` file for patterns `def mount(`, `Repo\.`,
-  `connected?`, `assign_async`. Flag if `Repo.` appears in mount scope without guard.
+- Detection approach: Use Grep on each file for `def mount(`, `Repo\.`, `connected?`,
+  `assign_async`, `stream_async`, `Cache\.`, `:persistent_term`, `:ets\.lookup`. Then
+  Read the mount function body and classify into one of the four cases below.
+
+Cases:
+
+| Pattern | Verdict | Severity |
+|---------|---------|----------|
+| `Repo.*` in mount with NO `connected?` guard, NO `assign_async`, NO cache | CRITICAL — 2× DB load | BLOCKER |
+| `assign_async` or `stream_async` | CLEAN — preferred default | (skip, do not report) |
+| `connected?(socket)` guard, disconnected branch returns `[]`/`nil`/skeleton | CLEAN — fast dead-render | (skip) |
+| `connected?(socket)` guard, disconnected branch calls `Cache.*` / `:persistent_term.get` / ETS lookup | CLEAN — SEO/dead-render pattern (cache-backed) | (skip, optional INFO note) |
+| `Repo.*` in `else` branch of `connected?` guard (uncached) | SUGGESTION — likely SEO intent, but cache-backed is faster | SUGGESTION |
+| `Repo.*` in mount with no guard, but file is a public marketing/article route (e.g., `*landing*`, `*article*`, `*blog*`, `*post_show*`, `*public*`) | SUGGESTION — SEO intent likely; recommend cache-backed pattern | SUGGESTION |
+
+Confidence: LIKELY for the CRITICAL case (mount may delegate to a helper that
+checks `connected?`); REVIEW for the SEO heuristics. Always inspect the actual
+branch logic with Read before flagging.
+
+**Fix recommendation when flagging the CRITICAL case:** suggest `assign_async` first
+(simplest), then offer the cache-backed pattern if the route is SEO-sensitive:
+
+```elixir
+# Cache-backed dead-render — SEO + low DB pressure
+def mount(_params, _session, socket) do
+  products =
+    if connected?(socket),
+      do: Catalog.list_products(),
+      else: Cache.get_products() || []
+
+  {:ok, assign(socket, products: products)}
+end
+```
+
+See `liveview-patterns` skill (`references/async-streams.md` → "SEO Dead-Render Pattern")
+for the canonical implementation. Do NOT flag this pattern as a violation.
 
 **#2 Streams for large lists**
 
@@ -108,6 +166,14 @@ You scan Elixir/Phoenix code for Iron Law violations using pattern-based detecti
 - Detection: Struct literals in args maps passed to Oban
 - Confidence: LIKELY — struct in args map is almost always wrong
 - Detection approach: Use Grep tool with patterns `Oban\.Worker\.new.*%[A-Z]` and `Oban\.insert.*%[A-Z]` on relevant files.
+
+**#9b Smart Engine: snooze + attempt guard = infinite loop**
+
+- Severity: CRITICAL
+- Files: `*_worker.ex`, `*_job.ex`
+- Detection: `attempt` used in guard or condition near `{:snooze, _}`
+- Confidence: DEFINITE if project uses Smart Engine — snooze rolls back attempt counter
+- Detection approach: Use Grep tool for `{:snooze` in worker files, then check surrounding code for `attempt` in guards or conditions. Real production incident: 72k+ orphaned jobs from this pattern.
 
 ### Security Iron Laws
 

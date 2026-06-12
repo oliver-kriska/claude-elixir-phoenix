@@ -1,0 +1,17 @@
+{
+  "skill": "brainstorm",
+  "should_trigger": [
+    "I have a vague idea about adding notifications but I'm not sure how to structure it",
+    "Let's explore different approaches for handling file uploads in this project",
+    "I want to brainstorm how to improve the authentication flow",
+    "Not sure what I need yet",
+    "How should I approach building a recommendation engine? I want to explore options first"
+  ],
+  "should_not_trigger": [
+    "Add user avatars with S3 upload",
+    "Fix the login bug where sessions expire too early",
+    "What's the best way to use Ecto.Multi?",
+    "Review my changes to the payment context",
+    "Research what Oban Pro offers vs OSS"
+  ]
+}

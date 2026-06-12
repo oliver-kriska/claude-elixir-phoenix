@@ -1,6 +1,6 @@
 ---
 name: phx:verify
-description: Full verification loop for Elixir/Phoenix changes. Use after completing any code implementation to catch issues before committing. Run before creating PRs, after fixing bugs, or whenever you want to confirm compile, format, and tests all pass together.
+description: Verify Elixir/Phoenix changes — compile, format, and test in one loop. Use after implementation, before PRs, or after fixing bugs.
 effort: low
 ---
 
@@ -57,6 +57,13 @@ Strategy: Running `mix check` then asking about E2E
 ### Step 1: Compile
 
 `mix compile --warnings-as-errors` — always
+
+> **Elixir 1.20+ (OTP 27+)**: the compiler's built-in type checker emits **type
+> violations / verified bugs** as warnings, so `--warnings-as-errors` now fails
+> the build on them — no Dialyzer needed. If a previously-green build fails
+> after a 1.20 bump, suspect a newly-detected type violation, not a regression.
+> Read the message literally (accepted vs supplied type); it is almost always a
+> real bug. See `elixir-idioms/references/elixir-120-type-system.md`.
 
 ### Step 2: Format
 

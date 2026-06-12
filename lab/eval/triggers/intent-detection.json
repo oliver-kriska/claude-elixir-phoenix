@@ -2,10 +2,17 @@
   "skill": "intent-detection",
   "should_trigger": [
     "not sure where to start with this user module work",
-    "how should I approach this — bug fix or full refactor",
+    "how should I approach this",
     "what's the right workflow for making these changes",
     "I have mixed intents here: fix the bug and then refactor the context",
     "route me to the right command for this ambiguous task"
+  ],
+  "should_trigger_test": [
+    "I need to fix this auth issue but also redesign the token flow",
+    "this could be a quick fix or a bigger refactor, not sure which",
+    "where do I even begin with this module",
+    "should I investigate this error first or jump straight to fixing it",
+    "I'm confused about which workflow to use for updating the payment system"
   ],
   "should_not_trigger": [
     "/phx:plan add user auth",

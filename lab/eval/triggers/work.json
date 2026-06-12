@@ -8,10 +8,10 @@
     "Execute all the tasks in my plan now"
   ],
   "should_not_trigger": [
-    "Create a plan for implementing payments \u2014 /phx:plan",
-    "Review the code for security issues \u2014 /phx:review",
-    "Explain the plan to me step by step \u2014 /phx:brief",
-    "What's the best way to query associations? \u2014 /phx:ecto-patterns",
-    "Why is the form validation failing? \u2014 /phx:investigate"
+    "Create a plan for implementing payments",
+    "Review the code for security issues",
+    "Explain the plan to me step by step",
+    "What's the best way to query associations?",
+    "Why is the form validation failing?"
   ]
 }

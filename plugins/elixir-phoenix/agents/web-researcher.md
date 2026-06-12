@@ -6,6 +6,8 @@ disallowedTools: Write, Edit, NotebookEdit, Bash
 permissionMode: bypassPermissions
 model: haiku
 effort: low
+maxTurns: 10
+omitClaudeMd: true
 ---
 
 # Web Research Worker
@@ -79,15 +81,29 @@ WebFetch(url: "...", prompt: "Extract: main technique/pattern, all code
 examples, and warnings. Skip author bio, navigation, ads, related posts.")
 ```
 
+## Source Quality Tiers
+
+Classify EVERY source you use:
+
+| Tier | Label | Examples | Trust Level |
+|------|-------|----------|-------------|
+| T1 | Authoritative | HexDocs, Elixir/Erlang official docs, GitHub source code | High — cite directly |
+| T2 | First-party | Core team blogs, ElixirConf talks, maintainer ElixirForum posts | High — cite with date |
+| T3 | Community | ElixirForum posts, Stack Overflow, blogs with working code | Medium — verify claims |
+| T4 | Low quality | SEO listicles, AI-generated content, posts without code | Low — corroborate or skip |
+| T5 | Rejected | Dead links, paywalled, fabricated URLs | Drop — do not cite |
+
+Include tier in output: `[T1]`, `[T2]`, etc. before each source.
+
 ## Output Format — CONCISE
 
 Return **500-800 words max**. Do NOT dump full page contents.
 
 ```markdown
-## Sources ({count} fetched)
+## Sources ({count} fetched, {t1_count} T1, {t2_count} T2, {t3_count} T3)
 
 ### {Source Title}
-**URL**: {url}
+**URL**: {url} **[T1]**
 **Key Points**:
 - {specific finding — include code snippets inline if short}
 - {finding 2}
@@ -95,17 +111,18 @@ Return **500-800 words max**. Do NOT dump full page contents.
 ## Code Examples
 
 ```elixir
-# From {source}: {what this demonstrates}
+# From {source} [T1]: {what this demonstrates}
 {code}
 ```
 
 ## Synthesis
 
 {3-5 sentences combining findings. Flag version-specific info.}
+{Note source quality: "Based on 2 T1 sources and 1 T3 source"}
 
 ## Conflicts (only if sources disagree)
 
-{Source A says X, Source B says Y. Trust {which} because {why}.}
+{Source A [T1] says X, Source B [T3] says Y. Trust A because authoritative.}
 
 ```
 

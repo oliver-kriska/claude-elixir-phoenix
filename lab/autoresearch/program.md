@@ -4,6 +4,7 @@
 
 1. Fix accuracy issues: stale cross-references, missing agents/skills
 2. Improve conciseness: compress bloated sections, move detail to references/
+   (NEVER by trimming a protected section — see "Protected Sections" below)
 3. Strengthen Iron Laws: add missing prohibitions, ensure min coverage
 4. Improve triggering: add domain keywords to generic descriptions
 5. Fill completeness gaps: missing sections, undocumented flags
@@ -25,6 +26,18 @@
 - `CHANGELOG.md`
 - `README.md`
 
+## Protected Sections (Frozen — append-only)
+
+The `## Iron Laws` section of every SKILL.md is **slow state**: hard-won
+prohibitions that must never erode. The loop MAY append a new Iron Law but MUST
+NEVER delete or reword an existing one. This is a hard invariant, not a scored
+tradeoff — `checks.sh` (check #7, via `scripts/protected_sections.py`) compares
+the mutation against git HEAD and forces REVERT if any existing law disappears.
+
+Rationale: SkillOpt (arXiv 2605.23904) measured that removing this fast/slow
+guarantee cost 22 points on SpreadsheetBench. Conciseness gains must come from
+the fast state (patterns, examples, prose), never from the protected section.
+
 ## Scoring
 
 - 7 dimensions: completeness, accuracy, conciseness, triggering, safety, clarity, specificity
@@ -39,10 +52,19 @@ On exact tie: keep (prefer newer — likely simpler or more accurate).
 
 ## Stop Conditions
 
+### Structural mode (default)
+
 - All target skills at composite >= 0.95
 - 10 consecutive discards on same skill -> skip that skill
 - 50 total consecutive discards -> stop entirely
 - Human interrupts (Ctrl+C)
+
+### Tournament mode (post-saturation)
+
+- Activated when all structural composites >= 1.000 but trigger accuracy < 0.75
+- Per-skill: incumbent A wins k=2 consecutive rounds -> converged, stop
+- Per-skill: max 20 passes hard ceiling
+- Global: 5 consecutive "all_perfect" target checks -> stop entirely
 
 ## Anti-Thrashing Rules
 

@@ -8,8 +8,8 @@
     "What vm.args.eex settings should I use?"
   ],
   "should_not_trigger": [
-    "Add OAuth login to my API \u2014 security skill",
-    "Database queries are slow, optimize \u2014 perf skill",
-    "Split my User context into Auth and Profile \u2014 phoenix-contexts skill"
+    "Add OAuth login to my API",
+    "Database queries are slow, optimize",
+    "Split my User context into Auth and Profile"
   ]
 }

@@ -108,12 +108,15 @@ grep -rn "Repo\." lib/my_app_web/ --include="*.ex"
 grep -rn "alias MyApp\." lib/my_app/ --include="*.ex" | grep -v "alias MyApp\.$(dirname)"
 ```
 
-## Circular Dependencies
+## Circular Dependencies (Compile-Time)
+
+Runtime cycles (e.g., from `verified_routes()`) are benign and don't cause recompilation cascades.
+Only compile-time cycles affect build performance and are scored.
 
 ### Detection
 
 ```bash
-mix xref graph --format cycles
+mix xref graph --format cycles --label compile
 ```
 
 ### Assessment
