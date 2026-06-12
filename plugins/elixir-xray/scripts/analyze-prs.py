@@ -42,6 +42,11 @@ KNOWN_BOTS = {
     "imgbot", "imgbot[bot]",
     "semantic-release-bot",
     "copilot",
+    "linear", "linear[bot]",
+    "coderabbitai", "coderabbitai[bot]",
+    "greptile-apps", "greptile-apps[bot]",
+    "sentry-io", "sentry-io[bot]",
+    "claude", "claude[bot]",
 }
 
 # Minimum human review comments to fetch full details
@@ -80,7 +85,8 @@ def _is_retryable_error(stderr_text):
     # Check for timeout / connection indicators
     if any(kw in lower for kw in ("timeout", "timed out", "connection reset",
                                    "bad gateway", "service unavailable",
-                                   "server error", "internal error")):
+                                   "server error", "internal error",
+                                   "stream error", "received from peer")):
         return True
     return False
 
@@ -239,18 +245,36 @@ def list_merged_prs(cwd, limit, timeout=60, gh_api_fallback=False):
     higher-level command doesn't.
     """
     fields = "number,title,createdAt,mergedAt,comments,reviews,additions,deletions,author"
-    raw = run_gh(
-        ["pr", "list", "--state", "merged", "--limit", str(limit),
-         "--json", fields],
-        cwd,
-        timeout=timeout,
-    )
-    if raw:
-        try:
-            return json.loads(raw)
-        except json.JSONDecodeError:
-            print("Error: failed to parse gh pr list JSON output.", file=sys.stderr)
-            # Fall through to fallback
+    # The nested comments+reviews query is expensive on large repos and the
+    # GitHub GraphQL API 502s on it. Degrade to smaller batches before giving
+    # up — 25 recent PRs is far more useful than 0.
+    batch_limits = [limit] + [b for b in (50, 25) if b < limit]
+    for attempt_limit in batch_limits:
+        raw = run_gh(
+            ["pr", "list", "--state", "merged", "--limit", str(attempt_limit),
+             "--json", fields],
+            cwd,
+            timeout=timeout,
+        )
+        if raw:
+            try:
+                prs = json.loads(raw)
+                if attempt_limit < limit:
+                    print(
+                        f"Note: server rejected larger queries; analyzed "
+                        f"{attempt_limit} most recent PRs instead of {limit}.",
+                        file=sys.stderr,
+                    )
+                return prs
+            except json.JSONDecodeError:
+                print("Error: failed to parse gh pr list JSON output.", file=sys.stderr)
+                break  # Parse error won't improve with a smaller batch
+        elif attempt_limit != batch_limits[-1]:
+            print(
+                f"PR listing with limit {attempt_limit} failed; "
+                f"trying a smaller batch...",
+                file=sys.stderr,
+            )
 
     if not gh_api_fallback:
         return []

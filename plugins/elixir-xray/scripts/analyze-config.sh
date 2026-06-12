@@ -104,7 +104,7 @@ if [[ -f "$AGENTS_MD" ]]; then
     agents_md_sections=$(grep -E '^#{1,6} ' "$AGENTS_MD" 2>/dev/null | head -50 | json_array_from_lines)
     rules_raw=$(grep -E '\b(MUST|NEVER|ALWAYS|DO NOT)\b' "$AGENTS_MD" 2>/dev/null | head -100 || true)
     agents_md_rules=$(echo "$rules_raw" | json_array_from_lines)
-    agents_md_rule_count=$(echo "$rules_raw" | grep -c . 2>/dev/null || echo 0)
+    agents_md_rule_count=$(echo "$rules_raw" | grep -c . 2>/dev/null || true)
 fi
 
 # ---------------------------------------------------------------------------
@@ -213,7 +213,7 @@ if [[ -f "$CLAUDE_MD" ]]; then
     # Extract rule lines (containing MUST, NEVER, ALWAYS, DO NOT — case sensitive)
     rules_raw=$(grep -E '\b(MUST|NEVER|ALWAYS|DO NOT)\b' "$CLAUDE_MD" 2>/dev/null | head -100 || true)
     claude_md_rules=$(echo "$rules_raw" | json_array_from_lines)
-    claude_md_rule_count=$(echo "$rules_raw" | grep -c . 2>/dev/null || echo 0)
+    claude_md_rule_count=$(echo "$rules_raw" | grep -c . 2>/dev/null || true)
 fi
 
 # Also check .claude/CLAUDE.md (some projects put it there)
@@ -225,7 +225,7 @@ if [[ "$claude_md_exists" == false && -f "$CLAUDE_MD_ALT" ]]; then
     claude_md_sections=$(grep -E '^#{1,6} ' "$CLAUDE_MD" 2>/dev/null | head -50 | json_array_from_lines)
     rules_raw=$(grep -E '\b(MUST|NEVER|ALWAYS|DO NOT)\b' "$CLAUDE_MD" 2>/dev/null | head -100 || true)
     claude_md_rules=$(echo "$rules_raw" | json_array_from_lines)
-    claude_md_rule_count=$(echo "$rules_raw" | grep -c . 2>/dev/null || echo 0)
+    claude_md_rule_count=$(echo "$rules_raw" | grep -c . 2>/dev/null || true)
 fi
 
 # ---------------------------------------------------------------------------

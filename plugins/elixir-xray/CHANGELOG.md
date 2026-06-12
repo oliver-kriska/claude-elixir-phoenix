@@ -36,8 +36,17 @@ First stable release — updated to current repo conventions (elixir-phoenix v2.
 - CI: shellcheck now covers all plugins' `hooks/scripts/` and `scripts/` dirs
 - `test-pipeline.sh` no longer false-positives on inline (non-script) hook
   commands; stale "INSPECTOR" wording in PreCompact hook message
-- All 36 pipeline tests pass; all 6 extractor scripts validated against a real
-  production project (custom-check extraction, AGENTS.md, PR retry confirmed)
+- All 36 pipeline tests pass; all 6 extractor scripts validated against TWO
+  real production projects, including ENAIA — the original design target
+- `analyze-config.sh` emitted corrupt JSON (`0\n0`) when a rules file had zero
+  MUST/NEVER rules — `grep -c` prints the count AND exits non-zero, so the
+  `|| echo 0` guard double-printed (hit by ENAIA's one-line CLAUDE.md stub)
+- Layer 2 (PR analysis) now produces data on large repos for the first time:
+  HTTP/2 stream errors added to retryable patterns, and the heavy
+  comments+reviews query degrades to smaller batches (50, 25) instead of
+  returning nothing — verified on an 11k-PR repo (100 PRs, 10 themes)
+- Bot filter extended (linear, coderabbitai, greptile, sentry-io, claude) —
+  163 bot comments filtered on the ENAIA run where previously 0 were caught
 
 ### Added (validation infrastructure)
 
