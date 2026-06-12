@@ -1,0 +1,17 @@
+{
+  "skill": "xray:compare",
+  "should_trigger": [
+    "did the codebase improve since the last xray scan?",
+    "compare the current xray scan against last month's — what got fixed, any regressions?",
+    "show me the trend — are we paying down the findings from previous xray scans?",
+    "what changed between the two xray scans?",
+    "I re-ran the scan after the refactor — diff it against the baseline scan"
+  ],
+  "should_not_trigger": [
+    "run the first xray scan on this project",
+    "compare the staging and production configs",
+    "diff my branch against main and review the changes",
+    "how healthy is this codebase overall? full analysis please",
+    "compare Oban and Exq for background job processing"
+  ]
+}

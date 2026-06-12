@@ -1,0 +1,17 @@
+{
+  "skill": "xray:fix",
+  "should_trigger": [
+    "fix the top issue from the xray scan",
+    "implement the highest-ROI finding from the scan in the project",
+    "apply the quick win from the xray report",
+    "take finding CP-003 from the xray scan and implement it",
+    "go from the scan analysis straight to action — fix the most valuable finding"
+  ],
+  "should_not_trigger": [
+    "generate all the artifacts from the xray scan findings",
+    "fix the flaky test in checkout_test.exs",
+    "fix CI — compile warnings are failing the build",
+    "scan the project and tell me what's broken",
+    "fix the N+1 query on the dashboard page"
+  ]
+}

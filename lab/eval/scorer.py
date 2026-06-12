@@ -79,6 +79,18 @@ def default_eval(skill_path: str) -> EvalDefinition:
     )
 
 
+def _infer_plugin_root(skill_path: str) -> str:
+    """Derive the plugin root from a skill path.
+
+    plugins/{plugin}/skills/{name}/SKILL.md → plugins/{plugin}.
+    Falls back to elixir-phoenix for non-plugin paths.
+    """
+    candidate = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(skill_path))))
+    if os.path.isdir(os.path.join(candidate, "skills")):
+        return candidate
+    return os.path.abspath(PLUGIN_ROOT)
+
+
 def score_skill(skill_path: str, eval_def: EvalDefinition | None = None) -> ScoreResult:
     """Score a skill across all dimensions. Returns ScoreResult; composite 0.0-1.0.
     Backwards-compat: ScoreResult.to_dict() emits the legacy SkillScore shape.
@@ -87,7 +99,7 @@ def score_skill(skill_path: str, eval_def: EvalDefinition | None = None) -> Scor
         target_path=os.path.abspath(skill_path),
         target_kind="skill",
         eval_def=eval_def,
-        plugin_root=os.path.abspath(PLUGIN_ROOT),
+        plugin_root=_infer_plugin_root(skill_path),
     )
     return score_skill_request(request)
 

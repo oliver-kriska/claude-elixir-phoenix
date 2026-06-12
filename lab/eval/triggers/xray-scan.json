@@ -1,0 +1,19 @@
+{
+  "skill": "xray:scan",
+  "should_trigger": [
+    "our phoenix project keeps seeing the same bugs come back — missing gettext, currency conversion errors. figure out what patterns keep recurring and how to prevent them",
+    "analyze the git history and PR review comments to find conventions our team follows implicitly and what reviewers flag most often",
+    "I inherited this elixir codebase — scan it for weak points before we onboard new devs: naming drift, boundary violations, missing tests",
+    "run a deep 6-layer analysis of this project — git history, PRs, code patterns, architecture",
+    "we have custom credo checks but I don't know if they cover everything — scan the code for patterns that should have checks but don't",
+    "x-ray this codebase and tell me what to improve, with priorities"
+  ],
+  "should_not_trigger": [
+    "fix the failing test in test/my_app/accounts_test.exs — it's a pattern match error on line 45",
+    "add a new LiveView page for the admin dashboard that shows user activity stats",
+    "did we improve since the last xray scan? show me the progress",
+    "generate credo checks and skills from the xray findings",
+    "help me set up credo in this project for the first time — we don't have a .credo.exs yet",
+    "the login page is broken after the latest deploy — users get a 500 on google oauth sign-in"
+  ]
+}
