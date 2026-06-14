@@ -87,6 +87,12 @@ Strategy: Running `mix check` then asking about E2E
 
 Skip unavailable tools with: "Credo: ⏭ Not installed"
 
+### Step 6b: Structural Slop Sweep
+
+If `:ex_ast` is in deps, sweep changed files for structural leftovers (debug calls,
+always-true guards) that text linters miss — e.g. `mix ex_ast.search 'IO.inspect(...)'`.
+See the `ex-ast` skill / `/phx:ast-search`. Skip if `ex_ast` is absent.
+
 ### Step 7: Additional Test Offer
 
 After core verification passes, check if project has additional test commands (E2E, integration, coverage). **Ask the user**:

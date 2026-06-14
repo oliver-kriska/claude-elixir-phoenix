@@ -186,6 +186,13 @@
             "timeout": 3,
             "statusMessage": "Detecting Ash...",
             "async": true
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/detect-ex-ast.sh",
+            "timeout": 3,
+            "statusMessage": "Detecting ex_ast...",
+            "async": true
           }
         ]
       },

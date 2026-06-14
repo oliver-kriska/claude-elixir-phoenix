@@ -10,6 +10,7 @@ maxTurns: 10
 omitClaudeMd: true
 skills:
   - verify
+  - ex-ast
 ---
 
 # Verification Runner

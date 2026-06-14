@@ -9,6 +9,22 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **`ex-ast` skill** — structural AST search/replace/diff for Elixir via the
+  [`ex_ast`](https://github.com/elixir-vibe/ex_ast) library (dev/test only). Patterns are
+  plain Elixir (`_` wildcard, captures, `^` pin, `...` arity, pipe-normalized, partial
+  struct match) so structure matches structure — `IO.inspect(x)` ≠ `IO.inspect(x, label: _)`.
+  Iron Laws: dev/test-only dep, preview before `--apply`, AST search over grep, structurally
+  verify AI-generated code. References: pattern language, CLI tasks + programmatic API,
+  AI-slop verification recipes.
+- **`/phx:ast-search` command** — interactive search → preview → apply / diff workflow over
+  `ex_ast`, with a dep check and post-apply verification.
+- **`detect-ex-ast.sh` SessionStart hook** — announces the `ex-ast` skill and tasks when
+  `:ex_ast` is in `mix.exs`; otherwise surfaces the install line on Elixir projects.
+- **Agent wiring** — `ex-ast` preloaded into `call-tracer`, `xref-analyzer`, and
+  `verification-runner` (Bash-capable, run the tasks) and `elixir-reviewer` (recommends
+  exact `mix ex_ast.search` checks in findings). `verify` skill gains an optional structural
+  slop-sweep step.
+
 ### Changed
 
 ### Fixed

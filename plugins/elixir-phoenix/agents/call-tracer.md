@@ -10,6 +10,7 @@ omitClaudeMd: true
 maxTurns: 25
 skills:
   - call-tracing
+  - ex-ast
 ---
 
 # Call Tracer Agent (Parallel Orchestrator)

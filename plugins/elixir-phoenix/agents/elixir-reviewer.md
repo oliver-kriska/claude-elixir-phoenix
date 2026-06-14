@@ -11,6 +11,7 @@ omitClaudeMd: true
 skills:
   - elixir-idioms
   - phoenix-contexts
+  - ex-ast
 ---
 
 # Elixir Code Reviewer

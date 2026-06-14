@@ -528,6 +528,7 @@ The plugin enforces critical rules and **stops with an explanation** if code wou
 | `/phx:permissions`       | Scan sessions, recommend safe Bash permissions             |
 | `/phx:trace <function>`  | Build call trees to trace function flow                    |
 | `/phx:boundaries`        | Analyze Phoenix context boundaries with mix xref           |
+| `/phx:ast-search`        | Structural AST search/replace/diff for Elixir via ex_ast   |
 | `/phx:examples`          | Practical examples and pattern walkthroughs                |
 | `/ecto:constraint-debug` | Debug Ecto constraint violations                           |
 

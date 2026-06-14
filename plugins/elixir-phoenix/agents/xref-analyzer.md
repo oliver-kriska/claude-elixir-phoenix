@@ -11,6 +11,7 @@ omitClaudeMd: true
 skills:
   - boundaries
   - phoenix-contexts
+  - ex-ast
 ---
 
 # Xref Analyzer

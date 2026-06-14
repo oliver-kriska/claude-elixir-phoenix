@@ -273,6 +273,19 @@ When Tidewave MCP available:
 - Prefer `mcp__tidewave__project_eval` over test scripts
 - Prefer `mcp__tidewave__execute_sql_query` over psql
 
+### ex_ast Integration
+
+When `ex_ast` is in `mix.exs` (detected by `detect-ex-ast.sh`), the `ex-ast` skill
+auto-loads. `ex_ast` searches/replaces/diffs Elixir by **AST pattern**, not text:
+
+- Prefer `mix ex_ast.search 'pattern'` over `grep` for **structural** Elixir queries
+  (arity, pipe form, struct shape, call site) — `IO.inspect(x)` ≠ `IO.inspect(x, label: _)`
+- ALWAYS preview `mix ex_ast.replace` (no `--apply`) before applying a rewrite
+- Use `ex_ast` to **structurally verify AI-generated code** before claiming done (Iron
+  Law #22) — sweep for debug calls, always-true guards, negative-literal slips
+- Reserve `grep` for plain text, strings, comments, and non-Elixir files
+- Drive interactive search/refactor/diff with `/phx:ast-search`
+
 ## Development
 
 ### Testing locally
@@ -476,6 +489,10 @@ When working on Elixir/Phoenix code, ALWAYS load relevant skills based on file c
 | `*.sface` | `liveview-patterns` | `references/components.md` |
 | `priv/resource_snapshots/**` | `ash-framework` | NEVER edit snapshots manually — owned by `mix ash.codegen` |
 | Any `.ex` or `.exs` file | `elixir-idioms` | Always check Iron Laws |
+
+**Intent cue (not file-pattern)**: when the user asks to find/replace/refactor Elixir
+*by code structure* (arity, pipe form, call shape) — not plain text — load `ex-ast` and
+prefer `mix ex_ast.search` over `grep` (requires `:ex_ast` in deps). See `/phx:ast-search`.
 
 ### Skill Loading Behavior
 
@@ -706,6 +723,7 @@ When working on code, automatically consult relevant reference documentation bef
 | Resume work | `/phx:work --continue` |
 | N+1 queries | `/ecto:n1-check` |
 | LiveView memory | `/lv:assigns` |
+| Structural AST search / refactor | `/phx:ast-search` |
 | PR review comments | `/phx:pr-review` |
 | Performance analysis | `/phx:perf` |
 | Project health | `/phx:audit` |
@@ -722,7 +740,7 @@ When working on code, automatically consult relevant reference documentation bef
 
 **Standalone**: `/phx:quick`, `/phx:full`, `/phx:investigate`, `/phx:verify`, `/phx:research`, `/phx:brainstorm`, `/phx:help`, `/phx:permissions`
 
-**Analysis**: `/ecto:n1-check`, `/lv:assigns`, `/phx:boundaries`, `/phx:trace`, `/phx:techdebt`
+**Analysis**: `/ecto:n1-check`, `/lv:assigns`, `/phx:boundaries`, `/phx:trace`, `/phx:techdebt`, `/phx:ast-search`
 
 **Session Analytics (dev-only, requires ccrider MCP)**: `/session-scan`, `/session-deep-dive`, `/session-trends`
 

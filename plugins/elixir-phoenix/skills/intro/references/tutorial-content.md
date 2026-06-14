@@ -155,6 +155,7 @@ Iron Laws are non-negotiable rules that every agent enforces. If your code viola
 | `/ecto:n1-check` | Detect N+1 query patterns |
 | `/lv:assigns` | Audit LiveView socket assigns for memory |
 | `/phx:boundaries` | Check Phoenix context boundary violations |
+| `/phx:ast-search` | Structural AST search/replace/diff via ex_ast |
 | `/phx:perf` | Performance analysis (Ecto, LiveView, OTP) |
 
 ### Tidewave Integration
@@ -336,6 +337,7 @@ The plugin works best when all layers are active: `/phx:init` for persistent rul
 | `/ecto:n1-check` | N+1 query detection |
 | `/lv:assigns` | LiveView memory audit |
 | `/phx:boundaries` | Context boundary check |
+| `/phx:ast-search` | Structural AST search/replace via ex_ast |
 | `/phx:techdebt` | Technical debt analysis |
 | `/phx:trace <function>` | Call chain tracing |
 | `/ecto:constraint-debug` | Debug Ecto constraint errors |
