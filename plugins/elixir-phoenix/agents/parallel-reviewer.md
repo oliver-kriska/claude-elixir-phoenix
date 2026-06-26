@@ -244,9 +244,27 @@ files exist, clearly mark the missing tracks ("security track failed:
 rate limit"), and tell the user: "Hit API limits — re-run /phx:review
 after the limit resets to cover the missing tracks."
 
+**Cross-Validation** (before compression):
+
+Read all review output files. For each finding, check:
+
+1. **Contradictions**: Does another agent disagree? (e.g., security says "fine",
+   iron-law-judge says "violation"). Tag as [DISPUTED] with both perspectives.
+2. **Code verification**: Does the code ACTUALLY contain what the finding claims?
+   Re-read the specific lines mentioned. Tag false positives as [UNVERIFIED].
+3. **Severity consistency**: If two agents flag the same issue at different
+   severities, use the higher one.
+
+Tag each finding: [VALIDATED], [DISPUTED], or [UNVERIFIED].
+Remove findings tagged [UNVERIFIED] from the final output.
+Present [DISPUTED] findings with both perspectives for user decision.
+
+This catches false N+1 reports and phantom security issues (42%+ hallucination
+rate in niche domains — FActScore paper).
+
 **Context Supervision** (when `summaries_dir` provided):
 
-After all 4 agents complete, spawn context-supervisor:
+After cross-validation, spawn context-supervisor:
 
 ```
 Agent(subagent_type: "context-supervisor", mode: "bypassPermissions", prompt: """

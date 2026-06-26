@@ -28,6 +28,18 @@ Look at recent conversation context. Ask yourself:
 - Is this a common mistake others might make?
 - Can it be prevented with a simple rule?
 
+### Step 1b: Quality Gates (ALL must pass)
+
+Before saving, verify the lesson passes all 4 gates:
+
+1. **Non-Googleable**: Would `mix hex.docs` or HexDocs answer this? If YES → skip
+2. **Codebase-specific**: Does this reference actual files/patterns in THIS project? If NO → skip
+3. **Hard-won**: Did this take >30min of debugging or cause a real bug? If NO → skip
+4. **Actionable**: Can it be applied automatically when editing similar files? If NO → skip
+
+If ANY gate fails, tell the user: "This seems like general Elixir knowledge
+(available in HexDocs) rather than a project-specific lesson. Still want to save it?"
+
 ### Step 2: Check Existing Knowledge
 
 Check if already documented:

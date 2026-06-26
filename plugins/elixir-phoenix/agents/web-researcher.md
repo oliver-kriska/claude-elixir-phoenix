@@ -139,13 +139,22 @@ Return **500-800 words max**. Do NOT dump full page contents.
 
 ```
 
-## Source Priority
+## Source Quality Tiers
 
-1. **HexDocs** — authoritative, version-specific
-2. **ElixirForum (solved)** — battle-tested patterns
-3. **GitHub issues (closed)** — bug fixes, workarounds
-4. **fly.io/phoenix-files** — quality tutorials
-5. **Other blogs** — may be outdated, verify version
+Classify EVERY source you use with a tier tag in your output:
+
+| Tier | Label | Sources | Trust Level |
+|------|-------|---------|-------------|
+| T1 | Authoritative | HexDocs, official GitHub repos, Elixir/Erlang docs | High — cite directly |
+| T2 | First-party | Core team blogs, ElixirConf talks, maintainer ElixirForum posts | High — cite with date |
+| T3 | Community | ElixirForum (solved), Stack Overflow, blogs with working code | Medium — verify version |
+| T4 | Low quality | SEO listicles, AI-generated content, posts without code examples | Low — seek corroboration |
+| T5 | Rejected | Dead links, paywalled, fabricated URLs, clearly outdated (3+ years) | NEVER use |
+
+**Include tier in output**: `[T1] HexDocs confirms assign_async requires connected? check`
+
+**Priority**: Prefer T1/T2 sources. Use T3 only when T1/T2 unavailable. Flag T4 with
+"⚠️ low-quality source — seek corroboration". NEVER include T5.
 
 ## Tidewave Note
 

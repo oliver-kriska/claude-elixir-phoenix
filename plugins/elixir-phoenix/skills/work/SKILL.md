@@ -60,8 +60,9 @@ Skip for plans with 3 or fewer simple tasks -- just start.
 ## Step 2: Check Context (MANDATORY)
 
 Read scratchpad and compound docs before writing any code.
-Skipping this causes rework — scratchpad captures dead-ends
-and decisions from planning that prevent taking wrong paths.
+Scratchpad has structured sections: **Dead Ends** (don't retry these),
+**Decisions** (why we chose this approach), **Hypotheses** (what was tested).
+See `${CLAUDE_SKILL_DIR}/references/scratchpad-template.md` for format.
 
 Read the scratchpad at `.claude/plans/{slug}/scratchpad.md` — it's short and has critical context.
 Then search `.claude/solutions/` for relevant keywords using Grep to find solved patterns.

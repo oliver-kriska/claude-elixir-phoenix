@@ -154,7 +154,31 @@ Create `.claude/research/{topic-slug}.md`:
 
 ```
 
-### 5. After Research — STOP
+### 5. Verify Claims (default ON, skip with `--fast`)
+
+Spawn output-verifier agent on the draft research file:
+
+```
+
+Agent(subagent_type: "output-verifier", prompt: """
+Verify claims in: .claude/research/{topic-slug}.md
+Check: citations exist, URLs resolve, source tiers are T1-T3,
+version claims match current Elixir/Phoenix, code examples valid.
+Write provenance sidecar to: .claude/research/{topic-slug}.provenance.md
+""", run_in_background: true)
+
+```
+
+When verifier completes, update the research file:
+
+- Remove claims marked REMOVED
+- Add [UNVERIFIED] tag to claims without sources
+- Append provenance summary to the research file
+
+Skip this step if user passed `--fast` or if the research is informal
+(e.g., "how do I do X" vs "should we adopt library Y").
+
+### 6. After Research — STOP
 
 **STOP and present the research summary.** Do NOT auto-transition.
 
