@@ -1,0 +1,18 @@
+{
+  "name": "elixir-xray",
+  "version": "1.0.0",
+  "description": "Analyze Elixir/Phoenix codebases across 6 layers with optional deep mode (20 sub-agents, 100+ patterns). Generate Credo checks, skills, CI steps, review prompts, and quality gates",
+  "keywords": [
+    "elixir",
+    "phoenix",
+    "credo",
+    "code-quality",
+    "xray",
+    "analysis"
+  ],
+  "author": {
+    "name": "Oliver Kriska"
+  },
+  "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix"
+}

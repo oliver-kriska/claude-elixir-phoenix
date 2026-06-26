@@ -79,26 +79,46 @@ def aggregate_path_for_model(model: str) -> str:
     return os.path.join(cache_dir_for_model(model), "_aggregate.json")
 
 
+def _safe_name(skill_name: str) -> str:
+    """Filesystem-safe key for a skill name (xray:scan → xray-scan)."""
+    return skill_name.replace(":", "-")
+
+
 def load_all_descriptions() -> dict[str, str]:
-    """Load all skill names and descriptions."""
-    skills_dir = os.path.join(PLUGIN_ROOT, "skills")
+    """Load skill names and descriptions from ALL plugins.
+
+    The routing judge should see the realistic co-installed skill list.
+    elixir-phoenix skills keep their directory name as key (legacy cache
+    compatibility); other plugins use the frontmatter `name:` (e.g. xray:scan)
+    so namespaced skills don't collide with phoenix dir names (brief, compare).
+    """
+    plugins_dir = os.path.dirname(PLUGIN_ROOT)
     descriptions = {}
-    for name in sorted(os.listdir(skills_dir)):
-        skill_path = os.path.join(skills_dir, name, "SKILL.md")
-        if not os.path.isfile(skill_path):
+    for plugin in sorted(os.listdir(plugins_dir)):
+        skills_dir = os.path.join(plugins_dir, plugin, "skills")
+        if not os.path.isdir(skills_dir):
             continue
-        with open(skill_path) as f:
-            content = f.read()
-        fm = parse_frontmatter(content)
-        desc = str(fm.get("description", ""))
-        if desc:
-            descriptions[name] = desc
+        for name in sorted(os.listdir(skills_dir)):
+            skill_path = os.path.join(skills_dir, name, "SKILL.md")
+            if not os.path.isfile(skill_path):
+                continue
+            with open(skill_path) as f:
+                content = f.read()
+            fm = parse_frontmatter(content)
+            desc = str(fm.get("description", ""))
+            if not desc:
+                continue
+            if plugin == "elixir-phoenix":
+                key = name
+            else:
+                key = str(fm.get("name", "")) or name
+            descriptions[key] = desc
     return descriptions
 
 
 def load_trigger_file(skill_name: str) -> dict | None:
-    """Load trigger test prompts for a skill."""
-    path = os.path.join(TRIGGERS_DIR, f"{skill_name}.json")
+    """Load trigger test prompts for a skill (xray:scan → xray-scan.json)."""
+    path = os.path.join(TRIGGERS_DIR, f"{_safe_name(skill_name)}.json")
     if not os.path.isfile(path):
         return None
     with open(path) as f:
@@ -166,7 +186,7 @@ def score_triggers(request: ScoreRequest) -> ScoreResult:
 
     # Cache read — request-prep step, not a side effect
     if request.use_cache and request.cache_dir:
-        cache_path = os.path.join(request.cache_dir, f"{skill_name}.json")
+        cache_path = os.path.join(request.cache_dir, f"{_safe_name(skill_name)}.json")
         if os.path.isfile(cache_path):
             with open(cache_path) as f:
                 cached = json.load(f)
@@ -277,7 +297,7 @@ def score_skill_triggers(
 
     if not result.cache_hit:
         os.makedirs(cache_dir, exist_ok=True)
-        cache_path = os.path.join(cache_dir, f"{skill_name}.json")
+        cache_path = os.path.join(cache_dir, f"{_safe_name(skill_name)}.json")
         with open(cache_path, "w") as f:
             json.dump(score_data, f, indent=2)
             f.write("\n")
@@ -306,9 +326,12 @@ def main():
         if not triggers:
             print(f"No trigger file for {args.skill}", file=sys.stderr)
             sys.exit(1)
-        result = score_skill_triggers(args.skill, triggers, all_descriptions, args.cache, model=judge_model)
+        # Fixture's "skill" field is authoritative (namespaced skills like
+        # xray:scan live in fixture files named xray-scan.json)
+        skill_name = triggers.get("skill") or args.skill
+        result = score_skill_triggers(skill_name, triggers, all_descriptions, args.cache, model=judge_model)
         if args.summary:
-            print(f"{args.skill} [{judge_model}]: accuracy={result['accuracy']:.0%} precision={result['precision']:.0%} recall={result['recall']:.0%}")
+            print(f"{skill_name} [{judge_model}]: accuracy={result['accuracy']:.0%} precision={result['precision']:.0%} recall={result['recall']:.0%}")
         else:
             print(json.dumps(result, indent=2))
 

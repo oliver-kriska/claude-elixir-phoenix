@@ -76,7 +76,7 @@ jobs:
       - name: ShellCheck
         run: |
           sudo apt-get install -y shellcheck
-          find plugins/elixir-phoenix/hooks/scripts -name "*.sh" -exec shellcheck {} + || true
+          find plugins/*/hooks/scripts plugins/*/scripts -name "*.sh" -exec shellcheck {} + || true
           find lab/autoresearch/scripts -name "*.sh" -exec shellcheck {} + || true
           shellcheck lab/eval/run_eval.sh || true
 

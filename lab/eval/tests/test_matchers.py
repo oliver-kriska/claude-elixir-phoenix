@@ -396,3 +396,32 @@ class TestDescriptionStructure:
         passed, evidence = description_structure(no_when)
         assert not passed
         assert "when" in evidence.lower()
+
+
+class TestValidAgentRefs:
+    PLUGIN_ROOT = os.path.join(os.path.dirname(__file__), "..", "..", "..", "plugins", "elixir-phoenix")
+
+    def test_bare_ref_valid(self):
+        from lab.eval.matchers import valid_agent_refs
+        content = 'Agent(subagent_type="elixir-reviewer", prompt="...")'
+        passed, evidence = valid_agent_refs(content, plugin_root=self.PLUGIN_ROOT)
+        assert passed, evidence
+
+    def test_namespaced_ref_same_plugin(self):
+        from lab.eval.matchers import valid_agent_refs
+        content = 'Agent(subagent_type="elixir-phoenix:elixir-reviewer", prompt="...")'
+        passed, evidence = valid_agent_refs(content, plugin_root=self.PLUGIN_ROOT)
+        assert passed, evidence
+
+    def test_namespaced_ref_sibling_plugin(self):
+        from lab.eval.matchers import valid_agent_refs
+        content = 'Agent(subagent_type="elixir-xray:credo-generator", prompt="...")'
+        passed, evidence = valid_agent_refs(content, plugin_root=self.PLUGIN_ROOT)
+        assert passed, evidence
+
+    def test_namespaced_ref_missing_agent(self):
+        from lab.eval.matchers import valid_agent_refs
+        content = 'Agent(subagent_type="elixir-xray:nonexistent-agent", prompt="...")'
+        passed, evidence = valid_agent_refs(content, plugin_root=self.PLUGIN_ROOT)
+        assert not passed
+        assert "nonexistent-agent" in evidence

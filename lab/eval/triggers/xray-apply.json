@@ -1,0 +1,17 @@
+{
+  "skill": "xray:apply",
+  "should_trigger": [
+    "turn the xray scan findings into credo checks and CLAUDE.md rules",
+    "generate the artifacts from the scan results — credo checks, skills, CI scripts",
+    "the scan is done — now create review prompts and CI steps from the findings",
+    "make claude code skills out of what the xray scan found",
+    "I reviewed the scan report, generate everything — credo checks, skills, rules"
+  ],
+  "should_not_trigger": [
+    "implement the top finding from the xray scan directly in lib/",
+    "scan the codebase for recurring problems and tech debt",
+    "apply the code review feedback from PR #42",
+    "add gettext calls to all the hardcoded strings in our templates",
+    "walk me through the scan findings one by one before I decide anything"
+  ]
+}

@@ -283,20 +283,29 @@ def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
     agents_dir = os.path.join(plugin_root, "agents")
     existing_agents = {f.replace(".md", "") for f in os.listdir(agents_dir) if f.endswith(".md")}
 
-    # Find agent references: subagent_type: "name" or agent name in backticks
-    refs = re.findall(r'subagent_type[=:]\s*["\']?(\w[\w-]+)', content)
+    # Find agent references: subagent_type: "name" or "plugin:name", or agent name in backticks
+    refs = re.findall(r'subagent_type[=:]\s*["\']?([\w-]+(?::[\w-]+)?)', content)
     refs += re.findall(r'`(\w[\w-]+-(?:reviewer|analyzer|architect|validator|runner|specialist|advisor|judge|supervisor|orchestrator|researcher|tracer))`', content)
 
     # Built-in Claude Code agent types (not in plugin agents/ dir)
     builtin_agents = {"general-purpose", "Explore", "Plan", "code-simplifier"}
 
+    # Parent dir of plugin_root holds sibling plugins (for namespaced refs)
+    plugins_dir = os.path.dirname(os.path.abspath(plugin_root))
+
     missing = []
     for ref in set(refs):
         if ref in builtin_agents:
             continue
-        # Strip elixir-phoenix: prefix if present
-        clean_ref = ref.replace("elixir-phoenix:", "")
-        if clean_ref not in existing_agents and clean_ref.replace("_", "-") not in existing_agents:
+        clean_ref = ref
+        agents_pool = existing_agents
+        if ":" in ref:
+            # Namespaced ref (plugin:agent) — resolve in that plugin's agents dir
+            ref_plugin, clean_ref = ref.split(":", 1)
+            ref_agents_dir = os.path.join(plugins_dir, ref_plugin, "agents")
+            if os.path.isdir(ref_agents_dir):
+                agents_pool = {f.replace(".md", "") for f in os.listdir(ref_agents_dir) if f.endswith(".md")}
+        if clean_ref not in agents_pool and clean_ref.replace("_", "-") not in agents_pool:
             missing.append(ref)
 
     if not missing:

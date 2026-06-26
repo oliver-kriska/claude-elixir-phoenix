@@ -29,7 +29,9 @@ DIMENSION_MODULES = {
     "behavioral": behavioral,
 }
 
-PLUGIN_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "plugins", "elixir-phoenix")
+DEFAULT_PLUGIN = "elixir-phoenix"
+PLUGINS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "plugins")
+PLUGIN_ROOT = os.path.join(PLUGINS_DIR, DEFAULT_PLUGIN)
 
 
 def default_eval(skill_path: str) -> EvalDefinition:
@@ -77,6 +79,18 @@ def default_eval(skill_path: str) -> EvalDefinition:
     )
 
 
+def _infer_plugin_root(skill_path: str) -> str:
+    """Derive the plugin root from a skill path.
+
+    plugins/{plugin}/skills/{name}/SKILL.md → plugins/{plugin}.
+    Falls back to elixir-phoenix for non-plugin paths.
+    """
+    candidate = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(skill_path))))
+    if os.path.isdir(os.path.join(candidate, "skills")):
+        return candidate
+    return os.path.abspath(PLUGIN_ROOT)
+
+
 def score_skill(skill_path: str, eval_def: EvalDefinition | None = None) -> ScoreResult:
     """Score a skill across all dimensions. Returns ScoreResult; composite 0.0-1.0.
     Backwards-compat: ScoreResult.to_dict() emits the legacy SkillScore shape.
@@ -85,7 +99,7 @@ def score_skill(skill_path: str, eval_def: EvalDefinition | None = None) -> Scor
         target_path=os.path.abspath(skill_path),
         target_kind="skill",
         eval_def=eval_def,
-        plugin_root=os.path.abspath(PLUGIN_ROOT),
+        plugin_root=_infer_plugin_root(skill_path),
     )
     return score_skill_request(request)
 
@@ -139,9 +153,12 @@ def score_skill_request(request: ScoreRequest) -> ScoreResult:
     )
 
 
-def find_all_skills() -> list[str]:
-    """Find all SKILL.md files in the plugin."""
-    skills_dir = os.path.join(PLUGIN_ROOT, "skills")
+def find_all_skills(plugin_name: str | None = None) -> list[str]:
+    """Find all SKILL.md files in a plugin."""
+    if plugin_name:
+        skills_dir = os.path.join(PLUGINS_DIR, plugin_name, "skills")
+    else:
+        skills_dir = os.path.join(PLUGIN_ROOT, "skills")
     if not os.path.isdir(skills_dir):
         return []
     paths = []
@@ -150,6 +167,17 @@ def find_all_skills() -> list[str]:
         if os.path.isfile(skill_md):
             paths.append(skill_md)
     return paths
+
+
+def find_all_plugins() -> list[str]:
+    """Find all plugin directories."""
+    if not os.path.isdir(PLUGINS_DIR):
+        return []
+    return [
+        name for name in sorted(os.listdir(PLUGINS_DIR))
+        if os.path.isdir(os.path.join(PLUGINS_DIR, name, "skills"))
+        or os.path.isdir(os.path.join(PLUGINS_DIR, name, "agents"))
+    ]
 
 
 def find_eval(skill_name: str) -> str | None:
@@ -162,16 +190,35 @@ def find_eval(skill_name: str) -> str | None:
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Score plugin skills across 5 dimensions")
+    parser = argparse.ArgumentParser(description="Score plugin skills across 8 dimensions")
     parser.add_argument("skill_path", nargs="?", help="Path to SKILL.md file")
     parser.add_argument("--eval", help="Path to eval definition JSON")
     parser.add_argument("--all", action="store_true", help="Score all skills")
+    parser.add_argument("--plugin", help="Plugin name (default: elixir-phoenix)")
+    parser.add_argument("--all-plugins", action="store_true", help="Score all plugins")
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON output")
     args = parser.parse_args()
 
-    if args.all:
+    if args.all_plugins:
         results = {}
-        for skill_path in find_all_skills():
+        for plugin_name in find_all_plugins():
+            plugin_results = {}
+            for skill_path in find_all_skills(plugin_name):
+                skill_name = os.path.basename(os.path.dirname(skill_path))
+                eval_path = find_eval(skill_name)
+                eval_def = EvalDefinition.from_file(eval_path) if eval_path else None
+                score = score_skill(skill_path, eval_def)
+                plugin_results[skill_name] = score.to_dict()
+            results[plugin_name] = plugin_results
+            count = len(plugin_results)
+            avg = sum(v["composite"] for v in plugin_results.values()) / count if count else 0
+            perfect = sum(1 for v in plugin_results.values() if v["composite"] >= 0.999)
+            print(f"  {plugin_name}: {count} skills | {perfect} perfect | avg {avg:.3f}", file=sys.stderr)
+        output = json.dumps(results, indent=2 if args.pretty else None)
+        print(output)
+    elif args.all:
+        results = {}
+        for skill_path in find_all_skills(args.plugin):
             skill_name = os.path.basename(os.path.dirname(skill_path))
             eval_path = find_eval(skill_name)
             eval_def = EvalDefinition.from_file(eval_path) if eval_path else None

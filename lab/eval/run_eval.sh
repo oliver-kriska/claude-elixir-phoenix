@@ -30,10 +30,10 @@ run_skills() {
 
     if [ "$filter" = "changed" ]; then
         local changed_files=""
-        # 1. Uncommitted changes (staged + unstaged)
-        changed_files=$(git diff --name-only HEAD -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+        # 1. Uncommitted changes (staged + unstaged) — all plugins
+        changed_files=$(git diff --name-only HEAD -- 'plugins/*/skills/*' 2>/dev/null || echo "")
         local staged
-        staged=$(git diff --cached --name-only -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+        staged=$(git diff --cached --name-only -- 'plugins/*/skills/*' 2>/dev/null || echo "")
         if [ -n "$staged" ]; then
             changed_files=$(printf "%s\n%s" "$changed_files" "$staged")
         fi
@@ -48,7 +48,7 @@ run_skills() {
             local last_commit
             last_commit=$(cat "$LAST_EVAL_FILE")
             local since_last
-            since_last=$(git diff --name-only "$last_commit" HEAD -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+            since_last=$(git diff --name-only "$last_commit" HEAD -- 'plugins/*/skills/*' 2>/dev/null || echo "")
             if [ -n "$since_last" ]; then
                 changed_files=$(printf "%s\n%s" "$changed_files" "$since_last")
             fi
@@ -57,17 +57,17 @@ run_skills() {
             echo "  No skill changes since last eval"
             return 0
         fi
-        # Extract unique skill names from changed paths
+        # Extract unique skill dirs (plugins/{plugin}/skills/{name}) from changed paths
         while IFS= read -r file; do
-            local skill_name
-            skill_name=$(echo "$file" | sed -n 's|plugins/elixir-phoenix/skills/\([^/]*\)/.*|\1|p')
-            if [ -n "$skill_name" ]; then
-                skills_to_check+=("$skill_name")
+            local skill_dir
+            skill_dir=$(echo "$file" | sed -n 's|\(plugins/[^/]*/skills/[^/]*\)/.*|\1|p')
+            if [ -n "$skill_dir" ]; then
+                skills_to_check+=("$skill_dir")
             fi
         done <<< "$changed_files"
         # Deduplicate
         mapfile -t skills_to_check < <(printf '%s\n' "${skills_to_check[@]}" | sort -u)
-        echo "  Scoring ${#skills_to_check[@]} changed skills: ${skills_to_check[*]}"
+        echo "  Scoring ${#skills_to_check[@]} changed skills: $(printf '%s\n' "${skills_to_check[@]}" | xargs -I{} basename {} | tr '\n' ' ')"
     else
         echo "  Scoring all skills..."
     fi
@@ -83,9 +83,11 @@ run_skills() {
     else
         result="{"
         local first=true
-        for skill in "${skills_to_check[@]}"; do
-            local path="plugins/elixir-phoenix/skills/$skill/SKILL.md"
+        for skill_dir in "${skills_to_check[@]}"; do
+            local path="$skill_dir/SKILL.md"
             [ -f "$path" ] || continue
+            local skill
+            skill=$(basename "$skill_dir")
             local score
             score=$(python3 -m lab.eval.scorer "$path" 2>/dev/null)
             if [ "$first" = true ]; then first=false; else result+=","; fi
@@ -162,11 +164,11 @@ run_triggers_cached() {
     local skills_to_check=()
 
     if [ "$filter" = "changed" ]; then
-        # Get changed skills (same logic as run_skills)
+        # Get changed skills (same logic as run_skills) — all plugins
         local changed_files=""
-        changed_files=$(git diff --name-only HEAD -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+        changed_files=$(git diff --name-only HEAD -- 'plugins/*/skills/*' 2>/dev/null || echo "")
         local staged
-        staged=$(git diff --cached --name-only -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+        staged=$(git diff --cached --name-only -- 'plugins/*/skills/*' 2>/dev/null || echo "")
         if [ -n "$staged" ]; then
             changed_files=$(printf "%s\n%s" "$changed_files" "$staged")
         fi
@@ -180,7 +182,7 @@ run_triggers_cached() {
             local last_commit
             last_commit=$(cat "$LAST_EVAL_FILE")
             local since_last
-            since_last=$(git diff --name-only "$last_commit" HEAD -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+            since_last=$(git diff --name-only "$last_commit" HEAD -- 'plugins/*/skills/*' 2>/dev/null || echo "")
             if [ -n "$since_last" ]; then
                 changed_files=$(printf "%s\n%s" "$changed_files" "$since_last")
             fi
@@ -189,9 +191,18 @@ run_triggers_cached() {
             echo "  No skill changes — skipping trigger check"
             return 0
         fi
+        # Map to trigger cache keys: phoenix skills use bare dir name,
+        # other plugins use {short}-{dir} (e.g. elixir-xray/scan → xray-scan)
         while IFS= read -r file; do
-            local skill_name
-            skill_name=$(echo "$file" | sed -n 's|plugins/elixir-phoenix/skills/\([^/]*\)/.*|\1|p')
+            local skill_name=""
+            case "$file" in
+                plugins/elixir-phoenix/skills/*)
+                    skill_name=$(echo "$file" | sed -n 's|plugins/elixir-phoenix/skills/\([^/]*\)/.*|\1|p')
+                    ;;
+                plugins/elixir-xray/skills/*)
+                    skill_name=$(echo "$file" | sed -n 's|plugins/elixir-xray/skills/\([^/]*\)/.*|xray-\1|p')
+                    ;;
+            esac
             if [ -n "$skill_name" ]; then
                 skills_to_check+=("$skill_name")
             fi

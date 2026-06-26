@@ -1,0 +1,17 @@
+{
+  "skill": "xray:brief",
+  "should_trigger": [
+    "walk me through the xray findings one by one",
+    "explain the xray scan results — why does each finding matter?",
+    "the xray report has 50 findings — guide me through the important ones with evidence",
+    "I don't understand finding L6-002 — explain the scan output before I apply anything",
+    "give me a guided review of the xray report"
+  ],
+  "should_not_trigger": [
+    "brief me on the implementation plan before I approve it",
+    "summarize what changed in this PR",
+    "scan the codebase and produce a findings report",
+    "fix the top finding from the scan",
+    "explain how LiveView streams work"
+  ]
+}
