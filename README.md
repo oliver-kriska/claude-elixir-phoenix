@@ -1,3 +1,5 @@
+[![MseeP.ai Security Assessment Badge](https://mseep.net/pr/oliver-kriska-claude-elixir-phoenix-badge.png)](https://mseep.ai/app/oliver-kriska-claude-elixir-phoenix)
+
 # Elixir Phoenix Plugin for Claude Code
 
 [![Security: scanned with SkillSpector](https://img.shields.io/badge/security-scanned%20with%20SkillSpector-2ea44f)](SECURITY.md)
