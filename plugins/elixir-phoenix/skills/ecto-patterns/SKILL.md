@@ -78,6 +78,7 @@ end
 | `Repo.all(User) \|> Enum.filter(& &1.active)` | `from(u in User, where: u.active)` |
 | Preloading in loops | `Repo.preload(posts, :comments)` |
 | `Repo.get!(User, user_id)` with user input | `Repo.get(User, id)` + handle nil |
+| `{:ok, _} = Repo.update(cs)` inside `Repo.transaction` | `case`/`with` + `Repo.rollback(cs)` (see transactions.md) |
 
 ## References
 

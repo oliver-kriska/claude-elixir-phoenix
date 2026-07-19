@@ -11,6 +11,51 @@ Repo.transact(fn ->
 end)
 ```
 
+## Repo.transaction/1: changeset error handling
+
+Inside the callback form `Repo.transaction(fn -> ... end)`, a bare `{:ok, _} =`
+match on a write is a footgun. When the write returns `{:error, changeset}`, the
+match raises `MatchError`; the transaction rolls back and **re-raises** it, so the
+caller crashes (a `500` in a request) and the changeset's validation errors are
+lost. It does *not* return `{:error, %MatchError{}}` — nothing catches it for you.
+
+```elixir
+# BAD — invalid changeset raises MatchError, which propagates and crashes the caller
+Repo.transaction(fn ->
+  {:ok, updated} = Repo.update(changeset)
+  updated
+end)
+
+# GOOD — explicit case + Repo.rollback/1 preserves the changeset
+Repo.transaction(fn ->
+  case Repo.update(changeset) do
+    {:ok, updated} -> updated
+    {:error, changeset} -> Repo.rollback(changeset)
+  end
+end)
+# => {:error, %Ecto.Changeset{}} — caller gets actionable validation errors
+```
+
+The same applies to `Repo.insert/1` and `Repo.delete/1`. For multiple steps, use
+`with ... else` and roll back on the error path:
+
+```elixir
+Repo.transaction(fn ->
+  with {:ok, user}    <- Repo.insert(user_changeset),
+       {:ok, profile} <- Repo.insert(profile_changeset(user)) do
+    profile
+  else
+    {:error, changeset} -> Repo.rollback(changeset)
+  end
+end)
+```
+
+Prefer `Repo.transact/1` (above) or `Ecto.Multi` (below) when you can — both
+surface `{:error, ...}` on failure without a manual `Repo.rollback/1`, steering
+you away from the bare match. This footgun is specific to the classic
+`Repo.transaction/1` callback form. (Ties to Iron Laws #18 and #24 — check
+changeset errors, and match `{:error, %Ecto.Changeset{}}` explicitly.)
+
 ## Ecto.Multi (Complex operations, testing)
 
 ```elixir

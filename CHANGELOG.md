@@ -9,6 +9,16 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **`ecto-patterns`: `Repo.transaction/1` changeset error handling** — new
+  reference section (and an anti-pattern row in the auto-loaded SKILL.md) on the
+  bare-match footgun inside `Repo.transaction(fn -> ... end)`: `{:ok, _} =
+  Repo.update(cs)` raises `MatchError` on an invalid changeset, which rolls back
+  and **re-raises** (crashing the caller, e.g. a `500`) — it does *not* return
+  `{:error, %MatchError{}}`. Documents the explicit `case` + `Repo.rollback/1`
+  fix (single step) and the `with ... else` fix (multi-step), and points to
+  `Repo.transact/1` / `Ecto.Multi` as the footgun-free forms. Verified
+  empirically on Ecto 3.14. Thanks to @ndrean for the proposal (#76).
+
 ### Changed
 
 ### Fixed
