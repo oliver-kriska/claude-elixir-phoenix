@@ -1,11 +1,13 @@
 from __future__ import annotations
 
 import hashlib
+import stat
 from pathlib import Path
 
 import pytest
 
 from scripts import build_amp_skills
+from scripts.build_amp_skills import _differences
 from scripts.port_lib import SOURCE_PLUGIN_DIR
 from scripts.port_lib import amp
 from scripts.port_lib.frontmatter import parse_file
@@ -15,6 +17,7 @@ def _tree_hash(root: Path) -> str:
     digest = hashlib.sha256()
     for path in sorted(item for item in root.rglob("*") if item.is_file()):
         digest.update(path.relative_to(root).as_posix().encode())
+        digest.update(stat.S_IMODE(path.stat().st_mode).to_bytes(2, "big"))
         digest.update(path.read_bytes())
     return digest.hexdigest()
 
@@ -61,6 +64,9 @@ def test_build_copies_complete_subtree_and_transforms_only_markdown(tmp_path) ->
     payload = b"\x00\xff\x10"
     (skill / "nested" / "assets").mkdir(parents=True)
     (skill / "nested" / "assets" / "payload.bin").write_bytes(payload)
+    executable = skill / "nested" / "run.sh"
+    executable.write_text("#!/bin/sh\n", encoding="utf-8")
+    executable.chmod(0o755)
 
     output = tmp_path / "output"
     amp.build(plugin, output)
@@ -73,6 +79,7 @@ def test_build_copies_complete_subtree_and_transforms_only_markdown(tmp_path) ->
     )
     assert "/phx:source" not in references.read_text()
     assert (generated / "nested" / "assets" / "payload.bin").read_bytes() == payload
+    assert stat.S_IMODE((generated / "nested" / "run.sh").stat().st_mode) == 0o755
 
 
 def test_build_rewrites_cross_skill_resources(tmp_path) -> None:
@@ -95,6 +102,30 @@ def test_build_rewrites_cross_skill_resources(tmp_path) -> None:
         "../phx-second/references/guide.md"
         in (output / "phx-first" / "SKILL.md").read_text()
     )
+
+
+def test_build_rewrites_verified_bare_resource_paths(tmp_path) -> None:
+    plugin = tmp_path / "plugin"
+    _write_skill(
+        plugin,
+        "first",
+        "phx:first",
+        "Read `../second/references/guide.md` and run "
+        "`plugins/elixir-phoenix/skills/second/scripts/run.sh`.\n",
+    )
+    second = _write_skill(plugin, "second", "phx:second")
+    (second / "references").mkdir()
+    (second / "references" / "guide.md").write_text("Guide\n", encoding="utf-8")
+    (second / "scripts").mkdir()
+    (second / "scripts" / "run.sh").write_text("#!/bin/sh\n", encoding="utf-8")
+
+    output = tmp_path / "output"
+    amp.build(plugin, output)
+
+    generated = (output / "phx-first" / "SKILL.md").read_text()
+    assert "../phx-second/references/guide.md" in generated
+    assert "../phx-second/scripts/run.sh" in generated
+    assert "plugins/elixir-phoenix" not in generated
 
 
 def test_build_rejects_name_collisions_before_replacing_output(tmp_path) -> None:
@@ -136,6 +167,46 @@ def test_amp_projection_is_deterministic(tmp_path) -> None:
     amp.build(plugin, second)
 
     assert _tree_hash(first) == _tree_hash(second)
+
+
+def test_drift_comparison_detects_mode_only_changes(tmp_path) -> None:
+    plugin = tmp_path / "plugin"
+    skill = _write_skill(plugin, "one", "phx:one")
+    script = skill / "run.sh"
+    script.write_text("#!/bin/sh\n", encoding="utf-8")
+    script.chmod(0o755)
+    expected = tmp_path / "expected"
+    actual = tmp_path / "actual"
+    amp.build(plugin, expected)
+    amp.build(plugin, actual)
+    (actual / "phx-one" / "run.sh").chmod(0o644)
+
+    assert _differences(expected, actual) == ["mode differs: phx-one/run.sh"]
+
+
+def test_build_restores_previous_target_when_installation_fails(
+    tmp_path,
+    monkeypatch,
+) -> None:
+    plugin = tmp_path / "plugin"
+    _write_skill(plugin, "one", "phx:one")
+    output = tmp_path / "output"
+    amp.build(plugin, output)
+    before = _tree_hash(output)
+    original_rename = Path.rename
+
+    def fail_replacement(self, target):
+        if self.name == "replacement" and Path(target) == output:
+            raise OSError("simulated installation failure")
+        return original_rename(self, target)
+
+    monkeypatch.setattr(Path, "rename", fail_replacement)
+
+    with pytest.raises(OSError, match="simulated installation failure"):
+        amp.build(plugin, output)
+
+    assert _tree_hash(output) == before
+    assert not list(output.parent.glob(".output.backup-*"))
 
 
 def test_drift_check_is_read_only(tmp_path, monkeypatch) -> None:

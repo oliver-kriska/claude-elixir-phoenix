@@ -82,19 +82,19 @@ Run the deps-audit corpus loader. Cache lives at
 `~/.cache/phx-deps-audit/corpus/<pkg>/<version>/contents/`. Use:
 
 ```text
-bash plugins/elixir-phoenix/skills/deps-audit/smoke-test/corpus.d/fetch.sh \
+bash ../phx-deps-audit/smoke-test/corpus.d/fetch.sh \
     <pkg> <version>
 ```
 
 ### Step 4: Run Phase 1 rules
 
-Source the rules from `../deps-audit/references/rules-impl.md`.
+Source the rules from `../phx-deps-audit/references/rules-impl.md`.
 Run `run_all_rules` over the cached dir. Write findings to a temp
 `vet-findings.jsonl`. Set `FINDINGS_FILE` to override default path.
 
 ### Step 5: Present findings
 
-Print the findings table per `../deps-audit/references/output-renderer.md`.
+Print the findings table per `../phx-deps-audit/references/output-renderer.md`.
 On zero findings: say "No findings — vet from a clean baseline."
 On any finding: show severity, file, line, snippet inline.
 

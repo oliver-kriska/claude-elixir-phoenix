@@ -6,6 +6,7 @@ import os
 import re
 import shutil
 import tempfile
+import uuid
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -19,6 +20,13 @@ from .skill_transforms import (
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
 SKILL_DIR_TOKEN_RE = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/([A-Za-z0-9_./<>-]+)")
 PLUGIN_ROOT_TOKEN_RE = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/([A-Za-z0-9_./-]+)")
+BARE_SIBLING_PATH_RE = re.compile(
+    r"(?<![A-Za-z0-9_./-])\.\./([a-z0-9-]+)/([A-Za-z0-9_./<>-]+)"
+)
+CANONICAL_SKILL_PATH_RE = re.compile(
+    r"(?<![A-Za-z0-9_./-])plugins/elixir-phoenix/skills/"
+    r"([a-z0-9-]+)/([A-Za-z0-9_./<>-]+)"
+)
 IGNORED_FILES = {".DS_Store"}
 CLAUDE_HOOK_UNAVAILABLE = (
     "[Claude Code-only hook unavailable in the Amp skills-only target: {path}]"
@@ -143,8 +151,22 @@ def _rewrite_resource_paths(
             )
         return _target_relative_path(source_path, current, skills)
 
+    def replace_bare_sibling(match: re.Match[str]) -> str:
+        source_path = current.source_dir.parent / match.group(1) / match.group(2)
+        if "<" in match.group(0) or ">" in match.group(0) or not source_path.exists():
+            return match.group(0)
+        return _target_relative_path(source_path, current, skills)
+
+    def replace_canonical_skill_path(match: re.Match[str]) -> str:
+        source_path = current.source_dir.parent / match.group(1) / match.group(2)
+        if "<" in match.group(0) or ">" in match.group(0) or not source_path.exists():
+            return match.group(0)
+        return _target_relative_path(source_path, current, skills)
+
     text = SKILL_DIR_TOKEN_RE.sub(replace_skill_dir, text)
-    return PLUGIN_ROOT_TOKEN_RE.sub(replace_plugin_root, text)
+    text = PLUGIN_ROOT_TOKEN_RE.sub(replace_plugin_root, text)
+    text = BARE_SIBLING_PATH_RE.sub(replace_bare_sibling, text)
+    return CANONICAL_SKILL_PATH_RE.sub(replace_canonical_skill_path, text)
 
 
 def _transform_markdown(
@@ -183,7 +205,7 @@ def _populate(skills: list[SkillSource], output_dir: Path) -> None:
                     encoding="utf-8",
                 )
             else:
-                shutil.copyfile(source_file, destination)
+                shutil.copy2(source_file, destination)
 
 
 def validate(output_dir: str | Path) -> int:
@@ -200,10 +222,23 @@ def validate(output_dir: str | Path) -> int:
             raise ValueError(
                 f"{skill_file}: frontmatter name `{name}` does not match directory"
             )
-        if set(frontmatter.data) - {"name", "description", "license"}:
+        if set(frontmatter.data) - {
+            "name",
+            "description",
+            "license",
+            "compatibility",
+            "metadata",
+        }:
             raise ValueError(f"{skill_file}: unsupported Amp frontmatter fields")
-        if not isinstance(name, str) or not SKILL_NAME_RE.fullmatch(name):
+        if (
+            not isinstance(name, str)
+            or len(name) > 64
+            or not SKILL_NAME_RE.fullmatch(name)
+        ):
             raise ValueError(f"{skill_file}: invalid Amp skill name `{name}`")
+        description = frontmatter.data.get("description")
+        if not isinstance(description, str) or not 1 <= len(description) <= 1024:
+            raise ValueError(f"{skill_file}: invalid Amp skill description")
 
     for markdown in sorted(root.rglob("*.md")):
         text = markdown.read_text(encoding="utf-8")
@@ -222,7 +257,7 @@ def validate(output_dir: str | Path) -> int:
 
 
 def build(source_plugin_dir: str | Path, output_dir: str | Path) -> dict[str, int]:
-    """Atomically replace output_dir with a complete Amp skills projection."""
+    """Replace output_dir with a validated projection, rolling back on failure."""
     source = Path(source_plugin_dir)
     output = Path(output_dir)
     skills = discover_skills(source)
@@ -236,8 +271,16 @@ def build(source_plugin_dir: str | Path, output_dir: str | Path) -> dict[str, in
 
         replacement = Path(tmp) / "replacement"
         staged.rename(replacement)
+        backup = output.with_name(f".{output.name}.backup-{uuid.uuid4().hex}")
         if output.exists():
-            shutil.rmtree(output)
-        replacement.rename(output)
+            output.rename(backup)
+        try:
+            replacement.rename(output)
+        except Exception:
+            if backup.exists() and not output.exists():
+                backup.rename(output)
+            raise
+        if backup.exists():
+            shutil.rmtree(backup)
 
     return {"skills": count}

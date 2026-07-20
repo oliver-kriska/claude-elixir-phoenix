@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import filecmp
+import stat
 import sys
 import tempfile
 from pathlib import Path
@@ -31,6 +32,10 @@ def _differences(expected: Path, actual: Path) -> list[str]:
             right = Path(current.right) / name
             if not filecmp.cmp(left, right, shallow=False):
                 differences.append(f"differs: {prefix}{name}")
+            elif stat.S_IMODE(left.stat().st_mode) != stat.S_IMODE(
+                right.stat().st_mode
+            ):
+                differences.append(f"mode differs: {prefix}{name}")
         for name, child in current.subdirs.items():
             walk(child, f"{prefix}{name}/")
 

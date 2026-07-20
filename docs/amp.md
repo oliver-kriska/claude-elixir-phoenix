@@ -44,6 +44,19 @@ directly. Workflow skills such as `phx-plan`, `phx-review`, and `phx-full` are a
 preview: their knowledge is available, but instructions that rely on named
 Claude subagents or Claude-only lifecycle hooks may need Amp-native execution.
 
+Some administration skills require more than adaptation and are not currently
+portable:
+
+| Skill | Claude-specific dependency |
+| --- | --- |
+| `phx-freeze` | Enforcement requires a Claude `PreToolUse` hook. |
+| `phx-permissions` | Manages Claude permission settings. |
+| `phx-init` | Installs Claude-specific project instructions. |
+| `phx-watch-pr` | Uses Claude background-monitor lifecycle tools. |
+
+Use these generated entries as reference material in Amp, not as claims that
+the missing Claude runtime behavior is active.
+
 Unsupported Claude hook paths are marked explicitly in generated references;
 the generator never leaves unresolved `${CLAUDE_SKILL_DIR}` or
 `${CLAUDE_PLUGIN_ROOT}` variables behind.
@@ -63,7 +76,8 @@ The builder:
 1. validates all normalized names and detects collisions before writing;
 2. copies complete skill subtrees, transforming Markdown only;
 3. validates frontmatter, resource paths, and unresolved Claude tokens;
-4. replaces the generated target only after the staged build passes;
+4. replaces the generated target only after the staged build passes, with
+   rollback if final installation fails;
 5. supports a read-only drift check used by CI.
 
 The canonical Claude plugin can be verified independently:

@@ -30,7 +30,7 @@ endpoints those rules consume.
 ## Cassette layout
 
 ```text
-plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+test-assets/hex-api-cassettes
 ├── phoenix.packages.json
 ├── phoenix.releases.1.7.20.json
 ├── phoenix.releases.1.7.21.json
@@ -98,7 +98,7 @@ Mirrors `hex.pm` API verbatim (only fields we consume):
 # Helper script — capture.sh
 pkg=$1
 ver=$2
-out_dir=plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes
+out_dir=test-assets/hex-api-cassettes
 
 curl -fsSL "https://hex.pm/api/packages/${pkg}" \
   | jq '.' > "${out_dir}/${pkg}.packages.json"
@@ -238,8 +238,8 @@ When a user adds a `hex_vet.exs` entry for a package without a
 cassette, document the manual flow in the PR:
 
 ```bash
-bash plugins/elixir-phoenix/skills/deps-audit/priv/cassettes/capture.sh <pkg> <ver>
-git add plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+bash priv/cassettes/capture.sh <pkg> <ver>
+git add test-assets/hex-api-cassettes
 ```
 
 Reviewers should diff the cassette body and the `_meta.json` SHA
