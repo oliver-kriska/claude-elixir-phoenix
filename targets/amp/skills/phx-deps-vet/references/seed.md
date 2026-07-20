@@ -95,7 +95,7 @@ pattern when `peter-evans/create-pull-request@v6` exits with 403:
 3. Exit 0 — the regen succeeded even if the PR didn't.
 
 Maintainers download the artifact, commit manually. The fallback is
-the same in `cassette-regen.yml`; see `deps-audit/references/cassettes.md`
+the same in `cassette-regen.yml`; see `../phx-deps-audit/references/cassettes.md`
 "403 fallback".
 
 ## When to NOT use the seed

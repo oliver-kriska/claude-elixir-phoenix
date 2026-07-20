@@ -118,6 +118,11 @@ def test_build_rewrites_verified_bare_resource_paths(tmp_path) -> None:
     (second / "references" / "guide.md").write_text("Guide\n", encoding="utf-8")
     (second / "scripts").mkdir()
     (second / "scripts" / "run.sh").write_text("#!/bin/sh\n", encoding="utf-8")
+    (plugin / "skills" / "first" / "references").mkdir()
+    (plugin / "skills" / "first" / "references" / "nested.md").write_text(
+        "Read `second/references/guide.md`.\n",
+        encoding="utf-8",
+    )
 
     output = tmp_path / "output"
     amp.build(plugin, output)
@@ -126,6 +131,8 @@ def test_build_rewrites_verified_bare_resource_paths(tmp_path) -> None:
     assert "../phx-second/references/guide.md" in generated
     assert "../phx-second/scripts/run.sh" in generated
     assert "plugins/elixir-phoenix" not in generated
+    nested = (output / "phx-first" / "references" / "nested.md").read_text()
+    assert "../phx-second/references/guide.md" in nested
 
 
 def test_build_rejects_name_collisions_before_replacing_output(tmp_path) -> None:

@@ -63,7 +63,7 @@ Strategy: Running `mix check` then asking about E2E
 > the build on them — no Dialyzer needed. If a previously-green build fails
 > after a 1.20 bump, suspect a newly-detected type violation, not a regression.
 > Read the message literally (accepted vs supplied type); it is almost always a
-> real bug. See `elixir-idioms/references/elixir-120-type-system.md`.
+> real bug. See `../elixir-idioms/references/elixir-120-type-system.md`.
 
 ### Step 2: Format
 

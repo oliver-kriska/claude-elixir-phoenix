@@ -27,6 +27,9 @@ CANONICAL_SKILL_PATH_RE = re.compile(
     r"(?<![A-Za-z0-9_./-])plugins/elixir-phoenix/skills/"
     r"([a-z0-9-]+)/([A-Za-z0-9_./<>-]+)"
 )
+BARE_SKILL_PATH_RE = re.compile(
+    r"(?<![A-Za-z0-9_./:-])([a-z0-9-]+)/([A-Za-z0-9_./<>-]+)"
+)
 IGNORED_FILES = {".DS_Store"}
 CLAUDE_HOOK_UNAVAILABLE = (
     "[Claude Code-only hook unavailable in the Amp skills-only target: {path}]"
@@ -163,10 +166,23 @@ def _rewrite_resource_paths(
             return match.group(0)
         return _target_relative_path(source_path, current, skills)
 
+    def replace_bare_skill_path(match: re.Match[str]) -> str:
+        source_skill = current.source_dir.parent / match.group(1)
+        source_path = source_skill / match.group(2)
+        if (
+            "<" in match.group(0)
+            or ">" in match.group(0)
+            or not (source_skill / "SKILL.md").is_file()
+            or not source_path.exists()
+        ):
+            return match.group(0)
+        return _target_relative_path(source_path, current, skills)
+
     text = SKILL_DIR_TOKEN_RE.sub(replace_skill_dir, text)
     text = PLUGIN_ROOT_TOKEN_RE.sub(replace_plugin_root, text)
     text = BARE_SIBLING_PATH_RE.sub(replace_bare_sibling, text)
-    return CANONICAL_SKILL_PATH_RE.sub(replace_canonical_skill_path, text)
+    text = CANONICAL_SKILL_PATH_RE.sub(replace_canonical_skill_path, text)
+    return BARE_SKILL_PATH_RE.sub(replace_bare_skill_path, text)
 
 
 def _transform_markdown(
