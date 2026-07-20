@@ -1,0 +1,5 @@
+cve-diff category:patched count:1
+cve-diff contains:CVE-2026-32686
+cve-diff contains:"package":"decimal"
+cve-diff contains:"severity":"info"
+cve-diff contains:"disclosed_at":"2026-05-07"

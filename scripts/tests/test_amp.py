@@ -5,6 +5,7 @@ from pathlib import Path
 
 import pytest
 
+from scripts import build_amp_skills
 from scripts.port_lib import SOURCE_PLUGIN_DIR
 from scripts.port_lib import amp
 from scripts.port_lib.frontmatter import parse_file
@@ -135,3 +136,23 @@ def test_amp_projection_is_deterministic(tmp_path) -> None:
     amp.build(plugin, second)
 
     assert _tree_hash(first) == _tree_hash(second)
+
+
+def test_drift_check_is_read_only(tmp_path, monkeypatch) -> None:
+    plugin = tmp_path / "plugin"
+    _write_skill(plugin, "one", "phx:one")
+    output = tmp_path / "target" / "skills"
+    amp.build(plugin, output)
+    before = _tree_hash(output)
+    monkeypatch.setattr(build_amp_skills, "SOURCE_PLUGIN_DIR", plugin)
+    monkeypatch.setattr(build_amp_skills, "OUTPUT_DIR", output)
+
+    assert build_amp_skills.check() == 0
+    assert _tree_hash(output) == before
+
+    skill_file = output / "phx-one" / "SKILL.md"
+    skill_file.write_text(skill_file.read_text() + "drift\n", encoding="utf-8")
+    drifted = _tree_hash(output)
+
+    assert build_amp_skills.check() == 1
+    assert _tree_hash(output) == drifted
