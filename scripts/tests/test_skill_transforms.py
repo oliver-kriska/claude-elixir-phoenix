@@ -41,10 +41,12 @@ def test_claude_frontmatter_is_preserved() -> None:
 
 
 @pytest.mark.parametrize("target", ["codex", "pi", "opencode"])
-def test_non_claude_frontmatter_preserves_extensions_in_metadata(target: str) -> None:
+def test_non_claude_frontmatter_drops_claude_extensions(target: str) -> None:
     data = {
         "name": "phx:plan",
         "description": "Use after /phx:review.",
+        "compatibility": "Requires Elixir",
+        "metadata": {"author": "example"},
         "effort": "high",
         "paths": ["**/*.ex"],
     }
@@ -52,11 +54,19 @@ def test_non_claude_frontmatter_preserves_extensions_in_metadata(target: str) ->
     transformed = transform_frontmatter(data, target)
 
     assert transformed["name"] == "phx-plan"
-    assert transformed["metadata"] == {
-        "effort": "high",
-        "paths": ["**/*.ex"],
-    }
+    assert transformed["compatibility"] == "Requires Elixir"
+    assert transformed["metadata"] == {"author": "example"}
+    assert "effort" not in transformed
+    assert "paths" not in transformed
     assert "/phx:review" not in transformed["description"]
+
+
+def test_non_claude_frontmatter_rejects_non_string_metadata() -> None:
+    with pytest.raises(ValueError, match="string-to-string mapping"):
+        transform_frontmatter(
+            {"name": "testing", "metadata": {"paths": ["**/*.ex"]}},
+            "codex",
+        )
 
 
 def test_transform_frontmatter_rejects_unknown_target() -> None:
@@ -77,7 +87,7 @@ def test_reference_paths_are_relative_outside_claude() -> None:
     ("target", "expected"),
     [
         ("claude", "Run /phx:plan, /lv:assigns, and /ecto:n1-check."),
-        ("codex", "Run phx-plan, lv-assigns, and ecto-n1-check."),
+        ("codex", "Run $phx-plan, $lv-assigns, and $ecto-n1-check."),
         ("pi", "Run /phx-plan, /lv-assigns, and /ecto-n1-check."),
         ("opencode", "Run /phx-plan, /lv-assigns, and /ecto-n1-check."),
     ],
@@ -107,7 +117,7 @@ def test_port_references_transforms_markdown_and_preserves_binary(tmp_path) -> N
     port_references(source, destination, "codex")
 
     assert (destination / "guide.md").read_text(encoding="utf-8") == (
-        "Use phx-review and read references/details.md.\n"
+        "Use $phx-review and read references/details.md.\n"
     )
     assert (destination / "asset.bin").read_bytes() == payload
 

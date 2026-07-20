@@ -40,12 +40,32 @@ def test_parse_reports_source_for_missing_closer() -> None:
         parse("---\nname: broken\n", source="skill/SKILL.md")
 
 
-@pytest.mark.parametrize("yaml_value", ["- one\n- two", "plain scalar"])
+@pytest.mark.parametrize(
+    "yaml_value",
+    ["- one\n- two", "plain scalar", "false", "0", "[]", '""'],
+)
 def test_parse_rejects_non_mapping_frontmatter(yaml_value: str) -> None:
     text = f"---\n{yaml_value}\n---\nBody\n"
 
     with pytest.raises(ValueError, match="frontmatter must be a mapping"):
         parse(text)
+
+
+@pytest.mark.parametrize("opener", ["----", "---suffix", "--- "])
+def test_parse_requires_exact_opening_delimiter(opener: str) -> None:
+    text = f"{opener}\nordinary Markdown\n---\n"
+
+    assert parse(text) == Frontmatter(data={}, body=text)
+
+
+def test_parse_rejects_duplicate_keys_with_source() -> None:
+    text = "---\nname: first\nname: second\n---\nBody\n"
+
+    with pytest.raises(
+        ValueError,
+        match=r"(?s)skill/SKILL\.md: invalid YAML.*duplicate key",
+    ):
+        parse(text, source="skill/SKILL.md")
 
 
 def test_parse_file_and_write_file(tmp_path) -> None:

@@ -1,4 +1,4 @@
-"""Pure source-to-target transforms for Agent Skills."""
+"""Shared source-to-target transforms for Agent Skills."""
 
 from __future__ import annotations
 
@@ -7,18 +7,7 @@ import shutil
 from pathlib import Path
 from typing import Iterable
 
-AGENTSKILLS_FIELDS = {"name", "description", "license"}
-
-CLAUDE_EXTENSION_FIELDS = {
-    "effort",
-    "allowed-tools",
-    "disallowed-tools",
-    "model",
-    "memory",
-    "skills",
-    "permissionMode",
-    "omitClaudeMd",
-}
+AGENTSKILLS_FIELDS = {"name", "description", "license", "compatibility", "metadata"}
 
 
 def normalize_skill_name(name: str) -> str:
@@ -37,15 +26,22 @@ def transform_frontmatter(data: dict, target: str) -> dict:
         raise ValueError(f"Unknown target: {target}")
 
     output: dict = {}
-    metadata: dict = {}
 
     for key, value in data.items():
         if key == "name":
             output["name"] = normalize_skill_name(value)
         elif key in AGENTSKILLS_FIELDS:
             output[key] = value
-        else:
-            metadata[key] = value
+
+    metadata = output.get("metadata")
+    if metadata is not None and (
+        not isinstance(metadata, dict)
+        or not all(
+            isinstance(key, str) and isinstance(value, str)
+            for key, value in metadata.items()
+        )
+    ):
+        raise ValueError("Agent Skills metadata must be a string-to-string mapping")
 
     if isinstance(output.get("description"), str):
         output["description"] = rewrite_slash_commands(
@@ -53,8 +49,6 @@ def transform_frontmatter(data: dict, target: str) -> dict:
             target,
         )
 
-    if metadata:
-        output["metadata"] = metadata
     return output
 
 
@@ -94,7 +88,7 @@ def port_references(
             text = rewrite_slash_commands(text, target)
             output.write_text(text, encoding="utf-8")
         else:
-            output.write_bytes(src.read_bytes())
+            shutil.copy2(src, output)
 
 
 def rewrite_slash_commands(body: str, target: str) -> str:
@@ -102,7 +96,7 @@ def rewrite_slash_commands(body: str, target: str) -> str:
     if target == "claude":
         return body
     if target == "codex":
-        return _SLASH_CMD_RE.sub(r"\1-\2", body)
+        return _SLASH_CMD_RE.sub(r"$\1-\2", body)
     if target in ("pi", "opencode"):
         return _SLASH_CMD_RE.sub(r"/\1-\2", body)
     raise ValueError(f"Unknown target: {target}")
