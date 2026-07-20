@@ -1,0 +1,16 @@
+{
+  "capture_source": "https://hex.pm/api",
+  "captured_at": "2026-05-12T10:21:09.584688+00:00",
+  "files": {
+    "jason.packages.json": {
+      "captured_at": "2026-05-12T10:21:09.584688+00:00",
+      "endpoint": "/api/packages/jason",
+      "sha256": "7cb8b90520d8d80c5de49ba8d983b308cacb31b6cfb903e1fc17238c6bb4cc67"
+    },
+    "jason.releases.1.4.4.json": {
+      "captured_at": "2026-05-12T10:21:09.584688+00:00",
+      "endpoint": "/api/packages/jason/releases/1.4.4",
+      "sha256": "e826ef1bb226895903111860e6f71e5b9e13a77222af9ee96b22017e137a5659"
+    }
+  }
+}

@@ -22,7 +22,7 @@ def transform_frontmatter(data: dict, target: str) -> dict:
     if target == "claude":
         return dict(data)
 
-    if target not in ("codex", "pi", "opencode"):
+    if target not in ("amp", "codex", "pi", "opencode"):
         raise ValueError(f"Unknown target: {target}")
 
     output: dict = {}
@@ -54,6 +54,7 @@ def transform_frontmatter(data: dict, target: str) -> dict:
 
 _CLAUDE_REF_RE = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/references/([\w./-]+)")
 _SLASH_CMD_RE = re.compile(r"/(phx|lv|ecto):([a-z][a-z0-9-]*)")
+_SLASH_NAMESPACE_RE = re.compile(r"/(phx|lv|ecto):\*?")
 
 
 def rewrite_reference_paths(body: str, target: str) -> str:
@@ -95,8 +96,12 @@ def rewrite_slash_commands(body: str, target: str) -> str:
     """Rewrite Claude namespaced command references for a target."""
     if target == "claude":
         return body
+    if target == "amp":
+        body = _SLASH_CMD_RE.sub(r"\1-\2", body)
+        return _SLASH_NAMESPACE_RE.sub(r"\1-*", body)
     if target == "codex":
-        return _SLASH_CMD_RE.sub(r"$\1-\2", body)
+        body = _SLASH_CMD_RE.sub(r"$\1-\2", body)
+        return _SLASH_NAMESPACE_RE.sub(r"$\1-*", body)
     if target in ("pi", "opencode"):
         return _SLASH_CMD_RE.sub(r"/\1-\2", body)
     raise ValueError(f"Unknown target: {target}")

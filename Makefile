@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -62,6 +62,12 @@ test-quick: ## Run pytest (no verbose, fast)
 validate: ## Run claude plugin validate on plugin structure
 	@claude plugin validate plugins/elixir-phoenix
 
+amp-skills: ## Generate Amp skills from the canonical Claude plugin
+	@python3 -m scripts.build_amp_skills
+
+amp-skills-validate: ## Check committed Amp skills for generated drift
+	@python3 -m scripts.build_amp_skills --check
+
 # --- Security ---
 
 security: ## SkillSpector scan of all skills + agents (skips if not installed)
@@ -74,7 +80,7 @@ security: ## SkillSpector scan of all skills + agents (skips if not installed)
 
 # --- CI (full pipeline) ---
 
-ci: lint test validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
+ci: lint test validate amp-skills-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
 
 # --- Clean ---
 

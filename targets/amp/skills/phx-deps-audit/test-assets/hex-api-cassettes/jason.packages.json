@@ -1,0 +1,163 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/michalmuskala/jason"
+    },
+    "description": "A blazing fast JSON parser and generator in pure Elixir.",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "jason",
+  "url": "https://hex.pm/api/packages/jason",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/michalmuskala",
+      "email": "michal@muskala.eu",
+      "username": "michalmuskala"
+    }
+  ],
+  "inserted_at": "2017-12-22T09:32:40.615828Z",
+  "updated_at": "2026-05-05T14:34:54.953586Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.5.0-alpha.2",
+      "url": "https://hex.pm/api/packages/jason/releases/1.5.0-alpha.2",
+      "has_docs": true,
+      "inserted_at": "2023-07-07T10:11:17.931295Z"
+    },
+    {
+      "version": "1.5.0-alpha.1",
+      "url": "https://hex.pm/api/packages/jason/releases/1.5.0-alpha.1",
+      "has_docs": true,
+      "inserted_at": "2022-10-16T20:11:41.386180Z"
+    },
+    {
+      "version": "1.4.5",
+      "url": "https://hex.pm/api/packages/jason/releases/1.4.5",
+      "has_docs": true,
+      "inserted_at": "2026-05-05T14:34:53.909653Z"
+    },
+    {
+      "version": "1.4.4",
+      "url": "https://hex.pm/api/packages/jason/releases/1.4.4",
+      "has_docs": true,
+      "inserted_at": "2024-07-26T17:51:45.963093Z"
+    },
+    {
+      "version": "1.4.3",
+      "url": "https://hex.pm/api/packages/jason/releases/1.4.3",
+      "has_docs": true,
+      "inserted_at": "2024-06-29T16:10:22.568556Z"
+    },
+    {
+      "version": "1.4.2",
+      "url": "https://hex.pm/api/packages/jason/releases/1.4.2",
+      "has_docs": true,
+      "inserted_at": "2024-06-29T15:43:57.230584Z"
+    },
+    {
+      "version": "1.4.1",
+      "url": "https://hex.pm/api/packages/jason/releases/1.4.1",
+      "has_docs": true,
+      "inserted_at": "2023-07-07T09:28:26.799873Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/jason/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2022-09-12T19:53:18.454292Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/jason/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2021-12-21T14:22:24.054695Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/jason/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2020-09-08T20:01:45.068107Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/jason/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2020-05-04T19:46:36.963001Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/jason/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-17T21:22:55.521084Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/jason/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2018-10-19T18:01:19.398712Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/jason/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2018-07-10T20:14:17.639964Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/jason/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2018-07-02T18:18:58.092694Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/jason/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2018-07-02T10:08:56.261354Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/jason/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2018-01-26T09:58:27.849565Z"
+    },
+    {
+      "version": "1.0.0-rc.3",
+      "url": "https://hex.pm/api/packages/jason/releases/1.0.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2018-01-26T09:40:44.792652Z"
+    },
+    {
+      "version": "1.0.0-rc.2",
+      "url": "https://hex.pm/api/packages/jason/releases/1.0.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2018-01-07T10:14:28.167788Z"
+    },
+    {
+      "version": "1.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/jason/releases/1.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2017-12-22T09:32:40.629452Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/jason",
+  "downloads": {
+    "all": 199332083,
+    "day": 85352,
+    "recent": 4642840,
+    "week": 473491
+  },
+  "security_advisories": [],
+  "latest_version": "1.5.0-alpha.2",
+  "docs_html_url": "https://hexdocs.pm/jason/",
+  "configs": {
+    "erlang.mk": "dep_jason = hex 1.4.5",
+    "mix.exs": "{:jason, \"~> 1.4\"}",
+    "rebar.config": "{jason, \"1.4.5\"}"
+  },
+  "retirements": {},
+  "latest_stable_version": "1.4.5"
+}

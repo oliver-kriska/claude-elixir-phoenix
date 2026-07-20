@@ -61,6 +61,22 @@ def test_non_claude_frontmatter_drops_claude_extensions(target: str) -> None:
     assert "/phx:review" not in transformed["description"]
 
 
+def test_amp_frontmatter_omits_claude_extensions() -> None:
+    transformed = transform_frontmatter(
+        {
+            "name": "phx:plan",
+            "description": "Use after /phx:review.",
+            "effort": "high",
+        },
+        "amp",
+    )
+
+    assert transformed == {
+        "name": "phx-plan",
+        "description": "Use after phx-review.",
+    }
+
+
 def test_non_claude_frontmatter_rejects_non_string_metadata() -> None:
     with pytest.raises(ValueError, match="string-to-string mapping"):
         transform_frontmatter(
@@ -87,6 +103,7 @@ def test_reference_paths_are_relative_outside_claude() -> None:
     ("target", "expected"),
     [
         ("claude", "Run /phx:plan, /lv:assigns, and /ecto:n1-check."),
+        ("amp", "Run phx-plan, lv-assigns, and ecto-n1-check."),
         ("codex", "Run $phx-plan, $lv-assigns, and $ecto-n1-check."),
         ("pi", "Run /phx-plan, /lv-assigns, and /ecto-n1-check."),
         ("opencode", "Run /phx-plan, /lv-assigns, and /ecto-n1-check."),
@@ -101,6 +118,14 @@ def test_rewrite_slash_commands(target: str, expected: str) -> None:
 def test_rewrite_slash_commands_rejects_unknown_target() -> None:
     with pytest.raises(ValueError, match="Unknown target: other"):
         rewrite_slash_commands("Run /phx:plan.", "other")
+
+
+def test_amp_rewrites_generic_claude_namespaces() -> None:
+    body = "Use a /phx: workflow or `/ecto:*` command."
+
+    assert rewrite_slash_commands(body, "amp") == (
+        "Use a phx-* workflow or `ecto-*` command."
+    )
 
 
 def test_port_references_transforms_markdown_and_preserves_binary(tmp_path) -> None:

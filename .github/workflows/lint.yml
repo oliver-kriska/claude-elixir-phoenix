@@ -119,6 +119,9 @@ jobs:
       - name: Run pytest
         run: python3 -m pytest lab/eval/tests/ scripts/tests/ -v --tb=short
 
+      - name: Check Amp generated skills
+        run: python3 -m scripts.build_amp_skills --check
+
   eval:
     name: Skill & Agent Eval
     runs-on: ubuntu-latest
