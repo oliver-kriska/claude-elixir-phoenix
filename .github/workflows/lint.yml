@@ -57,10 +57,10 @@ jobs:
         run: pip install pyyaml ruff pip-audit
 
       - name: Ruff lint (Python)
-        run: ruff check lab/ --select E,F,W --ignore E501,E402
+        run: ruff check lab/ scripts/ --select E,F,W --ignore E501,E402
 
       - name: Ruff format check
-        run: ruff format --check lab/ || true
+        run: ruff format --check lab/ scripts/ || true
 
       - name: Pip audit (security)
         run: pip-audit -r requirements.txt || true
@@ -117,7 +117,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run pytest
-        run: python3 -m pytest lab/eval/tests/ -v --tb=short
+        run: python3 -m pytest lab/eval/tests/ scripts/tests/ -v --tb=short
 
   eval:
     name: Skill & Agent Eval

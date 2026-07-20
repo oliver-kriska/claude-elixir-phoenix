@@ -51,11 +51,11 @@ eval-agents: ## Score all agents only
 
 # --- Test ---
 
-test: ## Run pytest (75 tests for eval framework)
-	@python3 -m pytest lab/eval/tests/ -v --tb=short
+test: ## Run pytest for eval framework and port primitives
+	@python3 -m pytest lab/eval/tests/ scripts/tests/ -v --tb=short
 
 test-quick: ## Run pytest (no verbose, fast)
-	@python3 -m pytest lab/eval/tests/ -q
+	@python3 -m pytest lab/eval/tests/ scripts/tests/ -q
 
 # --- Validate ---
 
@@ -79,6 +79,6 @@ ci: lint test validate eval-all security ## Full CI: lint + test + validate + ev
 # --- Clean ---
 
 clean: ## Remove Python cache files
-	@find lab/ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
-	@find lab/ -name "*.pyc" -delete 2>/dev/null || true
+	@find lab/ scripts/ -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+	@find lab/ scripts/ -name "*.pyc" -delete 2>/dev/null || true
 	@echo "Cleaned"
