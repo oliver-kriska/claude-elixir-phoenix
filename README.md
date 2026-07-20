@@ -138,6 +138,22 @@ git clone https://github.com/oliver-kriska/claude-elixir-phoenix.git
 claude --plugin-dir ./claude-elixir-phoenix/plugins/elixir-phoenix
 ```
 
+### Amp skills preview
+
+Amp can install the plugin's 51 skills from the generated Agent Skills target:
+
+```bash
+git clone https://github.com/oliver-kriska/claude-elixir-phoenix.git
+cd claude-elixir-phoenix
+amp skill add ./targets/amp/skills --global
+```
+
+Namespaced Claude commands use hyphenated Amp names: `phx:plan` becomes
+`phx-plan`, `ecto:n1-check` becomes `ecto-n1-check`, and so on. This preview
+ships skills and their bundled resources, but not the Claude-specific hooks,
+custom agents, or MCP setup. See [Amp support](docs/amp.md) for scope,
+project-local installation, and regeneration instructions.
+
 ## Getting Started
 
 New to the plugin? Run the interactive tutorial:
