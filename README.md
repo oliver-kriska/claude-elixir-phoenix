@@ -19,6 +19,11 @@ including Codex-compatible `$phx-investigate` and `$phx-review` workflows. See
 [Use with Codex](#use-with-codex); hooks, custom agents, and bundled Tidewave MCP
 are intentionally not included yet.
 
+**Using Pi?** Install the native generated skills package for all 51 skills,
+including Pi-compatible `/skill:phx-investigate` and `/skill:phx-review`
+workflows. See [Use with Pi](#use-with-pi); extensions, prompt templates, MCP,
+and custom agents are intentionally not included yet.
+
 ```bash
 # You describe the feature. The plugin figures out the rest.
 /phx:plan Add real-time comment notifications
@@ -214,6 +219,24 @@ skills and bundled skill resources only—not Claude hooks, custom agents,
 plugin-root instructions, or Tidewave MCP configuration. See the complete
 [Codex guide](docs/codex.md) for updates, uninstall, isolation, troubleshooting,
 tested version, and capability details.
+
+### Use with Pi
+
+Install the repository as a Pi package globally, or add `-l` to scope it to the
+current project:
+
+```bash
+pi install git:github.com/oliver-kriska/claude-elixir-phoenix
+pi list
+```
+
+Start a fresh Pi session, then invoke workflows explicitly with
+`/skill:phx-investigate` or `/skill:phx-review`. Pi can also select a skill from
+its description automatically. This edition ships skills and their complete
+bundled resources only—not extensions, prompt templates, custom agents,
+package-root instructions, or Tidewave MCP configuration. See the complete
+[Pi guide](docs/pi.md) for project-local installation, updates, uninstall,
+isolation, troubleshooting, tested version, and capability details.
 
 ## Getting Started
 

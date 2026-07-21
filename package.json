@@ -3,6 +3,14 @@
   "version": "1.0.0",
   "private": true,
   "description": "Claude Code plugin for Elixir/Phoenix development",
+  "keywords": [
+    "pi-package"
+  ],
+  "pi": {
+    "skills": [
+      "./targets/pi/skills"
+    ]
+  },
   "scripts": {
     "lint": "markdownlint \"**/*.md\" --ignore node_modules --ignore docs --ignore reports --ignore analysis --ignore scratchpad --ignore lab/findings",
     "lint:fix": "markdownlint \"**/*.md\" --fix --ignore node_modules --ignore docs --ignore reports --ignore analysis --ignore scratchpad --ignore lab/findings",

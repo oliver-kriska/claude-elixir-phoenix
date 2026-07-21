@@ -1,0 +1,147 @@
+# Top Hex packages by download count — sampled from a real Phoenix
+# app's mix.lock (Plausible 2025-04 snapshot). Used by the benign FP
+# bench: every entry SHOULD produce zero high-severity findings.
+#
+# Format: <package> <version> (one per line, '#' for comments).
+# Loader: bash corpus.d/fetch.sh --batch corpus.d/benign-100.txt
+#
+# Last refreshed: 2026-05-12. Stale-warning kicks in at 90 days.
+#
+# Strictly cherry-picked for stability — every release pinned to a
+# version published >6 months ago so we don't fight version churn.
+
+phoenix 1.7.21
+phoenix_live_view 1.0.5
+phoenix_html 4.1.1
+phoenix_pubsub 2.1.3
+phoenix_ecto 4.6.2
+phoenix_view 2.0.4
+phoenix_template 1.0.4
+phoenix_live_dashboard 0.8.5
+phoenix_live_reload 1.5.3
+
+# Core data + serialization
+jason 1.4.4
+ecto 3.12.4
+ecto_sql 3.12.1
+postgrex 0.19.3
+db_connection 2.7.0
+decimal 2.1.1
+
+# HTTP + telemetry
+plug 1.16.1
+plug_cowboy 2.7.2
+cowboy 2.12.0
+cowboy_telemetry 0.4.0
+cowlib 2.13.0
+mime 2.0.6
+telemetry 1.3.0
+telemetry_poller 1.1.0
+telemetry_metrics 1.1.0
+
+# Auth / sessions
+argon2_elixir 4.0.0
+bcrypt_elixir 3.2.0
+plug_crypto 2.1.0
+
+# OTP / process management
+gen_stage 1.2.1
+flow 1.2.4
+
+# Crypto / certs
+castore 1.0.10
+mint 1.6.2
+ssl_verify_fun 1.1.7
+
+# Compression / files
+gzip 0.7.0
+ex_aws 2.5.5
+ex_aws_s3 2.5.4
+hackney 1.20.1
+
+# Test deps (would vet :safe_to_run rather than :safe_to_deploy)
+ex_machina 2.8.0
+mox 1.2.0
+stream_data 1.1.1
+floki 0.36.3
+
+# OAuth / auth
+ueberauth 0.10.8
+ueberauth_google 0.12.1
+oauth2 2.1.0
+
+# Markdown / templating
+earmark 1.4.46
+eex 1.18.1
+
+# Calendar / dates
+timex 3.7.11
+tz 0.27.1
+
+# Background jobs
+oban 2.18.3
+oban_web 2.10.4
+
+# Email
+swoosh 1.17.4
+finch 0.19.0
+
+# Build tools
+credo 1.7.10
+dialyxir 1.4.4
+sobelow 0.13.0
+
+# UUID / IDs
+elixir_uuid 1.2.1
+nanoid 2.1.0
+ulid 0.2.0
+
+# JSON Schema / validation
+ex_json_schema 0.10.2
+nimble_options 1.1.1
+nimble_parsec 1.4.0
+
+# Phoenix LiveView ecosystem
+heroicons 0.5.6
+tailwind 0.2.4
+esbuild 0.8.2
+
+# Tooling
+mix_test_watch 1.2.0
+mix_audit 2.1.4
+
+# Code quality
+makeup 1.2.1
+makeup_elixir 1.0.1
+makeup_erlang 1.0.1
+
+# CSV / tabular
+csv 3.2.1
+nimble_csv 1.2.0
+
+# String utils
+recase 0.8.1
+inflex 2.1.0
+
+# Compression
+zstream 0.6.4
+phoenix_swoosh 1.2.1
+
+# Image
+mogrify 0.9.3
+
+# Geo
+geo 3.6.0
+geo_postgis 3.5.1
+
+# OpenAPI
+open_api_spex 3.21.2
+
+# Misc
+gettext 0.26.2
+expo 1.1.0
+poolboy 1.5.2
+ranch 2.1.0
+parse_trans 3.4.1
+file_system 1.0.1
+fs 8.6.1

@@ -1,0 +1,27 @@
+{
+  "name": "pi-elixir-phoenix",
+  "version": "2.14.3",
+  "description": "Generated Elixir, Phoenix, LiveView, Ecto, Oban, testing, and security skills for Pi",
+  "keywords": [
+    "elixir",
+    "phoenix",
+    "liveview",
+    "ecto",
+    "oban",
+    "otp",
+    "pi-package"
+  ],
+  "author": {
+    "name": "Oliver Kriska"
+  },
+  "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "engines": {
+    "node": ">=22.19.0"
+  },
+  "pi": {
+    "skills": [
+      "./skills"
+    ]
+  }
+}

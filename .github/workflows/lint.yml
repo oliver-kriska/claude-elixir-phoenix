@@ -125,6 +125,9 @@ jobs:
       - name: Check Codex generated skills
         run: python3 -m scripts.build_codex_skills --check
 
+      - name: Check Pi generated skills
+        run: python3 -m scripts.build_pi_skills --check
+
   eval:
     name: Skill & Agent Eval
     runs-on: ubuntu-latest
