@@ -1,0 +1,5 @@
+cve-diff category:patched count:1
+cve-diff contains:CVE-2026-32687
+cve-diff contains:"package":"postgrex"
+cve-diff contains:"severity_label":"critical"
+cve-diff contains:SQL injection

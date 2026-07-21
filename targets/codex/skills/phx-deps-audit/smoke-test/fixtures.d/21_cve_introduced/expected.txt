@@ -1,0 +1,8 @@
+# 21_cve_introduced: clean OLD, vulnerable NEW.
+# diff_cves.py should emit exactly one `introduced` finding with severity=block.
+cve-diff category:patched count:0
+cve-diff category:introduced count:1
+cve-diff category:still_exposed count:0
+cve-diff contains:CVE-2026-99999
+cve-diff contains:"severity":"block"
+cve-diff contains:REGRESSION

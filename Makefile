@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -72,6 +72,16 @@ amp-skills-sync: ## Regenerate and verify the committed Amp target
 amp-skills-validate: ## Check committed Amp skills for generated drift
 	@python3 -m scripts.build_amp_skills --check
 
+codex-skills: ## Generate the Codex skills plugin from the canonical Claude plugin
+	@python3 -m scripts.build_codex_skills
+
+codex-skills-sync: ## Regenerate and verify the committed Codex target
+	@$(MAKE) codex-skills
+	@$(MAKE) codex-skills-validate
+
+codex-skills-validate: ## Check committed Codex skills for generated drift
+	@python3 -m scripts.build_codex_skills --check
+
 # --- Security ---
 
 security: ## SkillSpector scan of all skills + agents (skips if not installed)
@@ -84,7 +94,7 @@ security: ## SkillSpector scan of all skills + agents (skips if not installed)
 
 # --- CI (full pipeline) ---
 
-ci: lint test validate amp-skills-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
+ci: lint test validate amp-skills-validate codex-skills-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
 
 # --- Clean ---
 

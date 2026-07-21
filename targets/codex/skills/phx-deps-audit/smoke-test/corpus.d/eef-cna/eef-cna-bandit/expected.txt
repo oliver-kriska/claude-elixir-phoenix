@@ -1,0 +1,6 @@
+# Bandit had 2 CVEs in scope; both should be patched.
+cve-diff category:patched count:2
+cve-diff category:introduced count:0
+cve-diff contains:CVE-2026-39805
+cve-diff contains:CVE-2026-39804
+cve-diff contains:"package":"bandit"

@@ -1,0 +1,20 @@
+{
+  "name": "oliver-kriska",
+  "interface": {
+    "displayName": "Oliver Kriška Plugins"
+  },
+  "plugins": [
+    {
+      "name": "elixir-phoenix",
+      "source": {
+        "source": "local",
+        "path": "./targets/codex"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Development"
+    }
+  ]
+}

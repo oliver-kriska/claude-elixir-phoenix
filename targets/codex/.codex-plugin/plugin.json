@@ -1,0 +1,10 @@
+{
+  "name": "elixir-phoenix",
+  "version": "2.14.3",
+  "description": "Generated Elixir, Phoenix, LiveView, Ecto, Oban, testing, and security skills for Codex",
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Elixir/Phoenix Skills",
+    "shortDescription": "Generated Elixir and Phoenix development workflows"
+  }
+}

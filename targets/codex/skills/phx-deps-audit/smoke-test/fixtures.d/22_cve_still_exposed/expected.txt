@@ -1,0 +1,7 @@
+# 22_cve_still_exposed: both locks hit CVE-2026-32686 — bump didn't help.
+cve-diff category:patched count:0
+cve-diff category:introduced count:0
+cve-diff category:still_exposed count:1
+cve-diff contains:CVE-2026-32686
+cve-diff contains:STILL EXPOSED
+cve-diff contains:"severity":"block"

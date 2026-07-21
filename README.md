@@ -14,6 +14,11 @@ Phoenix, LiveView, Ecto, Oban, testing, and security skills. See
 [Use with Amp](#use-with-amp) for the important differences from the full Claude
 Code plugin.
 
+**Using Codex?** Install the native generated skills plugin for all 51 skills,
+including Codex-compatible `$phx-investigate` and `$phx-review` workflows. See
+[Use with Codex](#use-with-codex); hooks, custom agents, and bundled Tidewave MCP
+are intentionally not included yet.
+
 ```bash
 # You describe the feature. The plugin figures out the rest.
 /phx:plan Add real-time comment notifications
@@ -190,6 +195,25 @@ edition ships skills and their bundled resources, not the Claude-specific
 hooks, custom agents, permission settings, or MCP setup. Read the complete
 [Amp installation and usage guide](docs/amp.md) for verification, updates,
 skill precedence, examples, troubleshooting, and the portability matrix.
+
+### Use with Codex
+
+Codex installs the generated target as a native skills plugin. Registration and
+installation are separate steps:
+
+```bash
+codex plugin marketplace add oliver-kriska/claude-elixir-phoenix --ref main
+codex plugin add elixir-phoenix@oliver-kriska
+codex plugin list
+```
+
+Start a fresh Codex session, then invoke workflows explicitly with
+`$phx-investigate` or `$phx-review`, browse them with `/skills`, or let Codex
+select a relevant skill from its description. This edition currently ships
+skills and bundled skill resources only—not Claude hooks, custom agents,
+plugin-root instructions, or Tidewave MCP configuration. See the complete
+[Codex guide](docs/codex.md) for updates, uninstall, isolation, troubleshooting,
+tested version, and capability details.
 
 ## Getting Started
 
