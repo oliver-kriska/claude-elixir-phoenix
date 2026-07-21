@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -64,6 +64,10 @@ validate: ## Run claude plugin validate on plugin structure
 
 amp-skills: ## Generate Amp skills from the canonical Claude plugin
 	@python3 -m scripts.build_amp_skills
+
+amp-skills-sync: ## Regenerate and verify the committed Amp target
+	@$(MAKE) amp-skills
+	@$(MAKE) amp-skills-validate
 
 amp-skills-validate: ## Check committed Amp skills for generated drift
 	@python3 -m scripts.build_amp_skills --check

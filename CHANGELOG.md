@@ -9,7 +9,19 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Amp target drift pre-commit guard** — canonical changes under
+  `plugins/elixir-phoenix/skills/` now trigger `make amp-skills-validate` and
+  require regenerated `targets/amp/skills/` changes to be staged. CI retains
+  the same drift check as the authoritative fallback. Contributors can run
+  `make amp-skills-sync` to regenerate and verify the complete target in one
+  command.
+
 ### Changed
+
+- **Amp installation no longer requires cloning this repository** — the primary
+  project-local and global instructions now install all 51 generated skills
+  directly from the GitHub `targets/amp/skills` tree. Update instructions also
+  clarify that Amp copies skills and requires an explicit `--overwrite` install.
 
 ### Fixed
 

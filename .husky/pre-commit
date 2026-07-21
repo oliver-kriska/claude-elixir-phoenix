@@ -6,6 +6,7 @@ STAGED_MD=$(git diff --cached --name-only --diff-filter=ACM | grep '\.md$' || tr
 STAGED_JSON=$(git diff --cached --name-only --diff-filter=ACM | grep '\.json$' || true)
 STAGED_SH=$(git diff --cached --name-only --diff-filter=ACM | grep '\.sh$' || true)
 STAGED_SKILL_AGENT=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^plugins/[^/]+/(skills|agents)/' || true)
+STAGED_CANONICAL_SKILLS=$(git diff --cached --name-only --diff-filter=ACMRD | grep -E '^plugins/elixir-phoenix/skills/' || true)
 STAGED_EVAL_FW=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^lab/eval/' || true)
 
 # Markdown lint
@@ -61,6 +62,25 @@ if [ -n "$STAGED_SKILL_AGENT" ]; then
   if ! make eval > /tmp/precommit-eval.log 2>&1; then
     echo "Plugin eval failed. See /tmp/precommit-eval.log or run: make eval-fix"
     tail -30 /tmp/precommit-eval.log
+    exit 1
+  fi
+fi
+
+# Generated Amp target drift (only when canonical Elixir/Phoenix skills change).
+# Validate first, then require any regenerated target edits to be staged so the
+# source and projection land in the same commit. CI repeats the drift check from
+# the committed tree for contributors without Husky.
+if [ -n "$STAGED_CANONICAL_SKILLS" ]; then
+  echo "→ Checking generated Amp skills..."
+  if ! make amp-skills-validate > /tmp/precommit-amp-skills.log 2>&1; then
+    echo "Amp skills are out of date. Run: make amp-skills-sync"
+    tail -30 /tmp/precommit-amp-skills.log
+    exit 1
+  fi
+
+  UNTRACKED_AMP_SKILLS=$(git ls-files --others --exclude-standard -- targets/amp/skills)
+  if ! git diff --quiet -- targets/amp/skills || [ -n "$UNTRACKED_AMP_SKILLS" ]; then
+    echo "Generated Amp skill changes are not staged. Run: git add targets/amp/skills"
     exit 1
   fi
 fi

@@ -24,12 +24,7 @@ before relying on a workflow or administration skill.
 ## Requirements
 
 1. Install [Amp](https://ampcode.com/).
-2. Clone this repository.
-3. Run the installation from the Elixir/Phoenix project where Amp will work.
-
-```bash
-git clone https://github.com/oliver-kriska/claude-elixir-phoenix.git
-```
+2. Run the installation from the Elixir/Phoenix project where Amp will work.
 
 ## Install in one project (recommended)
 
@@ -37,10 +32,8 @@ Project-local installation keeps this opinionated guidance scoped to an
 Elixir/Phoenix repository. From the project that should use the skills:
 
 ```bash
-mkdir -p .agents/skills
-
 amp skill add \
-  /path/to/claude-elixir-phoenix/targets/amp/skills \
+  https://github.com/oliver-kriska/claude-elixir-phoenix/tree/main/targets/amp/skills \
   --target "$PWD/.agents/skills"
 ```
 
@@ -66,8 +59,9 @@ skills from `.agents/skills/`.
 Use a global installation only if most of your Amp work is Elixir/Phoenix:
 
 ```bash
-cd /path/to/claude-elixir-phoenix
-amp skill add ./targets/amp/skills --global
+amp skill add \
+  https://github.com/oliver-kriska/claude-elixir-phoenix/tree/main/targets/amp/skills \
+  --global
 ```
 
 Amp installs global skills in `~/.config/agents/skills/`.
@@ -194,21 +188,25 @@ if an isolated compatibility test requires it.
 
 ## Update or remove
 
-Pull the latest source, then reinstall with `--overwrite`:
+Amp copies skills when `amp skill add` runs; starting Amp does not fetch updates
+automatically. Rerun the remote installation with `--overwrite` to install the
+latest generated skills from `main`:
 
 ```bash
-cd /path/to/claude-elixir-phoenix
-git pull --ff-only
-
-amp skill add ./targets/amp/skills \
-  --target /path/to/your-phoenix-project/.agents/skills \
+cd /path/to/your-phoenix-project
+amp skill add \
+  https://github.com/oliver-kriska/claude-elixir-phoenix/tree/main/targets/amp/skills \
+  --target "$PWD/.agents/skills" \
   --overwrite
 ```
 
 For a global update:
 
 ```bash
-amp skill add ./targets/amp/skills --global --overwrite
+amp skill add \
+  https://github.com/oliver-kriska/claude-elixir-phoenix/tree/main/targets/amp/skills \
+  --global \
+  --overwrite
 ```
 
 `--overwrite` replaces installed skills with the same name. It may leave an
@@ -291,12 +289,25 @@ active merely because their workflow skill is installed.
 ## Maintain the generated target
 
 Never edit `targets/amp/skills` manually. Change the canonical Claude skill,
-then regenerate:
+then regenerate and verify the complete target with one command:
 
 ```bash
-make amp-skills
-make amp-skills-validate
+make amp-skills-sync
+git add targets/amp/skills
 ```
+
+`make amp-skills` remains available when generation without a follow-up drift
+check is useful; `make amp-skills-validate` is the read-only check used by hooks
+and CI.
+
+The Husky pre-commit hook runs `make amp-skills-validate` only when files under
+`plugins/elixir-phoenix/skills/` are staged. It blocks the commit when the Amp
+target has drift or regenerated target changes were not staged. GitHub Actions
+runs the same drift check for every pull request and push to protect contributors
+who do not have Husky installed.
+
+Clone the repository only when changing the canonical plugin or generator. Amp
+users installing the published skills should use the remote commands above.
 
 The builder:
 

@@ -152,17 +152,21 @@ Project-local installation is recommended because it keeps the Elixir/Phoenix
 guidance scoped to the repository where it applies:
 
 ```bash
-git clone https://github.com/oliver-kriska/claude-elixir-phoenix.git
-
 # Install into one Elixir/Phoenix project
 cd /path/to/your-phoenix-project
-amp skill add /path/to/claude-elixir-phoenix/targets/amp/skills \
+amp skill add \
+  https://github.com/oliver-kriska/claude-elixir-phoenix/tree/main/targets/amp/skills \
   --target "$PWD/.agents/skills"
 
 # Or install for every Amp workspace
-cd /path/to/claude-elixir-phoenix
-amp skill add ./targets/amp/skills --global
+amp skill add \
+  https://github.com/oliver-kriska/claude-elixir-phoenix/tree/main/targets/amp/skills \
+  --global
 ```
+
+Amp copies skills at installation time; it does not update them automatically.
+Rerun the same command with `--overwrite` to install the latest version from
+`main`. Cloning this repository is only necessary for local development.
 
 Namespaced Claude commands use hyphenated Amp names: `/phx:plan` becomes
 `phx-plan`, `/ecto:n1-check` becomes `ecto-n1-check`, and so on. Start a fresh
