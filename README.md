@@ -9,6 +9,11 @@ review, and verify your Elixir/Phoenix code in parallel -- each with domain
 expertise, fresh context, and enforced [Iron Laws](#iron-laws-non-negotiable-rules)
 that catch the bugs your tests won't.
 
+**Using Amp?** Install the generated skills-only edition for the same 51 Elixir,
+Phoenix, LiveView, Ecto, Oban, testing, and security skills. See
+[Use with Amp](#use-with-amp) for the important differences from the full Claude
+Code plugin.
+
 ```bash
 # You describe the feature. The plugin figures out the rest.
 /phx:plan Add real-time comment notifications
@@ -90,7 +95,9 @@ that prevent the mistakes Elixir developers actually make in production.
 
 ## Installation
 
-### From GitHub (recommended)
+### Claude Code
+
+#### From GitHub (recommended)
 
 ```bash
 # In Claude Code, add the marketplace
@@ -111,7 +118,7 @@ that prevent the mistakes Elixir developers actually make in production.
 > Hooks self-gate on `mix.exs` presence (v2.10.1+), so global enable is safe
 > — project-scoping is just a tidiness preference.
 
-### Companion plugin: `catchup`
+#### Companion plugin: `catchup`
 
 The same marketplace also ships **`catchup`** — a framework-agnostic
 `/catchup` return-from-absence briefing (PRs, reviews, git, Linear,
@@ -125,7 +132,7 @@ manifest, install only if you want it:
 
 See `plugins/catchup/README.md`. Not coupled to Elixir/Phoenix.
 
-### From Local Path (for development)
+#### From Local Path (for development)
 
 ```bash
 git clone https://github.com/oliver-kriska/claude-elixir-phoenix.git
@@ -138,21 +145,47 @@ git clone https://github.com/oliver-kriska/claude-elixir-phoenix.git
 claude --plugin-dir ./claude-elixir-phoenix/plugins/elixir-phoenix
 ```
 
-### Amp skills preview
+### Use with Amp
 
-Amp can install the plugin's 51 skills from the generated Agent Skills target:
+Amp can install the plugin's 51 skills from the generated Agent Skills target.
+Project-local installation is recommended because it keeps the Elixir/Phoenix
+guidance scoped to the repository where it applies:
 
 ```bash
 git clone https://github.com/oliver-kriska/claude-elixir-phoenix.git
-cd claude-elixir-phoenix
+
+# Install into one Elixir/Phoenix project
+cd /path/to/your-phoenix-project
+amp skill add /path/to/claude-elixir-phoenix/targets/amp/skills \
+  --target "$PWD/.agents/skills"
+
+# Or install for every Amp workspace
+cd /path/to/claude-elixir-phoenix
 amp skill add ./targets/amp/skills --global
 ```
 
-Namespaced Claude commands use hyphenated Amp names: `phx:plan` becomes
-`phx-plan`, `ecto:n1-check` becomes `ecto-n1-check`, and so on. This preview
-ships skills and their bundled resources, but not the Claude-specific hooks,
-custom agents, or MCP setup. See [Amp support](docs/amp.md) for scope,
-project-local installation, and regeneration instructions.
+Namespaced Claude commands use hyphenated Amp names: `/phx:plan` becomes
+`phx-plan`, `/ecto:n1-check` becomes `ecto-n1-check`, and so on. Start a fresh
+Amp session after installation. To invoke the equivalent of `/phx:investigate`
+reliably, open Amp's command palette with `Ctrl+O` (or type `/` in the CLI), run
+`skill: invoke`, and select `phx-investigate`. Amp forces the selected skill to
+load with your next message.
+
+You can also name skills explicitly in a prompt, which is convenient for copied
+prompts and non-interactive use:
+
+```text
+Load phx-investigate and investigate this LiveView filter reset.
+```
+
+Exact Claude-style entries such as `/phx:review` are not registered as Amp slash
+commands; Amp uses its command palette and native skill invocation instead. Amp
+may also select skills automatically from their descriptions, but automatic
+selection is model-driven and is not guaranteed on every prompt. The Amp
+edition ships skills and their bundled resources, not the Claude-specific
+hooks, custom agents, permission settings, or MCP setup. Read the complete
+[Amp installation and usage guide](docs/amp.md) for verification, updates,
+skill precedence, examples, troubleshooting, and the portability matrix.
 
 ## Getting Started
 

@@ -7,6 +7,8 @@ on:
       - "plugins/elixir-phoenix/skills/**"
       - "plugins/elixir-phoenix/agents/**"
       - "plugins/elixir-phoenix/.claude-plugin/plugin.json"
+      - "docs/amp.md"
+      - "README.md"
       - "CLAUDE.md"
       - "CHANGELOG.md"
   workflow_dispatch:
