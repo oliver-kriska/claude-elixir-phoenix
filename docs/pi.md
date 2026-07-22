@@ -79,6 +79,8 @@ For a project-local package, pass `-l` to `pi remove` from that project.
 - usable, sequential `phx-investigate` and read-only `phx-review` workflows;
 - portable `phx-plan` research checklists and resumable `phx-work` plan-file
   progress tracking, with complete same-session sequential fallbacks;
+- portable `phx-pr-review` connector/`gh` triage and mutation confirmation, plus
+  gated, bounded `phx-full` plan → work → verify → review → compound execution;
 - automatic skill selection through Pi's native Agent Skills support.
 
 ## Intentionally deferred

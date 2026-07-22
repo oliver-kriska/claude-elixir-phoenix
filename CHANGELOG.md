@@ -18,6 +18,15 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **Portable PR-review/full workflow overlays** — generated Codex, Pi, and
+  OpenCode `phx-pr-review` now use available GitHub connectors or authenticated
+  `gh`, preserve read-only triage and explicit mutation approval, and never infer
+  replies or resolution. Generated `phx-full` now preserves user phase gates,
+  bounded retries/cycles, explicit verification, read-only review, and compound
+  completion through portable skill invocation or sequential same-session
+  execution. Canonical Claude and frozen Amp output remain unchanged; other
+  workflows are not claimed portable.
+
 - **Portable plan/work workflow overlays** — generated Codex, Pi, and OpenCode
   `phx-plan` and `phx-work` skills now use scratchpad research checklists, plan
   checkboxes, and `progress.md` instead of Claude-only named agents, task APIs,

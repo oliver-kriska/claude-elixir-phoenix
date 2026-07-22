@@ -303,6 +303,28 @@ def test_repository_plan_work_workflows_are_portable_and_resumable(tmp_path) -> 
     assert not any(token in plan + work for token in forbidden)
 
 
+def test_generated_pr_review_and_full_are_portable(tmp_path) -> None:
+    generated = tmp_path / "opencode"
+    opencode.build(SOURCE_PLUGIN_DIR, generated)
+    pr_review = "\n".join(p.read_text() for p in (generated / "skills/phx-pr-review").rglob("*.md"))
+    full = "\n".join(p.read_text() for p in (generated / "skills/phx-full").rglob("*.md"))
+    assert "/phx-pr-review" in pr_review and "NOT POSTED" in pr_review
+    assert "/phx-full" in full and "read-only review" in full
+    assert "Tidewave is optional" in full
+    assert "originalLine" in pr_review and "query($threadId: ID!, $endCursor: String)" in pr_review
+    assert "comments(first:100, after:$endCursor)" in pr_review and "deduplicate by GraphQL `id`" in pr_review
+    assert all(f"Gate {gate}" in pr_review for gate in range(1, 5))
+    assert "EDIT: NOT APPLICABLE" in pr_review and "`--fix` approves none" in pr_review
+    assert "CHANGES_REQUESTED" in pr_review and "Outdated means" in pr_review
+    assert "sole state authority" in full and "monotonic `seq`" in full
+    assert "next legal phase is VERIFYING" in full and "Completion requires" in full
+    assert "COMPOUNDING SKIPPED" in full
+    assert not any(token in pr_review + full for token in ("--codex", "--Pi", "--OpenCode", "/phx-compound"))
+    assert "specialist agents" not in (generated / "skills/phx-full/SKILL.md").read_text()
+    assert "portable sequential plan-work" in parse_file(generated / "skills/phx-full/SKILL.md").data["description"]
+    assert not any(token in pr_review + full for token in ("Agent(", "TaskCreate", "AskUserQuestion", "mcp__", "workflow-orchestrator"))
+
+
 def test_repository_non_markdown_resources_match_canonical_bytes_and_modes() -> None:
     output = TARGETS_DIR / "opencode" / "skills"
     for skill in opencode.discover_skills(SOURCE_PLUGIN_DIR):

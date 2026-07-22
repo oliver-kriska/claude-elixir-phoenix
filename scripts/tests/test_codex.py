@@ -429,6 +429,82 @@ def test_plan_work_overlays_are_portable_resumable_and_anchored(tmp_path) -> Non
         codex._assert_ordered_markers("## Two\n## One\n", ("## One", "## Two"), skill)
 
 
+def test_pr_review_full_overlays_are_portable_and_anchored(tmp_path) -> None:
+    generated = tmp_path / "codex"
+    codex.build(SOURCE_PLUGIN_DIR, generated)
+    skills = generated / "skills"
+    pr_review = "\n".join(p.read_text() for p in (skills / "phx-pr-review").rglob("*.md"))
+    full = "\n".join(p.read_text() for p in (skills / "phx-full").rglob("*.md"))
+    assert "gh auth status" in pr_review
+    assert "originalLine" in pr_review
+    assert "query($threadId: ID!, $endCursor: String)" in pr_review
+    assert "comments(first:100, after:$endCursor)" in pr_review
+    assert "pageInfo { hasNextPage endCursor }" in pr_review
+    assert "deduplicate by GraphQL `id`" in pr_review and "Block triage" in pr_review
+    assert all(f"Gate {gate}" in pr_review for gate in range(1, 5))
+    assert "EDIT: NOT APPLICABLE" in pr_review and "`--fix` approves none" in pr_review
+    assert "NOT POSTED" in pr_review
+    assert "$endCursor: String" in pr_review
+    assert "after: $endCursor" in pr_review
+    assert pr_review.count("--paginate") >= 2
+    assert "comments.totalCount > nodes.length" in pr_review
+    outer_query = pr_review.split("gh api graphql --paginate", 2)[1]
+    outer_query = outer_query.split("gh api graphql --paginate", 1)[0]
+    assert outer_query.count("pageInfo { hasNextPage endCursor }") == 1
+    assert "comments(first: 100)" in outer_query
+    assert "author.__typename" in pr_review
+    assert "Outdated means location drift" in pr_review
+    assert "CHANGES_REQUESTED" in pr_review and "zero inline" in pr_review
+    assert "confirm the post" in pr_review and "`--no-resolve` always" in pr_review
+    assert "same-session" in pr_review and "processing is complete" in pr_review
+    assert "discover → plan → work → verify → read-only review" in full
+    assert "Honor user gates" in full
+    assert "--max-cycles" in full and "--max-retries" in full
+    assert "Tidewave is optional" in full
+    assert "sole state authority" in full and "append-only" in full
+    assert all(field in full for field in ("`seq`", "`phase_visit`", "`phase`", "`cycle`", "`task`", "`task_attempt`", "`blockers`", "`outcome`"))
+    assert "next legal phase is VERIFYING" in full
+    assert "Completion requires all required plan tasks checked" in full
+    assert "latest VERIFYING PASS after the last edit" in full
+    assert "latest accepted REVIEWING after" in full
+    assert "COMPOUNDING passed or explicitly skipped" in full
+    assert "REVIEWING → COMPOUNDING → COMPLETED" in full
+    assert "task retry, and blocker counters" in full
+    assert "COMPOUNDING SKIPPED" in full
+    assert "Do not\n   invoke `phx-compound`" in full
+    forbidden = ("Agent(", "TaskCreate", "AskUserQuestion", "mcp__", "run_in_background", "Ralph Wiggum", "workflow-orchestrator")
+    assert not any(token in pr_review + full for token in forbidden)
+
+    plugin = tmp_path / "plugin"
+    skill = _write_skill(plugin, "full", "phx:full", "# Full Phoenix Feature Development\n## State Machine\n")
+    current = codex.discover_skills(plugin)[0]
+    with pytest.raises(ValueError, match="wholesale portable overlay source changed"):
+        codex._codex_overlay(skill / "SKILL.md", current)
+
+    canonical_pr = SOURCE_PLUGIN_DIR / "skills/pr-review/SKILL.md"
+    original = canonical_pr.read_text()
+    canonical_pr.write_text(original.replace("## Step 1:", "## Step one:", 1))
+    try:
+        current = next(s for s in codex.discover_skills(SOURCE_PLUGIN_DIR) if s.target_name == "phx-pr-review")
+        with pytest.raises(ValueError, match="wholesale portable overlay source changed"):
+            codex._codex_overlay(canonical_pr, current)
+    finally:
+        canonical_pr.write_text(original)
+
+    canonical_ref = SOURCE_PLUGIN_DIR / "skills/full/references/execution-steps.md"
+    original = canonical_ref.read_text()
+    canonical_ref.write_text(original.replace("## Step 1:", "## Step one:", 1))
+    try:
+        current = next(s for s in codex.discover_skills(SOURCE_PLUGIN_DIR) if s.target_name == "phx-full")
+        with pytest.raises(ValueError, match="wholesale portable overlay source changed"):
+            codex._codex_overlay(canonical_ref, current)
+    finally:
+        canonical_ref.write_text(original)
+
+    assert not any(token in pr_review + full for token in ("--codex", "--Pi", "--OpenCode"))
+    assert "specialist agents" not in (skills / "phx-full/SKILL.md").read_text()
+
+
 def test_repository_target_has_no_unresolved_claude_tokens() -> None:
     markdown = "\n".join(
         path.read_text(encoding="utf-8")

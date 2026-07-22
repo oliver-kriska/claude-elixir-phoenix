@@ -76,6 +76,13 @@ tracks research in the plan scratchpad and preserves the canonical
 subagents and Tidewave remain optional; the same-session sequential path is
 complete. These adaptations do not provide hooks or a separate task UI.
 
+`$phx-pr-review` uses an available GitHub connector or authenticated `gh`, keeps
+triage read-only unless fixes are explicitly approved, and reports mutations only
+after confirmed replies/resolutions. `$phx-full` preserves the gated, bounded
+plan → work → verify → read-only review → compound lifecycle by invoking portable
+skills or executing them sequentially in-session. Other workflows remain baseline
+projections and may not be fully portable.
+
 ## Update
 
 Codex does not currently expose a separate plugin-update command. Refresh the

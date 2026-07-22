@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import os
 import re
 import shutil
@@ -266,6 +267,289 @@ run. Stop after presenting the review. Suggest `$phx-triage`, `$phx-plan`, or
 - `references/requirements-detection.md` — requirements source and coverage rules
 - `references/agent-spawning.md` — Codex concern selection and optional parallelism
 """
+
+PR_REVIEW_BODY = """# PR Review Response
+
+Inspect unresolved pull-request review threads, triage them read-only by default,
+and apply only explicitly approved fixes. GitHub mutations are never implied.
+
+## Usage
+
+```text
+$phx-pr-review 42
+$phx-pr-review 42 --fix
+$phx-pr-review https://github.com/owner/repo/pull/42 --bots-only
+$phx-pr-review 42 --no-resolve
+```
+
+## Workflow
+
+1. Resolve the PR number or URL. Prefer a runtime GitHub connector that returns
+   thread IDs and resolved state. Otherwise use this exact `gh` 2.94-compatible
+   fallback (requires `command -v gh` and `gh auth status`):
+
+```bash
+PR_INPUT="${1:?PR number or URL}"
+if [[ "$PR_INPUT" =~ ^https://github.com/([^/]+)/([^/]+)/pull/([0-9]+) ]]; then
+  OWNER="${BASH_REMATCH[1]}"; REPO="${BASH_REMATCH[2]}"; PR="${BASH_REMATCH[3]}"
+else
+  OWNER=$(gh repo view --json owner --jq '.owner.login')
+  REPO=$(gh repo view --json name --jq '.name'); PR="$PR_INPUT"
+fi
+gh api graphql --paginate -F owner="$OWNER" -F repo="$REPO" -F pr="$PR" \
+  -f query='query($owner: String!, $repo: String!, $pr: Int!, $endCursor: String) { repository(owner: $owner, name: $repo) { pullRequest(number: $pr) { reviewThreads(first: 100, after: $endCursor) { nodes { id isResolved isOutdated path line originalLine comments(first: 100) { totalCount nodes { id databaseId body author { login __typename } replyTo { id } } } } pageInfo { hasNextPage endCursor } } } } }'
+gh api graphql --paginate -F owner="$OWNER" -F repo="$REPO" -F pr="$PR" \
+  -f query='query($owner: String!, $repo: String!, $pr: Int!, $endCursor: String) { repository(owner: $owner, name: $repo) { pullRequest(number: $pr) { reviews(first: 100, after: $endCursor) { nodes { id state body submittedAt author { login __typename } } pageInfo { hasNextPage endCursor } } } } }'
+```
+
+   `--paginate` binds each returned `pageInfo.endCursor` to `$endCursor`. Filter
+   `isResolved == false` after collecting pages. Preserve thread `id`, root
+   comment `id`/`databaseId`, and `author.__typename` (not login suffixes).
+   `comments(first:100)` is nested and is **not** paginated by the outer command:
+   if `comments.totalCount > nodes.length`, report the thread as TRUNCATED and
+   fetch every comment page with this exact query. The outer query intentionally
+   omits nested `comments.pageInfo` so `gh --paginate` follows only the outer
+   `reviewThreads.pageInfo` cursor:
+
+```bash
+gh api graphql --paginate -F threadId="$THREAD_ID" \
+  -f query='query($threadId: ID!, $endCursor: String) { node(id:$threadId) { ... on PullRequestReviewThread { comments(first:100, after:$endCursor) { totalCount nodes { id databaseId body author { login __typename } replyTo { id } } pageInfo { hasNextPage endCursor } } } } }'
+```
+
+   Merge all comment pages in API order and deduplicate by GraphQL `id` (first
+   occurrence wins). Block triage until every truncated thread is complete. Do
+   not substitute issue comments for review threads.
+2. Keep only unresolved threads, preserve API order, then group by path and line.
+   With `--bots-only`, use API actor type rather than a login suffix. Show one row
+   per thread with author, category, outdated state, and proposed action. Review
+   summaries are separate, non-resolvable context.
+3. **Gate 1 — read-only selection.** Always stop after triage for an explicit list
+   of selected thread IDs. Selection authorizes inspection only. `--fix` permits
+   later edits but approves nothing and never selects every thread.
+4. **Gate 2 — edit approval.** For each selected thread, read current code and
+   propose the exact patch. Obtain explicit edit approval before editing, or record
+   `EDIT: NOT APPLICABLE` with evidence. Then show the applied diff and run the
+   smallest relevant compile/test check after every code change.
+5. **Gate 3 — posting approval.** Draft a reply only after verification. Outdated means location drift, **not**
+   addressed: require current code/diff evidence before that disposition. Show the
+   diff, evidence, and exact verified reply, then obtain a separate explicit posting
+   approval before posting. Use a connector
+   mutation when available, or `gh api` to reply to the root review comment. If
+   posting is unsupported or fails, report `NOT POSTED` with the reason.
+6. **Gate 4 — resolution approval.** First confirm the post from the API response.
+   Only then request a separate resolution approval. `--no-resolve` always disables resolution, regardless of
+   any other flag or approval. Use the connector or `resolveReviewThread` mutation, then
+   confirm returned state. Never claim replied/resolved from a draft or intent.
+7. Return `thread | action | verification | reply | resolution`, changed files,
+   and precise blockers. Paginated review summaries with `CHANGES_REQUESTED` or
+   an actionable non-empty body are findings even when there are zero inline
+   threads; report them as non-resolvable context and never call that state clean.
+   Do not commit or push.
+
+Generic read-only workers may inspect independent threads when the runtime has
+them, but named custom agents are not required and sequential same-session
+processing is complete.
+
+## Iron Laws
+
+1. **Triage always stops for explicit thread selection** — `--fix` permits but does
+   not approve edits.
+2. **Never post, resolve, dismiss, commit, or push without the required approval.**
+3. **Never resolve before a successful reply** and never fabricate mutation state.
+4. **Never claim a fix without a shown diff and successful focused verification.**
+5. **Scrutinize bot and human findings equally**; Iron Laws override suggestions.
+
+## References
+
+- `references/response-patterns.md` — reply templates and tone
+- `references/gh-commands.md` — GitHub CLI queries and mutations
+- `references/bot-triage.md` — bot review triage
+"""
+
+PR_REVIEW_GH_REFERENCE = """# gh Commands — PR Review Threads
+
+Use the exact outer and nested GraphQL queries in `SKILL.md`. Both queries use
+`$endCursor`; the outer query includes `originalLine`, and the per-thread nested
+query uses `gh api graphql --paginate -F threadId=...` with nested `pageInfo {
+hasNextPage endCursor }`. Merge nested pages in API order, deduplicate comments by
+GraphQL `id`, and do not begin triage until all comments are complete.
+
+Reply only to the root review comment after exact-reply posting approval. Confirm
+the API response, then separately request resolution approval. `--no-resolve`
+always wins. Review summaries and issue comments are non-resolvable surfaces and
+must not substitute for review threads.
+"""
+
+PR_REVIEW_BOT_REFERENCE = """# Bot Review Triage
+
+Detect bots from `author.__typename == "Bot"` or REST `user.type == "Bot"`, not
+login suffixes. Apply the same four gates as human threads: read-only selection;
+proposed patch plus explicit edit approval (or `EDIT: NOT APPLICABLE`); exact
+verified reply plus separate posting approval; confirmed post plus separate
+resolution approval. `--fix` approves none of these and `--no-resolve` always wins.
+
+Treat `isOutdated` only as location drift. Require current code, diff, test, or git
+evidence before calling a finding addressed or false. A summary-only bot review is
+not automatically clean: actionable text and `CHANGES_REQUESTED` remain findings.
+"""
+
+FULL_BODY = """# Full Phoenix Feature Development
+
+Run the portable lifecycle: discover → plan → work → verify → read-only review →
+compound. The filesystem is the state machine; no task API or named orchestrator
+is required.
+
+## Usage
+
+```text
+$phx-full Add user authentication with magic links
+$phx-full Background email jobs --max-cycles 5 --max-retries 2
+```
+
+If input is an existing `.claude/plans/*/plan.md`, do not re-plan. Ask for the
+native `phx-work` workflow or execute its portable behavior in this session.
+Defaults are `--max-cycles 10`, `--max-retries 3`, and `--max-blockers 5`.
+
+## Lifecycle
+
+1. **DISCOVERING** — inspect relevant code, tests, prior solutions, and optional
+   Tidewave evidence. Tidewave is optional; local files, logs, and `mix` commands
+   are the complete fallback. Record complexity and proposed depth, then wait for
+   the user's plan/implementation gate. Never auto-select a path that bypasses it.
+2. **PLANNING** — invoke the runtime's native `phx-plan` skill when available, or
+   execute its portable research checklist and artifact format in this session.
+   Require `.claude/plans/{slug}/plan.md`. Present it and wait for approval before
+   implementation unless the user already explicitly authorized the full run.
+3. **WORKING** — execute the plan sequentially. Task selection occurs only here.
+   The full-run limits override any baseline workflow retry defaults. Before every
+   attempt persist cycle, task retry, and blocker counters; if the next attempt
+   exceeds a limit, do not run it. `--max-retries N` means at most N retries after
+   the initial attempt (N+1 total attempts for that task). Mark `[BLOCKED]` and
+   stop at `--max-blockers`.
+4. **VERIFYING** — run `mix format --check-formatted`, compile with warnings as
+   errors, focused tests during work, and the full relevant suite at this gate.
+   A failed gate appends FAIL and returns to WORKING only within the cycle limit.
+5. **REVIEWING** — invoke portable `phx-review`, or perform the same read-only,
+   changed-file review sequentially. Generic workers are optional. Review never
+   edits. Findings or failures become plan tasks and return to WORKING.
+6. **COMPOUNDING** — only after verification and a clean/accepted review. Do not
+   invoke `phx-compound`. Inline contract: write a solution artifact under
+   `.claude/solutions/` only when the run produced a non-obvious, reusable learning,
+   including problem, root cause, solution, and verification. Otherwise append
+   `COMPOUNDING SKIPPED: no reusable learning` to progress. Never edit CLAUDE.md.
+
+Track `INITIALIZING → DISCOVERING → PLANNING → WORKING → VERIFYING → REVIEWING →
+COMPOUNDING → COMPLETED`, with `BLOCKED` reachable from every phase. A cycle is
+one `WORKING → VERIFYING → REVIEWING` pass; increment and persist it before
+entering VERIFYING. At `--max-cycles`, do not begin another pass: stop INCOMPLETE with remaining tasks,
+failed evidence, and a concrete resume command for this runtime.
+
+## Iron Laws
+
+1. **Honor user gates** — discovery and plan approval are not automatic transitions.
+2. **Never skip verification or the read-only review phase.**
+3. **Only WORKING edits code**; review findings become explicit plan tasks.
+4. **Respect every cycle, retry, and blocker limit; stop when exhausted.**
+5. **Persist state before stopping** so plan checkboxes and progress evidence resume.
+6. **Do not require hooks, MCP, named agents, background tasks, or a task UI.**
+
+## Resume Ledger
+
+`progress.md` is the sole state authority. It is append-only: never overwrite or
+maintain a competing authoritative current-state record. Every event has monotonic
+`seq`, `phase_visit`, `phase`, `cycle`, `task`, `task_attempt`, cumulative
+`blockers`, `outcome`, and an `evidence` or `artifact` path. On resume, validate the
+last valid event against evidence, plan checkboxes, artifacts, and git state, then
+enter only its legal successor. Any WORKING edit after a VERIFYING or REVIEWING
+pass invalidates both passes; the next legal phase is VERIFYING.
+
+Completion requires all required plan tasks checked, no unresolved `[BLOCKED]`,
+the latest VERIFYING PASS after the last edit, the latest accepted REVIEWING after
+that verify, and COMPOUNDING passed or explicitly skipped.
+
+## References
+
+- `references/execution-steps.md` — portable phase gates and outputs
+- `references/example-run.md` — example lifecycle
+- `references/safety-recovery.md` — resume and blocker recovery
+- `references/cycle-patterns.md` — bounded cycle patterns
+"""
+
+FULL_EXECUTION_REFERENCE = """# Full Cycle Execution Steps
+
+Use portable plan/work/verify/review instructions sequentially. Never transitively
+invoke compound. Append one event per transition or outcome to `progress.md`; it
+is the sole append-only state authority. Every event records monotonic `seq`,
+`phase_visit`, `phase`, `cycle`, `task`, `task_attempt`, cumulative `blockers`,
+`outcome`, and an `evidence` or `artifact` path. Task selection is legal only in
+WORKING.
+
+Discovery proposes depth and waits for the user gate. Planning writes and presents
+the plan. Work updates checkboxes and append-only progress evidence. Verification
+records exact commands and outcomes. Review is read-only; approved findings return
+to WORKING as plan tasks. After accepted review, COMPOUNDING writes a solution
+artifact only for a non-obvious reusable learning; otherwise it records SKIPPED.
+The only successful order is REVIEWING → COMPOUNDING → COMPLETED.
+
+Never silently continue through a blocker or limit. Report COMPLETE, BLOCKED, or
+INCOMPLETE with cycle/retry counts, changed files, verification, review disposition,
+artifacts, and the runtime-native resume action.
+"""
+
+FULL_SAFETY_REFERENCE = """# Safety Rails & Recovery
+
+Resume from `.claude/plans/{slug}/plan.md` and append-only `progress.md`. Validate
+the last valid event's evidence, plan checkboxes, artifacts, and git state, then
+take only its legal successor. A WORKING edit after prior verify/review invalidates
+those passes, so VERIFYING is next. Select tasks only after entering WORKING.
+
+Stop on exhausted cycle/retry/blocker limits, unrecoverable compilation failure,
+unsafe state, or a required user gate. Do not use autonomous loop commands, create
+commits, or perform destructive resets as implicit checkpoints. Before stopping,
+write the current state and return the exact portable skill invocation or
+same-session step needed to resume.
+"""
+
+FULL_EXAMPLE_REFERENCE = """# Example Full Cycle
+
+The runtime discovers relevant context, proposes planning depth, and waits at the
+user gate. After approval it creates the plan, presents it, executes approved
+tasks in order, and records focused checks. It then runs the final verification
+gate and a read-only review. Approved findings become plan tasks and consume a
+bounded cycle. The ledger records PHASE_ENTER/PASS/FAIL and all counters. Only a
+passing verification and accepted review advance REVIEWING → COMPOUNDING →
+COMPLETED; limits or unresolved blockers return INCOMPLETE/BLOCKED.
+"""
+
+FULL_CYCLE_REFERENCE = """# Cycle Patterns
+
+A cycle is one WORKING → VERIFYING → REVIEWING pass. Increment `task_attempt`
+immediately before each attempt and increment `cycle` immediately before
+VERIFYING. Count a cumulative blocker once, when its task first becomes blocked.
+Reject a transition before its bound would be exceeded: `--max-retries N` permits
+the initial attempt plus N retries. Review is read-only; findings return WORKING.
+"""
+
+WHOLESALE_SOURCE_SHA256 = {
+    "pr-review/SKILL.md": "64baf279488cf379d65e276d073dd4c6c4e75d3060b6daac2e1a071b979131a4",
+    "full/SKILL.md": "69af4a8f08319f7ca86432765b0662944b068db2ad8a5bc945cf39f308963545",
+    "full/references/execution-steps.md": "b608c047414f9ad464f5c0ecc0eb1562f509cfdc30ef3782ed6b4e566a37382c",
+    "full/references/safety-recovery.md": "94595d350b9e3c809e0762676b7d8c3b831782a51173db9213585bebc8869234",
+    "full/references/example-run.md": "8b72b77afcf947127978c74c2de560fb7abc826e541f71fcd06835101dad7bc8",
+    "full/references/cycle-patterns.md": "454b6d6d6df3c26b3b783cbc4bf3007c2497618603d55b447328821a443bd685",
+    "pr-review/references/gh-commands.md": "b4c90be961e7310ffb29a50ed8cae6dd0f3da9b5f12cecc95d70cc29e68aaa64",
+    "pr-review/references/bot-triage.md": "6426509d3319a1117abd5c9d150c4ec01d47505be8e9193bc932bb16a534bfef",
+}
+
+
+def _assert_wholesale_source(source_file: Path, current: SkillSource) -> None:
+    key = f"{current.source_dir.name}/{source_file.relative_to(current.source_dir).as_posix()}"
+    expected = WHOLESALE_SOURCE_SHA256.get(key)
+    if expected is None:
+        return
+    actual = hashlib.sha256(source_file.read_bytes()).hexdigest()
+    if actual != expected:
+        raise ValueError(f"{source_file}: wholesale portable overlay source changed")
 
 REVIEW_AGENT_REFERENCE = """# Codex Review Execution Reference
 
@@ -1011,6 +1295,7 @@ def _rewrite_resource_paths(
 
 
 def _codex_overlay(source_file: Path, current: SkillSource) -> str | None:
+    _assert_wholesale_source(source_file, current)
     portable_workflow = _portable_plan_work_overlay(source_file, current)
     if portable_workflow is not None:
         return portable_workflow
@@ -1029,6 +1314,18 @@ def _codex_overlay(source_file: Path, current: SkillSource) -> str | None:
             if not all(marker in body for marker in required):
                 raise ValueError(f"{source_file}: Codex review overlay anchors changed")
             return REVIEW_BODY
+        if current.target_name == "phx-pr-review":
+            required = ("# PR Review Response", "## Step 1: Resolve PR + Fetch Threads", "## Step 5: Final Summary", "## Iron Laws")
+            if not all(marker in body for marker in required):
+                raise ValueError(f"{source_file}: portable PR review overlay anchors changed")
+            _assert_ordered_markers(body, required, source_file)
+            return PR_REVIEW_BODY
+        if current.target_name == "phx-full":
+            required = ("# Full Phoenix Feature Development", "## State Machine", "## Cycle Limits", "## Iron Laws", "## References")
+            if not all(marker in body for marker in required):
+                raise ValueError(f"{source_file}: portable full overlay anchors changed")
+            _assert_ordered_markers(body, required, source_file)
+            return FULL_BODY
 
     if (
         current.target_name == "phx-review"
@@ -1042,6 +1339,30 @@ def _codex_overlay(source_file: Path, current: SkillSource) -> str | None:
         return REVIEW_AGENT_REFERENCE
 
     relative = source_file.relative_to(current.source_dir).as_posix()
+    if current.target_name == "phx-pr-review" and relative == "references/gh-commands.md":
+        return PR_REVIEW_GH_REFERENCE
+    if current.target_name == "phx-pr-review" and relative == "references/bot-triage.md":
+        return PR_REVIEW_BOT_REFERENCE
+    if current.target_name == "phx-full" and relative == "references/execution-steps.md":
+        source = source_file.read_text(encoding="utf-8")
+        required = ("# Full Cycle Execution Steps", "## Step 1: Initialize", "## Step 5: Review Phase", "## Step 7: Collect Metrics & Complete")
+        _assert_ordered_markers(source, required, source_file)
+        return FULL_EXECUTION_REFERENCE
+    if current.target_name == "phx-full" and relative == "references/safety-recovery.md":
+        source = source_file.read_text(encoding="utf-8")
+        required = ("# Safety Rails & Recovery", "## Resume from Interruption", "## Ralph Wiggum Integration", "## State Recovery")
+        _assert_ordered_markers(source, required, source_file)
+        return FULL_SAFETY_REFERENCE
+    if current.target_name == "phx-full" and relative == "references/example-run.md":
+        source = source_file.read_text(encoding="utf-8")
+        required = ("# Example Full Cycle Run", "## Magic Link Authentication", "## Feature Complete")
+        _assert_ordered_markers(source, required, source_file)
+        return FULL_EXAMPLE_REFERENCE
+    if current.target_name == "phx-full" and relative == "references/cycle-patterns.md":
+        source = source_file.read_text(encoding="utf-8")
+        required = ("# Cycle Patterns for Autonomous Development", "## State Persistence", "## Recovery Patterns", "## Metrics Tracking", "## Integration with CI/CD")
+        _assert_ordered_markers(source, required, source_file)
+        return FULL_CYCLE_REFERENCE
     if current.target_name == "phx-review" and relative == (
         "references/requirements-detection.md"
     ):
@@ -1122,6 +1443,11 @@ def _transform_markdown(
                 "Review changed Elixir/Phoenix code read-only. Check requirements, "
                 "cite evidence, deduplicate findings, and return a severity-based verdict."
             )
+        elif current.target_name == "phx-full":
+            projected["description"] = (
+                "Run a portable sequential plan-work-verify-review-compound lifecycle. "
+                "Use optional generic workers only when the runtime supports them."
+            )
         body = overlay if overlay is not None else current.frontmatter.body
         body = _rewrite_resource_paths(body, current, skills, source_file)
         body = rewrite_slash_commands(body, "codex")
@@ -1158,6 +1484,59 @@ def _populate(skills: list[SkillSource], output_dir: Path, manifest: dict) -> No
         encoding="utf-8",
     )
     manifest_file.chmod(0o644)
+
+
+def validate_portable_workflows(skills_root: Path) -> None:
+    """Reject generated flagship workflows that lose required safety semantics."""
+    if not (skills_root / "phx-pr-review").is_dir() or not (skills_root / "phx-full").is_dir():
+        return
+    pr_review = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted((skills_root / "phx-pr-review").rglob("*.md"))
+    )
+    required_pr = (
+        "originalLine",
+        "query($threadId: ID!, $endCursor: String)",
+        "comments(first:100, after:$endCursor)",
+        "pageInfo { hasNextPage endCursor }",
+        "deduplicate by GraphQL `id`",
+        "Gate 1 — read-only selection",
+        "Gate 2 — edit approval",
+        "Gate 3 — posting approval",
+        "Gate 4 — resolution approval",
+        "EDIT: NOT APPLICABLE",
+        "`--fix` approves none",
+        "`--no-resolve` always",
+    )
+    missing = next((token for token in required_pr if token not in pr_review), None)
+    if missing:
+        raise ValueError(f"{skills_root / 'phx-pr-review'}: missing portable gate `{missing}`")
+
+    full = "\n".join(
+        path.read_text(encoding="utf-8")
+        for path in sorted((skills_root / "phx-full").rglob("*.md"))
+    )
+    required_full = (
+        "sole state authority",
+        "append-only",
+        "monotonic `seq`",
+        "`phase_visit`",
+        "`task_attempt`",
+        "cumulative `blockers`",
+        "legal successor",
+        "next legal phase is VERIFYING",
+        "Completion requires all required plan tasks checked",
+        "latest VERIFYING PASS after the last edit",
+        "latest accepted REVIEWING after",
+        "COMPOUNDING passed or explicitly skipped",
+        "Increment `task_attempt`\nimmediately before each attempt",
+        "increment `cycle` immediately before\nVERIFYING",
+        "Count a cumulative blocker once",
+        "Reject a transition before its bound would be exceeded",
+    )
+    missing = next((token for token in required_full if token not in full), None)
+    if missing:
+        raise ValueError(f"{skills_root / 'phx-full'}: missing portable state rule `{missing}`")
 
 
 def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> int:
@@ -1224,7 +1603,7 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
         if found:
             raise ValueError(f"{markdown}: unresolved Claude token `{found}`")
 
-    for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work"):
+    for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work", "phx-pr-review", "phx-full"):
         flagship_root = skills_root / flagship
         if not flagship_root.is_dir():
             continue
@@ -1233,6 +1612,7 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
             for path in sorted(flagship_root.rglob("*.md"))
         )
         forbidden = (
+            "Agent(",
             "TaskCreate",
             "TaskUpdate",
             "TaskGet",
@@ -1242,7 +1622,16 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
             "$ARGUMENTS",
             "mcp__tidewave__",
             "mcp__linear__",
+            "${CLAUDE_SKILL_DIR}",
+            "${CLAUDE_PLUGIN_ROOT}",
         )
+        if flagship in {"phx-pr-review", "phx-full"}:
+            forbidden += (
+                "workflow-orchestrator", "parallel-reviewer", "planning-orchestrator",
+                "run_in_background", "Ralph Wiggum", "/ralph-loop:",
+                "PostToolUse", "Claude Code tasks", "AskUserQuestion",
+                "--codex", "--Pi", "--OpenCode", "$phx-compound",
+            )
         if flagship in {"phx-plan", "phx-work"}:
             forbidden += (
                 "phoenix-patterns-analyst", "ecto-schema-designer",
@@ -1259,6 +1648,7 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
         if found:
             raise ValueError(f"{flagship_root}: unavailable API `{found}`")
 
+    validate_portable_workflows(skills_root)
     return len(skill_files)
 
 

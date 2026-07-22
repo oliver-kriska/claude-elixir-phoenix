@@ -104,6 +104,11 @@ def _transform_markdown(
                 "Review changed Elixir/Phoenix code read-only. Check requirements, "
                 "cite evidence, deduplicate findings, and return a severity-based verdict."
             )
+        elif skill.target_name == "phx-full":
+            projected["description"] = (
+                "Run a portable sequential plan-work-verify-review-compound lifecycle. "
+                "Use optional generic workers only when the runtime supports them."
+            )
         body = overlay if overlay is not None else skill.frontmatter.body
         body = _rewrite_resource_paths(body, skill, skills, source_file)
         return Frontmatter(projected, _rewrite_commands(body)).dump()
@@ -193,15 +198,22 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
         if found:
             raise ValueError(f"{markdown}: unresolved non-Pi token `{found}`")
 
-    for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work"):
+    for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work", "phx-pr-review", "phx-full"):
         text = "\n".join(
             path.read_text(encoding="utf-8")
             for path in sorted((skills_root / flagship).rglob("*.md"))
         )
         forbidden = (
-            "TaskCreate", "TaskUpdate", "TaskGet", "TaskList", "AskUserQuestion",
+            "Agent(", "TaskCreate", "TaskUpdate", "TaskGet", "TaskList", "AskUserQuestion",
             "subagent_type", "$ARGUMENTS", "mcp__tidewave__", "mcp__linear__",
         )
+        if flagship in {"phx-pr-review", "phx-full"}:
+            forbidden += (
+                "workflow-orchestrator", "parallel-reviewer", "planning-orchestrator",
+                "run_in_background", "Ralph Wiggum", "/ralph-loop:",
+                "PostToolUse", "Claude Code tasks",
+                "--codex", "--Pi", "--OpenCode", "/skill:phx-compound",
+            )
         if flagship in {"phx-plan", "phx-work"}:
             forbidden += (
                 "phoenix-patterns-analyst", "ecto-schema-designer", "liveview-architect",
@@ -216,6 +228,7 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
         found = next((token for token in forbidden if token in text), None)
         if found:
             raise ValueError(f"{skills_root / flagship}: unavailable API `{found}`")
+    codex.validate_portable_workflows(skills_root)
     return len(skill_files)
 
 
