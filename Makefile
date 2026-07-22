@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate pi-skills pi-skills-sync pi-skills-validate opencode-skills opencode-skills-sync opencode-skills-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke security ci clean
 
 # Default target
 help: ## Show available commands
@@ -82,6 +82,9 @@ codex-skills-sync: ## Regenerate and verify the committed Codex target
 codex-skills-validate: ## Check committed Codex skills for generated drift
 	@python3 -m scripts.build_codex_skills --check
 
+codex-runtime-smoke: ## Optional: smoke-test local target with an isolated Codex runtime
+	@python3 -m scripts.runtime_smoke codex
+
 pi-skills: ## Generate the Pi skills package from the canonical Claude plugin
 	@python3 -m scripts.build_pi_skills
 
@@ -101,6 +104,9 @@ opencode-skills-sync: ## Regenerate and verify the committed OpenCode target
 
 opencode-skills-validate: ## Check committed OpenCode skills for generated drift
 	@python3 -m scripts.build_opencode_skills --check
+
+opencode-runtime-smoke: ## Optional: smoke-test local target with an isolated OpenCode runtime
+	@python3 -m scripts.runtime_smoke opencode
 
 # --- Security ---
 

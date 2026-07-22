@@ -183,7 +183,17 @@ Canonical sources live in `plugins/elixir-phoenix/skills`; do not hand-edit
 make codex-skills           # regenerate targets/codex
 make codex-skills-validate  # read-only drift check
 make codex-skills-sync      # regenerate, then validate
+make codex-runtime-smoke    # optional isolated native runtime acceptance
 ```
+
+The smoke target generates from the current checkout into a temporary local
+marketplace, installs and enables it through `codex plugin`, checks the installed
+51-skill tree and a packaged executable resource byte-for-byte and mode-for-mode,
+removes it, and checks again in a fresh process. It sets temporary `HOME` and
+`CODEX_HOME`, never copies authentication, and performs no model or
+network-dependent prompt. Codex does not expose a stable structured command for
+enumerating every plugin skill, so the exact count is an installed-tree check;
+`plugin list --json` verifies the native installed and enabled state.
 
 Generation stages and validates a complete replacement before swapping it into
 place, with rollback on installation failure. Drift checking compares paths,
