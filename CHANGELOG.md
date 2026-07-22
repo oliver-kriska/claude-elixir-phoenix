@@ -13,7 +13,8 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   explicit user-taught rules can now be saved as native background skills with
   `--library <package> --scope personal|project`. The workflow reads locked
   versions, checks both scopes for shadowing, merges safely, and never writes to
-  cached plugin files. Description-based activation remains model-selected.
+  cached plugin files. General cross-project rules route to personal
+  `~/.claude/CLAUDE.md`. Description-based activation remains model-selected.
 
 - **Amp target drift pre-commit guard** — canonical changes under
   `plugins/elixir-phoenix/skills/` now trigger `make amp-skills-validate` and

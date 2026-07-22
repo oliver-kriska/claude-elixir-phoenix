@@ -59,6 +59,16 @@
           "type": "content_present",
           "pattern": "mix.lock",
           "desc": "Preserves locked package version context"
+        },
+        {
+          "type": "content_present",
+          "pattern": "~/.claude/CLAUDE.md",
+          "desc": "Documents personal cross-project instruction destination"
+        },
+        {
+          "type": "content_present",
+          "pattern": "\\^\\[a-z\\]\\[a-z0-9_\\]\\+\\$",
+          "desc": "Defines deterministic valid Hex package normalization"
         }
       ]
     },
@@ -106,8 +116,8 @@
         {
           "type": "description_length",
           "min": 50,
-          "max": 250,
-          "desc": "Description in sweet spot"
+          "max": 200,
+          "desc": "Description stays within the plugin soft target"
         },
         {
           "type": "description_keywords",

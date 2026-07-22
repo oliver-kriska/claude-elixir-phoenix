@@ -1,8 +1,8 @@
 ---
 name: phx-learn-from-fix
-description: Capture Elixir/Ecto/LiveView fix lessons and Hex API rules. Use after
-  corrections or when asked to document learning, record a lesson, prevent a fixed
-  mistake, or remember package guidance with --library.
+description: Capture Elixir/Ecto/LiveView lessons and Hex API rules. Use after corrections
+  or when asked to document learning, record a lesson, prevent a fixed mistake, or
+  remember package guidance with --library.
 ---
 
 # Learn From Fix
@@ -38,8 +38,13 @@ Capture the root cause as a concise actionable rule, not the symptom.
 
 When both `--library <package>` and `--scope personal|project` are present,
 use the [Library Route](#library-route). Require both flags; do not guess scope.
-Normalize the Hex package name for `hex-<package>` without changing the actual
-package identifier used to look up `mix.lock`.
+For the skill directory only, trim surrounding whitespace and lowercase the
+package name. Preserve underscores when forming directory names
+(`phoenix_live_view` becomes `hex-phoenix_live_view`).
+Validate the normalized name against `^[a-z][a-z0-9_]+$`. If it does not match,
+ask for a valid Hex package identifier instead of replacing characters or
+inventing a name. Use the trimmed original identifier, not the normalized
+directory name, to look up `mix.lock`.
 
 Without `--library`, use the [General Correction Route](#general-correction-route).
 
@@ -47,7 +52,7 @@ Without `--library`, use the [General Correction Route](#general-correction-rout
 
 Check if already documented:
 
-- Grep project CLAUDE.md for the pattern keyword
+- Grep project CLAUDE.md and `~/.claude/CLAUDE.md` for the pattern keyword
 - Check auto-memory files for similar lessons
 - For library lessons, inspect both
   `~/.claude/skills/hex-<package>/SKILL.md` and
@@ -126,10 +131,13 @@ Choose the narrowest non-library destination:
 |-------|----------|---------|
 | This project | Project CLAUDE.md | "Never use raw SQL in this app" |
 | This project across sessions | Project-keyed auto-memory | "jsonb uses string keys" |
+| All your projects | `~/.claude/CLAUDE.md` personal instructions | "Prefer explicit error tuples" |
 | Detailed completed fix | `.claude/solutions/` via `$phx-compound` | Debugging narrative |
 
-For project CLAUDE.md, append `**RULE NAME** — Do NOT [bad]. Instead [good]`
-under the relevant category. For auto-memory, append to the project-keyed
+For project or personal instructions, preserve existing content and append
+`**RULE NAME** — Do NOT [bad]. Instead [good]` under the relevant category. Use
+personal instructions only for rules that should load in every project. For
+auto-memory, append to the project-keyed
 `~/.claude/projects/{project-hash}/memory/MEMORY.md`:
 
 ```markdown

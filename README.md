@@ -610,7 +610,8 @@ After fixing a bug or receiving a correction:
 /phx:learn-from-fix --library ical --scope personal ICal.to_ics output needs CRLF line endings
 ```
 
-This stores verified general lessons in project-owned instructions or memory.
+This stores verified general lessons in personal `~/.claude/CLAUDE.md`, project
+instructions, or project-keyed memory.
 The library route creates or safely updates native background knowledge at
 `~/.claude/skills/hex-<package>/SKILL.md` (personal) or
 `.claude/skills/hex-<package>/SKILL.md` (project). Claude selects it from its
