@@ -9,6 +9,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **All-runtime generated skills sync command** — contributors can run
+  `make generated-skills-sync` to regenerate and validate Amp, Codex, Pi, and
+  OpenCode in sequence. Target-specific sync and validation commands remain the
+  authoritative implementation and keep failures attributable.
+
 - **Package-specific `/phx:learn-from-fix` routing** — verified fixes and
   explicit user-taught rules can now be saved as native background skills with
   `--library <package> --scope personal|project`. The workflow reads locked

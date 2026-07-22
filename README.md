@@ -810,6 +810,7 @@ make eval             # Quick: lint + score changed skills/agents only
 make eval-all         # Full structural: all 51 skills + all 26 agents
 make eval-fix         # Auto-fix lint + show failures + suggest autoresearch
 make test             # 75 pytest tests for eval framework
+make generated-skills-sync # Regenerate and verify all four runtime targets
 make ci               # Full CI: lint + test + validate + eval + security (same as GitHub Actions)
 ```
 

@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate pi-skills pi-skills-sync pi-skills-validate opencode-skills opencode-skills-sync opencode-skills-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate pi-skills pi-skills-sync pi-skills-validate opencode-skills opencode-skills-sync opencode-skills-validate generated-skills-sync security ci clean
 
 # Default target
 help: ## Show available commands
@@ -101,6 +101,12 @@ opencode-skills-sync: ## Regenerate and verify the committed OpenCode target
 
 opencode-skills-validate: ## Check committed OpenCode skills for generated drift
 	@python3 -m scripts.build_opencode_skills --check
+
+generated-skills-sync: ## Regenerate and verify Amp, Codex, Pi, and OpenCode targets
+	@$(MAKE) amp-skills-sync
+	@$(MAKE) codex-skills-sync
+	@$(MAKE) pi-skills-sync
+	@$(MAKE) opencode-skills-sync
 
 # --- Security ---
 
