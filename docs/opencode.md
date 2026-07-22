@@ -7,6 +7,9 @@ below `.opencode/skill/` and `.opencode/skills/` (and the equivalent global
 config roots). It does not provide a native Git or package installer for skills,
 so installation is a sparse Git checkout.
 
+See the [runtime support matrix](runtime-support.md) for a concise comparison
+with Claude Code, Amp, Codex, and Pi.
+
 ## Install
 
 Project-local installation keeps the Elixir/Phoenix guidance scoped to one

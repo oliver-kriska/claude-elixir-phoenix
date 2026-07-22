@@ -28,6 +28,10 @@ and custom agents are intentionally not included yet.
 including `/phx-investigate` and `/phx-review`. See
 [Use with OpenCode](#use-with-opencode) and the [OpenCode guide](docs/opencode.md).
 
+Compare native invocation, installation, and deliberately deferred capabilities
+in the canonical [runtime support matrix](docs/runtime-support.md). Generated
+skills support does not imply full Claude Code feature parity.
+
 ```bash
 # You describe the feature. The plugin figures out the rest.
 /phx:plan Add real-time comment notifications

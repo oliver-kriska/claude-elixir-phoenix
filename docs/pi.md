@@ -4,6 +4,9 @@ The generated Pi package provides all 51 canonical Elixir/Phoenix skills and
 their bundled resources. It was tested with Pi **0.79.1**. This is a focused
 skills baseline, not full Claude Code feature parity.
 
+See the [runtime support matrix](runtime-support.md) for a concise comparison
+with Claude Code, Amp, Codex, and OpenCode.
+
 ## Install
 
 Install globally for every Pi project:

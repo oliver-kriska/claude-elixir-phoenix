@@ -9,6 +9,9 @@ normalizes names (`phx:review` → `phx-review`), rewrites cross-skill and resou
 paths, converts Claude command references to Codex `$skill-name` syntax, and
 applies Codex-only workflow overlays without changing canonical Claude files.
 
+See the [runtime support matrix](runtime-support.md) for a concise comparison
+with Claude Code, Amp, Pi, and OpenCode.
+
 ## Install from GitHub
 
 Marketplace registration and plugin installation are separate operations:

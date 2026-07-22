@@ -9,6 +9,9 @@ The canonical source remains `plugins/elixir-phoenix/`. Amp-specific naming and
 path constraints never flow back into the Claude Code plugin, so both targets
 can evolve without weakening Claude Code support.
 
+See the [runtime support matrix](runtime-support.md) for a concise comparison
+with Claude Code, Codex, Pi, and OpenCode.
+
 ## What you get
 
 - All 51 skills and their complete bundled resources.
