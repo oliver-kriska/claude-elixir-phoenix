@@ -9,6 +9,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Package-specific `/phx:learn-from-fix` routing** — verified fixes and
+  explicit user-taught rules can now be saved as native background skills with
+  `--library <package> --scope personal|project`. The workflow reads locked
+  versions, checks both scopes for shadowing, merges safely, and never writes to
+  cached plugin files. Description-based activation remains model-selected.
+
 - **Amp target drift pre-commit guard** — canonical changes under
   `plugins/elixir-phoenix/skills/` now trigger `make amp-skills-validate` and
   require regenerated `targets/amp/skills/` changes to be staged. CI retains
@@ -24,6 +30,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   clarify that Amp copies skills and requires an explicit `--overwrite` install.
 
 ### Fixed
+
+- **Learning destination and skill-loading documentation** — project-keyed
+  auto-memory is no longer described as applying to every Elixir project, and
+  the intro now documents native `paths:` frontmatter as a file-path gate.
 
 ## [2.14.3] - 2026-07-20
 

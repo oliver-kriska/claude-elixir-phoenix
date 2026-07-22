@@ -607,9 +607,15 @@ After fixing a bug or receiving a correction:
 
 ```
 /phx:learn-from-fix Fixed N+1 query -- always preload associations in context functions
+/phx:learn-from-fix --library ical --scope personal ICal.to_ics output needs CRLF line endings
 ```
 
-This updates the plugin's `common-mistakes.md` knowledge base so the same mistake is prevented in future sessions.
+This stores verified general lessons in project-owned instructions or memory.
+The library route creates or safely updates native background knowledge at
+`~/.claude/skills/hex-<package>/SKILL.md` (personal) or
+`.claude/skills/hex-<package>/SKILL.md` (project). Claude selects it from its
+description; dependency presence alone does not guarantee activation. Cached
+plugin files are never modified.
 
 ## Iron Laws (Non-Negotiable Rules)
 
@@ -644,7 +650,7 @@ The plugin enforces critical rules and **stops with an explanation** if code wou
 | `/phx:compound`         | Capture solved problem as reusable knowledge                 |
 | `/phx:triage`           | Interactive triage of review findings                        |
 | `/phx:document`         | Generate @moduledoc, @doc, README, ADRs                      |
-| `/phx:learn-from-fix <lesson>`   | Capture lessons learned                                      |
+| `/phx:learn-from-fix [--library <pkg> --scope personal\|project] <lesson>` | Capture verified general or package lessons |
 | `/phx:brief <plan>`     | Interactive plan walkthrough                                 |
 | `/phx:perf`             | Performance analysis with specialist agents                  |
 | `/phx:pr-review`        | Address PR review threads — fetch, fix, reply, resolve       |
