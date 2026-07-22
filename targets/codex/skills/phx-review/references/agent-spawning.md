@@ -1,6 +1,6 @@
 # Codex Review Execution Reference
 
-`$phx-review` works without separately installed custom agents. Native Codex
+`$elixir-phoenix:phx-review` works without separately installed custom agents. Native Codex
 subagents are an optional performance optimization, not a correctness dependency.
 
 ## Concern Selection

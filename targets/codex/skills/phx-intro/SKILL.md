@@ -1,8 +1,7 @@
 ---
 name: phx-intro
-description: Walk through the Elixir/Phoenix plugin commands, workflow, and features
-  in 6 interactive sections. Use when a new user wants to learn what the plugin offers
-  or needs a refresher on available commands.
+description: Walk through the Elixir/Phoenix plugin commands, workflow; Use when a
+  new user wants to learn what the plugin offers…
 ---
 
 # Plugin Introduction Tutorial
@@ -54,8 +53,8 @@ For each section:
 After Section 6 (or when user stops):
 
 ```
-You're all set! Try `$phx-plan` with your next feature to see the workflow in action.
-Run `$phx-intro --section N` anytime to revisit a specific section.
+You're all set! Try `$elixir-phoenix:phx-plan` with your next feature to see the workflow in action.
+Run `$elixir-phoenix:phx-intro --section N` anytime to revisit a specific section.
 ```
 
 ## Notes

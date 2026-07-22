@@ -1,8 +1,7 @@
 ---
 name: phx-learn-from-fix
-description: Capture lessons after fixing a bug or receiving a correction — ecto,
-  liveview, oban, iron law mistakes. Use when the user corrects your approach or teaches
-  a pattern.
+description: Capture lessons after fixing a bug or receiving a correction — ecto;
+  Use when the user corrects your approach…
 ---
 
 # Learn From Fix
@@ -13,9 +12,9 @@ to prevent future mistakes.
 ## Usage
 
 ```
-$phx-learn-from-fix Fixed N+1 query in user listing - was missing preload
-$phx-learn-from-fix String vs atom key mismatch in params handling
-$phx-learn-from-fix LiveView assign_async needs render_async in tests
+$elixir-phoenix:phx-learn-from-fix Fixed N+1 query in user listing - was missing preload
+$elixir-phoenix:phx-learn-from-fix String vs atom key mismatch in params handling
+$elixir-phoenix:phx-learn-from-fix LiveView assign_async needs render_async in tests
 ```
 
 ## Workflow
@@ -49,7 +48,7 @@ Always write to project or memory locations.
 |-------|----------|---------|
 | This project only | Project CLAUDE.md | "Never use raw SQL in this app" |
 | All Elixir projects | Auto-memory MEMORY.md | "jsonb always uses string keys" |
-| Detailed fix with context | `.claude/solutions/` via `$phx-compound` | Complex debugging story |
+| Detailed fix with context | `.claude/solutions/` via `$elixir-phoenix:phx-compound` | Complex debugging story |
 
 ### Step 4: Write the Lesson
 

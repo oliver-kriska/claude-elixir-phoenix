@@ -15,7 +15,8 @@ Phoenix, LiveView, Ecto, Oban, testing, and security skills. See
 Code plugin.
 
 **Using Codex?** Install the native generated skills plugin for all 51 skills,
-including Codex-compatible `$phx-investigate` and `$phx-review` workflows. See
+including `$elixir-phoenix:phx-investigate` and
+`$elixir-phoenix:phx-review` workflows. See
 [Use with Codex](#use-with-codex); hooks, custom agents, and bundled Tidewave MCP
 are intentionally not included yet.
 
@@ -217,12 +218,13 @@ codex plugin list
 ```
 
 Start a fresh Codex session, then invoke workflows explicitly with
-`$phx-investigate` or `$phx-review`, browse them with `/skills`, or let Codex
-select a relevant skill from its description. This edition currently ships
-skills and bundled skill resources only—not Claude hooks, custom agents,
-plugin-root instructions, or Tidewave MCP configuration. See the complete
-[Codex guide](docs/codex.md) for updates, uninstall, isolation, troubleshooting,
-tested version, and capability details.
+`$elixir-phoenix:phx-investigate` or `$elixir-phoenix:phx-review`, browse them
+with `/skills`, or let Codex select a relevant skill from its description. Codex
+namespaces plugin skills; unqualified `$phx-investigate` is not an explicit
+alias. This edition currently ships skills and bundled skill resources only—not
+Claude hooks, custom agents, plugin-root instructions, or Tidewave MCP
+configuration. See the complete [Codex guide](docs/codex.md) for updates,
+uninstall, isolation, troubleshooting, tested version, and capability details.
 
 ### Use with Pi
 

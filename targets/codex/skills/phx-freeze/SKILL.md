@@ -1,8 +1,7 @@
 ---
 name: phx-freeze
-description: Scope or freeze which files Claude can edit during debugging, a refactor,
-  or review. Use when edits should stay in specific dirs, or for a read-only investigate
-  lock. Backed by a sentinel + PreToolUse hook.
+description: Scope or freeze which files Claude can edit during debugging; Use when
+  edits should stay in specific dirs…
 ---
 
 # Freeze — scoped edit lock
@@ -17,20 +16,20 @@ project-relative. Empty file = freeze everything.
 
 ## Usage
 
-`$phx-freeze [args]` — resolve `$ARGUMENTS` and run the matching Bash branch.
+`$elixir-phoenix:phx-freeze [args]` — resolve `$ARGUMENTS` and run the matching Bash branch.
 
 | Invocation | Effect |
 |------------|--------|
-| `$phx-freeze` | Freeze ALL edits — read-only investigation mode |
-| `$phx-freeze lib/app_web priv/repo` | Allow edits only under these dirs |
-| `$phx-freeze status` | Show current lock state |
-| `$phx-freeze off` | Lift the lock (delete the sentinel) |
+| `$elixir-phoenix:phx-freeze` | Freeze ALL edits — read-only investigation mode |
+| `$elixir-phoenix:phx-freeze lib/app_web priv/repo` | Allow edits only under these dirs |
+| `$elixir-phoenix:phx-freeze status` | Show current lock state |
+| `$elixir-phoenix:phx-freeze off` | Lift the lock (delete the sentinel) |
 
 ### Freeze all edits (investigation mode)
 
 ```bash
 mkdir -p .claude && : > .claude/.freeze
-echo "Freeze ON — all edits blocked. Lift with $phx-freeze off"
+echo "Freeze ON — all edits blocked. Lift with $elixir-phoenix:phx-freeze off"
 ```
 
 ### Scope edits to specific directories
@@ -65,7 +64,7 @@ rm -f .claude/.freeze && echo "Freeze OFF — edits unlocked"
    Edit/Write. The freeze hook gates Edit/Write and would block you from
    re-scoping or clearing the lock.
 2. **NEVER leave a freeze active across unrelated tasks** — it persists until
-   `$phx-freeze off`, including into later sessions. Clear it when the task ends.
+   `$elixir-phoenix:phx-freeze off`, including into later sessions. Clear it when the task ends.
 3. **PATHS ARE PROJECT-RELATIVE PREFIXES, one per line** — `lib/foo` allows
    `lib/foo` and everything under it; it does NOT allow `lib/foobar`.
 
@@ -73,6 +72,6 @@ rm -f .claude/.freeze && echo "Freeze OFF — edits unlocked"
 
 - The hook denies with a reason and tells Claude not to retry, so a frozen edit
   surfaces clearly instead of failing silently.
-- Pairs with `$phx-investigate` (freeze all while root-causing) and `$phx-work`
+- Pairs with `$elixir-phoenix:phx-investigate` (freeze all while root-causing) and `$elixir-phoenix:phx-work`
   (scope to the plan's dirs). The lock is advisory tooling, not a security
-  boundary — anyone can run `$phx-freeze off`.
+  boundary — anyone can run `$elixir-phoenix:phx-freeze off`.

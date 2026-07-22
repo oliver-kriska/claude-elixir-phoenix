@@ -1,6 +1,6 @@
 # Briefing Guide
 
-Detailed templates for each section of the `$phx-brief` interactive
+Detailed templates for each section of the `$elixir-phoenix:phx-brief` interactive
 briefing. Two modes: pre-work (plan pending) and post-work (plan
 completed or in progress).
 
@@ -285,7 +285,7 @@ scratchpad + progress.md
 - {Lesson from dead-end}
 
 **Compound candidate?** {If this solution involved a non-obvious
-fix or architectural decision, suggest `$phx-compound` to capture it.}
+fix or architectural decision, suggest `$elixir-phoenix:phx-compound` to capture it.}
 ```
 
 **Rules:**
@@ -293,7 +293,7 @@ fix or architectural decision, suggest `$phx-compound` to capture it.}
 - Focus on what FUTURE developers should know
 - Dead-ends and risk materializations are the most valuable
   lessons — always surface them
-- Suggest `$phx-compound` only when there's genuinely novel
+- Suggest `$elixir-phoenix:phx-compound` only when there's genuinely novel
   knowledge worth capturing
 
 ---
@@ -307,7 +307,7 @@ When the user selects this option between sections:
    scratchpad.md, summaries, progress.md)
 3. If the answer isn't in the artifacts, say so: "The plan doesn't
    cover this — you may want to check with the person who created
-   it or run `$phx-plan --existing` to research this aspect"
+   it or run `$elixir-phoenix:phx-plan --existing` to research this aspect"
 4. After answering, offer to continue to the next section
 
 ## Edge Cases

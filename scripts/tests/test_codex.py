@@ -94,9 +94,9 @@ def test_complete_subtree_is_copied_and_only_markdown_is_transformed(tmp_path) -
 
     assert (generated / "assets" / "payload.bin").read_bytes() == payload
     assert stat.S_IMODE((generated / "scripts" / "run.sh").stat().st_mode) == 0o755
-    assert "$phx-source" in (generated / "SKILL.md").read_text()
-    assert "$phx-source" in (generated / "notes" / "guide.md").read_text()
-    assert "$ecto-n1-check" in (generated / "notes" / "guide.md").read_text()
+    assert "$fixture:phx-source" in (generated / "SKILL.md").read_text()
+    assert "$fixture:phx-source" in (generated / "notes" / "guide.md").read_text()
+    assert "$fixture:ecto-n1-check" in (generated / "notes" / "guide.md").read_text()
     assert stat.S_IMODE((generated / "notes" / "guide.md").stat().st_mode) == 0o744
     assert "notes/guide.md" in (generated / "SKILL.md").read_text()
     assert set(path.relative_to(skill) for path in skill.rglob("*") if path.is_file()) == {
@@ -126,15 +126,110 @@ def test_frontmatter_and_all_markdown_use_codex_invocation_syntax(tmp_path) -> N
 
     assert frontmatter.data == {
         "name": "phx-source",
-        "description": "Use $phx-review for tests.",
+        "description": "Use $fixture:phx-review for tests.",
     }
     all_markdown = "\n".join(
         path.read_text(encoding="utf-8") for path in output.rglob("*.md")
     )
-    assert "$phx-review" in all_markdown
-    assert "$lv-assigns" in all_markdown
-    assert "$ecto-n1-check" in all_markdown
+    assert "$fixture:phx-review" in all_markdown
+    assert "$fixture:lv-assigns" in all_markdown
+    assert "$fixture:ecto-n1-check" in all_markdown
+    assert not any(token in all_markdown for token in ("$phx-", "$lv-", "$ecto-"))
     assert not any(token in all_markdown for token in ("/phx:", "/lv:", "/ecto:"))
+
+
+def test_codex_descriptions_preserve_summary_and_trigger_within_budget() -> None:
+    description = (
+        "Audit Hex dependencies for supply-chain security risks including bidirectional "
+        "characters, compile-time execution, maintainer changes, typosquats, and CVEs. "
+        "Use after mix deps.update or when reviewing dependency changes."
+    )
+
+    compact = codex.compact_skill_description(description)
+
+    assert len(compact) <= codex.CODEX_SKILL_DESCRIPTION_LIMIT
+    assert compact.startswith("Audit Hex dependencies for supply-chain security risks")
+    assert "Use after mix deps.update" in compact
+    assert codex.compact_skill_description(compact) == compact
+
+
+def test_codex_plugin_skill_mentions_are_qualified_as_complete_tokens() -> None:
+    source = (
+        "Use $phx-review, $lv-assigns, $ecto-n1-check, and $phx-*. "
+        "Keep $other:phx-review and prefix$phx-review unchanged."
+    )
+
+    assert codex._qualify_codex_skill_mentions(source, "elixir-phoenix") == (
+        "Use $elixir-phoenix:phx-review, $elixir-phoenix:lv-assigns, "
+        "$elixir-phoenix:ecto-n1-check, and $elixir-phoenix:phx-*. "
+        "Keep $other:phx-review and prefix$phx-review unchanged."
+    )
+
+
+def test_namespace_expansion_wraps_only_affected_prose() -> None:
+    prose = "- " + ("word " * 37) + "$elixir-phoenix:phx-review result\n"
+    fenced = "```text\n" + ("word " * 45) + "$elixir-phoenix:phx-review\n```\n"
+
+    wrapped = codex._wrap_namespace_expanded_lines(prose + fenced, "elixir-phoenix")
+    prose_output, fenced_output = wrapped.split("```text\n", maxsplit=1)
+
+    assert max(map(len, prose_output.splitlines())) <= 200
+    assert "\n  " in prose_output
+    assert fenced_output == fenced.removeprefix("```text\n")
+
+
+@pytest.mark.parametrize(
+    ("skill_name", "required"),
+    [
+        ("ecto-n1-check", "not for broad database performance"),
+        (
+            "phx-deps-update",
+            "$elixir-phoenix:phx-investigate for deps.get failures",
+        ),
+        ("phx-document", "not README or external docs"),
+        ("phx-full", "$elixir-phoenix:phx-work for an existing plan"),
+        ("phx-help", "not for Codex /help"),
+        ("phx-investigate", "Codex subagents are optional"),
+        ("phx-review", "return a verdict"),
+    ],
+)
+def test_route_sensitive_codex_descriptions_remain_complete(
+    skill_name: str, required: str
+) -> None:
+    skill = parse_file(TARGETS_DIR / "codex" / "skills" / skill_name / "SKILL.md")
+    description = skill.data["description"]
+
+    expected = codex._qualify_codex_skill_mentions(
+        codex.CODEX_SKILL_DESCRIPTION_OVERRIDES[skill_name], "elixir-phoenix"
+    )
+    assert description == expected
+    assert required in description
+    assert len(description) <= codex.CODEX_SKILL_DESCRIPTION_LIMIT
+
+
+def test_repository_codex_descriptions_reduce_catalog_pressure() -> None:
+    canonical = codex.discover_skills(SOURCE_PLUGIN_DIR)
+    generated = [
+        parse_file(path).data["description"]
+        for path in sorted((TARGETS_DIR / "codex" / "skills").glob("*/SKILL.md"))
+    ]
+    canonical_chars = sum(
+        len(str(skill.frontmatter.data["description"])) for skill in canonical
+    )
+
+    assert len(generated) == len(canonical)
+    assert all(
+        1 <= len(description) <= codex.CODEX_SKILL_DESCRIPTION_LIMIT
+        for description in generated
+    )
+    assert all(description == description.strip() for description in generated)
+    assert not any(
+        description.removesuffix("…").rsplit(maxsplit=1)[-1].lower()
+        in codex.DESCRIPTION_DANGLING_WORDS
+        for description in generated
+    )
+    assert sum(map(len, generated)) <= 6_000
+    assert sum(map(len, generated)) <= canonical_chars * 0.7
 
 
 def test_rewrites_cross_skill_resources_and_rejects_missing_or_escaping_paths(
@@ -341,10 +436,10 @@ def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies()
         target / "phx-investigate" / "references" / "investigation-template.md"
     ).read_text()
 
-    assert "$phx-investigate" in investigate
+    assert "$elixir-phoenix:phx-investigate" in investigate
     assert "Reproduce Before Fixing" in investigate
     assert "Tidewave is optional" in investigate
-    assert "$phx-review" in review
+    assert "$elixir-phoenix:phx-review" in review
     assert "Review is read-only" in review
     assert "sequential review is fully valid" in review
     assert "optional performance optimization" in review_agents
@@ -390,6 +485,9 @@ def test_repository_target_has_no_unresolved_claude_tokens() -> None:
             "/phx:",
             "/lv:",
             "/ecto:",
+            "$phx-",
+            "$lv-",
+            "$ecto-",
         )
     )
 

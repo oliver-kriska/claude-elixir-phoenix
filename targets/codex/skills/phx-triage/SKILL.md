@@ -1,7 +1,7 @@
 ---
 name: phx-triage
-description: Triage review findings interactively — approve, skip, or prioritize each
-  issue. Use after $phx-review to filter findings before fixing.
+description: Triage review findings interactively — approve, skip, or prioritize;
+  Use after $elixir-phoenix:phx-review to filter…
 ---
 
 # Triage — Interactive Review Resolution
@@ -12,16 +12,16 @@ committing to fixes.
 ## Usage
 
 ```
-$phx-triage .claude/plans/user-auth/reviews/user-auth-review.md
-$phx-triage                  # Uses most recent review
+$elixir-phoenix:phx-triage .claude/plans/user-auth/reviews/user-auth-review.md
+$elixir-phoenix:phx-triage                  # Uses most recent review
 ```
 
 ## Why Triage
 
-After `$phx-review` produces findings, you have three options:
+After `$elixir-phoenix:phx-review` produces findings, you have three options:
 
-1. **Fix everything** — `$phx-plan .claude/plans/{slug}/reviews/...`
-2. **Triage first** — `$phx-triage` (filter, then fix what matters)
+1. **Fix everything** — `$elixir-phoenix:phx-plan .claude/plans/{slug}/reviews/...`
+2. **Triage first** — `$elixir-phoenix:phx-triage` (filter, then fix what matters)
 3. **Handle manually** — Read review, pick what to fix yourself
 
 Best when review has 5+ findings and you want to prioritize.
@@ -80,10 +80,10 @@ Write to `.claude/plans/{slug}/reviews/{slug}-triage.md` with Fix Queue
 ```
 Triage complete: {n} to fix, {n} skipped, {n} deferred.
 
-1. Plan fixes — $phx-plan .claude/plans/{slug}/reviews/{slug}-triage.md
-2. Fix directly — $phx-work (for simple fixes)
+1. Plan fixes — $elixir-phoenix:phx-plan .claude/plans/{slug}/reviews/{slug}-triage.md
+2. Fix directly — $elixir-phoenix:phx-work (for simple fixes)
 3. Review deferred items later
-4. Capture solutions — $phx-compound (if patterns were solved)
+4. Capture solutions — $elixir-phoenix:phx-compound (if patterns were solved)
 ```
 
 ## Iron Laws
@@ -94,17 +94,17 @@ Triage complete: {n} to fix, {n} skipped, {n} deferred.
 4. **Capture user context** — Every "fix it" should include
    any user guidance for better fixes
 5. **Suggest compound after triage** — If triage reveals solved patterns
-   (root cause identified, fix known), mention `$phx-compound`
+   (root cause identified, fix known), mention `$elixir-phoenix:phx-compound`
 6. **NEVER auto-decide severity or auto-dismiss findings** — the human assigns final priority; present the agent's severity as a recommendation, not a verdict
 
 ## Integration with Workflow
 
 ```text
-$phx-review
+$elixir-phoenix:phx-review
        |
-$phx-triage  ← YOU ARE HERE (interactive filtering)
+$elixir-phoenix:phx-triage  ← YOU ARE HERE (interactive filtering)
        |
-$phx-plan (with triage file) → $phx-work → $phx-compound
+$elixir-phoenix:phx-plan (with triage file) → $elixir-phoenix:phx-work → $elixir-phoenix:phx-compound
 ```
 
 ## References

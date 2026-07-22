@@ -1,6 +1,6 @@
 # Full Cycle Execution Steps
 
-Detailed step-by-step execution for `$phx-full`.
+Detailed step-by-step execution for `$elixir-phoenix:phx-full`.
 
 ## Step 1: Initialize
 
@@ -56,7 +56,7 @@ git checkout -b feature/$FEATURE_SLUG
 
 ## Step 3: Plan Phase
 
-Run `$phx-plan {feature}` (with `--depth deep` for "research it"):
+Run `$elixir-phoenix:phx-plan {feature}` (with `--depth deep` for "research it"):
 
 - Spawn research agents (1-2 for standard, 4+ for deep)
 - Create phased implementation plan
@@ -66,7 +66,7 @@ Run `$phx-plan {feature}` (with `--depth deep` for "research it"):
 
 ## Step 4: Work Phase (Loop)
 
-Run `$phx-work .claude/plans/{feature}/plan.md`:
+Run `$elixir-phoenix:phx-work .claude/plans/{feature}/plan.md`:
 
 ```
 WHILE unchecked tasks exist:
@@ -83,8 +83,8 @@ WHILE unchecked tasks exist:
 
 ## Step 5: Review Phase
 
-Run `$phx-review` (append `--codex` when the full run was invoked with
-`--codex` — this forwards the flag to the existing `$phx-review --codex`
+Run `$elixir-phoenix:phx-review` (append `--codex` when the full run was invoked with
+`--codex` — this forwards the flag to the existing `$elixir-phoenix:phx-review --codex`
 path, adding the codex-reviewer track):
 
 Spawn 4 parallel review agents (5 with `--codex`):
@@ -136,8 +136,8 @@ Append metrics to progress file:
 
 Auto-suggest optional follow-ups:
 
-- `$phx-document` for documentation generation
-- `$phx-learn-from-fix` to capture lessons learned
+- `$elixir-phoenix:phx-document` for documentation generation
+- `$elixir-phoenix:phx-learn-from-fix` to capture lessons learned
 
 Then output completion:
 

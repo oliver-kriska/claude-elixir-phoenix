@@ -1,6 +1,6 @@
 # Interview Techniques Reference
 
-Detailed methodology for the adaptive interview phase of `$phx-brainstorm`.
+Detailed methodology for the adaptive interview phase of `$elixir-phoenix:phx-brainstorm`.
 
 ## Coverage Scoring Algorithm
 
@@ -231,9 +231,9 @@ current architecture that informs the plan.}
 
 ### Format Notes
 
-- **Summary section** is what `$phx-plan` reads first — must be self-contained
-- **Coverage Details** replace `$phx-plan`'s clarification questions
-- **Codebase Context** replaces the patterns-analyst research in `$phx-plan`
-- **Transcript** at the bottom for audit trail — not consumed by `$phx-plan`
+- **Summary section** is what `$elixir-phoenix:phx-plan` reads first — must be self-contained
+- **Coverage Details** replace `$elixir-phoenix:phx-plan`'s clarification questions
+- **Codebase Context** replaces the patterns-analyst research in `$elixir-phoenix:phx-plan`
+- **Transcript** at the bottom for audit trail — not consumed by `$elixir-phoenix:phx-plan`
 - **Status: COMPLETE** means all dimensions >= 1 and total >= 8
 - **Status: IN_PROGRESS** means user chose "Store & exit" before sufficient coverage

@@ -18,12 +18,25 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **Codex skill descriptions now preserve routing signal within a compact
+  budget** — generated descriptions are capped at 120 characters while retaining
+  key capability and trigger cues. Route-sensitive skills keep explicit negative
+  routing rules to avoid collisions. This reduces pressure on Codex's shared
+  skills context without changing canonical Claude descriptions, explicit skill
+  bodies, or other generated runtimes.
+
 - **Amp installation no longer requires cloning this repository** — the primary
   project-local and global instructions now install all 51 generated skills
   directly from the GitHub `targets/amp/skills` tree. Update instructions also
   clarify that Amp copies skills and requires an explicit `--overwrite` install.
 
 ### Fixed
+
+- **Codex plugin skill references now use their required runtime namespace** —
+  explicit invocations and generated sibling references use
+  `$elixir-phoenix:phx-investigate` rather than the non-resolving unqualified
+  `$phx-investigate` form. README and Codex installation guidance now document
+  the exact plugin-qualified syntax inserted by `/skills`.
 
 ## [2.14.3] - 2026-07-20
 

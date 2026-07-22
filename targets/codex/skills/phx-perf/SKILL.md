@@ -1,8 +1,7 @@
 ---
 name: phx-perf
-description: Analyze Elixir/Phoenix performance — N+1 queries, assign bloat, ecto
-  optimization, genserver bottlenecks. Use when slowness, timeouts, or high memory
-  reported.
+description: Analyze Elixir/Phoenix performance — N+1 queries, assign bloat, ecto;
+  Use when slowness, timeouts, or high memory…
 ---
 
 # Performance Analysis
@@ -13,11 +12,11 @@ and OTP layers. Prioritize findings by impact and effort.
 ## Usage
 
 ```
-$phx-perf                           # Analyze full project
-$phx-perf lib/my_app/accounts.ex    # Analyze specific module
-$phx-perf --focus ecto              # Ecto queries only
-$phx-perf --focus liveview          # LiveView memory only
-$phx-perf --focus otp               # OTP bottlenecks only
+$elixir-phoenix:phx-perf                           # Analyze full project
+$elixir-phoenix:phx-perf lib/my_app/accounts.ex    # Analyze specific module
+$elixir-phoenix:phx-perf --focus ecto              # Ecto queries only
+$elixir-phoenix:phx-perf --focus liveview          # LiveView memory only
+$elixir-phoenix:phx-perf --focus otp               # OTP bottlenecks only
 ```
 
 ## Arguments
@@ -106,9 +105,9 @@ get lost. Present options based on severity:
 ```
 How would you like to proceed?
 
-- `$phx-plan` — Create a plan from these findings (recommended for 3+ fixes)
-- `$phx-quick` — Apply top priority fix directly (1-2 simple fixes)
-- `$phx-investigate` — Deep-dive into a specific finding
+- `$elixir-phoenix:phx-plan` — Create a plan from these findings (recommended for 3+ fixes)
+- `$elixir-phoenix:phx-quick` — Apply top priority fix directly (1-2 simple fixes)
+- `$elixir-phoenix:phx-investigate` — Deep-dive into a specific finding
 ```
 
 ## Tidewave Integration

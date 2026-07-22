@@ -146,7 +146,7 @@ From codebase analysis:
 
 ## Session Handoff
 
-Key context from planning session for `$phx-work` to use:
+Key context from planning session for `$elixir-phoenix:phx-work` to use:
 
 - **Discovery**: {key findings, bugs found, gotchas learned}
 - **Decisions**: {choices made and why}
@@ -202,5 +202,5 @@ Tasks are logical work units, NOT individual file edits.
 - Sub-locations are indented lists, not separate tasks
 - Each task completable in one sitting
 
-**IMPORTANT**: Plan template does NOT auto-start `$phx-work`. The
+**IMPORTANT**: Plan template does NOT auto-start `$elixir-phoenix:phx-work`. The
 skill presents the plan and asks the user how to proceed.

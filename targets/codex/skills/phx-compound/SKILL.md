@@ -1,7 +1,7 @@
 ---
 name: phx-compound
 description: Capture solved problems as searchable solution docs. Use after fixing
-  bugs, when "that worked", or after successful $phx-review or $phx-investigate.
+  bugs, when "that worked", or after successful…
 ---
 
 # Compound — Capture Solutions as Knowledge
@@ -12,9 +12,9 @@ institutional documentation.
 ## Usage
 
 ```
-$phx-compound Fixed N+1 query in user listing
-$phx-compound Resolved LiveView timeout in dashboard
-$phx-compound   # Auto-detects from recent session context
+$elixir-phoenix:phx-compound Fixed N+1 query in user listing
+$elixir-phoenix:phx-compound Resolved LiveView timeout in dashboard
+$elixir-phoenix:phx-compound   # Auto-detects from recent session context
 ```
 
 ## Philosophy
@@ -52,7 +52,7 @@ then create file using `../compound-docs/references/resolution-template.md`.
 **Write-blocked fallback**: if writing to `.claude/solutions/` is denied
 by permissions, do NOT silently drop the solution. Output the full
 solution doc inline (fenced markdown the user can paste), then suggest
-`$phx-permissions` to allow `.claude/solutions/` writes for next time.
+`$elixir-phoenix:phx-permissions` to allow `.claude/solutions/` writes for next time.
 
 ### Step 4: Decision Menu
 
@@ -64,22 +64,22 @@ solution doc inline (fenced markdown the user can paste), then suggest
 ## Auto-Trigger Phrases
 
 When user says "that worked", "it's fixed", "problem solved",
-"the fix was" — suggest `$phx-compound`.
+"the fix was" — suggest `$elixir-phoenix:phx-compound`.
 
 ### Supply-chain finding auto-feed (Phase 3)
 
-When `$phx-deps-audit` produces a BLOCK-severity finding that the
+When `$elixir-phoenix:phx-deps-audit` produces a BLOCK-severity finding that the
 user investigates and confirms is a real malicious pattern (not a
 false positive), suggest:
 
 > Caught a high-severity finding in `<pkg>@<version>`. Run
-> `$phx-compound` to capture this for future audits?
+> `$elixir-phoenix:phx-compound` to capture this for future audits?
 
 If accepted, the resulting solution doc goes to
 `.claude/solutions/supply-chain/<pkg>-<cve_or_pattern>.md` and
 includes the exact rule-id + snippet + diff window that triggered
 the finding. This compounds the audit corpus: future runs of
-`$phx-deps-audit` grep `solutions/supply-chain/` for snippet
+`$elixir-phoenix:phx-deps-audit` grep `solutions/supply-chain/` for snippet
 matches and pre-elevate severity on known-bad patterns.
 
 **Always prompt; never auto-write.** Solution docs are durable and
@@ -96,11 +96,11 @@ shape future trust calls — the user reviews before committing.
 ## Integration with Workflow
 
 ```text
-$phx-review → Complete → $phx-compound  ← YOU ARE HERE
+$elixir-phoenix:phx-review → Complete → $elixir-phoenix:phx-compound  ← YOU ARE HERE
                               │
                  .claude/solutions/{category}/{fix}.md
                               │
-              $phx-investigate and $phx-plan search here
+              $elixir-phoenix:phx-investigate and $elixir-phoenix:phx-plan search here
 ```
 
 ## References

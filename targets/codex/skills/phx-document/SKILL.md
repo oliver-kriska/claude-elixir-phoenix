@@ -1,8 +1,7 @@
 ---
 name: phx-document
-description: Generate @moduledoc and @doc strings for Elixir modules, contexts, and
-  schemas. Use when explicitly asked to write @doc/@moduledoc — NOT for README or
-  external docs.
+description: Write Elixir @moduledoc and @doc text. Use only for code documentation,
+  not README or external docs.
 ---
 
 # Document
@@ -12,9 +11,9 @@ Generate documentation for newly implemented features.
 ## Usage
 
 ```
-$phx-document .claude/plans/magic-link-auth/plan.md
-$phx-document magic link authentication
-$phx-document  # Auto-detect from recent plan
+$elixir-phoenix:phx-document .claude/plans/magic-link-auth/plan.md
+$elixir-phoenix:phx-document magic link authentication
+$elixir-phoenix:phx-document  # Auto-detect from recent plan
 ```
 
 ## Iron Laws
@@ -66,9 +65,9 @@ zero output (confirmed: session bb0a0454 wasted ~2K tokens on no-op).
 ## Integration with Workflow
 
 ```text
-$phx-plan → $phx-work → $phx-review
+$elixir-phoenix:phx-plan → $elixir-phoenix:phx-work → $elixir-phoenix:phx-review
        ↓
-$phx-document  ← YOU ARE HERE (optional, suggested after review passes)
+$elixir-phoenix:phx-document  ← YOU ARE HERE (optional, suggested after review passes)
 ```
 
 ## References
