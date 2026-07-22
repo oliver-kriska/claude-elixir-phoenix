@@ -40,6 +40,21 @@ CODEX_DESCRIPTION = (
     "skills for Codex"
 )
 
+
+def _assert_ordered_markers(
+    source: str, markers: tuple[str, ...], source_file: Path
+) -> None:
+    """Require each canonical marker exactly once and in the declared order."""
+    positions: list[int] = []
+    for marker in markers:
+        if source.count(marker) != 1:
+            raise ValueError(
+                f"{source_file}: expected canonical marker exactly once: {marker}"
+            )
+        positions.append(source.index(marker))
+    if positions != sorted(positions):
+        raise ValueError(f"{source_file}: canonical marker order changed")
+
 INVESTIGATE_BODY = """# Investigate Bug
 
 Investigate Elixir/Phoenix bugs root-cause first. Reproduce or establish the
@@ -313,6 +328,513 @@ without `UNMET` downgrades `PASS` to `PASS WITH WARNINGS`.
 """
 
 
+def _replace_anchored(source: str, old: str, new: str, source_file: Path) -> str:
+    """Replace one canonical block, failing loudly when its structure drifts."""
+    if source.count(old) != 1:
+        raise ValueError(f"{source_file}: portable plan/work overlay anchor changed")
+    return source.replace(old, new)
+
+
+def _replace_section(
+    source: str, start_heading: str, end_heading: str, replacement: str, source_file: Path
+) -> str:
+    """Replace one bounded section and reject missing, duplicate, or reordered headings."""
+    if source.count(start_heading) != 1 or source.count(end_heading) != 1:
+        raise ValueError(f"{source_file}: portable plan/work section anchor changed")
+    start = source.index(start_heading)
+    end = source.index(end_heading)
+    if start >= end:
+        raise ValueError(f"{source_file}: portable plan/work heading order changed")
+    return source[:start] + replacement + source[end:]
+
+
+def _replace_tail(source: str, heading: str, replacement: str, source_file: Path) -> str:
+    """Replace from one unique heading through end-of-file."""
+    if source.count(heading) != 1:
+        raise ValueError(f"{source_file}: portable plan/work tail anchor changed")
+    return source[: source.index(heading)] + replacement
+
+
+def _portable_plan_work_overlay(
+    source_file: Path, current: "SkillSource"
+) -> str | None:
+    """Remove executable Claude-only dependencies from plan/work workflows."""
+    relative = source_file.relative_to(current.source_dir).as_posix()
+    if current.target_name not in {"phx-plan", "phx-work"}:
+        return None
+
+    source = (
+        current.frontmatter.body
+        if relative == "SKILL.md"
+        else source_file.read_text(encoding="utf-8")
+    )
+
+    if current.target_name == "phx-plan" and relative == "SKILL.md":
+        required = ("# Plan Elixir/Phoenix Feature", "## Workflow", "## CRITICAL: After Writing the Plan")
+        if not all(marker in source for marker in required):
+            raise ValueError(f"{source_file}: portable plan overlay anchors changed")
+        source = _replace_anchored(
+            source,
+            "Plan a feature by spawning Elixir specialist agents, then output\nstructured plan with checkboxes.",
+            "Plan a feature by researching the relevant Elixir/Phoenix concerns, then\noutput a structured plan with checkboxes.",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "1. Spawns Elixir specialist agents for research",
+            "1. Covers relevant concerns through resumable research tracks",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            '- `$ARGUMENTS` = Feature description, review file, or existing plan',
+            "- Text after the skill name = feature description, review file, or existing plan",
+            source_file,
+        )
+        source = _replace_anchored(source, """4. **Runtime context** (Tidewave) — Gather live schemas, routes,
+   and warnings before spawning agents (direct path only — the
+   research orchestrator gathers its own)
+5. **Spawn research** — Selective, based on need. **0–2 agents**:
+   spawn directly in parallel. **3+ agents** (broad multi-context
+   feature): spawn ONE `planning-orchestrator` to run and compress
+   the fan-out, then read only its digest and
+   `summaries/consolidated.md`. Create a Claude Code task per spawn:
+   `TaskCreate({subject: "{Agent} research", activeForm: "Researching..."})`,
+   mark `in_progress` on spawn, `completed` when done
+6. **Wait for ALL agents** — Do NOT proceed until all return
+   "completed". NEVER write plan while any agent is still running""", """4. **Create research state** — Before research, create
+   `.claude/plans/{slug}/scratchpad.md` with a concern-track checklist
+5. **Gather optional runtime context** — Only when Tidewave tools are independently
+   configured and exposed; otherwise inspect source, routes, schemas, and tests
+6. **Research selectively** — Cover only relevant concerns. Native generic
+   subagents may run independent tracks in parallel, but they are optional.
+   Without them, run every selected track sequentially in this session and
+   save evidence under `.claude/plans/{slug}/research/`
+7. **Finish ALL research tracks** — Maintain the scratchpad checklist,
+   marking each selected track `[x]` only after its evidence is captured.
+   NEVER write the plan while any selected track remains unchecked""", source_file)
+        source = _replace_anchored(
+            source,
+            "1. **Gather context** — File path (skip to agents), brainstorm",
+            "1. **Gather context** — File path (skip to research), brainstorm",
+            source_file,
+        )
+        source = _replace_anchored(source, "7. **Breadboard** (LiveView) — System map for multi-page features\n8. **Completeness check**", "8. **Breadboard** (LiveView) — Produce the system map from collected evidence\n9. **Completeness check**", source_file)
+        source = _replace_anchored(source, "9. **Split decision**", "10. **Split decision**", source_file)
+        source = _replace_anchored(source, "10. **Generate plan**", "11. **Generate plan**", source_file)
+        source = _replace_anchored(source, "    Also create `plans/{slug}/scratchpad.md` for decisions and dead-ends", "    Reuse `.claude/plans/{slug}/scratchpad.md` for decisions and dead-ends", source_file)
+        source = _replace_anchored(source, "11. **Self-check**", "12. **Self-check**", source_file)
+        source = _replace_anchored(source, "12. **Present and ask**", "13. **Present and ask**", source_file)
+        source = _replace_section(source, "### --existing Mode (Deepening)", "## Iron Laws", """### --existing Mode (Deepening)
+
+Enhance an existing plan without relying on named agents:
+
+1. Load the plan and create or update `.claude/plans/{slug}/scratchpad.md`
+2. Identify thin sections and add a checklist of relevant concern tracks
+3. Complete every track in this session, sequentially by default; generic workers
+   are optional only for independent tracks and must write evidence under
+   `.claude/plans/{slug}/research/`
+4. Produce breadboarding and infrastructure notes directly from the gathered
+   evidence, independent of whether workers were used
+5. Add implementation detail, resolve spikes, and strengthen verification
+6. Present a diff summary; never delete or silently rewrite existing tasks
+
+""", source_file)
+        source = _replace_anchored(
+            source,
+            "2. Use `AskUserQuestion` with options:",
+            "2. Ask the user a normal conversational question with these options:",
+            source_file,
+        )
+        source = _replace_anchored(source, "6. **Do NOT spawn hex-library-researcher for existing deps**", "6. **Do NOT run a library-selection track for existing dependencies**", source_file)
+        source = _replace_anchored(
+            source,
+            "3. **Spawn agents selectively** — Only relevant, not all",
+            "3. **Select research tracks narrowly** — Only relevant concerns, not all",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "4. **NEVER write plan while agents still running**",
+            "4. **NEVER write the plan while selected research tracks remain incomplete**",
+            source_file,
+        )
+
+    elif current.target_name == "phx-plan" and relative == "references/planning-workflow.md":
+        required = ("## Agent Spawning", "## Waiting for Agents", "## Presenting the Plan")
+        if not all(marker in source for marker in required):
+            raise ValueError(f"{source_file}: portable planning reference anchors changed")
+        portable = """## Research Tracks
+
+Select only the concerns the feature needs. Use the canonical selection table
+below as concern expertise, not as a requirement for installed named agents.
+
+- `quick`: existing-project-patterns track
+- `standard`: patterns plus 1-2 relevant concern tracks
+- `deep`: patterns plus all relevant concern and external-research tracks
+
+Native generic subagents are an optional optimization. Give each one a focused
+scope and require it to write evidence to `.claude/plans/{slug}/research/`.
+When subagents are unavailable, perform the same tracks sequentially in this
+session using repository search, dependency documentation, web research when
+needed, and optional Tidewave tools when independently configured.
+
+Before any research, create `.claude/plans/{slug}/scratchpad.md` and track progress there:
+
+```markdown
+## Research checklist
+- [x] Existing project patterns — research/patterns.md
+- [ ] Ecto/data design
+- [ ] LiveView interaction design
+```
+
+Do not generate the plan until every selected track is `[x]`. If a track fails,
+record the failure and complete it in the current session instead of dropping
+its coverage. Preserve source paths, line evidence, alternatives, and confidence.
+
+## Concern Selection
+
+| Condition | Research concern |
+|---|---|
+| Always | Existing project patterns and context boundaries |
+| NEW library not in `mix.exs` | Hex/library evaluation |
+| UI, form, live, real-time | LiveView architecture |
+| Database, schema, table | Ecto/data design |
+| Job, worker, async, queue | Oban behavior |
+| GenServer, process, state | OTP design |
+| Auth, permission, secrets | Security |
+| Unfamiliar technology | Primary docs and web evidence |
+| Function signature changes | Call-site tracing |
+
+Do not research an existing dependency as if selecting a new library. Inspect
+its installed source/docs or optional runtime docs instead.
+
+## Completing Research
+
+Wait for every optional subagent to finish, collect its output, and complete any
+missing or failed track sequentially. The checklist, research files, and
+scratchpad make this state resumable without a runtime task API. Breadboarding
+and infrastructure output are synthesized from this evidence, not delegated to
+or made conditional on any named worker.
+
+"""
+        source = _replace_section(source, "## Agent Spawning", "## Infrastructure Knowledge Persistence", portable, source_file)
+        source = _replace_anchored(
+            source,
+            "Check `$ARGUMENTS` for a path containing `interview.md`",
+            "Check the text after the skill name for a path containing `interview.md`",
+            source_file,
+        )
+        source = _replace_anchored(source, "Use interview content as input for agent spawning (depth detection still applies)", "Use interview content for concern-track selection (depth detection still applies)", source_file)
+        source = _replace_anchored(source, "**Depth determines agent count AND plan detail:**", "**Depth determines research track counts, concerns, and plan detail:**", source_file)
+        source = _replace_anchored(source, "| Depth      | Agents             | Clarification           | Plan Detail", "| Depth      | Research tracks / concerns | Clarification           | Plan Detail", source_file)
+        source = _replace_anchored(source, "| `quick`    | 1 (patterns only)", "| `quick`    | 1 pattern track", source_file)
+        source = _replace_anchored(source, "| `standard` | 2-3 specialists", "| `standard` | 2-3 concern tracks", source_file)
+        source = _replace_anchored(source, "| `deep`     | 4+ (full research)", "| `deep`     | 4+ full research tracks", source_file)
+        source = _replace_anchored(source, "When Explore agents discover **project infrastructure**", "When completed research discovers **project infrastructure**", source_file)
+        source = _replace_anchored(
+            source,
+            "Then use `AskUserQuestion`:",
+            "Then ask the user a normal conversational question:",
+            source_file,
+        )
+        source = _replace_anchored(source, "Do NOT use subagent_type names", "Do NOT use runtime worker names", source_file)
+        source = _replace_anchored(source, "If liveview-architect was spawned, its report should include\naffordance tables. Use these to build a system map.", "Synthesize affordance tables and the system map from the completed research-track evidence.", source_file)
+        source = _replace_tail(source, "## Deepening an Existing Plan (--existing mode)", """## Deepening an Existing Plan (--existing mode)
+
+1. Load the existing plan and create or update its scratchpad checklist
+2. Select thin sections as concern tracks; complete them sequentially in the
+   current session by default
+3. Optionally use native generic workers only for independent tracks, with
+   bounded prompts and `.claude/plans/{slug}/research/{topic}.md` output
+4. Synthesize breadboarding and infrastructure notes from the gathered evidence
+5. Add detail and verification without deleting or silently changing tasks
+6. Present a diff summary and stop for user review
+
+Deepening is useful for unfamiliar code, external integrations, security-sensitive
+work, and unresolved spikes. Preserve existing scope and decisions.
+""", source_file)
+
+    elif current.target_name == "phx-plan" and relative == "references/agent-selection.md":
+        _assert_ordered_markers(
+            source,
+            (
+                "# Agent Selection Guidelines",
+                "## When to Spawn Which Agents",
+                "## When to Spawn hex-library-researcher",
+                "## When to Spawn web-researcher",
+                "## When to Spawn call-tracer",
+                "## When to Ask Clarifying Questions",
+            ),
+            source_file,
+        )
+        source = """# Concern Track Selection
+
+Select research by feature concerns, not named agents.
+
+| Feature type | Required concern tracks |
+|---|---|
+| CRUD or data-heavy | Existing patterns, Ecto/data design |
+| Interactive or real-time UI | Existing patterns, LiveView architecture |
+| External integration | Existing patterns, OTP boundaries; library evaluation only for a new dependency |
+| Background processing | Existing patterns, Oban behavior, OTP supervision |
+| Authentication/permissions | Existing patterns, security and negative paths |
+| Refactoring/signature changes | Existing patterns, call-site tracing |
+
+Run selected tracks sequentially in the current session by default. Native
+generic workers are optional only for independent tracks.
+
+## Dependency Research
+
+Evaluate libraries only when adding a dependency absent from `mix.exs` or
+comparing replacements. For an existing dependency, inspect `deps/{library}`
+and its installed/version-matched documentation. Optional Tidewave dependency
+documentation tools may be used only when independently configured and exposed.
+
+## External Research
+
+Use primary documentation and focused web research for unfamiliar technology,
+known issues, or infrastructure questions. Capture URLs, findings, alternatives,
+and confidence in `.claude/plans/{slug}/research/`.
+
+## Clarification
+
+Ask at most three focused questions when scope, integration points, performance,
+or competing valid approaches cannot be resolved from repository evidence.
+"""
+
+    elif current.target_name == "phx-plan" and relative == "references/plan-template.md":
+        source = _replace_anchored(source, "Include when the liveview-architect produced a breadboard.", "Include for multi-page LiveView work after synthesizing the research evidence.", source_file)
+        source = _replace_section(source, "## Task Agent Annotations", "## Files to Follow as Patterns", """## Concern Annotations
+
+Annotations are portable concern and verification labels, not worker identities:
+
+| Annotation | Concern |
+|---|---|
+| `[ecto]` | Schemas, migrations, queries |
+| `[liveview]` | LiveView, real-time UI, PubSub |
+| `[oban]` | Background jobs and workers |
+| `[otp]` | Processes and supervision |
+| `[security]` | Authentication, authorization, tokens |
+| `[test]` | Tests, mocks, factories |
+| `[direct]` | General implementation and wiring |
+
+""", source_file)
+
+    elif current.target_name == "phx-work" and relative == "SKILL.md":
+        required = ("# Work", "## Step 3: Load, Create Task List, and Resume", "## Step 5: Completion")
+        if not all(marker in source for marker in required):
+            raise ValueError(f"{source_file}: portable work overlay anchors changed")
+        portable = """**Use the plan file as the portable task list.** For every unchecked item,
+preserve its `- [ ] [Pn-Tm]` row and ordering. At the start of a task, set its
+phase to `[IN_PROGRESS]` and append a `Started:` entry to
+`.claude/plans/{slug}/progress.md`. Mark the plan checkbox `[x]` only after
+verification passes, then append the completion evidence to `progress.md`.
+
+Dependencies remain explicit in phase order: do not start a later phase while
+an earlier phase has unchecked non-blocked tasks. This checklist is the progress
+UI, durable state, and resume mechanism; no runtime task API is required.
+
+"""
+        source = _replace_section(
+            source,
+            "**Create Claude Code tasks**",
+            "With `--from P2-T3`",
+            portable,
+            source_file,
+        )
+        source = _replace_anchored(source, '1. **Start task**: `TaskUpdate({taskId, status: "in_progress"})`', "1. **Start task**: mark its phase `[IN_PROGRESS]` and log the start in `.claude/plans/{slug}/progress.md`", source_file)
+        source = _replace_anchored(source,
+            "2. **Route** by `[agent]` annotation (see `${CLAUDE_SKILL_DIR}/references/execution-guide.md`)",
+            "2. **Apply concern guidance** from the annotation and its required verification (see `${CLAUDE_SKILL_DIR}/references/execution-guide.md`); it never selects a named worker",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "3. **Plan checkboxes ARE the state** -- `[x]` = done, `[ ]` = pending.\n   No separate JSON state files. Resume by reading the plan.",
+            "3. **Plan checkboxes ARE the state** -- `[x]` = done; `[ ]` = pending\n   unless the row is visibly tagged `[BLOCKED]`. No separate JSON state files.\n   Resume by reading the plan.",
+            source_file,
+        )
+        source = _replace_anchored(source,
+            "5. **Complete task**: Mark checkbox `[x]` on pass, **append\n   implementation note** inline, AND\n   `TaskUpdate({taskId, status: \"completed\"})`. Example:",
+            "5. **Complete task**: Mark checkbox `[x]` on pass, **append\n   implementation note** inline, and log verification evidence in `progress.md`. Example:",
+            source_file,
+        )
+        source = _replace_anchored(source, "**Parallel groups**: Tasks under `### Parallel:` header spawn\nas background subagents.", "**Parallel groups**: Tasks under `### Parallel:` may use native generic workers only when independent; otherwise execute them sequentially in the current session.", source_file)
+        source = _replace_anchored(
+            source,
+            "for spawning pattern, prompt template, and checkpoint flow.",
+            "for the optional-worker pattern, sequential fallback, and checkpoint flow.",
+            source_file,
+        )
+        source = _replace_anchored(source, "  (format is checked by PostToolUse hook automatically)", "  and `mix format --check-formatted <changed_files>`", source_file)
+        source = _replace_anchored(source, "- Per-feature (Tidewave): behavioral smoke test via `project_eval`\n  (create record, fetch, verify -- see execution-guide.md)", "- Per-feature: when Tidewave tools are independently configured and exposed, use a behavioral runtime smoke test; otherwise run a focused repository test and a local/manual smoke check (see execution-guide.md)", source_file)
+        source = _replace_anchored(source, "The PostToolUse hook checks formatting but does NOT modify files —\nrun `mix format` explicitly during verification or before committing.", "No hook is assumed. Run `mix format` explicitly during verification and\n`mix format --check-formatted <changed_files>` before completing each task.", source_file)
+        source = _replace_anchored(source, "Summarize results with `AskUserQuestion`:", "Summarize results, then ask the user a normal conversational question:", source_file)
+        source = _replace_anchored(source, "3. **Commit changes** (`/commit`), 4. **Continue manually**.", "3. **Create a git commit** with the platform's native git workflow, 4. **Continue manually**.", source_file)
+        source = _replace_anchored(source, "Execute each unchecked task (`- [ ] [Pn-Tm][agent] Description`):", "Execute each unchecked task (`- [ ] [Pn-Tm][concern] Description`):", source_file)
+        source = _replace_anchored(source, "Find first unchecked task by `[Pn-Tm]` ID.", "Select the first unchecked task not tagged `[BLOCKED]`. Stop if an unresolved\n`[BLOCKED]` task precedes it unless `--skip-blockers` is explicit.\n`--skip-blockers` skips only tagged blocked rows; `--from <blocked-id>`\nexplicitly retries that row and clears `[BLOCKED]` when starting.", source_file)
+        source = _replace_anchored(source, "6. **On failure**: retry up to 3 times, then create BLOCKER\n   and write DEAD-END to scratchpad (see error-recovery.md)", "6. **On failure**: retry up to 3 times, then keep the row unchecked and\n   append `[BLOCKED]`, optionally mark its phase `[BLOCKED]`, record the\n   blocker in `progress.md`, write a DEAD-END to scratchpad, and stop by\n   default. Continue only when `--skip-blockers` was explicitly supplied", source_file)
+
+    elif current.target_name == "phx-work" and relative == "references/execution-guide.md":
+        required = ("## Task Routing", "## Parallel Task Execution", "## Checkpoint Pattern")
+        if not all(marker in source for marker in required):
+            raise ValueError(f"{source_file}: portable execution reference anchors changed")
+        portable = """### Execution Pattern
+
+Native generic subagents are optional for tasks that are independent and touch
+different files. Give each worker the full task text, locations, constraints,
+and verification contract, and wait for all workers before checkpointing.
+Do not require annotation-named custom agents.
+
+If native subagents are unavailable, execute every task sequentially in plan
+order in this session. This fallback is complete: apply the same domain guidance,
+verification, checkbox update, implementation note, and progress-log entry for
+each task. Never skip a task because parallel execution is unavailable.
+
+"""
+        source = _replace_section(source, "### Spawning Pattern", "### Waiting and Checkpoint", portable, source_file)
+        source = _replace_anchored(source, "Tasks under `### Parallel:` header execute via subagents:", "Tasks under `### Parallel:` are eligible for optional generic workers or sequential execution:", source_file)
+        source = _replace_anchored(source, "After spawning, wait for ALL agents to complete, then run phase checkpoint:", "If optional workers were used, wait for all of them; otherwise, after the sequential tasks complete, run the phase checkpoint:", source_file)
+        source = _replace_section(source, "## Task Routing", "## Parallel Task Execution", """## Concern Guidance
+
+Annotations such as `[ecto]`, `[liveview]`, `[oban]`, `[otp]`, `[security]`,
+`[test]`, and `[direct]` describe implementation concerns and required checks.
+They are not custom-agent identities and never route work to a named worker.
+Execute in the current session by default. A native generic worker is optional
+only for an independent task with disjoint files and a complete verification
+contract.
+
+| Annotation | Guidance and required verification |
+|---|---|
+| `[ecto]` | Ecto safety; migrate/rollback as applicable plus focused tests |
+| `[liveview]` | LiveView lifecycle/security; focused LiveView test plus local/manual UI smoke |
+| `[oban]` | Idempotency and args; worker test plus enqueue behavior check |
+| `[otp]` | Supervision/concurrency; focused process tests |
+| `[security]` | Authorization/input handling; negative-path tests and audit |
+| `[test]` | Test quality; run the named focused test |
+| `[direct]` | General implementation; format and compile plus affected test |
+
+Legacy unannotated tasks use their subject matter to select the same concern
+guidance, never a worker identity. Security requirements take priority.
+
+""", source_file)
+        source = _replace_anchored(source, "[Task Routing](#task-routing)", "[Concern Guidance](#concern-guidance)", source_file)
+        source = _replace_anchored(source,
+            "When Tidewave is available, also call\n`mcp__tidewave__get_logs level: :error` after code changes",
+            "When Tidewave is independently configured, optionally inspect error-level runtime logs after code changes",
+            source_file,
+        )
+        source = _replace_section(source, "### Per-Feature Behavioral Smoke Test (Tidewave)", "### After ALL Phases (Final Gate)", """### Per-Feature Behavioral Smoke Test
+
+Use Tidewave runtime tools only when they are independently configured and
+exposed in the current environment. If available, exercise the main behavior
+and inspect errors without persisting test data. Tidewave is optional, never a
+completion prerequisite.
+
+Without Tidewave, run all applicable fallbacks:
+
+1. `mix test test/path/to/affected_test.exs`
+2. Exercise the public repository/context function in a local test or `mix run`
+3. For UI work, start the app locally and perform a manual browser smoke check;
+   if that is impossible, record the unverified manual step explicitly
+
+""", source_file)
+        source = _replace_anchored(source,
+            "2. **Complete Claude Code task**: `TaskUpdate({taskId, status: \"completed\"})`\n   This updates the live progress indicator visible in the UI.",
+            "2. **Log completion**: Append the task ID, changed files, and verification result to `progress.md`.",
+            source_file,
+        )
+        source = _replace_anchored(source,
+            "5. **Start next task**: `TaskUpdate({nextTaskId, status: \"in_progress\"})`\n   then move to next unchecked task",
+            "5. **Start next task**: Log its start, then select the next unchecked\n   non-`[BLOCKED]` task. Stop if an unresolved blocker precedes it unless\n   `--skip-blockers` was explicitly supplied",
+            source_file,
+        )
+        source = _replace_anchored(source, "4. **Log progress**: Append to `.claude/plans/{feature}/progress.md`\n", "", source_file)
+        source = _replace_tail(
+            source,
+            "### Escalate to BLOCKER",
+            """### Escalate to BLOCKER
+
+After 3 failures, keep the plan row unchecked, append `[BLOCKED]`, and
+optionally mark its phase `[BLOCKED]`. Append the attempts and error evidence to
+`.claude/plans/{slug}/progress.md`, write the dead end to `scratchpad.md`, and
+stop by default. Continue to later work only with explicit `--skip-blockers`.
+
+```markdown
+- [ ] [P2-T3][ecto] [BLOCKED] Implement register_user/1
+
+## BLOCKER: P2-T3
+**Attempts**: 3
+**Error history**: {commands and first actionable failures}
+**Suggested next action**: {evidence-based recommendation}
+```
+
+Retry this task explicitly with the native `phx-work` invocation and
+`--from P2-T3`; clear `[BLOCKED]` when starting that retry.
+""",
+            source_file,
+        )
+
+    elif current.target_name == "phx-work" and relative == "references/file-formats.md":
+        source = _replace_anchored(source, "**Task format**: `- [ ] [Pn-Tm][agent] Description`", "**Task format**: `- [ ] [Pn-Tm][concern] Description`", source_file)
+        source = _replace_anchored(source, "- `[agent]`: Agent annotation (for routing)", "- `[concern]`: Guidance and verification annotation; never a worker identity", source_file)
+        source = _replace_anchored(source, "## Phase 1: {Phase Name} [COMPLETED|IN_PROGRESS|PENDING]", "## Phase 1: {Phase Name} [COMPLETED|IN_PROGRESS|PENDING|BLOCKED]", source_file)
+        source = _replace_anchored(source, "- [ ] [P1-T3][direct] Another pending task", "- [ ] [P1-T3][direct] [BLOCKED] Blocked task (remains unchecked)", source_file)
+        source = _replace_anchored(source, "**Task format**: `- [ ] [Pn-Tm][concern] Description`", "**Task format**: `- [ ] [Pn-Tm][concern] Description`; blocked tasks use `- [ ] [Pn-Tm][concern] [BLOCKED] Description`", source_file)
+        source = _replace_anchored(source, "**Notes**: {any observations}", "**Started**: {date and time task execution began}\n**Notes**: {any observations}\n\nProgress evidence is append-only: never rewrite or delete prior Started, PASS, FAIL, retry, or blocker records.", source_file)
+
+    elif current.target_name == "phx-work" and relative == "references/error-recovery.md":
+        source = _replace_anchored(source, "4. **After 3 retries**: Log blocker, skip task, continue", "4. **After 3 retries**: Mark the blocker in both plan and progress, write the scratchpad DEAD-END, and stop. Skip and continue only with explicit `--skip-blockers`", source_file)
+        source = _replace_anchored(source, "## BLOCKER: Task could not be completed", "## BLOCKER: P2-T3 — Task could not be completed", source_file)
+        source = _replace_anchored(source, "**Task ID**: P2-T3", "**Plan task**: `- [ ] [P2-T3][ecto] BLOCKED — Implement register_user/1`", source_file)
+        source = _replace_anchored(source, "`- [ ] [P2-T3][ecto] BLOCKED — Implement register_user/1`", "`- [ ] [P2-T3][ecto] [BLOCKED] Implement register_user/1`", source_file)
+        source = _replace_anchored(source, "## Recovery After BLOCKER", "By default, return control after recording this state. Only `--skip-blockers` may advance to a later task.\n\n## Recovery After BLOCKER", source_file)
+
+    elif current.target_name == "phx-work" and relative == "references/resume-strategies.md":
+        source = _replace_anchored(source, "- `[ ]` = pending", "- `[ ]` = pending; `[ ] ... [BLOCKED] ...` = blocked and still incomplete", source_file)
+        source = _replace_anchored(source, "- Phase status `[COMPLETED|IN_PROGRESS|PENDING]` tracks phase progress", "- Phase status `[COMPLETED|IN_PROGRESS|PENDING|BLOCKED]` tracks phase progress", source_file)
+        source = _replace_anchored(source, "- BLOCKERs in progress file track failed tasks", "- `[BLOCKED]` on the plan row is authoritative; progress records preserve blocker evidence", source_file)
+        source = _replace_anchored(source, "/phx:work  # Find most recent IN_PROGRESS plan, resume from first [ ]", "/phx:work  # Resume at first unchecked non-[BLOCKED] task; stop if an earlier blocker exists", source_file)
+        source = _replace_anchored(source, "Skips directly to P2-T3 regardless of earlier unchecked tasks.", "Targets P2-T3 regardless of earlier unchecked tasks. If it is `[BLOCKED]`, this explicitly retries it and clears the tag when starting.", source_file)
+        source = _replace_anchored(source, "Continues past tasks that previously failed with BLOCKER status.", "Skips rows visibly tagged `[BLOCKED]`; it does not infer blockers from prose or progress history.", source_file)
+        source = _replace_anchored(source, "No state file to parse. Just find first `[ ]` and continue.", "No state file to parse. Select the first unchecked row not tagged `[BLOCKED]`, but stop when an unresolved blocker precedes it unless `--skip-blockers` was supplied.", source_file)
+        source = _replace_anchored(
+            source,
+            "- All tasks before the target should be `[x]` in plan\n- If earlier tasks are unchecked, warn and ask user:",
+            "- Tasks before the target must be `[x]`, or visibly `[BLOCKED]` when\n  `--skip-blockers` was explicitly supplied\n- If another earlier task is unchecked, warn and ask the user:",
+            source_file,
+        )
+
+    elif current.target_name == "phx-work" and relative == "references/harness-patterns.md":
+        source = _replace_section(source, "## Action Verification Pattern", "## Anti-Pattern: Unstructured Retry Loop", """## Action Verification Pattern
+
+Portable targets assume no lifecycle hooks. Verify actions explicitly after
+each edit and use command output as feedback:
+
+```bash
+mix format --check-formatted <changed_files>
+mix compile --warnings-as-errors
+mix test <affected_test_files>
+mix credo --strict
+```
+
+For auth/security changes, also search the changed files for unsafe atom
+creation and untrusted raw HTML, then run negative-path authorization tests.
+For repeated failures, capture the exact command and first error in the
+scratchpad before trying a different approach.
+
+The loop is: edit, run the explicit command, read its concrete failure, fix the
+root cause, and rerun the same command. Do not rely on implicit automation.
+
+""", source_file)
+
+    else:
+        return None
+
+    return source
+
+
 @dataclass(frozen=True)
 class SkillSource:
     source_dir: Path
@@ -489,6 +1011,10 @@ def _rewrite_resource_paths(
 
 
 def _codex_overlay(source_file: Path, current: SkillSource) -> str | None:
+    portable_workflow = _portable_plan_work_overlay(source_file, current)
+    if portable_workflow is not None:
+        return portable_workflow
+
     if source_file == current.source_dir / "SKILL.md":
         body = current.frontmatter.body
         if current.target_name == "phx-investigate":
@@ -698,7 +1224,7 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
         if found:
             raise ValueError(f"{markdown}: unresolved Claude token `{found}`")
 
-    for flagship in ("phx-investigate", "phx-review"):
+    for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work"):
         flagship_root = skills_root / flagship
         if not flagship_root.is_dir():
             continue
@@ -717,6 +1243,18 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
             "mcp__tidewave__",
             "mcp__linear__",
         )
+        if flagship in {"phx-plan", "phx-work"}:
+            forbidden += (
+                "phoenix-patterns-analyst", "ecto-schema-designer",
+                "liveview-architect", "oban-specialist", "otp-advisor",
+                "security-analyzer", "testing-reviewer", "hex-library-researcher",
+                "web-researcher", "call-tracer", "planning-orchestrator",
+                "Spawn SPECIALIST", "run_in_background", "[agent]",
+                "Agent annotation", "agent routing", "project_eval", "get_logs",
+                "| Hook |", "Each hook", "/commit",
+                "agent spawning", "agent count", "Explore agents",
+                "execute via subagents", "After spawning",
+            )
         found = next((token for token in forbidden if token in text), None)
         if found:
             raise ValueError(f"{flagship_root}: unavailable API `{found}`")

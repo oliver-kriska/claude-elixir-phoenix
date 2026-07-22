@@ -26,14 +26,14 @@ Verification is tiered to balance speed and safety:
 1. **Compile error**: Read error, fix, retry
 2. **Test failure**: Analyze failure, fix code or test
 3. **Credo warning**: Auto-fix if possible, else flag
-4. **After 3 retries**: Log blocker, skip task, continue
+4. **After 3 retries**: Mark the blocker in both plan and progress, write the scratchpad DEAD-END, and stop. Skip and continue only with explicit `--skip-blockers`
 
 ## BLOCKER Format
 
 ```markdown
-## BLOCKER: Task could not be completed
+## BLOCKER: P2-T3 — Task could not be completed
 
-**Task ID**: P2-T3
+**Plan task**: `- [ ] [P2-T3][ecto] [BLOCKED] Implement register_user/1`
 **Task**: Implement register_user/1
 **Attempts**: 3
 **Last Error**: Test assertion failed - expected {:ok, user} got {:error, changeset}
@@ -53,6 +53,8 @@ Attempts: 3. See BLOCKER in progress.md for full error.
 ```
 
 Append to `.claude/plans/{slug}/scratchpad.md`.
+
+By default, return control after recording this state. Only `--skip-blockers` may advance to a later task.
 
 ## Recovery After BLOCKER
 

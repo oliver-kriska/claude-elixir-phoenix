@@ -376,6 +376,59 @@ def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies()
     assert not any(token in combined for token in forbidden)
 
 
+def test_plan_work_overlays_are_portable_resumable_and_anchored(tmp_path) -> None:
+    generated = tmp_path / "codex"
+    codex.build(SOURCE_PLUGIN_DIR, generated)
+    target = generated / "skills"
+    plan_tree = "\n".join(
+        path.read_text() for path in (target / "phx-plan").rglob("*.md")
+    )
+    work_tree = "\n".join(
+        path.read_text() for path in (target / "phx-work").rglob("*.md")
+    )
+
+    assert "Research checklist" in plan_tree
+    assert "perform the same tracks sequentially" in plan_tree
+    assert ".claude/plans/{feature-slug}/plan.md" in plan_tree
+    assert "Use the plan file as the portable task list" in work_tree
+    assert "progress.md" in work_tree
+    assert "execute every task sequentially" in work_tree
+    assert "mix compile --warnings-as-errors" in work_tree
+    assert "[BLOCKED]" in work_tree
+    assert "first unchecked task not tagged `[BLOCKED]`" in work_tree
+    assert "clears `[BLOCKED]` when starting" in work_tree
+    assert "append-only" in work_tree
+    assert "**Started**:" in work_tree
+    forbidden = (
+        "Agent(", "subagent_type", "TaskCreate", "TaskUpdate", "TaskGet",
+        "TaskList", "AskUserQuestion", "$ARGUMENTS", "mcp__", "PostToolUse hook",
+        "phoenix-patterns-analyst", "ecto-schema-designer", "liveview-architect",
+        "oban-specialist", "otp-advisor", "security-analyzer", "testing-reviewer",
+        "hex-library-researcher", "web-researcher", "call-tracer",
+        "planning-orchestrator", "Spawn SPECIALIST", "run_in_background",
+        "[agent]", "Agent annotation", "agent routing", "project_eval", "get_logs",
+        "| Hook |", "Each hook", "/commit", "${CLAUDE_SKILL_DIR}",
+        "${CLAUDE_PLUGIN_ROOT}", "spawning Elixir specialist agents",
+        "Spawns Elixir specialist agents", "skip to agents",
+        "Spawn agents selectively", "while agents still running",
+        "agent spawning", "agent count", "Explore agents",
+        "execute via subagents", "After spawning",
+    )
+    assert not any(token in plan_tree + work_tree for token in forbidden)
+
+    plugin = tmp_path / "plugin"
+    skill = _write_skill(plugin, "plan", "phx:plan", "# Plan Elixir/Phoenix Feature\n")
+    current = codex.discover_skills(plugin)[0]
+    with pytest.raises(ValueError, match="portable plan overlay anchors changed"):
+        codex._codex_overlay(skill / "SKILL.md", current)
+
+    with pytest.raises(ValueError, match="heading order changed"):
+        codex._replace_section("## End\n## Start\n", "## Start", "## End", "", skill)
+
+    with pytest.raises(ValueError, match="canonical marker order changed"):
+        codex._assert_ordered_markers("## Two\n## One\n", ("## One", "## Two"), skill)
+
+
 def test_repository_target_has_no_unresolved_claude_tokens() -> None:
     markdown = "\n".join(
         path.read_text(encoding="utf-8")

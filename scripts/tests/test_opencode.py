@@ -269,6 +269,40 @@ def test_repository_target_and_flagship_overlays() -> None:
     )
 
 
+def test_repository_plan_work_workflows_are_portable_and_resumable(tmp_path) -> None:
+    generated = tmp_path / "opencode"
+    opencode.build(SOURCE_PLUGIN_DIR, generated)
+    target = generated / "skills"
+    plan = "\n".join(p.read_text() for p in (target / "phx-plan").rglob("*.md"))
+    work = "\n".join(p.read_text() for p in (target / "phx-work").rglob("*.md"))
+    assert "/phx-plan" in plan
+    assert "Research checklist" in plan
+    assert "perform the same tracks sequentially" in plan
+    assert "/phx-work" in work
+    assert "Use the plan file as the portable task list" in work
+    assert "execute every task sequentially" in work
+    assert "progress.md" in work
+    assert "[BLOCKED]" in work
+    assert "clears `[BLOCKED]` when starting" in work
+    assert "append-only" in work
+    assert "**Started**:" in work
+    forbidden = (
+        "Agent(", "subagent_type", "TaskCreate", "TaskUpdate", "TaskGet",
+        "TaskList", "AskUserQuestion", "$ARGUMENTS", "mcp__", "PostToolUse hook",
+        "phoenix-patterns-analyst", "ecto-schema-designer", "liveview-architect",
+        "oban-specialist", "otp-advisor", "security-analyzer", "testing-reviewer",
+        "hex-library-researcher", "web-researcher", "call-tracer", "planning-orchestrator",
+        "Spawn SPECIALIST", "run_in_background", "[agent]", "Agent annotation",
+        "agent routing", "project_eval", "get_logs", "| Hook |", "Each hook",
+        "/commit", "${CLAUDE_SKILL_DIR}", "${CLAUDE_PLUGIN_ROOT}",
+        "spawning Elixir specialist agents", "Spawns Elixir specialist agents",
+        "skip to agents", "Spawn agents selectively", "while agents still running",
+        "agent spawning", "agent count", "Explore agents",
+        "execute via subagents", "After spawning",
+    )
+    assert not any(token in plan + work for token in forbidden)
+
+
 def test_repository_non_markdown_resources_match_canonical_bytes_and_modes() -> None:
     output = TARGETS_DIR / "opencode" / "skills"
     for skill in opencode.discover_skills(SOURCE_PLUGIN_DIR):

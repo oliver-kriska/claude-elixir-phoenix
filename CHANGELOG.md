@@ -18,6 +18,14 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **Portable plan/work workflow overlays** — generated Codex, Pi, and OpenCode
+  `phx-plan` and `phx-work` skills now use scratchpad research checklists, plan
+  checkboxes, and `progress.md` instead of Claude-only named agents, task APIs,
+  question tools, hooks, or MCP identifiers. Optional native subagents and
+  Tidewave retain complete same-session sequential fallbacks. Canonical Claude
+  skills and the frozen Amp target are unchanged; this does not claim parity for
+  other generated workflows.
+
 - **Amp installation no longer requires cloning this repository** — the primary
   project-local and global instructions now install all 51 generated skills
   directly from the GitHub `targets/amp/skills` tree. Update instructions also

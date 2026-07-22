@@ -77,6 +77,8 @@ For a project-local package, pass `-l` to `pi remove` from that project.
 - Pi-native `/skill:phx-*`, `/skill:lv-*`, and `/skill:ecto-*` references;
 - resource paths rewritten relative to each generated skill;
 - usable, sequential `phx-investigate` and read-only `phx-review` workflows;
+- portable `phx-plan` research checklists and resumable `phx-work` plan-file
+  progress tracking, with complete same-session sequential fallbacks;
 - automatic skill selection through Pi's native Agent Skills support.
 
 ## Intentionally deferred

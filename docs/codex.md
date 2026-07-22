@@ -69,6 +69,13 @@ requirements, cites file/line evidence, assigns severity, deduplicates findings,
 and returns a verdict. It may use native Codex subagents for independent tracks,
 but a sequential same-session review is fully supported.
 
+`$phx-plan` and `$phx-work` also have focused portable adaptations. Planning
+tracks research in the plan scratchpad and preserves the canonical
+`.claude/plans/{slug}/plan.md` schema. Work uses plan checkboxes plus
+`progress.md` for ordered, resumable execution and verification. Generic native
+subagents and Tidewave remain optional; the same-session sequential path is
+complete. These adaptations do not provide hooks or a separate task UI.
+
 ## Update
 
 Codex does not currently expose a separate plugin-update command. Refresh the
@@ -127,7 +134,8 @@ Supported now:
 - byte-identical non-Markdown resources and preserved executable modes;
 - native plugin installation, `/skills`, explicit `$skill-name`, and implicit
   skill selection;
-- Codex-specific `$phx-investigate` and `$phx-review` workflow adaptations.
+- Codex-specific `$phx-investigate`, `$phx-review`, `$phx-plan`, and `$phx-work`
+  workflow adaptations.
 
 Intentionally deferred:
 

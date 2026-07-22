@@ -156,7 +156,7 @@ def validate(output_dir: str | Path) -> int:
             found = command.group(0) if command else None
         if found:
             raise ValueError(f"{markdown}: unresolved non-OpenCode token `{found}`")
-    for flagship in ("phx-investigate", "phx-review"):
+    for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work"):
         text = "\n".join(
             path.read_text(encoding="utf-8")
             for path in sorted((skills_root / flagship).rglob("*.md"))
@@ -173,6 +173,17 @@ def validate(output_dir: str | Path) -> int:
             "mcp__linear__",
             "Claude Task",
         )
+        if flagship in {"phx-plan", "phx-work"}:
+            forbidden += (
+                "phoenix-patterns-analyst", "ecto-schema-designer", "liveview-architect",
+                "oban-specialist", "otp-advisor", "security-analyzer", "testing-reviewer",
+                "hex-library-researcher", "web-researcher", "call-tracer",
+                "planning-orchestrator", "Spawn SPECIALIST", "run_in_background",
+                "[agent]", "Agent annotation", "agent routing", "project_eval",
+                "get_logs", "| Hook |", "Each hook", "/commit",
+                "agent spawning", "agent count", "Explore agents",
+                "execute via subagents", "After spawning",
+            )
         found = next((token for token in forbidden if token in text), None)
         if found:
             raise ValueError(f"{skills_root / flagship}: unavailable API `{found}`")

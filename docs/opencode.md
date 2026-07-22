@@ -64,11 +64,13 @@ configuration. OpenCode itself exposes discovered skills as slash commands.
 Native OpenCode subagents are an optional optimization in the flagship
 workflows, and the sequential fallback is valid. Tidewave is optional and its
 MCP setup is deferred. Exact Claude colon syntax such as `/phx:review` is not
-registered; use `/phx-review`. The flagship investigation and review workflows
-have explicit OpenCode adaptations. Other generated workflows receive portable
-frontmatter, resource, and command projection but may still describe optional
-Claude-specific orchestration APIs; those capabilities are deferred rather than
-silently emulated.
+registered; use `/phx-review`. The investigation, review, plan, and work
+workflows have explicit OpenCode adaptations. Plan keeps its canonical artifact
+schema and a scratchpad research checklist; work uses plan checkboxes and
+`progress.md` for ordered, resumable execution. Other generated workflows
+receive portable frontmatter, resource, and command projection but may still
+describe optional Claude-specific orchestration APIs; those capabilities are
+deferred rather than silently emulated.
 
 ## Runtime acceptance
 
