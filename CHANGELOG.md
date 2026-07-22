@@ -9,6 +9,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Codex native destructive-command safeguard** — the generated Codex plugin
+  now includes one trust-gated, synchronous `PreToolUse` hook that reuses the
+  canonical audited blocker for destructive Ecto operations, unguarded force
+  pushes, and accidental production Mix commands. The broad Claude hook set,
+  async hooks, custom agents, and Tidewave MCP remain deferred.
+
 - **Amp target drift pre-commit guard** — canonical changes under
   `plugins/elixir-phoenix/skills/` now trigger `make amp-skills-validate` and
   require regenerated `targets/amp/skills/` changes to be staged. CI retains

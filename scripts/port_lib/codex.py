@@ -39,6 +39,27 @@ CODEX_DESCRIPTION = (
     "Generated Elixir, Phoenix, LiveView, Ecto, Oban, testing, and security "
     "skills for Codex"
 )
+CODEX_HOOK_SCRIPT = "block-dangerous-ops.sh"
+CODEX_HOOKS = {
+    "description": "Optional synchronous safeguards for destructive shell commands.",
+    "hooks": {
+        "PreToolUse": [
+            {
+                "matcher": "Bash",
+                "hooks": [
+                    {
+                        "type": "command",
+                        "command": (
+                            "\"${PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh\" "
+                            "|| exit 0"
+                        ),
+                        "timeout": 10,
+                    }
+                ],
+            }
+        ]
+    },
+}
 
 INVESTIGATE_BODY = """# Investigate Bug
 
@@ -606,7 +627,12 @@ def _transform_markdown(
     return rewrite_slash_commands(text, "codex")
 
 
-def _populate(skills: list[SkillSource], output_dir: Path, manifest: dict) -> None:
+def _populate(
+    source_plugin_dir: Path,
+    skills: list[SkillSource],
+    output_dir: Path,
+    manifest: dict,
+) -> None:
     skills_dir = output_dir / "skills"
     for skill in skills:
         target_skill = skills_dir / skill.target_name
@@ -633,6 +659,28 @@ def _populate(skills: list[SkillSource], output_dir: Path, manifest: dict) -> No
     )
     manifest_file.chmod(0o644)
 
+    source_hooks = source_plugin_dir / "hooks"
+    if source_hooks.exists():
+        source_script = source_hooks / "scripts" / CODEX_HOOK_SCRIPT
+        if not source_script.is_file() or source_script.is_symlink():
+            raise ValueError(f"{source_script}: missing native Codex hook source")
+        hooks_dir = output_dir / "hooks"
+        scripts_dir = hooks_dir / "scripts"
+        scripts_dir.mkdir(parents=True)
+        hooks_file = hooks_dir / "hooks.json"
+        hooks_file.write_text(
+            json.dumps(CODEX_HOOKS, indent=2, ensure_ascii=False) + "\n",
+            encoding="utf-8",
+        )
+        hooks_file.chmod(0o644)
+        destination = scripts_dir / CODEX_HOOK_SCRIPT
+        script = source_script.read_text(encoding="utf-8")
+        destination.write_text(
+            script.replace("Claude Code", "Codex").replace("Claude's", "Codex's"),
+            encoding="utf-8",
+        )
+        shutil.copymode(source_script, destination)
+
 
 def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> int:
     """Validate a generated Codex plugin and return its skill count."""
@@ -650,6 +698,20 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
             raise ValueError(f"{manifest_file}: invalid or missing field `{field}`")
     if "agents" in manifest or "commands" in manifest:
         raise ValueError(f"{manifest_file}: unsupported Codex manifest field")
+
+    hooks_file = root / "hooks" / "hooks.json"
+    if hooks_file.exists():
+        try:
+            hooks = json.loads(hooks_file.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as error:
+            raise ValueError(f"{hooks_file}: invalid hooks configuration") from error
+        if hooks != CODEX_HOOKS:
+            raise ValueError(f"{hooks_file}: unexpected Codex hooks configuration")
+        hook_script = root / "hooks" / "scripts" / CODEX_HOOK_SCRIPT
+        if not hook_script.is_file() or hook_script.is_symlink():
+            raise ValueError(f"{hook_script}: missing native Codex hook script")
+        if not os.access(hook_script, os.X_OK):
+            raise ValueError(f"{hook_script}: native Codex hook is not executable")
 
     skills_path = manifest.get("skills")
     if not isinstance(skills_path, str) or not skills_path.startswith("./"):
@@ -734,7 +796,7 @@ def build(source_plugin_dir: str | Path, output_dir: str | Path) -> dict[str, in
     with tempfile.TemporaryDirectory(prefix=".codex-plugin-", dir=output.parent) as tmp:
         staged = Path(tmp) / "target"
         staged.mkdir()
-        _populate(skills, staged, manifest)
+        _populate(Path(source_plugin_dir), skills, staged, manifest)
         count = validate(staged, manifest)
 
         replacement = Path(tmp) / "replacement"

@@ -2,7 +2,10 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import shutil
 import stat
+import subprocess
 from pathlib import Path
 
 import pytest
@@ -322,6 +325,80 @@ def test_manifests_are_conformant_and_every_declared_path_resolves() -> None:
     assert entry["source"] == {"source": "local", "path": "./targets/codex"}
     assert (root / entry["source"]["path"]).resolve() == target.resolve()
     assert (root / entry["source"]["path"] / ".codex-plugin/plugin.json").is_file()
+
+
+def test_repository_hook_is_native_synchronous_and_projects_source(tmp_path) -> None:
+    target = TARGETS_DIR / "codex"
+    hooks_file = target / "hooks" / "hooks.json"
+    hooks = json.loads(hooks_file.read_text(encoding="utf-8"))
+    [group] = hooks["hooks"]["PreToolUse"]
+    [handler] = group["hooks"]
+
+    assert hooks == codex.CODEX_HOOKS
+    assert group["matcher"] == "Bash"
+    assert handler["type"] == "command"
+    assert handler["command"].startswith('"${PLUGIN_ROOT}/')
+    assert "async" not in handler
+    assert "if" not in handler
+
+    source = SOURCE_PLUGIN_DIR / "hooks" / "scripts" / codex.CODEX_HOOK_SCRIPT
+    generated = target / "hooks" / "scripts" / codex.CODEX_HOOK_SCRIPT
+    assert generated.read_text(encoding="utf-8") == source.read_text(
+        encoding="utf-8"
+    ).replace("Claude Code", "Codex").replace("Claude's", "Codex's")
+    assert "outside Codex" in generated.read_text(encoding="utf-8")
+    assert "outside Claude Code" not in generated.read_text(encoding="utf-8")
+    assert stat.S_IMODE(generated.stat().st_mode) == stat.S_IMODE(source.stat().st_mode)
+    assert os.access(generated, os.X_OK)
+
+    plugin_root = tmp_path / "plugin root with spaces"
+    shutil.copytree(target / "hooks", plugin_root / "hooks")
+    command = handler["command"].replace("${PLUGIN_ROOT}", str(plugin_root))
+    fixture = tmp_path / "fixture"
+    fixture.mkdir()
+    (fixture / "mix.exs").write_text("defmodule Fixture.MixProject do\nend\n")
+    blocked = subprocess.run(
+        ["/bin/bash", "-lc", command],
+        input=json.dumps(
+            {"tool_name": "Bash", "tool_input": {"command": "mix ecto.reset"}}
+        ),
+        text=True,
+        capture_output=True,
+        cwd=fixture,
+        check=True,
+    )
+    output = json.loads(blocked.stdout)
+    assert output["hookSpecificOutput"]["hookEventName"] == "PreToolUse"
+    assert output["hookSpecificOutput"]["permissionDecision"] == "deny"
+    assert output["hookSpecificOutput"]["permissionDecisionReason"]
+    assert output["hookSpecificOutput"]["additionalContext"]
+
+    safe = subprocess.run(
+        ["/bin/bash", "-lc", command],
+        input=json.dumps(
+            {"tool_name": "Bash", "tool_input": {"command": "mix test"}}
+        ),
+        text=True,
+        capture_output=True,
+        cwd=fixture,
+        check=True,
+    )
+    assert safe.stdout == ""
+
+    installed_script = plugin_root / "hooks" / "scripts" / codex.CODEX_HOOK_SCRIPT
+    installed_script.write_text("#!/bin/sh\nexit 7\n", encoding="utf-8")
+    installed_script.chmod(0o755)
+    failed_open = subprocess.run(
+        ["/bin/bash", "-lc", command],
+        input=json.dumps(
+            {"tool_name": "Bash", "tool_input": {"command": "mix ecto.reset"}}
+        ),
+        text=True,
+        capture_output=True,
+        cwd=fixture,
+        check=True,
+    )
+    assert failed_open.stdout == ""
 
 
 def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies() -> None:
