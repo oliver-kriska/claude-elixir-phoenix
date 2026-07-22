@@ -24,6 +24,10 @@ including Pi-compatible `/skill:phx-investigate` and `/skill:phx-review`
 workflows. See [Use with Pi](#use-with-pi); extensions, prompt templates, MCP,
 and custom agents are intentionally not included yet.
 
+**Using OpenCode?** Install the generated skills-only target for all 51 skills,
+including `/phx-investigate` and `/phx-review`. See
+[Use with OpenCode](#use-with-opencode) and the [OpenCode guide](docs/opencode.md).
+
 ```bash
 # You describe the feature. The plugin figures out the rest.
 /phx:plan Add real-time comment notifications
@@ -237,6 +241,25 @@ bundled resources only—not extensions, prompt templates, custom agents,
 package-root instructions, or Tidewave MCP configuration. See the complete
 [Pi guide](docs/pi.md) for project-local installation, updates, uninstall,
 isolation, troubleshooting, tested version, and capability details.
+
+### Use with OpenCode
+
+OpenCode 1.17.2 discovers the generated skills recursively. Install a sparse
+checkout into one project (recommended) or the global OpenCode config root:
+
+```bash
+git clone --filter=blob:none --sparse https://github.com/oliver-kriska/claude-elixir-phoenix.git .opencode/skills/elixir-phoenix
+git -C .opencode/skills/elixir-phoenix sparse-checkout set targets/opencode
+```
+
+Start a fresh session, then use `/phx-investigate`, `/phx-review`, or explicitly
+say “Use the skill tool to load the phx-investigate skill, then …”. OpenCode
+selects the model implicitly. This target contains skills and complete bundled
+resources only—not hooks, custom agents, or Tidewave MCP configuration. The two
+flagship workflows are explicitly adapted; some other skills may still describe
+optional Claude-specific orchestration APIs. See the [OpenCode installation and
+support guide](docs/opencode.md) for global setup, updates, uninstall,
+feature-branch review, discovery debugging, and limitations.
 
 ## Getting Started
 

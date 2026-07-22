@@ -1,0 +1,4 @@
+# Cross-rule fixture. Rule 5 must fire on the new :git dep AND Rule 3
+# must fire on the System.cmd in __before_compile__. Detectors run against
+# the NEW dir (where lib/ lives); Rule 5's diff uses old/new mix.exs.
+rule:5 op:>= count:1

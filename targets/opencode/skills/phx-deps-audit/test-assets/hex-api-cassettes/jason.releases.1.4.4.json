@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "elixir": "~> 1.4",
+    "app": "jason",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.4.4",
+  "checksum": "c5eb0cab91f094599f94d55bc63409236a8ec69a21a67814529e8d5f6cc90b3b",
+  "url": "https://hex.pm/api/packages/jason/releases/1.4.4",
+  "has_docs": true,
+  "inserted_at": "2024-07-26T17:51:45.963093Z",
+  "updated_at": "2024-07-26T17:51:48.641876Z",
+  "html_url": "https://hex.pm/packages/jason/1.4.4",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/michalmuskala",
+    "email": "michal@muskala.eu",
+    "username": "michalmuskala"
+  },
+  "downloads": 27845888,
+  "security_advisories": [],
+  "requirements": {
+    "decimal": {
+      "app": "decimal",
+      "optional": true,
+      "requirement": "~> 1.0 or ~> 2.0"
+    }
+  },
+  "docs_html_url": "https://hexdocs.pm/jason/1.4.4/",
+  "package_url": "https://hex.pm/api/packages/jason",
+  "configs": {
+    "erlang.mk": "dep_jason = hex 1.4.4",
+    "mix.exs": "{:jason, \"~> 1.4\"}",
+    "rebar.config": "{jason, \"1.4.4\"}"
+  }
+}

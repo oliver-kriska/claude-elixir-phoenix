@@ -1,0 +1,6 @@
+# Clean fixture: every file-scoped rule reports zero.
+rule:1 op:== count:0
+rule:2 op:== count:0
+rule:3 op:== count:0
+rule:4 op:== count:0
+rule:7 op:== count:0
