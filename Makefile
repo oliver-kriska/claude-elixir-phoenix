@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate pi-skills pi-skills-sync pi-skills-validate opencode-skills opencode-skills-sync opencode-skills-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate pi-skills pi-skills-sync pi-skills-validate opencode-skills opencode-skills-sync opencode-skills-validate generated-skills-snapshots generated-skills-snapshots-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -102,6 +102,12 @@ opencode-skills-sync: ## Regenerate and verify the committed OpenCode target
 opencode-skills-validate: ## Check committed OpenCode skills for generated drift
 	@python3 -m scripts.build_opencode_skills --check
 
+generated-skills-snapshots: ## Update reviewed byte-and-mode digests for all targets
+	@python3 -m scripts.generated_target_snapshots
+
+generated-skills-snapshots-validate: ## Check all targets against golden digests
+	@python3 -m scripts.generated_target_snapshots --check
+
 # --- Security ---
 
 security: ## SkillSpector scan of all skills + agents (skips if not installed)
@@ -114,7 +120,7 @@ security: ## SkillSpector scan of all skills + agents (skips if not installed)
 
 # --- CI (full pipeline) ---
 
-ci: lint test validate amp-skills-validate codex-skills-validate pi-skills-validate opencode-skills-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
+ci: lint test validate amp-skills-validate codex-skills-validate pi-skills-validate opencode-skills-validate generated-skills-snapshots-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
 
 # --- Clean ---
 

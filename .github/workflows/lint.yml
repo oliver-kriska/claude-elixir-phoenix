@@ -131,6 +131,9 @@ jobs:
       - name: Check OpenCode generated skills
         run: python3 -m scripts.build_opencode_skills --check
 
+      - name: Check generated target golden snapshots
+        run: python3 -m scripts.generated_target_snapshots --check
+
   eval:
     name: Skill & Agent Eval
     runs-on: ubuntu-latest

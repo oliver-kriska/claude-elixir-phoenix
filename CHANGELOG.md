@@ -9,6 +9,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Generated-target golden snapshots** — CI now pins aggregate path, byte, and
+  executable-mode digests for Amp, Codex, Pi, and OpenCode before shared
+  generator refactoring. Target changes require an explicit reviewed snapshot
+  update instead of silently redefining the baseline.
+
 - **Package-specific `/phx:learn-from-fix` routing** — verified fixes and
   explicit user-taught rules can now be saved as native background skills with
   `--library <package> --scope personal|project`. The workflow reads locked
