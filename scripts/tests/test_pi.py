@@ -123,6 +123,22 @@ def test_complete_subtree_bytes_modes_and_pi_syntax(tmp_path) -> None:
     }
 
 
+def test_pi_command_rewrite_requires_complete_tokens() -> None:
+    assert pi._rewrite_commands("Use /phx:review and $lv-assigns.") == (
+        "Use /skill:phx-review and /skill:lv-assigns."
+    )
+    for unchanged in (
+        "/tmp/phx:review",
+        "/tmp/phx-review",
+        "/tmp/$phx-review",
+        "/phx:Review",
+        "/phx:review_more",
+        "$phx-review_more",
+        "/phx:*extra",
+    ):
+        assert pi._rewrite_commands(unchanged) == unchanged
+
+
 def test_rejects_collisions_missing_resources_and_symlinks_without_replacing_target(
     tmp_path,
 ) -> None:

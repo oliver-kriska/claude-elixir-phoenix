@@ -25,6 +25,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **Portable command rewriting now requires complete invocation tokens** — Amp,
+  Codex, Pi, and OpenCode projections leave filesystem paths, URLs, uppercase
+  names, underscored suffixes, and malformed namespace wildcards unchanged. Pi
+  now emits native `/skill:*` syntax directly instead of passing through a
+  path-like intermediate form.
+
 ## [2.14.3] - 2026-07-20
 
 Patch release: document the `Repo.transaction/1` changeset error-handling

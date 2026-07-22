@@ -11,7 +11,7 @@ from pathlib import Path
 
 from . import codex
 from .frontmatter import Frontmatter, parse_file
-from .skill_transforms import transform_frontmatter
+from .skill_transforms import rewrite_slash_commands, transform_frontmatter
 
 IGNORED_FILES = codex.IGNORED_FILES
 SKILL_NAME_RE = codex.SKILL_NAME_RE
@@ -19,17 +19,15 @@ PI_DESCRIPTION = (
     "Generated Elixir, Phoenix, LiveView, Ecto, Oban, testing, and security "
     "skills for Pi"
 )
-_CLAUDE_COMMAND_RE = re.compile(r"/(phx|lv|ecto):([a-z][a-z0-9-]*)")
-_CLAUDE_NAMESPACE_RE = re.compile(r"/(phx|lv|ecto):\*?")
-_HYPHENATED_COMMAND_RE = re.compile(r"/(phx|lv|ecto)-([a-z][a-z0-9-]*)")
-_HYPHENATED_NAMESPACE_RE = re.compile(r"/(phx|lv|ecto)-\*")
-_CODEX_COMMAND_RE = re.compile(r"\$(phx|lv|ecto)-([a-z][a-z0-9-]*)")
+_CODEX_COMMAND_RE = re.compile(
+    r"(?<![A-Za-z0-9_./-])\$(phx|lv|ecto)-"
+    r"([a-z][a-z0-9-]*)(?![A-Za-z0-9_:-])"
+)
 _QUICK_COMMAND_RE = re.compile(r"(?<![A-Za-z0-9_./-])/quick(?=\s|$|[,.)])")
 
 
 def _rewrite_commands(text: str) -> str:
-    text = _CLAUDE_COMMAND_RE.sub(r"/skill:\1-\2", text)
-    text = _CLAUDE_NAMESPACE_RE.sub(r"/skill:\1-*", text)
+    text = rewrite_slash_commands(text, "pi")
     text = _CODEX_COMMAND_RE.sub(r"/skill:\1-\2", text)
     text = _QUICK_COMMAND_RE.sub("/skill:phx-quick", text)
     return text.replace(
@@ -96,12 +94,6 @@ def _transform_markdown(
     if source_file == skill.source_dir / "SKILL.md":
         projected = transform_frontmatter(skill.frontmatter.data, "pi")
         projected["description"] = _rewrite_commands(projected["description"])
-        projected["description"] = _HYPHENATED_COMMAND_RE.sub(
-            r"/skill:\1-\2", projected["description"]
-        )
-        projected["description"] = _HYPHENATED_NAMESPACE_RE.sub(
-            r"/skill:\1-*", projected["description"]
-        )
         if skill.target_name == "phx-investigate":
             projected["description"] = (
                 "Investigate Elixir/Phoenix bugs root-cause first. Reproduce failures, "
