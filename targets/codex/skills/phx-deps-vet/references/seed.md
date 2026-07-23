@@ -20,7 +20,7 @@ provenance record + `:new_only` enforcement of *future* additions.
 2. **Stale seeds warn.** If `reviewed_at` is more than 90 days old at
    import time, emit a warning. Stale trust is more dangerous than
    no trust.
-3. **Seed import is opt-in.** `$phx-deps-vet --seed` requires an
+3. **Seed import is opt-in.** `$elixir-phoenix:phx-deps-vet --seed` requires an
    explicit `AskUserQuestion` confirmation; never silent.
 
 ## Schema
@@ -45,7 +45,7 @@ Same map shape as `hex_vet.exs`, but lives at
 ## Import flow
 
 ```text
-$phx-deps-vet --seed
+$elixir-phoenix:phx-deps-vet --seed
 
   Step 1: Code.eval_file priv/hex_vet_seed.exs.
   Step 2: Check generated_at; warn if > 90 days.

@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate pi-skills pi-skills-sync pi-skills-validate opencode-skills opencode-skills-sync opencode-skills-validate generated-skills-sync security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -82,6 +82,9 @@ codex-skills-sync: ## Regenerate and verify the committed Codex target
 codex-skills-validate: ## Check committed Codex skills for generated drift
 	@python3 -m scripts.build_codex_skills --check
 
+codex-runtime-smoke: ## Optional: smoke-test local target with an isolated Codex runtime
+	@python3 -m scripts.runtime_smoke codex
+
 pi-skills: ## Generate the Pi skills package from the canonical Claude plugin
 	@python3 -m scripts.build_pi_skills
 
@@ -102,11 +105,21 @@ opencode-skills-sync: ## Regenerate and verify the committed OpenCode target
 opencode-skills-validate: ## Check committed OpenCode skills for generated drift
 	@python3 -m scripts.build_opencode_skills --check
 
+opencode-runtime-smoke: ## Optional: smoke-test local target with an isolated OpenCode runtime
+	@python3 -m scripts.runtime_smoke opencode
+
 generated-skills-sync: ## Regenerate and verify Amp, Codex, Pi, and OpenCode targets
 	@$(MAKE) amp-skills-sync
 	@$(MAKE) codex-skills-sync
 	@$(MAKE) pi-skills-sync
 	@$(MAKE) opencode-skills-sync
+	@$(MAKE) generated-skills-snapshots-validate
+
+generated-skills-snapshots: ## Update reviewed byte-and-mode digests for all targets
+	@python3 -m scripts.generated_target_snapshots
+
+generated-skills-snapshots-validate: ## Check all targets against golden digests
+	@python3 -m scripts.generated_target_snapshots --check
 
 # --- Security ---
 
@@ -120,7 +133,7 @@ security: ## SkillSpector scan of all skills + agents (skips if not installed)
 
 # --- CI (full pipeline) ---
 
-ci: lint test validate amp-skills-validate codex-skills-validate pi-skills-validate opencode-skills-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
+ci: lint test validate amp-skills-validate codex-skills-validate pi-skills-validate opencode-skills-validate generated-skills-snapshots-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
 
 # --- Clean ---
 

@@ -1,0 +1,17 @@
+{
+  "description": "Optional synchronous safeguards for destructive shell commands.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"${PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh\" || exit 0",
+            "timeout": 10
+          }
+        ]
+      }
+    ]
+  }
+}

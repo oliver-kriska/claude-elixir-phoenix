@@ -1,7 +1,7 @@
 ---
 name: hexdocs-fetcher
 description: Fetch HexDocs for Elixir libraries with HTML-to-markdown conversion.
-  Use when looking up docs on hexdocs.pm — modules, functions, guides, changelogs.
+  Use when looking up docs on hexdocs.pm…
 ---
 
 # HexDocs Fetcher

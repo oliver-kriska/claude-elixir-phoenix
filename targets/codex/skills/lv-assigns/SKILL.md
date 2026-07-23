@@ -1,8 +1,7 @@
 ---
 name: lv-assigns
-description: Inspect LiveView socket assigns for memory bloat — missing temporary_assigns,
-  unused assigns, unbounded lists needing streams, memory estimates. Use when LiveView
-  memory grows or you need to add temporary_assigns.
+description: Inspect LiveView socket assigns for memory bloat — missing; Use when
+  LiveView memory grows or you need to add…
 ---
 
 # LiveView Assigns Audit
@@ -88,4 +87,4 @@ For each assign, estimate memory footprint:
 
 ## Usage
 
-Run `$lv-assigns path/to/live_view.ex` to generate an assigns inventory with memory estimates and optimization recommendations.
+Run `$elixir-phoenix:lv-assigns path/to/live_view.ex` to generate an assigns inventory with memory estimates and optimization recommendations.

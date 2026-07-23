@@ -8,10 +8,10 @@ from pathlib import Path
 import pytest
 
 from scripts import build_opencode_skills
-from scripts.build_codex_skills import _differences
 from scripts.port_lib import SOURCE_PLUGIN_DIR, TARGETS_DIR
 from scripts.port_lib import opencode
 from scripts.port_lib.frontmatter import parse_file
+from scripts.port_lib.generated_tree import tree_differences
 
 
 def _tree_hash(root: Path) -> str:
@@ -185,7 +185,7 @@ def test_determinism_rollback_and_read_only_drift_detection(
     second = tmp_path / "second"
     opencode.build(plugin, first)
     opencode.build(plugin, second)
-    assert _differences(first, second) == []
+    assert tree_differences(first, second) == []
     assert _tree_hash(first) == _tree_hash(second)
 
     before = _tree_hash(first)
@@ -267,6 +267,62 @@ def test_repository_target_and_flagship_overlays() -> None:
             "mcp__",
         )
     )
+
+
+def test_repository_plan_work_workflows_are_portable_and_resumable(tmp_path) -> None:
+    generated = tmp_path / "opencode"
+    opencode.build(SOURCE_PLUGIN_DIR, generated)
+    target = generated / "skills"
+    plan = "\n".join(p.read_text() for p in (target / "phx-plan").rglob("*.md"))
+    work = "\n".join(p.read_text() for p in (target / "phx-work").rglob("*.md"))
+    assert "/phx-plan" in plan
+    assert "Research checklist" in plan
+    assert "perform the same tracks sequentially" in plan
+    assert "/phx-work" in work
+    assert "Use the plan file as the portable task list" in work
+    assert "execute every task sequentially" in work
+    assert "progress.md" in work
+    assert "[BLOCKED]" in work
+    assert "clears `[BLOCKED]` when starting" in work
+    assert "append-only" in work
+    assert "**Started**:" in work
+    forbidden = (
+        "Agent(", "subagent_type", "TaskCreate", "TaskUpdate", "TaskGet",
+        "TaskList", "AskUserQuestion", "$ARGUMENTS", "mcp__", "PostToolUse hook",
+        "phoenix-patterns-analyst", "ecto-schema-designer", "liveview-architect",
+        "oban-specialist", "otp-advisor", "security-analyzer", "testing-reviewer",
+        "hex-library-researcher", "web-researcher", "call-tracer", "planning-orchestrator",
+        "Spawn SPECIALIST", "run_in_background", "[agent]", "Agent annotation",
+        "agent routing", "project_eval", "get_logs", "| Hook |", "Each hook",
+        "/commit", "${CLAUDE_SKILL_DIR}", "${CLAUDE_PLUGIN_ROOT}",
+        "spawning Elixir specialist agents", "Spawns Elixir specialist agents",
+        "skip to agents", "Spawn agents selectively", "while agents still running",
+        "agent spawning", "agent count", "Explore agents",
+        "execute via subagents", "After spawning",
+    )
+    assert not any(token in plan + work for token in forbidden)
+
+
+def test_generated_pr_review_and_full_are_portable(tmp_path) -> None:
+    generated = tmp_path / "opencode"
+    opencode.build(SOURCE_PLUGIN_DIR, generated)
+    pr_review = "\n".join(p.read_text() for p in (generated / "skills/phx-pr-review").rglob("*.md"))
+    full = "\n".join(p.read_text() for p in (generated / "skills/phx-full").rglob("*.md"))
+    assert "/phx-pr-review" in pr_review and "NOT POSTED" in pr_review
+    assert "/phx-full" in full and "read-only review" in full
+    assert "Tidewave is optional" in full
+    assert "originalLine" in pr_review and "query($threadId: ID!, $endCursor: String)" in pr_review
+    assert "comments(first:100, after:$endCursor)" in pr_review and "deduplicate by GraphQL `id`" in pr_review
+    assert all(f"Gate {gate}" in pr_review for gate in range(1, 5))
+    assert "EDIT: NOT APPLICABLE" in pr_review and "`--fix` approves none" in pr_review
+    assert "CHANGES_REQUESTED" in pr_review and "Outdated means" in pr_review
+    assert "sole state authority" in full and "monotonic `seq`" in full
+    assert "next legal phase is VERIFYING" in full and "Completion requires" in full
+    assert "COMPOUNDING SKIPPED" in full
+    assert not any(token in pr_review + full for token in ("--codex", "--Pi", "--OpenCode", "/phx-compound"))
+    assert "specialist agents" not in (generated / "skills/phx-full/SKILL.md").read_text()
+    assert "portable sequential plan-work" in parse_file(generated / "skills/phx-full/SKILL.md").data["description"]
+    assert not any(token in pr_review + full for token in ("Agent(", "TaskCreate", "AskUserQuestion", "mcp__", "workflow-orchestrator"))
 
 
 def test_repository_non_markdown_resources_match_canonical_bytes_and_modes() -> None:

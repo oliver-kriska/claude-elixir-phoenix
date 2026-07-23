@@ -1,8 +1,7 @@
 ---
 name: phoenix-contexts
-description: Phoenix context design — creating/splitting contexts, Scope (1.8+), Ecto.Multi,
-  PubSub, routers, plugs, controllers. Use when editing contexts, routers, or designing
-  boundaries.
+description: Phoenix context design — creating/splitting contexts, Scope (1.8+); Use
+  when editing contexts, routers, or designing…
 ---
 
 # Phoenix Contexts Reference

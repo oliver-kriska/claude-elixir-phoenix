@@ -105,7 +105,7 @@ def test_reference_paths_are_relative_outside_claude() -> None:
         ("claude", "Run /phx:plan, /lv:assigns, and /ecto:n1-check."),
         ("amp", "Run phx-plan, lv-assigns, and ecto-n1-check."),
         ("codex", "Run $phx-plan, $lv-assigns, and $ecto-n1-check."),
-        ("pi", "Run /phx-plan, /lv-assigns, and /ecto-n1-check."),
+        ("pi", "Run /skill:phx-plan, /skill:lv-assigns, and /skill:ecto-n1-check."),
         ("opencode", "Run /phx-plan, /lv-assigns, and /ecto-n1-check."),
     ],
 )
@@ -120,12 +120,36 @@ def test_rewrite_slash_commands_rejects_unknown_target() -> None:
         rewrite_slash_commands("Run /phx:plan.", "other")
 
 
-def test_amp_rewrites_generic_claude_namespaces() -> None:
+@pytest.mark.parametrize(
+    ("target", "expected"),
+    [
+        ("amp", "Use a phx-* workflow or `ecto-*` command."),
+        ("codex", "Use a $phx-* workflow or `$ecto-*` command."),
+        ("pi", "Use a /skill:phx-* workflow or `/skill:ecto-*` command."),
+        ("opencode", "Use a /phx-* workflow or `/ecto-*` command."),
+    ],
+)
+def test_rewrites_generic_claude_namespaces(target: str, expected: str) -> None:
     body = "Use a /phx: workflow or `/ecto:*` command."
 
-    assert rewrite_slash_commands(body, "amp") == (
-        "Use a phx-* workflow or `ecto-*` command."
-    )
+    assert rewrite_slash_commands(body, target) == expected
+
+
+@pytest.mark.parametrize("target", ["amp", "codex", "pi", "opencode"])
+@pytest.mark.parametrize(
+    "text",
+    [
+        "/tmp/phx:review",
+        "https://example.test/phx:review",
+        "/phx:Review",
+        "/phx:review_more",
+        "/phx:*extra",
+    ],
+)
+def test_slash_command_rewrite_requires_complete_tokens(
+    target: str, text: str
+) -> None:
+    assert rewrite_slash_commands(text, target) == text
 
 
 def test_port_references_transforms_markdown_and_preserves_binary(tmp_path) -> None:

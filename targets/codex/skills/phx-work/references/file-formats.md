@@ -11,11 +11,11 @@ Plans must follow this structure for parsing:
 **Created**: {date}
 **Last Updated**: {date}
 
-## Phase 1: {Phase Name} [COMPLETED|IN_PROGRESS|PENDING]
+## Phase 1: {Phase Name} [COMPLETED|IN_PROGRESS|PENDING|BLOCKED]
 
 - [x] [P1-T1][ecto] Completed task description — implementation note (key decisions, gotchas)
 - [ ] [P1-T2][ecto] Pending task description
-- [ ] [P1-T3][direct] Another pending task
+- [ ] [P1-T3][direct] [BLOCKED] Blocked task (remains unchecked)
 
 ## Phase 2: {Phase Name} [PENDING]
 
@@ -29,10 +29,10 @@ Plans must follow this structure for parsing:
 - [ ] [P2-T3][security] Task that depends on above
 ```
 
-**Task format**: `- [ ] [Pn-Tm][agent] Description`
+**Task format**: `- [ ] [Pn-Tm][concern] Description`; blocked tasks use `- [ ] [Pn-Tm][concern] [BLOCKED] Description`
 
 - `[Pn-Tm]`: Phase n, Task m (for resume)
-- `[agent]`: Agent annotation (for routing)
+- `[concern]`: Guidance and verification annotation; never a worker identity
 
 **Task ID format**: `[Pn-Tm]` - Phase n, Task m. Used for:
 
@@ -56,7 +56,10 @@ Plans must follow this structure for parsing:
 **Task**: {description}
 **Result**: PASS | FAIL
 **Files**: {list of modified files}
+**Started**: {date and time task execution began}
 **Notes**: {any observations}
+
+Progress evidence is append-only: never rewrite or delete prior Started, PASS, FAIL, retry, or blocker records.
 
 ---
 

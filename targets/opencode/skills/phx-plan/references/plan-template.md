@@ -43,7 +43,7 @@
 ## System Map (LiveView features with 2+ pages/components only)
 
 {Omit this entire section for non-LiveView or simple features.
-Include when the liveview-architect produced a breadboard.}
+Include for multi-page LiveView work after synthesizing the research evidence.}
 
 ### Places
 
@@ -115,19 +115,19 @@ Include when the liveview-architect produced a breadboard.}
 - [ ] [PN-T2][test] LiveView tests for {component}
 - [ ] [PN-T3][test] Run full verification suite
 
-## Task Agent Annotations
+## Concern Annotations
 
-| Annotation | Agent | Use For |
-|------------|-------|---------|
-| `[ecto]` | ecto-schema-designer | Schemas, migrations, queries |
-| `[liveview]` | liveview-architect | LiveView, real-time UI, PubSub |
-| `[oban]` | oban-specialist | Background jobs, workers |
-| `[otp]` | otp-advisor | GenServers, processes |
-| `[security]` | security-analyzer | Auth, tokens, permissions |
-| `[test]` | testing-reviewer | Tests, mocks, factories |
-| `[direct]` | (none) | Simple tasks, config |
+Annotations are portable concern and verification labels, not worker identities:
 
-**Rules:** Primary focus wins. Security always wins for auth tasks.
+| Annotation | Concern |
+|---|---|
+| `[ecto]` | Schemas, migrations, queries |
+| `[liveview]` | LiveView, real-time UI, PubSub |
+| `[oban]` | Background jobs and workers |
+| `[otp]` | Processes and supervision |
+| `[security]` | Authentication, authorization, tokens |
+| `[test]` | Tests, mocks, factories |
+| `[direct]` | General implementation and wiring |
 
 ## Files to Follow as Patterns
 

@@ -1,8 +1,7 @@
 ---
 name: phx-learn-from-fix
 description: Capture Elixir/Ecto/LiveView lessons and Hex API rules. Use after corrections
-  or when asked to document learning, record a lesson, prevent a fixed mistake, or
-  remember package guidance with --library.
+  or when asked to document learning…
 ---
 
 # Learn From Fix
@@ -13,11 +12,11 @@ to prevent future mistakes.
 ## Usage
 
 ```
-$phx-learn-from-fix Fixed N+1 query in user listing - was missing preload
-$phx-learn-from-fix String vs atom key mismatch in params handling
-$phx-learn-from-fix LiveView assign_async needs render_async in tests
-$phx-learn-from-fix --library ical --scope personal ICal.to_ics output needs CRLF line endings
-$phx-learn-from-fix --library ical --scope project Use method: "PUBLISH" for calendar feeds
+$elixir-phoenix:phx-learn-from-fix Fixed N+1 query in user listing - was missing preload
+$elixir-phoenix:phx-learn-from-fix String vs atom key mismatch in params handling
+$elixir-phoenix:phx-learn-from-fix LiveView assign_async needs render_async in tests
+$elixir-phoenix:phx-learn-from-fix --library ical --scope personal ICal.to_ics output needs CRLF line endings
+$elixir-phoenix:phx-learn-from-fix --library ical --scope project Use method: "PUBLISH" for calendar feeds
 ```
 
 ## Workflow
@@ -31,7 +30,7 @@ Persist only one of:
 
 Stop without writing if neither condition is met.
 Do not save a hypothesis, unverified workaround, investigation narrative, or
-unsolved error. Use `$phx-compound` for a detailed completed investigation.
+unsolved error. Use `$elixir-phoenix:phx-compound` for a detailed completed investigation.
 Capture the root cause as a concise actionable rule, not the symptom.
 
 ### Step 2: Select the Route
@@ -132,7 +131,7 @@ Choose the narrowest non-library destination:
 | This project | Project CLAUDE.md | "Never use raw SQL in this app" |
 | This project across sessions | Project-keyed auto-memory | "jsonb uses string keys" |
 | All your projects | `~/.claude/CLAUDE.md` personal instructions | "Prefer explicit error tuples" |
-| Detailed completed fix | `.claude/solutions/` via `$phx-compound` | Debugging narrative |
+| Detailed completed fix | `.claude/solutions/` via `$elixir-phoenix:phx-compound` | Debugging narrative |
 
 For project or personal instructions, preserve existing content and append
 `**RULE NAME** — Do NOT [bad]. Instead [good]` under the relevant category. Use

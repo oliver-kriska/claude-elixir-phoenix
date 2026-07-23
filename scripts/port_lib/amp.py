@@ -11,6 +11,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 from .frontmatter import Frontmatter, parse_file
+from .generated_tree import copy_skill_subtrees
 from .skill_transforms import (
     normalize_skill_name,
     rewrite_slash_commands,
@@ -207,21 +208,13 @@ def _transform_markdown(
 
 
 def _populate(skills: list[SkillSource], output_dir: Path) -> None:
-    for skill in skills:
-        target_skill = output_dir / skill.target_name
-        for source_file in sorted(skill.source_dir.rglob("*")):
-            if source_file.is_dir() or source_file.name in IGNORED_FILES:
-                continue
-
-            destination = target_skill / source_file.relative_to(skill.source_dir)
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            if source_file.suffix.lower() == ".md":
-                destination.write_text(
-                    _transform_markdown(source_file, skill, skills),
-                    encoding="utf-8",
-                )
-            else:
-                shutil.copy2(source_file, destination)
+    copy_skill_subtrees(
+        skills,
+        output_dir,
+        IGNORED_FILES,
+        _transform_markdown,
+        preserve_markdown_mode=False,
+    )
 
 
 def validate(output_dir: str | Path) -> int:

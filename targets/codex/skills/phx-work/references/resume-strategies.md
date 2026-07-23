@@ -5,33 +5,33 @@
 **Plan checkboxes ARE the state.** No separate JSON state files.
 
 - `[x]` = completed
-- `[ ]` = pending
-- Phase status `[COMPLETED|IN_PROGRESS|PENDING]` tracks phase progress
-- BLOCKERs in progress file track failed tasks
+- `[ ]` = pending; `[ ] ... [BLOCKED] ...` = blocked and still incomplete
+- Phase status `[COMPLETED|IN_PROGRESS|PENDING|BLOCKED]` tracks phase progress
+- `[BLOCKED]` on the plan row is authoritative; progress records preserve blocker evidence
 
 ## Resume Modes
 
 ### Default: Auto-detect
 
 ```
-$phx-work  # Find most recent IN_PROGRESS plan, resume from first [ ]
+$elixir-phoenix:phx-work  # Resume at first unchecked non-[BLOCKED] task; stop if an earlier blocker exists
 ```
 
 ### From Specific Task
 
 ```
-$phx-work .claude/plans/auth/plan.md --from P2-T3
+$elixir-phoenix:phx-work .claude/plans/auth/plan.md --from P2-T3
 ```
 
-Skips directly to P2-T3 regardless of earlier unchecked tasks.
+Targets P2-T3 regardless of earlier unchecked tasks. If it is `[BLOCKED]`, this explicitly retries it and clears the tag when starting.
 
 ### Skip Blockers
 
 ```
-$phx-work .claude/plans/auth/plan.md --skip-blockers
+$elixir-phoenix:phx-work .claude/plans/auth/plan.md --skip-blockers
 ```
 
-Continues past tasks that previously failed with BLOCKER status.
+Skips rows visibly tagged `[BLOCKED]`; it does not infer blockers from prose or progress history.
 
 ## Resume from Interrupted Session
 
@@ -48,14 +48,15 @@ On resume, the plan file itself shows progress:
 - [ ] [P2-T3][direct] Implement register_user/1
 ```
 
-No state file to parse. Just find first `[ ]` and continue.
+No state file to parse. Select the first unchecked row not tagged `[BLOCKED]`, but stop when an unresolved blocker precedes it unless `--skip-blockers` was supplied.
 
 ## Consistency Check
 
 On resume, validate:
 
-- All tasks before the target should be `[x]` in plan
-- If earlier tasks are unchecked, warn and ask user:
+- Tasks before the target must be `[x]`, or visibly `[BLOCKED]` when
+  `--skip-blockers` was explicitly supplied
+- If another earlier task is unchecked, warn and ask the user:
   - Skip them (mark as done)?
   - Go back and complete them?
   - Something else?
