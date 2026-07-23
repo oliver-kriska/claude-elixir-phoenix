@@ -1,8 +1,7 @@
 ---
 name: compound-docs
-description: Searchable Elixir/Phoenix/Ecto solution documentation system with YAML
-  frontmatter. Builds institutional knowledge from solved problems. Use when consulting
-  past solutions before investigating new issues.
+description: Searchable Elixir/Phoenix/Ecto solution documentation system with; Use
+  when consulting past solutions…
 ---
 
 # Compound Docs — Institutional Knowledge Base
@@ -73,9 +72,9 @@ Use Grep to search `.claude/solutions/` by symptom (e.g., `NotLoaded`), by tag (
 
 ## Integration
 
-- `$phx-compound` creates solution docs here
-- `$phx-investigate` searches here before debugging
-- `$phx-plan` consults for known risks
+- `$elixir-phoenix:phx-compound` creates solution docs here
+- `$elixir-phoenix:phx-investigate` searches here before debugging
+- `$elixir-phoenix:phx-plan` consults for known risks
 - `learn-from-fix` feeds into this system
 
 ## References

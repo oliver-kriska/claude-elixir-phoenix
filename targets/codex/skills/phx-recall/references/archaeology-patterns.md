@@ -44,5 +44,5 @@ string — tool usage must be inferred from assistant text.
 
 Say so explicitly: "No prior work found on {topic} in solution docs, git
 history, or indexed sessions." A clean miss is a valid answer — do not
-pad it with speculation. Suggest `$phx-compound` after the user solves it
+pad it with speculation. Suggest `$elixir-phoenix:phx-compound` after the user solves it
 fresh, so the next recall hits Layer 1.

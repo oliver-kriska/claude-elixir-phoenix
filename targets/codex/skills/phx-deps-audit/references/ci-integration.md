@@ -1,6 +1,6 @@
 # CI integration — `--ci` flag and sample workflows
 
-Phase 3 adds non-interactive `--ci` mode to `$phx-deps-audit` for use
+Phase 3 adds non-interactive `--ci` mode to `$elixir-phoenix:phx-deps-audit` for use
 in GitHub Actions, CircleCI, GitLab CI, and similar runners. Pairs
 with `--sarif <path>` (Phase 2) to feed results into the host
 platform's code-scanning UI.
@@ -143,7 +143,7 @@ that links to the run.
 
 ## Mix-task pattern (Phase 3+ companion)
 
-The `--ci` flag works with `$phx-deps-audit` inside Claude Code AND
+The `--ci` flag works with `$elixir-phoenix:phx-deps-audit` inside Claude Code AND
 with the planned `mix phx.deps_audit` Mix task shipped by the
 companion `phx_deps_vet` Hex package. Both surfaces share the same
 exit-code rubric so CI workflows are portable between teams using
@@ -153,7 +153,7 @@ Until the companion package ships, CI users run the audit via the
 Claude Code CLI:
 
 ```bash
-claude code -m "$phx-deps-audit --ci --base origin/main --sarif audit.sarif"
+claude code -m "$elixir-phoenix:phx-deps-audit --ci --base origin/main --sarif audit.sarif"
 ```
 
 This requires the runner has Claude Code installed and authenticated.

@@ -1,0 +1,25 @@
+{
+  "format": 1,
+  "targets": {
+    "amp": {
+      "entries": 379,
+      "files": 251,
+      "sha256": "d01ed7ed77eaafdbf21c489b9e6e7254bdbabc3340192c3a8838ad11147d23da"
+    },
+    "codex": {
+      "entries": 381,
+      "files": 252,
+      "sha256": "d16f8933c8ca1295c8ff3cbe1c2f94ace943194ff814c934f05db74152123a00"
+    },
+    "opencode": {
+      "entries": 379,
+      "files": 251,
+      "sha256": "f23ef480885775006a178427bade78f56aefa468f6b725b4d09c366eacb0f3c2"
+    },
+    "pi": {
+      "entries": 380,
+      "files": 252,
+      "sha256": "98e10dbeab3a433c1dd36056bfd969c9e34aab4a40a5f7b99a084daa8291f5fc"
+    }
+  }
+}

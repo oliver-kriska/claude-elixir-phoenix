@@ -1,7 +1,7 @@
 ---
 name: phx-investigate
 description: Investigate Elixir/Phoenix bugs root-cause first. Reproduce failures,
-  cite evidence, and use optional Codex subagents only when useful.
+  cite evidence; Codex subagents are optional.
 ---
 # Investigate Bug
 
@@ -11,9 +11,9 @@ failing behavior before recommending a fix, and cite concrete paths and lines.
 ## Usage
 
 ```text
-$phx-investigate Users can't log in after password reset
-$phx-investigate FunctionClauseError in UserController.show
-$phx-investigate Complex auth bug --parallel
+$elixir-phoenix:phx-investigate Users can't log in after password reset
+$elixir-phoenix:phx-investigate FunctionClauseError in UserController.show
+$elixir-phoenix:phx-investigate Complex auth bug --parallel
 ```
 
 Treat the text after the skill name as the bug description. `--parallel` asks
@@ -94,7 +94,7 @@ Use `references/investigation-template.md`. Include:
 - confidence and any unverified assumptions;
 - the smallest safe fix or next diagnostic step.
 
-Route follow-up work with `$phx-quick`, `$phx-plan`, or `$phx-compound` when
+Route follow-up work with `$elixir-phoenix:phx-quick`, `$elixir-phoenix:phx-plan`, or `$elixir-phoenix:phx-compound` when
 appropriate. Do not invoke another skill unless the user asks you to continue.
 
 ## References

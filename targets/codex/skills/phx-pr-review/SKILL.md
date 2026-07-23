@@ -1,8 +1,7 @@
 ---
 name: phx-pr-review
-description: Address PR review threads on Elixir/Phoenix code — fetch unresolved threads,
-  fix code, reply, and resolve each thread. Use when the user shares a PR URL or mentions
-  reviewer feedback.
+description: Address PR review threads on Elixir/Phoenix code — fetch unresolved;
+  Use when the user shares a PR URL or mentions…
 ---
 
 # PR Review Response
@@ -14,11 +13,11 @@ threads drop out automatically.
 ## Usage
 
 ```
-$phx-pr-review 42                  # Triage unresolved threads on PR #42
-$phx-pr-review 42 --fix            # Triage + apply approved code fixes
-$phx-pr-review https://...         # Full URL also works (repo parsed from URL)
-$phx-pr-review 42 --bots-only      # Triage only CI bot threads (Copilot, Codex...)
-$phx-pr-review 42 --no-resolve     # Reply but leave threads open
+$elixir-phoenix:phx-pr-review 42                  # Triage unresolved threads on PR #42
+$elixir-phoenix:phx-pr-review 42 --fix            # Triage + apply approved code fixes
+$elixir-phoenix:phx-pr-review https://...         # Full URL also works (repo parsed from URL)
+$elixir-phoenix:phx-pr-review 42 --bots-only      # Triage only CI bot threads (Copilot, Codex...)
+$elixir-phoenix:phx-pr-review 42 --no-resolve     # Reply but leave threads open
 ```
 
 ## Step 1: Resolve PR + Fetch Threads
@@ -127,7 +126,7 @@ with the rollup — **only on user approval**.
 ## Integration
 
 ```text
-PR receives review → $phx-pr-review {number}  ← YOU ARE HERE
+PR receives review → $elixir-phoenix:phx-pr-review {number}  ← YOU ARE HERE
    ↓ fetch unresolved threads (GraphQL, paginated)
    ↓ triage table → user greenlights
    ↓ per thread: fix (diff) → reply → resolve
@@ -137,9 +136,9 @@ Push changes → user handles git push
 
 ## Next Steps
 
-- `$phx-plan` — if findings reveal scope gaps
-- `$phx-verify` — full verification before pushing
-- Re-run `$phx-pr-review` after the next review round (idempotent)
+- `$elixir-phoenix:phx-plan` — if findings reveal scope gaps
+- `$elixir-phoenix:phx-verify` — full verification before pushing
+- Re-run `$elixir-phoenix:phx-pr-review` after the next review round (idempotent)
 
 ## References
 

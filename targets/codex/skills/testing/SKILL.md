@@ -1,7 +1,7 @@
 ---
 name: testing
 description: Elixir testing patterns — ExUnit, Mox, factories, LiveView test helpers.
-  Use when working on *_test.exs, test/support/, factory files, or fixing test failures.
+  Use when working on *_test.exs…
 ---
 
 # Elixir Testing Reference

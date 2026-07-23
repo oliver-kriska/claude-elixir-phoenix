@@ -1,7 +1,7 @@
 # Testing — Fixtures & Smoke Test
 
 The plugin has no Elixir ExUnit harness of its own (it distributes skills,
-agents, hooks — no `lib/` or `test/`). Tests for `$phx-deps-audit` rules
+agents, hooks — no `lib/` or `test/`). Tests for `$elixir-phoenix:phx-deps-audit` rules
 live as a bash smoke-test runner that materializes synthetic fixtures and
 asserts each rule fires.
 

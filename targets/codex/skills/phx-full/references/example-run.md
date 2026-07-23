@@ -3,7 +3,7 @@
 ## Magic Link Authentication
 
 ```
-$ $phx-full Add magic link authentication
+$ $elixir-phoenix:phx-full Add magic link authentication
 
 [INITIALIZING] Creating feature branch: feature/magic-link-auth
 [DISCOVERING] Scanning codebase for patterns...

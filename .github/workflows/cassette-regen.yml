@@ -24,10 +24,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v7
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1  # v7
 
       - name: Setup Python
-        uses: actions/setup-python@v6
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1  # v6
         with:
           python-version: '3.12'
 
@@ -73,7 +73,7 @@ jobs:
         id: open_pr
         if: steps.drift.outputs.drift == 'true'
         continue-on-error: true
-        uses: peter-evans/create-pull-request@v8
+        uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1  # v8
         with:
           commit-message: 'chore(cassettes): monthly hex-api regen'
           title: 'Monthly hex-api cassette regeneration'
@@ -93,7 +93,7 @@ jobs:
 
       - name: 403 fallback — upload as artifact
         if: steps.drift.outputs.drift == 'true' && steps.open_pr.outcome == 'failure'
-        uses: actions/upload-artifact@v7
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7
         with:
           name: cassettes-regen-${{ github.run_id }}
           path: plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/

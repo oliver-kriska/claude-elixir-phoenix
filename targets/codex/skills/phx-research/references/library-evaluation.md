@@ -1,6 +1,6 @@
 # Library Evaluation Template
 
-When `$phx-research --library` or evaluating a Hex dependency,
+When `$elixir-phoenix:phx-research --library` or evaluating a Hex dependency,
 use this structured template instead of free-form research.
 
 ## Workflow
@@ -85,6 +85,6 @@ integration guide files — everything in one evaluation doc.
 
 Present the recommendation and ask user what to do next:
 
-- "Plan the integration" -> `$phx-plan`
+- "Plan the integration" -> `$elixir-phoenix:phx-plan`
 - "Research more" -> continue
 - "Skip it" -> end

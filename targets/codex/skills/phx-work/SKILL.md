@@ -1,8 +1,7 @@
 ---
 name: phx-work
-description: Execute Elixir/Phoenix plan tasks with progress tracking. Use after $phx-plan
-  to implement features with mix compile and mix test verification after each step,
-  or --continue to resume interrupted work.
+description: Execute Elixir/Phoenix plan tasks with progress tracking. Use after $elixir-phoenix:phx-plan
+  to implement features…
 ---
 
 # Work
@@ -12,10 +11,10 @@ Execute tasks from a plan file with checkpoint tracking and verification.
 ## Usage
 
 ```
-$phx-work .claude/plans/user-auth/plan.md
-$phx-work .claude/plans/user-auth/plan.md --from P2-T3
-$phx-work --skip-blockers
-$phx-work  # Resumes most recent plan
+$elixir-phoenix:phx-work .claude/plans/user-auth/plan.md
+$elixir-phoenix:phx-work .claude/plans/user-auth/plan.md --from P2-T3
+$elixir-phoenix:phx-work --skip-blockers
+$elixir-phoenix:phx-work  # Resumes most recent plan
 ```
 
 ## Arguments
@@ -27,7 +26,7 @@ $phx-work  # Resumes most recent plan
 
 ## Iron Laws (NON-NEGOTIABLE)
 
-1. **NEVER auto-proceed** to $phx-review or any next workflow
+1. **NEVER auto-proceed** to $elixir-phoenix:phx-review or any next workflow
    phase -- always ask the user what to do next
 2. **AUTO-CONTINUE between plan phases** -- when Phase N completes,
    immediately start Phase N+1. Do NOT stop or ask for permission
@@ -56,7 +55,7 @@ Ask the user for plans with >3 tasks:
 Skip for plans with 3 or fewer simple tasks -- just start.
 
 > **Split warning**: Plans with >10 tasks risk 2-3 context
-> compactions. Suggest splitting via `$phx-plan` if not already.
+> compactions. Suggest splitting via `$elixir-phoenix:phx-plan` if not already.
 
 ## Step 2: Check Context (MANDATORY)
 
@@ -137,14 +136,14 @@ Summarize results, then ask the user a normal conversational question:
 > Implementation complete! {done}/{total} tasks finished.
 > {count} files modified across {count} phases.
 
-Options: 1. **Run review** (`$phx-review`) (Recommended),
-2. **Get a briefing** (`$phx-brief` — understand what was built),
+Options: 1. **Run review** (`$elixir-phoenix:phx-review`) (Recommended),
+2. **Get a briefing** (`$elixir-phoenix:phx-brief` — understand what was built),
 3. **Create a git commit** with the platform's native git workflow, 4. **Continue manually**.
-If any task fixed a non-obvious bug, also mention `$phx-compound`
+If any task fixed a non-obvious bug, also mention `$elixir-phoenix:phx-compound`
 to capture the solution.
 
-With blockers: list them, offer **Replan** (`$phx-plan`),
-**Review first** (`$phx-review`), or **Handle myself**.
+With blockers: list them, offer **Replan** (`$elixir-phoenix:phx-plan`),
+**Review first** (`$elixir-phoenix:phx-review`), or **Handle myself**.
 
 **If blockers remain**, auto-write HANDOFF to scratchpad:
 
@@ -157,7 +156,7 @@ Key decisions: {brief list from this session}.
 
 Include context beyond checkboxes for fresh session resume.
 
-**NEVER** auto-start $phx-review or any other phase.
+**NEVER** auto-start $elixir-phoenix:phx-review or any other phase.
 
 ## Step 6: Check for Additional Plans
 
@@ -168,7 +167,7 @@ user. Do NOT auto-start.
 ## Integration
 
 ```text
-$phx-plan → $phx-work (YOU ARE HERE) → $phx-review → $phx-compound
+$elixir-phoenix:phx-plan → $elixir-phoenix:phx-work (YOU ARE HERE) → $elixir-phoenix:phx-review → $elixir-phoenix:phx-compound
                  ↑ ASK USER before each transition
 ```
 

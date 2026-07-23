@@ -1,7 +1,6 @@
 ---
 name: phx-mix-compression
-description: Reduce mix output noise (5-15% token savings) by installing rtk filters
-  that compress mix test/credo/dialyzer/compile output before it reaches Claude. Use
+description: Reduce mix output noise (5-15% token savings) by installing rtk; Use
   when long mix output floods context.
 ---
 
@@ -18,8 +17,8 @@ while preserving full failure blocks, compile errors, and stack traces. Net win:
 
 ## When to use
 
-- **Long sessions** — `$phx-work` or `$phx-full` hitting context limits from mix output
-- **Debugging loops** — `$phx-investigate` retrying `mix compile`/`mix test` repeatedly
+- **Long sessions** — `$elixir-phoenix:phx-work` or `$elixir-phoenix:phx-full` hitting context limits from mix output
+- **Debugging loops** — `$elixir-phoenix:phx-investigate` retrying `mix compile`/`mix test` repeatedly
 - **Dialyzer-heavy projects** — `mix dialyzer` output dominates the transcript
 
 ## Iron Laws

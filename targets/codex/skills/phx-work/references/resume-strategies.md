@@ -14,13 +14,13 @@
 ### Default: Auto-detect
 
 ```
-$phx-work  # Resume at first unchecked non-[BLOCKED] task; stop if an earlier blocker exists
+$elixir-phoenix:phx-work  # Resume at first unchecked non-[BLOCKED] task; stop if an earlier blocker exists
 ```
 
 ### From Specific Task
 
 ```
-$phx-work .claude/plans/auth/plan.md --from P2-T3
+$elixir-phoenix:phx-work .claude/plans/auth/plan.md --from P2-T3
 ```
 
 Targets P2-T3 regardless of earlier unchecked tasks. If it is `[BLOCKED]`, this explicitly retries it and clears the tag when starting.
@@ -28,7 +28,7 @@ Targets P2-T3 regardless of earlier unchecked tasks. If it is `[BLOCKED]`, this 
 ### Skip Blockers
 
 ```
-$phx-work .claude/plans/auth/plan.md --skip-blockers
+$elixir-phoenix:phx-work .claude/plans/auth/plan.md --skip-blockers
 ```
 
 Skips rows visibly tagged `[BLOCKED]`; it does not infer blockers from prose or progress history.

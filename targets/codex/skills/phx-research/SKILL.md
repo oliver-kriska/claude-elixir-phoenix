@@ -1,8 +1,7 @@
 ---
 name: phx-research
 description: Research Elixir/Phoenix topics or evaluate Hex libraries (--library).
-  Use when learning about libraries, patterns, or comparing approaches. Searches HexDocs,
-  ElixirForum, GitHub.
+  Use when learning about libraries, patterns…
 ---
 
 # Research Elixir Topic
@@ -12,9 +11,9 @@ Research a topic by searching the web and fetching relevant sources efficiently.
 ## Usage
 
 ```
-$phx-research Oban unique jobs best practices
-$phx-research LiveView file upload with progress
-$phx-research --library permit
+$elixir-phoenix:phx-research Oban unique jobs best practices
+$elixir-phoenix:phx-research LiveView file upload with progress
+$elixir-phoenix:phx-research --library permit
 ```
 
 ## Arguments
@@ -161,9 +160,9 @@ Create `.claude/research/{topic-slug}.md`:
 
 Use `AskUserQuestion` to let the user choose next action:
 
-- "Plan a feature based on this research" → `$phx-plan`
-- "Investigate a specific finding" → `$phx-investigate`
+- "Plan a feature based on this research" → `$elixir-phoenix:phx-plan`
+- "Investigate a specific finding" → `$elixir-phoenix:phx-investigate`
 - "Research more on a subtopic" → continue research
 - "Done" → end
 
-**NEVER auto-invoke `$phx-plan` or any other skill after research.**
+**NEVER auto-invoke `$elixir-phoenix:phx-plan` or any other skill after research.**

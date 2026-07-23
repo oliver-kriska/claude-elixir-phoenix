@@ -12,7 +12,7 @@ inspects how the diff came to be.
 ## Mode B — Default (working vs HEAD)
 
 ```
-$phx-deps-audit
+$elixir-phoenix:phx-deps-audit
 ```
 
 Compares the working-tree `mix.lock` against `git show HEAD:mix.lock`.
@@ -33,9 +33,9 @@ still run.
 ## Mode C — PR / branch comparison
 
 ```
-$phx-deps-audit --base main
-$phx-deps-audit --base origin/main
-$phx-deps-audit --base abc1234
+$elixir-phoenix:phx-deps-audit --base main
+$elixir-phoenix:phx-deps-audit --base origin/main
+$elixir-phoenix:phx-deps-audit --base abc1234
 ```
 
 Compares the working-tree `mix.lock` against `git show <ref>:mix.lock`.
@@ -46,16 +46,16 @@ Compares the working-tree `mix.lock` against `git show <ref>:mix.lock`.
 | **New source** | working `mix.lock` |
 | **Use case** | CI on PRs that touch `mix.lock`. Pre-PR self-review. |
 | **Cost** | Same as Mode B |
-| **CI hint** | `$phx-deps-audit --base origin/main --json` for machine-readable output |
+| **CI hint** | `$elixir-phoenix:phx-deps-audit --base origin/main --json` for machine-readable output |
 
 `<ref>` is any valid Git revision: branch name, tag, commit SHA, `HEAD~N`.
 
 ## Mode A — Preview (locked vs Hex latest)
 
 ```
-$phx-deps-audit --preview                 # all locked deps vs latest
-$phx-deps-audit --preview httpoison       # one package
-$phx-deps-audit --preview httpoison req   # multiple
+$elixir-phoenix:phx-deps-audit --preview                 # all locked deps vs latest
+$elixir-phoenix:phx-deps-audit --preview httpoison       # one package
+$elixir-phoenix:phx-deps-audit --preview httpoison req   # multiple
 ```
 
 Compares the locked version against the latest version on Hex.pm.
@@ -155,8 +155,8 @@ simple regex to extract; the format has been stable for years.
 
 | Situation | Command |
 |-----------|---------|
-| Just ran `mix deps.update`, want pre-commit check | `$phx-deps-audit` |
-| Reviewing a PR that bumped `mix.lock` | `$phx-deps-audit --base origin/main` |
-| Considering whether to update `httpoison` | `$phx-deps-audit --preview httpoison` |
-| Curious which deps could update | `$phx-deps-audit --preview` (capped at 50) |
-| Just merged main, want fresh audit on whole tree | `git fetch && $phx-deps-audit --base origin/main~1` |
+| Just ran `mix deps.update`, want pre-commit check | `$elixir-phoenix:phx-deps-audit` |
+| Reviewing a PR that bumped `mix.lock` | `$elixir-phoenix:phx-deps-audit --base origin/main` |
+| Considering whether to update `httpoison` | `$elixir-phoenix:phx-deps-audit --preview httpoison` |
+| Curious which deps could update | `$elixir-phoenix:phx-deps-audit --preview` (capped at 50) |
+| Just merged main, want fresh audit on whole tree | `git fetch && $elixir-phoenix:phx-deps-audit --base origin/main~1` |

@@ -1,8 +1,7 @@
 ---
 name: phx-boundaries
 description: Analyze Phoenix context boundaries and module coupling via mix xref.
-  Use when checking cross-context calls, validating dependencies, before splitting
-  modules, or reviewing architecture.
+  Use when checking cross-context calls…
 ---
 
 # Phoenix Context Boundary Validation
@@ -12,9 +11,9 @@ Analyze module dependencies to ensure clean context separation and proper archit
 ## Usage
 
 ```
-$phx-boundaries              # Check for violations
-$phx-boundaries --assess     # Score context health (0-100)
-$phx-boundaries --fix        # Suggest fixes for violations
+$elixir-phoenix:phx-boundaries              # Check for violations
+$elixir-phoenix:phx-boundaries --assess     # Score context health (0-100)
+$elixir-phoenix:phx-boundaries --fix        # Suggest fixes for violations
 ```
 
 ## `--assess` Mode: Context Health Score
@@ -124,9 +123,9 @@ Always end with actionable follow-up — findings without a plan
 get lost:
 
 ```
-- `$phx-plan` — Create a plan to fix violations (recommended for 3+ issues)
-- `$phx-quick` — Fix a single boundary violation directly
-- `$phx-review` — Review specific modules for deeper issues
+- `$elixir-phoenix:phx-plan` — Create a plan to fix violations (recommended for 3+ issues)
+- `$elixir-phoenix:phx-quick` — Fix a single boundary violation directly
+- `$elixir-phoenix:phx-review` — Review specific modules for deeper issues
 ```
 
 ## References

@@ -1,7 +1,7 @@
 ---
 name: phx-init
-description: Initialize plugin in a project — install Iron Laws, auto-activation rules,
-  and reference auto-loading into CLAUDE.md. Use when setting up or updating the plugin.
+description: Initialize plugin in a project — install Iron Laws, auto-activation;
+  Use when setting up or updating the plugin.
 ---
 
 # Plugin Initialization
@@ -11,8 +11,8 @@ Install the Elixir/Phoenix plugin's behavioral instructions into the project's C
 ## Usage
 
 ```
-$phx-init           # First-time installation
-$phx-init --update  # Update existing installation with latest rules
+$elixir-phoenix:phx-init           # First-time installation
+$elixir-phoenix:phx-init --update  # Update existing installation with latest rules
 ```
 
 ## Iron Laws
@@ -104,8 +104,8 @@ Added to CLAUDE.md:
 - Verification rules
 {- Codex review guidelines → AGENTS.md (only if installed in Step 4b)}
 
-Run $phx-init --update after plugin updates.
-Run $phx-audit for a full project health check.
+Run $elixir-phoenix:phx-init --update after plugin updates.
+Run $elixir-phoenix:phx-audit for a full project health check.
 ```
 
 ## Content Template
@@ -137,7 +137,7 @@ See `references/injectable-template.md` for full template with all placeholders 
 
 ## Validation
 
-After running `$phx-init`:
+After running `$elixir-phoenix:phx-init`:
 
 1. Check CLAUDE.md contains markers
 2. Verify detected stack matches actual project
@@ -159,6 +159,6 @@ After running `$phx-init`:
 
 | Command | When to Use |
 |---------|-------------|
-| `$phx-init` | First time, or after plugin updates |
-| `$phx-audit` | Periodic project health check |
-| `$phx-verify` | After code changes |
+| `$elixir-phoenix:phx-init` | First time, or after plugin updates |
+| `$elixir-phoenix:phx-audit` | Periodic project health check |
+| `$elixir-phoenix:phx-verify` | After code changes |

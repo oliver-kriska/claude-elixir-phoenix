@@ -5,7 +5,11 @@
     "That decimal field mistake was serious. Document this learning?",
     "The Oban idempotency bug broke production. Record this lesson?",
     "I finally got the `^` pinning rule right. Update knowledge base?",
-    "You caught my Iron Law violation. Prevent this next time?"
+    "You caught my Iron Law violation. Prevent this next time?",
+    "Save this verified ICal.to_ics CRLF fix as personal ical library knowledge",
+    "Use learn-from-fix --library ical --scope project to remember method PUBLISH",
+    "We fixed a Swoosh API issue; capture the package rule for this project",
+    "Remember this user-taught Timex parsing rule across all my projects"
   ],
   "should_not_trigger": [
     "Help me debug this N+1 query in my code",
@@ -14,6 +18,9 @@
     "How do I validate fields in a changeset?",
     "Scan the codebase for N+1 anti-patterns please",
     "Audit the project health across architecture and security",
-    "Give me Phoenix context design patterns for this domain"
+    "Give me Phoenix context design patterns for this domain",
+    "How do I add the ical package to mix.exs?",
+    "Research which calendar library is best for Elixir",
+    "Debug this unverified Swoosh delivery failure"
   ]
 }

@@ -1,8 +1,7 @@
 ---
 name: phx-full
-description: Use for large features spanning multiple contexts or autonomous end-to-end
-  implementation. Runs the full plan-implement-review-compound cycle with specialist
-  agents. NOT for executing an existing plan file — use $phx-work for that.
+description: Run large features end to end. Use for autonomous work; use $elixir-phoenix:phx-work
+  for an existing plan.
 ---
 
 # Full Phoenix Feature Development
@@ -14,20 +13,20 @@ Cycles back automatically if review finds issues.
 ## Usage
 
 ```
-$phx-full Add user authentication with magic links
-$phx-full Real-time notification system with Phoenix PubSub
-$phx-full Background job processing for email campaigns --max-cycles 5
-$phx-full Add magic-link auth --codex
+$elixir-phoenix:phx-full Add user authentication with magic links
+$elixir-phoenix:phx-full Real-time notification system with Phoenix PubSub
+$elixir-phoenix:phx-full Background job processing for email campaigns --max-cycles 5
+$elixir-phoenix:phx-full Add magic-link auth --codex
 ```
 
 **Wrong input guard**: if the argument is a path to an existing plan file
-(`.claude/plans/*/plan.md`), do NOT re-plan it. Say so and run `$phx-work {path}`
+(`.claude/plans/*/plan.md`), do NOT re-plan it. Say so and run `$elixir-phoenix:phx-work {path}`
 instead — the plan phase already happened.
 
 ## Flags
 
 - **`--codex`** — Codex CLI joins the review panel on **every** review
-  cycle, matching `$phx-review --codex`.
+  cycle, matching `$elixir-phoenix:phx-review --codex`.
 - **Requires** the `codex` CLI. A missing CLI degrades to a SKIPPED note —
   the cycle never fails.
 - **Consensus** findings (flagged by a Claude agent **and** codex) are
@@ -37,7 +36,7 @@ instead — the plan phase already happened.
 
 ```
 ┌──────────────────────────────────────────────────────────────────┐
-│                       $phx-full {feature}                        │
+│                       $elixir-phoenix:phx-full {feature}                        │
 ├──────────────────────────────────────────────────────────────────┤
 │                                                                  │
 │  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  ┌────────┐  │
@@ -60,7 +59,7 @@ instead — the plan phase already happened.
 │                                                                  │
 │  On Completion:                                                  │
 │  Auto-compound: Capture solved problems → .claude/solutions/     │
-│  Auto-suggest: $phx-document → $phx-learn-from-fix                       │
+│  Auto-suggest: $elixir-phoenix:phx-document → $elixir-phoenix:phx-learn-from-fix                       │
 │                                                                  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -88,7 +87,7 @@ TaskCreate({subject: "Capture solutions", activeForm: "Compounding..."})
 Set up `blockedBy` dependencies between phases (sequential).
 
 Run COMPOUNDING phase on COMPLETED to capture solved problems in `.claude/solutions/`.
-Suggest `$phx-document` for docs and `$phx-learn-from-fix` for quick pattern capture.
+Suggest `$elixir-phoenix:phx-document` for docs and `$elixir-phoenix:phx-learn-from-fix` for quick pattern capture.
 
 ## Cycle Limits
 
@@ -103,13 +102,13 @@ Stop with INCOMPLETE status when limits exceeded. List remaining work and recomm
 ## Integration
 
 ```text
-$phx-full = $phx-plan → $phx-work → $phx-verify → $phx-review → (fix → $phx-verify) → $phx-compound
+$elixir-phoenix:phx-full = $elixir-phoenix:phx-plan → $elixir-phoenix:phx-work → $elixir-phoenix:phx-verify → $elixir-phoenix:phx-review → (fix → $elixir-phoenix:phx-verify) → $elixir-phoenix:phx-compound
 ```
 
 Use Ralph Wiggum Loop for fully autonomous execution:
 
 ```bash
-/ralph-loop:ralph-loop "$phx-full {feature}" --completion-promise "DONE" --max-iterations 50
+/ralph-loop:ralph-loop "$elixir-phoenix:phx-full {feature}" --completion-promise "DONE" --max-iterations 50
 ```
 
 ## Iron Laws

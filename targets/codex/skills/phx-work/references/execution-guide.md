@@ -1,6 +1,6 @@
 # Execution Guide
 
-Step-by-step execution details for `$phx-work`.
+Step-by-step execution details for `$elixir-phoenix:phx-work`.
 
 ## Contents
 
@@ -247,7 +247,7 @@ Don't commit after every task. Instead:
 2. **After blockers**: Commit working state before human intervention
 3. **After completion**: Ask user about final commit
 
-### Branch Strategy (for $phx-full)
+### Branch Strategy (for $elixir-phoenix:phx-full)
 
 ```bash
 git checkout -b feature/{feature-slug}
