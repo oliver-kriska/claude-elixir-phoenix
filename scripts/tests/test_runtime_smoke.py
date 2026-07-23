@@ -22,6 +22,137 @@ def _fixture_target(output: Path) -> None:
     resource.chmod(0o755)
 
 
+def test_amp_uses_native_install_exact_discovery_and_fresh_removal(tmp_path, monkeypatch) -> None:
+    canonical = tmp_path / "canonical"
+    canonical_resource = canonical / "skills" / runtime_smoke.PI_SOURCE_EXECUTABLE
+    canonical_resource.parent.mkdir(parents=True)
+    canonical_resource.write_text("#!/bin/sh\n")
+    canonical_resource.chmod(0o755)
+
+    def build_amp_fixture(_source, output):
+        _fixture_target(output)
+        nested = output / "skills"
+        for skill in nested.iterdir():
+            skill.rename(output / skill.name)
+        nested.rmdir()
+
+    monkeypatch.setattr(runtime_smoke, "SOURCE_PLUGIN_DIR", canonical)
+    monkeypatch.setattr(
+        runtime_smoke.amp_port,
+        "build",
+        build_amp_fixture,
+    )
+    monkeypatch.setattr(runtime_smoke, "_executable", lambda name, _env: name)
+    for name in (
+        "AMP_API_KEY",
+        "AMP_ENABLE_TRACING",
+        "AMP_HOME",
+        "AMP_PWD",
+        "AMP_SETTINGS_FILE",
+        "OTEL_EXPORTER_OTLP_ENDPOINT",
+    ):
+        monkeypatch.setenv(name, f"real-{name.lower()}")
+    monkeypatch.setenv("XDG_CONFIG_HOME", "/real/config")
+    calls = []
+
+    def runner(command, **kwargs):
+        calls.append((command, kwargs["env"].copy(), kwargs["cwd"]))
+        install = tmp_path / "workspace/.agents/skills"
+        generated = tmp_path / "generated-skills"
+        if command[-1] == "--version":
+            output = "amp test\n"
+        elif command[1:3] == ["skill", "add"]:
+            for skill in generated.iterdir():
+                shutil.copytree(skill, install / skill.name, copy_function=shutil.copy2)
+            output = "Installed\n"
+        elif command[1:3] == ["skill", "remove"]:
+            shutil.rmtree(install / command[3])
+            output = "Removed\n"
+        else:
+            records = [
+                {
+                    "name": path.name,
+                    "baseDir": path.resolve().as_uri(),
+                }
+                for path in install.iterdir()
+                if path.is_dir()
+            ]
+            output = json.dumps({"skills": records, "errors": []})
+        return subprocess.CompletedProcess(command, 0, output, "")
+
+    runtime_smoke.smoke_amp(tmp_path, runner)
+    assert all(call[1]["HOME"] == str(tmp_path / "home") for call in calls)
+    assert all(call[1]["AMP_SETTINGS_FILE"] == str(tmp_path / "settings.json") for call in calls)
+    assert all(call[1]["AMP_LOG_FILE"] == str(tmp_path / "amp.log") for call in calls)
+    assert all(call[1]["AMP_API_KEY"] == "runtime-smoke-placeholder" for call in calls)
+    assert all(call[1]["AMP_URL"] == "http://127.0.0.1:9" for call in calls)
+    assert all(call[1]["AMP_SKIP_UPDATE_CHECK"] == "1" for call in calls)
+    assert all("AMP_ENABLE_TRACING" not in call[1] for call in calls)
+    assert all("AMP_HOME" not in call[1] for call in calls)
+    assert all("AMP_PWD" not in call[1] for call in calls)
+    assert all("OTEL_EXPORTER_OTLP_ENDPOINT" not in call[1] for call in calls)
+    assert all(call[1]["XDG_CONFIG_HOME"] == str(tmp_path / "xdg_config_home") for call in calls)
+    assert all(call[2] == tmp_path / "workspace" for call in calls)
+    assert sum(call[0][1:4] == ["skill", "list", "--json"] for call in calls) == 2
+    assert sum(call[0][1:3] == ["skill", "remove"] for call in calls) == 51
+
+
+def test_amp_records_require_unique_names_clean_payload_and_path_boundaries(tmp_path) -> None:
+    install = tmp_path / "skills"
+    expected = install / "phx-review"
+    expected.mkdir(parents=True)
+    sibling = tmp_path / "skills-other/false"
+    sibling.mkdir(parents=True)
+    records = [
+        {"name": "phx-review", "baseDir": expected.resolve().as_uri()},
+        {"name": "false", "baseDir": sibling.resolve().as_uri()},
+        {"name": "built-in", "baseDir": "builtin:///skills"},
+    ]
+    assert runtime_smoke._amp_skill_records(
+        {"skills": records, "errors": []}, install
+    ) == {"phx-review": expected.resolve()}
+    with pytest.raises(RuntimeError, match="duplicate"):
+        runtime_smoke._amp_skill_records(
+            {"skills": [records[0], records[0]], "errors": []}, install
+        )
+    with pytest.raises(RuntimeError, match="invalid skill discovery"):
+        runtime_smoke._amp_skill_records(
+            {"skills": records, "errors": ["broken skill"]}, install
+        )
+    with pytest.raises(RuntimeError, match="non-local skill URI"):
+        runtime_smoke._amp_skill_records(
+            {
+                "skills": [
+                    {"name": "false", "baseDir": "file://remote.example/skills/false"}
+                ],
+                "errors": [],
+            },
+            install,
+        )
+    fallback = {
+        "skills": [
+            {
+                "name": "phx-review",
+                "baseDir": (tmp_path / "global/phx-review").resolve().as_uri(),
+            }
+        ],
+        "errors": [],
+    }
+    assert runtime_smoke._amp_skill_names(fallback) & {"phx-review"} == {
+        "phx-review"
+    }
+
+
+def test_resource_snapshot_detects_source_mutation(tmp_path) -> None:
+    resource = tmp_path / "watch-pr.sh"
+    resource.write_text("#!/bin/sh\n")
+    resource.chmod(0o755)
+    snapshot = runtime_smoke._resource_snapshot(resource)
+    resource.write_text("#!/bin/sh\necho mutated\n")
+    with pytest.raises(RuntimeError, match="bytes or mode differ"):
+        runtime_smoke._verify_resource_snapshot(resource, snapshot)
+
+
 def test_codex_uses_isolated_homes_native_install_and_fresh_removal(tmp_path, monkeypatch) -> None:
     monkeypatch.setattr(runtime_smoke.codex_port, "build", lambda _source, output: _fixture_target(output))
     monkeypatch.setattr(runtime_smoke, "_executable", lambda name, _env: name)

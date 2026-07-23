@@ -13,8 +13,11 @@ import sys
 import tempfile
 from pathlib import Path
 from typing import Callable
+from urllib.parse import unquote, urlparse
+from urllib.request import url2pathname
 
 from scripts.port_lib import SOURCE_PLUGIN_DIR
+from scripts.port_lib import amp as amp_port
 from scripts.port_lib import codex as codex_port
 from scripts.port_lib import opencode as opencode_port
 from scripts.port_lib import pi as pi_port
@@ -94,6 +97,17 @@ def _verify_resource(
         raise RuntimeError(f"installed resource mode differs: {installed_resource}")
 
 
+def _resource_snapshot(path: Path) -> tuple[bytes, int]:
+    return path.read_bytes(), stat.S_IMODE(path.stat().st_mode)
+
+
+def _verify_resource_snapshot(path: Path, expected: tuple[bytes, int]) -> None:
+    if not path.is_file():
+        raise RuntimeError(f"resource is missing: {path}")
+    if _resource_snapshot(path) != expected:
+        raise RuntimeError(f"resource bytes or mode differ: {path}")
+
+
 def _skill_records(records: list[dict], install: Path) -> dict[str, Path]:
     install = install.resolve()
     discovered: dict[str, Path] = {}
@@ -104,6 +118,46 @@ def _skill_records(records: list[dict], install: Path) -> dict[str, Path]:
         name = item.get("name")
         if not isinstance(name, str) or name in discovered:
             raise RuntimeError("OpenCode returned duplicate or invalid generated skills")
+        discovered[name] = location
+    return discovered
+
+
+def _amp_skills(payload: dict) -> list[dict]:
+    if not isinstance(payload, dict):
+        raise RuntimeError("Amp returned invalid skill discovery data")
+    errors = payload.get("errors")
+    records = payload.get("skills")
+    if not isinstance(errors, list) or errors or not isinstance(records, list):
+        raise RuntimeError("Amp returned invalid skill discovery data")
+    if not all(isinstance(item, dict) for item in records):
+        raise RuntimeError("Amp returned an invalid skill record")
+    return records
+
+
+def _amp_skill_names(payload: dict) -> set[str]:
+    names = {item.get("name") for item in _amp_skills(payload)}
+    if not all(isinstance(name, str) and name for name in names):
+        raise RuntimeError("Amp returned an invalid skill name")
+    return names
+
+
+def _amp_skill_records(payload: dict, install: Path) -> dict[str, Path]:
+    records = _amp_skills(payload)
+    install = install.resolve()
+    discovered: dict[str, Path] = {}
+    for item in records:
+        base_dir = item.get("baseDir")
+        if not isinstance(base_dir, str) or not base_dir.startswith("file://"):
+            continue
+        parsed = urlparse(base_dir)
+        if parsed.netloc not in ("", "localhost"):
+            raise RuntimeError(f"Amp returned a non-local skill URI: {base_dir}")
+        location = Path(url2pathname(unquote(parsed.path))).resolve()
+        if not location.is_relative_to(install):
+            continue
+        name = item.get("name")
+        if not isinstance(name, str) or name in discovered:
+            raise RuntimeError("Amp returned duplicate or invalid generated skills")
         discovered[name] = location
     return discovered
 
@@ -195,6 +249,105 @@ def smoke_codex(root: Path, runner: Run = subprocess.run) -> None:
     if installed_path.exists():
         raise RuntimeError(f"Codex left the removed plugin on disk: {installed_path}")
     print(f"[runtime-smoke] Codex {version}: {EXPECTED_SKILLS} skills OK")
+
+
+def smoke_amp(root: Path, runner: Run = subprocess.run) -> None:
+    home, workspace = root / "home", root / "workspace"
+    generated = root / "generated-skills"
+    install = workspace / ".agents/skills"
+    xdg_roots = {
+        name: root / name.lower()
+        for name in (
+            "XDG_CONFIG_HOME",
+            "XDG_DATA_HOME",
+            "XDG_CACHE_HOME",
+            "XDG_STATE_HOME",
+        )
+    }
+    for path in (home, workspace, install, *xdg_roots.values()):
+        path.mkdir(parents=True)
+    canonical_resource = SOURCE_PLUGIN_DIR / "skills" / PI_SOURCE_EXECUTABLE
+    canonical_snapshot = _resource_snapshot(canonical_resource)
+    amp_port.build(SOURCE_PLUGIN_DIR, generated)
+    generated_resource = generated / EXECUTABLE_RESOURCE
+    _verify_resource_snapshot(generated_resource, canonical_snapshot)
+    settings = root / "settings.json"
+    settings.write_text(
+        json.dumps(
+            {
+                "amp.experimental.cli.nativeSecretsStorage.enabled": False,
+                "amp.skills.disableClaudeCodeSkills": True,
+                "amp.updates.mode": "disabled",
+            }
+        )
+        + "\n",
+        encoding="utf-8",
+    )
+    env = os.environ.copy()
+    for name in tuple(env):
+        if name.startswith(("AMP_", "OTEL_")):
+            env.pop(name)
+    env |= {
+        "HOME": str(home),
+        "AMP_API_KEY": "runtime-smoke-placeholder",
+        "AMP_URL": "http://127.0.0.1:9",
+        "AMP_SKIP_UPDATE_CHECK": "1",
+        "AMP_SETTINGS_FILE": str(settings),
+        "AMP_LOG_FILE": str(root / "amp.log"),
+        **{name: str(path) for name, path in xdg_roots.items()},
+    }
+    executable = _executable("amp", env)
+    version = _run(runner, [executable, "--version"], env, workspace).stdout.strip()
+    if not version:
+        raise RuntimeError("amp returned an empty version")
+    _run(
+        runner,
+        [executable, "skill", "add", str(generated), "--target", str(install)],
+        env,
+        workspace,
+    )
+    _verify_tree(install)
+    _verify_resource_snapshot(generated_resource, canonical_snapshot)
+    _verify_resource_snapshot(install / EXECUTABLE_RESOURCE, canonical_snapshot)
+    expected = {
+        path.parent.name: (install / path.parent.name).resolve()
+        for path in generated.glob("*/SKILL.md")
+    }
+    discovered = _amp_skill_records(
+        json.loads(
+            _run(runner, [executable, "skill", "list", "--json"], env, workspace).stdout
+        ),
+        install,
+    )
+    if discovered != expected:
+        raise RuntimeError(
+            f"Amp discovered {len(discovered)} generated skills, "
+            f"expected the exact {len(expected)}-skill target"
+        )
+    for name in sorted(expected):
+        _run(
+            runner,
+            [executable, "skill", "remove", name, "--target", str(install)],
+            env,
+            workspace,
+        )
+    after = json.loads(
+        _run(runner, [executable, "skill", "list", "--json"], env, workspace).stdout
+    )
+    remaining = _amp_skill_records(after, install)
+    if remaining:
+        raise RuntimeError(f"Amp rediscovered {len(remaining)} generated skills after removal")
+    fallback_names = _amp_skill_names(after) & expected.keys()
+    if fallback_names:
+        raise RuntimeError(
+            f"Amp discovered removed skill names elsewhere: {sorted(fallback_names)}"
+        )
+    if any(install.iterdir()):
+        raise RuntimeError(f"Amp left removed skills on disk: {install}")
+    _verify_tree(generated)
+    _verify_resource_snapshot(generated_resource, canonical_snapshot)
+    _verify_resource_snapshot(canonical_resource, canonical_snapshot)
+    print(f"[runtime-smoke] Amp {version}: {EXPECTED_SKILLS} skills OK")
 
 
 def smoke_pi(root: Path, runner: Run = subprocess.run) -> None:
@@ -302,13 +455,16 @@ def smoke_opencode(root: Path, runner: Run = subprocess.run) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("runtime", choices=("codex", "pi", "opencode"))
+    parser.add_argument("runtime", choices=("amp", "codex", "pi", "opencode"))
     args = parser.parse_args()
     try:
         with tempfile.TemporaryDirectory(prefix=f"{args.runtime}-runtime-smoke-") as temporary:
-            {"codex": smoke_codex, "pi": smoke_pi, "opencode": smoke_opencode}[
-                args.runtime
-            ](Path(temporary))
+            {
+                "amp": smoke_amp,
+                "codex": smoke_codex,
+                "pi": smoke_pi,
+                "opencode": smoke_opencode,
+            }[args.runtime](Path(temporary))
     except (KeyError, OSError, RuntimeError, ValueError, json.JSONDecodeError) as error:
         print(f"[runtime-smoke] FAIL: {error}", file=sys.stderr)
         return 1

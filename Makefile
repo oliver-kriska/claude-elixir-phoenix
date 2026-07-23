@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -71,6 +71,9 @@ amp-skills-sync: ## Regenerate and verify the committed Amp target
 
 amp-skills-validate: ## Check committed Amp skills for generated drift
 	@python3 -m scripts.build_amp_skills --check
+
+amp-runtime-smoke: ## Optional: smoke-test local target with an isolated Amp runtime
+	@python3 -m scripts.runtime_smoke amp
 
 codex-skills: ## Generate the Codex skills plugin from the canonical Claude plugin
 	@python3 -m scripts.build_codex_skills

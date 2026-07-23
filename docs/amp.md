@@ -329,6 +329,20 @@ make validate
 make eval-all
 ```
 
+Maintainers with Amp installed can run a model-free native acceptance check:
+
+```bash
+make amp-runtime-smoke
+```
+
+Tested with Amp `0.0.1784796539-g051498`, this builds the target in a temporary
+directory, installs it with `amp skill add`, verifies exact JSON discovery of
+all 51 skills plus bundled resource bytes and executable modes, removes every
+skill with `amp skill remove`, and confirms a fresh `amp skill list` no longer
+discovers them from any location. Temporary home, XDG, settings, and log paths
+isolate normal user configuration. Update checks and tracing are disabled; an
+unreachable loopback service URL makes unexpected API requests fail closed.
+
 ## Further reading
 
 - [Amp Agent Skills documentation](https://ampcode.com/manual#agent-skills)
