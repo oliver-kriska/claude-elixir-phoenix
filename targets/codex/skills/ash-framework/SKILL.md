@@ -1,8 +1,7 @@
 ---
 name: ash-framework
-description: Ash Framework — resources, actions, policies, aggregates, calculations,
-  AshPhoenix.Form, LiveView, migrations. Use when generating resources via mix ash.codegen,
-  editing changes, checks, types, validations, or domain code interfaces.
+description: Ash Framework — resources, actions, policies, aggregates; Use when generating
+  resources via mix ash.codegen, editing…
 ---
 
 # Ash Framework Reference

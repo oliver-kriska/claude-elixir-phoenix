@@ -34,6 +34,41 @@
           "type": "content_present",
           "pattern": "references/",
           "desc": "Has References section"
+        },
+        {
+          "type": "content_present",
+          "pattern": "--library.*--scope",
+          "desc": "Documents explicit library and scope route"
+        },
+        {
+          "type": "content_present",
+          "pattern": "~/.claude/skills/hex-<package>/SKILL.md",
+          "desc": "Documents personal package skill destination"
+        },
+        {
+          "type": "content_present",
+          "pattern": ".claude/skills/hex-<package>/SKILL.md",
+          "desc": "Documents project package skill destination"
+        },
+        {
+          "type": "content_present",
+          "pattern": "user-invocable: false",
+          "desc": "Generated package knowledge is background-only"
+        },
+        {
+          "type": "content_present",
+          "pattern": "mix.lock",
+          "desc": "Preserves locked package version context"
+        },
+        {
+          "type": "content_present",
+          "pattern": "~/.claude/CLAUDE.md",
+          "desc": "Documents personal cross-project instruction destination"
+        },
+        {
+          "type": "content_present",
+          "pattern": "\\^\\[a-z\\]\\[a-z0-9_\\]\\+\\$",
+          "desc": "Defines deterministic valid Hex package normalization"
         }
       ]
     },
@@ -81,8 +116,8 @@
         {
           "type": "description_length",
           "min": 50,
-          "max": 250,
-          "desc": "Description in sweet spot"
+          "max": 200,
+          "desc": "Description stays within the plugin soft target"
         },
         {
           "type": "description_keywords",
@@ -111,6 +146,16 @@
           "type": "content_present",
           "pattern": "NEVER|MUST NOT|DO NOT|CRITICAL",
           "desc": "Has explicit prohibitions or critical rules"
+        },
+        {
+          "type": "content_present",
+          "pattern": "Personal skills override",
+          "desc": "Warns about cross-scope shadowing"
+        },
+        {
+          "type": "content_present",
+          "pattern": "hand-authored",
+          "desc": "Protects unrelated skill content"
         },
         {
           "type": "askuserquestion_option_limit",

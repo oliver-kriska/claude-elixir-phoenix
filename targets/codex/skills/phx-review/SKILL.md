@@ -1,7 +1,7 @@
 ---
 name: phx-review
 description: Review changed Elixir/Phoenix code read-only. Check requirements, cite
-  evidence, deduplicate findings, and return a severity-based verdict.
+  evidence, deduplicate, and return a verdict.
 ---
 # Review Elixir/Phoenix Code
 
@@ -11,11 +11,11 @@ issues; do not edit files, create tasks, or fix findings.
 ## Usage
 
 ```text
-$phx-review
-$phx-review test
-$phx-review security
-$phx-review .claude/plans/auth/plan.md
-$phx-review --no-requirements
+$elixir-phoenix:phx-review
+$elixir-phoenix:phx-review test
+$elixir-phoenix:phx-review security
+$elixir-phoenix:phx-review .claude/plans/auth/plan.md
+$elixir-phoenix:phx-review --no-requirements
 ```
 
 Treat the text after the skill name as a focus area, issue identifier, or path to
@@ -105,8 +105,8 @@ appropriate correction. Add requirements coverage before findings; any `UNMET`
 requirement requires `REQUIRES CHANGES`.
 
 If there are no findings, say so explicitly and list residual risks or checks not
-run. Stop after presenting the review. Suggest `$phx-triage`, `$phx-plan`, or
-`$phx-compound` as optional next steps without invoking them automatically.
+run. Stop after presenting the review. Suggest `$elixir-phoenix:phx-triage`, `$elixir-phoenix:phx-plan`, or
+`$elixir-phoenix:phx-compound` as optional next steps without invoking them automatically.
 
 ## References
 

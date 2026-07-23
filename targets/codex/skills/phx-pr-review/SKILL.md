@@ -1,148 +1,98 @@
 ---
 name: phx-pr-review
-description: Address PR review threads on Elixir/Phoenix code — fetch unresolved threads,
-  fix code, reply, and resolve each thread. Use when the user shares a PR URL or mentions
-  reviewer feedback.
+description: Address PR review threads on Elixir/Phoenix code — fetch unresolved;
+  Use when the user shares a PR URL or mentions…
 ---
-
 # PR Review Response
 
-Close the review loop: fetch unresolved threads → fix → reply → resolve.
-GitHub's `isResolved` is the state — re-runs are idempotent, handled
-threads drop out automatically.
+Inspect unresolved pull-request review threads, triage them read-only by default,
+and apply only explicitly approved fixes. GitHub mutations are never implied.
 
 ## Usage
 
-```
-$phx-pr-review 42                  # Triage unresolved threads on PR #42
-$phx-pr-review 42 --fix            # Triage + apply approved code fixes
-$phx-pr-review https://...         # Full URL also works (repo parsed from URL)
-$phx-pr-review 42 --bots-only      # Triage only CI bot threads (Copilot, Codex...)
-$phx-pr-review 42 --no-resolve     # Reply but leave threads open
+```text
+$elixir-phoenix:phx-pr-review 42
+$elixir-phoenix:phx-pr-review 42 --fix
+$elixir-phoenix:phx-pr-review https://github.com/owner/repo/pull/42 --bots-only
+$elixir-phoenix:phx-pr-review 42 --no-resolve
 ```
 
-## Step 1: Resolve PR + Fetch Threads
+## Workflow
 
-`gh pr view "$PR" --json number,title,state,baseRefName,headRefName,url,author`
-(accepts number or URL; URL also yields owner/repo). Then fetch ALL review
-threads with thread IDs + resolved status — REST alone cannot do this:
+1. Resolve the PR number or URL. Prefer a runtime GitHub connector that returns
+   thread IDs and resolved state. Otherwise use this exact `gh` 2.94-compatible
+   fallback (requires `command -v gh` and `gh auth status`):
 
 ```bash
-cat > /tmp/review_threads.graphql <<'GQL'
-query($owner:String!, $repo:String!, $pr:Int!, $cursor:String) {
-  repository(owner:$owner, name:$repo) {
-    pullRequest(number:$pr) {
-      reviewThreads(first:50, after:$cursor) {
-        pageInfo { hasNextPage endCursor }
-        nodes {
-          id isResolved isOutdated path line originalLine
-          comments(first:20) { nodes {
-            databaseId body createdAt
-            author { login __typename } } }
-        }
-      }
-    }
-  }
-}
-GQL
-gh api graphql --paginate -F owner="$OWNER" -F repo="$REPO" -F pr="$PR" \
-  -F query=@/tmp/review_threads.graphql \
-  --jq '.data.repository.pullRequest.reviewThreads.nodes[]
-        | select(.isResolved == false)
-        | {threadId: .id, isOutdated, path, line: (.line // .originalLine),
-           firstCommentId: .comments.nodes[0].databaseId,
-           author: .comments.nodes[0].author.login,
-           isBot: (.comments.nodes[0].author.__typename == "Bot"),
-           body: .comments.nodes[0].body}'
+PR_INPUT="${1:?PR number or URL}"
+if [[ "$PR_INPUT" =~ ^https://github.com/([^/]+)/([^/]+)/pull/([0-9]+) ]]; then
+  OWNER="${BASH_REMATCH[1]}"; REPO="${BASH_REMATCH[2]}"; PR="${BASH_REMATCH[3]}"
+else
+  OWNER=$(gh repo view --json owner --jq '.owner.login')
+  REPO=$(gh repo view --json name --jq '.name'); PR="$PR_INPUT"
+fi
+gh api graphql --paginate -F owner="$OWNER" -F repo="$REPO" -F pr="$PR"   -f query='query($owner: String!, $repo: String!, $pr: Int!, $endCursor: String) { repository(owner: $owner, name: $repo) { pullRequest(number: $pr) { reviewThreads(first: 100, after: $endCursor) { nodes { id isResolved isOutdated path line originalLine comments(first: 100) { totalCount nodes { id databaseId body author { login __typename } replyTo { id } } } } pageInfo { hasNextPage endCursor } } } } }'
+gh api graphql --paginate -F owner="$OWNER" -F repo="$REPO" -F pr="$PR"   -f query='query($owner: String!, $repo: String!, $pr: Int!, $endCursor: String) { repository(owner: $owner, name: $repo) { pullRequest(number: $pr) { reviews(first: 100, after: $endCursor) { nodes { id state body submittedAt author { login __typename } } pageInfo { hasNextPage endCursor } } } } }'
 ```
 
-Also fetch review summaries (`gh api "repos/$OWNER/$REPO/pulls/$PR/reviews"`)
-— they are NOT threads and cannot be resolved; surface `CHANGES_REQUESTED`
-bodies separately. Bot detection: `__typename == "Bot"` / `user.type == "Bot"`
-(the `[bot]` login suffix is NOT reliable across endpoints).
+   `--paginate` binds each returned `pageInfo.endCursor` to `$endCursor`. Filter
+   `isResolved == false` after collecting pages. Preserve thread `id`, root
+   comment `id`/`databaseId`, and `author.__typename` (not login suffixes).
+   `comments(first:100)` is nested and is **not** paginated by the outer command:
+   if `comments.totalCount > nodes.length`, report the thread as TRUNCATED and
+   fetch every comment page with this exact query. The outer query intentionally
+   omits nested `comments.pageInfo` so `gh --paginate` follows only the outer
+   `reviewThreads.pageInfo` cursor:
 
-## Step 2: Triage Table
+```bash
+gh api graphql --paginate -F threadId="$THREAD_ID"   -f query='query($threadId: ID!, $endCursor: String) { node(id:$threadId) { ... on PullRequestReviewThread { comments(first:100, after:$endCursor) { totalCount nodes { id databaseId body author { login __typename } replyTo { id } } pageInfo { hasNextPage endCursor } } } } }'
+```
 
-Group by file, one row per thread. With `--bots-only`, keep only `isBot` rows.
+   Merge all comment pages in API order and deduplicate by GraphQL `id` (first
+   occurrence wins). Block triage until every truncated thread is complete. Do
+   not substitute issue comments for review threads.
+2. Keep only unresolved threads, preserve API order, then group by path and line.
+   With `--bots-only`, use API actor type rather than a login suffix. Show one row
+   per thread with author, category, outdated state, and proposed action. Review
+   summaries are separate, non-resolvable context.
+3. **Gate 1 — read-only selection.** Always stop after triage for an explicit list
+   of selected thread IDs. Selection authorizes inspection only. `--fix` permits
+   later edits but approves nothing and never selects every thread.
+4. **Gate 2 — edit approval.** For each selected thread, read current code and
+   propose the exact patch. Obtain explicit edit approval before editing, or record
+   `EDIT: NOT APPLICABLE` with evidence. Then show the applied diff and run the
+   smallest relevant compile/test check after every code change.
+5. **Gate 3 — posting approval.** Draft a reply only after verification. Outdated means location drift, **not**
+   addressed: require current code/diff evidence before that disposition. Show the
+   diff, evidence, and exact verified reply, then obtain a separate explicit posting
+   approval before posting. Use a connector
+   mutation when available, or `gh api` to reply to the root review comment. If
+   posting is unsupported or fails, report `NOT POSTED` with the reason.
+6. **Gate 4 — resolution approval.** First confirm the post from the API response.
+   Only then request a separate resolution approval. `--no-resolve` always disables resolution, regardless of
+   any other flag or approval. Use the connector or `resolveReviewThread` mutation, then
+   confirm returned state. Never claim replied/resolved from a draft or intent.
+7. Return `thread | action | verification | reply | resolution`, changed files,
+   and precise blockers. Paginated review summaries with `CHANGES_REQUESTED` or
+   an actionable non-empty body are findings even when there are zero inline
+   threads; report them as non-resolvable context and never call that state clean.
+   Do not commit or push.
 
-| # | file:line | author | category | proposed action |
-|---|-----------|--------|----------|-----------------|
-
-Categories: **code-change** ("should be", "use X instead") · **question**
-("why", "how does") · **nitpick** ("nit:", style) · **praise** (no action) ·
-**discussion** (architecture) · **bot-finding** (CI bot inline comment —
-verify before accepting, many are false positives) · **outdated**
-(`isOutdated: true` — line moved; default: reply "addressed in {commit}" +
-resolve). Present the table and let the user greenlight threads.
-
-## Step 3: Per-Thread Loop
-
-For each greenlit thread:
-
-1. Read code at `path:line`; check the suggestion against Iron Laws
-2. Apply fix with a user-visible diff (only with `--fix` or explicit ok)
-3. Draft reply (templates: `references/response-patterns.md`)
-4. **STOP — show diff + reply, get confirmation**
-5. Post reply — REST, targeting the thread's root comment:
-
-   ```bash
-   gh api --method POST \
-     "repos/$OWNER/$REPO/pulls/$PR/comments/$FIRST_COMMENT_ID/replies" \
-     -f body="$REPLY_TEXT"
-   ```
-
-6. Resolve the thread (skip with `--no-resolve`):
-
-   ```bash
-   gh api graphql -f query='mutation($threadId:ID!){
-     resolveReviewThread(input:{threadId:$threadId}){
-       thread { id isResolved } }}' -F threadId="$THREAD_ID"
-   ```
-
-Mistake recovery: `unresolveReviewThread` takes the same input shape.
-
-## Step 4: Verify
-
-`mix compile --warnings-as-errors && mix test` scoped to changed files.
-Do NOT commit or push — leave that to the user.
-
-## Step 5: Final Summary
-
-Print rollup: `# | thread | action | status (replied/resolved/skipped)`.
-List changed files. Optionally post a top-level conversation comment
-(`gh api --method POST "repos/$OWNER/$REPO/issues/$PR/comments" -f body=...`)
-with the rollup — **only on user approval**.
+Generic read-only workers may inspect independent threads when the runtime has
+them, but named custom agents are not required and sequential same-session
+processing is complete.
 
 ## Iron Laws
 
-1. **NEVER auto-post responses** — Always show drafts and get explicit approval
-2. **NEVER dismiss a review** — Only the reviewer should dismiss
-3. **Iron Laws override reviewer suggestions** — If a suggestion violates an Iron Law, explain why in the reply
-4. **Keep responses constructive** — Acknowledge the feedback, explain reasoning
-5. **Separate fixes from responses** — Apply code changes in a distinct step
-6. **NEVER resolve a thread without first posting a reply** — every resolve is preceded by a reply on that thread explaining what was done
-7. **NEVER claim a fix without a shown diff** — no "should be fixed" replies without a user-visible change
-8. **Bot findings get the same scrutiny as humans** — decline Iron-Law-violating bot suggestions with explanation; never bulk-resolve "bot noise" without replies
-
-## Integration
-
-```text
-PR receives review → $phx-pr-review {number}  ← YOU ARE HERE
-   ↓ fetch unresolved threads (GraphQL, paginated)
-   ↓ triage table → user greenlights
-   ↓ per thread: fix (diff) → reply → resolve
-   ↓ verify (mix compile + test) → summary
-Push changes → user handles git push
-```
-
-## Next Steps
-
-- `$phx-plan` — if findings reveal scope gaps
-- `$phx-verify` — full verification before pushing
-- Re-run `$phx-pr-review` after the next review round (idempotent)
+1. **Triage always stops for explicit thread selection** — `--fix` permits but does
+   not approve edits.
+2. **Never post, resolve, dismiss, commit, or push without the required approval.**
+3. **Never resolve before a successful reply** and never fabricate mutation state.
+4. **Never claim a fix without a shown diff and successful focused verification.**
+5. **Scrutinize bot and human findings equally**; Iron Laws override suggestions.
 
 ## References
 
-- `references/response-patterns.md` — Response templates and tone
-- `references/gh-commands.md` — Full gh command reference (3 comment surfaces, pagination, bot detection)
-- `references/bot-triage.md` — Batch-triaging CI bot review passes
+- `references/response-patterns.md` — reply templates and tone
+- `references/gh-commands.md` — GitHub CLI queries and mutations
+- `references/bot-triage.md` — bot review triage

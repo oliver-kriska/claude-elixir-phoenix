@@ -1,8 +1,7 @@
 ---
 name: phx-permissions
-description: Recommend safe Bash permissions for Elixir mix commands in settings.json.
-  Use when permission prompts slow workflow, "fix permissions", "reduce prompts",
-  "auto-allow mix".
+description: Recommend safe Bash permissions for Elixir mix commands in; Use when
+  permission prompts slow workflow, "fix…
 ---
 
 # Permission Analyzer
@@ -15,7 +14,8 @@ cross-reference with current `settings.json`, and recommend adding the missing o
 
 ## Usage
 
-`$phx-permissions [--days=14] [--dry-run]` — Scans session JSONL files, finds uncovered Bash commands, classifies risk, and recommends `settings.json` changes. Use `--dry-run` to preview without writing.
+`$elixir-phoenix:phx-permissions [--days=14] [--dry-run]` — Scans session JSONL files, finds uncovered Bash commands, classifies risk, and recommends `settings.json` changes. Use `--dry-run` to
+preview without writing.
 
 ## Arguments
 
@@ -117,7 +117,7 @@ Remove approved garbage entries. Report final counts.
 ### Workflow-artifact permissions (always check)
 
 The plugin's workflow writes to `.claude/plans/`, `.claude/solutions/`, and
-`.claude/reviews/`. If these aren't covered, `$phx-compound` and review agents
+`.claude/reviews/`. If these aren't covered, `$elixir-phoenix:phx-compound` and review agents
 get write-blocked mid-workflow. Recommend (GREEN):
 `Write(.claude/plans/**)`, `Write(.claude/solutions/**)`, `Write(.claude/reviews/**)`.
 
@@ -128,6 +128,6 @@ get write-blocked mid-workflow. Recommend (GREEN):
 
 ## Related
 
-Long mix output flooding context? `$phx-mix-compression` installs rtk filters
+Long mix output flooding context? `$elixir-phoenix:phx-mix-compression` installs rtk filters
 that compress `mix test/credo/dialyzer/compile` output before it reaches the
 transcript (5-15% token savings on mix-heavy sessions).

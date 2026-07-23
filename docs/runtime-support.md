@@ -31,13 +31,17 @@ installation and troubleshooting remain in the linked guides.
 | Automatic skill selection | Full | Model-driven | Model-driven | Model-driven | Model-driven |
 | Flagship `phx-investigate` | Full | Generated guidance | Adapted | Adapted | Adapted |
 | Flagship read-only `phx-review` | Full | Generated guidance | Adapted | Adapted | Adapted |
+| `phx-plan` / `phx-work` | Full | Generated guidance | Adapted | Adapted | Adapted |
+| `phx-pr-review` / `phx-full` | Full | Generated guidance | Adapted | Adapted | Adapted |
 | Claude namespaced slash commands | Full | Not applicable | Not applicable | Not applicable | Not applicable |
 | Bundled custom agents | Full | Deferred | Deferred | Deferred | Deferred |
-| Lifecycle/enforcement hooks | Full | Deferred | Deferred | Deferred | Deferred |
+| Lifecycle/enforcement hooks | Full | Deferred | One optional safeguard | Deferred | Deferred |
 | Bundled Tidewave MCP setup | Full | External | External | External | External |
 | Plugin-root instructions | Full | Deferred | Deferred | Deferred | Deferred |
 | Deterministic generated target | Canonical source | Yes | Yes | Yes | Yes |
 | Mode-aware CI drift validation | Not applicable | Yes | Yes | Yes | Yes |
+| Golden target snapshot | Not applicable | Yes | Yes | Yes | Yes |
+| Isolated native smoke command | Not applicable | Deferred | Yes | Deferred | Yes |
 
 “External” Tidewave support means a skill may use Tidewave when the project and
 runtime already expose it. Generated flagship workflows must still complete
@@ -59,6 +63,10 @@ the supported installation and update mechanism. Start a fresh process after
 installing, updating, or removing skills because runtime discovery may be
 cached when a session starts.
 
+The current local acceptance baseline is Codex CLI 0.145.0, Pi 0.79.1, and
+OpenCode 1.17.2. Amp uses standard Agent Skills rather than a repository-pinned
+runtime package version.
+
 ## Runtime-specific boundaries
 
 ### Claude Code
@@ -79,8 +87,10 @@ native skill picker and explicit skill-loading prompts.
 Codex installs `targets/codex` as a native plugin. `/skills` opens the selector,
 and explicit skill references use the `elixir-phoenix:` plugin namespace.
 Plugin-root agent definitions and `AGENTS.md` are not automatically activated.
-Hooks, generated agent TOMLs, and bundled MCP configuration are separate future
-capabilities rather than hidden installation side effects.
+The plugin includes one optional, synchronous, trust-gated safeguard for
+destructive shell commands. The remaining Claude hooks, generated agent TOMLs,
+and bundled MCP configuration are separate future capabilities rather than
+hidden installation side effects.
 
 ### Pi
 
@@ -110,12 +120,12 @@ Every generated target must pass repository tests that prove:
    changes, and mode-only changes; and
 8. generation does not mutate canonical sources or another runtime target.
 
-Runtime acceptance additionally verifies installation or discovery, all 51
-skills, explicit flagship loading, a resource outside `references/`, an
-executable resource, update/removal behavior, and fresh-process rediscovery.
-Behavioral probes use a controlled fixture and require `phx-investigate` to
-reproduce before identifying a planted root cause and `phx-review` to find a
-planted defect without modifying the fixture.
+The optional Codex and OpenCode smoke harnesses additionally verify native
+installation or discovery, all 51 skills, retained resources and executable
+modes, removal behavior, and fresh-process rediscovery. Behavioral acceptance
+uses controlled fixtures and requires `phx-investigate` to reproduce before
+identifying a planted root cause and `phx-review` to find a planted defect
+without modifying the fixture.
 
 ### Isolation rules
 
@@ -132,6 +142,11 @@ export HOME="$TEST_ROOT/home"
 export CODEX_HOME="$TEST_ROOT/codex"
 mkdir -p "$HOME" "$CODEX_HOME"
 ```
+
+Do not pass `--ignore-user-config` when testing Codex plugin hooks: that option
+suppresses the installed plugin hooks as well as unrelated user configuration.
+An isolated `HOME` and `CODEX_HOME` provide the required separation without
+disabling the behavior under test.
 
 For OpenCode, isolate every XDG root in addition to `HOME`:
 
@@ -153,7 +168,14 @@ resource, and mode checks remain the hermetic CI gate.
 ## Maintainer commands
 
 Never hand-edit a generated target. Change the canonical skill or the relevant
-runtime generator, then regenerate and validate only that target:
+runtime generator. To regenerate all four targets and validate their reviewed
+golden snapshots, run:
+
+```bash
+make generated-skills-sync
+```
+
+Target-specific commands remain available for focused work:
 
 ```bash
 make amp-skills-sync
@@ -163,5 +185,10 @@ make opencode-skills-sync
 ```
 
 The corresponding `*-skills-validate` commands are read-only and run in CI.
-When shared transformation behavior changes, run all four validations and prove
-that unaffected targets remain byte- and mode-identical.
+Intentional generated-target changes also require an explicit
+`make generated-skills-snapshots` update; the aggregate sync command validates
+snapshots but never blesses new output.
+The generators share audited subtree-copying and strict tree-comparison
+primitives, including byte, node-type, and executable-mode checks. When shared
+transformation behavior changes, run all four validations and prove that
+unaffected targets remain byte- and mode-identical.

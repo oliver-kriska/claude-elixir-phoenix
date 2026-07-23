@@ -1,8 +1,7 @@
 ---
 name: phx-work
-description: Execute Elixir/Phoenix plan tasks with progress tracking. Use after $phx-plan
-  to implement features with mix compile and mix test verification after each step,
-  or --continue to resume interrupted work.
+description: Execute Elixir/Phoenix plan tasks with progress tracking. Use after $elixir-phoenix:phx-plan
+  to implement features…
 ---
 
 # Work
@@ -12,10 +11,10 @@ Execute tasks from a plan file with checkpoint tracking and verification.
 ## Usage
 
 ```
-$phx-work .claude/plans/user-auth/plan.md
-$phx-work .claude/plans/user-auth/plan.md --from P2-T3
-$phx-work --skip-blockers
-$phx-work  # Resumes most recent plan
+$elixir-phoenix:phx-work .claude/plans/user-auth/plan.md
+$elixir-phoenix:phx-work .claude/plans/user-auth/plan.md --from P2-T3
+$elixir-phoenix:phx-work --skip-blockers
+$elixir-phoenix:phx-work  # Resumes most recent plan
 ```
 
 ## Arguments
@@ -27,13 +26,14 @@ $phx-work  # Resumes most recent plan
 
 ## Iron Laws (NON-NEGOTIABLE)
 
-1. **NEVER auto-proceed** to $phx-review or any next workflow
+1. **NEVER auto-proceed** to $elixir-phoenix:phx-review or any next workflow
    phase -- always ask the user what to do next
 2. **AUTO-CONTINUE between plan phases** -- when Phase N completes,
    immediately start Phase N+1. Do NOT stop or ask for permission
    between phases. Only stop at BLOCKERS or when ALL phases are done.
-3. **Plan checkboxes ARE the state** -- `[x]` = done, `[ ]` = pending.
-   No separate JSON state files. Resume by reading the plan.
+3. **Plan checkboxes ARE the state** -- `[x]` = done; `[ ]` = pending
+   unless the row is visibly tagged `[BLOCKED]`. No separate JSON state files.
+   Resume by reading the plan.
 4. **Verify after EVERY task** -- never skip verification
 5. **Max 3 retries then BLOCKER** -- don't keep retrying forever
 6. **Stage specific files** -- never use `git add -A` or `git add .`
@@ -55,7 +55,7 @@ Ask the user for plans with >3 tasks:
 Skip for plans with 3 or fewer simple tasks -- just start.
 
 > **Split warning**: Plans with >10 tasks risk 2-3 context
-> compactions. Suggest splitting via `$phx-plan` if not already.
+> compactions. Suggest splitting via `$elixir-phoenix:phx-plan` if not already.
 
 ## Step 2: Check Context (MANDATORY)
 
@@ -69,23 +69,20 @@ guess, corrections are expensive.
 ## Step 3: Load, Create Task List, and Resume
 
 Read plan file, count `[x]` (completed) vs `[ ]` (remaining).
-Find first unchecked task by `[Pn-Tm]` ID.
+Select the first unchecked task not tagged `[BLOCKED]`. Stop if an unresolved
+`[BLOCKED]` task precedes it unless `--skip-blockers` is explicit.
+`--skip-blockers` skips only tagged blocked rows; `--from <blocked-id>`
+explicitly retries that row and clears `[BLOCKED]` when starting.
 
-**Create Claude Code tasks** from ALL unchecked plan items using
-`TaskCreate`. This gives real-time progress visibility in the UI:
+**Use the plan file as the portable task list.** For every unchecked item,
+preserve its `- [ ] [Pn-Tm]` row and ordering. At the start of a task, set its
+phase to `[IN_PROGRESS]` and append a `Started:` entry to
+`.claude/plans/{slug}/progress.md`. Mark the plan checkbox `[x]` only after
+verification passes, then append the completion evidence to `progress.md`.
 
-```
-For each unchecked `- [ ] [Pn-Tm] Description`:
-  TaskCreate({
-    subject: "[Pn-Tm] Description",
-    description: "Full task details from plan",
-    activeForm: "Implementing: Description"
-  })
-```
-
-Skip already-checked items (`[x]`) — don't create tasks for them.
-Set up `blockedBy` dependencies between phases (Phase 2 tasks
-blocked by Phase 1 tasks).
+Dependencies remain explicit in phase order: do not start a later phase while
+an earlier phase has unchecked non-blocked tasks. This checklist is the progress
+UI, durable state, and resume mechanism; no runtime task API is required.
 
 With `--from P2-T3`: Skip to that specific task.
 
@@ -96,33 +93,32 @@ See `references/resume-strategies.md` for all resume modes.
 
 ## Step 4: Execute Tasks
 
-Execute each unchecked task (`- [ ] [Pn-Tm][agent] Description`):
+Execute each unchecked task (`- [ ] [Pn-Tm][concern] Description`):
 
-1. **Start task**: `TaskUpdate({taskId, status: "in_progress"})`
-2. **Route** by `[agent]` annotation (see `references/execution-guide.md`)
+1. **Start task**: mark its phase `[IN_PROGRESS]` and log the start in `.claude/plans/{slug}/progress.md`
+2. **Apply concern guidance** from the annotation and its required verification (see `references/execution-guide.md`); it never selects a named worker
 3. **Implement** the task
 4. **Verify**: `mix format` + `mix compile --warnings-as-errors`
    (at phase end, also run `mix test <affected>` — see tiers below)
 5. **Complete task**: Mark checkbox `[x]` on pass, **append
-   implementation note** inline, AND
-   `TaskUpdate({taskId, status: "completed"})`. Example:
+   implementation note** inline, and log verification evidence in `progress.md`. Example:
    `- [x] [P1-T3] Add user schema — citext for email, composite index on [user_id, status]`
    This survives context compaction; the plan is re-read on resume.
-6. **On failure**: retry up to 3 times, then create BLOCKER
-   and write DEAD-END to scratchpad (see error-recovery.md)
+6. **On failure**: retry up to 3 times, then keep the row unchecked and
+   append `[BLOCKED]`, optionally mark its phase `[BLOCKED]`, record the
+   blocker in `progress.md`, write a DEAD-END to scratchpad, and stop by
+   default. Continue only when `--skip-blockers` was explicitly supplied
 
-**Parallel groups**: Tasks under `### Parallel:` header spawn
-as background subagents. See `references/execution-guide.md`
-for spawning pattern, prompt template, and checkpoint flow.
+**Parallel groups**: Tasks under `### Parallel:` may use native generic workers only when independent; otherwise execute them sequentially in the current session. See `references/execution-guide.md`
+for the optional-worker pattern, sequential fallback, and checkpoint flow.
 
 **Verification tiers** (scoped to minimize redundant runs):
 
 - Per-task: `mix compile --warnings-as-errors` only
-  (format is checked by PostToolUse hook automatically)
+  and `mix format --check-formatted <changed_files>`
 - Per-phase: `mix compile --warnings-as-errors` + `mix test <affected_files>` + `mix credo --strict`
   (scope tests: `mix test test/path/to_affected_test.exs` — NOT full suite)
-- Per-feature (Tidewave): behavioral smoke test via `project_eval`
-  (create record, fetch, verify -- see execution-guide.md)
+- Per-feature: when Tidewave tools are independently configured and exposed, use a behavioral runtime smoke test; otherwise run a focused repository test and a local/manual smoke check (see execution-guide.md)
 - Final gate: `mix test` (full suite — run ONCE at the end, not per-phase)
 
 **Token efficiency**: Do NOT narrate each verification step. Execute
@@ -130,24 +126,24 @@ tool calls directly without "Let me now run..." preamble. Only narrate
 when explaining a non-obvious decision or reporting a failure. When
 several checkboxes complete together (parallel groups, resume catch-up),
 batch them into ONE edit pass — never one Edit call per checkbox.
-The PostToolUse hook checks formatting but does NOT modify files —
-run `mix format` explicitly during verification or before committing.
+No hook is assumed. Run `mix format` explicitly during verification and
+`mix format --check-formatted <changed_files>` before completing each task.
 
 ## Step 5: Completion
 
-Summarize results with `AskUserQuestion`:
+Summarize results, then ask the user a normal conversational question:
 
 > Implementation complete! {done}/{total} tasks finished.
 > {count} files modified across {count} phases.
 
-Options: 1. **Run review** (`$phx-review`) (Recommended),
-2. **Get a briefing** (`$phx-brief` — understand what was built),
-3. **Commit changes** (`/commit`), 4. **Continue manually**.
-If any task fixed a non-obvious bug, also mention `$phx-compound`
+Options: 1. **Run review** (`$elixir-phoenix:phx-review`) (Recommended),
+2. **Get a briefing** (`$elixir-phoenix:phx-brief` — understand what was built),
+3. **Create a git commit** with the platform's native git workflow, 4. **Continue manually**.
+If any task fixed a non-obvious bug, also mention `$elixir-phoenix:phx-compound`
 to capture the solution.
 
-With blockers: list them, offer **Replan** (`$phx-plan`),
-**Review first** (`$phx-review`), or **Handle myself**.
+With blockers: list them, offer **Replan** (`$elixir-phoenix:phx-plan`),
+**Review first** (`$elixir-phoenix:phx-review`), or **Handle myself**.
 
 **If blockers remain**, auto-write HANDOFF to scratchpad:
 
@@ -160,7 +156,7 @@ Key decisions: {brief list from this session}.
 
 Include context beyond checkboxes for fresh session resume.
 
-**NEVER** auto-start $phx-review or any other phase.
+**NEVER** auto-start $elixir-phoenix:phx-review or any other phase.
 
 ## Step 6: Check for Additional Plans
 
@@ -171,7 +167,7 @@ user. Do NOT auto-start.
 ## Integration
 
 ```text
-$phx-plan → $phx-work (YOU ARE HERE) → $phx-review → $phx-compound
+$elixir-phoenix:phx-plan → $elixir-phoenix:phx-work (YOU ARE HERE) → $elixir-phoenix:phx-review → $elixir-phoenix:phx-compound
                  ↑ ASK USER before each transition
 ```
 

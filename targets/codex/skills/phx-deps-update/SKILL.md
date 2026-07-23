@@ -1,23 +1,22 @@
 ---
 name: phx-deps-update
-description: Bump outdated Hex deps — inventory, snapshot changelogs, update, fix
-  breaks, split reviewable PRs (patches bundled, majors solo). Use to upgrade/bump
-  Elixir dependencies or when versions fall behind. NOT for deps.get failures ($phx-investigate).
+description: Update Hex dependencies safely. Use for upgrades; use $elixir-phoenix:phx-investigate
+  for deps.get failures.
 ---
 
 # Dependency Update (Freshness)
 
 Inventory → update → fix breaks → grouped PRs. This is the only MUTATING
 deps skill: it edits `mix.exs`, `mix.lock`, and source. Security scanning
-stays in `$phx-deps-audit`; the vet ledger stays in `$phx-deps-vet`.
+stays in `$elixir-phoenix:phx-deps-audit`; the vet ledger stays in `$elixir-phoenix:phx-deps-vet`.
 
 ## Usage
 
 ```
-$phx-deps-update                       # inventory + interactive scope pick
-$phx-deps-update --scope patch         # bundle all patch bumps, one PR
-$phx-deps-update --pkg phoenix_live_view   # one package (+ coupled group)
-$phx-deps-update --dry-run             # inventory only, no changes
+$elixir-phoenix:phx-deps-update                       # inventory + interactive scope pick
+$elixir-phoenix:phx-deps-update --scope patch         # bundle all patch bumps, one PR
+$elixir-phoenix:phx-deps-update --pkg phoenix_live_view   # one package (+ coupled group)
+$elixir-phoenix:phx-deps-update --dry-run             # inventory only, no changes
 ```
 
 ## Iron Laws
@@ -30,13 +29,13 @@ $phx-deps-update --dry-run             # inventory only, no changes
    `deps/<pkg>/CHANGELOG.md`, then delta via `mix hex.package diff`. Never
    update blind
 3. **NEVER claim an update is safe without verification** — run
-   `$phx-verify` (compile --warnings-as-errors + test). "Compiles" ≠ "works"
+   `$elixir-phoenix:phx-verify` (compile --warnings-as-errors + test). "Compiles" ≠ "works"
 4. **ALWAYS move coupled packages together** — Phoenix core, Ecto, Ash,
    Oban, telemetry families update in the SAME step/commit (see
    `references/coupled-groups.md`)
 5. **NEVER commit a partial bump** — `mix.lock` + `mix.exs` edits + (for
    Phoenix-family) `assets/package-lock.json` in ONE commit
-6. **HAND OFF security to `$phx-deps-audit`** — run it on the lock diff
+6. **HAND OFF security to `$elixir-phoenix:phx-deps-audit`** — run it on the lock diff
    before any PR; don't reimplement audit rules
 7. **`hex.outdated` exit 1 is normal** — it means "deps are outdated", not
    failure. Capture with `|| true`
@@ -85,7 +84,7 @@ For each selected package, in coupled-group order:
 
 ### Phase 4: Verify
 
-Run `$phx-verify`. On failure → Phase 5; else Phase 6.
+Run `$elixir-phoenix:phx-verify`. On failure → Phase 5; else Phase 6.
 
 ### Phase 5: Breaking-Change Fixes
 
@@ -94,8 +93,8 @@ compile/test errors. Fix source (apply the sibling-file check). Re-verify.
 
 ### Phase 6: Security Handoff
 
-Run `$phx-deps-audit` on the working `mix.lock` diff (its Mode B default).
-BLOCK findings → surface and offer `$phx-deps-vet <pkg> <ver>` for
+Run `$elixir-phoenix:phx-deps-audit` on the working `mix.lock` diff (its Mode B default).
+BLOCK findings → surface and offer `$elixir-phoenix:phx-deps-vet <pkg> <ver>` for
 accepted risks. Never skip this before a PR.
 
 ### Phase 7: Group, Commit, PR
@@ -109,9 +108,9 @@ and the deps-audit risk band. Stage lock + mix.exs + package-lock together.
 ## Integration
 
 ```text
-$phx-deps-update (mutating) → $phx-deps-audit (security, Mode B)
-        │                              │ BLOCK → $phx-deps-vet (ledger)
-        └→ $phx-verify (gate) → grouped commits / PRs
+$elixir-phoenix:phx-deps-update (mutating) → $elixir-phoenix:phx-deps-audit (security, Mode B)
+        │                              │ BLOCK → $elixir-phoenix:phx-deps-vet (ledger)
+        └→ $elixir-phoenix:phx-verify (gate) → grouped commits / PRs
 ```
 
 ## References

@@ -2,16 +2,19 @@ from __future__ import annotations
 
 import hashlib
 import json
+import os
+import shutil
 import stat
+import subprocess
 from pathlib import Path
 
 import pytest
 
 from scripts import build_codex_skills
-from scripts.build_codex_skills import _differences
 from scripts.port_lib import SOURCE_PLUGIN_DIR, TARGETS_DIR
 from scripts.port_lib import codex
 from scripts.port_lib.frontmatter import parse_file
+from scripts.port_lib.generated_tree import tree_differences
 
 
 def _tree_hash(root: Path) -> str:
@@ -94,9 +97,9 @@ def test_complete_subtree_is_copied_and_only_markdown_is_transformed(tmp_path) -
 
     assert (generated / "assets" / "payload.bin").read_bytes() == payload
     assert stat.S_IMODE((generated / "scripts" / "run.sh").stat().st_mode) == 0o755
-    assert "$phx-source" in (generated / "SKILL.md").read_text()
-    assert "$phx-source" in (generated / "notes" / "guide.md").read_text()
-    assert "$ecto-n1-check" in (generated / "notes" / "guide.md").read_text()
+    assert "$fixture:phx-source" in (generated / "SKILL.md").read_text()
+    assert "$fixture:phx-source" in (generated / "notes" / "guide.md").read_text()
+    assert "$fixture:ecto-n1-check" in (generated / "notes" / "guide.md").read_text()
     assert stat.S_IMODE((generated / "notes" / "guide.md").stat().st_mode) == 0o744
     assert "notes/guide.md" in (generated / "SKILL.md").read_text()
     assert set(path.relative_to(skill) for path in skill.rglob("*") if path.is_file()) == {
@@ -126,15 +129,110 @@ def test_frontmatter_and_all_markdown_use_codex_invocation_syntax(tmp_path) -> N
 
     assert frontmatter.data == {
         "name": "phx-source",
-        "description": "Use $phx-review for tests.",
+        "description": "Use $fixture:phx-review for tests.",
     }
     all_markdown = "\n".join(
         path.read_text(encoding="utf-8") for path in output.rglob("*.md")
     )
-    assert "$phx-review" in all_markdown
-    assert "$lv-assigns" in all_markdown
-    assert "$ecto-n1-check" in all_markdown
+    assert "$fixture:phx-review" in all_markdown
+    assert "$fixture:lv-assigns" in all_markdown
+    assert "$fixture:ecto-n1-check" in all_markdown
+    assert not any(token in all_markdown for token in ("$phx-", "$lv-", "$ecto-"))
     assert not any(token in all_markdown for token in ("/phx:", "/lv:", "/ecto:"))
+
+
+def test_codex_descriptions_preserve_summary_and_trigger_within_budget() -> None:
+    description = (
+        "Audit Hex dependencies for supply-chain security risks including bidirectional "
+        "characters, compile-time execution, maintainer changes, typosquats, and CVEs. "
+        "Use after mix deps.update or when reviewing dependency changes."
+    )
+
+    compact = codex.compact_skill_description(description)
+
+    assert len(compact) <= codex.CODEX_SKILL_DESCRIPTION_LIMIT
+    assert compact.startswith("Audit Hex dependencies for supply-chain security risks")
+    assert "Use after mix deps.update" in compact
+    assert codex.compact_skill_description(compact) == compact
+
+
+def test_codex_plugin_skill_mentions_are_qualified_as_complete_tokens() -> None:
+    source = (
+        "Use $phx-review, $lv-assigns, $ecto-n1-check, and $phx-*. "
+        "Keep $other:phx-review and prefix$phx-review unchanged."
+    )
+
+    assert codex._qualify_codex_skill_mentions(source, "elixir-phoenix") == (
+        "Use $elixir-phoenix:phx-review, $elixir-phoenix:lv-assigns, "
+        "$elixir-phoenix:ecto-n1-check, and $elixir-phoenix:phx-*. "
+        "Keep $other:phx-review and prefix$phx-review unchanged."
+    )
+
+
+def test_namespace_expansion_wraps_only_affected_prose() -> None:
+    prose = "- " + ("word " * 37) + "$elixir-phoenix:phx-review result\n"
+    fenced = "```text\n" + ("word " * 45) + "$elixir-phoenix:phx-review\n```\n"
+
+    wrapped = codex._wrap_namespace_expanded_lines(prose + fenced, "elixir-phoenix")
+    prose_output, fenced_output = wrapped.split("```text\n", maxsplit=1)
+
+    assert max(map(len, prose_output.splitlines())) <= 200
+    assert "\n  " in prose_output
+    assert fenced_output == fenced.removeprefix("```text\n")
+
+
+@pytest.mark.parametrize(
+    ("skill_name", "required"),
+    [
+        ("ecto-n1-check", "not for broad database performance"),
+        (
+            "phx-deps-update",
+            "$elixir-phoenix:phx-investigate for deps.get failures",
+        ),
+        ("phx-document", "not README or external docs"),
+        ("phx-full", "$elixir-phoenix:phx-work for an existing plan"),
+        ("phx-help", "not for Codex /help"),
+        ("phx-investigate", "Codex subagents are optional"),
+        ("phx-review", "return a verdict"),
+    ],
+)
+def test_route_sensitive_codex_descriptions_remain_complete(
+    skill_name: str, required: str
+) -> None:
+    skill = parse_file(TARGETS_DIR / "codex" / "skills" / skill_name / "SKILL.md")
+    description = skill.data["description"]
+
+    expected = codex._qualify_codex_skill_mentions(
+        codex.CODEX_SKILL_DESCRIPTION_OVERRIDES[skill_name], "elixir-phoenix"
+    )
+    assert description == expected
+    assert required in description
+    assert len(description) <= codex.CODEX_SKILL_DESCRIPTION_LIMIT
+
+
+def test_repository_codex_descriptions_reduce_catalog_pressure() -> None:
+    canonical = codex.discover_skills(SOURCE_PLUGIN_DIR)
+    generated = [
+        parse_file(path).data["description"]
+        for path in sorted((TARGETS_DIR / "codex" / "skills").glob("*/SKILL.md"))
+    ]
+    canonical_chars = sum(
+        len(str(skill.frontmatter.data["description"])) for skill in canonical
+    )
+
+    assert len(generated) == len(canonical)
+    assert all(
+        1 <= len(description) <= codex.CODEX_SKILL_DESCRIPTION_LIMIT
+        for description in generated
+    )
+    assert all(description == description.strip() for description in generated)
+    assert not any(
+        description.removesuffix("…").rsplit(maxsplit=1)[-1].lower()
+        in codex.DESCRIPTION_DANGLING_WORDS
+        for description in generated
+    )
+    assert sum(map(len, generated)) <= 6_000
+    assert sum(map(len, generated)) <= canonical_chars * 0.7
 
 
 def test_rewrites_cross_skill_resources_and_rejects_missing_or_escaping_paths(
@@ -220,7 +318,7 @@ def test_projection_is_deterministic_byte_for_byte_and_mode_for_mode(tmp_path) -
     codex.build(plugin, second)
 
     assert _tree_hash(first) == _tree_hash(second)
-    assert _differences(first, second) == []
+    assert tree_differences(first, second) == []
 
 
 def test_drift_comparison_detects_added_removed_and_type_changes(tmp_path) -> None:
@@ -233,7 +331,7 @@ def test_drift_comparison_detects_added_removed_and_type_changes(tmp_path) -> No
     (expected / "node").write_text("file\n", encoding="utf-8")
     (actual / "node").mkdir()
 
-    assert _differences(expected, actual) == [
+    assert tree_differences(expected, actual) == [
         "extra in target: extra.txt",
         "missing in target: missing.txt",
         "type differs: node (file != directory)",
@@ -324,6 +422,80 @@ def test_manifests_are_conformant_and_every_declared_path_resolves() -> None:
     assert (root / entry["source"]["path"] / ".codex-plugin/plugin.json").is_file()
 
 
+def test_repository_hook_is_native_synchronous_and_projects_source(tmp_path) -> None:
+    target = TARGETS_DIR / "codex"
+    hooks_file = target / "hooks" / "hooks.json"
+    hooks = json.loads(hooks_file.read_text(encoding="utf-8"))
+    [group] = hooks["hooks"]["PreToolUse"]
+    [handler] = group["hooks"]
+
+    assert hooks == codex.CODEX_HOOKS
+    assert group["matcher"] == "Bash"
+    assert handler["type"] == "command"
+    assert handler["command"].startswith('"${PLUGIN_ROOT}/')
+    assert "async" not in handler
+    assert "if" not in handler
+
+    source = SOURCE_PLUGIN_DIR / "hooks" / "scripts" / codex.CODEX_HOOK_SCRIPT
+    generated = target / "hooks" / "scripts" / codex.CODEX_HOOK_SCRIPT
+    assert generated.read_text(encoding="utf-8") == source.read_text(
+        encoding="utf-8"
+    ).replace("Claude Code", "Codex").replace("Claude's", "Codex's")
+    assert "outside Codex" in generated.read_text(encoding="utf-8")
+    assert "outside Claude Code" not in generated.read_text(encoding="utf-8")
+    assert stat.S_IMODE(generated.stat().st_mode) == stat.S_IMODE(source.stat().st_mode)
+    assert os.access(generated, os.X_OK)
+
+    plugin_root = tmp_path / "plugin root with spaces"
+    shutil.copytree(target / "hooks", plugin_root / "hooks")
+    command = handler["command"].replace("${PLUGIN_ROOT}", str(plugin_root))
+    fixture = tmp_path / "fixture"
+    fixture.mkdir()
+    (fixture / "mix.exs").write_text("defmodule Fixture.MixProject do\nend\n")
+    blocked = subprocess.run(
+        ["/bin/bash", "-lc", command],
+        input=json.dumps(
+            {"tool_name": "Bash", "tool_input": {"command": "mix ecto.reset"}}
+        ),
+        text=True,
+        capture_output=True,
+        cwd=fixture,
+        check=True,
+    )
+    output = json.loads(blocked.stdout)
+    assert output["hookSpecificOutput"]["hookEventName"] == "PreToolUse"
+    assert output["hookSpecificOutput"]["permissionDecision"] == "deny"
+    assert output["hookSpecificOutput"]["permissionDecisionReason"]
+    assert output["hookSpecificOutput"]["additionalContext"]
+
+    safe = subprocess.run(
+        ["/bin/bash", "-lc", command],
+        input=json.dumps(
+            {"tool_name": "Bash", "tool_input": {"command": "mix test"}}
+        ),
+        text=True,
+        capture_output=True,
+        cwd=fixture,
+        check=True,
+    )
+    assert safe.stdout == ""
+
+    installed_script = plugin_root / "hooks" / "scripts" / codex.CODEX_HOOK_SCRIPT
+    installed_script.write_text("#!/bin/sh\nexit 7\n", encoding="utf-8")
+    installed_script.chmod(0o755)
+    failed_open = subprocess.run(
+        ["/bin/bash", "-lc", command],
+        input=json.dumps(
+            {"tool_name": "Bash", "tool_input": {"command": "mix ecto.reset"}}
+        ),
+        text=True,
+        capture_output=True,
+        cwd=fixture,
+        check=True,
+    )
+    assert failed_open.stdout == ""
+
+
 def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies() -> None:
     target = TARGETS_DIR / "codex" / "skills"
     investigate = (target / "phx-investigate" / "SKILL.md").read_text()
@@ -341,10 +513,10 @@ def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies()
         target / "phx-investigate" / "references" / "investigation-template.md"
     ).read_text()
 
-    assert "$phx-investigate" in investigate
+    assert "$elixir-phoenix:phx-investigate" in investigate
     assert "Reproduce Before Fixing" in investigate
     assert "Tidewave is optional" in investigate
-    assert "$phx-review" in review
+    assert "$elixir-phoenix:phx-review" in review
     assert "Review is read-only" in review
     assert "sequential review is fully valid" in review
     assert "optional performance optimization" in review_agents
@@ -376,6 +548,135 @@ def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies()
     assert not any(token in combined for token in forbidden)
 
 
+def test_plan_work_overlays_are_portable_resumable_and_anchored(tmp_path) -> None:
+    generated = tmp_path / "codex"
+    codex.build(SOURCE_PLUGIN_DIR, generated)
+    target = generated / "skills"
+    plan_tree = "\n".join(
+        path.read_text() for path in (target / "phx-plan").rglob("*.md")
+    )
+    work_tree = "\n".join(
+        path.read_text() for path in (target / "phx-work").rglob("*.md")
+    )
+
+    assert "Research checklist" in plan_tree
+    assert "perform the same tracks sequentially" in plan_tree
+    assert ".claude/plans/{feature-slug}/plan.md" in plan_tree
+    assert "Use the plan file as the portable task list" in work_tree
+    assert "progress.md" in work_tree
+    assert "execute every task sequentially" in work_tree
+    assert "mix compile --warnings-as-errors" in work_tree
+    assert "[BLOCKED]" in work_tree
+    assert "first unchecked task not tagged `[BLOCKED]`" in work_tree
+    assert "clears `[BLOCKED]` when starting" in work_tree
+    assert "append-only" in work_tree
+    assert "**Started**:" in work_tree
+    forbidden = (
+        "Agent(", "subagent_type", "TaskCreate", "TaskUpdate", "TaskGet",
+        "TaskList", "AskUserQuestion", "$ARGUMENTS", "mcp__", "PostToolUse hook",
+        "phoenix-patterns-analyst", "ecto-schema-designer", "liveview-architect",
+        "oban-specialist", "otp-advisor", "security-analyzer", "testing-reviewer",
+        "hex-library-researcher", "web-researcher", "call-tracer",
+        "planning-orchestrator", "Spawn SPECIALIST", "run_in_background",
+        "[agent]", "Agent annotation", "agent routing", "project_eval", "get_logs",
+        "| Hook |", "Each hook", "/commit", "${CLAUDE_SKILL_DIR}",
+        "${CLAUDE_PLUGIN_ROOT}", "spawning Elixir specialist agents",
+        "Spawns Elixir specialist agents", "skip to agents",
+        "Spawn agents selectively", "while agents still running",
+        "agent spawning", "agent count", "Explore agents",
+        "execute via subagents", "After spawning",
+    )
+    assert not any(token in plan_tree + work_tree for token in forbidden)
+
+    plugin = tmp_path / "plugin"
+    skill = _write_skill(plugin, "plan", "phx:plan", "# Plan Elixir/Phoenix Feature\n")
+    current = codex.discover_skills(plugin)[0]
+    with pytest.raises(ValueError, match="portable plan overlay anchors changed"):
+        codex._codex_overlay(skill / "SKILL.md", current)
+
+    with pytest.raises(ValueError, match="heading order changed"):
+        codex._replace_section("## End\n## Start\n", "## Start", "## End", "", skill)
+
+    with pytest.raises(ValueError, match="canonical marker order changed"):
+        codex._assert_ordered_markers("## Two\n## One\n", ("## One", "## Two"), skill)
+
+
+def test_pr_review_full_overlays_are_portable_and_anchored(tmp_path) -> None:
+    generated = tmp_path / "codex"
+    codex.build(SOURCE_PLUGIN_DIR, generated)
+    skills = generated / "skills"
+    pr_review = "\n".join(p.read_text() for p in (skills / "phx-pr-review").rglob("*.md"))
+    full = "\n".join(p.read_text() for p in (skills / "phx-full").rglob("*.md"))
+    assert "gh auth status" in pr_review
+    assert "originalLine" in pr_review
+    assert "query($threadId: ID!, $endCursor: String)" in pr_review
+    assert "comments(first:100, after:$endCursor)" in pr_review
+    assert "pageInfo { hasNextPage endCursor }" in pr_review
+    assert "deduplicate by GraphQL `id`" in pr_review and "Block triage" in pr_review
+    assert all(f"Gate {gate}" in pr_review for gate in range(1, 5))
+    assert "EDIT: NOT APPLICABLE" in pr_review and "`--fix` approves none" in pr_review
+    assert "NOT POSTED" in pr_review
+    assert "$endCursor: String" in pr_review
+    assert "after: $endCursor" in pr_review
+    assert pr_review.count("--paginate") >= 2
+    assert "comments.totalCount > nodes.length" in pr_review
+    outer_query = pr_review.split("gh api graphql --paginate", 2)[1]
+    outer_query = outer_query.split("gh api graphql --paginate", 1)[0]
+    assert outer_query.count("pageInfo { hasNextPage endCursor }") == 1
+    assert "comments(first: 100)" in outer_query
+    assert "author.__typename" in pr_review
+    assert "Outdated means location drift" in pr_review
+    assert "CHANGES_REQUESTED" in pr_review and "zero inline" in pr_review
+    assert "confirm the post" in pr_review and "`--no-resolve` always" in pr_review
+    assert "same-session" in pr_review and "processing is complete" in pr_review
+    assert "discover → plan → work → verify → read-only review" in full
+    assert "Honor user gates" in full
+    assert "--max-cycles" in full and "--max-retries" in full
+    assert "Tidewave is optional" in full
+    assert "sole state authority" in full and "append-only" in full
+    assert all(field in full for field in ("`seq`", "`phase_visit`", "`phase`", "`cycle`", "`task`", "`task_attempt`", "`blockers`", "`outcome`"))
+    assert "next legal phase is VERIFYING" in full
+    assert "Completion requires all required plan tasks checked" in full
+    assert "latest VERIFYING PASS after the last edit" in full
+    assert "latest accepted REVIEWING after" in full
+    assert "COMPOUNDING passed or explicitly skipped" in full
+    assert "REVIEWING → COMPOUNDING → COMPLETED" in full
+    assert "task retry, and blocker counters" in full
+    assert "COMPOUNDING SKIPPED" in full
+    assert "Do not\n   invoke `phx-compound`" in full
+    forbidden = ("Agent(", "TaskCreate", "AskUserQuestion", "mcp__", "run_in_background", "Ralph Wiggum", "workflow-orchestrator")
+    assert not any(token in pr_review + full for token in forbidden)
+
+    plugin = tmp_path / "plugin"
+    skill = _write_skill(plugin, "full", "phx:full", "# Full Phoenix Feature Development\n## State Machine\n")
+    current = codex.discover_skills(plugin)[0]
+    with pytest.raises(ValueError, match="wholesale portable overlay source changed"):
+        codex._codex_overlay(skill / "SKILL.md", current)
+
+    canonical_pr = SOURCE_PLUGIN_DIR / "skills/pr-review/SKILL.md"
+    original = canonical_pr.read_text()
+    canonical_pr.write_text(original.replace("## Step 1:", "## Step one:", 1))
+    try:
+        current = next(s for s in codex.discover_skills(SOURCE_PLUGIN_DIR) if s.target_name == "phx-pr-review")
+        with pytest.raises(ValueError, match="wholesale portable overlay source changed"):
+            codex._codex_overlay(canonical_pr, current)
+    finally:
+        canonical_pr.write_text(original)
+
+    canonical_ref = SOURCE_PLUGIN_DIR / "skills/full/references/execution-steps.md"
+    original = canonical_ref.read_text()
+    canonical_ref.write_text(original.replace("## Step 1:", "## Step one:", 1))
+    try:
+        current = next(s for s in codex.discover_skills(SOURCE_PLUGIN_DIR) if s.target_name == "phx-full")
+        with pytest.raises(ValueError, match="wholesale portable overlay source changed"):
+            codex._codex_overlay(canonical_ref, current)
+    finally:
+        canonical_ref.write_text(original)
+
+    assert not any(token in pr_review + full for token in ("--codex", "--Pi", "--OpenCode"))
+    assert "specialist agents" not in (skills / "phx-full/SKILL.md").read_text()
+
+
 def test_repository_target_has_no_unresolved_claude_tokens() -> None:
     markdown = "\n".join(
         path.read_text(encoding="utf-8")
@@ -390,6 +691,9 @@ def test_repository_target_has_no_unresolved_claude_tokens() -> None:
             "/phx:",
             "/lv:",
             "/ecto:",
+            "$phx-",
+            "$lv-",
+            "$ecto-",
         )
     )
 

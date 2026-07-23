@@ -15,9 +15,11 @@ Phoenix, LiveView, Ecto, Oban, testing, and security skills. See
 Code plugin.
 
 **Using Codex?** Install the native generated skills plugin for all 51 skills,
-including Codex-compatible `$phx-investigate` and `$phx-review` workflows. See
-[Use with Codex](#use-with-codex); hooks, custom agents, and bundled Tidewave MCP
-are intentionally not included yet.
+including `$elixir-phoenix:phx-investigate` and
+`$elixir-phoenix:phx-review` workflows. See
+[Use with Codex](#use-with-codex); a trust-gated destructive-command safeguard
+is included, while custom agents and bundled Tidewave MCP are intentionally not
+included yet.
 
 **Using Pi?** Install the native generated skills package for all 51 skills,
 including Pi-compatible `/skill:phx-investigate` and `/skill:phx-review`
@@ -221,10 +223,14 @@ codex plugin list
 ```
 
 Start a fresh Codex session, then invoke workflows explicitly with
-`$phx-investigate` or `$phx-review`, browse them with `/skills`, or let Codex
-select a relevant skill from its description. This edition currently ships
-skills and bundled skill resources only—not Claude hooks, custom agents,
-plugin-root instructions, or Tidewave MCP configuration. See the complete
+`$elixir-phoenix:phx-investigate` or `$elixir-phoenix:phx-review`, browse them
+with `/skills`, or let Codex select a relevant skill from its description. Codex
+namespaces plugin skills; unqualified `$phx-investigate` is not an explicit
+alias. This edition also ships one synchronous native hook that blocks destructive
+Ecto resets/drops, unguarded force pushes, and accidental `MIX_ENV=prod mix`
+commands. Codex requires users to review and trust plugin hooks before they run;
+the skills work without it. Custom agents, plugin-root instructions, the remaining
+Claude hooks, and Tidewave MCP remain deferred. See the complete
 [Codex guide](docs/codex.md) for updates, uninstall, isolation, troubleshooting,
 tested version, and capability details.
 
@@ -611,9 +617,16 @@ After fixing a bug or receiving a correction:
 
 ```
 /phx:learn-from-fix Fixed N+1 query -- always preload associations in context functions
+/phx:learn-from-fix --library ical --scope personal ICal.to_ics output needs CRLF line endings
 ```
 
-This updates the plugin's `common-mistakes.md` knowledge base so the same mistake is prevented in future sessions.
+This stores verified general lessons in personal `~/.claude/CLAUDE.md`, project
+instructions, or project-keyed memory.
+The library route creates or safely updates native background knowledge at
+`~/.claude/skills/hex-<package>/SKILL.md` (personal) or
+`.claude/skills/hex-<package>/SKILL.md` (project). Claude selects it from its
+description; dependency presence alone does not guarantee activation. Cached
+plugin files are never modified.
 
 ## Iron Laws (Non-Negotiable Rules)
 
@@ -648,7 +661,7 @@ The plugin enforces critical rules and **stops with an explanation** if code wou
 | `/phx:compound`         | Capture solved problem as reusable knowledge                 |
 | `/phx:triage`           | Interactive triage of review findings                        |
 | `/phx:document`         | Generate @moduledoc, @doc, README, ADRs                      |
-| `/phx:learn-from-fix <lesson>`   | Capture lessons learned                                      |
+| `/phx:learn-from-fix [--library <pkg> --scope personal\|project] <lesson>` | Capture verified general or package lessons |
 | `/phx:brief <plan>`     | Interactive plan walkthrough                                 |
 | `/phx:perf`             | Performance analysis with specialist agents                  |
 | `/phx:pr-review`        | Address PR review threads — fetch, fix, reply, resolve       |
@@ -807,6 +820,7 @@ make eval             # Quick: lint + score changed skills/agents only
 make eval-all         # Full structural: all 51 skills + all 26 agents
 make eval-fix         # Auto-fix lint + show failures + suggest autoresearch
 make test             # 75 pytest tests for eval framework
+make generated-skills-sync # Regenerate and verify all four runtime targets
 make ci               # Full CI: lint + test + validate + eval + security (same as GitHub Actions)
 ```
 

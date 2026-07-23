@@ -1,8 +1,7 @@
 ---
 name: phx-challenge
 description: Challenge mode reviews - rigorous questioning before approving changes.
-  Use when you want thorough scrutiny of Ecto changes, LiveView events, OTP designs,
-  or PR readiness.
+  Use when you want thorough scrutiny of Ecto…
 ---
 
 # Challenge Mode Reviews
@@ -24,7 +23,7 @@ Rigorous, critical review patterns inspired by Boris Cherny's "Grill me" approac
 
 ## Challenge Modes
 
-### Ecto Challenge (`$phx-challenge ecto`)
+### Ecto Challenge (`$elixir-phoenix:phx-challenge ecto`)
 
 Grill the developer on database changes:
 
@@ -52,7 +51,7 @@ Grill the developer on database changes:
 - Will old code work during deployment?
 - Are there any breaking changes to the context API?
 
-### LiveView Challenge (`$phx-challenge liveview`)
+### LiveView Challenge (`$elixir-phoenix:phx-challenge liveview`)
 
 Prove the LiveView handles all cases:
 
@@ -80,7 +79,7 @@ Prove the LiveView handles all cases:
 - Is transient data using temporary_assigns?
 - What's the memory footprint per connected user?
 
-### PR Challenge (`$phx-challenge pr`)
+### PR Challenge (`$elixir-phoenix:phx-challenge pr`)
 
 Senior engineer review checklist:
 
@@ -140,10 +139,10 @@ New `WHERE status = ?` query on line 45 has no index.
 
 ## Usage
 
-Run `$phx-challenge [mode]` to initiate a rigorous review. The reviewer will not approve until all concerns are addressed with evidence.
+Run `$elixir-phoenix:phx-challenge [mode]` to initiate a rigorous review. The reviewer will not approve until all concerns are addressed with evidence.
 
 Example workflow:
 
-1. Run `$phx-challenge ecto` after migration changes
+1. Run `$elixir-phoenix:phx-challenge ecto` after migration changes
 2. Answer each question with code references or test results
 3. Address all concerns before proceeding to PR
