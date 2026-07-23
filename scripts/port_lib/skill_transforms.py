@@ -53,8 +53,14 @@ def transform_frontmatter(data: dict, target: str) -> dict:
 
 
 _CLAUDE_REF_RE = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/references/([\w./-]+)")
-_SLASH_CMD_RE = re.compile(r"/(phx|lv|ecto):([a-z][a-z0-9-]*)")
-_SLASH_NAMESPACE_RE = re.compile(r"/(phx|lv|ecto):\*?")
+_SLASH_CMD_RE = re.compile(
+    r"(?<![A-Za-z0-9_./-])/(phx|lv|ecto):"
+    r"([a-z][a-z0-9-]*)(?![A-Za-z0-9_:-])"
+)
+_SLASH_NAMESPACE_RE = re.compile(
+    r"(?<![A-Za-z0-9_./-])/(phx|lv|ecto):"
+    r"(?:\*(?![A-Za-z0-9_:-])|(?![A-Za-z0-9_*:-]))"
+)
 
 
 def rewrite_reference_paths(body: str, target: str) -> str:
@@ -102,8 +108,12 @@ def rewrite_slash_commands(body: str, target: str) -> str:
     if target == "codex":
         body = _SLASH_CMD_RE.sub(r"$\1-\2", body)
         return _SLASH_NAMESPACE_RE.sub(r"$\1-*", body)
-    if target in ("pi", "opencode"):
-        return _SLASH_CMD_RE.sub(r"/\1-\2", body)
+    if target == "pi":
+        body = _SLASH_CMD_RE.sub(r"/skill:\1-\2", body)
+        return _SLASH_NAMESPACE_RE.sub(r"/skill:\1-*", body)
+    if target == "opencode":
+        body = _SLASH_CMD_RE.sub(r"/\1-\2", body)
+        return _SLASH_NAMESPACE_RE.sub(r"/\1-*", body)
     raise ValueError(f"Unknown target: {target}")
 
 

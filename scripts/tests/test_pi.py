@@ -8,10 +8,10 @@ from pathlib import Path
 import pytest
 
 from scripts import build_pi_skills
-from scripts.build_codex_skills import _differences
 from scripts.port_lib import SOURCE_PLUGIN_DIR, TARGETS_DIR
 from scripts.port_lib import pi
 from scripts.port_lib.frontmatter import parse_file
+from scripts.port_lib.generated_tree import tree_differences
 
 
 def _tree_hash(root: Path) -> str:
@@ -123,6 +123,22 @@ def test_complete_subtree_bytes_modes_and_pi_syntax(tmp_path) -> None:
     }
 
 
+def test_pi_command_rewrite_requires_complete_tokens() -> None:
+    assert pi._rewrite_commands("Use /phx:review and $lv-assigns.") == (
+        "Use /skill:phx-review and /skill:lv-assigns."
+    )
+    for unchanged in (
+        "/tmp/phx:review",
+        "/tmp/phx-review",
+        "/tmp/$phx-review",
+        "/phx:Review",
+        "/phx:review_more",
+        "$phx-review_more",
+        "/phx:*extra",
+    ):
+        assert pi._rewrite_commands(unchanged) == unchanged
+
+
 def test_rejects_collisions_missing_resources_and_symlinks_without_replacing_target(
     tmp_path,
 ) -> None:
@@ -166,7 +182,7 @@ def test_determinism_rollback_and_read_only_drift_detection(tmp_path, monkeypatc
     second = tmp_path / "second"
     pi.build(plugin, first)
     pi.build(plugin, second)
-    assert _differences(first, second) == []
+    assert tree_differences(first, second) == []
     assert _tree_hash(first) == _tree_hash(second)
 
     before = _tree_hash(first)
