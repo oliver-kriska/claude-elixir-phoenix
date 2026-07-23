@@ -1,7 +1,7 @@
 # Pi skills package
 
 The generated Pi package provides all 51 canonical Elixir/Phoenix skills and
-their bundled resources. It was tested with Pi **0.79.1**. This is a focused
+their bundled resources. It was tested with Pi **0.81.1**. This is a focused
 skills baseline, not full Claude Code feature parity.
 
 See the [runtime support matrix](runtime-support.md) for a concise comparison
@@ -127,7 +127,7 @@ pi install git:github.com/oliver-kriska/claude-elixir-phoenix
 ```
 
 The generated package manifest deliberately declares `pi.skills` as an array.
-Pi 0.79.1 expects resource values to be arrays; a string can prevent package
+Pi 0.81.1 expects resource values to be arrays; a string can prevent package
 resource discovery.
 
 ## Maintainer workflow
@@ -138,7 +138,16 @@ The Claude Code skills remain canonical. Never hand-edit `targets/pi`.
 make pi-skills           # regenerate targets/pi
 make pi-skills-sync      # regenerate, then verify committed output
 make pi-skills-validate  # read-only drift check
+make pi-runtime-smoke    # optional isolated native runtime acceptance
 ```
+
+The smoke target generates a temporary local Pi package, installs it with an
+isolated `HOME` and `PI_CODING_AGENT_DIR`, and uses RPC `get_commands` to verify
+all 51 native `/skill:*` commands without requiring credentials or making a
+model call. It also checks a retained executable resource byte-for-byte and
+mode-for-mode, removes the package, and confirms a fresh Pi process no longer
+discovers it. `PI_OFFLINE=1` and `PI_TELEMETRY=0` prevent startup network and
+telemetry activity.
 
 Generation stages and validates the complete package before replacing the target
 with in-process rollback. A failed build preserves the previous target. Drift

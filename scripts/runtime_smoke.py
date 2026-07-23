@@ -17,16 +17,19 @@ from typing import Callable
 from scripts.port_lib import SOURCE_PLUGIN_DIR
 from scripts.port_lib import codex as codex_port
 from scripts.port_lib import opencode as opencode_port
+from scripts.port_lib import pi as pi_port
 
 EXPECTED_SKILLS = 51
 Run = Callable[..., subprocess.CompletedProcess[str]]
 EXECUTABLE_RESOURCE = Path("phx-watch-pr/scripts/watch-pr.sh")
+PI_SOURCE_EXECUTABLE = Path("watch-pr/scripts/watch-pr.sh")
 OPENCODE_ENV_OVERRIDES = (
     "OPENCODE_CONFIG",
     "OPENCODE_CONFIG_DIR",
     "OPENCODE_CONFIG_CONTENT",
     "OPENCODE_TEST_HOME",
 )
+PI_ENV_OVERRIDES = ("PI_PACKAGE_DIR",)
 
 
 def _run(
@@ -75,15 +78,20 @@ def _verify_tree(skills: Path) -> None:
         raise RuntimeError("no executable resource retained its mode")
 
 
-def _verify_resource(source_skills: Path, installed_skills: Path) -> None:
-    source = source_skills / EXECUTABLE_RESOURCE
-    installed = installed_skills / EXECUTABLE_RESOURCE
+def _verify_resource(
+    source_skills: Path,
+    installed_skills: Path,
+    source_resource: Path = EXECUTABLE_RESOURCE,
+    installed_resource: Path = EXECUTABLE_RESOURCE,
+) -> None:
+    source = source_skills / source_resource
+    installed = installed_skills / installed_resource
     if not installed.is_file():
-        raise RuntimeError(f"installed resource is missing: {EXECUTABLE_RESOURCE}")
+        raise RuntimeError(f"installed resource is missing: {installed_resource}")
     if installed.read_bytes() != source.read_bytes():
-        raise RuntimeError(f"installed resource bytes differ: {EXECUTABLE_RESOURCE}")
+        raise RuntimeError(f"installed resource bytes differ: {installed_resource}")
     if stat.S_IMODE(installed.stat().st_mode) != stat.S_IMODE(source.stat().st_mode):
-        raise RuntimeError(f"installed resource mode differs: {EXECUTABLE_RESOURCE}")
+        raise RuntimeError(f"installed resource mode differs: {installed_resource}")
 
 
 def _skill_records(records: list[dict], install: Path) -> dict[str, Path]:
@@ -98,6 +106,51 @@ def _skill_records(records: list[dict], install: Path) -> dict[str, Path]:
             raise RuntimeError("OpenCode returned duplicate or invalid generated skills")
         discovered[name] = location
     return discovered
+
+
+def _pi_skill_records(commands: list[dict], install: Path) -> dict[str, Path]:
+    install = install.resolve()
+    discovered: dict[str, Path] = {}
+    for item in commands:
+        source_info = item.get("sourceInfo")
+        if item.get("source") != "skill" or not isinstance(source_info, dict):
+            continue
+        location = Path(str(source_info.get("path", ""))).resolve()
+        if not location.is_relative_to(install):
+            continue
+        invocation = item.get("name")
+        if not isinstance(invocation, str) or not invocation.startswith("skill:"):
+            raise RuntimeError("Pi returned an invalid generated skill command")
+        name = invocation.removeprefix("skill:")
+        if not name or name in discovered:
+            raise RuntimeError("Pi returned duplicate or invalid generated skills")
+        discovered[name] = location
+    return discovered
+
+
+def _pi_commands(runner: Run, executable: str, env: dict[str, str], cwd: Path) -> list[dict]:
+    command = [executable, "--mode", "rpc", "--no-session", "--no-context-files"]
+    result = runner(
+        command,
+        env=env,
+        cwd=cwd,
+        text=True,
+        capture_output=True,
+        input='{"id":"skills","type":"get_commands"}\n',
+    )
+    if result.returncode:
+        detail = result.stderr.strip() or result.stdout.strip()
+        raise RuntimeError(f"{' '.join(command)} failed: {detail}")
+    for line in result.stdout.splitlines():
+        response = json.loads(line)
+        if response.get("id") == "skills" and response.get("command") == "get_commands":
+            if not response.get("success"):
+                raise RuntimeError("Pi get_commands request failed")
+            commands = response.get("data", {}).get("commands")
+            if not isinstance(commands, list):
+                raise RuntimeError("Pi returned invalid get_commands data")
+            return commands
+    raise RuntimeError("Pi did not return a get_commands response")
 
 
 def smoke_codex(root: Path, runner: Run = subprocess.run) -> None:
@@ -144,6 +197,69 @@ def smoke_codex(root: Path, runner: Run = subprocess.run) -> None:
     print(f"[runtime-smoke] Codex {version}: {EXPECTED_SKILLS} skills OK")
 
 
+def smoke_pi(root: Path, runner: Run = subprocess.run) -> None:
+    home, agent_dir = root / "home", root / "agent"
+    workspace, package = root / "workspace", root / "package"
+    for path in (home, agent_dir, workspace, package / "targets"):
+        path.mkdir(parents=True)
+    generated = package / "targets/pi"
+    pi_port.build(SOURCE_PLUGIN_DIR, generated)
+    shutil.copy2(Path(__file__).parents[1] / "package.json", package / "package.json")
+    env = os.environ.copy()
+    for name in PI_ENV_OVERRIDES:
+        env.pop(name, None)
+    env |= {
+        "HOME": str(home),
+        "PI_CODING_AGENT_DIR": str(agent_dir),
+        "PI_CODING_AGENT_SESSION_DIR": str(root / "sessions"),
+        "PI_OFFLINE": "1",
+        "PI_SKIP_VERSION_CHECK": "1",
+        "PI_TELEMETRY": "0",
+    }
+    executable = _executable("pi", env)
+    version = _run(runner, [executable, "--version"], env, workspace).stdout.strip()
+    if not version:
+        raise RuntimeError("pi returned an empty version")
+    source = str(package.resolve())
+    _run(runner, [executable, "install", source], env, workspace)
+    listing = _run(runner, [executable, "list"], env, workspace).stdout
+    if source not in listing:
+        raise RuntimeError("Pi did not list the installed package")
+    _verify_tree(generated / "skills")
+    _verify_resource(
+        SOURCE_PLUGIN_DIR / "skills",
+        generated / "skills",
+        PI_SOURCE_EXECUTABLE,
+        EXECUTABLE_RESOURCE,
+    )
+    expected = {
+        path.parent.name: path.resolve()
+        for path in (generated / "skills").glob("*/SKILL.md")
+    }
+    discovered = _pi_skill_records(_pi_commands(runner, executable, env, workspace), generated)
+    if discovered != expected:
+        raise RuntimeError(
+            f"Pi discovered {len(discovered)} generated skills, "
+            f"expected the exact {len(expected)}-skill target"
+        )
+    _run(runner, [executable, "remove", source], env, workspace)
+    remaining = _pi_skill_records(_pi_commands(runner, executable, env, workspace), generated)
+    if remaining:
+        raise RuntimeError(f"Pi rediscovered {len(remaining)} generated skills after removal")
+    after = _run(runner, [executable, "list"], env, workspace).stdout
+    if source in after:
+        raise RuntimeError("Pi still lists the removed package")
+    if not package.is_dir():
+        raise RuntimeError("Pi removed the local package source")
+    _verify_resource(
+        SOURCE_PLUGIN_DIR / "skills",
+        generated / "skills",
+        PI_SOURCE_EXECUTABLE,
+        EXECUTABLE_RESOURCE,
+    )
+    print(f"[runtime-smoke] Pi {version}: {EXPECTED_SKILLS} skills OK")
+
+
 def smoke_opencode(root: Path, runner: Run = subprocess.run) -> None:
     roots = {name: root / name.lower() for name in ("HOME", "XDG_CONFIG_HOME", "XDG_DATA_HOME", "XDG_CACHE_HOME", "XDG_STATE_HOME")}
     for path in roots.values():
@@ -186,11 +302,13 @@ def smoke_opencode(root: Path, runner: Run = subprocess.run) -> None:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("runtime", choices=("codex", "opencode"))
+    parser.add_argument("runtime", choices=("codex", "pi", "opencode"))
     args = parser.parse_args()
     try:
         with tempfile.TemporaryDirectory(prefix=f"{args.runtime}-runtime-smoke-") as temporary:
-            {"codex": smoke_codex, "opencode": smoke_opencode}[args.runtime](Path(temporary))
+            {"codex": smoke_codex, "pi": smoke_pi, "opencode": smoke_opencode}[
+                args.runtime
+            ](Path(temporary))
     except (KeyError, OSError, RuntimeError, ValueError, json.JSONDecodeError) as error:
         print(f"[runtime-smoke] FAIL: {error}", file=sys.stderr)
         return 1

@@ -106,6 +106,66 @@ def test_opencode_uses_all_isolated_xdg_roots_and_fresh_discovery(tmp_path, monk
     assert sum(call[0][1:] == ["debug", "skill", "--pure"] for call in calls) == 2
 
 
+def test_pi_uses_isolated_agent_dir_rpc_discovery_and_fresh_removal(tmp_path, monkeypatch) -> None:
+    canonical = tmp_path / "canonical"
+    source_resource = canonical / "skills" / runtime_smoke.PI_SOURCE_EXECUTABLE
+    source_resource.parent.mkdir(parents=True)
+    source_resource.write_text("#!/bin/sh\n")
+    source_resource.chmod(0o755)
+    monkeypatch.setattr(runtime_smoke, "SOURCE_PLUGIN_DIR", canonical)
+    monkeypatch.setattr(runtime_smoke.pi_port, "build", lambda _source, output: _fixture_target(output))
+    monkeypatch.setattr(runtime_smoke, "_executable", lambda name, _env: name)
+    monkeypatch.setenv("PI_PACKAGE_DIR", "/real/pi-packages")
+    calls = []
+    removed = False
+
+    def runner(command, **kwargs):
+        nonlocal removed
+        calls.append((command, kwargs["env"].copy(), kwargs["cwd"], kwargs.get("input")))
+        package = tmp_path / "package"
+        generated = package / "targets/pi"
+        if command[-1] == "--version":
+            output = "0.test\n"
+        elif command[1] == "list":
+            output = "No packages installed.\n" if removed else f"User packages:\n  {package}\n    {package}\n"
+        elif command[1] == "remove":
+            removed = True
+            output = "Removed\n"
+        elif command[1:3] == ["--mode", "rpc"]:
+            records = [] if removed else [
+                {
+                    "name": f"skill:{path.parent.name}",
+                    "source": "skill",
+                    "sourceInfo": {"path": str(path)},
+                }
+                for path in generated.glob("skills/*/SKILL.md")
+            ]
+            output = json.dumps(
+                {
+                    "id": "skills",
+                    "type": "response",
+                    "command": "get_commands",
+                    "success": True,
+                    "data": {"commands": records},
+                }
+            )
+        else:
+            output = "Installed\n"
+        return subprocess.CompletedProcess(command, 0, output, "")
+
+    runtime_smoke.smoke_pi(tmp_path, runner)
+    assert all(call[1]["HOME"] == str(tmp_path / "home") for call in calls)
+    assert all(call[1]["PI_CODING_AGENT_DIR"] == str(tmp_path / "agent") for call in calls)
+    assert all(call[1]["PI_CODING_AGENT_SESSION_DIR"] == str(tmp_path / "sessions") for call in calls)
+    assert all(call[1]["PI_OFFLINE"] == "1" for call in calls)
+    assert all(call[1]["PI_TELEMETRY"] == "0" for call in calls)
+    assert all("PI_PACKAGE_DIR" not in call[1] for call in calls)
+    assert all(call[2] == tmp_path / "workspace" for call in calls)
+    rpc_calls = [call for call in calls if call[0][1:3] == ["--mode", "rpc"]]
+    assert len(rpc_calls) == 2
+    assert all(call[3] == '{"id":"skills","type":"get_commands"}\n' for call in rpc_calls)
+
+
 def test_tree_validation_requires_exact_count_resource_and_executable(tmp_path) -> None:
     target = tmp_path / "target"
     _fixture_target(target)
@@ -218,3 +278,24 @@ def test_resource_validation_detects_mode_drift(tmp_path) -> None:
 
     with pytest.raises(RuntimeError, match="mode differs"):
         runtime_smoke._verify_resource(source / "skills", installed / "skills")
+
+
+def test_pi_resource_validation_requires_the_expected_executable(tmp_path) -> None:
+    source = tmp_path / "source"
+    installed = tmp_path / "installed"
+    source_script = source / runtime_smoke.PI_SOURCE_EXECUTABLE
+    source_script.parent.mkdir(parents=True)
+    source_script.write_text("#!/bin/sh\n")
+    source_script.chmod(0o755)
+    decoy = installed / "other/executable.sh"
+    decoy.parent.mkdir(parents=True)
+    decoy.write_text("#!/bin/sh\n")
+    decoy.chmod(0o755)
+
+    with pytest.raises(RuntimeError, match="installed resource is missing"):
+        runtime_smoke._verify_resource(
+            source,
+            installed,
+            runtime_smoke.PI_SOURCE_EXECUTABLE,
+            runtime_smoke.EXECUTABLE_RESOURCE,
+        )

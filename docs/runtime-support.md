@@ -41,7 +41,7 @@ installation and troubleshooting remain in the linked guides.
 | Deterministic generated target | Canonical source | Yes | Yes | Yes | Yes |
 | Mode-aware CI drift validation | Not applicable | Yes | Yes | Yes | Yes |
 | Golden target snapshot | Not applicable | Yes | Yes | Yes | Yes |
-| Isolated native smoke command | Not applicable | Deferred | Yes | Deferred | Yes |
+| Isolated native smoke command | Not applicable | Deferred | Yes | Yes | Yes |
 
 “External” Tidewave support means a skill may use Tidewave when the project and
 runtime already expose it. Generated flagship workflows must still complete
@@ -63,7 +63,7 @@ the supported installation and update mechanism. Start a fresh process after
 installing, updating, or removing skills because runtime discovery may be
 cached when a session starts.
 
-The current local acceptance baseline is Codex CLI 0.145.0, Pi 0.79.1, and
+The current local acceptance baseline is Codex CLI 0.145.0, Pi 0.81.1, and
 OpenCode 1.17.2. Amp uses standard Agent Skills rather than a repository-pinned
 runtime package version.
 
@@ -120,7 +120,7 @@ Every generated target must pass repository tests that prove:
    changes, and mode-only changes; and
 8. generation does not mutate canonical sources or another runtime target.
 
-The optional Codex and OpenCode smoke harnesses additionally verify native
+The optional Codex, Pi, and OpenCode smoke harnesses additionally verify native
 installation or discovery, all 51 skills, retained resources and executable
 modes, removal behavior, and fresh-process rediscovery. Behavioral acceptance
 uses controlled fixtures and requires `phx-investigate` to reproduce before

@@ -25,11 +25,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   pushes, and accidental production Mix commands. The broad Claude hook set,
   async hooks, custom agents, and Tidewave MCP remain deferred.
 
-- **Optional runtime smoke harness** — `make codex-runtime-smoke` and
-  `make opencode-runtime-smoke` validate locally generated targets, native Codex
-  installation/enabled state, native OpenCode discovery, all 51 installed
-  skills, retained resources and modes, and fresh-process removal in isolated
-  temporary homes without credentials or model calls.
+- **Optional runtime smoke harness** — `make codex-runtime-smoke`,
+  `make pi-runtime-smoke`, and `make opencode-runtime-smoke` validate locally
+  generated targets, native installation or discovery, all 51 installed skills,
+  retained resources and modes, and fresh-process removal in isolated temporary
+  homes without requiring credentials or making model calls.
 
 - **Generated-target golden snapshots** — CI now pins aggregate path, byte, and
   executable-mode digests for Amp, Codex, Pi, and OpenCode before shared
