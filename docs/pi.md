@@ -62,15 +62,26 @@ Update the installed Git package:
 pi update git:github.com/oliver-kriska/claude-elixir-phoenix
 ```
 
-A pinned branch remains on that branch and advances when the package is updated.
-Tags and commit hashes remain fixed. Run `pi install ...@new-ref` to switch refs.
+Pi treats every explicit `@ref` as pinned to that configured ref name. Updating
+reconciles the checkout to that same ref; a moving branch name can therefore
+resolve to a newer commit, while a tag or commit SHA normally remains fixed.
+Pi does not model branch names as unpinned dependencies. Run
+`pi install ...@new-ref` to deliberately change the configured ref.
 Remove the user-level package with:
 
 ```bash
 pi remove git:github.com/oliver-kriska/claude-elixir-phoenix
 ```
 
-For a project-local package, pass `-l` to `pi remove` from that project.
+For a project-local package, remove it from that project with the same trust
+boundary used during installation:
+
+```bash
+pi remove -l git:github.com/oliver-kriska/claude-elixir-phoenix --approve
+```
+
+`--approve` is required only when project trust has not already been persisted.
+Start a fresh Pi process after an install, update, ref change, or removal.
 
 ## Supported capabilities
 
@@ -119,12 +130,22 @@ pi list
 ```
 
 If skills do not appear, start a fresh session and confirm skill commands were
-not disabled in Pi settings. A clean reinstall is:
+not disabled in Pi settings. A clean user-level reinstall is:
 
 ```bash
 pi remove git:github.com/oliver-kriska/claude-elixir-phoenix
 pi install git:github.com/oliver-kriska/claude-elixir-phoenix
 ```
+
+For a project-local clean reinstall, run from that project:
+
+```bash
+pi remove -l git:github.com/oliver-kriska/claude-elixir-phoenix --approve
+pi install -l git:github.com/oliver-kriska/claude-elixir-phoenix --approve
+```
+
+For non-interactive Git-backed updates, set `GIT_TERMINAL_PROMPT=0` so missing
+credentials fail instead of waiting for a prompt.
 
 The generated package manifest deliberately declares `pi.skills` as an array.
 Pi 0.81.1 expects resource values to be arrays; a string can prevent package

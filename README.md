@@ -262,8 +262,10 @@ git clone --filter=blob:none --sparse https://github.com/oliver-kriska/claude-el
 git -C .opencode/skills/elixir-phoenix sparse-checkout set targets/opencode
 ```
 
-Start a fresh session, then use `/phx-investigate`, `/phx-review`, or explicitly
-say “Use the skill tool to load the phx-investigate skill, then …”. OpenCode
+Start a fresh session and explicitly say “Use the skill tool to load the
+phx-investigate skill, then …”. Tested OpenCode 1.17.2 also accepts
+`/phx-investigate` and `/phx-review`, but the skill tool is the documented
+portable interface. OpenCode
 selects the model implicitly. This target contains skills and complete bundled
 resources only—not hooks, custom agents, or Tidewave MCP configuration. The two
 flagship workflows are explicitly adapted; some other skills may still describe
