@@ -27,7 +27,7 @@ jobs:
         run: npm run lint
 
       - name: Lint YAML
-        uses: ibiqlik/action-yamllint@v3
+        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c  # v3
         with:
           file_or_dir: .
           config_file: .yamllint.yml
