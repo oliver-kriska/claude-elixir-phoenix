@@ -8,9 +8,9 @@ import sys
 import tempfile
 from pathlib import Path
 
-from .build_codex_skills import _differences
 from .port_lib import SOURCE_PLUGIN_DIR, TARGETS_DIR
 from .port_lib import pi
+from .port_lib.generated_tree import tree_differences
 
 OUTPUT_DIR = TARGETS_DIR / "pi"
 
@@ -22,7 +22,7 @@ def check() -> int:
     with tempfile.TemporaryDirectory(prefix="pi-skills-check-") as tmp:
         generated = Path(tmp) / "pi"
         pi.build(SOURCE_PLUGIN_DIR, generated)
-        differences = _differences(generated, OUTPUT_DIR)
+        differences = tree_differences(generated, OUTPUT_DIR)
     if differences:
         print("[pi-skills] generated target has drift:", file=sys.stderr)
         for difference in differences:

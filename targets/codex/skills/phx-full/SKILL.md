@@ -1,7 +1,7 @@
 ---
 name: phx-full
-description: Run a portable sequential plan-work-verify-review-compound lifecycle.
-  Use optional generic workers only when the runtime supports them.
+description: Run portable end-to-end lifecycle with gates. Use for full features;
+  use $elixir-phoenix:phx-work for an existing plan.
 ---
 # Full Phoenix Feature Development
 
@@ -12,8 +12,8 @@ is required.
 ## Usage
 
 ```text
-$phx-full Add user authentication with magic links
-$phx-full Background email jobs --max-cycles 5 --max-retries 2
+$elixir-phoenix:phx-full Add user authentication with magic links
+$elixir-phoenix:phx-full Background email jobs --max-cycles 5 --max-retries 2
 ```
 
 If input is an existing `.claude/plans/*/plan.md`, do not re-plan. Ask for the

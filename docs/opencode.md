@@ -116,7 +116,15 @@ Generate and drift-check the target with:
 make opencode-skills
 make opencode-skills-validate
 make opencode-skills-sync
+make opencode-runtime-smoke
 ```
+
+The optional smoke target generates the current checkout into a temporary
+global-style skills tree (the closest local equivalent to the documented sparse
+Git checkout), then checks discovery, resources, and removal in fresh OpenCode
+processes using `opencode debug skill --pure`. All `HOME` and XDG roots are
+temporary. It never copies credentials and performs no model or
+network-dependent prompt.
 
 CI runs the read-only drift check. `targets/opencode` and this document are
 ignored in local development, so release orchestration must force-add them when

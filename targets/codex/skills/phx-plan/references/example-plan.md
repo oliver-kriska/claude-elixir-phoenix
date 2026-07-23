@@ -1,6 +1,6 @@
 # Example Plan Output
 
-For `$phx-plan Add user profile avatars`:
+For `$elixir-phoenix:phx-plan Add user profile avatars`:
 
 ```markdown
 # Plan: User Profile Avatars
@@ -131,7 +131,7 @@ within tasks rather than as separate tasks.
 
 ## Example with System Map (Breadboarding)
 
-For `$phx-plan Add real-time project kanban board`:
+For `$elixir-phoenix:phx-plan Add real-time project kanban board`:
 
 This example shows a multi-page LiveView feature where
 breadboarding adds value. The System Map captures Places,

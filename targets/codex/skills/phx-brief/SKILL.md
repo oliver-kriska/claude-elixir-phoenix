@@ -1,7 +1,7 @@
 ---
 name: phx-brief
-description: Interactive briefing of a plan file — explains reasoning, schema decisions,
-  component choices. Use when developers need to understand a plan before approving.
+description: Interactive briefing of a plan file — explains reasoning, schema; Use
+  when developers need to understand a plan…
 ---
 
 # Plan Briefing
@@ -18,8 +18,8 @@ gap with an interactive walkthrough.
 ## Usage
 
 ```
-$phx-brief                                    # Latest plan
-$phx-brief .claude/plans/user-auth/plan.md    # Specific plan
+$elixir-phoenix:phx-brief                                    # Latest plan
+$elixir-phoenix:phx-brief .claude/plans/user-auth/plan.md    # Specific plan
 ```
 
 ## Arguments
@@ -43,7 +43,7 @@ Read the plan file and determine mode from phase statuses:
 
    Use Glob to find `.claude/plans/*/plan.md` and pick the most recent.
 
-3. If no plan found, tell user and suggest `$phx-plan`
+3. If no plan found, tell user and suggest `$elixir-phoenix:phx-plan`
 4. Read the plan file
 
 ### Step 2: Load Supporting Artifacts
@@ -100,7 +100,7 @@ See `references/briefing-guide.md` for section content templates.
    programming concepts
 5. **Keep each section under 20 lines** — this is a briefing,
    not a lecture
-6. **NEVER skip sections or auto-start work** — briefing is read-only; do not execute plan tasks or launch `$phx-work` without explicit user request
+6. **NEVER skip sections or auto-start work** — briefing is read-only; do not execute plan tasks or launch `$elixir-phoenix:phx-work` without explicit user request
 7. **SECTION TEXT BEFORE THE QUESTION** — every ★ Briefing block is
    visible response text emitted before its `AskUserQuestion`; never
    deliver a section only inside thinking or the question field
@@ -113,7 +113,7 @@ After final section (or when user stops):
 That's the briefing! For full details, see:
 {plan_path}
 
-Ready to proceed? Try `$phx-work {plan_path}` to start execution.
+Ready to proceed? Try `$elixir-phoenix:phx-work {plan_path}` to start execution.
 ```
 
 Post-work variant:
@@ -122,13 +122,13 @@ Post-work variant:
 That's what was built! For full details, see:
 {plan_path}
 
-Consider `$phx-compound` to capture key learnings for future reference.
+Consider `$elixir-phoenix:phx-compound` to capture key learnings for future reference.
 ```
 
 ## Integration
 
 ```text
-$phx-plan  -->  $phx-brief (optional)  -->  $phx-work  -->  $phx-brief (optional)
+$elixir-phoenix:phx-plan  -->  $elixir-phoenix:phx-brief (optional)  -->  $elixir-phoenix:phx-work  -->  $elixir-phoenix:phx-brief (optional)
   create       understand before            execute        understand after
 ```
 

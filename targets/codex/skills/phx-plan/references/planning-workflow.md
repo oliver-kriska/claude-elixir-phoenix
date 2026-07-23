@@ -1,9 +1,9 @@
 # Planning Workflow — Detailed Steps
 
-Full step-by-step details for `$phx-plan`. The SKILL.md has a
+Full step-by-step details for `$elixir-phoenix:phx-plan`. The SKILL.md has a
 summary; this reference has the complete workflow.
 
-## Interview Detection (from $phx-brainstorm)
+## Interview Detection (from $elixir-phoenix:phx-brainstorm)
 
 Before asking clarification questions, check for a pre-existing
 brainstorm interview:
@@ -16,7 +16,7 @@ If found with `Status: COMPLETE`:
 - Read the interview.md Summary and Coverage Details
 - Skip clarification questions entirely — the interview IS the clarification
 - Use interview content for concern-track selection (depth detection still applies)
-- Note in scratchpad: "Requirements from $phx-brainstorm interview"
+- Note in scratchpad: "Requirements from $elixir-phoenix:phx-brainstorm interview"
 
 If found with `Status: IN_PROGRESS`:
 
@@ -200,7 +200,7 @@ Create plan(s) at `.claude/plans/{feature-slug}/plan.md`.
 Key requirements:
 
 - Tasks in `- [ ] [Pn-Tm][annotation] Description` format
-  (required for `$phx-work`). Valid annotations:
+  (required for `$elixir-phoenix:phx-work`). Valid annotations:
   `[direct]` (most common), `[ecto]`, `[liveview]`, `[oban]`,
   `[otp]`, `[security]`, `[test]`.
   Do NOT use runtime worker names like `[general-purpose]` or
@@ -249,11 +249,11 @@ count, phase names, key scope). Then ask the user a normal conversational questi
 For single plan:
 
 - **Start in fresh session** (recommended for 5+ tasks)
-- **Get a briefing** -- interactive walkthrough via `$phx-brief`
+- **Get a briefing** -- interactive walkthrough via `$elixir-phoenix:phx-brief`
 - **Start here** -- in current session (fine for small plans)
 - **Review or adjust the plan** -- walk through phases, tell me what to change
 
-Do NOT say "Start Phase 1" — `$phx-work` runs the whole plan.
+Do NOT say "Start Phase 1" — `$elixir-phoenix:phx-work` runs the whole plan.
 
 **When user selects "Start in fresh session"**, print clear
 step-by-step:
@@ -261,8 +261,8 @@ step-by-step:
 ```
 1. Run `/new` to start a fresh session
 2. Then run one of:
-   $phx-work .claude/plans/{slug}/plan.md
-   $phx-full .claude/plans/{slug}/plan.md  (includes review + compound)
+   $elixir-phoenix:phx-work .claude/plans/{slug}/plan.md
+   $elixir-phoenix:phx-full .claude/plans/{slug}/plan.md  (includes review + compound)
 ```
 
 ## Deepening an Existing Plan (--existing mode)

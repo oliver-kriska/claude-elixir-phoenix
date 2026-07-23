@@ -1,7 +1,7 @@
 ---
 name: phx-verify
 description: Verify Elixir/Phoenix changes — compile, format, and test in one loop.
-  Use after implementation, before PRs, or after fixing bugs.
+  Use after implementation, before PRs…
 ---
 
 # Verification Loop
@@ -116,7 +116,7 @@ Respect `preferred_envs` / `cli/0` for correct `MIX_ENV` on each command.
 
 ## Usage
 
-1. Run `$phx-verify` — discovery happens automatically
+1. Run `$elixir-phoenix:phx-verify` — discovery happens automatically
 2. Core checks run in order, adapted to project
 3. After pass, offered additional test commands (E2E, coverage)
 4. Commit only after all chosen checks pass

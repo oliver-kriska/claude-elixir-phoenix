@@ -10,6 +10,7 @@ from pathlib import Path
 
 from . import codex
 from .frontmatter import Frontmatter, parse_file
+from .generated_tree import copy_skill_subtrees
 from .skill_transforms import transform_frontmatter
 
 IGNORED_FILES = codex.IGNORED_FILES
@@ -92,20 +93,7 @@ def transform_markdown(
 
 
 def _populate(skills: list[codex.SkillSource], output: Path) -> None:
-    for skill in skills:
-        target_skill = output / "skills" / skill.target_name
-        for source_file in sorted(skill.source_dir.rglob("*")):
-            if source_file.is_dir() or source_file.name in IGNORED_FILES:
-                continue
-            destination = target_skill / source_file.relative_to(skill.source_dir)
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            if source_file.suffix.lower() == ".md":
-                destination.write_text(
-                    transform_markdown(source_file, skill, skills), encoding="utf-8"
-                )
-                destination.chmod(source_file.stat().st_mode & 0o7777)
-            else:
-                shutil.copy2(source_file, destination)
+    copy_skill_subtrees(skills, output / "skills", IGNORED_FILES, transform_markdown)
 
 
 def validate(output_dir: str | Path) -> int:

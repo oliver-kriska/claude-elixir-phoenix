@@ -1,8 +1,7 @@
 ---
 name: phx-audit
-description: Project health audit and health check — architecture, performance, tests,
-  dependencies, code quality. Use when assessing overall project health, before releases,
-  or after refactors.
+description: Project health audit and health check — architecture, performance; Use
+  when assessing overall project health…
 ---
 
 # Project Health Audit
@@ -12,12 +11,12 @@ Comprehensive project-wide health assessment using 5 parallel specialist subagen
 ## Usage
 
 ```
-$phx-audit              # Full audit (default)
-$phx-audit --quick      # 2-3 minute pulse check
-$phx-audit --focus=security   # Deep dive single area
-$phx-audit --focus=performance
-$phx-audit --since abc123   # Incremental audit since commit
-$phx-audit --since HEAD~10  # Audit last 10 commits
+$elixir-phoenix:phx-audit              # Full audit (default)
+$elixir-phoenix:phx-audit --quick      # 2-3 minute pulse check
+$elixir-phoenix:phx-audit --focus=security   # Deep dive single area
+$elixir-phoenix:phx-audit --focus=performance
+$elixir-phoenix:phx-audit --since abc123   # Incremental audit since commit
+$elixir-phoenix:phx-audit --since HEAD~10  # Audit last 10 commits
 ```
 
 ## When to Use
@@ -96,7 +95,7 @@ Read reports from `.claude/audit/reports/`.
 **Rate-limit circuit breaker:** if 2+ auditors return empty results or
 rate-limit/API errors, STOP spawning. Synthesize from the reports that
 exist, mark missing categories as "not audited (rate limit)", and tell
-the user to re-run `$phx-audit` after the limit resets. Never leave the
+the user to re-run `$elixir-phoenix:phx-audit` after the limit resets. Never leave the
 user typing "continue" against dead agents.
 
 ### Step 3: Compress Findings
@@ -157,16 +156,16 @@ Analyze only changes since a specific commit. Useful for pre-merge checks:
 
 Run `git diff --name-only <commit>...HEAD` to identify changed files, then run targeted audits on changed files only (skips full project scan).
 
-Combines with other flags: `$phx-audit --since HEAD~5 --focus=security`
+Combines with other flags: `$elixir-phoenix:phx-audit --since HEAD~5 --focus=security`
 
 ## Relationship to Other Commands
 
 | Command | Scope | Frequency |
 |---------|-------|-----------|
-| `$phx-review` | Changed files (diff) | Every PR |
-| `$phx-audit` | Entire project | Quarterly |
-| `$phx-boundaries` | Context structure | On-demand |
-| `$phx-verify` | Compile/test pass | Anytime |
+| `$elixir-phoenix:phx-review` | Changed files (diff) | Every PR |
+| `$elixir-phoenix:phx-audit` | Entire project | Quarterly |
+| `$elixir-phoenix:phx-boundaries` | Context structure | On-demand |
+| `$elixir-phoenix:phx-verify` | Compile/test pass | Anytime |
 
 ## References
 

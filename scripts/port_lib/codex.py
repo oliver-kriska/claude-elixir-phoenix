@@ -8,11 +8,13 @@ import os
 import re
 import shutil
 import tempfile
+import textwrap
 import uuid
 from dataclasses import dataclass
 from pathlib import Path
 
 from .frontmatter import Frontmatter, parse_file
+from .generated_tree import copy_skill_subtrees
 from .skill_transforms import (
     normalize_skill_name,
     rewrite_slash_commands,
@@ -20,6 +22,11 @@ from .skill_transforms import (
 )
 
 SKILL_NAME_RE = re.compile(r"^[a-z0-9]+(?:-[a-z0-9]+)*$")
+DESCRIPTION_TRIGGER_RE = re.compile(r"\b(Use (?:when|after|to|for)\b.*)$")
+UNQUALIFIED_CODEX_SKILL_RE = re.compile(
+    r"(?<![A-Za-z0-9_:-])\$(phx|lv|ecto)-([a-z][a-z0-9-]*|\*)"
+    r"(?![A-Za-z0-9-])"
+)
 SKILL_DIR_TOKEN_RE = re.compile(r"\$\{CLAUDE_SKILL_DIR\}/([A-Za-z0-9_./<>-]+)")
 PLUGIN_ROOT_TOKEN_RE = re.compile(r"\$\{CLAUDE_PLUGIN_ROOT\}/([A-Za-z0-9_./-]+)")
 BARE_SIBLING_PATH_RE = re.compile(
@@ -40,6 +47,50 @@ CODEX_DESCRIPTION = (
     "Generated Elixir, Phoenix, LiveView, Ecto, Oban, testing, and security "
     "skills for Codex"
 )
+CODEX_SKILL_DESCRIPTION_LIMIT = 120
+CODEX_SKILL_SUMMARY_LIMIT = 72
+CODEX_SKILL_DESCRIPTION_OVERRIDES = {
+    "ecto-n1-check": (
+        "Find Ecto N+1 queries and missing preloads. Use only when N+1 is suspected; "
+        "not for broad database performance."
+    ),
+    "phx-deps-update": (
+        "Update Hex dependencies safely. Use for upgrades; use "
+        "$phx-investigate for deps.get failures."
+    ),
+    "phx-document": (
+        "Write Elixir @moduledoc and @doc text. Use only for code documentation, not "
+        "README or external docs."
+    ),
+    "phx-full": (
+        "Run portable end-to-end lifecycle with gates. Use for full features; use "
+        "$phx-work for an existing plan."
+    ),
+    "phx-help": (
+        "Recommend the right $phx-* workflow. Use when choosing a plugin skill, not "
+        "for Codex /help."
+    ),
+    "phx-investigate": (
+        "Investigate Elixir/Phoenix bugs root-cause first. Reproduce failures, cite "
+        "evidence; Codex subagents are optional."
+    ),
+    "phx-review": (
+        "Review changed Elixir/Phoenix code read-only. Check requirements, cite "
+        "evidence, deduplicate, and return a verdict."
+    ),
+}
+DESCRIPTION_DANGLING_WORDS = {
+    "a",
+    "after",
+    "an",
+    "and",
+    "before",
+    "for",
+    "not",
+    "or",
+    "the",
+    "to",
+}
 
 
 def _assert_ordered_markers(
@@ -1127,6 +1178,84 @@ class SkillSource:
     frontmatter: Frontmatter
 
 
+def _truncate_description(text: str, limit: int, suffix: str = "…") -> str:
+    """Shorten text at a word boundary without exceeding limit characters."""
+    if len(text) <= limit:
+        return text
+    shortened = text[: limit - len(suffix)].rsplit(maxsplit=1)[0]
+    words = shortened.split()
+    while words and words[-1].rstrip(" ,;:-—").lower() in DESCRIPTION_DANGLING_WORDS:
+        words.pop()
+    shortened = " ".join(words).rstrip(" ,;:-—")
+    if not shortened:
+        shortened = text[: limit - len(suffix)].rstrip()
+    return shortened + suffix
+
+
+def compact_skill_description(description: str) -> str:
+    """Keep Codex discovery metadata compact while preserving trigger intent."""
+    normalized = " ".join(description.split())
+    if len(normalized) <= CODEX_SKILL_DESCRIPTION_LIMIT:
+        return normalized
+
+    trigger_match = DESCRIPTION_TRIGGER_RE.search(normalized)
+    if trigger_match is None:
+        return _truncate_description(normalized, CODEX_SKILL_DESCRIPTION_LIMIT)
+
+    summary = normalized[: trigger_match.start()].rstrip()
+    trigger = trigger_match.group(1)
+    if not summary:
+        return _truncate_description(trigger, CODEX_SKILL_DESCRIPTION_LIMIT)
+    summary = _truncate_description(summary, CODEX_SKILL_SUMMARY_LIMIT, suffix=";")
+    trigger_limit = CODEX_SKILL_DESCRIPTION_LIMIT - len(summary) - 1
+    return f"{summary} {_truncate_description(trigger, trigger_limit)}"
+
+
+def _qualify_codex_skill_mentions(text: str, plugin_name: str) -> str:
+    """Qualify plugin-owned skills with their runtime Codex namespace."""
+    return UNQUALIFIED_CODEX_SKILL_RE.sub(
+        lambda match: f"${plugin_name}:{match.group(1)}-{match.group(2)}",
+        text,
+    )
+
+
+def _wrap_namespace_expanded_lines(text: str, plugin_name: str) -> str:
+    """Wrap prose lines that only exceed the lint limit after qualification."""
+    lines: list[str] = []
+    in_fence = False
+    qualified_prefix = f"${plugin_name}:"
+
+    for line in text.splitlines(keepends=True):
+        content = line.rstrip("\r\n")
+        newline = line[len(content) :]
+        stripped = content.lstrip()
+        if stripped.startswith(("```", "~~~")):
+            in_fence = not in_fence
+        if (
+            in_fence
+            or len(content) <= 200
+            or qualified_prefix not in content
+            or stripped.startswith("|")
+        ):
+            lines.append(line)
+            continue
+
+        leading = content[: len(content) - len(stripped)]
+        marker = re.match(r"(?:[-*+] |\d+[.)] )", stripped)
+        subsequent = leading + (" " * len(marker.group(0)) if marker else "")
+        wrapped = textwrap.wrap(
+            content,
+            width=200,
+            subsequent_indent=subsequent,
+            break_long_words=False,
+            break_on_hyphens=False,
+            replace_whitespace=False,
+        )
+        lines.append(("\n".join(wrapped) if wrapped else content) + newline)
+
+    return "".join(lines)
+
+
 def _plugin_manifest(source_plugin_dir: str | Path) -> dict:
     source_file = Path(source_plugin_dir) / ".claude-plugin" / "plugin.json"
     try:
@@ -1429,6 +1558,7 @@ def _transform_markdown(
     source_file: Path,
     current: SkillSource,
     skills: list[SkillSource],
+    plugin_name: str,
 ) -> str:
     overlay = _codex_overlay(source_file, current)
     if source_file == current.source_dir / "SKILL.md":
@@ -1443,38 +1573,41 @@ def _transform_markdown(
                 "Review changed Elixir/Phoenix code read-only. Check requirements, "
                 "cite evidence, deduplicate findings, and return a severity-based verdict."
             )
-        elif current.target_name == "phx-full":
-            projected["description"] = (
-                "Run a portable sequential plan-work-verify-review-compound lifecycle. "
-                "Use optional generic workers only when the runtime supports them."
+        override = CODEX_SKILL_DESCRIPTION_OVERRIDES.get(current.target_name)
+        projected["description"] = override or compact_skill_description(
+            projected["description"]
+        )
+        projected["description"] = _qualify_codex_skill_mentions(
+            projected["description"], plugin_name
+        )
+        if override is None:
+            projected["description"] = compact_skill_description(
+                projected["description"]
             )
         body = overlay if overlay is not None else current.frontmatter.body
         body = _rewrite_resource_paths(body, current, skills, source_file)
         body = rewrite_slash_commands(body, "codex")
+        body = _qualify_codex_skill_mentions(body, plugin_name)
+        body = _wrap_namespace_expanded_lines(body, plugin_name)
         return Frontmatter(projected, body).dump()
 
     text = overlay if overlay is not None else source_file.read_text(encoding="utf-8")
     text = _rewrite_resource_paths(text, current, skills, source_file)
-    return rewrite_slash_commands(text, "codex")
+    text = rewrite_slash_commands(text, "codex")
+    text = _qualify_codex_skill_mentions(text, plugin_name)
+    return _wrap_namespace_expanded_lines(text, plugin_name)
 
 
 def _populate(skills: list[SkillSource], output_dir: Path, manifest: dict) -> None:
     skills_dir = output_dir / "skills"
-    for skill in skills:
-        target_skill = skills_dir / skill.target_name
-        for source_file in sorted(skill.source_dir.rglob("*")):
-            if source_file.is_dir() or source_file.name in IGNORED_FILES:
-                continue
-            destination = target_skill / source_file.relative_to(skill.source_dir)
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            if source_file.suffix.lower() == ".md":
-                destination.write_text(
-                    _transform_markdown(source_file, skill, skills),
-                    encoding="utf-8",
-                )
-                destination.chmod(source_file.stat().st_mode & 0o7777)
-            else:
-                shutil.copy2(source_file, destination)
+    copy_skill_subtrees(
+        skills,
+        skills_dir,
+        IGNORED_FILES,
+        lambda source_file, skill, all_skills: _transform_markdown(
+            source_file, skill, all_skills, manifest["name"]
+        ),
+    )
 
     manifest_dir = output_dir / ".codex-plugin"
     manifest_dir.mkdir(parents=True)
@@ -1586,7 +1719,10 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
         if not isinstance(name, str) or not SKILL_NAME_RE.fullmatch(name):
             raise ValueError(f"{skill_file}: invalid Codex skill name `{name}`")
         description = frontmatter.data.get("description")
-        if not isinstance(description, str) or not 1 <= len(description) <= 1024:
+        if (
+            not isinstance(description, str)
+            or not 1 <= len(description) <= CODEX_SKILL_DESCRIPTION_LIMIT
+        ):
             raise ValueError(f"{skill_file}: invalid Codex skill description")
 
     unresolved = (
@@ -1602,6 +1738,11 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
         found = next((token for token in unresolved if token in text), None)
         if found:
             raise ValueError(f"{markdown}: unresolved Claude token `{found}`")
+        unqualified = UNQUALIFIED_CODEX_SKILL_RE.search(text)
+        if unqualified:
+            raise ValueError(
+                f"{markdown}: unqualified Codex plugin skill `{unqualified.group(0)}`"
+            )
 
     for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work", "phx-pr-review", "phx-full"):
         flagship_root = skills_root / flagship

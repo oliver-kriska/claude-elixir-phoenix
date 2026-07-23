@@ -2,12 +2,16 @@
 
 The Codex edition is a generated native plugin containing all 51 canonical
 Elixir/Phoenix skills and their complete resource trees. It was tested with
-`codex-cli 0.144.6`.
+`codex-cli 0.145.0`.
 
 This is a skills baseline, not full Claude Code feature parity. The generator
 normalizes names (`phx:review` → `phx-review`), rewrites cross-skill and resource
 paths, converts Claude command references to Codex `$skill-name` syntax, and
 applies Codex-only workflow overlays without changing canonical Claude files.
+It also projects descriptions to at most 120 characters while preserving key
+capability and trigger cues. Route-sensitive skills retain explicit exclusions
+to avoid collisions. This reduces pressure on Codex's shared skills catalog
+budget without changing canonical descriptions or skill bodies.
 
 ## Install from GitHub
 
@@ -46,28 +50,49 @@ codex plugin add elixir-phoenix@oliver-kriska
 Invoke a skill explicitly by mentioning its generated name:
 
 ```text
-$phx-investigate FunctionClauseError after saving the profile form
-$phx-review
-$ecto-n1-check Accounts
-$lv-assigns UserDashboardLive
+$elixir-phoenix:phx-investigate FunctionClauseError after saving the profile form
+$elixir-phoenix:phx-review
+$elixir-phoenix:ecto-n1-check Accounts
+$elixir-phoenix:lv-assigns UserDashboardLive
 ```
+
+Codex namespaces plugin-owned skills with the plugin manifest name. There are no
+automatic unqualified aliases, so `$phx-investigate` alone does not explicitly
+load this plugin's skill. Selecting a skill through `/skills` inserts the fully
+qualified name automatically.
 
 Use `/skills` in an interactive Codex session to open the skill selector and
 manage individual skills. Codex can also select a skill implicitly when the user
 request matches its generated description; explicit `$skill-name` invocation is
-preferred when a specific workflow is required.
+preferred when a specific workflow is required. For plugin skills, the complete
+name is `$plugin-name:skill-name`.
+
+Codex allocates a shared model-context budget to enabled skills. Large combined
+catalogs may still produce a description-shortening warning, especially when
+several plugins or project skills are enabled. The generated descriptions are
+kept compact to preserve routing signal, while explicit invocation always loads
+the complete `SKILL.md`. Disable unused skills or plugins if the warning remains.
 
 ### Flagship workflow behavior
 
-`$phx-investigate` preserves reproduce-before-fix and root-cause-first analysis.
+`$elixir-phoenix:phx-investigate` preserves reproduce-before-fix and
+root-cause-first analysis.
 It uses Tidewave when available but falls back to local files, logs, tests, and
 `mix` commands. Native Codex subagents are optional; the same tracks can run
 sequentially without named custom agents.
 
-`$phx-review` is read-only, scopes findings to changed files, checks available
-requirements, cites file/line evidence, assigns severity, deduplicates findings,
-and returns a verdict. It may use native Codex subagents for independent tracks,
-but a sequential same-session review is fully supported.
+`$elixir-phoenix:phx-review` is read-only, scopes findings to changed files,
+checks available requirements, cites file/line evidence, assigns severity,
+deduplicates findings, and returns a verdict. It may use native Codex subagents
+for independent tracks, but a sequential same-session review is fully supported.
+
+`$elixir-phoenix:phx-plan` and `$elixir-phoenix:phx-work` also have focused
+portable adaptations. Planning tracks research in the plan scratchpad and
+preserves the canonical `.claude/plans/{slug}/plan.md` schema. Work uses plan
+checkboxes plus `progress.md` for ordered, resumable execution and verification.
+Generic native subagents and Tidewave remain optional; the same-session
+sequential path is complete. These adaptations do not provide hooks or a
+separate task UI.
 
 `$phx-plan` and `$phx-work` also have focused portable adaptations. Planning
 tracks research in the plan scratchpad and preserves the canonical
@@ -141,8 +166,12 @@ Supported now:
 - byte-identical non-Markdown resources and preserved executable modes;
 - native plugin installation, `/skills`, explicit `$skill-name`, and implicit
   skill selection;
-- Codex-specific `$phx-investigate`, `$phx-review`, `$phx-plan`, and `$phx-work`
-  workflow adaptations.
+- Codex-specific `$elixir-phoenix:phx-investigate` and
+  `$elixir-phoenix:phx-review`, `$elixir-phoenix:phx-plan`, and
+  `$elixir-phoenix:phx-work`, `$elixir-phoenix:phx-pr-review`, and
+  `$elixir-phoenix:phx-full` workflow adaptations.
+- compact discovery descriptions generated from canonical capability and trigger
+  text to reduce shared skills-context pressure.
 
 Intentionally deferred:
 
@@ -198,7 +227,17 @@ Canonical sources live in `plugins/elixir-phoenix/skills`; do not hand-edit
 make codex-skills           # regenerate targets/codex
 make codex-skills-validate  # read-only drift check
 make codex-skills-sync      # regenerate, then validate
+make codex-runtime-smoke    # optional isolated native runtime acceptance
 ```
+
+The smoke target generates from the current checkout into a temporary local
+marketplace, installs and enables it through `codex plugin`, checks the installed
+51-skill tree and a packaged executable resource byte-for-byte and mode-for-mode,
+removes it, and checks again in a fresh process. It sets temporary `HOME` and
+`CODEX_HOME`, never copies authentication, and performs no model or
+network-dependent prompt. Codex does not expose a stable structured command for
+enumerating every plugin skill, so the exact count is an installed-tree check;
+`plugin list --json` verifies the native installed and enabled state.
 
 Generation stages and validates a complete replacement before swapping it into
 place, with rollback on installation failure. Drift checking compares paths,

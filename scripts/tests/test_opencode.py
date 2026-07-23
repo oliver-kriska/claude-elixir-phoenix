@@ -8,10 +8,10 @@ from pathlib import Path
 import pytest
 
 from scripts import build_opencode_skills
-from scripts.build_codex_skills import _differences
 from scripts.port_lib import SOURCE_PLUGIN_DIR, TARGETS_DIR
 from scripts.port_lib import opencode
 from scripts.port_lib.frontmatter import parse_file
+from scripts.port_lib.generated_tree import tree_differences
 
 
 def _tree_hash(root: Path) -> str:
@@ -185,7 +185,7 @@ def test_determinism_rollback_and_read_only_drift_detection(
     second = tmp_path / "second"
     opencode.build(plugin, first)
     opencode.build(plugin, second)
-    assert _differences(first, second) == []
+    assert tree_differences(first, second) == []
     assert _tree_hash(first) == _tree_hash(second)
 
     before = _tree_hash(first)

@@ -1,6 +1,6 @@
 # Research Integration Reference
 
-Detailed methodology for the research phase of `$phx-brainstorm`.
+Detailed methodology for the research phase of `$elixir-phoenix:phx-brainstorm`.
 
 ## When Research Triggers
 
@@ -199,9 +199,9 @@ Written by web-researcher:
 3. {approach}: {brief description}
 ```
 
-## Integration with $phx-plan
+## Integration with $elixir-phoenix:phx-plan
 
-When `$phx-plan` detects `.claude/plans/{slug}/interview.md` with research:
+When `$elixir-phoenix:phx-plan` detects `.claude/plans/{slug}/interview.md` with research:
 
 1. **Skips clarification** — interview IS the clarification
 2. **Skips patterns-analyst spawn** — codebase-scan.md already exists
