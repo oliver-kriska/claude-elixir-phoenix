@@ -3,8 +3,8 @@ name: Quality Gate
 on:
   push:
     branches: [main]
+  # Validate stacked PRs too; GitHub evaluates this workflow from the PR base.
   pull_request:
-    branches: [main]
 
 jobs:
   lint:
