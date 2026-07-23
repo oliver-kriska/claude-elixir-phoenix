@@ -150,7 +150,7 @@ only.
 
 ```text
 1. Install: `code --install-extension MS-SarifVSCode.sarif-viewer`
-2. Run audit: `$phx-deps-audit --sarif .claude/audit.sarif`
+2. Run audit: `$elixir-phoenix:phx-deps-audit --sarif .claude/audit.sarif`
 3. In VS Code, open `.claude/audit.sarif` — the SARIF panel auto-opens
    and lets you jump to file:line for each result.
 ```
@@ -162,7 +162,7 @@ For projects that want CI gating, add a workflow step:
 ```yaml
 - name: Run deps-audit
   run: |
-    claude code -m "$phx-deps-audit --sarif audit.sarif"
+    claude code -m "$elixir-phoenix:phx-deps-audit --sarif audit.sarif"
 - name: Upload SARIF to Code Scanning
   uses: github/codeql-action/upload-sarif@v3
   with:

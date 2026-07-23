@@ -1,8 +1,7 @@
 ---
 name: phx-deps-vet
-description: Record a vetted Hex package version in hex_vet.exs after a security review
-  — manages the audit ledger, not the scanner. Use to approve a dep after $phx-deps-audit
-  findings or to initialize hex_vet.exs.
+description: Record a vetted Hex package version in hex_vet.exs after a security;
+  Use to approve a dep…
 ---
 
 # Deps Vet — Hex package audit ledger
@@ -10,18 +9,18 @@ description: Record a vetted Hex package version in hex_vet.exs after a security
 Review a Hex package version, run Phase 1 supply-chain rules against it,
 prompt the user for a verdict, append the result to `hex_vet.exs`
 (project-root audit ledger). Vetted versions get downgraded to `INFO`
-on subsequent `$phx-deps-audit` runs.
+on subsequent `$elixir-phoenix:phx-deps-audit` runs.
 
-Run this AFTER `$phx-deps-audit` to clear findings.
+Run this AFTER `$elixir-phoenix:phx-deps-audit` to clear findings.
 Run this BEFORE merging a `mix.lock` PR to certify new versions.
 
 ## Usage
 
 ```text
-$phx-deps-vet phoenix 1.7.21      # vet a single package version
-$phx-deps-vet --seed              # import curated baseline seed (~30 pkgs)
-$phx-deps-vet --list              # show existing ledger entries
-$phx-deps-vet --check             # cross-check mix.lock vs ledger
+$elixir-phoenix:phx-deps-vet phoenix 1.7.21      # vet a single package version
+$elixir-phoenix:phx-deps-vet --seed              # import curated baseline seed (~30 pkgs)
+$elixir-phoenix:phx-deps-vet --list              # show existing ledger entries
+$elixir-phoenix:phx-deps-vet --check             # cross-check mix.lock vs ledger
 ```
 
 ## Iron Laws
@@ -132,17 +131,17 @@ Confirm to user: "Added `<pkg>` `<version>` to hex_vet.exs."
 
 ## Integration
 
-- **Run after** `$phx-deps-audit` to clear vetted findings.
+- **Run after** `$elixir-phoenix:phx-deps-audit` to clear vetted findings.
 - **Run before** merging a `mix.lock` PR to certify new versions.
-- **Run `$phx-deps-vet --check`** to detect ledger drift vs `mix.lock`.
-- **`$phx-deps-audit`** auto-downgrades vetted findings to INFO.
+- **Run `$elixir-phoenix:phx-deps-vet --check`** to detect ledger drift vs `mix.lock`.
+- **`$elixir-phoenix:phx-deps-audit`** auto-downgrades vetted findings to INFO.
 
 ## References
 
 - `references/hex-vet.md` — schema, parser, lookup
 - `references/seed.md` — `--seed` flag, curated baseline
 - `../phx-deps-audit/references/rules-impl.md` — the
-  same rules `$phx-deps-audit` runs
+  same rules `$elixir-phoenix:phx-deps-audit` runs
 
 ## Out of scope (Phase 3+)
 

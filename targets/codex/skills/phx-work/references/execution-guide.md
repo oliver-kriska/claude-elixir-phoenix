@@ -1,11 +1,11 @@
 # Execution Guide
 
-Step-by-step execution details for `$phx-work`.
+Step-by-step execution details for `$elixir-phoenix:phx-work`.
 
 ## Contents
 
 - [Loading a Plan](#loading-a-plan)
-- [Task Routing](#task-routing)
+- [Concern Guidance](#concern-guidance)
 - [Parallel Task Execution](#parallel-task-execution)
 - [Verification](#verification)
 - [Proactive Patterns](#proactive-patterns)
@@ -33,63 +33,31 @@ Read the plan file and count progress:
 
 With `--from P2-T3`: Skip directly to that task.
 
-## Task Routing
+## Concern Guidance
 
-### Primary: Parse Agent Annotation
+Annotations such as `[ecto]`, `[liveview]`, `[oban]`, `[otp]`, `[security]`,
+`[test]`, and `[direct]` describe implementation concerns and required checks.
+They are not custom-agent identities and never route work to a named worker.
+Execute in the current session by default. A native generic worker is optional
+only for an independent task with disjoint files and a complete verification
+contract.
 
-Task format: `- [ ] [Pn-Tm][agent] Description`
+| Annotation | Guidance and required verification |
+|---|---|
+| `[ecto]` | Ecto safety; migrate/rollback as applicable plus focused tests |
+| `[liveview]` | LiveView lifecycle/security; focused LiveView test plus local/manual UI smoke |
+| `[oban]` | Idempotency and args; worker test plus enqueue behavior check |
+| `[otp]` | Supervision/concurrency; focused process tests |
+| `[security]` | Authorization/input handling; negative-path tests and audit |
+| `[test]` | Test quality; run the named focused test |
+| `[direct]` | General implementation; format and compile plus affected test |
 
-```markdown
-- [ ] [P2-T2][ecto] Add password_hash field to schema
-                ^^^^
-           Parse this annotation -> spawn ecto-schema-designer
-```
-
-### Routing Table
-
-| Annotation | Agent | Verification |
-|------------|-------|--------------|
-| `[ecto]` | ecto-schema-designer | migrate + test |
-| `[liveview]` | liveview-architect | test + browser |
-| `[oban]` | oban-specialist | test + manual |
-| `[otp]` | otp-advisor | test |
-| `[security]` | security-analyzer | test + audit |
-| `[test]` | testing-reviewer | test only |
-| `[direct]` | (none) | compile + format |
-
-### Fallback: Keyword Matching (Legacy Plans)
-
-If no `[agent]` annotation, fall back to keywords:
-
-| Keywords (priority order) | Agent |
-|---------------------------|-------|
-| auth, login, password, token, permission | security-analyzer |
-| schema, migration, field, changeset | ecto-schema-designer |
-| worker, job, queue, oban | oban-specialist |
-| genserver, supervisor, process | otp-advisor |
-| liveview, component, mount | liveview-architect |
-| test, assert, mock | testing-reviewer |
-| (no match) | (direct execution) |
-
-**Security priority**: Security keywords ALWAYS win, even if other
-patterns match.
-
-### `[direct]` Task Guidance
-
-Tasks annotated `[direct]` are simple and don't need a specialist:
-
-- **Config changes**: Adding env vars, updating `config/runtime.exs`
-- **Dependencies**: Adding libraries to `mix.exs`, running `mix deps.get`
-- **Scaffolding**: Creating directory structure, empty modules
-- **Simple wiring**: Adding routes, imports, aliases
-- **File operations**: Moving, renaming, or deleting files
-
-Implement these directly without spawning a Task agent. Run
-verification (compile + format) after each one.
+Legacy unannotated tasks use their subject matter to select the same concern
+guidance, never a worker identity. Security requirements take priority.
 
 ## Parallel Task Execution
 
-Tasks under `### Parallel:` header execute via subagents:
+Tasks under `### Parallel:` are eligible for optional generic workers or sequential execution:
 
 ### Detection
 
@@ -111,31 +79,21 @@ Tasks are parallelizable if they:
 - Modify different files (check Locations in task description)
 - Don't share mutable state (schemas, helpers)
 
-### Spawning Pattern
+### Execution Pattern
 
-Spawn ALL parallel tasks in ONE message using the Agent tool:
+Native generic subagents are optional for tasks that are independent and touch
+different files. Give each worker the full task text, locations, constraints,
+and verification contract, and wait for all workers before checkpointing.
+Do not require annotation-named custom agents.
 
-```
-Agent({
-  subagent_type: "general-purpose",
-  prompt: "Implement P2-T1: Add currency/area unit selectors to
-    occupier deal form at lib/.../occupier_deal/.../details_form.ex.
-    [full task context here]",
-  run_in_background: true,
-  mode: "bypassPermissions"
-})
-Agent({
-  subagent_type: "general-purpose",
-  prompt: "Implement P2-T2: Add selectors to landlord deal form...",
-  run_in_background: true,
-  mode: "bypassPermissions"
-})
-// ... one per parallel task
-```
+If native subagents are unavailable, execute every task sequentially in plan
+order in this session. This fallback is complete: apply the same domain guidance,
+verification, checkbox update, implementation note, and progress-log entry for
+each task. Never skip a task because parallel execution is unavailable.
 
 ### Waiting and Checkpoint
 
-After spawning, wait for ALL agents to complete, then run phase checkpoint:
+If optional workers were used, wait for all of them; otherwise, after the sequential tasks complete, run the phase checkpoint:
 
 ```bash
 mix format lib/**/*.ex lib/**/*.exs
@@ -162,8 +120,7 @@ mix format --check-formatted <changed_files>
 mix compile --warnings-as-errors
 ```
 
-When Tidewave is available, also call
-`mcp__tidewave__get_logs level: :error` after code changes to catch
+When Tidewave is independently configured, optionally inspect error-level runtime logs after code changes to catch
 runtime errors invisible to static analysis (supervision tree
 failures, config errors, module loading problems).
 
@@ -175,23 +132,19 @@ mix test <affected_test_files>
 mix credo --strict
 ```
 
-### Per-Feature Behavioral Smoke Test (Tidewave)
+### Per-Feature Behavioral Smoke Test
 
-After completing a feature (all phases for a domain), use
-`project_eval` to verify end-to-end behavior. Pick the smoke
-test by task annotation:
+Use Tidewave runtime tools only when they are independently configured and
+exposed in the current environment. If available, exercise the main behavior
+and inspect errors without persisting test data. Tidewave is optional, never a
+completion prerequisite.
 
-| Annotation | Smoke Test Pattern |
-|------------|-------------------|
-| `[ecto]` | `project_eval`: Create record -> fetch -> verify fields match |
-| `[liveview]` | `get_logs level: :error` after navigation to the new route |
-| `[oban]` | `project_eval`: Enqueue job -> check `oban_jobs` table for state |
-| `[security]` | `project_eval`: Test unauthenticated access returns error |
-| `[direct]` | `get_logs level: :error` to verify no regressions |
+Without Tidewave, run all applicable fallbacks:
 
-Use `project_eval` with transaction + rollback to verify without
-persisting data. This catches issues unit tests miss: association
-loading, default values, database constraints, and trigger behavior.
+1. `mix test test/path/to/affected_test.exs`
+2. Exercise the public repository/context function in a local test or `mix run`
+3. For UI work, start the app locally and perform a manual browser smoke check;
+   if that is impossible, record the unverified manual step explicitly
 
 ### After ALL Phases (Final Gate)
 
@@ -244,12 +197,11 @@ After each task passes verification:
    implementation note** — key decisions, gotchas, actual values.
    Example: `- [x] [P2-T2] Add password_hash — used Bcrypt, 12 rounds, added virtual :password`
    These notes survive context compaction since the plan is re-read on resume.
-2. **Complete Claude Code task**: `TaskUpdate({taskId, status: "completed"})`
-   This updates the live progress indicator visible in the UI.
+2. **Log completion**: Append the task ID, changed files, and verification result to `progress.md`.
 3. **Update phase status**: If all tasks done, change to `[COMPLETED]`
-4. **Log progress**: Append to `.claude/plans/{feature}/progress.md`
-5. **Start next task**: `TaskUpdate({nextTaskId, status: "in_progress"})`
-   then move to next unchecked task
+5. **Start next task**: Log its start, then select the next unchecked
+   non-`[BLOCKED]` task. Stop if an unresolved blocker precedes it unless
+   `--skip-blockers` was explicitly supplied
 
 ### Progress Log Entry
 
@@ -295,7 +247,7 @@ Don't commit after every task. Instead:
 2. **After blockers**: Commit working state before human intervention
 3. **After completion**: Ask user about final commit
 
-### Branch Strategy (for $phx-full)
+### Branch Strategy (for $elixir-phoenix:phx-full)
 
 ```bash
 git checkout -b feature/{feature-slug}
@@ -319,24 +271,19 @@ If first attempt fails, retry with error context in the prompt.
 
 ### Escalate to BLOCKER
 
-After 3 failures, create blocker in progress file:
+After 3 failures, keep the plan row unchecked, append `[BLOCKED]`, and
+optionally mark its phase `[BLOCKED]`. Append the attempts and error evidence to
+`.claude/plans/{slug}/progress.md`, write the dead end to `scratchpad.md`, and
+stop by default. Continue to later work only with explicit `--skip-blockers`.
 
 ```markdown
-## BLOCKER
+- [ ] [P2-T3][ecto] [BLOCKED] Implement register_user/1
 
-**Task ID**: P2-T3
-**Description**: Implement register_user/1
+## BLOCKER: P2-T3
 **Attempts**: 3
-
-**Error History**:
-1. Compile error: undefined function hash_password/1
-2. Test failure: expected {:ok, _} got {:error, changeset}
-3. Test failure: changeset errors [:email, "has already been taken"]
-
-**Suggested Actions**:
-- Review test setup (database not cleaned?)
-- Check hash_password/1 implementation
-- Verify unique constraint handling
-
-**Resume**: `$phx-work plan.md --from P2-T3`
+**Error history**: {commands and first actionable failures}
+**Suggested next action**: {evidence-based recommendation}
 ```
+
+Retry this task explicitly with the native `phx-work` invocation and
+`--from P2-T3`; clear `[BLOCKED]` when starting that retry.

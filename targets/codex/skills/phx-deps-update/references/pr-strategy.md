@@ -30,7 +30,7 @@ Built from the scratch changelog deltas:
 
 - Full diff: https://diff.hex.pm/diff/<pkg>/<old>..<new>
 - Verification: mix compile + mix test PASS
-- Security: $phx-deps-audit risk band <band>
+- Security: $elixir-phoenix:phx-deps-audit risk band <band>
 ```
 
 ## Commit discipline

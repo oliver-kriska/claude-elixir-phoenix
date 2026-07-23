@@ -8,14 +8,14 @@ summary; this reference has the complete workflow.
 Before asking clarification questions, check for a pre-existing
 brainstorm interview:
 
-1. Check `$ARGUMENTS` for a path containing `interview.md`
+1. Check the text after the skill name for a path containing `interview.md`
 2. Check `.claude/plans/*/interview.md` for recent files (<24h)
 
 If found with `Status: COMPLETE`:
 
 - Read the interview.md Summary and Coverage Details
 - Skip clarification questions entirely — the interview IS the clarification
-- Use interview content as input for agent spawning (depth detection still applies)
+- Use interview content for concern-track selection (depth detection still applies)
 - Note in scratchpad: "Requirements from /phx-brainstorm interview"
 
 If found with `Status: IN_PROGRESS`:
@@ -67,77 +67,74 @@ of the request and the technical complexity:
 | Vague (post-clarification) | Any                                | At least `standard`         |
 | From review file           | Any                                | `standard` (scope is known) |
 
-**Depth determines agent count AND plan detail:**
+**Depth determines research track counts, concerns, and plan detail:**
 
-| Depth      | Agents             | Clarification           | Plan Detail                          |
+| Depth      | Research tracks / concerns | Clarification           | Plan Detail                          |
 | ---------- | ------------------ | ----------------------- | ------------------------------------ |
-| `quick`    | 1 (patterns only)  | Skip if clear           | Task list, minimal prose             |
-| `standard` | 2-3 specialists    | 1-2 questions if needed | Phased tasks with code patterns      |
-| `deep`     | 4+ (full research) | 3-5 questions           | Full system map, risks, alternatives |
+| `quick`    | 1 pattern track  | Skip if clear           | Task list, minimal prose             |
+| `standard` | 2-3 concern tracks    | 1-2 questions if needed | Phased tasks with code patterns      |
+| `deep`     | 4+ full research tracks | 3-5 questions           | Full system map, risks, alternatives |
 
 **Elixir-specific complexity signals**: New migration? New LiveView?
 New Oban worker? Changes Phoenix context boundaries? Multiple
 contexts affected? These push toward deeper planning.
 
-## Agent Spawning
+## Research Tracks
 
-Spawn agents using the Agent tool based on what's actually needed.
-Delegate broad research to agents. You MAY read specific files
-(CI config, a single module) for plan detail, but do NOT do the
-agents' job -- let them handle pattern discovery.
+Select only the concerns the feature needs. Use the canonical selection table
+below as concern expertise, not as a requirement for installed named agents.
 
-**Agent count scales with depth:**
+- `quick`: existing-project-patterns track
+- `standard`: patterns plus 1-2 relevant concern tracks
+- `deep`: patterns plus all relevant concern and external-research tracks
 
-- `quick`: 1 agent (phoenix-patterns-analyst only)
-- `standard`: 2-3 agents (patterns + relevant specialists)
-- `deep`: 4+ agents (patterns + specialists +
-  web-researcher + hex-library-researcher)
+Native generic subagents are an optional optimization. Give each one a focused
+scope and require it to write evidence to `.claude/plans/{slug}/research/`.
+When subagents are unavailable, perform the same tracks sequentially in this
+session using repository search, dependency documentation, web research when
+needed, and optional Tidewave tools when independently configured.
 
-**Always spawn:**
+Before any research, create `.claude/plans/{slug}/scratchpad.md` and track progress there:
 
-- `phoenix-patterns-analyst`: Analyze codebase for existing patterns
+```markdown
+## Research checklist
+- [x] Existing project patterns — research/patterns.md
+- [ ] Ecto/data design
+- [ ] LiveView interaction design
+```
 
-**Spawn conditionally based on feature needs:**
+Do not generate the plan until every selected track is `[x]`. If a track fails,
+record the failure and complete it in the current session instead of dropping
+its coverage. Preserve source paths, line evidence, alternatives, and confidence.
 
-| Condition                             | Agent                    |
-| ------------------------------------- | ------------------------ |
-| NEW library needed (not in mix.exs)   | `hex-library-researcher` |
-| UI, form, live, real-time features    | `liveview-architect`     |
-| Database, schema, table changes       | `ecto-schema-designer`   |
-| Job, worker, async, queue             | `oban-specialist`        |
-| GenServer, process, state             | `otp-advisor`            |
-| Auth, login, permission, security     | `security-analyzer`      |
-| Unfamiliar tech, need community input | `web-researcher`         |
-| Changing function signatures          | `call-tracer`            |
+## Concern Selection
 
-**hex-library-researcher rules (STRICT):**
+| Condition | Research concern |
+|---|---|
+| Always | Existing project patterns and context boundaries |
+| NEW library not in `mix.exs` | Hex/library evaluation |
+| UI, form, live, real-time | LiveView architecture |
+| Database, schema, table | Ecto/data design |
+| Job, worker, async, queue | Oban behavior |
+| GenServer, process, state | OTP design |
+| Auth, permission, secrets | Security |
+| Unfamiliar technology | Primary docs and web evidence |
+| Function signature changes | Call-site tracing |
 
-- ONLY spawn when evaluating a library NOT already in mix.exs
-- Do NOT spawn for: review blockers, refactoring, existing libraries
-- To understand an existing library's API, use Read/Grep on
-  `deps/{library}/lib/` or use Tidewave's `get_docs` instead
+Do not research an existing dependency as if selecting a new library. Inspect
+its installed source/docs or optional runtime docs instead.
 
-**CRITICAL**: Spawn ALL applicable agents in ONE Tool Use block
-(parallel) with `run_in_background: true`. Minimum 1 agent spawned.
+## Completing Research
 
-**Agent prompts must be FOCUSED.** Scope each prompt to the
-relevant directories, files, and patterns. Do NOT give vague
-prompts like "analyze the codebase."
-
-## Waiting for Agents
-
-You'll be notified as each background agent completes. Read each
-agent's output file to collect results. Do NOT proceed to plan
-generation until every agent has completed.
-
-Then read reports from `.claude/plans/{slug}/research/`.
-
-If an agent fails, do the research yourself with Read/Grep
-instead of re-spawning.
+Wait for every optional subagent to finish, collect its output, and complete any
+missing or failed track sequentially. The checklist, research files, and
+scratchpad make this state resumable without a runtime task API. Breadboarding
+and infrastructure output are synthesized from this evidence, not delegated to
+or made conditional on any named worker.
 
 ## Infrastructure Knowledge Persistence
 
-When Explore agents discover **project infrastructure** (not
+When completed research discovers **project infrastructure** (not
 feature-specific code) — e.g., test helpers, factory patterns,
 API endpoint maps, compile environments — write a compact summary
 to `.claude/plans/{slug}/scratchpad.md` under a `## Infrastructure`
@@ -157,8 +154,7 @@ components, has complex event flows (PubSub, streams, multi-step
 forms), or involves navigation between multiple live routes.
 **Skip** for single-page CRUD, config changes, or non-LiveView work.
 
-If liveview-architect was spawned, its report should include
-affordance tables. Use these to build a system map. See
+Synthesize affordance tables and the system map from the completed research-track evidence. See
 `references/breadboarding.md` for full details.
 
 ## Completeness Check
@@ -207,7 +203,7 @@ Key requirements:
   (required for `/phx-work`). Valid annotations:
   `[direct]` (most common), `[ecto]`, `[liveview]`, `[oban]`,
   `[otp]`, `[security]`, `[test]`.
-  Do NOT use subagent_type names like `[general-purpose]` or
+  Do NOT use runtime worker names like `[general-purpose]` or
   `[solo]` -- those are not valid annotations.
 - Include: Summary, Scope, Technical Decisions, Phased Tasks,
   Patterns, Risks
@@ -248,7 +244,7 @@ For `deep` plans, answer these three questions in the plan's
 ## Presenting the Plan
 
 **STOP and present the plan.** Briefly summarize the plan (task
-count, phase names, key scope). Then use `AskUserQuestion`:
+count, phase names, key scope). Then ask the user a normal conversational question:
 
 For single plan:
 
@@ -271,41 +267,14 @@ step-by-step:
 
 ## Deepening an Existing Plan (--existing mode)
 
-When `--existing` is passed with a plan file path, enhance the
-plan with deeper research instead of creating a new one.
+1. Load the existing plan and create or update its scratchpad checklist
+2. Select thin sections as concern tracks; complete them sequentially in the
+   current session by default
+3. Optionally use native generic workers only for independent tracks, with
+   bounded prompts and `.claude/plans/{slug}/research/{topic}.md` output
+4. Synthesize breadboarding and infrastructure notes from the gathered evidence
+5. Add detail and verification without deleting or silently changing tasks
+6. Present a diff summary and stop for user review
 
-### Deepening Workflow
-
-1. **Load plan** -- Parse phases, tasks, annotations, `???` markers
-2. **Search compound docs** -- Find known issues in planned areas
-   (`grep -rl "KEYWORD" .claude/solutions/`)
-3. **Spawn research agents** -- Use SPECIALIST agents (same
-   selection rules as main flow), NOT Explore agents. Each agent
-   MUST write detailed output to
-   `.claude/plans/{slug}/research/{topic}.md` and return ONLY a
-   500-word summary. Spawn all in ONE Tool Use block with
-   `run_in_background: true`
-4. **Wait for ALL agents** -- You'll be notified as each completes.
-   Read each agent's output file. Do NOT proceed until all complete
-5. **Enhance plan** -- Add implementation detail, resolve spikes,
-   add verification criteria, note risk from compound docs
-6. **Present diff summary** -- Show what was enhanced
-
-### When Deepening Adds Value
-
-- Plan has 5+ tasks touching unfamiliar code
-- Feature involves external API integration
-- Security-sensitive features (auth, payments)
-- Plan generated from review findings
-- Tasks have `???` or spike markers
-
-### Deepening Rules
-
-- **NEVER delete existing tasks** — Only add detail and risks
-- **Preserve task IDs** — `[Pn-Tm]` identifiers must not change
-- **Compound docs first** — Check solution docs before spawning
-  agents (saves context)
-- **Context budget** — `--existing` often runs in sessions with
-  prior history. Use specialist agents that write to files and
-  return short summaries. Never use Explore agents (they return
-  full output inline and exhaust context)
+Deepening is useful for unfamiliar code, external integrations, security-sensitive
+work, and unresolved spikes. Preserve existing scope and decisions.

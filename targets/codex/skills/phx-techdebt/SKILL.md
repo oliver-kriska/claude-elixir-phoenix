@@ -1,7 +1,7 @@
 ---
 name: phx-techdebt
-description: Analyze Elixir/Phoenix technical debt — duplicates, refactoring opportunities,
-  credo issues. Use when asked about code quality, cleanup, or what to improve.
+description: Analyze Elixir/Phoenix technical debt — duplicates, refactoring; Use
+  when asked about code quality, cleanup, or what…
 ---
 
 # Technical Debt Detection
@@ -61,4 +61,4 @@ For each duplication found, report:
 
 ## Usage
 
-Run `$phx-techdebt` to analyze the codebase and generate a prioritized report of technical debt with specific remediation steps.
+Run `$elixir-phoenix:phx-techdebt` to analyze the codebase and generate a prioritized report of technical debt with specific remediation steps.

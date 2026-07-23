@@ -15,10 +15,11 @@ Phoenix, LiveView, Ecto, Oban, testing, and security skills. See
 Code plugin.
 
 **Using Codex?** Install the native generated skills plugin for all 51 skills,
-including Codex-compatible `$phx-investigate` and `$phx-review` workflows. See
+including `$elixir-phoenix:phx-investigate` and
+`$elixir-phoenix:phx-review` workflows. See
 [Use with Codex](#use-with-codex); a trust-gated destructive-command safeguard
-is included, while custom agents and bundled Tidewave MCP
-are intentionally not included yet.
+is included, while custom agents and bundled Tidewave MCP are intentionally not
+included yet.
 
 **Using Pi?** Install the native generated skills package for all 51 skills,
 including Pi-compatible `/skill:phx-investigate` and `/skill:phx-review`
@@ -218,14 +219,16 @@ codex plugin list
 ```
 
 Start a fresh Codex session, then invoke workflows explicitly with
-`$phx-investigate` or `$phx-review`, browse them with `/skills`, or let Codex
-select a relevant skill from its description. This edition also ships one
-synchronous native hook that blocks destructive Ecto resets/drops, unguarded
-force pushes, and accidental `MIX_ENV=prod mix` commands. Codex requires users
-to review and trust plugin hooks before they run; the skills work without it.
-Custom agents, plugin-root instructions, and Tidewave MCP remain deferred. See
-the complete [Codex guide](docs/codex.md) for updates, uninstall, isolation,
-troubleshooting, tested version, and capability details.
+`$elixir-phoenix:phx-investigate` or `$elixir-phoenix:phx-review`, browse them
+with `/skills`, or let Codex select a relevant skill from its description. Codex
+namespaces plugin skills; unqualified `$phx-investigate` is not an explicit
+alias. This edition also ships one synchronous native hook that blocks destructive
+Ecto resets/drops, unguarded force pushes, and accidental `MIX_ENV=prod mix`
+commands. Codex requires users to review and trust plugin hooks before they run;
+the skills work without it. Custom agents, plugin-root instructions, the remaining
+Claude hooks, and Tidewave MCP remain deferred. See the complete
+[Codex guide](docs/codex.md) for updates, uninstall, isolation, troubleshooting,
+tested version, and capability details.
 
 ### Use with Pi
 

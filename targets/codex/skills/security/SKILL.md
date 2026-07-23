@@ -1,8 +1,7 @@
 ---
 name: security
-description: Enforce Elixir/Phoenix security — auth, OAuth, sessions, CSRF, XSS, SQL
-  injection, input validation, secrets. Use when editing auth files, login flows,
-  RBAC, or API keys.
+description: Enforce Elixir/Phoenix security — auth, OAuth, sessions, CSRF, XSS; Use
+  when editing auth files, login flows, RBAC…
 ---
 
 # Elixir/Phoenix Security Reference

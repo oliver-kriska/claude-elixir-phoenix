@@ -64,11 +64,15 @@ configuration. OpenCode itself exposes discovered skills as slash commands.
 Native OpenCode subagents are an optional optimization in the flagship
 workflows, and the sequential fallback is valid. Tidewave is optional and its
 MCP setup is deferred. Exact Claude colon syntax such as `/phx:review` is not
-registered; use `/phx-review`. The flagship investigation and review workflows
-have explicit OpenCode adaptations. Other generated workflows receive portable
-frontmatter, resource, and command projection but may still describe optional
-Claude-specific orchestration APIs; those capabilities are deferred rather than
-silently emulated.
+registered; use `/phx-review`. The investigation, review, plan, work, PR-review,
+and full-lifecycle workflows have explicit OpenCode adaptations. PR review uses a
+GitHub connector or authenticated `gh` without fabricating mutations; full
+preserves user gates and bounded sequential fallback. Plan keeps its canonical
+artifact schema and a scratchpad research checklist; work uses plan checkboxes and
+`progress.md` for ordered, resumable execution. Other generated workflows
+receive portable frontmatter, resource, and command projection but may still
+describe optional Claude-specific orchestration APIs; those capabilities are
+deferred rather than silently emulated.
 
 ## Runtime acceptance
 
@@ -112,7 +116,15 @@ Generate and drift-check the target with:
 make opencode-skills
 make opencode-skills-validate
 make opencode-skills-sync
+make opencode-runtime-smoke
 ```
+
+The optional smoke target generates the current checkout into a temporary
+global-style skills tree (the closest local equivalent to the documented sparse
+Git checkout), then checks discovery, resources, and removal in fresh OpenCode
+processes using `opencode debug skill --pure`. All `HOME` and XDG roots are
+temporary. It never copies credentials and performs no model or
+network-dependent prompt.
 
 CI runs the read-only drift check. `targets/opencode` and this document are
 ignored in local development, so release orchestration must force-add them when

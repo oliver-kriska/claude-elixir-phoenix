@@ -24,7 +24,7 @@ prompt combined with `--base`/`--uncommitted`/`--commit`.
 
 ```markdown
 <!-- ELIXIR-PHOENIX-REVIEW-GUIDELINES:START -->
-<!-- Last updated: {DATE} | Managed by $phx-init — edits inside markers are overwritten on --update -->
+<!-- Last updated: {DATE} | Managed by $elixir-phoenix:phx-init — edits inside markers are overwritten on --update -->
 
 ## Review guidelines
 
@@ -72,4 +72,4 @@ Elixir/Phoenix review priorities. Flag violations at the given priority.
   per changed file; a bloated rubric dilutes focus.
 - Cloud reviews surface mainly P0/P1 per OpenAI docs (P2/P3 observed in
   practice) — putting a priority on each rule steers what Codex reports.
-- Re-running `$phx-init --update` refreshes the block in place.
+- Re-running `$elixir-phoenix:phx-init --update` refreshes the block in place.

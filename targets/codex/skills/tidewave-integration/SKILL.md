@@ -1,7 +1,7 @@
 ---
 name: tidewave-integration
-description: Tidewave MCP runtime tools — debugging, smoke testing, live state inspection,
-  SQL queries, hex docs. Use when evaluating code in a running Phoenix app.
+description: Tidewave MCP runtime tools — debugging, smoke testing, live state; Use
+  when evaluating code in a running Phoenix app.
 ---
 
 # Tidewave MCP Integration

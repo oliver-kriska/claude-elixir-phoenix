@@ -1,7 +1,7 @@
 ---
 name: narrow-bare-rescue
-description: Narrow bare rescue in Elixir so real errors like KeyError and typos propagate
-  instead of being swallowed. Use to audit rescues and refactor error handling.
+description: Narrow bare rescue in Elixir so real errors like KeyError and typos;
+  Use to audit rescues and refactor error handling.
 ---
 
 # Narrow Bare Rescue

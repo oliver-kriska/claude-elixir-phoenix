@@ -51,4 +51,4 @@ WebFetch the relevant section — no vendor names hardcoded.
 ## Nothing found
 
 Note in the per-package file: "no changelog available; review the diff at
-{diff.hex.pm URL}" — and lean on `$phx-deps-audit`'s diff scan for safety.
+{diff.hex.pm URL}" — and lean on `$elixir-phoenix:phx-deps-audit`'s diff scan for safety.

@@ -22,7 +22,7 @@ Type violations are emitted as **`mix compile` warnings** — built into the
 compiler. **Not** Dialyzer, **not** a separate tool, **no PLT**.
 
 > On Elixir 1.20+, `mix compile --warnings-as-errors` **now fails the build on
-> type violations.** This is what `$phx-verify`, `$phx-work` checkpoints, and
+> type violations.** This is what `$elixir-phoenix:phx-verify`, `$elixir-phoenix:phx-work` checkpoints, and
 > the "fix CI" pattern run everywhere — so a verified bug becomes a hard
 > failure, not a silent warning.
 

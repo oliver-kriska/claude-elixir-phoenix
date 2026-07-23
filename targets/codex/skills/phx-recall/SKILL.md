@@ -1,9 +1,7 @@
 ---
 name: phx-recall
-description: Recall prior work from past sessions — how a bug was fixed, what was
-  decided, where a pattern lives. Use when asked 'have we done this before' or 'how
-  did I fix X' in Elixir/Phoenix work. ccrider MCP when available, else git + solution
-  docs.
+description: Recall prior work from past sessions — how a bug was fixed, what was;
+  Use when asked 'have we done this before'…
 ---
 
 # Recall — Session & History Archaeology
@@ -14,9 +12,9 @@ this before?". Stop at the first layer that answers the question.
 ## Usage
 
 ```
-$phx-recall how did we fix the LiveView form that saved silently?
-$phx-recall what did we decide about the billing context boundaries?
-$phx-recall which library did we pick for rate limiting and why?
+$elixir-phoenix:phx-recall how did we fix the LiveView form that saved silently?
+$elixir-phoenix:phx-recall what did we decide about the billing context boundaries?
+$elixir-phoenix:phx-recall which library did we pick for rate limiting and why?
 ```
 
 ## Iron Laws
@@ -73,16 +71,16 @@ docs + git history" and stop after Layers 1–2.
 ### Step 4: Answer + Compound
 
 Present the answer with its evidence trail. If the recalled knowledge was
-NOT already in `.claude/solutions/`, offer `$phx-compound` so the next
+NOT already in `.claude/solutions/`, offer `$elixir-phoenix:phx-compound` so the next
 recall stops at Layer 1.
 
 ## Integration
 
 ```text
-"have we done this before?" → $phx-recall
+"have we done this before?" → $elixir-phoenix:phx-recall
    Layer 1 .claude/solutions/ ──hit──► answer + cite
    Layer 2 git log --grep/-S  ──hit──► answer + cite
-   Layer 3 ccrider sessions (gated) ─► answer + cite → offer $phx-compound
+   Layer 3 ccrider sessions (gated) ─► answer + cite → offer $elixir-phoenix:phx-compound
 ```
 
 ## References

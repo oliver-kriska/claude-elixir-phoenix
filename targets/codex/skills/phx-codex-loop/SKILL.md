@@ -1,25 +1,24 @@
 ---
 name: phx-codex-loop
-description: Fix Elixir/Phoenix code until Codex CLI review comes back clean — bounded
-  review, fix, verify loop before opening a PR. Use when codex is installed and you
-  want an external cross-model critic on your changes before pushing.
+description: Fix Elixir/Phoenix code until Codex CLI review comes back clean; Use
+  when codex is installed and you want an external…
 ---
 
 # Codex Loop (fix until clean)
 
 Critic→Refiner loop with the Codex CLI as external critic: review → fix
 approved findings → verify → re-review, until codex is clean or rounds run
-out. Codex reviews; Claude fixes. Complements `$phx-review` (Claude panel)
+out. Codex reviews; Claude fixes. Complements `$elixir-phoenix:phx-review` (Claude panel)
 — run either or both before a PR.
 
 ## Usage
 
 ```
-$phx-codex-loop                    # diff vs default branch, interactive
-$phx-codex-loop --uncommitted      # staged + unstaged + untracked
-$phx-codex-loop --base develop     # explicit base branch
-$phx-codex-loop --auto             # auto-approve P0/P1/P2, skip P3
-$phx-codex-loop --max-rounds 2     # default 3
+$elixir-phoenix:phx-codex-loop                    # diff vs default branch, interactive
+$elixir-phoenix:phx-codex-loop --uncommitted      # staged + unstaged + untracked
+$elixir-phoenix:phx-codex-loop --base develop     # explicit base branch
+$elixir-phoenix:phx-codex-loop --auto             # auto-approve P0/P1/P2, skip P3
+$elixir-phoenix:phx-codex-loop --max-rounds 2     # default 3
 ```
 
 ## Iron Laws
@@ -34,7 +33,7 @@ $phx-codex-loop --max-rounds 2     # default 3
 5. **Skipped findings are reported, never dropped** — every finding ends as
    fixed, declined (with reason), or deferred-by-user
 6. **Missing CLI stops the skill with an install hint** — suggest
-   `$phx-review` as the codex-free alternative; never crash
+   `$elixir-phoenix:phx-review` as the codex-free alternative; never crash
 
 ## Workflow
 
@@ -42,7 +41,7 @@ $phx-codex-loop --max-rounds 2     # default 3
 
 Run `command -v codex`. If missing: STOP.
 Show the install hint (`brew install codex` or `npm i -g @openai/codex`,
-then `codex login`; `codex doctor` to diagnose) and suggest `$phx-review`.
+then `codex login`; `codex doctor` to diagnose) and suggest `$elixir-phoenix:phx-review`.
 
 Then two cheap checks that save review rounds:
 
@@ -51,7 +50,7 @@ Then two cheap checks that save review rounds:
   dirty submodules) as findings. Surface the dirt and ask: clean/stash
   first, or proceed knowing round 1 may spend findings on it.
 - **Missing rubric**: if `AGENTS.md` has no `## Review guidelines`
-  section, note once that `$phx-init` installs the Elixir rubric that
+  section, note once that `$elixir-phoenix:phx-init` installs the Elixir rubric that
   steers codex priorities — then proceed (it works without, on defaults).
 
 ### Step 2: Detect Diff Mode
@@ -75,7 +74,7 @@ Then two cheap checks that save review rounds:
 
    NEVER pass custom instructions with a diff-mode flag — the CLI rejects
    the combination; the rubric comes from AGENTS.md `## Review guidelines`
-   (`$phx-init`). Parse the output file, NOT the exit code (0 even with
+   (`$elixir-phoenix:phx-init`). Parse the output file, NOT the exit code (0 even with
    findings). Recipes: `references/codex-cli.md`.
 
 2. **Clean check** — parse the output file; no `- [P{n}]` bullets means
@@ -112,15 +111,15 @@ Rounds: {n}/{max} | Fixed: {n} | Declined (Iron Law): {n} | Deferred: {n}
 {remaining findings if not CLEAN}
 ```
 
-On CLEAN: suggest `$phx-compound` for non-obvious fixes, then commit/PR.
-On MAX ROUNDS: list remaining findings; offer `$phx-plan` to convert them
+On CLEAN: suggest `$elixir-phoenix:phx-compound` for non-obvious fixes, then commit/PR.
+On MAX ROUNDS: list remaining findings; offer `$elixir-phoenix:phx-plan` to convert them
 into a follow-up plan.
 
 ## Integration
 
 ```text
-implement → $phx-codex-loop (YOU ARE HERE) → clean → commit/PR → $phx-watch-pr --codex
-     ↑ or arrive from $phx-review --codex verdict REQUIRES CHANGES
+implement → $elixir-phoenix:phx-codex-loop (YOU ARE HERE) → clean → commit/PR → $elixir-phoenix:phx-watch-pr --codex
+     ↑ or arrive from $elixir-phoenix:phx-review --codex verdict REQUIRES CHANGES
 ```
 
 ## References

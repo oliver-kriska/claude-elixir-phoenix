@@ -10,6 +10,7 @@ from pathlib import Path
 
 from . import codex
 from .frontmatter import Frontmatter, parse_file
+from .generated_tree import copy_skill_subtrees
 from .skill_transforms import transform_frontmatter
 
 IGNORED_FILES = codex.IGNORED_FILES
@@ -79,6 +80,11 @@ def transform_markdown(
             projected["description"] = (
                 "Review changed Elixir/Phoenix code read-only. Check requirements, cite evidence, deduplicate findings, and return a severity-based verdict."
             )
+        elif skill.target_name == "phx-full":
+            projected["description"] = (
+                "Run a portable sequential plan-work-verify-review-compound lifecycle. "
+                "Use optional generic workers only when the runtime supports them."
+            )
         body = overlay if overlay is not None else skill.frontmatter.body
         body = _rewrite_resource_paths(body, skill, skills, source_file)
         return Frontmatter(projected, rewrite_commands(body)).dump()
@@ -87,20 +93,7 @@ def transform_markdown(
 
 
 def _populate(skills: list[codex.SkillSource], output: Path) -> None:
-    for skill in skills:
-        target_skill = output / "skills" / skill.target_name
-        for source_file in sorted(skill.source_dir.rglob("*")):
-            if source_file.is_dir() or source_file.name in IGNORED_FILES:
-                continue
-            destination = target_skill / source_file.relative_to(skill.source_dir)
-            destination.parent.mkdir(parents=True, exist_ok=True)
-            if source_file.suffix.lower() == ".md":
-                destination.write_text(
-                    transform_markdown(source_file, skill, skills), encoding="utf-8"
-                )
-                destination.chmod(source_file.stat().st_mode & 0o7777)
-            else:
-                shutil.copy2(source_file, destination)
+    copy_skill_subtrees(skills, output / "skills", IGNORED_FILES, transform_markdown)
 
 
 def validate(output_dir: str | Path) -> int:
@@ -156,12 +149,13 @@ def validate(output_dir: str | Path) -> int:
             found = command.group(0) if command else None
         if found:
             raise ValueError(f"{markdown}: unresolved non-OpenCode token `{found}`")
-    for flagship in ("phx-investigate", "phx-review"):
+    for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work", "phx-pr-review", "phx-full"):
         text = "\n".join(
             path.read_text(encoding="utf-8")
             for path in sorted((skills_root / flagship).rglob("*.md"))
         )
         forbidden = (
+            "Agent(",
             "TaskCreate",
             "TaskUpdate",
             "TaskGet",
@@ -173,9 +167,28 @@ def validate(output_dir: str | Path) -> int:
             "mcp__linear__",
             "Claude Task",
         )
+        if flagship in {"phx-pr-review", "phx-full"}:
+            forbidden += (
+                "workflow-orchestrator", "parallel-reviewer", "planning-orchestrator",
+                "run_in_background", "Ralph Wiggum", "/ralph-loop:",
+                "PostToolUse", "Claude Code tasks",
+                "--codex", "--Pi", "--OpenCode", "/phx-compound",
+            )
+        if flagship in {"phx-plan", "phx-work"}:
+            forbidden += (
+                "phoenix-patterns-analyst", "ecto-schema-designer", "liveview-architect",
+                "oban-specialist", "otp-advisor", "security-analyzer", "testing-reviewer",
+                "hex-library-researcher", "web-researcher", "call-tracer",
+                "planning-orchestrator", "Spawn SPECIALIST", "run_in_background",
+                "[agent]", "Agent annotation", "agent routing", "project_eval",
+                "get_logs", "| Hook |", "Each hook", "/commit",
+                "agent spawning", "agent count", "Explore agents",
+                "execute via subagents", "After spawning",
+            )
         found = next((token for token in forbidden if token in text), None)
         if found:
             raise ValueError(f"{skills_root / flagship}: unavailable API `{found}`")
+    codex.validate_portable_workflows(skills_root)
     return len(skill_files)
 
 

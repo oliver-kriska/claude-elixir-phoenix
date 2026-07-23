@@ -39,7 +39,7 @@ codex exec review --base main --ephemeral --json \
    '[PROMPT]'`. You CANNOT pass custom review instructions together with a
    diff-mode flag. The rubric injection point is the project's `AGENTS.md`
    `## Review guidelines` section (honored by both the local CLI and the
-   Codex cloud reviewer) — install the managed block via `$phx-init`.
+   Codex cloud reviewer) — install the managed block via `$elixir-phoenix:phx-init`.
 2. **Exit code is 0 even when findings exist** — parse the output, never
    branch on `$?`.
 3. **Output format** (the `-o` file / final agent message):
@@ -86,4 +86,4 @@ runtime behavior and lose value when paraphrased.
 
 - Cloud reviewer mechanics (triggers, 👀/👍 reactions, re-request loop):
   `watch-pr` skill, `references/watcher-mechanics.md`
-- Cross-model panel review: `$phx-review --codex` (codex-reviewer agent)
+- Cross-model panel review: `$elixir-phoenix:phx-review --codex` (codex-reviewer agent)
