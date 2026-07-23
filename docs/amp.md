@@ -223,6 +223,23 @@ For a global installation, apply the same rule under
 `~/.config/agents/skills/`; that directory may contain unrelated skills, so do
 not delete it wholesale unless it contains nothing else.
 
+Amp also provides native removal for one known skill at a time:
+
+```bash
+# Project-local
+amp skill remove phx-review --target "$PWD/.agents/skills"
+
+# Global (skill remove has no --global flag)
+amp skill remove phx-review --target "$HOME/.config/agents/skills"
+```
+
+Repeat that command only for names installed by this package. A clean reinstall
+removes every known package-owned skill, reruns `amp skill add`, and starts a
+fresh Amp process. Do not loop over every directory in a shared skills root;
+that can remove unrelated project or personal skills. `--overwrite` is the
+normal update path, but removal followed by installation is the exact-sync path
+when a release deletes or renames a skill.
+
 ## Feature compatibility
 
 | Capability | Claude Code plugin | Amp edition |

@@ -55,13 +55,18 @@ without Tidewave, named custom agents, or Claude-only task APIs.
 | Amp | Command palette → `skill: invoke`, or explicitly request the skill in the prompt | Direct GitHub Agent Skills install | [Amp guide](amp.md) |
 | Codex | `$elixir-phoenix:phx-investigate`, `$elixir-phoenix:phx-review` | Native Codex Git marketplace plugin | [Codex guide](codex.md) |
 | Pi | `/skill:phx-investigate`, `/skill:phx-review` | Native Pi Git package | [Pi guide](pi.md) |
-| OpenCode | `/phx-investigate`, `/phx-review`, or ask the skill tool to load the skill | Sparse Git checkout | [OpenCode guide](opencode.md) |
+| OpenCode | Ask the skill tool to load the skill; 1.17.2 also accepts `/phx-investigate` and `/phx-review` | Sparse Git checkout | [OpenCode guide](opencode.md) |
 
 Codex plugin skills are qualified by the plugin manifest name. OpenCode 1.17.2
 does not provide a native Git skills-package installer, so a sparse checkout is
 the supported installation and update mechanism. Start a fresh process after
 installing, updating, or removing skills because runtime discovery may be
 cached when a session starts.
+
+The same lifecycle boundary applies to every generated runtime: install,
+update, clean reinstall, ref change, and uninstall affect newly started
+processes. Standalone list/debug commands are already fresh processes; they do
+not refresh the catalog of an existing interactive session.
 
 The current local acceptance baseline is Amp 0.0.1784796539-g051498, Codex CLI
 0.145.0, Pi 0.81.1, and OpenCode 1.17.2.

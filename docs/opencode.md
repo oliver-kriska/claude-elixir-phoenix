@@ -3,8 +3,8 @@
 This generated skills-only baseline is tested with OpenCode 1.17.2. Runtime
 acceptance used `opencode/north-mini-code-free`; skill behavior still depends on
 the model selected by each user. OpenCode recursively discovers `SKILL.md` files
-below `.opencode/skill/` and `.opencode/skills/` (and the equivalent global
-config roots). It does not provide a native Git or package installer for skills,
+below the documented `.opencode/skills/` project path and equivalent global
+config root. It does not provide a native Git or package installer for skills,
 so installation is a sparse Git checkout.
 
 See the [runtime support matrix](runtime-support.md) for a concise comparison
@@ -32,11 +32,11 @@ git clone --filter=blob:none --sparse \
 git -C ~/.config/opencode/skills/elixir-phoenix sparse-checkout set targets/opencode
 ```
 
-After this feature merges, both commands use the default `main` branch. Reviewers
-can test this branch before merge by adding the branch to `git clone`:
+Both commands use the default `main` branch. Reviewers can test a feature branch
+or tag before merge by adding its ref to `git clone`:
 
 ```bash
-git clone --branch feat/opencode-skills-package --filter=blob:none --sparse \
+git clone --branch <branch-or-tag> --filter=blob:none --sparse \
   https://github.com/oliver-kriska/claude-elixir-phoenix.git \
   .opencode/skills/elixir-phoenix
 git -C .opencode/skills/elixir-phoenix sparse-checkout set targets/opencode
@@ -48,8 +48,8 @@ OpenCode project and may influence model-driven skill selection there.
 
 ## Use
 
-The flagship generated records are `/phx-investigate` and `/phx-review`.
-OpenCode may select a skill from its description, but the most reliable explicit
+The flagship generated skill names are `phx-investigate` and `phx-review`.
+OpenCode may select a skill from its description, but the documented explicit
 prompt is:
 
 ```text
@@ -63,7 +63,8 @@ resources are copied byte-for-byte.
 
 This is a focused baseline, not full Claude Code parity. It does not install
 hooks, custom agents, separate command definitions, MCP servers, AGENTS.md, or
-configuration. OpenCode itself exposes discovered skills as slash commands.
+configuration. OpenCode 1.17.2 also exposes discovered skills as slash commands;
+the documented skill-tool prompt above is the portable explicit invocation.
 Native OpenCode subagents are an optional optimization in the flagship
 workflows, and the sequential fallback is valid. Tidewave is optional and its
 MCP setup is deferred. Exact Claude colon syntax such as `/phx:review` is not

@@ -84,6 +84,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **Generated-runtime install lifecycle guidance** — Amp now documents native,
+  target-scoped removal and exact-sync boundaries; Pi distinguishes configured
+  Git refs from unpinned dependencies and includes both project and user clean
+  reinstall flows; OpenCode uses its documented plural skills path and treats
+  slash invocation as a tested 1.17.2 convenience rather than the portable API.
+
 - **Codex plugin skill references now use their required runtime namespace** —
   explicit invocations and generated sibling references use
   `$elixir-phoenix:phx-investigate` rather than the non-resolving unqualified
