@@ -8,10 +8,10 @@ from pathlib import Path
 import pytest
 
 from scripts import build_codex_skills
-from scripts.build_codex_skills import _differences
 from scripts.port_lib import SOURCE_PLUGIN_DIR, TARGETS_DIR
 from scripts.port_lib import codex
 from scripts.port_lib.frontmatter import parse_file
+from scripts.port_lib.generated_tree import tree_differences
 
 
 def _tree_hash(root: Path) -> str:
@@ -315,7 +315,7 @@ def test_projection_is_deterministic_byte_for_byte_and_mode_for_mode(tmp_path) -
     codex.build(plugin, second)
 
     assert _tree_hash(first) == _tree_hash(second)
-    assert _differences(first, second) == []
+    assert tree_differences(first, second) == []
 
 
 def test_drift_comparison_detects_added_removed_and_type_changes(tmp_path) -> None:
@@ -328,7 +328,7 @@ def test_drift_comparison_detects_added_removed_and_type_changes(tmp_path) -> No
     (expected / "node").write_text("file\n", encoding="utf-8")
     (actual / "node").mkdir()
 
-    assert _differences(expected, actual) == [
+    assert tree_differences(expected, actual) == [
         "extra in target: extra.txt",
         "missing in target: missing.txt",
         "type differs: node (file != directory)",

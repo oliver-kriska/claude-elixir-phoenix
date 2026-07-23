@@ -214,7 +214,9 @@ This is behavioral — it works because the rules are in Claude's context, not b
 
 ### Layer 3: Skill Loading by File Type (Behavioral)
 
-CLAUDE.md instructs Claude to load specific skills based on file patterns:
+Claude Code supports native `paths:` frontmatter that limits automatic skill
+activation to matching files. This plugin uses it on domain skills; CLAUDE.md
+also provides an explicit fallback routing table:
 
 ```text
 *_live.ex       → liveview-patterns (streams, async, components)
@@ -224,9 +226,10 @@ CLAUDE.md instructs Claude to load specific skills based on file patterns:
 Any .ex file    → elixir-idioms (always)
 ```
 
-This is **not plugin infrastructure** — it's instructions that Claude follows. No hooks trigger skill loading.
-This is the plugin's biggest known gap — in practice, skills rarely auto-load from file context alone.
-Running `$elixir-phoenix:phx-init` significantly improves this.
+`paths:` is a file-path activation gate, not a dependency predicate. Matching a
+path makes a skill eligible, while Claude still selects skills from their
+descriptions; activation is not guaranteed merely because a dependency exists
+in `mix.lock`. Running `$elixir-phoenix:phx-init` adds the fallback rules to the project.
 
 ---
 

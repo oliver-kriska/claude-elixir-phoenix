@@ -9,6 +9,24 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Optional runtime smoke harness** — `make codex-runtime-smoke` and
+  `make opencode-runtime-smoke` validate locally generated targets, native Codex
+  installation/enabled state, native OpenCode discovery, all 51 installed
+  skills, retained resources and modes, and fresh-process removal in isolated
+  temporary homes without credentials or model calls.
+
+- **Generated-target golden snapshots** — CI now pins aggregate path, byte, and
+  executable-mode digests for Amp, Codex, Pi, and OpenCode before shared
+  generator refactoring. Target changes require an explicit reviewed snapshot
+  update instead of silently redefining the baseline.
+
+- **Package-specific `/phx:learn-from-fix` routing** — verified fixes and
+  explicit user-taught rules can now be saved as native background skills with
+  `--library <package> --scope personal|project`. The workflow reads locked
+  versions, checks both scopes for shadowing, merges safely, and never writes to
+  cached plugin files. General cross-project rules route to personal
+  `~/.claude/CLAUDE.md`. Description-based activation remains model-selected.
+
 - **Amp target drift pre-commit guard** — canonical changes under
   `plugins/elixir-phoenix/skills/` now trigger `make amp-skills-validate` and
   require regenerated `targets/amp/skills/` changes to be staged. CI retains
@@ -37,6 +55,16 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `$elixir-phoenix:phx-investigate` rather than the non-resolving unqualified
   `$phx-investigate` form. README and Codex installation guidance now document
   the exact plugin-qualified syntax inserted by `/skills`.
+
+- **Portable command rewriting now requires complete invocation tokens** — Amp,
+  Codex, Pi, and OpenCode projections leave filesystem paths, URLs, uppercase
+  names, underscored suffixes, and malformed namespace wildcards unchanged. Pi
+  now emits native `/skill:*` syntax directly instead of passing through a
+  path-like intermediate form.
+
+- **Learning destination and skill-loading documentation** — project-keyed
+  auto-memory is no longer described as applying to every Elixir project, and
+  the intro now documents native `paths:` frontmatter as a file-path gate.
 
 ## [2.14.3] - 2026-07-20
 

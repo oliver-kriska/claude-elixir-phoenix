@@ -4,62 +4,15 @@
 from __future__ import annotations
 
 import argparse
-import stat
 import sys
 import tempfile
 from pathlib import Path
 
 from .port_lib import SOURCE_PLUGIN_DIR, TARGETS_DIR
 from .port_lib import codex
+from .port_lib.generated_tree import tree_differences
 
 OUTPUT_DIR = TARGETS_DIR / "codex"
-
-
-def _differences(expected: Path, actual: Path) -> list[str]:
-    def entries(root: Path) -> dict[str, tuple[str, int, Path]]:
-        result: dict[str, tuple[str, int, Path]] = {}
-        for path in sorted(root.rglob("*")):
-            mode = path.lstat().st_mode
-            kind = (
-                "symlink"
-                if stat.S_ISLNK(mode)
-                else "directory"
-                if stat.S_ISDIR(mode)
-                else "file"
-                if stat.S_ISREG(mode)
-                else "special"
-            )
-            result[path.relative_to(root).as_posix()] = (
-                kind,
-                stat.S_IMODE(mode),
-                path,
-            )
-        return result
-
-    expected_entries = entries(expected)
-    actual_entries = entries(actual)
-    differences: list[str] = []
-    for relative in sorted(expected_entries.keys() | actual_entries.keys()):
-        if relative not in actual_entries:
-            differences.append(f"missing in target: {relative}")
-            continue
-        if relative not in expected_entries:
-            differences.append(f"extra in target: {relative}")
-            continue
-        expected_kind, expected_mode, expected_path = expected_entries[relative]
-        actual_kind, actual_mode, actual_path = actual_entries[relative]
-        if expected_kind != actual_kind:
-            differences.append(
-                f"type differs: {relative} ({expected_kind} != {actual_kind})"
-            )
-        elif expected_kind == "file" and (
-            expected_path.read_bytes() != actual_path.read_bytes()
-        ):
-            differences.append(f"differs: {relative}")
-        elif expected_mode != actual_mode:
-            differences.append(f"mode differs: {relative}")
-    return differences
-
 
 def check() -> int:
     if not OUTPUT_DIR.exists():
@@ -69,7 +22,7 @@ def check() -> int:
     with tempfile.TemporaryDirectory(prefix="codex-skills-check-") as tmp:
         generated = Path(tmp) / "codex"
         codex.build(SOURCE_PLUGIN_DIR, generated)
-        differences = _differences(generated, OUTPUT_DIR)
+        differences = tree_differences(generated, OUTPUT_DIR)
 
     if differences:
         print("[codex-skills] generated target has drift:", file=sys.stderr)
