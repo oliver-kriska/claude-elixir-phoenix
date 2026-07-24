@@ -189,6 +189,7 @@ def test_namespace_expansion_wraps_only_affected_prose() -> None:
             "phx-deps-update",
             "$elixir-phoenix:phx-investigate for deps.get failures",
         ),
+        ("phx-deps-vet", "not to scan them"),
         ("phx-document", "not README or external docs"),
         ("phx-full", "$elixir-phoenix:phx-work for an existing plan"),
         ("phx-help", "not for Codex /help"),

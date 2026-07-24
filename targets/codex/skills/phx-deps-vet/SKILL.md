@@ -1,7 +1,7 @@
 ---
 name: phx-deps-vet
-description: Record a vetted Hex package version in hex_vet.exs after a security;
-  Use to approve a dep…
+description: Record vetted Hex versions after security review. Use to approve audited
+  dependencies, not to scan them.
 ---
 
 # Deps Vet — Hex package audit ledger

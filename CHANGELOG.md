@@ -142,6 +142,10 @@ capabilities rather than claiming cross-runtime feature parity.
   prerequisites; and security documentation distinguishes absent telemetry or
   covert egress from visible, user-authorized external service calls.
 
+- **Codex dependency-vetting routing metadata stays complete** — the generated
+  `phx-deps-vet` description now preserves both its post-audit trigger and its
+  distinction from dependency scanning instead of ending mid-clause.
+
 - **Reliable behavioral trigger gates and routing boundaries** — deterministic
   structural evals no longer depend on ignored local result caches, while
   `make eval-full` runs a fresh Claude Haiku 4.5 gate requiring every skill to

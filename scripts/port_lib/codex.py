@@ -79,6 +79,10 @@ CODEX_SKILL_DESCRIPTION_OVERRIDES = {
         "Update Hex dependencies safely. Use for upgrades; use "
         "$phx-investigate for deps.get failures."
     ),
+    "phx-deps-vet": (
+        "Record vetted Hex versions after security review. Use to approve audited "
+        "dependencies, not to scan them."
+    ),
     "phx-document": (
         "Write Elixir @moduledoc and @doc text. Use only for code documentation, not "
         "README or external docs."
