@@ -4,43 +4,19 @@
 from __future__ import annotations
 
 import argparse
-import filecmp
-import stat
 import sys
 import tempfile
 from pathlib import Path
 
 from .port_lib import SOURCE_PLUGIN_DIR, TARGETS_DIR
 from .port_lib import amp
+from .port_lib.generated_tree import tree_differences
 
 OUTPUT_DIR = TARGETS_DIR / "amp" / "skills"
 
 
 def _differences(expected: Path, actual: Path) -> list[str]:
-    differences: list[str] = []
-    comparison = filecmp.dircmp(expected, actual)
-
-    def walk(current: filecmp.dircmp, prefix: str = "") -> None:
-        differences.extend(
-            f"missing in target: {prefix}{name}" for name in current.left_only
-        )
-        differences.extend(
-            f"extra in target: {prefix}{name}" for name in current.right_only
-        )
-        for name in current.common_files:
-            left = Path(current.left) / name
-            right = Path(current.right) / name
-            if not filecmp.cmp(left, right, shallow=False):
-                differences.append(f"differs: {prefix}{name}")
-            elif stat.S_IMODE(left.stat().st_mode) != stat.S_IMODE(
-                right.stat().st_mode
-            ):
-                differences.append(f"mode differs: {prefix}{name}")
-        for name, child in current.subdirs.items():
-            walk(child, f"{prefix}{name}/")
-
-    walk(comparison)
-    return differences
+    return tree_differences(expected, actual)
 
 
 def check() -> int:

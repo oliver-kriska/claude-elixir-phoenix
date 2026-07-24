@@ -191,6 +191,19 @@ def test_drift_comparison_detects_mode_only_changes(tmp_path) -> None:
     assert _differences(expected, actual) == ["mode differs: phx-one/run.sh"]
 
 
+def test_drift_comparison_detects_file_directory_type_changes(tmp_path) -> None:
+    expected = tmp_path / "expected"
+    actual = tmp_path / "actual"
+    expected.mkdir()
+    actual.mkdir()
+    (expected / "node").write_text("file\n", encoding="utf-8")
+    (actual / "node").mkdir()
+
+    assert _differences(expected, actual) == [
+        "type differs: node (file != directory)"
+    ]
+
+
 def test_build_restores_previous_target_when_installation_fails(
     tmp_path,
     monkeypatch,
