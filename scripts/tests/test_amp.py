@@ -61,6 +61,7 @@ def test_build_copies_complete_subtree_and_transforms_only_markdown(tmp_path) ->
     references = skill / "references"
     references.mkdir()
     (references / "guide.md").write_text("Use /phx:source.\n", encoding="utf-8")
+    (references / "guide.md").chmod(0o744)
     payload = b"\x00\xff\x10"
     (skill / "nested" / "assets").mkdir(parents=True)
     (skill / "nested" / "assets" / "payload.bin").write_bytes(payload)
@@ -78,6 +79,7 @@ def test_build_copies_complete_subtree_and_transforms_only_markdown(tmp_path) ->
         in (references := generated / "references" / "guide.md").read_text()
     )
     assert "/phx:source" not in references.read_text()
+    assert stat.S_IMODE(references.stat().st_mode) == 0o744
     assert (generated / "nested" / "assets" / "payload.bin").read_bytes() == payload
     assert stat.S_IMODE((generated / "nested" / "run.sh").stat().st_mode) == 0o755
 
@@ -161,6 +163,23 @@ def test_build_reports_missing_resource_with_source_path(tmp_path) -> None:
 
     with pytest.raises(ValueError, match=str(skill / "SKILL.md")):
         amp.build(plugin, tmp_path / "output")
+
+
+def test_build_rejects_symlinked_resources_without_replacing_target(tmp_path) -> None:
+    plugin = tmp_path / "plugin"
+    skill = _write_skill(plugin, "source", "phx:source")
+    outside = tmp_path / "outside.txt"
+    outside.write_text("private\n", encoding="utf-8")
+    (skill / "linked.txt").symlink_to(outside)
+    output = tmp_path / "output"
+    output.mkdir()
+    sentinel = output / "keep.txt"
+    sentinel.write_text("unchanged\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="linked.txt.*symlinks are not supported"):
+        amp.build(plugin, output)
+
+    assert sentinel.read_text(encoding="utf-8") == "unchanged\n"
 
 
 def test_amp_projection_is_deterministic(tmp_path) -> None:

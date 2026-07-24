@@ -131,6 +131,11 @@ capabilities rather than claiming cross-runtime feature parity.
   same `pi-elixir-phoenix` name, 3.0.0 version, and Pi-focused description as
   `targets/pi/package.json`.
 
+- **Amp generation now rejects source symlinks and preserves Markdown modes** —
+  generated resources can no longer dereference links outside the canonical
+  skill tree, and transformed Markdown permissions no longer depend on the
+  invoking process's umask.
+
 - **Reliable behavioral trigger gates and routing boundaries** — deterministic
   structural evals no longer depend on ignored local result caches, while
   `make eval-full` runs a fresh Claude Haiku 4.5 gate requiring every skill to

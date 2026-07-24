@@ -49,6 +49,14 @@ def discover_skills(source_plugin_dir: str | Path) -> list[SkillSource]:
     """Read all canonical skills and reject invalid or colliding target names."""
     plugin_dir = Path(source_plugin_dir)
     skills_dir = plugin_dir / "skills"
+    if skills_dir.is_symlink() or not skills_dir.is_dir():
+        raise ValueError(f"{skills_dir}: canonical skills must be a real directory")
+    for source_path in sorted(skills_dir.rglob("*")):
+        if source_path.is_symlink():
+            raise ValueError(f"{source_path}: symlinks are not supported in skills")
+        if not source_path.is_dir() and not source_path.is_file():
+            raise ValueError(f"{source_path}: special files are not supported in skills")
+
     discovered: list[SkillSource] = []
     names: dict[str, Path] = {}
 
@@ -215,7 +223,6 @@ def _populate(skills: list[SkillSource], output_dir: Path) -> None:
         output_dir,
         IGNORED_FILES,
         _transform_markdown,
-        preserve_markdown_mode=False,
     )
 
 
