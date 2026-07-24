@@ -171,8 +171,8 @@ like "analyze the codebase."
 NEW (on changed lines in the diff) or PRE-EXISTING (on unchanged code).
 Pre-existing issues are reported but don't affect the verdict."
 
-**CRITICAL**: All Agent calls MUST include `mode: "bypassPermissions"` —
-background agents cannot answer interactive permission prompts.
+Do not pass the deprecated Agent `mode` parameter. Claude Code 2.1.212+
+ignores it; subagents inherit the parent session's permission mode.
 
 Spawn the REAL specialist agents directly (they now have Write tool). Do NOT
 use `general-purpose` impersonation — that was a v2.8.0 workaround for when
@@ -184,7 +184,7 @@ at 1–5 min, so it overlaps the Claude agents; it self-preflights and SKIPs
 gracefully — never blocks the panel):
 
 ```
-Agent(subagent_type: "elixir-phoenix:codex-reviewer", mode: "bypassPermissions", prompt: """
+Agent(subagent_type: "phx:codex-reviewer", prompt: """
 Codex CLI review of this diff; normalize findings.
 base_branch: {default branch, e.g. main}
 diff_files: {file_list}
@@ -194,7 +194,7 @@ error. Don't pass custom instructions with --base (rubric is in AGENTS.md).
 Normalize P0/P1→BLOCKER, P2→WARNING, P3→SUGGESTION; tag source [codex].
 """, run_in_background: true)   # only when codex: true
 
-Agent(subagent_type: "elixir-phoenix:elixir-reviewer", mode: "bypassPermissions", prompt: """
+Agent(subagent_type: "phx:elixir-reviewer", prompt: """
 Review files for correctness, idioms, style, maintainability.
 
 Files: {file_list}
@@ -207,7 +207,7 @@ refine with a second Write. Chat response body ≤300 words.
 Mark each finding NEW (on changed lines) or PRE-EXISTING (on unchanged code).
 """, run_in_background: true)
 
-Agent(subagent_type: "elixir-phoenix:security-analyzer", mode: "bypassPermissions", prompt: """
+Agent(subagent_type: "phx:security-analyzer", prompt: """
 Security audit these files.
 
 Files: {file_list}
@@ -221,7 +221,7 @@ Focus: SQL injection, XSS (raw/1), authorization in handle_event,
 String.to_atom with user input, input validation, secrets, PII in logs.
 """, run_in_background: true)
 
-Agent(subagent_type: "elixir-phoenix:testing-reviewer", mode: "bypassPermissions", prompt: """
+Agent(subagent_type: "phx:testing-reviewer", prompt: """
 Review test quality for these changes.
 
 Files: {file_list}
@@ -235,7 +235,7 @@ Focus: missing tests, isolation, factories vs fixtures, edge cases,
 LiveView test patterns, Mox usage, StreamData opportunities.
 """, run_in_background: true)
 
-Agent(subagent_type: "elixir-phoenix:verification-runner", mode: "bypassPermissions", prompt: """
+Agent(subagent_type: "phx:verification-runner", prompt: """
 Run static analysis on this project.
 
 output_file: {output_dir}/verification.md
@@ -272,7 +272,7 @@ after the limit resets to cover the missing tracks."
 After all 4 agents complete, spawn context-supervisor:
 
 ```
-Agent(subagent_type: "context-supervisor", mode: "bypassPermissions", prompt: """
+Agent(subagent_type: "phx:context-supervisor", prompt: """
 Compress review findings.
 Input: {output_dir}
 Output: {summaries_dir}

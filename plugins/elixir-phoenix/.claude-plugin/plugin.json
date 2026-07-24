@@ -1,5 +1,6 @@
 {
-  "name": "elixir-phoenix",
+  "name": "phx",
+  "displayName": "Elixir/Phoenix",
   "version": "3.0.0",
   "description": "Elixir/Phoenix/LiveView development with specialist agents, Iron Laws, and Tidewave MCP integration",
   "keywords": ["elixir", "phoenix", "liveview", "ecto", "oban", "otp"],
@@ -7,5 +8,6 @@
     "name": "Oliver Kriska"
   },
   "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
-  "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix"
+  "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "dependencies": ["ecto", "lv"]
 }

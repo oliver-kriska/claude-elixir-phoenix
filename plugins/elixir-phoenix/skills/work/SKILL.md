@@ -1,5 +1,5 @@
 ---
-name: phx:work
+name: work
 description: Execute Elixir/Phoenix plan tasks with progress tracking. Use after /phx:plan to implement features with mix compile and mix test verification after each step, or --continue to resume interrupted work.
 effort: high
 argument-hint: <path to plan file>

@@ -103,8 +103,13 @@ authenticated `gh`, keeps triage read-only unless fixes are explicitly approved,
 and reports mutations only after confirmed replies/resolutions.
 `$elixir-phoenix:phx-full` preserves the gated, bounded plan → work → verify →
 read-only review → compound lifecycle by invoking portable skills or executing
-them sequentially in-session. Other workflows remain baseline projections and
-may not be fully portable.
+them sequentially in-session. `$elixir-phoenix:phx-trace` uses direct
+`mix xref` call-tree discovery; `$elixir-phoenix:phx-audit` completes its five
+health tracks with optional generic subagents or sequentially; and
+`$elixir-phoenix:phx-research` uses native web or HTTP capabilities with a
+local-source fallback. None requires Claude named agents, task APIs, or MCP
+tools. Other workflows remain baseline projections and may not be fully
+portable.
 
 ### Optional Tidewave MCP
 
@@ -221,7 +226,11 @@ Intentionally deferred:
 Some non-flagship skills still describe richer Claude Code orchestration APIs.
 They are packaged for domain guidance and progressive migration, but the plugin
 does not claim complete workflow parity until those paths receive focused Codex
-adaptations.
+adaptations. In particular, `phx-perf` describes Claude specialist agents; run
+its quoted analysis tracks directly or with generic Codex subagents.
+`phx-learn-from-fix` still targets Claude-specific personal skill and memory
+locations. `phx-freeze` is adapted to an advisory current-session scope and
+does not claim hook enforcement.
 
 ## Troubleshooting
 

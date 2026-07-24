@@ -125,6 +125,43 @@ capabilities rather than claiming cross-runtime feature parity.
   HTTP server from registering it with a client, and document external
   registration for Claude Code, Codex, and OpenCode.
 
+- **Claude Code 2.1.217 nested-agent compatibility** — flagship workflows now
+  detect the default depth-1 subagent limit and keep orchestration in the main
+  conversation while spawning leaf specialists directly. Users retain the
+  plan/work/verify/review contracts without setting shell state; depth 2/3 can
+  still opt into the original nested topology.
+
+- **Claude Code 2.1.212 Agent invocation compatibility** — removed the ignored,
+  deprecated Task/Agent `mode` parameter from workflow instructions. Subagents
+  inherit the parent session's permission mode.
+
+- **Fork-session continuity on Claude Code 2.1.214+** — resume, scratchpad, and
+  branch-freshness SessionStart checks now also run for source `fork`.
+
+- **Claude Code 2.1.218 agent validation compatibility** — declared agent names
+  remain unqualified while concrete runtime invocations use the `phx:` plugin
+  namespace. Regression coverage rejects colons in declared agent names and
+  unrecognized agent tool names.
+
+- **Claude Code slash-command compatibility remains stable in v3** — the
+  marketplace package keeps its `elixir-phoenix` install identity while the
+  plugin namespace now explicitly registers `/phx:*`; auto-installed `ecto`
+  and `lv` compatibility plugins preserve `/ecto:*` and `/lv:*`. The call
+  tracing skill directory now matches `/phx:trace`, and regression coverage
+  checks effective namespace-plus-frontmatter command names. Canonical
+  frontmatter names contain only the final command segment because Claude Code
+  2.1.216+ retains the plugin prefix when a skill declares `name`.
+
+- **v2 → v3 upgrade path preserves newly added compatibility dependencies** —
+  install the new `ecto` and `lv` compatibility plugins from the updated
+  marketplace before updating `elixir-phoenix`. This avoids a temporary
+  missing-dependency state on existing installations. Restart Claude Code
+  before relying on the updated hooks and agents.
+
+- **Generated freeze is now honest about its safety boundary** — Amp, Codex,
+  Pi, and OpenCode receive an advisory current-session edit scope instead of a
+  sentinel that falsely claimed enforcement by an uninstalled Claude hook.
+
 - **Generated nested resource links now resolve from their containing file** —
   Amp, Codex, Pi, and OpenCode projections compute skill-relative paths from
   each Markdown resource directory instead of the skill root, fixing broken

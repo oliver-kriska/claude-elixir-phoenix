@@ -7,6 +7,12 @@ skills baseline, not full Claude Code feature parity.
 See the [runtime support matrix](runtime-support.md) for a concise comparison
 with Claude Code, Amp, Codex, and OpenCode.
 
+## Requirements
+
+- Pi 0.81.1 or a compatible newer release;
+- Node.js 22.19.0 or newer, as required by the package manifest;
+- Git access to GitHub for installation and updates.
+
 ## Install
 
 Install globally for every Pi project:
@@ -95,6 +101,8 @@ Start a fresh Pi process after an install, update, ref change, or removal.
   progress tracking, with complete same-session sequential fallbacks;
 - portable `phx-pr-review` connector/`gh` triage and mutation confirmation, plus
   gated, bounded `phx-full` plan → work → verify → review → compound execution;
+- portable `phx-trace` direct `mix xref` discovery, five-track `phx-audit`, and
+  native-capability `phx-research`, each with a same-session sequential path;
 - automatic skill selection through Pi's native Agent Skills support.
 
 ## Intentionally deferred
@@ -112,7 +120,12 @@ has a same-session sequential path.
 
 Some non-flagship skills remain baseline projections and may describe richer
 Claude Code orchestration APIs. They are included for domain guidance and
-progressive migration, not as a claim of complete workflow parity.
+progressive migration, not as a claim of complete workflow parity. In
+particular, `phx-perf` describes Claude specialist agents; run its quoted
+analysis tracks directly or with generic Pi subagents. `phx-learn-from-fix`
+still targets Claude-specific personal skill and memory locations.
+`phx-freeze` is adapted to an advisory current-session scope and does not claim
+hook enforcement.
 
 ## Project and global scope
 
@@ -130,6 +143,7 @@ Confirm Pi and the package are visible:
 
 ```bash
 pi --version
+node --version
 pi list
 ```
 

@@ -216,7 +216,7 @@ that per-task compile checks miss (test failures, credo violations, type errors)
    degrades to SKIPPED when the CLI is absent — never blocks the cycle):
 
    ```
-   Agent(subagent_type: "parallel-reviewer", prompt: """
+   Agent(subagent_type: "phx:parallel-reviewer", prompt: """
    Review changes for feature '{slug}'.
    Output directory: .claude/plans/{slug}/reviews/
    Summaries directory: .claude/plans/{slug}/summaries/
@@ -312,7 +312,7 @@ orchestrator (which may be at 150k+ tokens by this point).
       - Cross-reference with existing solutions
    3. Present compound summary
    4. Output: COMPOUNDING_DONE or COMPOUNDING_SKIPPED
-   """, mode: "bypassPermissions")
+   """)
    ```
 
 2. Read the sub-agent's result

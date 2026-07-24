@@ -117,7 +117,7 @@ Agent(subagent_type: "general-purpose", model: "sonnet", run_in_background: true
 If 3+ workers spawned, compress findings:
 
 ```text
-Agent(subagent_type: "elixir-phoenix:context-supervisor", prompt: """
+Agent(subagent_type: "phx:context-supervisor", prompt: """
   input_dir: .claude/docs-check/reports/
   output_dir: .claude/docs-check/summaries/
   priority_instructions: |

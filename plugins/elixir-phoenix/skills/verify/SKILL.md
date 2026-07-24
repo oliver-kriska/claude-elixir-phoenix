@@ -1,5 +1,5 @@
 ---
-name: phx:verify
+name: verify
 description: Verify Elixir/Phoenix changes — compile, format, and test in one loop. Use after implementation, before PRs, or after fixing bugs.
 effort: low
 ---

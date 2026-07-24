@@ -29,7 +29,7 @@ def get_body(content: str) -> str:
     end = content.find("---", 3)
     if end == -1:
         return content
-    return content[end + 3:].strip()
+    return content[end + 3 :].strip()
 
 
 def get_sections(content: str) -> dict[str, str]:
@@ -56,6 +56,7 @@ def get_sections(content: str) -> dict[str, str]:
 
 # --- Section matchers ---
 
+
 def section_exists(content: str, section: str, **_) -> tuple[bool, str]:
     """Check that a markdown section (## or ###) with given name exists."""
     sections = get_sections(content)
@@ -80,7 +81,10 @@ def section_order(content: str, expected_order: list[str], **_) -> tuple[bool, s
             return False, f"Section '{expected}' not found"
     if positions == sorted(positions):
         return True, "Sections in correct order"
-    return False, f"Sections out of order: {[expected_order[i] for i in range(len(positions)) if i > 0 and positions[i] < positions[i-1]]}"
+    return (
+        False,
+        f"Sections out of order: {[expected_order[i] for i in range(len(positions)) if i > 0 and positions[i] < positions[i - 1]]}",
+    )
 
 
 def max_section_lines(content: str, max: int = 40, **_) -> tuple[bool, str]:
@@ -98,6 +102,7 @@ def max_section_lines(content: str, max: int = 40, **_) -> tuple[bool, str]:
 
 # --- Content matchers ---
 
+
 def content_present(content: str, pattern: str, **_) -> tuple[bool, str]:
     """Check that a regex pattern exists in the content."""
     if re.search(pattern, content):
@@ -113,7 +118,9 @@ def content_absent(content: str, pattern: str, **_) -> tuple[bool, str]:
     return True, f"Pattern '{pattern}' correctly absent"
 
 
-def grep_count(content: str, pattern: str, min: int = 0, max: int = 999, **_) -> tuple[bool, str]:
+def grep_count(
+    content: str, pattern: str, min: int = 0, max: int = 999, **_
+) -> tuple[bool, str]:
     """Count regex matches and check against min/max bounds."""
     matches = re.findall(pattern, content)
     count = len(matches)
@@ -124,7 +131,10 @@ def grep_count(content: str, pattern: str, min: int = 0, max: int = 999, **_) ->
 
 # --- Size matchers ---
 
-def line_count(content: str, target: int = 100, tolerance: int = 85, skill_path: str = "", **_) -> tuple[bool, str]:
+
+def line_count(
+    content: str, target: int = 100, tolerance: int = 85, skill_path: str = "", **_
+) -> tuple[bool, str]:
     """Check file line count is within target +/- tolerance.
 
     Score is based on proximity to target. Under target is always good.
@@ -140,7 +150,10 @@ def line_count(content: str, target: int = 100, tolerance: int = 85, skill_path:
         return True, f"{lines} lines (target: {target})"
     if lines <= target + tolerance:
         return True, f"{lines} lines (within tolerance: {target}+{tolerance})"
-    return False, f"{lines} lines (exceeds target+tolerance: {target}+{tolerance}={target + tolerance})"
+    return (
+        False,
+        f"{lines} lines (exceeds target+tolerance: {target}+{tolerance}={target + tolerance})",
+    )
 
 
 def token_estimate(content: str, max_tokens: int = 500, **_) -> tuple[bool, str]:
@@ -155,7 +168,10 @@ def token_estimate(content: str, max_tokens: int = 500, **_) -> tuple[bool, str]
 
 # --- Frontmatter matchers ---
 
-def frontmatter_field(content: str, field: str, expected: str | None = None, **_) -> tuple[bool, str]:
+
+def frontmatter_field(
+    content: str, field: str, expected: str | None = None, **_
+) -> tuple[bool, str]:
     """Check that a frontmatter field exists and optionally matches expected value."""
     fm = parse_frontmatter(content)
     if field not in fm:
@@ -165,7 +181,9 @@ def frontmatter_field(content: str, field: str, expected: str | None = None, **_
     return True, f"Frontmatter '{field}': '{fm[field]}'"
 
 
-def description_length(content: str, min: int = 50, max: int = 250, **_) -> tuple[bool, str]:
+def description_length(
+    content: str, min: int = 50, max: int = 250, **_
+) -> tuple[bool, str]:
     """Check frontmatter description length is in sweet spot.
 
     The 250-char target is a plugin-side listing-budget discipline, not a CC
@@ -186,7 +204,9 @@ def description_length(content: str, min: int = 50, max: int = 250, **_) -> tupl
     return False, f"Description length: {length} chars (expected {min}-{max})"
 
 
-def description_keywords(content: str, min: int = 5, keywords: list[str] | None = None, **_) -> tuple[bool, str]:
+def description_keywords(
+    content: str, min: int = 5, keywords: list[str] | None = None, **_
+) -> tuple[bool, str]:
     """Check description has enough domain-specific keywords."""
     fm = parse_frontmatter(content)
     desc = str(fm.get("description", "")).lower()
@@ -196,14 +216,53 @@ def description_keywords(content: str, min: int = 5, keywords: list[str] | None 
     else:
         # Default Elixir/Phoenix domain keywords
         domain_keywords = [
-            "elixir", "phoenix", "liveview", "ecto", "oban", "genserver", "plug",
-            "migration", "changeset", "schema", "query", "preload", "pubsub",
-            "component", "mount", "handle_event", "handle_info", "assign",
-            "stream", "socket", "router", "controller", "context", "repo",
-            "test", "exunit", "mox", "factory", "credo", "dialyzer",
-            "security", "auth", "session", "token", "deploy", "docker", "fly",
-            "debug", "investigate", "audit", "review", "plan", "verify",
-            "refactor", "performance", "optimize", "iron law",
+            "elixir",
+            "phoenix",
+            "liveview",
+            "ecto",
+            "oban",
+            "genserver",
+            "plug",
+            "migration",
+            "changeset",
+            "schema",
+            "query",
+            "preload",
+            "pubsub",
+            "component",
+            "mount",
+            "handle_event",
+            "handle_info",
+            "assign",
+            "stream",
+            "socket",
+            "router",
+            "controller",
+            "context",
+            "repo",
+            "test",
+            "exunit",
+            "mox",
+            "factory",
+            "credo",
+            "dialyzer",
+            "security",
+            "auth",
+            "session",
+            "token",
+            "deploy",
+            "docker",
+            "fly",
+            "debug",
+            "investigate",
+            "audit",
+            "review",
+            "plan",
+            "verify",
+            "refactor",
+            "performance",
+            "optimize",
+            "iron law",
         ]
         found = [kw for kw in domain_keywords if kw in desc]
 
@@ -212,12 +271,14 @@ def description_keywords(content: str, min: int = 5, keywords: list[str] | None 
     return False, f"{len(found)} keywords found (min: {min}): {found}"
 
 
-def description_no_vague(content: str, forbidden: list[str] | None = None, **_) -> tuple[bool, str]:
+def description_no_vague(
+    content: str, forbidden: list[str] | None = None, **_
+) -> tuple[bool, str]:
     """Check description doesn't have vague words. Uses word boundaries to avoid false positives."""
     fm = parse_frontmatter(content)
     desc = str(fm.get("description", "")).lower()
     vague = forbidden or ["general", "various", "etc", "sometimes", "might", "possibly"]
-    found = [w for w in vague if re.search(r'\b' + re.escape(w) + r'\b', desc)]
+    found = [w for w in vague if re.search(r"\b" + re.escape(w) + r"\b", desc)]
     if not found:
         return True, "No vague words in description"
     return False, f"Vague words in description: {found}"
@@ -225,13 +286,20 @@ def description_no_vague(content: str, forbidden: list[str] | None = None, **_) 
 
 # --- Cross-reference matchers ---
 
+
 def valid_skill_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, str]:
     """Check all /phx: or skill name references point to existing skills."""
     if not plugin_root:
         # Try to find plugin root relative to common paths
         for candidate in [
             "plugins/elixir-phoenix",
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "plugins", "elixir-phoenix"),
+            os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                "..",
+                "..",
+                "plugins",
+                "elixir-phoenix",
+            ),
         ]:
             if os.path.isdir(os.path.join(candidate, "skills")):
                 plugin_root = candidate
@@ -244,9 +312,9 @@ def valid_skill_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
     existing_skills = set(os.listdir(skills_dir))
 
     # Find /phx: references
-    refs = re.findall(r'/phx:(\w[\w-]*)', content)
+    refs = re.findall(r"/phx:(\w[\w-]*)", content)
     # Find skill name references in backticks
-    refs += re.findall(r'`(\w[\w-]+)`\s+skill', content)
+    refs += re.findall(r"`(\w[\w-]+)`\s+skill", content)
 
     missing = []
     for ref in set(refs):
@@ -255,8 +323,10 @@ def valid_skill_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
         if skill_name not in existing_skills:
             # Try common aliases
             aliases = {
-                "n1": "n1-check", "assigns": "assigns-audit",
-                "lv:assigns": "assigns-audit", "ecto:n1-check": "n1-check",
+                "n1": "n1-check",
+                "assigns": "assigns-audit",
+                "lv:assigns": "assigns-audit",
+                "ecto:n1-check": "n1-check",
             }
             if skill_name not in aliases.values():
                 missing.append(ref)
@@ -271,7 +341,13 @@ def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
     if not plugin_root:
         for candidate in [
             "plugins/elixir-phoenix",
-            os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "plugins", "elixir-phoenix"),
+            os.path.join(
+                os.path.dirname(os.path.abspath(__file__)),
+                "..",
+                "..",
+                "plugins",
+                "elixir-phoenix",
+            ),
         ]:
             if os.path.isdir(os.path.join(candidate, "agents")):
                 plugin_root = candidate
@@ -281,11 +357,19 @@ def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
         return True, "Cannot locate plugin root — skipping agent ref check"
 
     agents_dir = os.path.join(plugin_root, "agents")
-    existing_agents = {f.replace(".md", "") for f in os.listdir(agents_dir) if f.endswith(".md")}
+    existing_agents = {
+        f.replace(".md", "") for f in os.listdir(agents_dir) if f.endswith(".md")
+    }
 
     # Find agent references: subagent_type: "name" or agent name in backticks
-    refs = re.findall(r'subagent_type[=:]\s*["\']?(\w[\w-]+)', content)
-    refs += re.findall(r'`(\w[\w-]+-(?:reviewer|analyzer|architect|validator|runner|specialist|advisor|judge|supervisor|orchestrator|researcher|tracer))`', content)
+    refs = re.findall(
+        r'subagent_type[=:]\s*["\']?([\w-]+(?::[\w-]+)?)',
+        content,
+    )
+    refs += re.findall(
+        r"`(\w[\w-]+-(?:reviewer|analyzer|architect|validator|runner|specialist|advisor|judge|supervisor|orchestrator|researcher|tracer))`",
+        content,
+    )
 
     # Built-in Claude Code agent types (not in plugin agents/ dir)
     builtin_agents = {"general-purpose", "Explore", "Plan", "code-simplifier"}
@@ -294,14 +378,22 @@ def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
     for ref in set(refs):
         if ref in builtin_agents:
             continue
-        # Strip elixir-phoenix: prefix if present
-        clean_ref = ref.replace("elixir-phoenix:", "")
-        if clean_ref not in existing_agents and clean_ref.replace("_", "-") not in existing_agents:
+        # Strip the current runtime plugin namespace if present.
+        clean_ref = re.sub(r"^phx:", "", ref)
+        if (
+            clean_ref not in existing_agents
+            and clean_ref.replace("_", "-") not in existing_agents
+        ):
             missing.append(ref)
 
     if not missing:
         checked = len(set(refs))
-        return True, f"All {checked} agent references valid" if checked else "No agent references found"
+        return (
+            True,
+            f"All {checked} agent references valid"
+            if checked
+            else "No agent references found",
+        )
     return False, f"Missing agents: {missing}"
 
 
@@ -314,7 +406,7 @@ def valid_file_refs(content: str, skill_path: str = "", **_) -> tuple[bool, str]
     # Find cross-skill references first (e.g., compound-docs/references/schema.md)
     # These have a skill-name prefix before references/
     cross_skill_filenames = set()
-    for match in re.finditer(r'([\w-]+)/references/([\w-]+\.md)', content):
+    for match in re.finditer(r"([\w-]+)/references/([\w-]+\.md)", content):
         prefix = match.group(1)
         filename = match.group(2)
         # If prefix is not CLAUDE_SKILL_DIR placeholder, it's a cross-skill ref
@@ -322,7 +414,7 @@ def valid_file_refs(content: str, skill_path: str = "", **_) -> tuple[bool, str]
             cross_skill_filenames.add(filename)
 
     # Find own-skill references: ${CLAUDE_SKILL_DIR}/references/ or bare references/
-    own_refs = re.findall(r'(?:CLAUDE_SKILL_DIR\}?/)?references/([\w-]+\.md)', content)
+    own_refs = re.findall(r"(?:CLAUDE_SKILL_DIR\}?/)?references/([\w-]+\.md)", content)
 
     # Filter out cross-skill references
     refs = [r for r in set(own_refs) if r not in cross_skill_filenames]
@@ -346,6 +438,7 @@ def valid_file_refs(content: str, skill_path: str = "", **_) -> tuple[bool, str]
 
 # --- Safety matchers ---
 
+
 def has_iron_laws(content: str, min_count: int = 1, **_) -> tuple[bool, str]:
     """Check Iron Laws section exists and has content.
 
@@ -359,7 +452,7 @@ def has_iron_laws(content: str, min_count: int = 1, **_) -> tuple[bool, str]:
     for name, body in sections.items():
         if "iron law" in name.lower():
             found_any = True
-            items = re.findall(r'^\s*(?:\d+[\.\)]\s+|[-*]\s+)', body, re.MULTILINE)
+            items = re.findall(r"^\s*(?:\d+[\.\)]\s+|[-*]\s+)", body, re.MULTILINE)
             if len(items) > best_count:
                 best_count = len(items)
 
@@ -387,7 +480,7 @@ def has_gotchas(content: str, min_count: int = 1, **_) -> tuple[bool, str]:
     for name, body in sections.items():
         if "gotcha" in name.lower():
             found_any = True
-            items = re.findall(r'^\s*(?:\d+[\.\)]\s+|[-*]\s+)', body, re.MULTILINE)
+            items = re.findall(r"^\s*(?:\d+[\.\)]\s+|[-*]\s+)", body, re.MULTILINE)
             if len(items) > best_count:
                 best_count = len(items)
 
@@ -399,16 +492,18 @@ def has_gotchas(content: str, min_count: int = 1, **_) -> tuple[bool, str]:
     return False, f"Gotchas section has {best_count} items (min: {min_count})"
 
 
-def no_dangerous_patterns(content: str, patterns: list[str] | None = None, **_) -> tuple[bool, str]:
+def no_dangerous_patterns(
+    content: str, patterns: list[str] | None = None, **_
+) -> tuple[bool, str]:
     """Check content doesn't contain dangerous code patterns in examples.
 
     Skips Iron Laws sections where anti-patterns are documented as warnings.
     """
     dangerous = patterns or [
-        r'raw\(/1',
-        r'String\.to_atom\(',
-        r'MIX_ENV=prod',
-        r'\|\s*raw\b',
+        r"raw\(/1",
+        r"String\.to_atom\(",
+        r"MIX_ENV=prod",
+        r"\|\s*raw\b",
     ]
 
     # Get body, excluding:
@@ -417,7 +512,15 @@ def no_dangerous_patterns(content: str, patterns: list[str] | None = None, **_) 
     sections = get_sections(content)
     filtered_lines = []
     for name, body in sections.items():
-        skip_sections = ("iron law", "anti-pattern", "red flag", "detection", "checklist", "vulnerabilit", "confidence level")
+        skip_sections = (
+            "iron law",
+            "anti-pattern",
+            "red flag",
+            "detection",
+            "checklist",
+            "vulnerabilit",
+            "confidence level",
+        )
         if any(kw in name.lower() for kw in skip_sections):
             continue
         for line in body.split("\n"):
@@ -437,7 +540,9 @@ def no_dangerous_patterns(content: str, patterns: list[str] | None = None, **_) 
     return False, f"Dangerous patterns found: {found}"
 
 
-def askuserquestion_option_limit(content: str, max_options: int = 4, **_) -> tuple[bool, str]:
+def askuserquestion_option_limit(
+    content: str, max_options: int = 4, **_
+) -> tuple[bool, str]:
     """AskUserQuestion supports at most 4 options — a 5th is SILENTLY dropped.
 
     The brainstorm skill shipped with 5 options for months and nothing errored;
@@ -468,12 +573,12 @@ def askuserquestion_option_limit(content: str, max_options: int = 4, **_) -> tup
         # items can be its options — same-level items are siblings (e.g. an
         # AskUserQuestion mention inside an Iron Laws numbered list).
         mention_indent = None
-        mention_item = re.match(r'^(\s*)(?:[-*]|\d+[\.\)])\s+\S', line)
+        mention_item = re.match(r"^(\s*)(?:[-*]|\d+[\.\)])\s+\S", line)
         if mention_item:
             mention_indent = len(mention_item.group(1))
 
         # Shape 1: YAML-ish options block (`- label:` entries)
-        label_count = sum(1 for ln in window if re.match(r'^\s*-\s+label:', ln))
+        label_count = sum(1 for ln in window if re.match(r"^\s*-\s+label:", ln))
         if label_count:
             count = label_count
         else:
@@ -481,8 +586,8 @@ def askuserquestion_option_limit(content: str, max_options: int = 4, **_) -> tup
             count = 0
             marker = None
             for ln in window:
-                is_bullet = bool(re.match(r'^\s*[-*]\s+\S', ln))
-                is_number = bool(re.match(r'^\s*\d+[\.\)]\s+\S', ln))
+                is_bullet = bool(re.match(r"^\s*[-*]\s+\S", ln))
+                is_number = bool(re.match(r"^\s*\d+[\.\)]\s+\S", ln))
                 if is_bullet or is_number:
                     indent = len(ln) - len(ln.lstrip())
                     if mention_indent is not None and indent <= mention_indent:
@@ -495,7 +600,9 @@ def askuserquestion_option_limit(content: str, max_options: int = 4, **_) -> tup
                         count += 1
                     else:
                         break
-                elif marker is not None and ln.strip() and not ln.startswith((" ", "\t")):
+                elif (
+                    marker is not None and ln.strip() and not ln.startswith((" ", "\t"))
+                ):
                     break
 
         if count > max_options:
@@ -511,6 +618,7 @@ def askuserquestion_option_limit(content: str, max_options: int = 4, **_) -> tup
 
 # --- Clarity & Specificity matchers (from SkillsBench, MePO papers) ---
 
+
 def action_density(content: str, min_ratio: float = 0.4, **_) -> tuple[bool, str]:
     """Measure ratio of actionable lines to total non-empty lines.
 
@@ -523,27 +631,37 @@ def action_density(content: str, min_ratio: float = 0.4, **_) -> tuple[bool, str
     lines = [line.strip() for line in body.split("\n") if line.strip()]
 
     # Skip headings, blank lines, code fence markers
-    content_lines = [line for line in lines if not line.startswith("#") and line not in ("```", "---")]
+    content_lines = [
+        line
+        for line in lines
+        if not line.startswith("#") and line not in ("```", "---")
+    ]
     if not content_lines:
         return True, "No content lines to analyze"
 
-    imperative_verbs = r'^(?:Run|Add|Create|Check|Read|Use|Set|Write|Install|Configure|Start|Stop|Enable|Disable|Remove|Delete|Update|Fix|Move|Copy|Spawn|Load|Save|Open|Close|Verify|Test|Build|Deploy|Review|Merge|Commit|Push|Pull|Execute|Invoke|Call|Apply|Import|Export|Send|Fetch|Parse|Search|Find|List|Show|Print|Log|Debug|Skip|Avoid|Replace|Extract|Generate|Validate|Ensure|Include|Exclude|Prefer|Always|Never|Do not|MUST|NEVER|CRITICAL)\b'
+    imperative_verbs = r"^(?:Run|Add|Create|Check|Read|Use|Set|Write|Install|Configure|Start|Stop|Enable|Disable|Remove|Delete|Update|Fix|Move|Copy|Spawn|Load|Save|Open|Close|Verify|Test|Build|Deploy|Review|Merge|Commit|Push|Pull|Execute|Invoke|Call|Apply|Import|Export|Send|Fetch|Parse|Search|Find|List|Show|Print|Log|Debug|Skip|Avoid|Replace|Extract|Generate|Validate|Ensure|Include|Exclude|Prefer|Always|Never|Do not|MUST|NEVER|CRITICAL)\b"
 
     actionable = 0
     for line in content_lines:
         if re.match(imperative_verbs, line, re.IGNORECASE):
             actionable += 1
-        elif re.match(r'^\s*\d+[\.\)]\s+', line):  # Numbered steps
+        elif re.match(r"^\s*\d+[\.\)]\s+", line):  # Numbered steps
             actionable += 1
-        elif re.match(r'^\s*[-*]\s+\*\*', line):  # Bold bullet items
+        elif re.match(r"^\s*[-*]\s+\*\*", line):  # Bold bullet items
             actionable += 1
         elif line.startswith("|") and "|" in line[1:]:  # Table rows
             actionable += 1
 
     ratio = actionable / len(content_lines) if content_lines else 0
     if ratio >= min_ratio:
-        return True, f"Action density: {ratio:.0%} ({actionable}/{len(content_lines)} lines actionable, min: {min_ratio:.0%})"
-    return False, f"Action density: {ratio:.0%} ({actionable}/{len(content_lines)} lines actionable, min: {min_ratio:.0%})"
+        return (
+            True,
+            f"Action density: {ratio:.0%} ({actionable}/{len(content_lines)} lines actionable, min: {min_ratio:.0%})",
+        )
+    return (
+        False,
+        f"Action density: {ratio:.0%} ({actionable}/{len(content_lines)} lines actionable, min: {min_ratio:.0%})",
+    )
 
 
 def specificity_ratio(content: str, min_ratio: float = 0.3, **_) -> tuple[bool, str]:
@@ -554,27 +672,31 @@ def specificity_ratio(content: str, min_ratio: float = 0.3, **_) -> tuple[bool, 
     From SkillsBench: Specificity dimension is critical for skill effectiveness.
     """
     body = get_body(content)
-    lines = [line.strip() for line in body.split("\n") if line.strip() and not line.startswith("#")]
+    lines = [
+        line.strip()
+        for line in body.split("\n")
+        if line.strip() and not line.startswith("#")
+    ]
     if not lines:
         return True, "No content lines to analyze"
 
     # Concrete indicators
     concrete_patterns = [
-        r'`[^`]+`',           # Inline code
-        r'^\s*\|',            # Table rows
-        r'\w+\.\w+\.\w+',    # Dotted paths (Module.function.arity)
-        r'/\w+[/\w]*\.\w+',  # File paths
-        r'mix \w+',           # Mix commands
-        r'--\w+',             # CLI flags
-        r'\w+_\w+\.ex',      # Elixir file names
-        r'^\s*-\s*\[\s*\]',  # Checklist items (- [ ])
-        r'^\s*\d+\.\s*\*\*', # Bold numbered items (1. **Rule**)
+        r"`[^`]+`",  # Inline code
+        r"^\s*\|",  # Table rows
+        r"\w+\.\w+\.\w+",  # Dotted paths (Module.function.arity)
+        r"/\w+[/\w]*\.\w+",  # File paths
+        r"mix \w+",  # Mix commands
+        r"--\w+",  # CLI flags
+        r"\w+_\w+\.ex",  # Elixir file names
+        r"^\s*-\s*\[\s*\]",  # Checklist items (- [ ])
+        r"^\s*\d+\.\s*\*\*",  # Bold numbered items (1. **Rule**)
     ]
     # Vague indicators
     vague_phrases = [
-        r'\b(?:consider|you may want|it depends|as needed|if necessary|when appropriate)\b',
-        r'\b(?:should probably|might want to|could potentially|try to|attempt to)\b',
-        r'\b(?:in some cases|depending on|for example you could)\b',
+        r"\b(?:consider|you may want|it depends|as needed|if necessary|when appropriate)\b",
+        r"\b(?:should probably|might want to|could potentially|try to|attempt to)\b",
+        r"\b(?:in some cases|depending on|for example you could)\b",
     ]
 
     concrete_count = 0
@@ -592,25 +714,41 @@ def specificity_ratio(content: str, min_ratio: float = 0.3, **_) -> tuple[bool, 
         return True, "No specificity indicators found (neutral)"
     ratio = concrete_count / len(lines)
     if ratio >= min_ratio:
-        return True, f"Specificity: {ratio:.0%} concrete ({concrete_count} concrete, {vague_count} vague, {len(lines)} total)"
-    return False, f"Specificity: {ratio:.0%} concrete ({concrete_count} concrete, {vague_count} vague, min: {min_ratio:.0%})"
+        return (
+            True,
+            f"Specificity: {ratio:.0%} concrete ({concrete_count} concrete, {vague_count} vague, {len(lines)} total)",
+        )
+    return (
+        False,
+        f"Specificity: {ratio:.0%} concrete ({concrete_count} concrete, {vague_count} vague, min: {min_ratio:.0%})",
+    )
 
 
-def has_examples(content: str, min_blocks: int = 1, min_lines: int = 2, **_) -> tuple[bool, str]:
+def has_examples(
+    content: str, min_blocks: int = 1, min_lines: int = 2, **_
+) -> tuple[bool, str]:
     """Check for code examples (fenced blocks) of sufficient length.
 
     From SkillsBench: Examples dimension (0-3 scale) — presence and quality of working examples.
     """
     body = get_body(content)
-    blocks = re.findall(r'```[\w]*\n(.*?)```', body, re.DOTALL)
+    blocks = re.findall(r"```[\w]*\n(.*?)```", body, re.DOTALL)
     substantial = [b for b in blocks if len(b.strip().split("\n")) >= min_lines]
 
     if len(substantial) >= min_blocks:
-        return True, f"{len(substantial)} code examples found (min: {min_blocks}, each >= {min_lines} lines)"
-    return False, f"{len(substantial)} code examples with >= {min_lines} lines (min: {min_blocks})"
+        return (
+            True,
+            f"{len(substantial)} code examples found (min: {min_blocks}, each >= {min_lines} lines)",
+        )
+    return (
+        False,
+        f"{len(substantial)} code examples with >= {min_lines} lines (min: {min_blocks})",
+    )
 
 
-def no_duplication(content: str, ngram_size: int = 5, max_dupes: int = 3, **_) -> tuple[bool, str]:
+def no_duplication(
+    content: str, ngram_size: int = 5, max_dupes: int = 3, **_
+) -> tuple[bool, str]:
     """Detect repeated instructional phrases across different sections.
 
     Finds n-gram phrases (5+ words) that appear in multiple sections.
@@ -639,28 +777,54 @@ def no_duplication(content: str, ngram_size: int = 5, max_dupes: int = 3, **_) -
             if line.strip().startswith("|"):
                 continue
             # Skip lines that are just file paths
-            if re.match(r'^[-*]\s*`?\$?\{?.*references/', line):
+            if re.match(r"^[-*]\s*`?\$?\{?.*references/", line):
                 continue
-            filtered_lines.append(line)
+            # Commands, paths, and identifiers repeated across workflow steps
+            # are expected and do not represent duplicated prose.
+            filtered_lines.append(re.sub(r"`[^`]+`", "", line))
 
         text = " ".join(filtered_lines)
-        words = re.findall(r'\w+', text.lower())
+        words = re.findall(r"\w+", text.lower())
         ngrams = set()
         for i in range(len(words) - ngram_size + 1):
-            ngram = tuple(words[i:i + ngram_size])
+            ngram = tuple(words[i : i + ngram_size])
             ngrams.add(ngram)
         section_ngrams[name] = ngrams
 
     # Find ngrams appearing in 2+ sections
     all_dupes = []
     section_names = list(section_ngrams.keys())
-    stopwords = {"the", "a", "is", "in", "to", "for", "of", "with", "and", "or", "this", "that", "if", "on", "it", "by", "from", "not", "be", "are", "you", "your"}
+    stopwords = {
+        "the",
+        "a",
+        "is",
+        "in",
+        "to",
+        "for",
+        "of",
+        "with",
+        "and",
+        "or",
+        "this",
+        "that",
+        "if",
+        "on",
+        "it",
+        "by",
+        "from",
+        "not",
+        "be",
+        "are",
+        "you",
+        "your",
+    }
     for i in range(len(section_names)):
         for j in range(i + 1, len(section_names)):
             shared = section_ngrams[section_names[i]] & section_ngrams[section_names[j]]
             # Filter: at least 2 non-stopwords in the ngram
-            meaningful = [ng for ng in shared
-                         if sum(1 for w in ng if w not in stopwords) >= 3]
+            meaningful = [
+                ng for ng in shared if sum(1 for w in ng if w not in stopwords) >= 3
+            ]
             if meaningful:
                 all_dupes.extend(meaningful[:2])  # Cap per pair
 
@@ -668,7 +832,10 @@ def no_duplication(content: str, ngram_size: int = 5, max_dupes: int = 3, **_) -
     if len(unique_dupes) <= max_dupes:
         return True, f"{len(unique_dupes)} duplicated phrases (max: {max_dupes})"
     examples = [" ".join(ng) for ng in list(unique_dupes)[:3]]
-    return False, f"{len(unique_dupes)} duplicated phrases (max: {max_dupes}), e.g.: {examples}"
+    return (
+        False,
+        f"{len(unique_dupes)} duplicated phrases (max: {max_dupes}), e.g.: {examples}",
+    )
 
 
 def negative_triggers(content: str, **_) -> tuple[bool, str]:
@@ -680,14 +847,23 @@ def negative_triggers(content: str, **_) -> tuple[bool, str]:
     fm = parse_frontmatter(content)
     desc = str(fm.get("description", "")).lower()
     negative_patterns = [
-        r'\bnot\s+for\b', r'\bskip\s+for\b', r'\bnot\s+when\b',
-        r'\bdo\s+not\s+use\b', r'\bnever\s+use\b', r'\bavoid\b',
-        r'\binstead\s+use\b', r'\bdon\'t\s+use\b', r'\bnot\s+suitable\b',
+        r"\bnot\s+for\b",
+        r"\bskip\s+for\b",
+        r"\bnot\s+when\b",
+        r"\bdo\s+not\s+use\b",
+        r"\bnever\s+use\b",
+        r"\bavoid\b",
+        r"\binstead\s+use\b",
+        r"\bdon\'t\s+use\b",
+        r"\bnot\s+suitable\b",
     ]
     found = [p for p in negative_patterns if re.search(p, desc)]
     if found:
         return True, f"Description has negative triggers ({len(found)} patterns)"
-    return False, "No negative triggers in description (missing 'NOT for X' or 'Skip for X')"
+    return (
+        False,
+        "No negative triggers in description (missing 'NOT for X' or 'Skip for X')",
+    )
 
 
 def workflow_step_coverage(content: str, **_) -> tuple[bool, str]:
@@ -697,7 +873,7 @@ def workflow_step_coverage(content: str, **_) -> tuple[bool, str]:
     From SkillsBench: Completeness includes workflow coverage.
     """
     body = get_body(content)
-    steps = re.findall(r'Step\s+(\d+)', body)
+    steps = re.findall(r"Step\s+(\d+)", body)
     if not steps:
         return True, "No numbered steps found (not a workflow skill)"
 
@@ -709,7 +885,10 @@ def workflow_step_coverage(content: str, **_) -> tuple[bool, str]:
     expected = list(range(step_nums[0], step_nums[-1] + 1))
     missing = [s for s in expected if s not in step_nums]
     if not missing:
-        return True, f"Steps {step_nums[0]}-{step_nums[-1]} all present ({len(step_nums)} steps)"
+        return (
+            True,
+            f"Steps {step_nums[0]}-{step_nums[-1]} all present ({len(step_nums)} steps)",
+        )
     return False, f"Missing steps: {missing} (found: {step_nums})"
 
 
@@ -723,8 +902,8 @@ def description_structure(content: str, **_) -> tuple[bool, str]:
     if not desc:
         return False, "No description found"
 
-    has_what = bool(re.search(r'^[A-Z][a-z]+\s', desc))  # Starts with action verb
-    has_when = bool(re.search(r'\b[Uu]se\s+(?:when|after|for|to)\b', desc))
+    has_what = bool(re.search(r"^[A-Z][a-z]+\s", desc))  # Starts with action verb
+    has_when = bool(re.search(r"\b[Uu]se\s+(?:when|after|for|to)\b", desc))
 
     if has_what and has_when:
         return True, "Description has 'what' + 'when' components"
@@ -769,7 +948,9 @@ MATCHERS = {
 }
 
 
-def run_check(content: str, check_type: str, skill_path: str = "", plugin_root: str = "", **params) -> tuple[bool, str]:
+def run_check(
+    content: str, check_type: str, skill_path: str = "", plugin_root: str = "", **params
+) -> tuple[bool, str]:
     """Run a single check by type name. Returns (passed, evidence)."""
     matcher = MATCHERS.get(check_type)
     if matcher is None:

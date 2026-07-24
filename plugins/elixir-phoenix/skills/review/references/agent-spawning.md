@@ -7,15 +7,15 @@ Referenced by `/phx:review` Step 2.
 
 | Agent | subagent_type | When to spawn |
 |-------|---------------|---------------|
-| Elixir Reviewer | `elixir-phoenix:elixir-reviewer` | **Always** |
-| Iron Law Judge | `elixir-phoenix:iron-law-judge` | Only if >200 lines changed AND auth/LiveView/Oban files in diff. **Skip** if PostToolUse hooks already verified all files |
-| Verification Runner | `elixir-phoenix:verification-runner` | Only if `mix test` has NOT been run in this session. **Skip** if `/phx:work` just passed all verification tiers |
-| Security Analyzer | `elixir-phoenix:security-analyzer` | Auth/session/password/token files changed |
-| Testing Reviewer | `elixir-phoenix:testing-reviewer` | Test files changed OR new public functions |
-| Oban Specialist | `elixir-phoenix:oban-specialist` | Worker files changed (*_worker.ex) |
-| Deploy Validator | `elixir-phoenix:deployment-validator` | Dockerfile/fly.toml/runtime.exs changed |
-| Requirements Verifier | `elixir-phoenix:requirements-verifier` | Task ID detected OR plan/spec path passed (Step 1c succeeded). **Skip** on `--no-requirements` |
-| Codex Reviewer | `elixir-phoenix:codex-reviewer` | **ONLY when `--codex` passed** — never in default selection. Does not count toward the max-5 cap |
+| Elixir Reviewer | `phx:elixir-reviewer` | **Always** |
+| Iron Law Judge | `phx:iron-law-judge` | Only if >200 lines changed AND auth/LiveView/Oban files in diff. **Skip** if PostToolUse hooks already verified all files |
+| Verification Runner | `phx:verification-runner` | Only if `mix test` has NOT been run in this session. **Skip** if `/phx:work` just passed all verification tiers |
+| Security Analyzer | `phx:security-analyzer` | Auth/session/password/token files changed |
+| Testing Reviewer | `phx:testing-reviewer` | Test files changed OR new public functions |
+| Oban Specialist | `phx:oban-specialist` | Worker files changed (*_worker.ex) |
+| Deploy Validator | `phx:deployment-validator` | Dockerfile/fly.toml/runtime.exs changed |
+| Requirements Verifier | `phx:requirements-verifier` | Task ID detected OR plan/spec path passed (Step 1c succeeded). **Skip** on `--no-requirements` |
+| Codex Reviewer | `phx:codex-reviewer` | **ONLY when `--codex` passed** — never in default selection. Does not count toward the max-5 cap |
 
 Min 1, max 5 agents. For <200 lines changed: spawn only elixir-reviewer +
 security-analyzer (if auth files).
@@ -52,7 +52,7 @@ file IS the real output.
 
 ## Codex Reviewer Prompt Block (`--codex` only)
 
-Spawn `elixir-phoenix:codex-reviewer` in the SAME parallel batch as the
+Spawn `phx:codex-reviewer` in the SAME parallel batch as the
 other agents with this prompt (plus the Standard Prompt Block above):
 
 ```
@@ -80,10 +80,10 @@ When the user passes a focus argument, spawn only the specified agent:
 
 | Argument | subagent_type |
 |----------|---------------|
-| `test` | `elixir-phoenix:testing-reviewer` |
-| `security` | `elixir-phoenix:security-analyzer` |
-| `oban` | `elixir-phoenix:oban-specialist` |
-| `deploy` | `elixir-phoenix:deployment-validator` |
-| `iron-laws` | `elixir-phoenix:iron-law-judge` |
+| `test` | `phx:testing-reviewer` |
+| `security` | `phx:security-analyzer` |
+| `oban` | `phx:oban-specialist` |
+| `deploy` | `phx:deployment-validator` |
+| `iron-laws` | `phx:iron-law-judge` |
 
 Zero agents spawned = skill failure.

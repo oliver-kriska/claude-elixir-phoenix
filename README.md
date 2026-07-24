@@ -106,13 +106,14 @@ that prevent the mistakes Elixir developers actually make in production.
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-> **v3.0.0** -- all 51 canonical skills now have generated distributions for
-> Amp, Codex, Pi, and OpenCode, with deterministic generation, complete bundled
-> resources, drift enforcement, isolated runtime smoke tests, and native
-> installation guidance. Claude Code remains the full canonical plugin; hooks,
-> agents, MCP, instructions, and workflow portability intentionally vary by
-> runtime. See the [support matrix](docs/runtime-support.md) before assuming
-> feature parity.
+> **v3.0.0** -- all 51 canonical skill trees now have generated distributions
+> for Amp, Codex, Pi, and OpenCode. Nine core workflows are fully adapted: the
+> six flagship lifecycle workflows plus `phx-trace`, `phx-audit`, and
+> `phx-research`. The remaining projections preserve domain knowledge but may
+> require the runtime to translate Claude-specific orchestration. Claude Code
+> remains the full canonical plugin; hooks, agents, MCP, instructions, and
+> workflow portability intentionally vary by runtime. See the
+> [support matrix](docs/runtime-support.md) before assuming feature parity.
 > [Issues](https://github.com/oliver-kriska/claude-elixir-phoenix/issues) welcome.
 
 ## Installation
@@ -128,6 +129,52 @@ that prevent the mistakes Elixir developers actually make in production.
 # Install the plugin
 /plugin install elixir-phoenix
 ```
+
+The install name stays `elixir-phoenix`, while its public workflow commands
+remain `/phx:*`. Claude Code now derives plugin command names from the plugin
+namespace and each skill's final command name. On a fresh install, it also pulls
+in two small compatibility namespaces for `/ecto:*` and `/lv:*` automatically;
+you do not need to install them separately. Existing v2 installations should
+follow the staged upgrade below. After an update, run `/reload-plugins` before
+trying the commands in an already-open session.
+
+#### Updating from v2.x
+
+Update the marketplace, install the two compatibility namespaces introduced in
+v3, then update the main plugin:
+
+```bash
+claude plugin marketplace update oliver-kriska
+claude plugin install ecto@oliver-kriska
+claude plugin install lv@oliver-kriska
+claude plugin update elixir-phoenix@oliver-kriska
+```
+
+Installing the compatibility plugins first prevents the updated main plugin
+from entering a missing-dependency state. Restart Claude Code afterward. In an
+already-open session, `/reload-plugins` reloads the updated skills, agents, and
+hooks. Confirm that `/phx:help`, `/ecto:n1-check`, and `/lv:assigns` appear
+before continuing work.
+
+#### Claude Code 2.1.217+ subagent compatibility
+
+No configuration is required. Claude Code now defaults to a maximum subagent
+spawn depth of 1, so `/phx:full`, deep `/phx:plan`, parallel
+`/phx:investigate`, and `/phx:trace` automatically keep orchestration in the
+main conversation and spawn leaf specialists directly. The workflows preserve
+their decisions, artifacts, verification, and review gates; only the agent
+topology changes.
+
+If you explicitly want the original nested orchestrator topology, start Claude
+Code with depth 3:
+
+```bash
+CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=3 claude
+```
+
+Depth 2 is sufficient for `/phx:trace`'s call-tracer alone. This must be set in
+the environment that starts Claude Code; a plugin hook cannot change its parent
+process environment.
 
 > **Multi-stack tip — project-scope enable.** This plugin is opinionated for
 > Elixir/Phoenix. If you work across multiple language stacks, prefer enabling
@@ -163,9 +210,16 @@ git clone https://github.com/oliver-kriska/claude-elixir-phoenix.git
 /plugin marketplace add ./claude-elixir-phoenix
 /plugin install elixir-phoenix
 
-# Option B: Test plugin directly
-claude --plugin-dir ./claude-elixir-phoenix/plugins/elixir-phoenix
+# Option B: Test the plugin and its command namespaces directly
+claude \
+  --plugin-dir ./claude-elixir-phoenix/plugins/elixir-phoenix \
+  --plugin-dir ./claude-elixir-phoenix/plugins/ecto \
+  --plugin-dir ./claude-elixir-phoenix/plugins/lv
 ```
+
+Keep all three `--plugin-dir` arguments when testing public command
+compatibility. The main directory provides `/phx:*`; the `ecto` and `lv`
+directories provide the legacy `/ecto:*` and `/lv:*` aliases.
 
 ### Use with Amp
 
@@ -277,6 +331,13 @@ Claude-specific orchestration APIs. See the
 updates, uninstall, feature-branch review, discovery debugging, and limitations.
 
 ## Getting Started
+
+The remainder of this README describes the full Claude Code plugin and uses
+Claude Code `/phx:*`, `/ecto:*`, and `/lv:*` syntax. For generated runtimes,
+translate invocations using the runtime guide: Amp uses `skill: invoke`, Codex
+uses `$elixir-phoenix:<skill>`, Pi uses `/skill:<name>`, and OpenCode uses its
+skill tool. Generated editions do not install Claude Code's complete custom
+agent, lifecycle-hook, permission, or MCP configuration.
 
 New to the plugin? Run the interactive tutorial:
 

@@ -8,6 +8,53 @@ from pathlib import Path
 from typing import Iterable
 
 AGENTSKILLS_FIELDS = {"name", "description", "license", "compatibility", "metadata"}
+CANONICAL_PORTABLE_NAMES = {
+    "assigns-audit": "lv-assigns",
+    "audit": "phx-audit",
+    "boundaries": "phx-boundaries",
+    "brainstorm": "phx-brainstorm",
+    "brief": "phx-brief",
+    "challenge": "phx-challenge",
+    "codex-loop": "phx-codex-loop",
+    "compound": "phx-compound",
+    "deps-audit": "phx-deps-audit",
+    "deps-update": "phx-deps-update",
+    "deps-vet": "phx-deps-vet",
+    "document": "phx-document",
+    "ecto-constraint-debug": "ecto-constraint-debug",
+    "examples": "phx-examples",
+    "freeze": "phx-freeze",
+    "full": "phx-full",
+    "help": "phx-help",
+    "init": "phx-init",
+    "intro": "phx-intro",
+    "investigate": "phx-investigate",
+    "learn-from-fix": "phx-learn-from-fix",
+    "mix-compression": "phx-mix-compression",
+    "n1-check": "ecto-n1-check",
+    "perf": "phx-perf",
+    "permissions": "phx-permissions",
+    "plan": "phx-plan",
+    "pr-review": "phx-pr-review",
+    "quick": "phx-quick",
+    "recall": "phx-recall",
+    "research": "phx-research",
+    "review": "phx-review",
+    "techdebt": "phx-techdebt",
+    "trace": "phx-trace",
+    "triage": "phx-triage",
+    "verify": "phx-verify",
+    "watch-pr": "phx-watch-pr",
+    "work": "phx-work",
+}
+
+
+def portable_skill_name(directory_name: str, command_name: str) -> str:
+    """Return the stable generated-runtime name for a canonical Claude skill."""
+    return CANONICAL_PORTABLE_NAMES.get(
+        directory_name,
+        normalize_skill_name(command_name),
+    )
 
 
 def normalize_skill_name(name: str) -> str:

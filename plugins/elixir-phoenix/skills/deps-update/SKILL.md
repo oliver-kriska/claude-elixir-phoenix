@@ -1,5 +1,5 @@
 ---
-name: phx:deps-update
+name: deps-update
 description: Bump outdated Hex deps — inventory, snapshot changelogs, update, fix breaks, split reviewable PRs (patches bundled, majors solo). Use to upgrade/bump Elixir dependencies or when versions fall behind. NOT for deps.get failures (/phx:investigate).
 effort: high
 argument-hint: "[--scope patch|minor|major|all] [--pkg <name>...] [--pr-per major|area|none] [--dry-run]"

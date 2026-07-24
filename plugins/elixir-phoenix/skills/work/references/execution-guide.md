@@ -121,14 +121,12 @@ Agent({
   prompt: "Implement P2-T1: Add currency/area unit selectors to
     occupier deal form at lib/.../occupier_deal/.../details_form.ex.
     [full task context here]",
-  run_in_background: true,
-  mode: "bypassPermissions"
+  run_in_background: true
 })
 Agent({
   subagent_type: "general-purpose",
   prompt: "Implement P2-T2: Add selectors to landlord deal form...",
-  run_in_background: true,
-  mode: "bypassPermissions"
+  run_in_background: true
 })
 // ... one per parallel task
 ```

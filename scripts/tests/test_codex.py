@@ -97,15 +97,20 @@ def test_complete_subtree_is_copied_and_only_markdown_is_transformed(tmp_path) -
 
     assert (generated / "assets" / "payload.bin").read_bytes() == payload
     assert stat.S_IMODE((generated / "scripts" / "run.sh").stat().st_mode) == 0o755
-    assert "$fixture:phx-source" in (generated / "SKILL.md").read_text()
-    assert "$fixture:phx-source" in (generated / "notes" / "guide.md").read_text()
-    assert "$fixture:ecto-n1-check" in (generated / "notes" / "guide.md").read_text()
+    assert "$elixir-phoenix:phx-source" in (generated / "SKILL.md").read_text()
+    assert (
+        "$elixir-phoenix:phx-source" in (generated / "notes" / "guide.md").read_text()
+    )
+    assert (
+        "$elixir-phoenix:ecto-n1-check"
+        in (generated / "notes" / "guide.md").read_text()
+    )
     assert stat.S_IMODE((generated / "notes" / "guide.md").stat().st_mode) == 0o744
     assert "notes/guide.md" in (generated / "SKILL.md").read_text()
-    assert set(path.relative_to(skill) for path in skill.rglob("*") if path.is_file()) == {
-        path.relative_to(generated)
-        for path in generated.rglob("*")
-        if path.is_file()
+    assert set(
+        path.relative_to(skill) for path in skill.rglob("*") if path.is_file()
+    ) == {
+        path.relative_to(generated) for path in generated.rglob("*") if path.is_file()
     }
 
 
@@ -129,14 +134,14 @@ def test_frontmatter_and_all_markdown_use_codex_invocation_syntax(tmp_path) -> N
 
     assert frontmatter.data == {
         "name": "phx-source",
-        "description": "Use $fixture:phx-review for tests.",
+        "description": "Use $elixir-phoenix:phx-review for tests.",
     }
     all_markdown = "\n".join(
         path.read_text(encoding="utf-8") for path in output.rglob("*.md")
     )
-    assert "$fixture:phx-review" in all_markdown
-    assert "$fixture:lv-assigns" in all_markdown
-    assert "$fixture:ecto-n1-check" in all_markdown
+    assert "$elixir-phoenix:phx-review" in all_markdown
+    assert "$elixir-phoenix:lv-assigns" in all_markdown
+    assert "$elixir-phoenix:ecto-n1-check" in all_markdown
     assert not any(token in all_markdown for token in ("$phx-", "$lv-", "$ecto-"))
     assert not any(token in all_markdown for token in ("/phx:", "/lv:", "/ecto:"))
 
@@ -258,12 +263,14 @@ def test_rewrites_cross_skill_resources_and_rejects_missing_or_escaping_paths(
 
     output = tmp_path / "codex"
     codex.build(plugin, output)
-    assert "../phx-second/references/guide.md" in (
-        output / "skills" / "phx-first" / "SKILL.md"
-    ).read_text()
-    assert "../../phx-second/references/guide.md" in (
-        output / "skills" / "phx-first" / "references" / "nested.md"
-    ).read_text()
+    assert (
+        "../phx-second/references/guide.md"
+        in (output / "skills" / "phx-first" / "SKILL.md").read_text()
+    )
+    assert (
+        "../../phx-second/references/guide.md"
+        in (output / "skills" / "phx-first" / "references" / "nested.md").read_text()
+    )
 
     missing = tmp_path / "missing"
     broken = _write_skill(
@@ -371,7 +378,9 @@ def test_build_restores_previous_target_when_installation_fails(
     assert not list(output.parent.glob(".codex.backup-*"))
 
 
-def test_drift_check_is_read_only_and_detects_content_and_mode(tmp_path, monkeypatch) -> None:
+def test_drift_check_is_read_only_and_detects_content_and_mode(
+    tmp_path, monkeypatch
+) -> None:
     plugin = tmp_path / "plugin"
     skill = _write_skill(plugin, "one", "phx:one")
     script = skill / "run.sh"
@@ -412,13 +421,12 @@ def test_manifests_are_conformant_and_every_declared_path_resolves() -> None:
         )
     )
     marketplace = json.loads(
-        (root / ".agents" / "plugins" / "marketplace.json").read_text(
-            encoding="utf-8"
-        )
+        (root / ".agents" / "plugins" / "marketplace.json").read_text(encoding="utf-8")
     )
 
     assert plugin_manifest["skills"] == "./skills/"
-    assert plugin_manifest["name"] == canonical_manifest["name"]
+    assert canonical_manifest["name"] == "phx"
+    assert plugin_manifest["name"] == codex.CODEX_PLUGIN_NAME == "elixir-phoenix"
     assert plugin_manifest["version"] == canonical_manifest["version"]
     assert "skills" not in plugin_manifest.get("interface", {})
     assert "agents" not in plugin_manifest
@@ -480,9 +488,7 @@ def test_repository_hook_is_native_synchronous_and_projects_source(tmp_path) -> 
 
     safe = subprocess.run(
         ["/bin/bash", "-lc", command],
-        input=json.dumps(
-            {"tool_name": "Bash", "tool_input": {"command": "mix test"}}
-        ),
+        input=json.dumps({"tool_name": "Bash", "tool_input": {"command": "mix test"}}),
         text=True,
         capture_output=True,
         cwd=fixture,
@@ -523,7 +529,9 @@ def test_repository_hook_is_native_synchronous_and_projects_source(tmp_path) -> 
     assert "safety hook disabled: jq is unavailable" in missing_jq.stderr
 
 
-def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies() -> None:
+def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies() -> (
+    None
+):
     target = TARGETS_DIR / "codex" / "skills"
     investigate = (target / "phx-investigate" / "SKILL.md").read_text()
     review = (target / "phx-review" / "SKILL.md").read_text()
@@ -539,6 +547,9 @@ def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies()
     investigate_template = (
         target / "phx-investigate" / "references" / "investigation-template.md"
     ).read_text()
+    trace = (target / "phx-trace" / "SKILL.md").read_text()
+    audit = (target / "phx-audit" / "SKILL.md").read_text()
+    research = (target / "phx-research" / "SKILL.md").read_text()
 
     assert "$elixir-phoenix:phx-investigate" in investigate
     assert "Reproduce Before Fixing" in investigate
@@ -551,6 +562,12 @@ def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies()
     assert "generic read-only subagent" in investigate_patterns
     assert "Only when the user explicitly authorizes" in investigate_patterns
     assert "do not write a report file" in investigate_template
+    assert "same-session sequential path is fully supported" in trace
+    assert "named custom agent" in trace
+    assert "Portable Audit Workflow" in audit
+    assert "Never require named custom agents" in audit
+    assert "Portable Research Workflow" in research
+    assert "same-session sequential path must remain complete" in research
 
     combined = (
         investigate
@@ -559,6 +576,9 @@ def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies()
         + review_requirements
         + investigate_patterns
         + investigate_template
+        + trace
+        + audit
+        + research
     )
     forbidden = (
         "TaskCreate",
@@ -571,6 +591,8 @@ def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies()
         "mcp__tidewave__",
         "mcp__linear__",
         "${CODEX_PLUGIN_ROOT}",
+        "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH",
+        "Agent(",
     )
     assert not any(token in combined for token in forbidden)
 
@@ -599,19 +621,49 @@ def test_plan_work_overlays_are_portable_resumable_and_anchored(tmp_path) -> Non
     assert "append-only" in work_tree
     assert "**Started**:" in work_tree
     forbidden = (
-        "Agent(", "subagent_type", "TaskCreate", "TaskUpdate", "TaskGet",
-        "TaskList", "AskUserQuestion", "$ARGUMENTS", "mcp__", "PostToolUse hook",
-        "phoenix-patterns-analyst", "ecto-schema-designer", "liveview-architect",
-        "oban-specialist", "otp-advisor", "security-analyzer", "testing-reviewer",
-        "hex-library-researcher", "web-researcher", "call-tracer",
-        "planning-orchestrator", "Spawn SPECIALIST", "run_in_background",
-        "[agent]", "Agent annotation", "agent routing", "project_eval", "get_logs",
-        "| Hook |", "Each hook", "/commit", "${CLAUDE_SKILL_DIR}",
-        "${CLAUDE_PLUGIN_ROOT}", "spawning Elixir specialist agents",
-        "Spawns Elixir specialist agents", "skip to agents",
-        "Spawn agents selectively", "while agents still running",
-        "agent spawning", "agent count", "Explore agents",
-        "execute via subagents", "After spawning",
+        "Agent(",
+        "subagent_type",
+        "TaskCreate",
+        "TaskUpdate",
+        "TaskGet",
+        "TaskList",
+        "AskUserQuestion",
+        "$ARGUMENTS",
+        "mcp__",
+        "PostToolUse hook",
+        "phoenix-patterns-analyst",
+        "ecto-schema-designer",
+        "liveview-architect",
+        "oban-specialist",
+        "otp-advisor",
+        "security-analyzer",
+        "testing-reviewer",
+        "hex-library-researcher",
+        "web-researcher",
+        "call-tracer",
+        "planning-orchestrator",
+        "Spawn SPECIALIST",
+        "run_in_background",
+        "[agent]",
+        "Agent annotation",
+        "agent routing",
+        "project_eval",
+        "get_logs",
+        "| Hook |",
+        "Each hook",
+        "/commit",
+        "${CLAUDE_SKILL_DIR}",
+        "${CLAUDE_PLUGIN_ROOT}",
+        "spawning Elixir specialist agents",
+        "Spawns Elixir specialist agents",
+        "skip to agents",
+        "Spawn agents selectively",
+        "while agents still running",
+        "agent spawning",
+        "agent count",
+        "Explore agents",
+        "execute via subagents",
+        "After spawning",
     )
     assert not any(token in plan_tree + work_tree for token in forbidden)
 
@@ -632,7 +684,9 @@ def test_pr_review_full_overlays_are_portable_and_anchored(tmp_path) -> None:
     generated = tmp_path / "codex"
     codex.build(SOURCE_PLUGIN_DIR, generated)
     skills = generated / "skills"
-    pr_review = "\n".join(p.read_text() for p in (skills / "phx-pr-review").rglob("*.md"))
+    pr_review = "\n".join(
+        p.read_text() for p in (skills / "phx-pr-review").rglob("*.md")
+    )
     full = "\n".join(p.read_text() for p in (skills / "phx-full").rglob("*.md"))
     assert "gh auth status" in pr_review
     assert "originalLine" in pr_review
@@ -661,7 +715,19 @@ def test_pr_review_full_overlays_are_portable_and_anchored(tmp_path) -> None:
     assert "--max-cycles" in full and "--max-retries" in full
     assert "Tidewave is optional" in full
     assert "sole state authority" in full and "append-only" in full
-    assert all(field in full for field in ("`seq`", "`phase_visit`", "`phase`", "`cycle`", "`task`", "`task_attempt`", "`blockers`", "`outcome`"))
+    assert all(
+        field in full
+        for field in (
+            "`seq`",
+            "`phase_visit`",
+            "`phase`",
+            "`cycle`",
+            "`task`",
+            "`task_attempt`",
+            "`blockers`",
+            "`outcome`",
+        )
+    )
     assert "next legal phase is VERIFYING" in full
     assert "Completion requires all required plan tasks checked" in full
     assert "latest VERIFYING PASS after the last edit" in full
@@ -671,11 +737,24 @@ def test_pr_review_full_overlays_are_portable_and_anchored(tmp_path) -> None:
     assert "task retry, and blocker counters" in full
     assert "COMPOUNDING SKIPPED" in full
     assert "Do not\n   invoke `phx-compound`" in full
-    forbidden = ("Agent(", "TaskCreate", "AskUserQuestion", "mcp__", "run_in_background", "Ralph Wiggum", "workflow-orchestrator")
+    forbidden = (
+        "Agent(",
+        "TaskCreate",
+        "AskUserQuestion",
+        "mcp__",
+        "run_in_background",
+        "Ralph Wiggum",
+        "workflow-orchestrator",
+    )
     assert not any(token in pr_review + full for token in forbidden)
 
     plugin = tmp_path / "plugin"
-    skill = _write_skill(plugin, "full", "phx:full", "# Full Phoenix Feature Development\n## State Machine\n")
+    skill = _write_skill(
+        plugin,
+        "full",
+        "phx:full",
+        "# Full Phoenix Feature Development\n## State Machine\n",
+    )
     current = codex.discover_skills(plugin)[0]
     with pytest.raises(ValueError, match="wholesale portable overlay source changed"):
         codex._codex_overlay(skill / "SKILL.md", current)
@@ -684,8 +763,14 @@ def test_pr_review_full_overlays_are_portable_and_anchored(tmp_path) -> None:
     original = canonical_pr.read_text()
     canonical_pr.write_text(original.replace("## Step 1:", "## Step one:", 1))
     try:
-        current = next(s for s in codex.discover_skills(SOURCE_PLUGIN_DIR) if s.target_name == "phx-pr-review")
-        with pytest.raises(ValueError, match="wholesale portable overlay source changed"):
+        current = next(
+            s
+            for s in codex.discover_skills(SOURCE_PLUGIN_DIR)
+            if s.target_name == "phx-pr-review"
+        )
+        with pytest.raises(
+            ValueError, match="wholesale portable overlay source changed"
+        ):
             codex._codex_overlay(canonical_pr, current)
     finally:
         canonical_pr.write_text(original)
@@ -694,13 +779,21 @@ def test_pr_review_full_overlays_are_portable_and_anchored(tmp_path) -> None:
     original = canonical_ref.read_text()
     canonical_ref.write_text(original.replace("## Step 1:", "## Step one:", 1))
     try:
-        current = next(s for s in codex.discover_skills(SOURCE_PLUGIN_DIR) if s.target_name == "phx-full")
-        with pytest.raises(ValueError, match="wholesale portable overlay source changed"):
+        current = next(
+            s
+            for s in codex.discover_skills(SOURCE_PLUGIN_DIR)
+            if s.target_name == "phx-full"
+        )
+        with pytest.raises(
+            ValueError, match="wholesale portable overlay source changed"
+        ):
             codex._codex_overlay(canonical_ref, current)
     finally:
         canonical_ref.write_text(original)
 
-    assert not any(token in pr_review + full for token in ("--codex", "--Pi", "--OpenCode"))
+    assert not any(
+        token in pr_review + full for token in ("--codex", "--Pi", "--OpenCode")
+    )
     assert "specialist agents" not in (skills / "phx-full/SKILL.md").read_text()
 
 

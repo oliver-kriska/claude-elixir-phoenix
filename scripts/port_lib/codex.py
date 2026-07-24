@@ -16,7 +16,7 @@ from pathlib import Path
 from .frontmatter import Frontmatter, parse_file
 from .generated_tree import copy_skill_subtrees
 from .skill_transforms import (
-    normalize_skill_name,
+    portable_skill_name,
     rewrite_slash_commands,
     transform_frontmatter,
 )
@@ -47,6 +47,7 @@ CODEX_DESCRIPTION = (
     "Generated Elixir, Phoenix, LiveView, Ecto, Oban, testing, and security "
     "skills for Codex"
 )
+CODEX_PLUGIN_NAME = "elixir-phoenix"
 CODEX_HOOK_SCRIPT = "block-dangerous-ops.sh"
 CODEX_HOOKS = {
     "description": "Optional synchronous safeguards for destructive shell commands.",
@@ -58,7 +59,7 @@ CODEX_HOOKS = {
                     {
                         "type": "command",
                         "command": (
-                            "\"${PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh\" "
+                            '"${PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh" '
                             "|| exit 0"
                         ),
                         "timeout": 10,
@@ -86,6 +87,10 @@ CODEX_SKILL_DESCRIPTION_OVERRIDES = {
     "phx-document": (
         "Write Elixir @moduledoc and @doc text. Use only for code documentation, not "
         "README or external docs."
+    ),
+    "phx-freeze": (
+        "Apply an advisory scope in this session. Use for read-only or "
+        "directory-scoped work; no enforcement hook is installed."
     ),
     "phx-full": (
         "Run portable end-to-end lifecycle with gates. Use for full features; use "
@@ -131,6 +136,7 @@ def _assert_ordered_markers(
         positions.append(source.index(marker))
     if positions != sorted(positions):
         raise ValueError(f"{source_file}: canonical marker order changed")
+
 
 INVESTIGATE_BODY = """# Investigate Bug
 
@@ -606,9 +612,51 @@ Reject a transition before its bound would be exceeded: `--max-retries N` permit
 the initial attempt plus N retries. Review is read-only; findings return WORKING.
 """
 
+FREEZE_BODY = """# Freeze — advisory edit scope
+
+Apply a current-session instruction that limits which files this agent may edit.
+This generated runtime does not install an enforcement hook, so the scope is
+advisory rather than a technical lock. Never claim that edits are blocked by the
+runtime.
+
+## Usage
+
+```text
+/phx:freeze
+/phx:freeze lib/app_web priv/repo
+/phx:freeze status
+/phx:freeze off
+```
+
+Treat the text after the skill invocation as follows:
+
+| Invocation | Current-session behavior |
+|---|---|
+| No arguments | Do not edit files; investigation and reporting remain read-only. |
+| Path prefixes | Edit only files under the listed project-relative prefixes. |
+| `status` | Report the advisory scope currently established in this conversation. |
+| `off` | Clear the advisory scope for subsequent work. |
+
+Do not create `.claude/.freeze`. That sentinel belongs to the canonical Claude
+Code plugin and could affect a later Claude Code session even though this runtime
+cannot enforce or clear it reliably.
+
+## Iron Laws
+
+1. **Never describe this scope as enforced** — it is a binding instruction for
+   the current agent, not a runtime or security boundary.
+2. **Never create or modify `.claude/.freeze` in a generated runtime** — no
+   matching enforcement component is installed here.
+3. **Honor the active scope until the user clears it or the focused task ends** —
+   ask before editing outside listed prefixes.
+4. **Keep paths project-relative** — `lib/foo` includes that directory and its
+   descendants, not a sibling such as `lib/foobar`.
+"""
+
 WHOLESALE_SOURCE_SHA256 = {
-    "pr-review/SKILL.md": "80e91bd0737cf677ca59fe10aa3573afcc739f87685f20f258aa7bc8c650bdf8",
-    "full/SKILL.md": "d72cc731ff8fe0ba6ec4c0123cb86cdb1ca9c86283c77057bd168ebfd9bb7cf6",
+    "freeze/SKILL.md": "57830e672d503013211e7022580123ed5d35343fab5a55dd4b2c7aff62bd08c2",
+    "pr-review/SKILL.md": "31ff21551f99b4eb24d9285f4640cdd99a806673a65ff5b2885b8039a4910089",
+    "full/SKILL.md": "116bf9607e8a2f78786c732ab4e7a9710eea0c04287fd197aeb1354f313ac717",
     "full/references/execution-steps.md": "b608c047414f9ad464f5c0ecc0eb1562f509cfdc30ef3782ed6b4e566a37382c",
     "full/references/safety-recovery.md": "94595d350b9e3c809e0762676b7d8c3b831782a51173db9213585bebc8869234",
     "full/references/example-run.md": "8b72b77afcf947127978c74c2de560fb7abc826e541f71fcd06835101dad7bc8",
@@ -626,6 +674,7 @@ def _assert_wholesale_source(source_file: Path, current: SkillSource) -> None:
     actual = hashlib.sha256(source_file.read_bytes()).hexdigest()
     if actual != expected:
         raise ValueError(f"{source_file}: wholesale portable overlay source changed")
+
 
 REVIEW_AGENT_REFERENCE = """# Codex Review Execution Reference
 
@@ -696,7 +745,11 @@ def _replace_anchored(source: str, old: str, new: str, source_file: Path) -> str
 
 
 def _replace_section(
-    source: str, start_heading: str, end_heading: str, replacement: str, source_file: Path
+    source: str,
+    start_heading: str,
+    end_heading: str,
+    replacement: str,
+    source_file: Path,
 ) -> str:
     """Replace one bounded section and reject missing, duplicate, or reordered headings."""
     if source.count(start_heading) != 1 or source.count(end_heading) != 1:
@@ -708,7 +761,9 @@ def _replace_section(
     return source[:start] + replacement + source[end:]
 
 
-def _replace_tail(source: str, heading: str, replacement: str, source_file: Path) -> str:
+def _replace_tail(
+    source: str, heading: str, replacement: str, source_file: Path
+) -> str:
     """Replace from one unique heading through end-of-file."""
     if source.count(heading) != 1:
         raise ValueError(f"{source_file}: portable plan/work tail anchor changed")
@@ -730,7 +785,11 @@ def _portable_plan_work_overlay(
     )
 
     if current.target_name == "phx-plan" and relative == "SKILL.md":
-        required = ("# Plan Elixir/Phoenix Feature", "## Workflow", "## CRITICAL: After Writing the Plan")
+        required = (
+            "# Plan Elixir/Phoenix Feature",
+            "## Workflow",
+            "## CRITICAL: After Writing the Plan",
+        )
         if not all(marker in source for marker in required):
             raise ValueError(f"{source_file}: portable plan overlay anchors changed")
         source = _replace_anchored(
@@ -747,22 +806,29 @@ def _portable_plan_work_overlay(
         )
         source = _replace_anchored(
             source,
-            '- `$ARGUMENTS` = Feature description, review file, or existing plan',
+            "- `$ARGUMENTS` = Feature description, review file, or existing plan",
             "- Text after the skill name = feature description, review file, or existing plan",
             source_file,
         )
-        source = _replace_anchored(source, """4. **Runtime context** (Tidewave) — Gather live schemas, routes,
+        source = _replace_anchored(
+            source,
+            """4. **Runtime context** (Tidewave) — Gather live schemas, routes,
    and warnings before spawning agents (direct path only — the
    research orchestrator gathers its own)
 5. **Spawn research** — Selective, based on need. **0–2 agents**:
-   spawn directly in parallel. **3+ agents** (broad multi-context
-   feature): spawn ONE `planning-orchestrator` to run and compress
-   the fan-out, then read only its digest and
+   spawn directly in parallel. **3+ agents** (broad multi-context feature):
+   first inspect `${CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH:-1}`. At depth 3+
+   spawn ONE `planning-orchestrator` to run and compress the fan-out. At the
+   Claude Code 2.1.217+ default of 1 (or depth 2), keep orchestration in this
+   main session: spawn the selected specialist agents directly, wait for them, then spawn
+   `phx:context-supervisor` directly if compression is needed. Never spawn an
+   orchestrator that cannot delegate. Read only the resulting digest and
    `summaries/consolidated.md`. Create a Claude Code task per spawn:
    `TaskCreate({subject: "{Agent} research", activeForm: "Researching..."})`,
    mark `in_progress` on spawn, `completed` when done
 6. **Wait for ALL agents** — Do NOT proceed until all return
-   "completed". NEVER write plan while any agent is still running""", """4. **Create research state** — Before research, create
+   "completed". NEVER write plan while any agent is still running""",
+            """4. **Create research state** — Before research, create
    `.claude/plans/{slug}/scratchpad.md` with a concern-track checklist
 5. **Gather optional runtime context** — Only when Tidewave tools are independently
    configured and exposed; otherwise inspect source, routes, schemas, and tests
@@ -772,20 +838,44 @@ def _portable_plan_work_overlay(
    save evidence under `.claude/plans/{slug}/research/`
 7. **Finish ALL research tracks** — Maintain the scratchpad checklist,
    marking each selected track `[x]` only after its evidence is captured.
-   NEVER write the plan while any selected track remains unchecked""", source_file)
+   NEVER write the plan while any selected track remains unchecked""",
+            source_file,
+        )
         source = _replace_anchored(
             source,
             "1. **Gather context** — File path (skip to agents), brainstorm",
             "1. **Gather context** — File path (skip to research), brainstorm",
             source_file,
         )
-        source = _replace_anchored(source, "7. **Breadboard** (LiveView) — System map for multi-page features\n8. **Completeness check**", "8. **Breadboard** (LiveView) — Produce the system map from collected evidence\n9. **Completeness check**", source_file)
-        source = _replace_anchored(source, "9. **Split decision**", "10. **Split decision**", source_file)
-        source = _replace_anchored(source, "10. **Generate plan**", "11. **Generate plan**", source_file)
-        source = _replace_anchored(source, "    Also create `plans/{slug}/scratchpad.md` for decisions and dead-ends", "    Reuse `.claude/plans/{slug}/scratchpad.md` for decisions and dead-ends", source_file)
-        source = _replace_anchored(source, "11. **Self-check**", "12. **Self-check**", source_file)
-        source = _replace_anchored(source, "12. **Present and ask**", "13. **Present and ask**", source_file)
-        source = _replace_section(source, "### --existing Mode (Deepening)", "## Iron Laws", """### --existing Mode (Deepening)
+        source = _replace_anchored(
+            source,
+            "7. **Breadboard** (LiveView) — System map for multi-page features\n8. **Completeness check**",
+            "8. **Breadboard** (LiveView) — Produce the system map from collected evidence\n9. **Completeness check**",
+            source_file,
+        )
+        source = _replace_anchored(
+            source, "9. **Split decision**", "10. **Split decision**", source_file
+        )
+        source = _replace_anchored(
+            source, "10. **Generate plan**", "11. **Generate plan**", source_file
+        )
+        source = _replace_anchored(
+            source,
+            "    Also create `plans/{slug}/scratchpad.md` for decisions and dead-ends",
+            "    Reuse `.claude/plans/{slug}/scratchpad.md` for decisions and dead-ends",
+            source_file,
+        )
+        source = _replace_anchored(
+            source, "11. **Self-check**", "12. **Self-check**", source_file
+        )
+        source = _replace_anchored(
+            source, "12. **Present and ask**", "13. **Present and ask**", source_file
+        )
+        source = _replace_section(
+            source,
+            "### --existing Mode (Deepening)",
+            "## Iron Laws",
+            """### --existing Mode (Deepening)
 
 Enhance an existing plan without relying on named agents:
 
@@ -799,14 +889,21 @@ Enhance an existing plan without relying on named agents:
 5. Add implementation detail, resolve spikes, and strengthen verification
 6. Present a diff summary; never delete or silently rewrite existing tasks
 
-""", source_file)
+""",
+            source_file,
+        )
         source = _replace_anchored(
             source,
             "2. Use `AskUserQuestion` with options:",
             "2. Ask the user a normal conversational question with these options:",
             source_file,
         )
-        source = _replace_anchored(source, "6. **Do NOT spawn hex-library-researcher for existing deps**", "6. **Do NOT run a library-selection track for existing dependencies**", source_file)
+        source = _replace_anchored(
+            source,
+            "6. **Do NOT spawn hex-library-researcher for existing deps**",
+            "6. **Do NOT run a library-selection track for existing dependencies**",
+            source_file,
+        )
         source = _replace_anchored(
             source,
             "3. **Spawn agents selectively** — Only relevant, not all",
@@ -820,10 +917,19 @@ Enhance an existing plan without relying on named agents:
             source_file,
         )
 
-    elif current.target_name == "phx-plan" and relative == "references/planning-workflow.md":
-        required = ("## Agent Spawning", "## Waiting for Agents", "## Presenting the Plan")
+    elif (
+        current.target_name == "phx-plan"
+        and relative == "references/planning-workflow.md"
+    ):
+        required = (
+            "## Agent Spawning",
+            "## Waiting for Agents",
+            "## Presenting the Plan",
+        )
         if not all(marker in source for marker in required):
-            raise ValueError(f"{source_file}: portable planning reference anchors changed")
+            raise ValueError(
+                f"{source_file}: portable planning reference anchors changed"
+            )
         portable = """## Research Tracks
 
 Select only the concerns the feature needs. Use the canonical selection table
@@ -878,29 +984,83 @@ and infrastructure output are synthesized from this evidence, not delegated to
 or made conditional on any named worker.
 
 """
-        source = _replace_section(source, "## Agent Spawning", "## Infrastructure Knowledge Persistence", portable, source_file)
+        source = _replace_section(
+            source,
+            "## Agent Spawning",
+            "## Infrastructure Knowledge Persistence",
+            portable,
+            source_file,
+        )
         source = _replace_anchored(
             source,
             "Check `$ARGUMENTS` for a path containing `interview.md`",
             "Check the text after the skill name for a path containing `interview.md`",
             source_file,
         )
-        source = _replace_anchored(source, "Use interview content as input for agent spawning (depth detection still applies)", "Use interview content for concern-track selection (depth detection still applies)", source_file)
-        source = _replace_anchored(source, "**Depth determines agent count AND plan detail:**", "**Depth determines research track counts, concerns, and plan detail:**", source_file)
-        source = _replace_anchored(source, "| Depth      | Agents             | Clarification           | Plan Detail", "| Depth      | Research tracks / concerns | Clarification           | Plan Detail", source_file)
-        source = _replace_anchored(source, "| `quick`    | 1 (patterns only)", "| `quick`    | 1 pattern track", source_file)
-        source = _replace_anchored(source, "| `standard` | 2-3 specialists", "| `standard` | 2-3 concern tracks", source_file)
-        source = _replace_anchored(source, "| `deep`     | 4+ (full research)", "| `deep`     | 4+ full research tracks", source_file)
-        source = _replace_anchored(source, "When Explore agents discover **project infrastructure**", "When completed research discovers **project infrastructure**", source_file)
+        source = _replace_anchored(
+            source,
+            "Use interview content as input for agent spawning (depth detection still applies)",
+            "Use interview content for concern-track selection (depth detection still applies)",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "**Depth determines agent count AND plan detail:**",
+            "**Depth determines research track counts, concerns, and plan detail:**",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "| Depth      | Agents             | Clarification           | Plan Detail",
+            "| Depth      | Research tracks / concerns | Clarification           | Plan Detail",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "| `quick`    | 1 (patterns only)",
+            "| `quick`    | 1 pattern track",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "| `standard` | 2-3 specialists",
+            "| `standard` | 2-3 concern tracks",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "| `deep`     | 4+ (full research)",
+            "| `deep`     | 4+ full research tracks",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "When Explore agents discover **project infrastructure**",
+            "When completed research discovers **project infrastructure**",
+            source_file,
+        )
         source = _replace_anchored(
             source,
             "Then use `AskUserQuestion`:",
             "Then ask the user a normal conversational question:",
             source_file,
         )
-        source = _replace_anchored(source, "Do NOT use subagent_type names", "Do NOT use runtime worker names", source_file)
-        source = _replace_anchored(source, "If liveview-architect was spawned, its report should include\naffordance tables. Use these to build a system map.", "Synthesize affordance tables and the system map from the completed research-track evidence.", source_file)
-        source = _replace_tail(source, "## Deepening an Existing Plan (--existing mode)", """## Deepening an Existing Plan (--existing mode)
+        source = _replace_anchored(
+            source,
+            "Do NOT use subagent_type names",
+            "Do NOT use runtime worker names",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "If liveview-architect was spawned, its report should include\naffordance tables. Use these to build a system map.",
+            "Synthesize affordance tables and the system map from the completed research-track evidence.",
+            source_file,
+        )
+        source = _replace_tail(
+            source,
+            "## Deepening an Existing Plan (--existing mode)",
+            """## Deepening an Existing Plan (--existing mode)
 
 1. Load the existing plan and create or update its scratchpad checklist
 2. Select thin sections as concern tracks; complete them sequentially in the
@@ -913,9 +1073,14 @@ or made conditional on any named worker.
 
 Deepening is useful for unfamiliar code, external integrations, security-sensitive
 work, and unresolved spikes. Preserve existing scope and decisions.
-""", source_file)
+""",
+            source_file,
+        )
 
-    elif current.target_name == "phx-plan" and relative == "references/agent-selection.md":
+    elif (
+        current.target_name == "phx-plan"
+        and relative == "references/agent-selection.md"
+    ):
         _assert_ordered_markers(
             source,
             (
@@ -963,9 +1128,20 @@ Ask at most three focused questions when scope, integration points, performance,
 or competing valid approaches cannot be resolved from repository evidence.
 """
 
-    elif current.target_name == "phx-plan" and relative == "references/plan-template.md":
-        source = _replace_anchored(source, "Include when the liveview-architect produced a breadboard.", "Include for multi-page LiveView work after synthesizing the research evidence.", source_file)
-        source = _replace_section(source, "## Task Agent Annotations", "## Files to Follow as Patterns", """## Concern Annotations
+    elif (
+        current.target_name == "phx-plan" and relative == "references/plan-template.md"
+    ):
+        source = _replace_anchored(
+            source,
+            "Include when the liveview-architect produced a breadboard.",
+            "Include for multi-page LiveView work after synthesizing the research evidence.",
+            source_file,
+        )
+        source = _replace_section(
+            source,
+            "## Task Agent Annotations",
+            "## Files to Follow as Patterns",
+            """## Concern Annotations
 
 Annotations are portable concern and verification labels, not worker identities:
 
@@ -979,10 +1155,16 @@ Annotations are portable concern and verification labels, not worker identities:
 | `[test]` | Tests, mocks, factories |
 | `[direct]` | General implementation and wiring |
 
-""", source_file)
+""",
+            source_file,
+        )
 
     elif current.target_name == "phx-work" and relative == "SKILL.md":
-        required = ("# Work", "## Step 3: Load, Create Task List, and Resume", "## Step 5: Completion")
+        required = (
+            "# Work",
+            "## Step 3: Load, Create Task List, and Resume",
+            "## Step 5: Completion",
+        )
         if not all(marker in source for marker in required):
             raise ValueError(f"{source_file}: portable work overlay anchors changed")
         portable = """**Use the plan file as the portable task list.** For every unchecked item,
@@ -1003,8 +1185,14 @@ UI, durable state, and resume mechanism; no runtime task API is required.
             portable,
             source_file,
         )
-        source = _replace_anchored(source, '1. **Start task**: `TaskUpdate({taskId, status: "in_progress"})`', "1. **Start task**: mark its phase `[IN_PROGRESS]` and log the start in `.claude/plans/{slug}/progress.md`", source_file)
-        source = _replace_anchored(source,
+        source = _replace_anchored(
+            source,
+            '1. **Start task**: `TaskUpdate({taskId, status: "in_progress"})`',
+            "1. **Start task**: mark its phase `[IN_PROGRESS]` and log the start in `.claude/plans/{slug}/progress.md`",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
             "2. **Route** by `[agent]` annotation (see `${CLAUDE_SKILL_DIR}/references/execution-guide.md`)",
             "2. **Apply concern guidance** from the annotation and its required verification (see `${CLAUDE_SKILL_DIR}/references/execution-guide.md`); it never selects a named worker",
             source_file,
@@ -1015,31 +1203,86 @@ UI, durable state, and resume mechanism; no runtime task API is required.
             "3. **Plan checkboxes ARE the state** -- `[x]` = done; `[ ]` = pending\n   unless the row is visibly tagged `[BLOCKED]`. No separate JSON state files.\n   Resume by reading the plan.",
             source_file,
         )
-        source = _replace_anchored(source,
-            "5. **Complete task**: Mark checkbox `[x]` on pass, **append\n   implementation note** inline, AND\n   `TaskUpdate({taskId, status: \"completed\"})`. Example:",
+        source = _replace_anchored(
+            source,
+            '5. **Complete task**: Mark checkbox `[x]` on pass, **append\n   implementation note** inline, AND\n   `TaskUpdate({taskId, status: "completed"})`. Example:',
             "5. **Complete task**: Mark checkbox `[x]` on pass, **append\n   implementation note** inline, and log verification evidence in `progress.md`. Example:",
             source_file,
         )
-        source = _replace_anchored(source, "**Parallel groups**: Tasks under `### Parallel:` header spawn\nas background subagents.", "**Parallel groups**: Tasks under `### Parallel:` may use native generic workers only when independent; otherwise execute them sequentially in the current session.", source_file)
+        source = _replace_anchored(
+            source,
+            "**Parallel groups**: Tasks under `### Parallel:` header spawn\nas background subagents.",
+            "**Parallel groups**: Tasks under `### Parallel:` may use native generic workers only when independent; otherwise execute them sequentially in the current session.",
+            source_file,
+        )
         source = _replace_anchored(
             source,
             "for spawning pattern, prompt template, and checkpoint flow.",
             "for the optional-worker pattern, sequential fallback, and checkpoint flow.",
             source_file,
         )
-        source = _replace_anchored(source, "  (format is checked by PostToolUse hook automatically)", "  and `mix format --check-formatted <changed_files>`", source_file)
-        source = _replace_anchored(source, "- Per-feature (Tidewave): behavioral smoke test via `project_eval`\n  (create record, fetch, verify -- see execution-guide.md)", "- Per-feature: when Tidewave tools are independently configured and exposed, use a behavioral runtime smoke test; otherwise run a focused repository test and a local/manual smoke check (see execution-guide.md)", source_file)
-        source = _replace_anchored(source, "The PostToolUse hook checks formatting but does NOT modify files —\nrun `mix format` explicitly during verification or before committing.", "No hook is assumed. Run `mix format` explicitly during verification and\n`mix format --check-formatted <changed_files>` before completing each task.", source_file)
-        source = _replace_anchored(source, "Summarize results with `AskUserQuestion`:", "Summarize results, then ask the user a normal conversational question:", source_file)
-        source = _replace_anchored(source, "3. **Commit changes** (`/commit`), 4. **Continue manually**.", "3. **Create a git commit** with the platform's native git workflow, 4. **Continue manually**.", source_file)
-        source = _replace_anchored(source, "Execute each unchecked task (`- [ ] [Pn-Tm][agent] Description`):", "Execute each unchecked task (`- [ ] [Pn-Tm][concern] Description`):", source_file)
-        source = _replace_anchored(source, "Find first unchecked task by `[Pn-Tm]` ID.", "Select the first unchecked task not tagged `[BLOCKED]`. Stop if an unresolved\n`[BLOCKED]` task precedes it unless `--skip-blockers` is explicit.\n`--skip-blockers` skips only tagged blocked rows; `--from <blocked-id>`\nexplicitly retries that row and clears `[BLOCKED]` when starting.", source_file)
-        source = _replace_anchored(source, "6. **On failure**: retry up to 3 times, then create BLOCKER\n   and write DEAD-END to scratchpad (see error-recovery.md)", "6. **On failure**: retry up to 3 times, then keep the row unchecked and\n   append `[BLOCKED]`, optionally mark its phase `[BLOCKED]`, record the\n   blocker in `progress.md`, write a DEAD-END to scratchpad, and stop by\n   default. Continue only when `--skip-blockers` was explicitly supplied", source_file)
+        source = _replace_anchored(
+            source,
+            "  (format is checked by PostToolUse hook automatically)",
+            "  and `mix format --check-formatted <changed_files>`",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "- Per-feature (Tidewave): behavioral smoke test via `project_eval`\n  (create record, fetch, verify -- see execution-guide.md)",
+            "- Per-feature: when Tidewave tools are independently configured and exposed, use a behavioral runtime smoke test; otherwise run a focused repository test and a local/manual smoke check (see execution-guide.md)",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "The PostToolUse hook checks formatting but does NOT modify files —\nrun `mix format` explicitly during verification or before committing.",
+            "No hook is assumed. Run `mix format` explicitly during verification and\n`mix format --check-formatted <changed_files>` before completing each task.",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "Summarize results with `AskUserQuestion`:",
+            "Summarize results, then ask the user a normal conversational question:",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "3. **Commit changes** (`/commit`), 4. **Continue manually**.",
+            "3. **Create a git commit** with the platform's native git workflow, 4. **Continue manually**.",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "Execute each unchecked task (`- [ ] [Pn-Tm][agent] Description`):",
+            "Execute each unchecked task (`- [ ] [Pn-Tm][concern] Description`):",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "Find first unchecked task by `[Pn-Tm]` ID.",
+            "Select the first unchecked task not tagged `[BLOCKED]`. Stop if an unresolved\n`[BLOCKED]` task precedes it unless `--skip-blockers` is explicit.\n`--skip-blockers` skips only tagged blocked rows; `--from <blocked-id>`\nexplicitly retries that row and clears `[BLOCKED]` when starting.",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "6. **On failure**: retry up to 3 times, then create BLOCKER\n   and write DEAD-END to scratchpad (see error-recovery.md)",
+            "6. **On failure**: retry up to 3 times, then keep the row unchecked and\n   append `[BLOCKED]`, optionally mark its phase `[BLOCKED]`, record the\n   blocker in `progress.md`, write a DEAD-END to scratchpad, and stop by\n   default. Continue only when `--skip-blockers` was explicitly supplied",
+            source_file,
+        )
 
-    elif current.target_name == "phx-work" and relative == "references/execution-guide.md":
-        required = ("## Task Routing", "## Parallel Task Execution", "## Checkpoint Pattern")
+    elif (
+        current.target_name == "phx-work"
+        and relative == "references/execution-guide.md"
+    ):
+        required = (
+            "## Task Routing",
+            "## Parallel Task Execution",
+            "## Checkpoint Pattern",
+        )
         if not all(marker in source for marker in required):
-            raise ValueError(f"{source_file}: portable execution reference anchors changed")
+            raise ValueError(
+                f"{source_file}: portable execution reference anchors changed"
+            )
         portable = """### Execution Pattern
 
 Native generic subagents are optional for tasks that are independent and touch
@@ -1053,10 +1296,30 @@ verification, checkbox update, implementation note, and progress-log entry for
 each task. Never skip a task because parallel execution is unavailable.
 
 """
-        source = _replace_section(source, "### Spawning Pattern", "### Waiting and Checkpoint", portable, source_file)
-        source = _replace_anchored(source, "Tasks under `### Parallel:` header execute via subagents:", "Tasks under `### Parallel:` are eligible for optional generic workers or sequential execution:", source_file)
-        source = _replace_anchored(source, "After spawning, wait for ALL agents to complete, then run phase checkpoint:", "If optional workers were used, wait for all of them; otherwise, after the sequential tasks complete, run the phase checkpoint:", source_file)
-        source = _replace_section(source, "## Task Routing", "## Parallel Task Execution", """## Concern Guidance
+        source = _replace_section(
+            source,
+            "### Spawning Pattern",
+            "### Waiting and Checkpoint",
+            portable,
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "Tasks under `### Parallel:` header execute via subagents:",
+            "Tasks under `### Parallel:` are eligible for optional generic workers or sequential execution:",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "After spawning, wait for ALL agents to complete, then run phase checkpoint:",
+            "If optional workers were used, wait for all of them; otherwise, after the sequential tasks complete, run the phase checkpoint:",
+            source_file,
+        )
+        source = _replace_section(
+            source,
+            "## Task Routing",
+            "## Parallel Task Execution",
+            """## Concern Guidance
 
 Annotations such as `[ecto]`, `[liveview]`, `[oban]`, `[otp]`, `[security]`,
 `[test]`, and `[direct]` describe implementation concerns and required checks.
@@ -1078,14 +1341,26 @@ contract.
 Legacy unannotated tasks use their subject matter to select the same concern
 guidance, never a worker identity. Security requirements take priority.
 
-""", source_file)
-        source = _replace_anchored(source, "[Task Routing](#task-routing)", "[Concern Guidance](#concern-guidance)", source_file)
-        source = _replace_anchored(source,
+""",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "[Task Routing](#task-routing)",
+            "[Concern Guidance](#concern-guidance)",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
             "When Tidewave is available, also call\n`mcp__tidewave__get_logs level: :error` after code changes",
             "When Tidewave is independently configured, optionally inspect error-level runtime logs after code changes",
             source_file,
         )
-        source = _replace_section(source, "### Per-Feature Behavioral Smoke Test (Tidewave)", "### After ALL Phases (Final Gate)", """### Per-Feature Behavioral Smoke Test
+        source = _replace_section(
+            source,
+            "### Per-Feature Behavioral Smoke Test (Tidewave)",
+            "### After ALL Phases (Final Gate)",
+            """### Per-Feature Behavioral Smoke Test
 
 Use Tidewave runtime tools only when they are independently configured and
 exposed in the current environment. If available, exercise the main behavior
@@ -1099,18 +1374,27 @@ Without Tidewave, run all applicable fallbacks:
 3. For UI work, start the app locally and perform a manual browser smoke check;
    if that is impossible, record the unverified manual step explicitly
 
-""", source_file)
-        source = _replace_anchored(source,
-            "2. **Complete Claude Code task**: `TaskUpdate({taskId, status: \"completed\"})`\n   This updates the live progress indicator visible in the UI.",
+""",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            '2. **Complete Claude Code task**: `TaskUpdate({taskId, status: "completed"})`\n   This updates the live progress indicator visible in the UI.',
             "2. **Log completion**: Append the task ID, changed files, and verification result to `progress.md`.",
             source_file,
         )
-        source = _replace_anchored(source,
-            "5. **Start next task**: `TaskUpdate({nextTaskId, status: \"in_progress\"})`\n   then move to next unchecked task",
+        source = _replace_anchored(
+            source,
+            '5. **Start next task**: `TaskUpdate({nextTaskId, status: "in_progress"})`\n   then move to next unchecked task',
             "5. **Start next task**: Log its start, then select the next unchecked\n   non-`[BLOCKED]` task. Stop if an unresolved blocker precedes it unless\n   `--skip-blockers` was explicitly supplied",
             source_file,
         )
-        source = _replace_anchored(source, "4. **Log progress**: Append to `.claude/plans/{feature}/progress.md`\n", "", source_file)
+        source = _replace_anchored(
+            source,
+            "4. **Log progress**: Append to `.claude/plans/{feature}/progress.md`\n",
+            "",
+            source_file,
+        )
         source = _replace_tail(
             source,
             "### Escalate to BLOCKER",
@@ -1137,28 +1421,123 @@ Retry this task explicitly with the native `phx-work` invocation and
         )
 
     elif current.target_name == "phx-work" and relative == "references/file-formats.md":
-        source = _replace_anchored(source, "**Task format**: `- [ ] [Pn-Tm][agent] Description`", "**Task format**: `- [ ] [Pn-Tm][concern] Description`", source_file)
-        source = _replace_anchored(source, "- `[agent]`: Agent annotation (for routing)", "- `[concern]`: Guidance and verification annotation; never a worker identity", source_file)
-        source = _replace_anchored(source, "## Phase 1: {Phase Name} [COMPLETED|IN_PROGRESS|PENDING]", "## Phase 1: {Phase Name} [COMPLETED|IN_PROGRESS|PENDING|BLOCKED]", source_file)
-        source = _replace_anchored(source, "- [ ] [P1-T3][direct] Another pending task", "- [ ] [P1-T3][direct] [BLOCKED] Blocked task (remains unchecked)", source_file)
-        source = _replace_anchored(source, "**Task format**: `- [ ] [Pn-Tm][concern] Description`", "**Task format**: `- [ ] [Pn-Tm][concern] Description`; blocked tasks use `- [ ] [Pn-Tm][concern] [BLOCKED] Description`", source_file)
-        source = _replace_anchored(source, "**Notes**: {any observations}", "**Started**: {date and time task execution began}\n**Notes**: {any observations}\n\nProgress evidence is append-only: never rewrite or delete prior Started, PASS, FAIL, retry, or blocker records.", source_file)
+        source = _replace_anchored(
+            source,
+            "**Task format**: `- [ ] [Pn-Tm][agent] Description`",
+            "**Task format**: `- [ ] [Pn-Tm][concern] Description`",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "- `[agent]`: Agent annotation (for routing)",
+            "- `[concern]`: Guidance and verification annotation; never a worker identity",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "## Phase 1: {Phase Name} [COMPLETED|IN_PROGRESS|PENDING]",
+            "## Phase 1: {Phase Name} [COMPLETED|IN_PROGRESS|PENDING|BLOCKED]",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "- [ ] [P1-T3][direct] Another pending task",
+            "- [ ] [P1-T3][direct] [BLOCKED] Blocked task (remains unchecked)",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "**Task format**: `- [ ] [Pn-Tm][concern] Description`",
+            "**Task format**: `- [ ] [Pn-Tm][concern] Description`; blocked tasks use `- [ ] [Pn-Tm][concern] [BLOCKED] Description`",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "**Notes**: {any observations}",
+            "**Started**: {date and time task execution began}\n**Notes**: {any observations}\n\nProgress evidence is append-only: never rewrite or delete prior Started, PASS, FAIL, retry, or blocker records.",
+            source_file,
+        )
 
-    elif current.target_name == "phx-work" and relative == "references/error-recovery.md":
-        source = _replace_anchored(source, "4. **After 3 retries**: Log blocker, skip task, continue", "4. **After 3 retries**: Mark the blocker in both plan and progress, write the scratchpad DEAD-END, and stop. Skip and continue only with explicit `--skip-blockers`", source_file)
-        source = _replace_anchored(source, "## BLOCKER: Task could not be completed", "## BLOCKER: P2-T3 — Task could not be completed", source_file)
-        source = _replace_anchored(source, "**Task ID**: P2-T3", "**Plan task**: `- [ ] [P2-T3][ecto] BLOCKED — Implement register_user/1`", source_file)
-        source = _replace_anchored(source, "`- [ ] [P2-T3][ecto] BLOCKED — Implement register_user/1`", "`- [ ] [P2-T3][ecto] [BLOCKED] Implement register_user/1`", source_file)
-        source = _replace_anchored(source, "## Recovery After BLOCKER", "By default, return control after recording this state. Only `--skip-blockers` may advance to a later task.\n\n## Recovery After BLOCKER", source_file)
+    elif (
+        current.target_name == "phx-work" and relative == "references/error-recovery.md"
+    ):
+        source = _replace_anchored(
+            source,
+            "4. **After 3 retries**: Log blocker, skip task, continue",
+            "4. **After 3 retries**: Mark the blocker in both plan and progress, write the scratchpad DEAD-END, and stop. Skip and continue only with explicit `--skip-blockers`",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "## BLOCKER: Task could not be completed",
+            "## BLOCKER: P2-T3 — Task could not be completed",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "**Task ID**: P2-T3",
+            "**Plan task**: `- [ ] [P2-T3][ecto] BLOCKED — Implement register_user/1`",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "`- [ ] [P2-T3][ecto] BLOCKED — Implement register_user/1`",
+            "`- [ ] [P2-T3][ecto] [BLOCKED] Implement register_user/1`",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "## Recovery After BLOCKER",
+            "By default, return control after recording this state. Only `--skip-blockers` may advance to a later task.\n\n## Recovery After BLOCKER",
+            source_file,
+        )
 
-    elif current.target_name == "phx-work" and relative == "references/resume-strategies.md":
-        source = _replace_anchored(source, "- `[ ]` = pending", "- `[ ]` = pending; `[ ] ... [BLOCKED] ...` = blocked and still incomplete", source_file)
-        source = _replace_anchored(source, "- Phase status `[COMPLETED|IN_PROGRESS|PENDING]` tracks phase progress", "- Phase status `[COMPLETED|IN_PROGRESS|PENDING|BLOCKED]` tracks phase progress", source_file)
-        source = _replace_anchored(source, "- BLOCKERs in progress file track failed tasks", "- `[BLOCKED]` on the plan row is authoritative; progress records preserve blocker evidence", source_file)
-        source = _replace_anchored(source, "/phx:work  # Find most recent IN_PROGRESS plan, resume from first [ ]", "/phx:work  # Resume at first unchecked non-[BLOCKED] task; stop if an earlier blocker exists", source_file)
-        source = _replace_anchored(source, "Skips directly to P2-T3 regardless of earlier unchecked tasks.", "Targets P2-T3 regardless of earlier unchecked tasks. If it is `[BLOCKED]`, this explicitly retries it and clears the tag when starting.", source_file)
-        source = _replace_anchored(source, "Continues past tasks that previously failed with BLOCKER status.", "Skips rows visibly tagged `[BLOCKED]`; it does not infer blockers from prose or progress history.", source_file)
-        source = _replace_anchored(source, "No state file to parse. Just find first `[ ]` and continue.", "No state file to parse. Select the first unchecked row not tagged `[BLOCKED]`, but stop when an unresolved blocker precedes it unless `--skip-blockers` was supplied.", source_file)
+    elif (
+        current.target_name == "phx-work"
+        and relative == "references/resume-strategies.md"
+    ):
+        source = _replace_anchored(
+            source,
+            "- `[ ]` = pending",
+            "- `[ ]` = pending; `[ ] ... [BLOCKED] ...` = blocked and still incomplete",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "- Phase status `[COMPLETED|IN_PROGRESS|PENDING]` tracks phase progress",
+            "- Phase status `[COMPLETED|IN_PROGRESS|PENDING|BLOCKED]` tracks phase progress",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "- BLOCKERs in progress file track failed tasks",
+            "- `[BLOCKED]` on the plan row is authoritative; progress records preserve blocker evidence",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "/phx:work  # Find most recent IN_PROGRESS plan, resume from first [ ]",
+            "/phx:work  # Resume at first unchecked non-[BLOCKED] task; stop if an earlier blocker exists",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "Skips directly to P2-T3 regardless of earlier unchecked tasks.",
+            "Targets P2-T3 regardless of earlier unchecked tasks. If it is `[BLOCKED]`, this explicitly retries it and clears the tag when starting.",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "Continues past tasks that previously failed with BLOCKER status.",
+            "Skips rows visibly tagged `[BLOCKED]`; it does not infer blockers from prose or progress history.",
+            source_file,
+        )
+        source = _replace_anchored(
+            source,
+            "No state file to parse. Just find first `[ ]` and continue.",
+            "No state file to parse. Select the first unchecked row not tagged `[BLOCKED]`, but stop when an unresolved blocker precedes it unless `--skip-blockers` was supplied.",
+            source_file,
+        )
         source = _replace_anchored(
             source,
             "- All tasks before the target should be `[x]` in plan\n- If earlier tasks are unchecked, warn and ask user:",
@@ -1166,8 +1545,15 @@ Retry this task explicitly with the native `phx-work` invocation and
             source_file,
         )
 
-    elif current.target_name == "phx-work" and relative == "references/harness-patterns.md":
-        source = _replace_section(source, "## Action Verification Pattern", "## Anti-Pattern: Unstructured Retry Loop", """## Action Verification Pattern
+    elif (
+        current.target_name == "phx-work"
+        and relative == "references/harness-patterns.md"
+    ):
+        source = _replace_section(
+            source,
+            "## Action Verification Pattern",
+            "## Anti-Pattern: Unstructured Retry Loop",
+            """## Action Verification Pattern
 
 Portable targets assume no lifecycle hooks. Verify actions explicitly after
 each edit and use command output as feedback:
@@ -1187,7 +1573,9 @@ scratchpad before trying a different approach.
 The loop is: edit, run the explicit command, read its concrete failure, fix the
 root cause, and rerun the same command. Do not rely on implicit automation.
 
-""", source_file)
+""",
+            source_file,
+        )
 
     else:
         return None
@@ -1286,17 +1674,19 @@ def _plugin_manifest(source_plugin_dir: str | Path) -> dict:
     try:
         source = json.loads(source_file.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
-        raise ValueError(f"{source_file}: invalid or missing source manifest") from error
+        raise ValueError(
+            f"{source_file}: invalid or missing source manifest"
+        ) from error
 
-    name = source.get("name")
     version = source.get("version")
-    if not isinstance(name, str) or not name:
-        raise ValueError(f"{source_file}: missing string field `name`")
     if not isinstance(version, str) or not version:
         raise ValueError(f"{source_file}: missing string field `version`")
 
     return {
-        "name": name,
+        # Claude derives slash-command namespaces from its manifest name, while
+        # Codex uses this value as the installed plugin and skill namespace.
+        # Keep the established Codex public identity independent from Claude.
+        "name": CODEX_PLUGIN_NAME,
         "version": version,
         "description": CODEX_DESCRIPTION,
         "skills": "./skills/",
@@ -1316,7 +1706,9 @@ def discover_skills(source_plugin_dir: str | Path) -> list[SkillSource]:
         if source_path.is_symlink():
             raise ValueError(f"{source_path}: symlinks are not supported in skills")
         if not source_path.is_dir() and not source_path.is_file():
-            raise ValueError(f"{source_path}: special files are not supported in skills")
+            raise ValueError(
+                f"{source_path}: special files are not supported in skills"
+            )
 
     discovered: list[SkillSource] = []
     names: dict[str, Path] = {}
@@ -1332,7 +1724,7 @@ def discover_skills(source_plugin_dir: str | Path) -> list[SkillSource]:
                 f"{skill_file}: missing string frontmatter field `description`"
             )
 
-        target_name = normalize_skill_name(source_name)
+        target_name = portable_skill_name(skill_file.parent.name, source_name)
         if len(target_name) > 64 or not SKILL_NAME_RE.fullmatch(target_name):
             raise ValueError(
                 f"{skill_file}: normalized Codex skill name `{target_name}` is invalid"
@@ -1380,14 +1772,12 @@ def _target_relative_path(
             f"{source_path}"
         )
 
-    generated_resource = (
-        Path(owner.target_name) / resolved.relative_to(owner.source_dir.resolve())
+    generated_resource = Path(owner.target_name) / resolved.relative_to(
+        owner.source_dir.resolve()
     )
     source_relative = source_file.resolve().relative_to(current.source_dir.resolve())
     generated_current = Path(current.target_name) / source_relative.parent
-    return Path(
-        os.path.relpath(generated_resource, generated_current)
-    ).as_posix()
+    return Path(os.path.relpath(generated_resource, generated_current)).as_posix()
 
 
 def _rewrite_resource_paths(
@@ -1404,7 +1794,9 @@ def _rewrite_resource_paths(
             return raw_path
         source_path = current.source_dir / raw_path
         if not source_path.exists():
-            raise ValueError(f"{source_file}: missing referenced resource {source_path}")
+            raise ValueError(
+                f"{source_file}: missing referenced resource {source_path}"
+            )
         return _target_relative_path(source_path, current, skills, source_file)
 
     def replace_plugin_root(match: re.Match[str]) -> str:
@@ -1413,7 +1805,9 @@ def _rewrite_resource_paths(
             return CLAUDE_HOOK_UNAVAILABLE.format(path=raw_path)
         source_path = plugin_dir / raw_path
         if not source_path.exists():
-            raise ValueError(f"{source_file}: missing referenced resource {source_path}")
+            raise ValueError(
+                f"{source_file}: missing referenced resource {source_path}"
+            )
         if not raw_path.startswith("skills/"):
             raise ValueError(
                 f"{source_file}: unsupported CLAUDE_PLUGIN_ROOT resource {source_path}"
@@ -1457,10 +1851,200 @@ def _codex_overlay(source_file: Path, current: SkillSource) -> str | None:
     if portable_workflow is not None:
         return portable_workflow
 
+    if (
+        current.target_name == "phx-trace"
+        and source_file == current.source_dir / "SKILL.md"
+    ):
+        source = current.frontmatter.body
+        required = (
+            "# Call Tracing",
+            "## Delegate to call-tracer Agent",
+            "## Output Location",
+        )
+        if not all(marker in source for marker in required):
+            raise ValueError(f"{source_file}: portable trace overlay anchors changed")
+        return _replace_section(
+            source,
+            "## Delegate to call-tracer Agent",
+            "## Output Location",
+            """## Full Recursive Trace
+
+Trace controller, LiveView, worker, and internal entry-point categories in this
+session, starting each category with `mix xref callers`. Native generic workers
+may handle independent categories in parallel when the runtime provides them,
+but the same-session sequential path is fully supported and must produce the
+same call tree. Do not require a named custom agent or Claude-specific spawn
+configuration.
+
+""",
+            source_file,
+        )
+
+    if (
+        current.target_name == "phx-audit"
+        and source_file == current.source_dir / "SKILL.md"
+    ):
+        source = current.frontmatter.body
+        required = (
+            "# Project Health Audit",
+            "## Subagent Architecture",
+            "## Quick Mode",
+            "## Focus Mode",
+            "## Incremental Mode",
+        )
+        if not all(marker in source for marker in required):
+            raise ValueError(f"{source_file}: portable audit overlay anchors changed")
+        source = _replace_anchored(
+            source,
+            "Comprehensive project-wide health assessment using 5 parallel "
+            "specialist subagents.",
+            "Comprehensive project-wide health assessment across five independent "
+            "concern tracks.",
+            source_file,
+        )
+        source = _replace_section(
+            source,
+            "## Iron Laws",
+            "## Quick Mode",
+            """## Iron Laws
+
+1. **Complete every selected track before synthesizing** — partial results make
+   cross-category scores misleading
+2. **Scope each track to concrete directories and checks** — vague project-wide
+   analysis produces generic findings
+3. **Never compare scores across projects** — track trends only within the same
+   codebase
+4. **Run quick mode before full mode** — catch basic failures before expensive
+   analysis
+
+## Portable Audit Workflow
+
+1. Create `.claude/audit/reports/` and `.claude/audit/summaries/`.
+2. Run the quick checks below. Stop and report a blocker when the project cannot
+   compile or its test command cannot start.
+3. Complete five tracks: architecture, performance, security, tests, and
+   dependencies. Native generic workers may run independent tracks in parallel
+   when the runtime provides them; otherwise run every track sequentially in
+   this session. Never require named custom agents.
+4. Write one evidence-focused report per track under `.claude/audit/reports/`.
+   Report issues only, cite paths and lines, and use one summary line for a
+   clean area.
+5. After all selected reports exist, deduplicate findings, identify
+   cross-category correlations, calculate scores using
+   `references/scoring-methodology.md`, and write
+   `.claude/audit/summaries/project-health-{date}.md`.
+
+If two or more optional workers fail or hit limits, finish the missing tracks
+sequentially. Never present an incomplete track as audited.
+
+## Output Format
+
+Report an executive health score, per-category scores for Architecture,
+Performance, Security, Tests, and Dependencies, critical issues, top
+recommendations, and an Immediate/Short-term/Long-term action plan.
+
+""",
+            source_file,
+        )
+        return _replace_section(
+            source,
+            "## Focus Mode (`--focus=area`)",
+            "## Incremental Mode (`--since <commit>`)",
+            """## Focus Mode (`--focus=area`)
+
+Run only the selected concern track with its deeper checks:
+
+| Focus | Extra checks |
+|-------|--------------|
+| `security` | Full OWASP review, Sobelow, manual authorization patterns |
+| `performance` | Query plans, N+1 inventory, profiling evidence |
+| `architecture` | Full xref graph, coupling matrix, cohesion |
+| `tests` | Coverage by context, isolation, flaky-test indicators |
+| `deps` | Vulnerabilities, licenses, maintenance status |
+
+""",
+            source_file,
+        )
+
+    if (
+        current.target_name == "phx-research"
+        and source_file == current.source_dir / "SKILL.md"
+    ):
+        source = current.frontmatter.body
+        required = (
+            "# Research Elixir Topic",
+            "## Library Evaluation Mode",
+            "## Workflow",
+        )
+        if not all(marker in source for marker in required):
+            raise ValueError(
+                f"{source_file}: portable research overlay anchors changed"
+            )
+        source = source.replace("`$ARGUMENTS`", "the text after the skill name")
+        source = source.replace("raw $ARGUMENTS", "raw user input")
+        source = source.replace("`$ARGUMENTS` <", "the user input is shorter than")
+        source = source.replace("`$ARGUMENTS` >", "the user input is longer than")
+        return _replace_tail(
+            source,
+            "## Workflow",
+            """## Portable Research Workflow
+
+### 0. Pre-flight
+
+Check `.claude/research/{topic-slug}.md`. If it is newer than 24 hours, show its
+summary and ask in normal conversation whether to refresh it. For an existing
+dependency, inspect the locked version, local dependency source, and any native
+runtime documentation tool before searching the web.
+
+### 1. Decompose the question
+
+Turn the user request into one focused query when it is short, or two to four
+queries of at most ten words for a multi-part request. Never send a long raw
+prompt to a search provider.
+
+### 2. Gather sources
+
+Use the runtime's native web or HTTP capabilities when available. Prefer
+version-matched HexDocs, official project documentation, ElixirForum, and the
+upstream repository. Deduplicate URLs and discard irrelevant results. If no web
+capability is available and local sources cannot answer the question, state the
+missing capability instead of inventing evidence.
+
+### 3. Extract and synthesize
+
+Native generic workers may extract independent topic clusters in parallel, but
+they are optional. The same-session sequential path must remain complete. Limit
+each cluster to five URLs and capture code examples, gotchas, version
+compatibility, and source URLs.
+
+### 4. Write one durable result
+
+Write `.claude/research/{topic-slug}.md` (about 5 KB for topic research or 3 KB
+for a library evaluation) with:
+
+- a two-to-three sentence summary;
+- categorized source links and each source's key insight;
+- cited code examples;
+- evidence-backed recommendations; and
+- gotchas or version constraints.
+
+### 5. Stop after research
+
+Present the summary and offer, in normal conversation, to plan from it,
+investigate one finding, research a narrower subtopic, or stop. Never invoke a
+follow-up workflow automatically.
+""",
+            source_file,
+        )
+
     if source_file == current.source_dir / "SKILL.md":
         body = current.frontmatter.body
         if current.target_name == "phx-investigate":
-            required = ("# Investigate Bug", "## Investigation Workflow", "## References")
+            required = (
+                "# Investigate Bug",
+                "## Investigation Workflow",
+                "## References",
+            )
             if not all(marker in body for marker in required):
                 raise ValueError(
                     f"{source_file}: Codex investigate overlay anchors changed"
@@ -1472,17 +2056,39 @@ def _codex_overlay(source_file: Path, current: SkillSource) -> str | None:
                 raise ValueError(f"{source_file}: Codex review overlay anchors changed")
             return REVIEW_BODY
         if current.target_name == "phx-pr-review":
-            required = ("# PR Review Response", "## Step 1: Resolve PR + Fetch Threads", "## Step 5: Final Summary", "## Iron Laws")
+            required = (
+                "# PR Review Response",
+                "## Step 1: Resolve PR + Fetch Threads",
+                "## Step 5: Final Summary",
+                "## Iron Laws",
+            )
             if not all(marker in body for marker in required):
-                raise ValueError(f"{source_file}: portable PR review overlay anchors changed")
+                raise ValueError(
+                    f"{source_file}: portable PR review overlay anchors changed"
+                )
             _assert_ordered_markers(body, required, source_file)
             return PR_REVIEW_BODY
         if current.target_name == "phx-full":
-            required = ("# Full Phoenix Feature Development", "## State Machine", "## Cycle Limits", "## Iron Laws", "## References")
+            required = (
+                "# Full Phoenix Feature Development",
+                "## State Machine",
+                "## Cycle Limits",
+                "## Iron Laws",
+                "## References",
+            )
             if not all(marker in body for marker in required):
-                raise ValueError(f"{source_file}: portable full overlay anchors changed")
+                raise ValueError(
+                    f"{source_file}: portable full overlay anchors changed"
+                )
             _assert_ordered_markers(body, required, source_file)
             return FULL_BODY
+        if current.target_name == "phx-freeze":
+            required = ("# Freeze — scoped edit lock", "## Usage", "## Iron Laws")
+            if not all(marker in body for marker in required):
+                raise ValueError(
+                    f"{source_file}: portable freeze overlay anchors changed"
+                )
+            return FREEZE_BODY
 
     if (
         current.target_name == "phx-review"
@@ -1496,28 +2102,60 @@ def _codex_overlay(source_file: Path, current: SkillSource) -> str | None:
         return REVIEW_AGENT_REFERENCE
 
     relative = source_file.relative_to(current.source_dir).as_posix()
-    if current.target_name == "phx-pr-review" and relative == "references/gh-commands.md":
+    if (
+        current.target_name == "phx-pr-review"
+        and relative == "references/gh-commands.md"
+    ):
         return PR_REVIEW_GH_REFERENCE
-    if current.target_name == "phx-pr-review" and relative == "references/bot-triage.md":
+    if (
+        current.target_name == "phx-pr-review"
+        and relative == "references/bot-triage.md"
+    ):
         return PR_REVIEW_BOT_REFERENCE
-    if current.target_name == "phx-full" and relative == "references/execution-steps.md":
+    if (
+        current.target_name == "phx-full"
+        and relative == "references/execution-steps.md"
+    ):
         source = source_file.read_text(encoding="utf-8")
-        required = ("# Full Cycle Execution Steps", "## Step 1: Initialize", "## Step 5: Review Phase", "## Step 7: Collect Metrics & Complete")
+        required = (
+            "# Full Cycle Execution Steps",
+            "## Step 1: Initialize",
+            "## Step 5: Review Phase",
+            "## Step 7: Collect Metrics & Complete",
+        )
         _assert_ordered_markers(source, required, source_file)
         return FULL_EXECUTION_REFERENCE
-    if current.target_name == "phx-full" and relative == "references/safety-recovery.md":
+    if (
+        current.target_name == "phx-full"
+        and relative == "references/safety-recovery.md"
+    ):
         source = source_file.read_text(encoding="utf-8")
-        required = ("# Safety Rails & Recovery", "## Resume from Interruption", "## Ralph Wiggum Integration", "## State Recovery")
+        required = (
+            "# Safety Rails & Recovery",
+            "## Resume from Interruption",
+            "## Ralph Wiggum Integration",
+            "## State Recovery",
+        )
         _assert_ordered_markers(source, required, source_file)
         return FULL_SAFETY_REFERENCE
     if current.target_name == "phx-full" and relative == "references/example-run.md":
         source = source_file.read_text(encoding="utf-8")
-        required = ("# Example Full Cycle Run", "## Magic Link Authentication", "## Feature Complete")
+        required = (
+            "# Example Full Cycle Run",
+            "## Magic Link Authentication",
+            "## Feature Complete",
+        )
         _assert_ordered_markers(source, required, source_file)
         return FULL_EXAMPLE_REFERENCE
     if current.target_name == "phx-full" and relative == "references/cycle-patterns.md":
         source = source_file.read_text(encoding="utf-8")
-        required = ("# Cycle Patterns for Autonomous Development", "## State Persistence", "## Recovery Patterns", "## Metrics Tracking", "## Integration with CI/CD")
+        required = (
+            "# Cycle Patterns for Autonomous Development",
+            "## State Persistence",
+            "## Recovery Patterns",
+            "## Metrics Tracking",
+            "## Integration with CI/CD",
+        )
         _assert_ordered_markers(source, required, source_file)
         return FULL_CYCLE_REFERENCE
     if current.target_name == "phx-review" and relative == (
@@ -1591,6 +2229,7 @@ def _transform_markdown(
     overlay = _codex_overlay(source_file, current)
     if source_file == current.source_dir / "SKILL.md":
         projected = transform_frontmatter(current.frontmatter.data, "codex")
+        projected["name"] = current.target_name
         if current.target_name == "phx-investigate":
             projected["description"] = (
                 "Investigate Elixir/Phoenix bugs root-cause first. Reproduce failures, "
@@ -1676,7 +2315,10 @@ def _populate(
 
 def validate_portable_workflows(skills_root: Path) -> None:
     """Reject generated flagship workflows that lose required safety semantics."""
-    if not (skills_root / "phx-pr-review").is_dir() or not (skills_root / "phx-full").is_dir():
+    if (
+        not (skills_root / "phx-pr-review").is_dir()
+        or not (skills_root / "phx-full").is_dir()
+    ):
         return
     pr_review = "\n".join(
         path.read_text(encoding="utf-8")
@@ -1698,7 +2340,9 @@ def validate_portable_workflows(skills_root: Path) -> None:
     )
     missing = next((token for token in required_pr if token not in pr_review), None)
     if missing:
-        raise ValueError(f"{skills_root / 'phx-pr-review'}: missing portable gate `{missing}`")
+        raise ValueError(
+            f"{skills_root / 'phx-pr-review'}: missing portable gate `{missing}`"
+        )
 
     full = "\n".join(
         path.read_text(encoding="utf-8")
@@ -1724,7 +2368,33 @@ def validate_portable_workflows(skills_root: Path) -> None:
     )
     missing = next((token for token in required_full if token not in full), None)
     if missing:
-        raise ValueError(f"{skills_root / 'phx-full'}: missing portable state rule `{missing}`")
+        raise ValueError(
+            f"{skills_root / 'phx-full'}: missing portable state rule `{missing}`"
+        )
+
+
+def validate_portable_freeze(skills_root: Path) -> None:
+    """Reject generated freeze skills that imply unavailable hook enforcement."""
+    freeze_root = skills_root / "phx-freeze"
+    if not freeze_root.is_dir():
+        return
+    text = "\n".join(
+        path.read_text(encoding="utf-8") for path in sorted(freeze_root.rglob("*.md"))
+    )
+    forbidden = ("freeze-gate.sh", "PreToolUse", "all edits blocked", "Enforced by")
+    found = next((token for token in forbidden if token in text), None)
+    if found:
+        raise ValueError(
+            f"{freeze_root}: unavailable freeze enforcement claim `{found}`"
+        )
+    required = (
+        "advisory rather than a technical lock",
+        "Do not create `.claude/.freeze`",
+        "Never describe this scope as enforced",
+    )
+    missing = next((token for token in required if token not in text), None)
+    if missing:
+        raise ValueError(f"{freeze_root}: missing portable freeze rule `{missing}`")
 
 
 def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> int:
@@ -1734,7 +2404,9 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
     try:
         manifest = json.loads(manifest_file.read_text(encoding="utf-8"))
     except (OSError, json.JSONDecodeError) as error:
-        raise ValueError(f"{manifest_file}: invalid or missing plugin manifest") from error
+        raise ValueError(
+            f"{manifest_file}: invalid or missing plugin manifest"
+        ) from error
 
     if expected_manifest is not None and manifest != expected_manifest:
         raise ValueError(f"{manifest_file}: unexpected Codex plugin manifest")
@@ -1769,7 +2441,9 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
         if generated_path.is_symlink():
             raise ValueError(f"{generated_path}: generated symlinks are not supported")
         if not generated_path.is_dir() and not generated_path.is_file():
-            raise ValueError(f"{generated_path}: generated special file is not supported")
+            raise ValueError(
+                f"{generated_path}: generated special file is not supported"
+            )
 
     skill_files = sorted(skills_root.glob("*/SKILL.md"))
     if not skill_files:
@@ -1813,7 +2487,17 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
                 f"{markdown}: unqualified Codex plugin skill `{unqualified.group(0)}`"
             )
 
-    for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work", "phx-pr-review", "phx-full"):
+    for flagship in (
+        "phx-investigate",
+        "phx-review",
+        "phx-plan",
+        "phx-work",
+        "phx-pr-review",
+        "phx-full",
+        "phx-trace",
+        "phx-audit",
+        "phx-research",
+    ):
         flagship_root = skills_root / flagship
         if not flagship_root.is_dir():
             continue
@@ -1834,31 +2518,59 @@ def validate(output_dir: str | Path, expected_manifest: dict | None = None) -> i
             "mcp__linear__",
             "${CLAUDE_SKILL_DIR}",
             "${CLAUDE_PLUGIN_ROOT}",
+            "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH",
         )
         if flagship in {"phx-pr-review", "phx-full"}:
             forbidden += (
-                "workflow-orchestrator", "parallel-reviewer", "planning-orchestrator",
-                "run_in_background", "Ralph Wiggum", "/ralph-loop:",
-                "PostToolUse", "Claude Code tasks", "AskUserQuestion",
-                "--codex", "--Pi", "--OpenCode", "$phx-compound",
+                "workflow-orchestrator",
+                "parallel-reviewer",
+                "planning-orchestrator",
+                "run_in_background",
+                "Ralph Wiggum",
+                "/ralph-loop:",
+                "PostToolUse",
+                "Claude Code tasks",
+                "AskUserQuestion",
+                "--codex",
+                "--Pi",
+                "--OpenCode",
+                "$phx-compound",
             )
         if flagship in {"phx-plan", "phx-work"}:
             forbidden += (
-                "phoenix-patterns-analyst", "ecto-schema-designer",
-                "liveview-architect", "oban-specialist", "otp-advisor",
-                "security-analyzer", "testing-reviewer", "hex-library-researcher",
-                "web-researcher", "call-tracer", "planning-orchestrator",
-                "Spawn SPECIALIST", "run_in_background", "[agent]",
-                "Agent annotation", "agent routing", "project_eval", "get_logs",
-                "| Hook |", "Each hook", "/commit",
-                "agent spawning", "agent count", "Explore agents",
-                "execute via subagents", "After spawning",
+                "phoenix-patterns-analyst",
+                "ecto-schema-designer",
+                "liveview-architect",
+                "oban-specialist",
+                "otp-advisor",
+                "security-analyzer",
+                "testing-reviewer",
+                "hex-library-researcher",
+                "web-researcher",
+                "call-tracer",
+                "planning-orchestrator",
+                "Spawn SPECIALIST",
+                "run_in_background",
+                "[agent]",
+                "Agent annotation",
+                "agent routing",
+                "project_eval",
+                "get_logs",
+                "| Hook |",
+                "Each hook",
+                "/commit",
+                "agent spawning",
+                "agent count",
+                "Explore agents",
+                "execute via subagents",
+                "After spawning",
             )
         found = next((token for token in forbidden if token in text), None)
         if found:
             raise ValueError(f"{flagship_root}: unavailable API `{found}`")
 
     validate_portable_workflows(skills_root)
+    validate_portable_freeze(skills_root)
     return len(skill_files)
 
 

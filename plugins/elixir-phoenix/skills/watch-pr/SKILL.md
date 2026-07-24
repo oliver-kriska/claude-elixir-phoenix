@@ -1,5 +1,5 @@
 ---
-name: phx:watch-pr
+name: watch-pr
 description: Watch an Elixir/Phoenix PR for new review comments (bot + human) and CI results via a background watcher that wakes Claude only on real events. Use after opening a PR or pushing, while waiting on CI or reviewers.
 effort: medium
 argument-hint: <PR number or URL> [--checks-only] [--fix]

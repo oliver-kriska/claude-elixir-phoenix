@@ -14,7 +14,7 @@ from . import codex
 from .frontmatter import Frontmatter, parse_file
 from .generated_tree import copy_skill_subtrees
 from .skill_transforms import (
-    normalize_skill_name,
+    portable_skill_name,
     rewrite_slash_commands,
     transform_frontmatter,
 )
@@ -47,6 +47,9 @@ PORTABLE_WORKFLOWS = (
     "phx-work",
     "phx-pr-review",
     "phx-full",
+    "phx-trace",
+    "phx-audit",
+    "phx-research",
 )
 AMP_DESCRIPTION_OVERRIDES = {
     "phx-investigate": (
@@ -60,6 +63,10 @@ AMP_DESCRIPTION_OVERRIDES = {
     "phx-full": (
         "Run a portable sequential plan-work-verify-review-compound lifecycle. "
         "Use optional generic workers only when Amp makes them available."
+    ),
+    "phx-freeze": (
+        "Apply an advisory edit scope in this session. Use for read-only or "
+        "directory-scoped work; no enforcement hook is installed."
     ),
 }
 
@@ -82,7 +89,9 @@ def discover_skills(source_plugin_dir: str | Path) -> list[SkillSource]:
         if source_path.is_symlink():
             raise ValueError(f"{source_path}: symlinks are not supported in skills")
         if not source_path.is_dir() and not source_path.is_file():
-            raise ValueError(f"{source_path}: special files are not supported in skills")
+            raise ValueError(
+                f"{source_path}: special files are not supported in skills"
+            )
 
     discovered: list[SkillSource] = []
     names: dict[str, Path] = {}
@@ -99,7 +108,7 @@ def discover_skills(source_plugin_dir: str | Path) -> list[SkillSource]:
                 f"{skill_file}: missing string frontmatter field `description`"
             )
 
-        target_name = normalize_skill_name(source_name)
+        target_name = portable_skill_name(skill_file.parent.name, source_name)
         if len(target_name) > 64 or not SKILL_NAME_RE.fullmatch(target_name):
             raise ValueError(
                 f"{skill_file}: normalized Amp skill name `{target_name}` is invalid"
@@ -245,6 +254,7 @@ def _transform_markdown(
     overlay = _amp_overlay(source_file, current)
     if source_file.name == "SKILL.md" and source_file.parent == current.source_dir:
         projected = transform_frontmatter(current.frontmatter.data, "amp")
+        projected["name"] = current.target_name
         if current.target_name in AMP_DESCRIPTION_OVERRIDES:
             projected["description"] = AMP_DESCRIPTION_OVERRIDES[current.target_name]
         body = _rewrite_resource_paths(
@@ -336,6 +346,7 @@ def validate(output_dir: str | Path) -> int:
         "$lv-",
         "$ecto-",
         "/skill:phx-",
+        "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH",
     )
     for workflow in PORTABLE_WORKFLOWS:
         workflow_root = root / workflow
@@ -394,6 +405,7 @@ def validate(output_dir: str | Path) -> int:
             raise ValueError(f"{workflow_root}: unavailable Amp API `{found}`")
 
     codex.validate_portable_workflows(root)
+    codex.validate_portable_freeze(root)
     return len(skill_files)
 
 

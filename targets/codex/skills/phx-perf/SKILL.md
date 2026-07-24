@@ -47,7 +47,7 @@ Spawn analysis agents in parallel based on focus:
 
 **Ecto Track** (default or `--focus ecto`):
 
-Spawn `elixir-phoenix:elixir-reviewer` with prompt:
+Spawn `phx:elixir-reviewer` with prompt:
 "Analyze for N+1 queries, missing preloads, unindexed queries,
 and inefficient patterns. Check: `Repo.all` in loops,
 `Enum.map` with Repo calls, missing `preload`, queries without
@@ -55,14 +55,14 @@ indexes on WHERE/JOIN columns."
 
 **LiveView Track** (default or `--focus liveview`):
 
-Spawn `elixir-phoenix:elixir-reviewer` with prompt:
+Spawn `phx:elixir-reviewer` with prompt:
 "Analyze LiveViews for memory issues: large assigns, missing
 streams for lists, assigns that grow unbounded, heavy
 `handle_info` processing, missing `assign_async` for slow ops."
 
 **OTP Track** (only with `--focus otp`):
 
-Spawn `elixir-phoenix:otp-advisor` with prompt:
+Spawn `phx:otp-advisor` with prompt:
 "Analyze for OTP bottlenecks: GenServer mailbox growth,
 synchronous calls in hot paths, missing Task.async for
 parallel work, ETS opportunities for read-heavy state."

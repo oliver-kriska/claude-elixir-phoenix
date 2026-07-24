@@ -1,5 +1,5 @@
 ---
-name: phx:challenge
+name: challenge
 description: Challenge mode reviews - rigorous questioning before approving changes. Use when you want thorough scrutiny of Ecto changes, LiveView events, OTP designs, or PR readiness.
 effort: high
 argument-hint: ecto | liveview | pr

@@ -1,5 +1,5 @@
 ---
-name: phx:trace
+name: trace
 description: Trace Elixir call trees from entry points via mix xref. Use when debugging data flow, planning signature changes, or understanding how a bug reaches code.
 effort: medium
 ---
@@ -28,7 +28,14 @@ Build call trees showing how functions are reached from entry points.
 
 ## Quick Trace
 
-Run `mix xref callers MyApp.Accounts.update_user/2` to find all callers. Then read the reported locations to see argument patterns.
+Run the caller query first, then inspect another function in the chain as needed:
+
+```bash
+mix xref callers MyApp.Accounts.update_user/2
+mix xref callers MyApp.Accounts.get_user/1
+```
+
+Read the reported locations to see argument patterns.
 
 ## Entry Points (Stop Here)
 
@@ -43,8 +50,14 @@ Run `mix xref callers MyApp.Accounts.update_user/2` to find all callers. Then re
 
 For full recursive tree with argument extraction and **parallel category tracing**:
 
+First inspect `${CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH:-1}`. At depth 2+,
+delegate to the orchestrator below. At the Claude Code 2.1.217+ default of 1,
+keep orchestration in this main session: spawn the applicable controller,
+LiveView, worker, and internal tracing prompts directly, then merge their
+results. Never spawn an orchestrator that cannot delegate.
+
 ```
-Agent(subagent_type: "call-tracer", prompt: "Build call tree for MyApp.Accounts.update_user/2")
+Agent(subagent_type: "phx:call-tracer", prompt: "Build call tree for MyApp.Accounts.update_user/2")
 ```
 
 The call-tracer agent uses **parallel subagents** for each entry point category:

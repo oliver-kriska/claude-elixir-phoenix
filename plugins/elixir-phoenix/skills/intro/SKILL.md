@@ -1,5 +1,5 @@
 ---
-name: phx:intro
+name: intro
 description: Walk through the Elixir/Phoenix plugin commands, workflow, and features in 6 interactive sections. Use when a new user wants to learn what the plugin offers or needs a refresher on available commands.
 effort: low
 argument-hint: "[--section N]"

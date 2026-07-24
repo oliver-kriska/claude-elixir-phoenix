@@ -1,5 +1,5 @@
 ---
-name: phx:brief
+name: brief
 description: Interactive briefing of a plan file — explains reasoning, schema decisions, component choices. Use when developers need to understand a plan before approving.
 effort: low
 argument-hint: "[path to plan file]"

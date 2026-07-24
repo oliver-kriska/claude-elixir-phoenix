@@ -1,5 +1,5 @@
 ---
-name: phx:techdebt
+name: techdebt
 description: Analyze Elixir/Phoenix technical debt — duplicates, refactoring opportunities, credo issues. Use when asked about code quality, cleanup, or what to improve.
 effort: medium
 ---

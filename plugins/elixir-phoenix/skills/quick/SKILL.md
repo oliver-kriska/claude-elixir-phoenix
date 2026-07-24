@@ -1,5 +1,5 @@
 ---
-name: phx:quick
+name: quick
 description: Implement small Phoenix changes without planning — add validations, update routes, fix components, create migrations. Use for single-file edits under 50 lines.
 effort: low
 ---

@@ -320,32 +320,6 @@ Map.get(map, :key) # When key might not exist
 Enum.join(["Hello", name], " ")  # For lists
 ```
 
-## Delegate to Parallel Reviewer
-
-For large or critical changes, spawn `parallel-reviewer` for thorough multi-aspect analysis:
-
-| Situation | Use elixir-reviewer | Use parallel-reviewer |
-|-----------|--------------------|-----------------------|
-| Quick single-file review | ✅ | ❌ |
-| Small PR (<100 lines) | ✅ | ❌ |
-| Large PR (>500 lines) | ❌ | ✅ |
-| Critical system change | ❌ | ✅ |
-| Security-sensitive code | ❌ | ✅ |
-| "Thorough review please" | ❌ | ✅ |
-
-```
-Agent(subagent_type: "parallel-reviewer", prompt: "Thorough review of: {files_or_diff}")
-```
-
-Parallel reviewer spawns 4 specialist subagents:
-
-1. **Correctness** - Logic, edge cases, error handling
-2. **Security** - Vulnerabilities, auth, input validation
-3. **Performance** - N+1, efficiency, resource usage
-4. **Style** - Idioms, naming, maintainability
-
-Each gets fresh context for deep focused review.
-
 ## Tidewave Integration (Optional)
 
 **Availability Check**: Before using Tidewave tools, verify `mcp__tidewave__*` tools appear in your available tools list.

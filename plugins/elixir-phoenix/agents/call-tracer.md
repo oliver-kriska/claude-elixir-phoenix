@@ -9,7 +9,7 @@ effort: medium
 omitClaudeMd: true
 maxTurns: 25
 skills:
-  - call-tracing
+  - trace
 ---
 
 # Call Tracer Agent (Parallel Orchestrator)

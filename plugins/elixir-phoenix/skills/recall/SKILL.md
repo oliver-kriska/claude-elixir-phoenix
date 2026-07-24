@@ -1,5 +1,5 @@
 ---
-name: phx:recall
+name: recall
 description: Recall prior work from past sessions — how a bug was fixed, what was decided, where a pattern lives. Use when asked 'have we done this before' or 'how did I fix X' in Elixir/Phoenix work. ccrider MCP when available, else git + solution docs.
 effort: medium
 argument-hint: <question about past work>

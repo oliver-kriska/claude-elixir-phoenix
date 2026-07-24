@@ -1,5 +1,5 @@
 {
-  "skill": "call-tracing",
+  "skill": "trace",
   "should_trigger": [
     "Trace the call path from user login to the database query",
     "Show me all functions that call authenticate_user",

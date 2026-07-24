@@ -1,5 +1,5 @@
 ---
-name: lv:assigns
+name: assigns-audit
 description: "Inspect LiveView socket assigns for memory bloat — missing temporary_assigns, unused assigns, unbounded lists needing streams, memory estimates. Use when LiveView memory grows or you need to add temporary_assigns."
 effort: medium
 argument-hint: path/to/live_view.ex

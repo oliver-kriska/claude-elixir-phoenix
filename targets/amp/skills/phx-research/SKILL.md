@@ -1,6 +1,6 @@
 ---
 name: phx-research
-description: Research Elixir/Phoenix topics or evaluate Hex libraries (--library).
+description: Research Elixir/Phoenix/Ecto topics or evaluate Hex libraries (--library).
   Use when learning about libraries, patterns, or comparing approaches. Searches HexDocs,
   ElixirForum, GitHub.
 ---
@@ -19,7 +19,7 @@ phx-research --library permit
 
 ## Arguments
 
-`$ARGUMENTS` = Research topic/question. Add `--library` for
+the text after the skill name = Research topic/question. Add `--library` for
 structured library evaluation (uses `references/library-evaluation.md`
 template).
 
@@ -33,7 +33,7 @@ template).
 
 ## Library Evaluation Mode
 
-If `$ARGUMENTS` contains `--library` or the topic is clearly
+If the text after the skill name contains `--library` or the topic is clearly
 about evaluating a Hex dependency (e.g., "should we use permit",
 "evaluate sagents", "compare oban vs exq"):
 
@@ -42,128 +42,49 @@ about evaluating a Hex dependency (e.g., "should we use permit",
 3. Output ONE document to `.claude/research/{lib}-evaluation.md`
 4. Skip the general research workflow below
 
-## Workflow
+## Portable Research Workflow
 
-### 0. Pre-flight Checks
+### 0. Pre-flight
 
-**Cache check**: Check if `.claude/research/{topic-slug}.md` already
-exists. If recent (<24 hours): present existing summary, ask
-"Refresh or use existing?"
+Check `.claude/research/{topic-slug}.md`. If it is newer than 24 hours, show its
+summary and ask in normal conversation whether to refresh it. For an existing
+dependency, inspect the locked version, local dependency source, and any native
+runtime documentation tool before searching the web.
 
-**Tidewave shortcut**: If the topic is about an **existing dependency**
-(library already in `mix.exs`), prefer Tidewave over web search:
+### 1. Decompose the question
 
-```
-mcp__tidewave__get_docs(module: "LibraryModule")
-```
+Turn the user request into one focused query when it is short, or two to four
+queries of at most ten words for a multi-part request. Never send a long raw
+prompt to a search provider.
 
-This returns docs matching your exact `mix.lock` version — faster,
-more accurate, zero web tokens. Only fall through to web search if
-Tidewave is unavailable or the topic needs community discussion
-(gotchas, real-world patterns, comparisons).
+### 2. Gather sources
 
-### 1. Query Decomposition (CRITICAL — before any search)
+Use the runtime's native web or HTTP capabilities when available. Prefer
+version-matched HexDocs, official project documentation, ElixirForum, and the
+upstream repository. Deduplicate URLs and discard irrelevant results. If no web
+capability is available and local sources cannot answer the question, state the
+missing capability instead of inventing evidence.
 
-**NEVER pass raw $ARGUMENTS into WebSearch.** Decompose first:
+### 3. Extract and synthesize
 
-- If `$ARGUMENTS` < 30 words and focused → use as single query
-- If `$ARGUMENTS` > 30 words or multi-topic → extract 2-4 queries
+Native generic workers may extract independent topic clusters in parallel, but
+they are optional. The same-session sequential path must remain complete. Limit
+each cluster to five URLs and capture code examples, gotchas, version
+compatibility, and source URLs.
 
-Each query: max 10 words, targets ONE specific aspect.
+### 4. Write one durable result
 
-Example:
+Write `.claude/research/{topic-slug}.md` (about 5 KB for topic research or 3 KB
+for a library evaluation) with:
 
-```
-Input: "detect files, export to md, feed database with embeddings,
-        use ReqLLM for OpenAI API..."
-Queries:
-  1. "Elixir PDF text extraction library hex"
-  2. "Ecto pgvector embeddings setup"
-  3. "ReqLLM OpenAI embeddings Elixir"
-```
+- a two-to-three sentence summary;
+- categorized source links and each source's key insight;
+- cited code examples;
+- evidence-backed recommendations; and
+- gotchas or version constraints.
 
-### 2. Parallel Web Search
+### 5. Stop after research
 
-Search ALL decomposed queries in a SINGLE response (parallel):
-
-```
-WebSearch(query: "{query1} site:elixirforum.com OR site:hexdocs.pm OR site:github.com")
-WebSearch(query: "{query2} site:hexdocs.pm OR site:elixirforum.com")
-```
-
-Deduplicate URLs across results. Discard clearly irrelevant hits.
-
-### 3. Spawn Parallel Research Workers
-
-Group URLs by topic cluster. Spawn **1-3 web-researcher agents
-in parallel** (one per topic cluster):
-
-```
-Agent(subagent_type: "web-researcher", prompt: """
-Research focus: {specific aspect from decomposed query}
-Fetch these URLs:
-- {url1}
-- {url2}
-- {url3}
-Extract: code examples, patterns, gotchas, version compatibility.
-Return 500-800 word summary.
-""", run_in_background: true)
-```
-
-Rules:
-
-- **1 topic cluster = 1 agent** (don't mix unrelated URLs)
-- **Max 5 URLs per agent** (diminishing returns beyond that)
-- If only 1-3 URLs total, use single foreground agent
-- **Pass URLs explicitly** — agents should NOT re-search
-- Agents are haiku — cheap, fast, focused on extraction
-
-### 4. Write Output (File-First — NEVER Dump Inline)
-
-After ALL agents complete, synthesize summaries into ONE file.
-Target: ~5KB for topic research, ~3KB for library evaluations.
-
-Create `.claude/research/{topic-slug}.md`:
-
-```markdown
-# Research: {topic}
-
-## Summary
-{2-3 sentence answer combining all worker findings}
-
-## Sources
-
-### {Category}
-- [{title}]({url}) - {key insight}
-
-### Code Examples
-
-```elixir
-# From {source}: {what this demonstrates}
-{code}
-```
-
-## Recommendations
-
-1. {recommendation with evidence}
-2. {recommendation with evidence}
-
-## Watch Out For
-
-- {gotcha from forum/issues}
-- {version compatibility note}
-
-```
-
-### 5. After Research — STOP
-
-**STOP and present the research summary.** Do NOT auto-transition.
-
-Use `AskUserQuestion` to let the user choose next action:
-
-- "Plan a feature based on this research" → `phx-plan`
-- "Investigate a specific finding" → `phx-investigate`
-- "Research more on a subtopic" → continue research
-- "Done" → end
-
-**NEVER auto-invoke `phx-plan` or any other skill after research.**
+Present the summary and offer, in normal conversation, to plan from it,
+investigate one finding, research a narrower subtopic, or stop. Never invoke a
+follow-up workflow automatically.

@@ -6,15 +6,26 @@ import os
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "..", ".."))
 
 from lab.eval.matchers import (
-    parse_frontmatter, get_sections,
-    section_exists, max_section_lines,
-    content_present, grep_count,
+    parse_frontmatter,
+    get_sections,
+    section_exists,
+    max_section_lines,
+    content_present,
+    grep_count,
     frontmatter_field,
-    description_length, description_keywords, description_no_vague,
-    has_iron_laws, has_gotchas, no_dangerous_patterns,
+    description_length,
+    description_keywords,
+    description_no_vague,
+    has_iron_laws,
+    has_gotchas,
+    no_dangerous_patterns,
     askuserquestion_option_limit,
-    action_density, has_examples,
-    workflow_step_coverage, description_structure,
+    action_density,
+    has_examples,
+    workflow_step_coverage,
+    description_structure,
+    no_duplication,
+    valid_agent_refs,
 )
 
 
@@ -78,6 +89,7 @@ EMPTY_FRONTMATTER = """---
 
 # --- Frontmatter ---
 
+
 class TestParseFrontmatter:
     def test_valid_frontmatter(self):
         fm = parse_frontmatter(VALID_SKILL)
@@ -99,6 +111,7 @@ class TestParseFrontmatter:
 
 # --- Sections ---
 
+
 class TestGetSections:
     def test_finds_sections(self):
         sections = get_sections(VALID_SKILL)
@@ -116,6 +129,7 @@ class TestGetSections:
 
 
 # --- Section matchers ---
+
 
 class TestSectionExists:
     def test_found(self):
@@ -137,13 +151,16 @@ class TestMaxSectionLines:
         assert passed
 
     def test_over_limit(self):
-        long_content = "---\nname: x\n---\n## Big\n" + "\n".join(f"line {i}" for i in range(100))
+        long_content = "---\nname: x\n---\n## Big\n" + "\n".join(
+            f"line {i}" for i in range(100)
+        )
         passed, evidence = max_section_lines(long_content, max=10)
         assert not passed
         assert "Big" in evidence
 
 
 # --- Content matchers ---
+
 
 class TestContentPresent:
     def test_found(self):
@@ -170,6 +187,7 @@ class TestGrepCount:
 
 
 # --- Frontmatter matchers ---
+
 
 class TestFrontmatterField:
     def test_exists(self):
@@ -218,6 +236,7 @@ class TestDescriptionNoVague:
 
 # --- Safety matchers ---
 
+
 class TestHasIronLaws:
     def test_has_items(self):
         passed, evidence = has_iron_laws(VALID_SKILL, min_count=3)
@@ -238,7 +257,7 @@ class TestHasGotchas:
         skill = VALID_SKILL + (
             "\n## Gotchas\n\n"
             "1. **Mount runs twice** — guard side effects with connected?/1\n"
-            "2. **Oban args are string keys** — match %{\"id\" => id}, not :id\n"
+            '2. **Oban args are string keys** — match %{"id" => id}, not :id\n'
         )
         passed, evidence = has_gotchas(skill, min_count=2)
         assert passed
@@ -300,8 +319,8 @@ class TestAskUserQuestionOptionLimit:
         content = (
             "---\nname: x\n---\n## Step\n"
             "```\nAskUserQuestion:\n  options:\n"
-            "    - label: \"a\"\n    - label: \"b\"\n    - label: \"c\"\n"
-            "    - label: \"d\"\n    - label: \"e\"\n```\n"
+            '    - label: "a"\n    - label: "b"\n    - label: "c"\n'
+            '    - label: "d"\n    - label: "e"\n```\n'
         )
         passed, evidence = askuserquestion_option_limit(content)
         assert not passed
@@ -348,6 +367,7 @@ class TestAskUserQuestionOptionLimit:
 
 # --- Clarity matchers ---
 
+
 class TestActionDensity:
     def test_high_density(self):
         high = "---\nname: x\n---\n## Steps\n1. Run mix test\n2. Check output\n3. Fix errors\n4. Run again\n"
@@ -368,6 +388,30 @@ class TestHasExamples:
     def test_missing_examples(self):
         passed, _ = has_examples(MINIMAL_SKILL, min_blocks=1)
         assert not passed
+
+
+class TestReferenceValidation:
+    def test_namespaced_plugin_agent_reference(self, tmp_path):
+        agents = tmp_path / "agents"
+        agents.mkdir()
+        (agents / "reviewer.md").write_text("---\nname: reviewer\n---\n")
+
+        passed, evidence = valid_agent_refs(
+            'Agent(subagent_type: "phx:reviewer", prompt: "Review")',
+            plugin_root=str(tmp_path),
+        )
+
+        assert passed, evidence
+
+    def test_inline_commands_do_not_count_as_duplicated_prose(self):
+        content = (
+            "## Prepare\nRun `git diff --name-only HEAD~5`.\n"
+            "## Verify\nReuse `git diff --name-only HEAD~5`.\n"
+        )
+
+        passed, evidence = no_duplication(content, max_dupes=0)
+
+        assert passed, evidence
 
 
 class TestWorkflowStepCoverage:

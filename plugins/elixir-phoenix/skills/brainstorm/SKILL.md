@@ -1,5 +1,5 @@
 ---
-name: phx:brainstorm
+name: brainstorm
 description: "Brainstorm Elixir/Phoenix features — explore ideas, compare approaches, gather requirements. Use when vague idea, not sure how to approach, or want to discuss before plan."
 effort: high
 argument-hint: <topic or feature idea>

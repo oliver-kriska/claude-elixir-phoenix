@@ -1,5 +1,5 @@
 ---
-name: phx:codex-loop
+name: codex-loop
 description: Fix Elixir/Phoenix code until Codex CLI review comes back clean — bounded review, fix, verify loop before opening a PR. Use when codex is installed and you want an external cross-model critic on your changes before pushing.
 effort: medium
 argument-hint: "[--base <branch>] [--uncommitted] [--auto] [--max-rounds N]"

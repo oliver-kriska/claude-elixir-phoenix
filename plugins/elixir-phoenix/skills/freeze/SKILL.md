@@ -1,5 +1,5 @@
 ---
-name: phx:freeze
+name: freeze
 description: Scope or freeze which files Claude can edit during debugging, a refactor, or review. Use when edits should stay in specific dirs, or for a read-only investigate lock. Backed by a sentinel + PreToolUse hook.
 effort: low
 ---

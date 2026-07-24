@@ -1,5 +1,5 @@
 ---
-name: phx:mix-compression
+name: mix-compression
 description: Reduce mix output noise (5-15% token savings) by installing rtk filters that compress mix test/credo/dialyzer/compile output before it reaches Claude. Use when long mix output floods context.
 effort: low
 ---

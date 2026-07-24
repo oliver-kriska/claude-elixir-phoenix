@@ -1,5 +1,5 @@
 ---
-name: phx:full
+name: full
 description: "Deliver a large, cross-domain Phoenix feature or complete end-to-end system through planning, implementation, verification, and review. Use when several coordinated workflows or contexts must ship together. NOT for an existing plan; use /phx:work."
 effort: high
 argument-hint: <feature description> [--codex]
@@ -71,6 +71,25 @@ instead — the plan phase already happened.
 STATES: INITIALIZING → DISCOVERING → PLANNING → WORKING →
         VERIFYING → REVIEWING → COMPLETED → COMPOUNDING | BLOCKED
 ```
+
+### Claude Code 2.1.217+ nesting compatibility
+
+Before delegating this cycle, inspect
+`${CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH:-1}`:
+
+- **Depth 3+** — the full nested topology is available; delegate to
+  `phx:workflow-orchestrator` as usual.
+- **Depth 1–2 (default is 1)** — execute the same state machine in this main
+  session. Read `${CLAUDE_PLUGIN_ROOT}/agents/workflow-orchestrator.md` for the
+  phase contract, but spawn leaf research/review specialists directly. Do not
+  spawn `workflow-orchestrator`, `planning-orchestrator`, or
+  `parallel-reviewer`, because those agents need to delegate again. Context
+  supervision may still be spawned directly after its input files exist.
+
+The fallback is a topology change only: preserve the same user decisions,
+artifacts, verification gates, retry/cycle limits, and review-to-fix loop.
+Never tell the user to set an environment variable just to make `/phx:full`
+work.
 
 Save state in `.claude/plans/{slug}/progress.md` AND via Claude Code
 tasks. Create one task per phase at start, mark `in_progress` on

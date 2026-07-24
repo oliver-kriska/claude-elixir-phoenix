@@ -1,6 +1,6 @@
 {
-  "skill": "call-tracing",
-  "skill_path": "plugins/elixir-phoenix/skills/call-tracing/SKILL.md",
+  "skill": "trace",
+  "skill_path": "plugins/elixir-phoenix/skills/trace/SKILL.md",
   "dimensions": {
     "completeness": {
       "weight": 0.15,

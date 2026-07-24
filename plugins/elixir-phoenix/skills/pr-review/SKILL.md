@@ -1,5 +1,5 @@
 ---
-name: phx:pr-review
+name: pr-review
 description: "Address feedback left on a GitHub pull request: fetch unresolved review threads, make agreed Elixir/Phoenix code fixes, reply, and resolve. Use for a PR URL/number or reviewer comments. NOT for pre-PR review, findings triage, or CI monitoring."
 effort: high
 argument-hint: <PR number or URL> [--fix] [--bots-only] [--no-resolve]

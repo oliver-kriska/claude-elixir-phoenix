@@ -33,6 +33,10 @@ installation and troubleshooting remain in the linked guides.
 | Flagship read-only `phx-review` | Full | Adapted | Adapted | Adapted | Adapted |
 | `phx-plan` / `phx-work` | Full | Adapted | Adapted | Adapted | Adapted |
 | `phx-pr-review` / `phx-full` | Full | Adapted | Adapted | Adapted | Adapted |
+| `phx-trace` | Full | Adapted | Adapted | Adapted | Adapted |
+| `phx-audit` / `phx-research` | Full | Adapted | Adapted | Adapted | Adapted |
+| `phx-freeze` | Hook-enforced advisory lock | Advisory only | Advisory only | Advisory only | Advisory only |
+| Remaining workflow/admin skills | Full | Guidance/baseline | Guidance/baseline | Guidance/baseline | Guidance/baseline |
 | Claude namespaced slash commands | Full | Not applicable | Not applicable | Not applicable | Not applicable |
 | Bundled custom agents | Full | Deferred | Deferred | Deferred | Deferred |
 | Lifecycle/enforcement hooks | Full | Deferred | One optional safeguard | Deferred | Deferred |
@@ -46,7 +50,7 @@ installation and troubleshooting remain in the linked guides.
 “External” Tidewave support means a skill may use Tidewave when the project and
 runtime already expose it. Installing Tidewave in a Phoenix app starts the MCP
 server but does not register its project-specific URL with any client. Adapted
-flagship workflows in every generated target must still complete without
+workflows in every generated target must still complete without
 Tidewave, named custom agents, or Claude-only task APIs.
 
 ## Native invocation and installation

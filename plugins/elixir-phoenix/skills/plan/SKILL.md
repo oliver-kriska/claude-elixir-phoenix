@@ -1,5 +1,5 @@
 ---
-name: phx:plan
+name: plan
 description: "Plan features spanning multiple domains: billing (Stripe), auth (RBAC), real-time (Presence), webhooks, jobs (Oban). Use when designing interconnected systems or converting review findings into tasks."
 effort: high
 argument-hint: <feature description OR path to review/plan file>
@@ -44,9 +44,13 @@ structured plan with checkboxes.
    and warnings before spawning agents (direct path only — the
    research orchestrator gathers its own)
 5. **Spawn research** — Selective, based on need. **0–2 agents**:
-   spawn directly in parallel. **3+ agents** (broad multi-context
-   feature): spawn ONE `planning-orchestrator` to run and compress
-   the fan-out, then read only its digest and
+   spawn directly in parallel. **3+ agents** (broad multi-context feature):
+   first inspect `${CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH:-1}`. At depth 3+
+   spawn ONE `planning-orchestrator` to run and compress the fan-out. At the
+   Claude Code 2.1.217+ default of 1 (or depth 2), keep orchestration in this
+   main session: spawn the selected specialist agents directly, wait for them, then spawn
+   `phx:context-supervisor` directly if compression is needed. Never spawn an
+   orchestrator that cannot delegate. Read only the resulting digest and
    `summaries/consolidated.md`. Create a Claude Code task per spawn:
    `TaskCreate({subject: "{Agent} research", activeForm: "Researching..."})`,
    mark `in_progress` on spawn, `completed` when done

@@ -256,17 +256,23 @@ when a release deletes or renames a skill.
 
 Domain and reference skills such as `liveview-patterns`, `ecto-patterns`,
 `testing`, and `security` work directly. The flagship `phx-investigate`,
-`phx-review`, `phx-plan`, `phx-work`, `phx-pr-review`, and `phx-full` workflows
-are adapted to use optional native workers with a complete sequential fallback;
-they do not require named Claude subagents, task APIs, hooks, or MCP tools.
-Other generated workflow skills may still retain Claude-specific orchestration
-as reference guidance unless the compatibility table says otherwise.
+`phx-review`, `phx-plan`, `phx-work`, `phx-pr-review`, and `phx-full` workflows,
+plus `phx-trace`, `phx-audit`, and `phx-research`, are adapted to use native
+capabilities with complete same-session fallbacks. They do not require named
+Claude subagents, task APIs, hooks, or MCP tools. Other generated workflow
+skills may still retain Claude-specific orchestration as reference guidance
+unless the compatibility table says otherwise.
 
-These administration skills are primarily reference material in Amp:
+The generated `phx-freeze` skill is adapted to a current-session advisory
+scope. It does not write `.claude/.freeze` or claim hook enforcement.
+
+These remaining workflow and administration skills are primarily reference
+material in Amp:
 
 | Skill | Claude-specific dependency |
 | --- | --- |
-| `phx-freeze` | Enforcement requires a Claude `PreToolUse` hook. |
+| `phx-perf` | Describes Claude specialist agents; run the quoted tracks directly or with generic Amp workers. |
+| `phx-learn-from-fix` | Targets Claude-specific personal skill and memory locations. |
 | `phx-permissions` | Manages Claude permission settings. |
 | `phx-init` | Installs Claude-specific project instructions. |
 | `phx-watch-pr` | Uses Claude background-monitor lifecycle tools. |
@@ -305,7 +311,7 @@ generated skill; only the invocation surface differs.
 
 ### A workflow mentions Claude-only tools
 
-The six flagship workflows should not mention Claude-only tools. If one does,
+The nine adapted workflows should not require Claude-only tools. If one does,
 report generated-target drift and reinstall the current release. For other
 workflow or administration skills, treat those steps as reference guidance and
 ask Amp to adapt them using Amp-native tools. Do not assume that hooks, named

@@ -72,14 +72,21 @@ Native OpenCode subagents are an optional optimization in the flagship
 workflows, and the sequential fallback is valid. Tidewave is optional and its
 MCP registration is external. Exact Claude colon syntax such as `/phx:review` is not
 registered; use `/phx-review`. The investigation, review, plan, work, PR-review,
-and full-lifecycle workflows have explicit OpenCode adaptations. PR review uses a
-GitHub connector or authenticated `gh` without fabricating mutations; full
+and full-lifecycle workflows have explicit OpenCode adaptations. PR review uses
+a GitHub connector or authenticated `gh` without fabricating mutations; full
 preserves user gates and bounded sequential fallback. Plan keeps its canonical
-artifact schema and a scratchpad research checklist; work uses plan checkboxes and
-`progress.md` for ordered, resumable execution. Other generated workflows
-receive portable frontmatter, resource, and command projection but may still
-describe optional Claude-specific orchestration APIs; those capabilities are
-deferred rather than silently emulated.
+artifact schema and a scratchpad research checklist; work uses plan checkboxes
+and `progress.md` for ordered, resumable execution. `phx-trace` uses direct
+`mix xref` discovery, `phx-audit` runs five health tracks, and `phx-research`
+uses native web or HTTP capabilities with a local-source fallback. Other
+generated workflows receive portable frontmatter, resource, and command
+projection but may still describe optional Claude-specific orchestration APIs;
+those capabilities are deferred rather than silently emulated. In particular,
+`phx-perf` describes Claude specialist agents; run its quoted analysis tracks
+directly or with generic OpenCode subagents.
+`phx-learn-from-fix` still targets Claude-specific personal skill and memory
+locations. `phx-freeze` is adapted to an advisory current-session scope and
+does not claim hook enforcement.
 
 ### Optional Tidewave MCP
 
@@ -130,6 +137,10 @@ Update or uninstall with:
 git -C .opencode/skills/elixir-phoenix pull --ff-only
 rm -rf .opencode/skills/elixir-phoenix
 ```
+
+The pull updates only the currently checked-out branch. A tag or commit checkout
+remains pinned until you explicitly switch refs. Start a fresh OpenCode process
+after updating or removing the checkout because skill discovery is session-cached.
 
 For a global install, substitute
 `~/.config/opencode/skills/elixir-phoenix`. Removing the checkout is the complete

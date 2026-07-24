@@ -1,5 +1,5 @@
 ---
-name: phx:examples
+name: examples
 description: "Provide Phoenix, LiveView, Ecto, OTP, or Oban examples and walkthroughs. Use for sample code, step-by-step guidance, or what an implementation/output looks like. NOT for debugging, direct implementation, best practices, or audits."
 effort: low
 ---

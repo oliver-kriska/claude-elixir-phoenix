@@ -1,5 +1,5 @@
 ---
-name: phx:investigate
+name: investigate
 description: Investigate bugs and errors in Elixir/Phoenix — root-cause analysis for crashes, exceptions, stack traces, test failures. Use --parallel for deep 4-track investigation.
 effort: high
 argument-hint: <bug description> [--parallel]
@@ -28,6 +28,14 @@ for deep 4-track investigation.
 Use **parallel mode** (spawn `deep-bug-investigator`) when:
 bug mentions 3+ modules, spans multiple contexts, is intermittent
 or involves concurrency, or user says `--parallel`/`deep`.
+
+Before spawning it, inspect
+`${CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH:-1}`. At depth 3+, use the
+`deep-bug-investigator` orchestrator. At the Claude Code 2.1.217+ default of
+1 (or depth 2), keep orchestration in this main session: spawn the four
+focused tracks (reproduction, root cause, impact, fix strategy) directly in
+one parallel batch, wait for all four, then synthesize their evidence. Never
+spawn an orchestrator that cannot delegate.
 
 **Otherwise**: Run the sequential workflow below.
 

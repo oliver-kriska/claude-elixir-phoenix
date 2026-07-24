@@ -69,6 +69,7 @@ def transform_markdown(
     overlay = _opencode_overlay(source_file, skill)
     if source_file == skill.source_dir / "SKILL.md":
         projected = transform_frontmatter(skill.frontmatter.data, "opencode")
+        projected["name"] = skill.target_name
         projected["description"] = rewrite_commands(
             skill.frontmatter.data["description"]
         )
@@ -84,6 +85,11 @@ def transform_markdown(
             projected["description"] = (
                 "Run a portable sequential plan-work-verify-review-compound lifecycle. "
                 "Use optional generic workers only when the runtime supports them."
+            )
+        elif skill.target_name == "phx-freeze":
+            projected["description"] = (
+                "Apply an advisory edit scope in this session. Use for read-only or "
+                "directory-scoped work; no enforcement hook is installed."
             )
         body = overlay if overlay is not None else skill.frontmatter.body
         body = _rewrite_resource_paths(body, skill, skills, source_file)
@@ -149,7 +155,17 @@ def validate(output_dir: str | Path) -> int:
             found = command.group(0) if command else None
         if found:
             raise ValueError(f"{markdown}: unresolved non-OpenCode token `{found}`")
-    for flagship in ("phx-investigate", "phx-review", "phx-plan", "phx-work", "phx-pr-review", "phx-full"):
+    for flagship in (
+        "phx-investigate",
+        "phx-review",
+        "phx-plan",
+        "phx-work",
+        "phx-pr-review",
+        "phx-full",
+        "phx-trace",
+        "phx-audit",
+        "phx-research",
+    ):
         text = "\n".join(
             path.read_text(encoding="utf-8")
             for path in sorted((skills_root / flagship).rglob("*.md"))
@@ -166,29 +182,57 @@ def validate(output_dir: str | Path) -> int:
             "mcp__tidewave__",
             "mcp__linear__",
             "Claude Task",
+            "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH",
         )
         if flagship in {"phx-pr-review", "phx-full"}:
             forbidden += (
-                "workflow-orchestrator", "parallel-reviewer", "planning-orchestrator",
-                "run_in_background", "Ralph Wiggum", "/ralph-loop:",
-                "PostToolUse", "Claude Code tasks",
-                "--codex", "--Pi", "--OpenCode", "/phx-compound",
+                "workflow-orchestrator",
+                "parallel-reviewer",
+                "planning-orchestrator",
+                "run_in_background",
+                "Ralph Wiggum",
+                "/ralph-loop:",
+                "PostToolUse",
+                "Claude Code tasks",
+                "--codex",
+                "--Pi",
+                "--OpenCode",
+                "/phx-compound",
             )
         if flagship in {"phx-plan", "phx-work"}:
             forbidden += (
-                "phoenix-patterns-analyst", "ecto-schema-designer", "liveview-architect",
-                "oban-specialist", "otp-advisor", "security-analyzer", "testing-reviewer",
-                "hex-library-researcher", "web-researcher", "call-tracer",
-                "planning-orchestrator", "Spawn SPECIALIST", "run_in_background",
-                "[agent]", "Agent annotation", "agent routing", "project_eval",
-                "get_logs", "| Hook |", "Each hook", "/commit",
-                "agent spawning", "agent count", "Explore agents",
-                "execute via subagents", "After spawning",
+                "phoenix-patterns-analyst",
+                "ecto-schema-designer",
+                "liveview-architect",
+                "oban-specialist",
+                "otp-advisor",
+                "security-analyzer",
+                "testing-reviewer",
+                "hex-library-researcher",
+                "web-researcher",
+                "call-tracer",
+                "planning-orchestrator",
+                "Spawn SPECIALIST",
+                "run_in_background",
+                "[agent]",
+                "Agent annotation",
+                "agent routing",
+                "project_eval",
+                "get_logs",
+                "| Hook |",
+                "Each hook",
+                "/commit",
+                "agent spawning",
+                "agent count",
+                "Explore agents",
+                "execute via subagents",
+                "After spawning",
             )
         found = next((token for token in forbidden if token in text), None)
         if found:
             raise ValueError(f"{skills_root / flagship}: unavailable API `{found}`")
     codex.validate_portable_workflows(skills_root)
+    codex.validate_portable_freeze(skills_root)
     return len(skill_files)
 
 

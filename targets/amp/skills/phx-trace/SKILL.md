@@ -28,7 +28,14 @@ Build call trees showing how functions are reached from entry points.
 
 ## Quick Trace
 
-Run `mix xref callers MyApp.Accounts.update_user/2` to find all callers. Then read the reported locations to see argument patterns.
+Run the caller query first, then inspect another function in the chain as needed:
+
+```bash
+mix xref callers MyApp.Accounts.update_user/2
+mix xref callers MyApp.Accounts.get_user/1
+```
+
+Read the reported locations to see argument patterns.
 
 ## Entry Points (Stop Here)
 
@@ -39,22 +46,14 @@ Run `mix xref callers MyApp.Accounts.update_user/2` to find all callers. Then re
 | `def perform(%Oban.Job{})` | Oban Worker |
 | `def handle_call/3`, `def handle_cast/2` | GenServer |
 
-## Delegate to call-tracer Agent
+## Full Recursive Trace
 
-For full recursive tree with argument extraction and **parallel category tracing**:
-
-```
-Agent(subagent_type: "call-tracer", prompt: "Build call tree for MyApp.Accounts.update_user/2")
-```
-
-The call-tracer agent uses **parallel subagents** for each entry point category:
-
-- Controllers subagent (HTTP paths)
-- LiveView subagent (WebSocket paths)
-- Workers subagent (Background jobs)
-- Internal subagent (Cross-context calls)
-
-Each gets fresh 200k context for deep exploration.
+Trace controller, LiveView, worker, and internal entry-point categories in this
+session, starting each category with `mix xref callers`. Native generic workers
+may handle independent categories in parallel when the runtime provides them,
+but the same-session sequential path is fully supported and must produce the
+same call tree. Do not require a named custom agent or Claude-specific spawn
+configuration.
 
 ## Output Location
 

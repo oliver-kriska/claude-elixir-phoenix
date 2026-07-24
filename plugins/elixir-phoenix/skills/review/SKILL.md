@@ -1,5 +1,5 @@
 ---
-name: phx:review
+name: review
 description: Review code with parallel agents — tests, security, Ecto, LiveView, Oban. Use after implementation to catch bugs and anti-patterns before committing.
 effort: high
 argument-hint: "[test|security|oban|deploy|iron-laws|all]"
@@ -30,9 +30,8 @@ explain issues — do NOT create tasks or fix anything.
 
 `$ARGUMENTS` = Focus area, task ID, or path to plan/spec file.
 
-When no requirements argument is passed, the skill auto-detects a task ID
-from the current git branch name and recent commits (see
-`${CLAUDE_SKILL_DIR}/references/requirements-detection.md`).
+When no requirements argument is passed, the skill auto-detects a task ID from
+the branch and recent commits (see `${CLAUDE_SKILL_DIR}/references/requirements-detection.md`).
 
 ## Workflow
 
@@ -78,18 +77,20 @@ will emit `NOT AVAILABLE` rather than block the review.
 3. For focused reviews (`test|security|oban|deploy|iron-laws`): spawn only the
    matching specialist from the focused mode table in the same reference
 4. **If Step 1c succeeded** (REQ_SOURCE non-empty and `--no-requirements`
-   not passed): add `elixir-phoenix:requirements-verifier` to the same
+   not passed): add `phx:requirements-verifier` to the same
    parallel batch. Pass these prompt inputs: `REQUIREMENTS_TEXT` (content
    of `.requirements-input.md`), `REQUIREMENTS_SOURCE` (REQ_SOURCE label),
    `DIFF_FILES` (git diff --name-only output), `SOURCE_STATUS` (only if
    FETCH_FAILED), `output_file: .claude/plans/{slug}/reviews/requirements.md`
-5. Spawn in ONE message with `mode: "bypassPermissions"` and `run_in_background: true`
+5. Spawn in ONE message with `run_in_background: true`. Do not pass the
+   deprecated Agent `mode` parameter; Claude Code 2.1.212+ ignores it and
+   subagents inherit the parent session's permission mode
 6. **MANDATORY**: pass explicit `output_file` per-agent (mapping in the reference)
 7. Include the CRITICAL prompt block: write by turn ~12, chat body ≤300 words
 8. Scope every agent to the diff: pass `git diff --name-only` output with
    "Focus on NEW code. Pre-existing: one-line `{file}:{line} — {brief}`. Do
    NOT deep-analyze unchanged files."
-9. **With `--codex`**: add `elixir-phoenix:codex-reviewer` to the same batch
+9. **With `--codex`**: add `phx:codex-reviewer` to the same batch
    (prompt template in agent-spawning.md). Missing CLI degrades to SKIPPED.
 
 ### Step 3: Collect and Compress Findings
@@ -109,7 +110,7 @@ completes.** Mark each task `completed` via `TaskUpdate` as it finishes.
 **Verification-runner fallback** — if it times out, run directly:
 `mix compile --warnings-as-errors && mix format --check-formatted $(git diff --name-only HEAD~5 | grep '\.exs\?$' | tr '\n' ' ') && mix credo --strict && mix test`
 
-**Context supervision** — for 4+ agents, spawn `elixir-phoenix:context-supervisor`:
+**Context supervision** — for 4+ agents, spawn `phx:context-supervisor`:
 
 ```
 Prompt: "Compress review agent output.

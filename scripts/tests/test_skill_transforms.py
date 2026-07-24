@@ -5,6 +5,7 @@ import pytest
 from scripts.port_lib.skill_transforms import (
     inline_iron_laws,
     normalize_skill_name,
+    portable_skill_name,
     port_references,
     rewrite_reference_paths,
     rewrite_slash_commands,
@@ -24,6 +25,19 @@ from scripts.port_lib.skill_transforms import (
 )
 def test_normalize_skill_name(source: str, expected: str) -> None:
     assert normalize_skill_name(source) == expected
+
+
+@pytest.mark.parametrize(
+    ("directory", "command", "expected"),
+    [
+        ("plan", "plan", "phx-plan"),
+        ("assigns-audit", "assigns-audit", "lv-assigns"),
+        ("ecto-constraint-debug", "ecto-constraint-debug", "ecto-constraint-debug"),
+        ("n1-check", "n1-check", "ecto-n1-check"),
+    ],
+)
+def test_portable_skill_name(directory: str, command: str, expected: str) -> None:
+    assert portable_skill_name(directory, command) == expected
 
 
 def test_claude_frontmatter_is_preserved() -> None:
@@ -146,9 +160,7 @@ def test_rewrites_generic_claude_namespaces(target: str, expected: str) -> None:
         "/phx:*extra",
     ],
 )
-def test_slash_command_rewrite_requires_complete_tokens(
-    target: str, text: str
-) -> None:
+def test_slash_command_rewrite_requires_complete_tokens(target: str, text: str) -> None:
     assert rewrite_slash_commands(text, target) == text
 
 

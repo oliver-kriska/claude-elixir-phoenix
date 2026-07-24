@@ -1,5 +1,5 @@
 ---
-name: phx:help
+name: help
 description: "Choose Phoenix review, plan, debug, or test command. Use when user asks which /phx: command or plugin skill handles a task; do not route only to a domain skill. NEVER for bare /help; NOT for ambiguous requests (use intent-detection) or a plugin tour."
 argument-hint: "[description of what you want to do]"
 effort: low

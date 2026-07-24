@@ -1,5 +1,5 @@
 ---
-name: phx:learn-from-fix
+name: learn-from-fix
 description: Capture Elixir/Ecto/LiveView lessons and Hex API rules. Use after corrections or when asked to document learning, record a lesson, prevent a fixed mistake, or remember package guidance with --library.
 effort: low
 argument-hint: "[--library <hex-package> --scope personal|project] <lesson>"

@@ -1,6 +1,6 @@
 ---
-name: phx:research
-description: "Research Elixir/Phoenix topics or evaluate Hex libraries (--library). Use when learning about libraries, patterns, or comparing approaches. Searches HexDocs, ElixirForum, GitHub."
+name: research
+description: "Research Elixir/Phoenix/Ecto topics or evaluate Hex libraries (--library). Use when learning about libraries, patterns, or comparing approaches. Searches HexDocs, ElixirForum, GitHub."
 effort: high
 ---
 
@@ -98,7 +98,7 @@ Group URLs by topic cluster. Spawn **1-3 web-researcher agents
 in parallel** (one per topic cluster):
 
 ```
-Agent(subagent_type: "web-researcher", prompt: """
+Agent(subagent_type: "phx:web-researcher", prompt: """
 Research focus: {specific aspect from decomposed query}
 Fetch these URLs:
 - {url1}

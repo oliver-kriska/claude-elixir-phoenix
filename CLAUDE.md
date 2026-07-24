@@ -77,16 +77,17 @@ Orchestrator (thin coordinator)
 
 Used by: planning-orchestrator, parallel-reviewer, audit skill, docs-validation-orchestrator.
 
-**Subagent nesting depth budget (CC 2.1.172+).** Sub-agents may spawn their own
-sub-agents up to **5 levels deep** (foreground and background alike; CC 2.1.181
-enforces the same cap on both). Spawns past the cap silently no-op, so keep chains
-inside it. Current deepest chain is **depth 3** — `/phx:full` → workflow-orchestrator
-→ parallel-reviewer → review specialists (elixir-reviewer / security-analyzer /
-testing-reviewer / verification-runner). That leaves 2 levels of headroom, but the
-review specialists and context-supervisor are intentionally leaf agents (no `Agent`
-tool). Before giving a leaf worker the `Agent` tool, or inserting another
-orchestrator layer (e.g. workflow-orchestrator → planning-orchestrator → decision
-council would reach depth 4), re-count the chain so it stays ≤5.
+**Subagent nesting depth budget (CC 2.1.217+).** Claude Code now defaults
+`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to **1**, so subagents cannot delegate
+again unless the launching environment opts into a larger value. Current
+deepest chain is **depth 3** — `/phx:full` → workflow-orchestrator →
+parallel-reviewer → review specialists. Public skills must preflight the value
+and keep orchestration in the main conversation when the configured depth is
+too small; never launch an orchestrator that cannot perform its fan-out.
+`/phx:full` and planning/investigation orchestrators need depth 3; call-tracer
+alone needs depth 2. At the default, spawn the same leaf specialists directly
+and preserve the workflow's decisions, artifacts, and gates. A plugin hook
+cannot raise the parent process's environment.
 
 **Background is the default (CC 2.1.198).** Subagents now run in the background by
 default and inherit the session's extended-thinking config (a free quality lift for
@@ -277,7 +278,7 @@ Defined in `hooks/hooks.json`:
 - `SubagentStart`: Inject all Iron Laws into every spawned subagent via `additionalContext` (addresses zero skill auto-loading gap)
 - `PreCompact`: Re-inject workflow rules (plan/work/full) before compaction via JSON `systemMessage`
 - `SessionStart` (all): Setup `.claude/` directories + Tidewave detection + Ash detection (`detect-ash.sh`) (`async: true`)
-- `SessionStart` (startup|resume only): Scratchpad check + resume workflow detection (`check-resume.sh` —
+- `SessionStart` (startup|resume|fork only): Scratchpad check + resume workflow detection (`check-resume.sh` —
   gated on `mix.exs` OR an existing `.claude/plans/*/plan.md`; sole owner of the resume/no-plan banner
   after the duplicate echo hook was removed) + branch freshness (`async: true`) + workflow hints
 - `PostCompact`: Verify active plan state survived compaction, warn Claude to re-read plan and scratchpad
@@ -323,13 +324,22 @@ When Tidewave MCP available:
 ### Testing locally
 
 ```bash
-# Option A: Test plugin directly
-claude --plugin-dir ./plugins/elixir-phoenix
+# Option A: Test plugin directly, including its public command namespaces
+claude \
+  --plugin-dir ./plugins/elixir-phoenix \
+  --plugin-dir ./plugins/ecto \
+  --plugin-dir ./plugins/lv
 
 # Option B: Add as local marketplace
 /plugin marketplace add .
 /plugin install elixir-phoenix
 ```
+
+The marketplace/install identity is `elixir-phoenix`, but the canonical
+manifest namespace must stay `phx` so existing `/phx:*` commands remain valid.
+The `ecto` and `lv` dependencies preserve `/ecto:*` and `/lv:*`. Claude Code
+uses plugin namespaces plus skill directory names for effective slash commands;
+frontmatter `name` alone does not preserve these public names.
 
 When editing skills, agents, or hooks mid-session, run `/reload-plugins` to
 pick up changes without restarting Claude Code (v2.1.98+). Skills now hot-reload
@@ -472,10 +482,11 @@ Only trim when content is purely informational and not execution-critical.
 ### Release
 
 - [ ] All markdown passes linting
-- [ ] Version bumped in `plugins/elixir-phoenix/.claude-plugin/plugin.json`
+- [ ] Version bumped together in the `elixir-phoenix`, `ecto`, and `lv` plugin manifests
 - [ ] `CHANGELOG.md` updated with all changes under new version heading
 - [ ] README updated
 - [ ] `/phx:intro` tutorial content still accurate (commands, agents, features)
+- [ ] Public `/phx:*`, `/ecto:*`, and `/lv:*` command names still match skill directories and compatibility dependencies
 
 > **Tagging note**: `claude plugin tag` (CC 2.1.118+) does NOT work for this
 > repo. It expects `.claude-plugin/plugin.json` at the repo root, but this

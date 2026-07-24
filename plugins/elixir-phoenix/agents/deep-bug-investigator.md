@@ -9,7 +9,7 @@ effort: medium
 omitClaudeMd: true
 maxTurns: 30
 skills:
-  - call-tracing
+  - trace
 ---
 
 # Deep Bug Investigator (Parallel Orchestrator)
@@ -104,7 +104,7 @@ Your task:
 Stack trace:
 {stack_trace}
 
-Use call-tracing patterns from the skill to trace the call path.
+Use patterns from the `trace` skill to trace the call path.
 Spawn call-tracer subagent if needed for complex paths.
 
 Max 1500 words. Focus on actionable findings, skip lengthy background.
@@ -242,7 +242,7 @@ proceed while any subagent is still running.
 context-supervisor (haiku) to compress before synthesis:
 
 ```
-Agent(subagent_type: "elixir-phoenix:context-supervisor",
+Agent(subagent_type: "phx:context-supervisor",
   prompt: "Compress investigation track outputs.
     input_dir: {output_dir}/tracks/
     output_dir: {output_dir}/summaries/

@@ -120,9 +120,9 @@ Spawn if changing function signatures or refactoring:
 - **Quantitative inventories**: Instruct agents to use `grep -c`
   for counts (e.g., "found 48 `|| :USD` fallbacks across 12
   files") instead of manual scanning which undercounts.
-- **Write access**: Spawn research agents with
-  `mode: "bypassPermissions"` so they can write analysis files
-  to `.claude/plans/{slug}/research/`.
+- **Write access**: Research agents that need to persist analysis declare
+  `Write` in their agent frontmatter. Do not pass the deprecated Agent
+  `mode` parameter; subagents inherit the parent session's permission mode.
 
 **CRITICAL: hex-library-researcher rules:**
 
@@ -138,7 +138,7 @@ After ALL research agents complete, spawn the context-supervisor to
 compress output before you read it:
 
 ```
-Agent(subagent_type: "context-supervisor", prompt: """
+Agent(subagent_type: "phx:context-supervisor", prompt: """
 Compress research output for plan.
 Input: .claude/plans/{slug}/research/
 Output: .claude/plans/{slug}/summaries/
@@ -208,7 +208,7 @@ the codebase."
 
 ```
 Agent({
-  subagent_type: "phoenix-patterns-analyst",
+  subagent_type: "phx:phoenix-patterns-analyst",
   prompt: "Analyze test patterns in test/int_support/ and
     test/features/. Focus on: helper organization, JS usage,
     wait strategies. Skip full context/schema analysis.",

@@ -1,5 +1,5 @@
 ---
-name: phx:permissions
+name: permissions
 description: Recommend safe Bash permissions for Elixir mix commands in settings.json. Use when permission prompts slow workflow, "fix permissions", "reduce prompts", "auto-allow mix".
 argument-hint: "[--days=14] [--dry-run]"
 effort: low

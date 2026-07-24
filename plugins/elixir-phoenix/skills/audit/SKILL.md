@@ -1,5 +1,5 @@
 ---
-name: phx:audit
+name: audit
 description: Project health audit and health check — architecture, performance, tests, dependencies, code quality. Use when assessing overall project health, before releases, or after refactors.
 effort: high
 argument-hint: "[--quick|--full|--focus=area|--since=commit]"
@@ -65,10 +65,10 @@ specialists where they exist, keep `general-purpose` only where no specialist
 covers the audit category:
 
 ```
-Agent(subagent_type: "phoenix-patterns-analyst", prompt: "Architecture audit: analyze module structure, context boundaries, coupling, cohesion. Write findings to .claude/audit/reports/arch-review.md", run_in_background: true)
+Agent(subagent_type: "phx:phoenix-patterns-analyst", prompt: "Architecture audit: analyze module structure, context boundaries, coupling, cohesion. Write findings to .claude/audit/reports/arch-review.md", run_in_background: true)
 Agent(subagent_type: "general-purpose",          prompt: "Performance audit: N+1 queries, missing indexes, bottlenecks, scalability. Write findings to .claude/audit/reports/perf-audit.md", run_in_background: true)
-Agent(subagent_type: "security-analyzer",        prompt: "Security audit: OWASP scan, auth patterns, secret leakage. Write findings to .claude/audit/reports/security-audit.md", run_in_background: true)
-Agent(subagent_type: "testing-reviewer",         prompt: "Test health audit: coverage, quality, flakes. Write findings to .claude/audit/reports/test-audit.md", run_in_background: true)
+Agent(subagent_type: "phx:security-analyzer",        prompt: "Security audit: OWASP scan, auth patterns, secret leakage. Write findings to .claude/audit/reports/security-audit.md", run_in_background: true)
+Agent(subagent_type: "phx:testing-reviewer",         prompt: "Test health audit: coverage, quality, flakes. Write findings to .claude/audit/reports/test-audit.md", run_in_background: true)
 Agent(subagent_type: "general-purpose",          prompt: "Dependency audit: vulnerabilities, outdated, unused. Write findings to .claude/audit/reports/deps-audit.md", run_in_background: true)
 ```
 
@@ -104,7 +104,7 @@ user typing "continue" against dead agents.
 After all 5 auditors complete, spawn context-supervisor:
 
 ```
-Agent(subagent_type: "context-supervisor", prompt: """
+Agent(subagent_type: "phx:context-supervisor", prompt: """
 Compress audit findings.
 Input: .claude/audit/reports/
 Output: .claude/audit/summaries/
