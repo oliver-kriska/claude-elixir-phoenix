@@ -36,7 +36,7 @@ installation and troubleshooting remain in the linked guides.
 | Claude namespaced slash commands | Full | Not applicable | Not applicable | Not applicable | Not applicable |
 | Bundled custom agents | Full | Deferred | Deferred | Deferred | Deferred |
 | Lifecycle/enforcement hooks | Full | Deferred | One optional safeguard | Deferred | Deferred |
-| Bundled Tidewave MCP setup | Full | External | External | External | External |
+| Tidewave MCP connection | External | External | External | External | External |
 | Plugin-root instructions | Full | Deferred | Deferred | Deferred | Deferred |
 | Deterministic generated target | Canonical source | Yes | Yes | Yes | Yes |
 | Mode-aware CI drift validation | Not applicable | Yes | Yes | Yes | Yes |
@@ -44,9 +44,10 @@ installation and troubleshooting remain in the linked guides.
 | Isolated native smoke command | Not applicable | Yes | Yes | Yes | Yes |
 
 “External” Tidewave support means a skill may use Tidewave when the project and
-runtime already exposes it. Adapted flagship workflows in every generated target
-must still complete without Tidewave, named custom agents, or Claude-only task
-APIs.
+runtime already expose it. Installing Tidewave in a Phoenix app starts the MCP
+server but does not register its project-specific URL with any client. Adapted
+flagship workflows in every generated target must still complete without
+Tidewave, named custom agents, or Claude-only task APIs.
 
 ## Native invocation and installation
 
@@ -78,7 +79,8 @@ The local acceptance run recorded on 2026-07-23 used Amp
 
 `plugins/elixir-phoenix/` is the source of truth and retains the complete
 plugin: skills, commands, agents, hooks, root instructions, permission settings,
-and Tidewave MCP integration. Portability fixes must not weaken this behavior.
+and Tidewave-aware workflows. Users register the Tidewave MCP endpoint for each
+project and port. Portability fixes must not weaken this behavior.
 
 ### Amp
 
@@ -94,15 +96,16 @@ and explicit skill references use the `elixir-phoenix:` plugin namespace.
 Plugin-root agent definitions and `AGENTS.md` are not automatically activated.
 The plugin includes one optional, synchronous, trust-gated safeguard for
 destructive shell commands. The remaining Claude hooks, generated agent TOMLs,
-and bundled MCP configuration are separate future capabilities rather than
-hidden installation side effects.
+and plugin-root instructions are separate future capabilities rather than
+hidden installation side effects. Tidewave MCP registration remains external.
 
 ### Pi
 
 Pi consumes `targets/pi/skills` through the repository's Pi package declaration.
 Generated references use native `/skill:<name>` syntax. Extensions, prompt
 templates, custom-agent orchestration, package-root instructions, and bundled
-MCP configuration are deferred.
+MCP configuration are not installed. Tidewave remains optional when exposed by
+the host independently.
 
 ### OpenCode
 

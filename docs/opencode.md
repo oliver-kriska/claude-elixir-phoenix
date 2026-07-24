@@ -70,7 +70,7 @@ when their names do not collide with existing commands; the documented
 skill-tool prompt above is the portable explicit invocation.
 Native OpenCode subagents are an optional optimization in the flagship
 workflows, and the sequential fallback is valid. Tidewave is optional and its
-MCP setup is deferred. Exact Claude colon syntax such as `/phx:review` is not
+MCP registration is external. Exact Claude colon syntax such as `/phx:review` is not
 registered; use `/phx-review`. The investigation, review, plan, work, PR-review,
 and full-lifecycle workflows have explicit OpenCode adaptations. PR review uses a
 GitHub connector or authenticated `gh` without fabricating mutations; full
@@ -80,6 +80,26 @@ artifact schema and a scratchpad research checklist; work uses plan checkboxes a
 receive portable frontmatter, resource, and command projection but may still
 describe optional Claude-specific orchestration APIs; those capabilities are
 deferred rather than silently emulated.
+
+### Optional Tidewave MCP
+
+Installing these skills does not configure MCP. When the Phoenix project runs
+Tidewave, add its endpoint to the project `opencode.json` (or the global
+`~/.config/opencode/opencode.json`) and replace `$PORT`:
+
+```json
+{
+  "mcp": {
+    "tidewave": {
+      "type": "remote",
+      "url": "http://localhost:$PORT/tidewave/mcp",
+      "enabled": true
+    }
+  }
+}
+```
+
+Generated workflows retain a complete fallback when Tidewave is unavailable.
 
 ## Runtime acceptance
 

@@ -18,13 +18,14 @@ Code plugin.
 including `$elixir-phoenix:phx-investigate` and
 `$elixir-phoenix:phx-review` workflows. See
 [Use with Codex](#use-with-codex); a trust-gated destructive-command safeguard
-is included, while custom agents and bundled Tidewave MCP are intentionally not
-included yet.
+is included, while custom agents are intentionally not included and Tidewave
+MCP registration remains external.
 
 **Using Pi?** Install the native generated skills package for all 51 skills,
 including Pi-compatible `/skill:phx-investigate` and `/skill:phx-review`
 workflows. See [Use with Pi](#use-with-pi); extensions, prompt templates, MCP,
-and custom agents are intentionally not included yet.
+and custom agents are intentionally not included yet. Tidewave can be used when
+the Pi host exposes it independently.
 
 **Using OpenCode?** Install the generated skills-only target for all 51 skills,
 including `phx-investigate` and `phx-review`. In the tested OpenCode 1.17.2 setup,
@@ -100,7 +101,7 @@ that prevent the mistakes Elixir developers actually make in production.
 │    web-researcher (haiku)          progress-tracking · block-danger │
 │                                                                     │
 │  ───────────────────────────────────────────────────────────        │
-│  26 Iron Laws · Tidewave MCP · plan→work→verify→review→compound     │
+│  26 Iron Laws · Tidewave-aware · plan→work→verify→review→compound   │
 │  github.com/oliver-kriska/claude-elixir-phoenix                     │
 └─────────────────────────────────────────────────────────────────────┘
 ```
@@ -231,9 +232,9 @@ alias. This edition also ships one synchronous native hook that blocks destructi
 Ecto resets/drops, unguarded force pushes, and accidental `MIX_ENV=prod mix`
 commands. Codex requires users to review and trust plugin hooks before they run;
 the skills work without it. Custom agents, plugin-root instructions, the remaining
-Claude hooks, and Tidewave MCP remain deferred. See the complete
-[Codex guide](docs/codex.md) for updates, uninstall, isolation, troubleshooting,
-tested version, and capability details.
+Claude hooks remain deferred; Tidewave MCP registration is external. See the
+complete [Codex guide](docs/codex.md) for updates, uninstall, isolation,
+troubleshooting, tested version, and capability details.
 
 ### Use with Pi
 
@@ -249,9 +250,9 @@ Start a fresh Pi session, then invoke workflows explicitly with
 `/skill:phx-investigate` or `/skill:phx-review`. Pi can also select a skill from
 its description automatically. This edition ships skills and their complete
 bundled resources only—not extensions, prompt templates, custom agents,
-package-root instructions, or Tidewave MCP configuration. See the complete
-[Pi guide](docs/pi.md) for project-local installation, updates, uninstall,
-isolation, troubleshooting, tested version, and capability details.
+or package-root instructions. Tidewave MCP registration is external. See the
+complete [Pi guide](docs/pi.md) for project-local installation, updates,
+uninstall, isolation, troubleshooting, tested version, and capability details.
 
 ### Use with OpenCode
 
@@ -268,12 +269,12 @@ phx-investigate skill, then …”. In the tested OpenCode 1.17.2 setup,
 `/phx-investigate` and `/phx-review` also work when they do not collide with
 existing commands, but the skill tool is the documented portable interface. OpenCode
 selects the model implicitly. This target contains skills and complete bundled
-resources only—not hooks, custom agents, or Tidewave MCP configuration.
-Investigation, review, plan, work, PR-review, and full-lifecycle workflows are
-explicitly adapted; some other skills may still describe optional
-Claude-specific orchestration APIs. See the [OpenCode installation and
-support guide](docs/opencode.md) for global setup, updates, uninstall,
-feature-branch review, discovery debugging, and limitations.
+resources only—not hooks or custom agents. Tidewave MCP registration is
+external. Investigation, review, plan, work, PR-review, and full-lifecycle
+workflows are explicitly adapted; some other skills may still describe optional
+Claude-specific orchestration APIs. See the
+[OpenCode installation and support guide](docs/opencode.md) for global setup,
+updates, uninstall, feature-branch review, discovery debugging, and limitations.
 
 ## Getting Started
 
@@ -771,17 +772,30 @@ These load automatically based on file context -- no commands needed:
 
 ## Tidewave MCP Integration
 
-When your Phoenix app runs with [Tidewave](https://github.com/tidewave-elixir/tidewave), the plugin automatically detects it and uses runtime tools:
+When your Phoenix app runs with
+[Tidewave](https://github.com/tidewave-ai/tidewave_phoenix), the plugin detects
+the local server and prefers its runtime tools. Add Tidewave to the application:
 
 ```elixir
 # Add to mix.exs
-{:tidewave, "~> 0.1", only: :dev}
+{:tidewave, "~> 0.6", only: :dev}
 
 # Add to endpoint.ex (in dev block)
 plug Tidewave
 ```
 
-Available runtime tools: execute Elixir code, run SQL queries, get docs for your exact dependency versions, introspect Ecto schemas, read application logs.
+Then register the running endpoint with Claude Code, replacing `$PORT` with the
+Phoenix port:
+
+```bash
+claude mcp add --transport http tidewave \
+  http://localhost:$PORT/tidewave/mcp
+```
+
+Use `/mcp` to verify the connection. The plugin does not silently register a
+fixed-port MCP endpoint. Once connected, Tidewave can execute Elixir code, run
+SQL queries, get documentation for exact dependency versions, introspect Ecto
+schemas, and read application logs.
 
 ## Requirements
 
@@ -932,7 +946,7 @@ This plugin was built with insights from these articles, repositories, and tools
 
 ### Repositories and Tools
 
-- <https://github.com/tidewave-elixir/tidewave>
+- <https://github.com/tidewave-ai/tidewave_phoenix>
 - <https://github.com/neilberkman/ccrider>
 - <https://github.com/nicobailon/visual-explainer>
 - <https://github.com/VoltAgent/awesome-claude-code-subagents>

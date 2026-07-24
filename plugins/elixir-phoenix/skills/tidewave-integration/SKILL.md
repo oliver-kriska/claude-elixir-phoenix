@@ -69,7 +69,7 @@ pid = pid("0.1234.0")
 
 ```elixir
 # mix.exs
-{:tidewave, "~> 0.1", only: :dev}
+{:tidewave, "~> 0.6", only: :dev}
 
 # endpoint.ex (in dev block)
 plug Tidewave
@@ -79,6 +79,11 @@ config :phoenix_live_view,
   debug_heex_annotations: true,
   debug_attributes: true
 ```
+
+The dependency and endpoint plug expose Tidewave's streamable HTTP server; they
+do not register it with an MCP client. Configure the current runtime separately
+with `http://localhost:<port>/tidewave/mcp`, then verify that Tidewave tools are
+available before relying on this skill.
 
 ## Reliability Guards
 

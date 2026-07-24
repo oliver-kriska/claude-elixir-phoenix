@@ -120,6 +120,11 @@ capabilities rather than claiming cross-runtime feature parity.
 
 ### Fixed
 
+- **Accurate Tidewave MCP setup boundary** — update the maintained Phoenix
+  dependency requirement and repository link, distinguish exposing Tidewave's
+  HTTP server from registering it with a client, and document external
+  registration for Claude Code, Codex, and OpenCode.
+
 - **Generated nested resource links now resolve from their containing file** —
   Amp, Codex, Pi, and OpenCode projections compute skill-relative paths from
   each Markdown resource directory instead of the skill root, fixing broken

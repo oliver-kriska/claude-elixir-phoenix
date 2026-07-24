@@ -252,7 +252,7 @@ when a release deletes or renames a skill.
 | Parallel workflow orchestration | Full | Optional native workers with sequential fallback |
 | Lifecycle and enforcement hooks | Full | Not installed |
 | Claude permission settings | Full | Not installed |
-| Plugin MCP configuration | Full | Not installed |
+| Tidewave MCP connection | User-configured | User-configured |
 
 Domain and reference skills such as `liveview-patterns`, `ecto-patterns`,
 `testing`, and `security` work directly. The flagship `phx-investigate`,

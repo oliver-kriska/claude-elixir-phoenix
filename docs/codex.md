@@ -106,6 +106,20 @@ read-only review → compound lifecycle by invoking portable skills or executing
 them sequentially in-session. Other workflows remain baseline projections and
 may not be fully portable.
 
+### Optional Tidewave MCP
+
+Installing this plugin does not register a Tidewave endpoint. When the Phoenix
+project already runs Tidewave, register its actual port separately:
+
+```bash
+codex mcp add tidewave --url http://localhost:$PORT/tidewave/mcp
+codex mcp list
+```
+
+Start Codex and use `/mcp` to verify that the Tidewave tools are connected;
+`codex mcp list` confirms configuration only. Generated workflows retain a
+complete fallback when Tidewave is unavailable.
+
 ## Optional Native Safety Hook
 
 The generated plugin includes one synchronous `PreToolUse` command hook for
@@ -200,7 +214,7 @@ Intentionally deferred:
 
 - the remaining Claude Code hooks, including async and unsupported events;
 - generated or automatically installed custom-agent TOMLs;
-- bundled Tidewave MCP configuration;
+- automatic Tidewave MCP registration;
 - plugin-root `AGENTS.md` or copied `CLAUDE.md` instructions;
 - exact Claude slash-command syntax such as `/phx:review`.
 

@@ -102,7 +102,7 @@ Start a fresh Pi process after an install, update, ref change, or removal.
 - Pi extensions or hook-like event handlers;
 - generated prompt templates and short `/phx-*` aliases;
 - custom agents or subagent orchestration;
-- bundled Tidewave MCP configuration (Pi does not natively bundle MCP);
+- automatic Tidewave MCP registration (Pi does not natively bundle MCP);
 - package-root `AGENTS.md` or other automatic instructions;
 - exact Claude `/phx:*` command syntax.
 
