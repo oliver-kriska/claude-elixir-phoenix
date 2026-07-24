@@ -126,6 +126,11 @@ capabilities rather than claiming cross-runtime feature parity.
   rebuild workflow triggers on all five runtime guides instead of only
   `docs/amp.md`.
 
+- **Pi Git-package metadata now matches the generated distribution** — the
+  repository-root manifest used by the documented Pi installation reports the
+  same `pi-elixir-phoenix` name, 3.0.0 version, and Pi-focused description as
+  `targets/pi/package.json`.
+
 - **Reliable behavioral trigger gates and routing boundaries** — deterministic
   structural evals no longer depend on ignored local result caches, while
   `make eval-full` runs a fresh Claude Haiku 4.5 gate requiring every skill to

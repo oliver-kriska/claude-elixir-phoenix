@@ -224,6 +224,9 @@ def test_repository_manifest_resources_and_flagship_overlays() -> None:
     assert "extensions" not in manifest["pi"]
     assert "pi-package" in manifest["keywords"]
     assert repository_manifest["pi"] == {"skills": ["./targets/pi/skills"]}
+    assert repository_manifest["name"] == manifest["name"]
+    assert repository_manifest["version"] == manifest["version"]
+    assert repository_manifest["description"] == manifest["description"]
     assert isinstance(repository_manifest["pi"]["skills"], list)
     assert (TARGETS_DIR.parent / repository_manifest["pi"]["skills"][0]).is_dir()
     assert pi.validate(target) == 51

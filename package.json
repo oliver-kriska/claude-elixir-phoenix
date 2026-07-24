@@ -1,8 +1,8 @@
 {
-  "name": "elixir-phoenix-plugin",
-  "version": "1.0.0",
+  "name": "pi-elixir-phoenix",
+  "version": "3.0.0",
   "private": true,
-  "description": "Claude Code plugin for Elixir/Phoenix development",
+  "description": "Generated Elixir, Phoenix, LiveView, Ecto, Oban, testing, and security skills for Pi",
   "keywords": [
     "pi-package"
   ],
