@@ -49,6 +49,28 @@ def test_builds_all_repository_skills_without_mutating_claude_source(tmp_path) -
         assert frontmatter.data["name"] == skill_file.parent.name
         assert amp.SKILL_NAME_RE.fullmatch(skill_file.parent.name)
 
+    investigate = (output / "phx-investigate" / "SKILL.md").read_text()
+    review = (output / "phx-review" / "SKILL.md").read_text()
+    assert "Reproduce Before Fixing" in investigate
+    assert "Tidewave is optional" in investigate
+    assert "Review is read-only" in review
+    assert "sequential review is fully valid" in review
+    flagship_text = "\n".join(
+        path.read_text(encoding="utf-8")
+        for skill in amp.PORTABLE_WORKFLOWS
+        for path in sorted((output / skill).rglob("*.md"))
+    )
+    assert not any(
+        token in flagship_text
+        for token in (
+            "TaskCreate",
+            "AskUserQuestion",
+            "subagent_type",
+            "run_in_background",
+            "mcp__tidewave__",
+        )
+    )
+
 
 def test_build_copies_complete_subtree_and_transforms_only_markdown(tmp_path) -> None:
     plugin = tmp_path / "plugin"

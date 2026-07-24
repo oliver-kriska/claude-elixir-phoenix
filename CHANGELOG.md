@@ -85,22 +85,26 @@ capabilities rather than claiming cross-runtime feature parity.
   optional S3, Redis, and similar credentials behind their feature switch so
   unrelated release commands such as `bin/migrate` can start without them.
 
-- **Portable PR-review/full workflow overlays** — generated Codex, Pi, and
+- **Portable Amp investigation and review workflows** — generated Amp
+  `phx-investigate` and `phx-review` now preserve evidence-first investigation,
+  read-only review, optional native workers, and complete same-session sequential
+  fallbacks without Claude task APIs, named agents, hooks, or MCP identifiers.
+
+- **Portable PR-review/full workflow overlays** — generated Amp, Codex, Pi, and
   OpenCode `phx-pr-review` now use available GitHub connectors or authenticated
   `gh`, preserve read-only triage and explicit mutation approval, and never infer
   replies or resolution. Generated `phx-full` now preserves user phase gates,
   bounded retries/cycles, explicit verification, read-only review, and compound
   completion through portable skill invocation or sequential same-session
-  execution. Canonical Claude and frozen Amp output remain unchanged; other
-  workflows are not claimed portable.
+  execution. Canonical Claude output remains unchanged; other workflows are not
+  claimed portable.
 
-- **Portable plan/work workflow overlays** — generated Codex, Pi, and OpenCode
-  `phx-plan` and `phx-work` skills now use scratchpad research checklists, plan
+- **Portable plan/work workflow overlays** — generated Amp, Codex, Pi, and
+  OpenCode `phx-plan` and `phx-work` skills now use scratchpad research checklists, plan
   checkboxes, and `progress.md` instead of Claude-only named agents, task APIs,
   question tools, hooks, or MCP identifiers. Optional native subagents and
   Tidewave retain complete same-session sequential fallbacks. Canonical Claude
-  skills and the frozen Amp target are unchanged; this does not claim parity for
-  other generated workflows.
+  skills are unchanged; this does not claim parity for other generated workflows.
 
 - **Codex skill descriptions now preserve routing signal within a compact
   budget** — generated descriptions are capped at 120 characters while retaining

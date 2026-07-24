@@ -1,9 +1,9 @@
 # Investigation Output Template
 
-Create `.claude/plans/{slug}/research/investigation.md`:
+Return this structure in the current session; do not write a report file unless the user explicitly asks for one:
 
 ````markdown
-# Bug Investigation: $ARGUMENTS
+# Bug Investigation: <bug description>
 
 ## Error
 

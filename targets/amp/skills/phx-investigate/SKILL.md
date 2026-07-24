@@ -1,128 +1,104 @@
 ---
 name: phx-investigate
-description: Investigate bugs and errors in Elixir/Phoenix — root-cause analysis for
-  crashes, exceptions, stack traces, test failures. Use --parallel for deep 4-track
-  investigation.
+description: Investigate Elixir/Phoenix bugs root-cause first. Reproduce failures,
+  cite evidence, and use optional Amp subagents only when useful.
 ---
-
 # Investigate Bug
 
-Investigate bugs using the Ralph Wiggum approach: check the
-obvious, read errors literally.
+Investigate Elixir/Phoenix bugs root-cause first. Reproduce or establish the
+failing behavior before recommending a fix, and cite concrete paths and lines.
 
 ## Usage
 
-```
+```text
 phx-investigate Users can't log in after password reset
 phx-investigate FunctionClauseError in UserController.show
 phx-investigate Complex auth bug --parallel
 ```
 
-## Arguments
-
-`$ARGUMENTS` = Bug description or error message. Add `--parallel`
-for deep 4-track investigation.
-
-## Mode Selection
-
-Use **parallel mode** (spawn `deep-bug-investigator`) when:
-bug mentions 3+ modules, spans multiple contexts, is intermittent
-or involves concurrency, or user says `--parallel`/`deep`.
-
-**Otherwise**: Run the sequential workflow below.
-
-**Avoid confirmatory subagents**: Do NOT spawn parallel subagents
-to "verify" findings you already identified in the main context.
-If Step 3-4 already identified the root cause with high confidence,
-present it directly — don't spend ~80K tokens on 4 subagents to
-confirm what's already obvious (confirmed waste: session c135330a).
+Treat the text after the skill name as the bug description. `--parallel` asks
+for independent investigation tracks when native Amp subagent tooling is
+available; it is an optimization, never a requirement.
 
 ## Iron Laws
 
-1. **Read the error message literally first** — Most bugs tell you exactly what's wrong; resist the urge to theorize before reading what the system is saying
-2. **Check the obvious before going deep** — Compile errors, missing migrations, atom/string mismatches explain 80% of bugs; exhausting the Ralph Wiggum checklist saves hours
-3. **Check changeset errors before UI debugging** — Silent form saves are almost always `{:error, changeset}` with validation failures, not viewport or JS issues
-4. **Consult compound docs before investigating fresh** — A previously solved problem saves the entire investigation cycle; always search `.claude/solutions/` first
-5. **NEVER guess at a fix before reproducing** — Reproduce first, then identify root cause, then fix. Skipping steps causes wrong fixes
-6. **DO NOT apply a fix without confirming root cause** — Verify your hypothesis with evidence (logs, tests, IO.inspect) before changing code
+1. **Read the error literally first** — extract the exception, message, failing
+   assertion, and first relevant application frame before theorizing.
+2. **Check the obvious before going deep** — compile errors, missing migrations,
+   atom/string mismatches, nil values, stale servers, and changeset errors explain
+   many failures.
+3. **Reproduce before proposing a fix** — run the smallest relevant test or
+   controlled command and record its output. If reproduction is impossible,
+   state exactly what evidence establishes the failure instead.
+4. **Confirm the root cause with evidence** — distinguish the observed failure,
+   the causal code path, and the proposed correction.
+5. **Do not edit while investigating unless the user asks for a fix** — the
+   investigation result is evidence and a recommendation, not an implicit patch.
 
-## Investigation Workflow
+## Workflow
 
-### Step 0: Consult Compound Docs
+### 1. Consult Existing Evidence
 
-Search `.claude/solutions/` for relevant keywords using Grep.
+Search `.claude/solutions/`, recent diffs, tests, logs, and the literal error.
+Do not block if `.claude/solutions/` does not exist.
 
-If matching solution exists, present it and ask: "Apply this
-fix, or investigate fresh?"
+### 2. Capture Runtime Context When Available
 
-### Step 0a: Runtime Auto-Capture (Tidewave -- PRIMARY when available)
+Tidewave is optional. If its tools are configured, use them for logs, source
+locations, safe queries, or hypothesis checks. Otherwise use repository files,
+`mix` commands, and local logs. Never fail or ask the user to install Tidewave
+merely to continue an investigation.
 
-If Tidewave MCP is detected, **start here instead of asking
-the user to paste errors**. Auto-capture runtime context:
+### 3. Run Sanity Checks
 
-1. `mcp__tidewave__get_logs level: :error` -- capture recent errors
-2. Parse stacktraces, correlate with source via
-   `mcp__tidewave__get_source_location`
-3. For data bugs: `mcp__tidewave__execute_sql_query` to inspect state
-4. For logic bugs: `mcp__tidewave__project_eval` to test hypotheses
-5. For UI bugs: `mcp__tidewave__get_source_location` with component name
+Choose focused checks that fit the report, such as:
 
-Present pre-populated context to the user:
+```bash
+mix compile --warnings-as-errors
+mix test test/path_test.exs --trace
+```
 
-> **Auto-captured from runtime:**
->
-> - Error: {parsed error from logs}
-> - Location: {file:line from get_source_location}
->
-> Investigating this. Correct if wrong.
+Do not run migrations or other state-changing commands unless they are necessary,
+safe for the fixture, and authorized by the user.
 
-This eliminates copy-pasting errors between app and agent.
-**If Tidewave NOT available**: Fall through to Step 1.
+### 4. Reproduce Before Fixing
 
-### Step 1: Sanity Checks
+Capture the exact command, failure, and relevant output. Read
+`references/error-patterns.md`, then inspect only the code needed to trace the
+failure from entry point to cause.
 
-Run `mix compile --warnings-as-errors 2>&1 | head -50`, then `mix ecto.migrate`.
+### 5. Check the Obvious
 
-### Step 2: Reproduce
+Check saved files, atom/string keys, preload state, pattern matches, nil values,
+return values, server restarts, and changeset errors. For silent LiveView form
+failures, inspect `{:error, changeset}` and rendered validation errors before JS.
 
-Run `mix test test/path_test.exs --trace`. Then read the last 200 lines of `log/dev.log` and search for "error" or "exception" patterns.
+### 6. Trace and Test the Hypothesis
 
-### Step 3: Read Error LITERALLY
+Use targeted searches, source reads, tests, or non-mutating diagnostics. Only add
+temporary source diagnostics if the user explicitly authorizes edits, and remove
+them before reporting. Cite `path:line` evidence for both the failing behavior
+and the causal code.
 
-Parse the error message — check `references/error-patterns.md`.
+If native Amp subagents are available and the bug genuinely spans independent
+areas, delegate read-only tracks by concern. Otherwise perform the same tracks
+sequentially in this session. Do not require named custom agents.
 
-### Step 4: Check the Obvious (Ralph Wiggum Checklist)
+### 7. Report
 
-File saved? Atom vs string? Data preloaded? Pattern match
-correct? Nil? Return value? Server restarted?
+Use `references/investigation-template.md`. Include:
 
-**LiveView form saves silently failing?** Check changeset errors
-FIRST — not viewport, click mechanics, or JS. A missing
-`hidden_input` for a required embedded field causes `{:error,
-changeset}` with no visible UI feedback.
+- reproduction or evidence establishing the failure;
+- root cause, not merely the symptom;
+- relevant paths and lines;
+- confidence and any unverified assumptions;
+- the smallest safe fix or next diagnostic step.
 
-### Step 5: IO.inspect / Tidewave project_eval
-
-### Step 6: Identify Root Cause
-
-Find what's actually happening vs what should happen.
-
-### Step 7: Hand Off
-
-Present root cause + evidence. Then route by fix size:
-
-- Small, contained fix → offer to apply directly or via `phx-quick`
-- Multi-file or risky fix → suggest `phx-plan {root cause summary}` so
-  the fix gets task structure and review
-- Non-obvious root cause → after the fix lands, suggest `phx-compound`
-
-## Autonomous Iteration
-
-Use `/ralph-loop:ralph-loop` for autonomous debugging with
-clear completion criteria and `--max-iterations`.
+Route follow-up work with `phx-quick`, `phx-plan`, or `phx-compound` when
+appropriate. Do not invoke another skill unless the user asks you to continue.
 
 ## References
 
-- `references/error-patterns.md` — Common errors and checklist
-- `references/investigation-template.md` — Output format
-- `references/debug-commands.md` — Debug commands and common fixes
+- `references/error-patterns.md` — common errors and checklist
+- `references/investigation-template.md` — output format
+- `references/debug-commands.md` — debug commands and common fixes

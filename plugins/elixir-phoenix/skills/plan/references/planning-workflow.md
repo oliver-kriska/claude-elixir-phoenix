@@ -159,7 +159,7 @@ forms), or involves navigation between multiple live routes.
 
 If liveview-architect was spawned, its report should include
 affordance tables. Use these to build a system map. See
-`references/breadboarding.md` for full details.
+`${CLAUDE_SKILL_DIR}/references/breadboarding.md` for full details.
 
 ## Completeness Check
 

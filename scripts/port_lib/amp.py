@@ -10,6 +10,7 @@ import uuid
 from dataclasses import dataclass
 from pathlib import Path
 
+from . import codex
 from .frontmatter import Frontmatter, parse_file
 from .generated_tree import copy_skill_subtrees
 from .skill_transforms import (
@@ -31,10 +32,36 @@ CANONICAL_SKILL_PATH_RE = re.compile(
 BARE_SKILL_PATH_RE = re.compile(
     r"(?<![A-Za-z0-9_./:-])([a-z0-9-]+)/([A-Za-z0-9_./<>-]+)"
 )
+CODEX_COMMAND_RE = re.compile(
+    r"(?<![A-Za-z0-9_./:-])\$(phx|lv|ecto)-"
+    r"([a-z][a-z0-9-]*|\*)(?![A-Za-z0-9_:-])"
+)
 IGNORED_FILES = {".DS_Store"}
 CLAUDE_HOOK_UNAVAILABLE = (
     "[Claude Code-only hook unavailable in the Amp skills-only target: {path}]"
 )
+PORTABLE_WORKFLOWS = (
+    "phx-investigate",
+    "phx-review",
+    "phx-plan",
+    "phx-work",
+    "phx-pr-review",
+    "phx-full",
+)
+AMP_DESCRIPTION_OVERRIDES = {
+    "phx-investigate": (
+        "Investigate Elixir/Phoenix bugs root-cause first. Reproduce failures, "
+        "cite evidence, and use optional Amp subagents only when useful."
+    ),
+    "phx-review": (
+        "Review changed Elixir/Phoenix code read-only. Check requirements, cite "
+        "evidence, deduplicate findings, and return a severity-based verdict."
+    ),
+    "phx-full": (
+        "Run a portable sequential plan-work-verify-review-compound lifecycle. "
+        "Use optional generic workers only when Amp makes them available."
+    ),
+}
 
 
 @dataclass(frozen=True)
@@ -196,25 +223,42 @@ def _rewrite_resource_paths(
     return BARE_SKILL_PATH_RE.sub(replace_bare_skill_path, text)
 
 
+def _rewrite_commands(text: str) -> str:
+    """Translate canonical and reused Codex invocations to Amp skill names."""
+    text = rewrite_slash_commands(text, "amp")
+    return CODEX_COMMAND_RE.sub(r"\1-\2", text)
+
+
+def _amp_overlay(source_file: Path, current: SkillSource) -> str | None:
+    """Reuse the anchored portable workflows with Amp-native terminology."""
+    overlay = codex._codex_overlay(source_file, current)
+    if overlay is None:
+        return None
+    return _rewrite_commands(overlay.replace("Codex", "Amp"))
+
+
 def _transform_markdown(
     source_file: Path,
     current: SkillSource,
     skills: list[SkillSource],
 ) -> str:
+    overlay = _amp_overlay(source_file, current)
     if source_file.name == "SKILL.md" and source_file.parent == current.source_dir:
         projected = transform_frontmatter(current.frontmatter.data, "amp")
+        if current.target_name in AMP_DESCRIPTION_OVERRIDES:
+            projected["description"] = AMP_DESCRIPTION_OVERRIDES[current.target_name]
         body = _rewrite_resource_paths(
-            current.frontmatter.body,
+            overlay if overlay is not None else current.frontmatter.body,
             current,
             skills,
             source_file,
         )
-        body = rewrite_slash_commands(body, "amp")
+        body = _rewrite_commands(body)
         return Frontmatter(projected, body).dump()
 
-    text = source_file.read_text(encoding="utf-8")
+    text = overlay if overlay is not None else source_file.read_text(encoding="utf-8")
     text = _rewrite_resource_paths(text, current, skills, source_file)
-    return rewrite_slash_commands(text, "amp")
+    return _rewrite_commands(text)
 
 
 def _populate(skills: list[SkillSource], output_dir: Path) -> None:
@@ -229,6 +273,12 @@ def _populate(skills: list[SkillSource], output_dir: Path) -> None:
 def validate(output_dir: str | Path) -> int:
     """Validate a generated Amp skills directory and return its skill count."""
     root = Path(output_dir)
+    for generated in sorted(root.rglob("*")):
+        if generated.is_symlink():
+            raise ValueError(f"{generated}: generated symlinks are not supported")
+        if not generated.is_dir() and not generated.is_file():
+            raise ValueError(f"{generated}: generated special file is not supported")
+
     skill_files = sorted(root.glob("*/SKILL.md"))
     if not skill_files:
         raise ValueError(f"{root}: no generated skills found")
@@ -271,6 +321,79 @@ def validate(output_dir: str | Path) -> int:
         if found:
             raise ValueError(f"{markdown}: unresolved Claude token `{found}`")
 
+    forbidden = (
+        "Agent(",
+        "TaskCreate",
+        "TaskUpdate",
+        "TaskGet",
+        "TaskList",
+        "AskUserQuestion",
+        "subagent_type",
+        "$ARGUMENTS",
+        "mcp__tidewave__",
+        "mcp__linear__",
+        "$phx-",
+        "$lv-",
+        "$ecto-",
+        "/skill:phx-",
+    )
+    for workflow in PORTABLE_WORKFLOWS:
+        workflow_root = root / workflow
+        if not workflow_root.is_dir():
+            continue
+        text = "\n".join(
+            path.read_text(encoding="utf-8")
+            for path in sorted(workflow_root.rglob("*.md"))
+        )
+        workflow_forbidden = forbidden
+        if workflow in {"phx-pr-review", "phx-full"}:
+            workflow_forbidden += (
+                "workflow-orchestrator",
+                "parallel-reviewer",
+                "planning-orchestrator",
+                "run_in_background",
+                "Ralph Wiggum",
+                "/ralph-loop:",
+                "PostToolUse",
+                "Claude Code tasks",
+                "--codex",
+                "--Pi",
+                "--OpenCode",
+            )
+        if workflow in {"phx-plan", "phx-work"}:
+            workflow_forbidden += (
+                "phoenix-patterns-analyst",
+                "ecto-schema-designer",
+                "liveview-architect",
+                "oban-specialist",
+                "otp-advisor",
+                "security-analyzer",
+                "testing-reviewer",
+                "hex-library-researcher",
+                "web-researcher",
+                "call-tracer",
+                "planning-orchestrator",
+                "Spawn SPECIALIST",
+                "run_in_background",
+                "[agent]",
+                "Agent annotation",
+                "agent routing",
+                "project_eval",
+                "get_logs",
+                "| Hook |",
+                "Each hook",
+                "/commit",
+                "agent spawning",
+                "agent count",
+                "Explore agents",
+                "execute via subagents",
+                "After spawning",
+            )
+        found = next((token for token in workflow_forbidden if token in text), None)
+        if found:
+            raise ValueError(f"{workflow_root}: unavailable Amp API `{found}`")
+
+    codex.validate_portable_workflows(root)
     return len(skill_files)
 
 

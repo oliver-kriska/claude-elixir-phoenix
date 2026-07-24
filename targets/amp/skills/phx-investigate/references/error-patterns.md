@@ -12,7 +12,7 @@
 
 ## Ralph Wiggum Checklist
 
-Spawn `deep-bug-investigator` agent to systematically check:
+Check systematically, or delegate to a generic read-only subagent if native Amp subagent tooling is available:
 
 1. Is the file saved?
 2. Atom vs string key mismatch?
@@ -22,7 +22,9 @@ Spawn `deep-bug-investigator` agent to systematically check:
 6. Is the return value correct (conn/socket)?
 7. Did you restart the server?
 
-## IO.inspect Everything
+## Temporary Diagnostics
+
+Only when the user explicitly authorizes temporary source edits, add and later remove diagnostics such as:
 
 ```elixir
 # Add to suspected location
@@ -31,7 +33,7 @@ Spawn `deep-bug-investigator` agent to systematically check:
 
 ## When Stuck
 
-1. `IO.inspect(binding(), label: "all variables")`
-2. Add `require IEx; IEx.pry` and step through
-3. Check if code is even being reached (add `IO.puts "HERE"`)
-4. Compare working vs broken path
+1. Inspect values through failing test output or an available safe runtime eval
+2. Run a focused IEx expression without modifying source files
+3. Trace reachability through existing logs or tests; source edits require approval
+4. Compare the working and broken paths

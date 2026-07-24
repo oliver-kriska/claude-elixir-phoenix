@@ -147,7 +147,8 @@ user = Repo.reload!(user, force: true)
 
 ## Full-Text Search
 
-For PostgreSQL full-text search patterns, see `references/fulltext-search.md`.
+For PostgreSQL full-text search patterns, see
+`fulltext-search.md`.
 
 ## Preload Strategies
 

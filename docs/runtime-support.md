@@ -29,10 +29,10 @@ installation and troubleshooting remain in the linked guides.
 | Complete skill resource trees | Full | Generated | Generated | Generated | Generated |
 | Executable resource modes | Full | Preserved | Preserved | Preserved | Preserved |
 | Automatic skill selection | Full | Model-driven | Model-driven | Model-driven | Model-driven |
-| Flagship `phx-investigate` | Full | Generated guidance | Adapted | Adapted | Adapted |
-| Flagship read-only `phx-review` | Full | Generated guidance | Adapted | Adapted | Adapted |
-| `phx-plan` / `phx-work` | Full | Generated guidance | Adapted | Adapted | Adapted |
-| `phx-pr-review` / `phx-full` | Full | Generated guidance | Adapted | Adapted | Adapted |
+| Flagship `phx-investigate` | Full | Adapted | Adapted | Adapted | Adapted |
+| Flagship read-only `phx-review` | Full | Adapted | Adapted | Adapted | Adapted |
+| `phx-plan` / `phx-work` | Full | Adapted | Adapted | Adapted | Adapted |
+| `phx-pr-review` / `phx-full` | Full | Adapted | Adapted | Adapted | Adapted |
 | Claude namespaced slash commands | Full | Not applicable | Not applicable | Not applicable | Not applicable |
 | Bundled custom agents | Full | Deferred | Deferred | Deferred | Deferred |
 | Lifecycle/enforcement hooks | Full | Deferred | One optional safeguard | Deferred | Deferred |
@@ -44,11 +44,9 @@ installation and troubleshooting remain in the linked guides.
 | Isolated native smoke command | Not applicable | Yes | Yes | Yes | Yes |
 
 “External” Tidewave support means a skill may use Tidewave when the project and
-runtime already expose it. Adapted Codex, Pi, and OpenCode flagship workflows
+runtime already exposes it. Adapted flagship workflows in every generated target
 must still complete without Tidewave, named custom agents, or Claude-only task
-APIs. Amp ships generated guidance for those workflows; its Claude-specific
-orchestration steps require the Amp-native adaptation documented in the
-[Amp guide](amp.md#feature-compatibility).
+APIs.
 
 ## Native invocation and installation
 

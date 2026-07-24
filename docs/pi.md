@@ -110,6 +110,10 @@ The flagship workflows do not require those capabilities. Tidewave and native
 subagents are optional optimizations when independently available; each workflow
 has a same-session sequential path.
 
+Some non-flagship skills remain baseline projections and may describe richer
+Claude Code orchestration APIs. They are included for domain guidance and
+progressive migration, not as a claim of complete workflow parity.
+
 ## Project and global scope
 
 A default install writes to Pi's user settings and applies to all Pi sessions.

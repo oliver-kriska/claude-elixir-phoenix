@@ -249,15 +249,18 @@ when a release deletes or renames a skill.
 | Automatic skill selection | Supported | Supported, model-driven |
 | Explicit skill loading | Slash command | Command palette: `skill: invoke` |
 | 26 named custom subagents | Full | Not installed |
-| Parallel workflow orchestration | Full | Amp adapts where possible |
+| Parallel workflow orchestration | Full | Optional native workers with sequential fallback |
 | Lifecycle and enforcement hooks | Full | Not installed |
 | Claude permission settings | Full | Not installed |
 | Plugin MCP configuration | Full | Not installed |
 
 Domain and reference skills such as `liveview-patterns`, `ecto-patterns`,
-`testing`, and `security` work directly. Workflow skills such as `phx-plan`,
-`phx-review`, and `phx-full` retain their knowledge, but instructions that rely
-on named Claude subagents or lifecycle hooks require Amp-native adaptation.
+`testing`, and `security` work directly. The flagship `phx-investigate`,
+`phx-review`, `phx-plan`, `phx-work`, `phx-pr-review`, and `phx-full` workflows
+are adapted to use optional native workers with a complete sequential fallback;
+they do not require named Claude subagents, task APIs, hooks, or MCP tools.
+Other generated workflow skills may still retain Claude-specific orchestration
+as reference guidance unless the compatibility table says otherwise.
 
 These administration skills are primarily reference material in Amp:
 
@@ -302,9 +305,12 @@ generated skill; only the invocation surface differs.
 
 ### A workflow mentions Claude-only tools
 
-Treat those steps as guidance and ask Amp to adapt them using Amp-native tools.
-Do not assume that hooks, named Claude subagents, or permission enforcement are
-active merely because their workflow skill is installed.
+The six flagship workflows should not mention Claude-only tools. If one does,
+report generated-target drift and reinstall the current release. For other
+workflow or administration skills, treat those steps as reference guidance and
+ask Amp to adapt them using Amp-native tools. Do not assume that hooks, named
+Claude subagents, or permission enforcement are active merely because a skill
+is installed.
 
 ## Maintain the generated target
 

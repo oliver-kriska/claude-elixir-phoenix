@@ -155,7 +155,7 @@ forms), or involves navigation between multiple live routes.
 **Skip** for single-page CRUD, config changes, or non-LiveView work.
 
 Synthesize affordance tables and the system map from the completed research-track evidence. See
-`references/breadboarding.md` for full details.
+`breadboarding.md` for full details.
 
 ## Completeness Check
 

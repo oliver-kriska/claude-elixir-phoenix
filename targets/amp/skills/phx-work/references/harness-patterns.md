@@ -54,29 +54,23 @@ Before the 3rd retry, consolidate:
 
 ## Action Verification Pattern
 
-The plugin uses programmatic verification hooks (harness-as-action-verifier)
-to catch invalid actions BEFORE they propagate:
+Portable targets assume no lifecycle hooks. Verify actions explicitly after
+each edit and use command output as feedback:
 
-| Hook | What It Verifies | Feedback On Failure |
-|------|-----------------|---------------------|
-| `format-elixir.sh` | Code formatting | "NEEDS FORMAT" warning |
-| `iron-law-verifier.sh` | Iron Law violations in code content | Specific violation + line number |
-| `security-reminder.sh` | Auth file patterns | Security Iron Laws checklist |
-| `error-critic.sh` | Repeated mix failures | Consolidated error analysis |
+```bash
+mix format --check-formatted <changed_files>
+mix compile --warnings-as-errors
+mix test <affected_test_files>
+mix credo --strict
+```
 
-Each hook follows the pattern:
+For auth/security changes, also search the changed files for unsafe atom
+creation and untrusted raw HTML, then run negative-path authorization tests.
+For repeated failures, capture the exact command and first error in the
+scratchpad before trying a different approach.
 
-1. **Propose** (Claude writes code)
-2. **Verify** (hook checks programmatically)
-3. **Reject with feedback** (specific violation message via stderr)
-4. **Retry** (Claude fixes the specific issue)
-
-This is more reliable than asking Claude to self-check because:
-
-- grep-based checks never miss patterns
-- Line numbers pinpoint exact locations
-- Feedback is specific, not generic
-- Verification runs every time (no skipping)
+The loop is: edit, run the explicit command, read its concrete failure, fix the
+root cause, and rerun the same command. Do not rely on implicit automation.
 
 ## Anti-Pattern: Unstructured Retry Loop
 
