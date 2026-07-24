@@ -98,7 +98,7 @@ benefit from differential mode (the package itself is the unit).
 Once both NDJSON streams exist, the skill body invokes:
 
 ```bash
-python3 "scripts/diff_findings.py" \
+python3 "../scripts/diff_findings.py" \
     --new  "${AUDIT_TMPDIR}/findings.jsonl" \
     --old  "${AUDIT_TMPDIR}/findings.old.jsonl" \
     --new-out     "${AUDIT_TMPDIR}/new_signals.jsonl" \

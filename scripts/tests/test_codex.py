@@ -248,11 +248,20 @@ def test_rewrites_cross_skill_resources_and_rejects_missing_or_escaping_paths(
     second = _write_skill(plugin, "second", "phx:second")
     (second / "references").mkdir()
     (second / "references" / "guide.md").write_text("Guide\n", encoding="utf-8")
+    first_references = plugin / "skills" / "first" / "references"
+    first_references.mkdir()
+    (first_references / "nested.md").write_text(
+        "Read `second/references/guide.md`.\n",
+        encoding="utf-8",
+    )
 
     output = tmp_path / "codex"
     codex.build(plugin, output)
     assert "../phx-second/references/guide.md" in (
         output / "skills" / "phx-first" / "SKILL.md"
+    ).read_text()
+    assert "../../phx-second/references/guide.md" in (
+        output / "skills" / "phx-first" / "references" / "nested.md"
     ).read_text()
 
     missing = tmp_path / "missing"

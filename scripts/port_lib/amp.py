@@ -94,6 +94,7 @@ def _target_relative_path(
     source_path: Path,
     current: SkillSource,
     skills: list[SkillSource],
+    source_file: Path,
 ) -> str:
     """Map a canonical resource path to its generated relative location."""
     by_source_dir = {skill.source_dir.resolve(): skill for skill in skills}
@@ -115,7 +116,8 @@ def _target_relative_path(
 
     relative_resource = resolved.relative_to(owner.source_dir.resolve())
     generated_resource = Path(owner.target_name) / relative_resource
-    generated_current = Path(current.target_name)
+    source_relative = source_file.resolve().relative_to(current.source_dir.resolve())
+    generated_current = Path(current.target_name) / source_relative.parent
     return Path(os.path.relpath(generated_resource, generated_current)).as_posix()
 
 
@@ -137,7 +139,7 @@ def _rewrite_resource_paths(
             raise ValueError(
                 f"{source_file}: missing referenced resource {source_path}"
             )
-        return _target_relative_path(source_path, current, skills)
+        return _target_relative_path(source_path, current, skills, source_file)
 
     def replace_plugin_root(match: re.Match[str]) -> str:
         raw_path = match.group(1)
@@ -153,19 +155,19 @@ def _rewrite_resource_paths(
             raise ValueError(
                 f"{source_file}: unsupported CLAUDE_PLUGIN_ROOT resource {source_path}"
             )
-        return _target_relative_path(source_path, current, skills)
+        return _target_relative_path(source_path, current, skills, source_file)
 
     def replace_bare_sibling(match: re.Match[str]) -> str:
         source_path = current.source_dir.parent / match.group(1) / match.group(2)
         if "<" in match.group(0) or ">" in match.group(0) or not source_path.exists():
             return match.group(0)
-        return _target_relative_path(source_path, current, skills)
+        return _target_relative_path(source_path, current, skills, source_file)
 
     def replace_canonical_skill_path(match: re.Match[str]) -> str:
         source_path = current.source_dir.parent / match.group(1) / match.group(2)
         if "<" in match.group(0) or ">" in match.group(0) or not source_path.exists():
             return match.group(0)
-        return _target_relative_path(source_path, current, skills)
+        return _target_relative_path(source_path, current, skills, source_file)
 
     def replace_bare_skill_path(match: re.Match[str]) -> str:
         source_skill = current.source_dir.parent / match.group(1)
@@ -177,7 +179,7 @@ def _rewrite_resource_paths(
             or not source_path.exists()
         ):
             return match.group(0)
-        return _target_relative_path(source_path, current, skills)
+        return _target_relative_path(source_path, current, skills, source_file)
 
     text = SKILL_DIR_TOKEN_RE.sub(replace_skill_dir, text)
     text = PLUGIN_ROOT_TOKEN_RE.sub(replace_plugin_root, text)

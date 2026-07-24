@@ -47,7 +47,7 @@ run_yara() {
   }
   # -r recursive, -s show matched strings, -m show metadata.
   yara -r -s -m \
-    "priv/yara/hex-malware.yar" \
+    "../priv/yara/hex-malware.yar" \
     "${tarball_dir}" 2>/dev/null \
   | parse_yara_output_to_ndjson
 }

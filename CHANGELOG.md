@@ -116,6 +116,11 @@ capabilities rather than claiming cross-runtime feature parity.
 
 ### Fixed
 
+- **Generated nested resource links now resolve from their containing file** —
+  Amp, Codex, Pi, and OpenCode projections compute skill-relative paths from
+  each Markdown resource directory instead of the skill root, fixing broken
+  cross-skill and sibling links under nested `references/` directories.
+
 - **Reliable behavioral trigger gates and routing boundaries** — deterministic
   structural evals no longer depend on ignored local result caches, while
   `make eval-full` runs a fresh Claude Haiku 4.5 gate requiring every skill to

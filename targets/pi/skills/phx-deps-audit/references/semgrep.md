@@ -120,7 +120,7 @@ run_semgrep() {
     return 0
   }
   semgrep \
-    --config "priv/semgrep/elixir-supply-chain.yaml" \
+    --config "../priv/semgrep/elixir-supply-chain.yaml" \
     --lang elixir \
     --json \
     --quiet \

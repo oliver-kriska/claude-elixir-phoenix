@@ -69,7 +69,7 @@ next hook invocation gets a Tier 0 hit.
 ## Policy enforcement
 
 The hook reads `policy.block_on_unvetted` from `hex_vet.exs` (see
-`../phx-deps-vet/references/hex-vet.md` for the tri-mode schema) and gates
+`../../phx-deps-vet/references/hex-vet.md` for the tri-mode schema) and gates
 findings accordingly:
 
 | Mode | On Tier 1 findings |

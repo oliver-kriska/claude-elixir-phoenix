@@ -42,7 +42,7 @@ smoke-test/
 ## Running the smoke test
 
 ```bash
-bash smoke-test/runner.sh
+bash ../smoke-test/runner.sh
 ```
 
 Expected output (~1 second):

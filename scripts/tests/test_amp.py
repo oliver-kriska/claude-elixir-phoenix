@@ -132,7 +132,7 @@ def test_build_rewrites_verified_bare_resource_paths(tmp_path) -> None:
     assert "../phx-second/scripts/run.sh" in generated
     assert "plugins/elixir-phoenix" not in generated
     nested = (output / "phx-first" / "references" / "nested.md").read_text()
-    assert "../phx-second/references/guide.md" in nested
+    assert "../../phx-second/references/guide.md" in nested
 
 
 def test_build_rejects_name_collisions_before_replacing_output(tmp_path) -> None:

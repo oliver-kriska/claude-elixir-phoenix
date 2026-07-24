@@ -446,7 +446,7 @@ run_all_rules() {
 
   # Set-subtract NEW vs OLD into new_signals / info_signals / dropped_signals.
   if [ "${differential}" = "1" ]; then
-    python3 "scripts/diff_findings.py" \
+    python3 "../scripts/diff_findings.py" \
       --new  ${AUDIT_TMPDIR}/findings.jsonl \
       --old  ${AUDIT_TMPDIR}/findings.old.jsonl \
       --new-out     ${AUDIT_TMPDIR}/new_signals.jsonl \
