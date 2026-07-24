@@ -120,6 +120,10 @@ capabilities rather than claiming cross-runtime feature parity.
 
 ### Fixed
 
+- **Examples skill routing** — clarify that requests for sample code, proper
+  implementations, walkthroughs, and expected workflow output should load the
+  examples skill alongside the relevant domain skill.
+
 - **Accurate Tidewave MCP setup boundary** — update the maintained Phoenix
   dependency requirement and repository link, distinguish exposing Tidewave's
   HTTP server from registering it with a client, and document external

@@ -1,6 +1,6 @@
 ---
 name: examples
-description: "Provide Phoenix, LiveView, Ecto, OTP, or Oban examples and walkthroughs. Use for sample code, step-by-step guidance, or what an implementation/output looks like. NOT for debugging, direct implementation, best practices, or audits."
+description: "Provide Phoenix, LiveView, Ecto, OTP, or Oban examples. Use when asked for sample code, a walkthrough, a proper implementation, or expected workflow output. Pair with domain skills. NOT for debugging, direct changes, best-practice advice, or audits."
 effort: low
 ---
 
