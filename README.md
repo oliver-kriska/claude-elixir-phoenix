@@ -805,15 +805,17 @@ This plugin runs skills, agents, and hooks inside Claude Code with your tool
 permissions, so it ships a verifiable security posture:
 
 - **Independently scanned** with [NVIDIA SkillSpector](https://github.com/NVIDIA/SkillSpector)
-  (static analysis, **zero data egress**): **66 / 77 components SAFE**, 7 CAUTION,
+  (static analysis, **zero covert-egress findings**): **66 / 77 components SAFE**, 7 CAUTION,
   4 DO_NOT_INSTALL raw. The four DO_NOT_INSTALL components are documented false
   positives with reviewed baselines, so **after baselines 0 remain and the scan
   gate passes** (the 7 CAUTION-tier components stay documented). A static scanner
   flags the *safety-enforcing* and *security-auditing* skills precisely because
   they name dangerous patterns in order to forbid or detect them (e.g. the line
   literally reads `NEVER bypass security checks for speed`).
-- **No data exfiltration**, **read-only review agents** (source edits disallowed),
-  and **auditable bash hooks** you can read in `plugins/elixir-phoenix/hooks/`.
+- **No telemetry or covert egress**; workflows can make visible, user-authorized
+  GitHub, Hex, web-search, or configured MCP calls through the host runtime.
+  Review agents are read-only by default (source edits disallowed), and the
+  Bash hooks are auditable in `plugins/elixir-phoenix/hooks/`.
 
 Full report, line-by-line triage, and a reproduce-it-yourself command live in
 **[SECURITY.md](SECURITY.md)**. Re-run the scan anytime with `make security`.

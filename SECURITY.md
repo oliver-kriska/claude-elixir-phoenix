@@ -85,9 +85,10 @@ the table.
 
 ## What this plugin does and doesn't do
 
-- **No data exfiltration.** Nothing in the plugin transmits your code or
-  conversation to an external service. Skills and agents are Markdown
-  instructions; hooks are local shell scripts.
+- **No telemetry or covert egress.** Skills and agents are Markdown
+  instructions and hooks are local shell scripts. Some workflows may invoke
+  visible, user-authorized external services such as GitHub, Hex, web search,
+  or configured MCP servers through the host runtime's normal permission model.
 - **Hooks are auditable bash.** They format Elixir, verify Iron Laws, and block
   destructive ops (`mix ecto.reset`, `git push --force`, `MIX_ENV=prod`). Read
   them in [`plugins/elixir-phoenix/hooks/`](plugins/elixir-phoenix/hooks/).

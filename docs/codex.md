@@ -109,7 +109,8 @@ may not be fully portable.
 ## Optional Native Safety Hook
 
 The generated plugin includes one synchronous `PreToolUse` command hook for
-Codex's `Bash` tool. It blocks:
+Codex's `Bash` tool. The safeguard requires a Unix-like host with Bash and
+`jq`; no Windows command is currently included. It blocks:
 
 - `mix ecto.reset` and `mix ecto.drop` in Elixir projects;
 - unguarded `git push --force` / `git push -f` while allowing
@@ -120,6 +121,9 @@ Codex discovers plugin hooks but does not silently trust them. Review and enable
 the hook through `/hooks`; if it is untrusted, disabled, or disallowed by policy,
 all skills still work. Plugin updates that change the hook may require another
 trust review. Do not use `--dangerously-bypass-hook-trust` for normal sessions.
+The hook intentionally fails open: when Bash cannot execute it, protection is
+unavailable; when `jq` is missing, the hook prints a disabled warning and allows
+the command rather than acting as a partial security boundary.
 
 Only this audited synchronous safeguard is projected. The canonical Claude hook
 file contains runtime-specific conditions, events, and asynchronous handlers

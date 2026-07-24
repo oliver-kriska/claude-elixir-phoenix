@@ -504,6 +504,23 @@ def test_repository_hook_is_native_synchronous_and_projects_source(tmp_path) -> 
     )
     assert failed_open.stdout == ""
 
+    bin_dir = tmp_path / "bin-without-jq"
+    bin_dir.mkdir()
+    (bin_dir / "bash").symlink_to(shutil.which("bash") or "/bin/bash")
+    missing_jq = subprocess.run(
+        [str(generated)],
+        input=json.dumps(
+            {"tool_name": "Bash", "tool_input": {"command": "mix ecto.reset"}}
+        ),
+        text=True,
+        capture_output=True,
+        cwd=fixture,
+        env={**os.environ, "PATH": str(bin_dir)},
+        check=True,
+    )
+    assert missing_jq.stdout == ""
+    assert "safety hook disabled: jq is unavailable" in missing_jq.stderr
+
 
 def test_flagship_overlays_are_anchored_and_remove_claude_runtime_dependencies() -> None:
     target = TARGETS_DIR / "codex" / "skills"

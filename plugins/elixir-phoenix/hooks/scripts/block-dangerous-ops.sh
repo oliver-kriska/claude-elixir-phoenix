@@ -14,6 +14,12 @@
 # blocked ALL Bash calls), so hooks.json appends `|| exit 0` to fail open.
 # Never add a deny path that relies on a non-zero exit code.
 
+if ! command -v jq >/dev/null 2>&1; then
+  printf '%s\n' \
+    'elixir-phoenix safety hook disabled: jq is unavailable (failing open).' >&2
+  exit 0
+fi
+
 INPUT=$(cat)
 TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty' 2>/dev/null)
 [[ "$TOOL" == "Bash" ]] || exit 0

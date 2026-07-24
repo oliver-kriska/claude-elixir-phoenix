@@ -44,8 +44,11 @@ installation and troubleshooting remain in the linked guides.
 | Isolated native smoke command | Not applicable | Yes | Yes | Yes | Yes |
 
 “External” Tidewave support means a skill may use Tidewave when the project and
-runtime already expose it. Generated flagship workflows must still complete
-without Tidewave, named custom agents, or Claude-only task APIs.
+runtime already expose it. Adapted Codex, Pi, and OpenCode flagship workflows
+must still complete without Tidewave, named custom agents, or Claude-only task
+APIs. Amp ships generated guidance for those workflows; its Claude-specific
+orchestration steps require the Amp-native adaptation documented in the
+[Amp guide](amp.md#feature-compatibility).
 
 ## Native invocation and installation
 

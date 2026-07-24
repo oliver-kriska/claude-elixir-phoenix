@@ -136,6 +136,12 @@ capabilities rather than claiming cross-runtime feature parity.
   skill tree, and transformed Markdown permissions no longer depend on the
   invoking process's umask.
 
+- **Runtime support and security claims now match operational boundaries** —
+  the flagship portability contract is scoped to adapted Codex, Pi, and
+  OpenCode workflows; Codex documents and surfaces its Bash/`jq` hook
+  prerequisites; and security documentation distinguishes absent telemetry or
+  covert egress from visible, user-authorized external service calls.
+
 - **Reliable behavioral trigger gates and routing boundaries** — deterministic
   structural evals no longer depend on ignored local result caches, while
   `make eval-full` runs a fresh Claude Haiku 4.5 gate requiring every skill to
