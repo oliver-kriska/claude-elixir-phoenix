@@ -22,7 +22,7 @@
     "eval:full": "bash lab/eval/run_eval.sh --all && bash lab/eval/run_eval.sh --triggers",
     "eval:fix": "bash lab/eval/run_eval.sh --fix",
     "eval:ci": "bash lab/eval/run_eval.sh --ci",
-    "test": "python3 -m pytest lab/eval/tests/ -v",
+    "test": "python3 -m pytest lab/eval/tests/ scripts/tests/ -v",
     "prepare": "husky || true"
   },
   "devDependencies": {
