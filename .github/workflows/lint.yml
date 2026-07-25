@@ -97,7 +97,7 @@ jobs:
         run: npm ci
 
       - name: npm audit
-        run: npm audit --omit=dev || true
+        run: npm audit --audit-level=high
 
   test:
     name: Python Tests
