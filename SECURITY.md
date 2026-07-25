@@ -92,9 +92,10 @@ the table.
 - **Hooks are auditable bash.** They format Elixir, verify Iron Laws, and block
   destructive ops (`mix ecto.reset`, `git push --force`, `MIX_ENV=prod`). Read
   them in [`plugins/elixir-phoenix/hooks/`](plugins/elixir-phoenix/hooks/).
-- **Agents are read-only by default.** Review/analysis agents have
-  `Edit, NotebookEdit` disallowed — they can write their own findings file but
-  cannot modify your source.
+- **Review agents are instructed to be read-only.** They have `Edit` and
+  `NotebookEdit` disallowed and retain `Write` only for report artifacts. This
+  reduces accidental source edits but is not a security boundary; inspect each
+  agent's tool list and instructions before enabling it.
 - **`bypassPermissions` on agents** is required so background subagents don't
   hang on permission prompts; it does not grant them more tools than listed in
   each agent's `tools:` field.
@@ -102,5 +103,5 @@ the table.
 ## Reporting a vulnerability
 
 Open a GitHub issue, or for sensitive reports email the maintainer at the
-address in the plugin manifest. Please don't disclose exploitable issues in a
-public issue before a fix is available.
+address in the marketplace manifest. Please don't disclose exploitable issues
+in a public issue before a fix is available.

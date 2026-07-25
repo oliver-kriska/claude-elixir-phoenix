@@ -1,7 +1,7 @@
 ---
 name: phx-document
-description: Write Elixir @moduledoc and @doc text. Use only for code documentation,
-  not README or external docs.
+description: Document tested Elixir APIs; may update README/ADRs. Not for docs lookup,
+  audits/reviews, or standalone decisions.
 ---
 
 # Document

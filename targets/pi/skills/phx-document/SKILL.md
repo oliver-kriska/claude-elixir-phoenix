@@ -1,8 +1,8 @@
 ---
 name: phx-document
-description: Generate @moduledoc and @doc strings for Elixir modules, contexts, and
-  schemas. Use when explicitly asked to write @doc/@moduledoc — NOT for README or
-  external docs.
+description: Generate @moduledoc/@doc for tested Elixir features; may update their
+  README section or ADR. Not for docs lookup, documentation audits/reviews, or capturing
+  standalone decisions.
 ---
 
 # Document

@@ -180,7 +180,7 @@ def test_claude_agent_contract_matches_current_runtime() -> None:
     assert undeclared_agent_tool_uses == []
 
 
-def test_nested_orchestrator_workflows_have_depth_one_fallbacks() -> None:
+def test_nested_orchestrator_workflows_resolve_depth_and_have_fallbacks() -> None:
     required_fallbacks = {
         "full": "spawn leaf research/review specialists directly",
         "investigate": "spawn the four",
@@ -193,7 +193,19 @@ def test_nested_orchestrator_workflows_have_depth_one_fallbacks() -> None:
             encoding="utf-8"
         )
         assert "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH" in text
+        assert "2.1.217–2.1.218" in text
+        assert "3 in 2.1.219+" in text
+        assert "conservatively use 1" in text
         assert fallback in text
+
+
+def test_nested_investigation_track_does_not_spawn_call_tracer() -> None:
+    text = (CANONICAL_PLUGIN / "agents" / "deep-bug-investigator.md").read_text(
+        encoding="utf-8"
+    )
+
+    assert "Do not spawn `call-tracer` from this nested track" in text
+    assert "\n- **call-tracer**:" not in text
 
 
 def test_session_start_continuity_includes_forked_sessions() -> None:

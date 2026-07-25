@@ -85,8 +85,8 @@ CODEX_SKILL_DESCRIPTION_OVERRIDES = {
         "dependencies, not to scan them."
     ),
     "phx-document": (
-        "Write Elixir @moduledoc and @doc text. Use only for code documentation, not "
-        "README or external docs."
+        "Document tested Elixir APIs; may update README/ADRs. Not for docs lookup, "
+        "audits/reviews, or standalone decisions."
     ),
     "phx-freeze": (
         "Apply an advisory scope in this session. Use for read-only or "
@@ -656,7 +656,7 @@ cannot enforce or clear it reliably.
 WHOLESALE_SOURCE_SHA256 = {
     "freeze/SKILL.md": "57830e672d503013211e7022580123ed5d35343fab5a55dd4b2c7aff62bd08c2",
     "pr-review/SKILL.md": "31ff21551f99b4eb24d9285f4640cdd99a806673a65ff5b2885b8039a4910089",
-    "full/SKILL.md": "116bf9607e8a2f78786c732ab4e7a9710eea0c04287fd197aeb1354f313ac717",
+    "full/SKILL.md": "4841c1d713299048fb953f32f11fabeb14f0bd14053cd184413b899eba2e552a",
     "full/references/execution-steps.md": "b608c047414f9ad464f5c0ecc0eb1562f509cfdc30ef3782ed6b4e566a37382c",
     "full/references/safety-recovery.md": "94595d350b9e3c809e0762676b7d8c3b831782a51173db9213585bebc8869234",
     "full/references/example-run.md": "8b72b77afcf947127978c74c2de560fb7abc826e541f71fcd06835101dad7bc8",
@@ -817,9 +817,12 @@ def _portable_plan_work_overlay(
    research orchestrator gathers its own)
 5. **Spawn research** — Selective, based on need. **0–2 agents**:
    spawn directly in parallel. **3+ agents** (broad multi-context feature):
-   first inspect `${CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH:-1}`. At depth 3+
-   spawn ONE `planning-orchestrator` to run and compress the fan-out. At the
-   Claude Code 2.1.217+ default of 1 (or depth 2), keep orchestration in this
+   determine the effective maximum nesting depth. Use an explicit positive-integer
+   `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` value first; when it is unset, inspect
+   `claude --version` (the default is 1 in 2.1.217–2.1.218 and 3 in 2.1.219+).
+   If the version is unavailable, conservatively use 1. At depth 3+, spawn ONE
+   `planning-orchestrator` to run and compress the fan-out. At depth 1 or 2,
+   keep orchestration in this
    main session: spawn the selected specialist agents directly, wait for them, then spawn
    `phx:context-supervisor` directly if compression is needed. Never spawn an
    orchestrator that cannot delegate. Read only the resulting digest and

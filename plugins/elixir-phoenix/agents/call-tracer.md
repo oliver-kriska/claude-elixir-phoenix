@@ -262,7 +262,6 @@ If max depth reached:
 
 When spawned by:
 
-- **deep-bug-investigator**: Focus on nil/value origin or root cause track
 - **planning-orchestrator**: Emphasize all callers for signature change impact
 
 ## Quick Single-Category Trace

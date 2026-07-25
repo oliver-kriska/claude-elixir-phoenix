@@ -29,10 +29,12 @@ Use **parallel mode** (spawn `deep-bug-investigator`) when:
 bug mentions 3+ modules, spans multiple contexts, is intermittent
 or involves concurrency, or user says `--parallel`/`deep`.
 
-Before spawning it, inspect
-`${CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH:-1}`. At depth 3+, use the
-`deep-bug-investigator` orchestrator. At the Claude Code 2.1.217+ default of
-1 (or depth 2), keep orchestration in this main session: spawn the four
+Before spawning it, determine the effective maximum nesting depth. Use an
+explicit positive-integer `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` value first;
+when it is unset, inspect `claude --version` (the default is 1 in 2.1.217–2.1.218
+and 3 in 2.1.219+). If the version is unavailable, conservatively use 1. At
+depth 3+, use the `deep-bug-investigator` orchestrator. At depth 1 or 2, keep
+orchestration in this main session: spawn the four
 focused tracks (reproduction, root cause, impact, fix strategy) directly in
 one parallel batch, wait for all four, then synthesize their evidence. Never
 spawn an orchestrator that cannot delegate.

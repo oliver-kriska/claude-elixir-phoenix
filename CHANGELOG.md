@@ -7,18 +7,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
-### Added
-
-### Changed
-
-### Fixed
-
-## [3.0.0] - 2026-07-24
-
-Major release: keep Claude Code as the full canonical plugin while adding
-generated, runtime-native skills distributions for Amp, Codex, Pi, and
-OpenCode. Each target is explicit about supported workflows and deferred
-capabilities rather than claiming cross-runtime feature parity.
+Upcoming 3.0.0 major release: keep Claude Code as the full canonical plugin
+while adding generated, runtime-native skills distributions for Amp, Codex,
+Pi, and OpenCode. Each target is explicit about supported workflows and
+deferred capabilities rather than claiming cross-runtime feature parity.
 
 ### Added
 
@@ -129,11 +121,12 @@ capabilities rather than claiming cross-runtime feature parity.
   HTTP server from registering it with a client, and document external
   registration for Claude Code, Codex, and OpenCode.
 
-- **Claude Code 2.1.217 nested-agent compatibility** — flagship workflows now
-  detect the default depth-1 subagent limit and keep orchestration in the main
-  conversation while spawning leaf specialists directly. Users retain the
-  plan/work/verify/review contracts without setting shell state; depth 2/3 can
-  still opt into the original nested topology.
+- **Claude Code 2.1.217–2.1.220 nested-agent compatibility** — flagship
+  workflows account for the depth-1 default in 2.1.217–2.1.218 and the restored
+  depth-3 default in 2.1.219+. Explicit lower-depth configurations keep
+  orchestration in the main conversation while spawning leaf specialists
+  directly, preserving the plan/work/verify/review contracts. Nested
+  investigation tracks apply tracing directly to avoid a depth-4 chain.
 
 - **Claude Code 2.1.212 Agent invocation compatibility** — removed the ignored,
   deprecated Task/Agent `mode` parameter from workflow instructions. Subagents

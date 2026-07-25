@@ -50,9 +50,12 @@ Read the reported locations to see argument patterns.
 
 For full recursive tree with argument extraction and **parallel category tracing**:
 
-First inspect `${CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH:-1}`. At depth 2+,
-delegate to the orchestrator below. At the Claude Code 2.1.217+ default of 1,
-keep orchestration in this main session: spawn the applicable controller,
+Determine the effective maximum nesting depth. Use an explicit positive-integer
+`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` value first; when it is unset, inspect
+`claude --version` (the default is 1 in 2.1.217–2.1.218 and 3 in 2.1.219+).
+If the version is unavailable, conservatively use 1. At depth 2+, delegate to
+the orchestrator below. At depth 1, keep orchestration in this main session:
+spawn the applicable controller,
 LiveView, worker, and internal tracing prompts directly, then merge their
 results. Never spawn an orchestrator that cannot delegate.
 

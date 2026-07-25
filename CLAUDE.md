@@ -77,17 +77,19 @@ Orchestrator (thin coordinator)
 
 Used by: planning-orchestrator, parallel-reviewer, audit skill, docs-validation-orchestrator.
 
-**Subagent nesting depth budget (CC 2.1.217+).** Claude Code now defaults
-`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to **1**, so subagents cannot delegate
-again unless the launching environment opts into a larger value. Current
-deepest chain is **depth 3** — `/phx:full` → workflow-orchestrator →
+**Subagent nesting depth budget.** Claude Code 2.1.217–2.1.218 defaulted
+`CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to **1**; 2.1.219+ defaults to **3**.
+An explicit environment value overrides that default. The current deepest
+supported chain is **depth 3** — `/phx:full` → workflow-orchestrator →
 parallel-reviewer → review specialists. Public skills must preflight the value
 and keep orchestration in the main conversation when the configured depth is
 too small; never launch an orchestrator that cannot perform its fan-out.
 `/phx:full` and planning/investigation orchestrators need depth 3; call-tracer
-alone needs depth 2. At the default, spawn the same leaf specialists directly
-and preserve the workflow's decisions, artifacts, and gates. A plugin hook
-cannot raise the parent process's environment.
+alone needs depth 2. At lower depths, spawn the same leaf specialists directly
+and preserve the workflow's decisions, artifacts, and gates. A nested
+investigation track must apply trace procedures directly rather than spawning
+call-tracer, which would create a depth-4 chain. A plugin hook cannot raise the
+parent process's environment.
 
 **Background is the default (CC 2.1.198).** Subagents now run in the background by
 default and inherit the session's extended-thinking config (a free quality lift for
@@ -380,7 +382,7 @@ npm install  # Pre-commit hooks + linting
 make help          # Show all commands
 make lint          # Lint markdown
 make lint-fix      # Auto-fix lint
-make test          # 220 pytest tests for eval framework and port tooling
+make test          # Pytest suites for the eval framework and port tooling
 make eval          # Quick: lint + structurally score changed skills/agents
 make eval-all      # Structurally score all 51 skills + 26 agents
 make eval-full     # Structural checks + fresh per-skill behavioral gate
@@ -454,7 +456,9 @@ Only trim when content is purely informational and not execution-critical.
 ### New agent
 
 - [ ] Frontmatter complete
-- [ ] `disallowedTools: Edit, NotebookEdit` for review agents (Write IS allowed so they can save their own findings file — `Edit` blocks source code modification, upholding Review Iron Law #1)
+- [ ] `disallowedTools: Edit, NotebookEdit` for review agents (Write remains
+  available only for findings artifacts; the read-only source rule is also an
+  explicit instruction, not a tool-enforced security boundary)
 - [ ] `Write` allowed for agents that output reports (research agents, reviewers, context-supervisor). Only agents that neither review nor research should have Write disallowed.
 - [ ] `permissionMode: bypassPermissions`
 - [ ] `effort:` set (low for haiku, medium for sonnet, high for opus/security)

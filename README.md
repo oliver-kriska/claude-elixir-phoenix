@@ -106,7 +106,7 @@ that prevent the mistakes Elixir developers actually make in production.
 └─────────────────────────────────────────────────────────────────────┘
 ```
 
-> **v3.0.0** -- all 51 canonical skill trees now have generated distributions
+> **Upcoming v3.0.0** -- all 51 canonical skill trees have generated distributions
 > for Amp, Codex, Pi, and OpenCode. Nine core workflows are fully adapted: the
 > six flagship lifecycle workflows plus `phx-trace`, `phx-audit`, and
 > `phx-research`. The remaining projections preserve domain knowledge but may
@@ -156,17 +156,18 @@ already-open session, `/reload-plugins` reloads the updated skills, agents, and
 hooks. Confirm that `/phx:help`, `/ecto:n1-check`, and `/lv:assigns` appear
 before continuing work.
 
-#### Claude Code 2.1.217+ subagent compatibility
+#### Claude Code subagent compatibility
 
-No configuration is required. Claude Code now defaults to a maximum subagent
-spawn depth of 1, so `/phx:full`, deep `/phx:plan`, parallel
-`/phx:investigate`, and `/phx:trace` automatically keep orchestration in the
-main conversation and spawn leaf specialists directly. The workflows preserve
-their decisions, artifacts, verification, and review gates; only the agent
-topology changes.
+No configuration is required. Claude Code 2.1.219+ defaults to a maximum
+subagent spawn depth of 3, so `/phx:full`, deep `/phx:plan`, parallel
+`/phx:investigate`, and `/phx:trace` can use their nested orchestrators. Claude
+Code 2.1.217–2.1.218 defaulted to depth 1; on those versions, or when you
+explicitly configure depth 1–2, the workflows keep orchestration in the main
+conversation and spawn leaf specialists directly. They preserve the same
+decisions, artifacts, verification, and review gates; only the agent topology
+changes.
 
-If you explicitly want the original nested orchestrator topology, start Claude
-Code with depth 3:
+To explicitly enable the full nested topology, start Claude Code with depth 3:
 
 ```bash
 CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH=3 claude
@@ -908,7 +909,7 @@ make help             # Show all available commands
 make eval             # Quick: lint + score changed skills/agents only
 make eval-all         # Full structural: all 51 skills + all 26 agents
 make eval-fix         # Auto-fix lint + show failures + suggest autoresearch
-make test             # 220 pytest tests for eval framework and port tooling
+make test             # Pytest suites for the eval framework and port tooling
 make generated-skills-sync # Regenerate and verify all four runtime targets
 make ci               # Full CI: lint + test + validate + eval + security (same as GitHub Actions)
 ```

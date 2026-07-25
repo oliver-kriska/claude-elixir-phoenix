@@ -72,14 +72,18 @@ STATES: INITIALIZING → DISCOVERING → PLANNING → WORKING →
         VERIFYING → REVIEWING → COMPLETED → COMPOUNDING | BLOCKED
 ```
 
-### Claude Code 2.1.217+ nesting compatibility
+### Claude Code nesting compatibility
 
-Before delegating this cycle, inspect
-`${CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH:-1}`:
+Before delegating this cycle, determine the effective maximum nesting depth:
+
+1. If `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` is a positive integer, use it.
+2. Otherwise, inspect `claude --version`: the default is 1 in Claude Code
+   2.1.217–2.1.218 and 3 in 2.1.219+.
+3. If the version cannot be determined, conservatively use 1.
 
 - **Depth 3+** — the full nested topology is available; delegate to
   `phx:workflow-orchestrator` as usual.
-- **Depth 1–2 (default is 1)** — execute the same state machine in this main
+- **Depth 1–2** — execute the same state machine in this main
   session. Read `${CLAUDE_PLUGIN_ROOT}/agents/workflow-orchestrator.md` for the
   phase contract, but spawn leaf research/review specialists directly. Do not
   spawn `workflow-orchestrator`, `planning-orchestrator`, or

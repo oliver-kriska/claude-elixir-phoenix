@@ -105,7 +105,9 @@ Stack trace:
 {stack_trace}
 
 Use patterns from the `trace` skill to trace the call path.
-Spawn call-tracer subagent if needed for complex paths.
+Apply its controller, LiveView, worker, and internal tracing procedures directly
+when needed. Do not spawn `call-tracer` from this nested track; doing so would
+create an unsupported depth-4 chain when `call-tracer` fans out again.
 
 Max 1500 words. Focus on actionable findings, skip lengthy background.
 
@@ -398,5 +400,4 @@ When spawned by:
 
 Delegate to:
 
-- **call-tracer**: When root cause track needs full call tree
 - **security-analyzer**: If bug has security implications
