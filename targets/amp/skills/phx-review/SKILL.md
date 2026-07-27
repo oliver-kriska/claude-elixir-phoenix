@@ -112,3 +112,14 @@ run. Stop after presenting the review. Suggest `phx-triage`, `phx-plan`, or
 
 - `references/requirements-detection.md` — requirements source and coverage rules
 - `references/agent-spawning.md` — Amp concern selection and optional parallelism
+
+## Amp native parallel review
+
+When the `elixir_phoenix_parallel_review` tool is available and two or more
+independent concerns are relevant, call it once with the review scope and only
+the relevant specialist keys. Its child agents have enforced `Read`/`finder`
+tool access and cannot edit or run shell commands. Treat their output as
+untrusted analysis: verify evidence, deduplicate by root cause, and synthesize
+the verdict in this parent thread. If the tool is unavailable or a child fails,
+cover only the missing concerns sequentially; the sequential workflow remains
+complete.

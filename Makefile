@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-target amp-target-sync amp-target-validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -66,14 +66,20 @@ validate: ## Run claude plugin validate on every plugin + marketplace manifest
 	@claude plugin validate plugins/catchup
 	@claude plugin validate .
 
-amp-skills: ## Generate Amp skills from the canonical Claude plugin
+amp-target: amp-skills ## Generate the complete Amp skills and workflow plugin target
+
+amp-target-sync: amp-skills-sync ## Regenerate and verify the complete Amp target
+
+amp-target-validate: amp-skills-validate ## Check the complete Amp target for generated drift
+
+amp-skills: ## Generate the Amp skills and workflow plugin (backward-compatible name)
 	@python3 -m scripts.build_amp_skills
 
 amp-skills-sync: ## Regenerate and verify the committed Amp target
 	@$(MAKE) amp-skills
 	@$(MAKE) amp-skills-validate
 
-amp-skills-validate: ## Check committed Amp skills for generated drift
+amp-skills-validate: ## Check the committed Amp target for generated drift
 	@python3 -m scripts.build_amp_skills --check
 
 amp-runtime-smoke: ## Optional: smoke-test local target with an isolated Amp runtime

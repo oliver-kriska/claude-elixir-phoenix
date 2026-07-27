@@ -258,6 +258,7 @@ def smoke_amp(root: Path, runner: Run = subprocess.run) -> None:
     generated = root / "generated-target"
     generated_skills = generated / "skills"
     generated_plugin = generated / amp_port.PLUGIN_TARGET_RELATIVE
+    generated_workflow_plugin = generated / amp_port.WORKFLOW_PLUGIN_RELATIVE_PATH
     install = workspace / ".agents/skills"
     xdg_roots = {
         name: root / name.lower()
@@ -322,6 +323,26 @@ def smoke_amp(root: Path, runner: Run = subprocess.run) -> None:
         runner,
         [
             executable,
+            "plugins",
+            "exec",
+            str(generated_workflow_plugin),
+            "agent.start",
+            "--data",
+            json.dumps(
+                {
+                    "thread": {"id": "T-00000000-0000-0000-0000-000000000000"},
+                    "message": "runtime smoke",
+                    "id": "runtime-smoke",
+                }
+            ),
+        ],
+        env,
+        workspace,
+    )
+    _run(
+        runner,
+        [
+            executable,
             "skill",
             "add",
             str(generated_skills),
@@ -370,11 +391,14 @@ def smoke_amp(root: Path, runner: Run = subprocess.run) -> None:
     if any(install.iterdir()):
         raise RuntimeError(f"Amp left removed skills on disk: {install}")
     _verify_tree(generated_skills)
+    for plugin in (generated_plugin, generated_workflow_plugin):
+        if not plugin.is_file():
+            raise RuntimeError(f"Amp generated plugin disappeared: {plugin}")
     _verify_resource_snapshot(generated_resource, canonical_snapshot)
     _verify_resource_snapshot(canonical_resource, canonical_snapshot)
     print(
-        f"[runtime-smoke] Amp {version}: {EXPECTED_SKILLS} skills and "
-        "phx-watch-pr plugin load OK"
+        f"[runtime-smoke] Amp {version}: {EXPECTED_SKILLS} skills, "
+        "elixir-phoenix and phx-watch-pr plugins load OK"
     )
 
 

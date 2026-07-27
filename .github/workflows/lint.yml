@@ -119,7 +119,7 @@ jobs:
       - name: Run pytest
         run: python3 -m pytest lab/eval/tests/ scripts/tests/ -v --tb=short
 
-      - name: Check Amp generated skills
+      - name: Check Amp generated target
         run: python3 -m scripts.build_amp_skills --check
 
       - name: Check Codex generated skills

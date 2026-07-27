@@ -71,16 +71,16 @@ fi
 # source and projection land in the same commit. CI repeats the drift check from
 # the committed tree for contributors without Husky.
 if [ -n "$STAGED_CANONICAL_SKILLS" ]; then
-  echo "→ Checking generated Amp skills..."
-  if ! make amp-skills-validate > /tmp/precommit-amp-skills.log 2>&1; then
-    echo "Amp skills are out of date. Run: make amp-skills-sync"
-    tail -30 /tmp/precommit-amp-skills.log
+  echo "→ Checking generated Amp target..."
+  if ! make amp-target-validate > /tmp/precommit-amp-target.log 2>&1; then
+    echo "Amp target is out of date. Run: make amp-target-sync"
+    tail -30 /tmp/precommit-amp-target.log
     exit 1
   fi
 
-  UNTRACKED_AMP_SKILLS=$(git ls-files --others --exclude-standard -- targets/amp/skills)
-  if ! git diff --quiet -- targets/amp/skills || [ -n "$UNTRACKED_AMP_SKILLS" ]; then
-    echo "Generated Amp skill changes are not staged. Run: git add targets/amp/skills"
+  UNTRACKED_AMP_TARGET=$(git ls-files --others --exclude-standard -- targets/amp)
+  if ! git diff --quiet -- targets/amp || [ -n "$UNTRACKED_AMP_TARGET" ]; then
+    echo "Generated Amp target changes are not staged. Run: git add targets/amp"
     exit 1
   fi
 fi

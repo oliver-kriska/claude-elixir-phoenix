@@ -41,9 +41,13 @@ def test_amp_uses_native_install_exact_discovery_and_fresh_removal(tmp_path, mon
 
     def build_amp_fixture(_source, output):
         _fixture_target(output)
-        plugin = output / runtime_smoke.amp_port.PLUGIN_TARGET_RELATIVE
-        plugin.parent.mkdir(parents=True)
-        plugin.write_text("export default function () {}\n")
+        for relative in (
+            runtime_smoke.amp_port.PLUGIN_TARGET_RELATIVE,
+            runtime_smoke.amp_port.WORKFLOW_PLUGIN_RELATIVE_PATH,
+        ):
+            plugin = output / relative
+            plugin.parent.mkdir(parents=True, exist_ok=True)
+            plugin.write_text("export default function () {}\n")
 
     monkeypatch.setattr(runtime_smoke, "SOURCE_PLUGIN_DIR", canonical)
     monkeypatch.setattr(
@@ -104,6 +108,7 @@ def test_amp_uses_native_install_exact_discovery_and_fresh_removal(tmp_path, mon
     assert all("OTEL_EXPORTER_OTLP_ENDPOINT" not in call[1] for call in calls)
     assert all(call[1]["XDG_CONFIG_HOME"] == str(tmp_path / "xdg_config_home") for call in calls)
     assert all(call[2] == tmp_path / "workspace" for call in calls)
+    assert sum(call[0][1:3] == ["plugins", "exec"] for call in calls) == 1
     assert sum(call[0][1:4] == ["skill", "list", "--json"] for call in calls) == 2
     assert sum(call[0][1:3] == ["skill", "remove"] for call in calls) == 51
     assert sum(call[0][1:3] == ["plugins", "exec"] for call in calls) == 1

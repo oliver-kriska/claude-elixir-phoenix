@@ -16,8 +16,9 @@ expertise, fresh context, and enforced [Iron Laws](#iron-laws-non-negotiable-rul
 that catch the bugs your tests won't.
 
 **Using Amp?** Install the generated edition for the same 51 Elixir, Phoenix,
-LiveView, Ecto, Oban, testing, and security skills plus the optional native PR
-watch lifecycle plugin. See
+LiveView, Ecto, Oban, testing, and security skills, plus 45 deterministic
+commands, five read-only specialist agents, parallel review/investigation,
+native edit/verification guards, and the native PR watch lifecycle plugin. See
 [Use with Amp](#use-with-amp) for the important differences from the full Claude
 Code plugin, or the [Amp install guide](https://phxagents.dev/install/amp/) on
 phxagents.dev.
@@ -262,25 +263,29 @@ directories provide the legacy `/ecto:*` and `/lv:*` aliases.
 
 ### Use with Amp
 
-Amp can install the plugin's 51 skills from the generated Agent Skills target.
-Project-local installation is recommended because it keeps the Elixir/Phoenix
-guidance scoped to the repository where it applies:
+Amp can install the plugin's 51 skills and a generated workflow-command plugin.
+Project-local installation is recommended because it keeps this opinionated
+Elixir/Phoenix guidance scoped to the repository where it applies:
 
 ```bash
-# Install into one Elixir/Phoenix project
 cd /path/to/your-phoenix-project
+
+# Install the 51 skills into this project
 amp skill add \
-  https://github.com/oliver-kriska/claude-elixir-phoenix/tree/main/targets/amp/skills \
+  https://github.com/oliver-kriska/amp-elixir-phoenix/tree/stable/skills \
   --target "$PWD/.agents/skills"
 
-# Or install for every Amp workspace
-amp skill add \
-  https://github.com/oliver-kriska/claude-elixir-phoenix/tree/main/targets/amp/skills \
-  --global
+# Add deterministic workflows, read-only agents, and native guards
+mkdir -p .amp/plugins
+plugin=".amp/plugins/elixir-phoenix.ts"
+temporary="$(mktemp "${plugin}.XXXXXX")"
+curl --fail --silent --show-error --location \
+  https://raw.githubusercontent.com/oliver-kriska/amp-elixir-phoenix/stable/plugins/elixir-phoenix.ts \
+  --output "$temporary" && mv "$temporary" "$plugin"
 ```
 
-`phx-watch-pr` additionally needs the generated Amp plugin. Install it into the
-project where the worker Orb opens and watches PRs:
+`phx-watch-pr` additionally needs the separate `phx-watch-pr.ts` plugin.
+Install it into the project where the worker Orb opens and watches PRs:
 
 ```bash
 amp plugins add \
@@ -288,43 +293,53 @@ amp plugins add \
   --target workspace
 ```
 
-The plugin holds a bounded Orb keep-alive lease, filters deployment-like checks
-out of readiness, persists reload-safe state, and wakes the same worker thread
-only for failed/cancelled required CI, unresolved feedback, and terminal
-outcomes. Its defaults are a 60-second poll, 15-minute activity-based quiet
-period, and 2-hour active-watch cap. Head pushes, required-check transitions,
-reviews, and comments restart the quiet period without routine model turns;
-deployment-like transitions do neither. With `--fix`, actionable feedback and
-branch-owned CI failures are repaired in one serialized same-thread workflow.
-It never blindly reruns shared CI, merges, or deploys.
+It holds a bounded Orb keep-alive lease, filters deployment-like checks out of
+readiness, persists reload-safe state, and wakes the same worker thread only for
+failed/cancelled required CI, unresolved feedback, and terminal outcomes. Its
+defaults are a 60-second poll, 15-minute activity-based quiet period, and 2-hour
+active-watch cap. With `--fix`, actionable feedback and branch-owned CI failures
+are repaired in one serialized same-thread workflow. It never blindly reruns
+shared CI, merges, or deploys.
 
-Amp copies skills at installation time; it does not update them automatically.
-Rerun the same command with `--overwrite` to install the latest version from
-`main`. Cloning this repository is only necessary for local development.
+For every Amp workspace, use the global installation commands in the
+[Amp guide](docs/amp.md#install-for-every-project). Amp copies skills at
+installation time, so rerun the skill command with `--overwrite` to update
+them. Amp currently limits native plugin installation and auto-updates to
+Amp-hosted URLs, so the published GitHub plugins use an atomic direct download.
+Cloning this repository is only necessary for local development.
 
-Namespaced Claude commands use hyphenated Amp names: `/phx:plan` becomes
-`phx-plan`, `/ecto:n1-check` becomes `ecto-n1-check`, and so on. Start a fresh
-Amp session after installation. To invoke the equivalent of `/phx:investigate`
-reliably, open Amp's command palette with `Ctrl+O` (or type `/` in the CLI), run
-`skill: invoke`, and select `phx-investigate`. Amp forces the selected skill to
-load with your next message.
+Start a fresh Amp session after installation. To invoke the equivalent of
+`/phx:investigate` reliably, open Amp's command palette with `Ctrl+O`, choose
+`phx: investigate`, and send the bug details in your next prompt. The command
+arms that generated workflow for one turn in the current thread, and a
+notification confirms the selection. Other examples are `phx: review`,
+`phx: plan`, `ecto: n1-check`, and `lv: assigns`. Use `phx: clear pending
+workflow` if you change your mind before submitting the prompt.
 
-You can also name skills explicitly in a prompt, which is convenient for copied
-prompts and non-interactive use:
+The command metadata and skill paths are generated ahead of time. Invoking a
+workflow does not spawn `amp skill list`; on the next `agent.start`, the plugin
+reads the installed `SKILL.md` directly and adds it as hidden context. This
+avoids both model-dependent selection and dynamic skill-list latency.
+
+You can still name skills explicitly in a prompt, which is convenient for
+copied prompts and non-interactive use:
 
 ```text
 Load phx-investigate and investigate this LiveView filter reset.
 ```
 
-Exact Claude-style entries such as `/phx:review` are not registered as Amp slash
-commands; Amp uses its command palette and native skill invocation instead. Amp
-may also select skills automatically from their descriptions, but automatic
-selection is model-driven and is not guaranteed on every prompt. The Amp
-edition ships skills, their bundled resources, and the focused `phx-watch-pr`
-lifecycle plugin—not the Claude-specific hooks, custom agents, permission
-settings, or MCP setup. Read the complete
-[Amp installation and usage guide](docs/amp.md) for verification, updates,
-skill precedence, examples, troubleshooting, and the portability matrix.
+Exact Claude-style entries such as `/phx:review` are not registered as prompt
+slash commands; Amp presents the generated commands in its palette. Amp may
+also select skills automatically from their descriptions, but automatic
+selection is model-driven and is not guaranteed on every prompt. In the palette,
+open `phx: specialist` for one enforced read-only domain agent. The parallel
+review/investigate commands run bounded local child threads; `phx: edit lock`
+sets a persistent classified-edit scope. The generated target ships skills,
+their bundled resources, five of the 26 Claude agents, a narrow verification
+gate, and the focused `phx-watch-pr` lifecycle plugin—not Claude's complete hook
+graph, permission settings, or MCP setup. Read the complete [Amp installation
+and usage guide](docs/amp.md) for model selection, costs, safety boundaries,
+verification, updates, troubleshooting, and implementation details.
 
 ### Use with Codex
 
@@ -393,10 +408,11 @@ updates, uninstall, feature-branch review, discovery debugging, and limitations.
 
 The remainder of this README describes the full Claude Code plugin and uses
 Claude Code `/phx:*`, `/ecto:*`, and `/lv:*` syntax. For generated runtimes,
-translate invocations using the runtime guide: Amp uses `skill: invoke`, Codex
-uses `$elixir-phoenix:<skill>`, Pi uses `/skill:<name>`, and OpenCode uses its
-skill tool. Generated editions do not install Claude Code's complete custom
-agent, lifecycle-hook, permission, or MCP configuration.
+translate invocations using the runtime guide: Amp uses generated command
+palette entries such as `phx: investigate`, Codex uses
+`$elixir-phoenix:<skill>`, Pi uses `/skill:<name>`, and OpenCode uses its skill
+tool. Generated editions do not install Claude Code's complete custom agent,
+lifecycle-hook, permission, or MCP configuration.
 
 New to the plugin? Run the interactive tutorial:
 

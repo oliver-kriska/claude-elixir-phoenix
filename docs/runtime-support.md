@@ -36,11 +36,12 @@ installation and troubleshooting remain in the linked guides.
 | `phx-trace` | Full | Adapted | Adapted | Adapted | Adapted |
 | `phx-audit` / `phx-research` | Full | Adapted | Adapted | Adapted | Adapted |
 | `phx-watch-pr` | Background monitor | Native keep-alive plugin | Guidance/baseline | Guidance/baseline | Guidance/baseline |
-| `phx-freeze` | Hook-enforced advisory lock | Advisory only | Advisory only | Advisory only | Advisory only |
+| `phx-freeze` | Hook-enforced advisory lock | Advisory skill + native classified edit lock | Advisory only | Advisory only | Advisory only |
 | Remaining workflow/admin skills | Full | Guidance/baseline | Guidance/baseline | Guidance/baseline | Guidance/baseline |
 | Claude namespaced slash commands | Full | Not applicable | Not applicable | Not applicable | Not applicable |
-| Bundled custom agents | Full | Deferred | Deferred | Deferred | Deferred |
-| Lifecycle/enforcement hooks | Full | Deferred | One optional safeguard | Deferred | Deferred |
+| Deterministic workflow invocation | Slash commands | 45 generated palette commands | Skill reference | `/skill:*` | Skill tool |
+| Bundled custom agents | Full | Five read-only specialists | Deferred | Deferred | Deferred |
+| Lifecycle/enforcement hooks | Full | Edit lock + bounded verification gate | One optional safeguard | Deferred | Deferred |
 | Tidewave MCP connection | External | External | External | External | External |
 | Plugin-root instructions | Full | Deferred | Deferred | Deferred | Deferred |
 | Deterministic generated target | Canonical source | Yes | Yes | Yes | Yes |
@@ -59,7 +60,7 @@ Tidewave, named custom agents, or Claude-only task APIs.
 | Runtime | Reliable explicit invocation | Distribution | Guide |
 | --- | --- | --- | --- |
 | Claude Code | `/phx:investigate`, `/phx:review` | Claude plugin marketplace | [Claude Code installation](../README.md#claude-code) |
-| Amp | Command palette → `skill: invoke`, or explicitly request the skill in the prompt | Direct GitHub Agent Skills install | [Amp guide](amp.md) |
+| Amp | Generated palette commands such as `phx: investigate` and `phx: review` | Direct GitHub skills and plugin install | [Amp guide](amp.md) |
 | Codex | `$elixir-phoenix:phx-investigate`, `$elixir-phoenix:phx-review` | Native Codex Git marketplace plugin | [Codex guide](codex.md) |
 | Pi | `/skill:phx-investigate`, `/skill:phx-review` | Native Pi Git package | [Pi guide](pi.md) |
 | OpenCode | Ask the skill tool to load the skill; in the tested 1.17.2 setup, `/phx-investigate` and `/phx-review` also work | Sparse Git checkout | [OpenCode guide](opencode.md) |
@@ -75,8 +76,9 @@ update, clean reinstall, ref change, and uninstall affect newly started
 processes. Standalone list/debug commands are already fresh processes; they do
 not refresh the catalog of an existing interactive session.
 
-The local acceptance run recorded on 2026-07-23 used Amp
-0.0.1784809706-g96cc8a, Codex CLI 0.145.0, Pi 0.81.1, and OpenCode 1.17.2.
+The latest Amp acceptance run recorded on 2026-07-26 used
+0.0.1785055505-g9690ae. The cross-runtime acceptance baseline recorded on
+2026-07-23 used Codex CLI 0.145.0, Pi 0.81.1, and OpenCode 1.17.2.
 
 ## Runtime-specific boundaries
 
@@ -89,12 +91,18 @@ project and port. Portability fixes must not weaken this behavior.
 
 ### Amp
 
-Amp installs `targets/amp/skills` as standard Agent Skills. The focused
-`targets/amp/plugins/phx-watch-pr.ts` plugin adds a bounded keep-alive lease,
-durable polling state, and same-thread event delivery for PR watching. The rest
-of the generated target does not install Claude hooks, agents, permissions, or
-MCP configuration. Exact Claude slash-command syntax is replaced by Amp's
-native skill picker and explicit skill-loading prompts.
+Amp installs `targets/amp/skills` as standard Agent Skills and two plugins.
+`targets/amp/plugins/elixir-phoenix.ts` is a native command-palette plugin
+exposing all 40 public workflows plus clear, specialist, parallel review,
+parallel investigation, and edit-lock commands. It injects the selected
+installed skill once on `agent.start`, projects five canonical agents with only
+`Read`/`finder`, and provides bounded local review/investigation fan-out. Its
+workspace edit lock enforces Amp-classified file changes and blocks shell while
+active; `phx-full` gets one bounded verification follow-up after observable
+edits. `targets/amp/plugins/phx-watch-pr.ts` adds a bounded keep-alive lease,
+durable polling state, and same-thread event delivery for PR watching. The
+generated target does not install the other 21 Claude agents, the complete
+Claude hook graph, permissions, or MCP configuration.
 
 ### Codex
 
@@ -203,7 +211,7 @@ make generated-skills-sync
 Target-specific commands remain available for focused work:
 
 ```bash
-make amp-skills-sync
+make amp-target-sync
 make codex-skills-sync
 make pi-skills-sync
 make opencode-skills-sync

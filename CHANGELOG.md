@@ -35,6 +35,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   search read the whole README and never learned the docs site exists. The
   repo's About → Website field was already set.
 
+- **Deterministic Amp workflow plugin** — the generated Amp target now includes
+  40 workflow palette commands, five read-only domain specialists, bounded
+  parallel review and investigation, a persistent classified edit lock, and a
+  bounded `phx-full` verification gate. The standalone distribution promotes a
+  validated `stable` branch for direct GitHub installation.
+
 ### Changed
 
 - **Release bodies now carry a docs-site footer** — the `release` contributor

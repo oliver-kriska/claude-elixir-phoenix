@@ -81,6 +81,133 @@ def test_builds_all_repository_skills_without_mutating_claude_source(tmp_path) -
     )
 
 
+def test_builds_complete_target_with_public_workflow_commands(tmp_path) -> None:
+    output = tmp_path / "amp"
+
+    result = amp.build_target(SOURCE_PLUGIN_DIR, output)
+
+    assert result == {"skills": 51, "commands": 45, "plugins": 1}
+    skills = amp.discover_skills(SOURCE_PLUGIN_DIR)
+    specialists = amp.discover_specialists(SOURCE_PLUGIN_DIR)
+    commands = amp.workflow_commands(skills)
+    assert len(commands) == 40
+    assert [specialist.key for specialist in specialists] == [
+        "elixir",
+        "ecto",
+        "liveview",
+        "security",
+        "testing",
+    ]
+    assert amp.validate(output / "skills") == 51
+    assert (
+        amp.validate_plugin(output / amp.PLUGIN_RELATIVE_PATH, skills, specialists)
+        == 45
+    )
+
+    by_skill = {command.skill_name: command for command in commands}
+    assert (by_skill["phx-investigate"].category, by_skill["phx-investigate"].title) == (
+        "phx",
+        "investigate",
+    )
+    assert (by_skill["ecto-n1-check"].category, by_skill["ecto-n1-check"].title) == (
+        "ecto",
+        "n1-check",
+    )
+    assert (by_skill["lv-assigns"].category, by_skill["lv-assigns"].title) == (
+        "lv",
+        "assigns",
+    )
+    assert by_skill["phx-full"].argument_hint == "<feature description>"
+    assert "security" not in by_skill
+    assert "testing" not in by_skill
+
+    plugin = (output / amp.PLUGIN_RELATIVE_PATH).read_text(encoding="utf-8")
+    assert plugin.startswith(f"// Distribution: {amp.PLUGIN_DISTRIBUTION_URL}\n")
+    assert "@amp-plugin" not in plugin
+    assert "elixir-phoenix-${workflow.skillName}" in plugin
+    assert "amp.on('agent.start'" in plugin
+    assert "amp.activeThread.current?.id === event.thread.id" in plugin
+    assert "].join('\\n')" in plugin
+    assert "].join('\n')" not in plugin
+    assert "amp skill list" not in plugin
+    assert "--codex" not in plugin
+    assert "amp.createAgent" in plugin
+    assert "tools: ['Read', 'finder']" in plugin
+    assert "Promise.allSettled" in plugin
+    assert "parentThreadID" in plugin
+    assert "executor: 'local'" in plugin
+    assert "name: 'elixir_phoenix_parallel_review'" in plugin
+    assert "name: 'elixir_phoenix_parallel_investigate'" in plugin
+    assert "amp.on('tool.call'" in plugin
+    assert "amp.helpers.filesModifiedByToolCall(event)" in plugin
+    assert "amp.on('agent.end'" in plugin
+    assert "action: 'continue'" in plugin
+    assert "amp.experimental" not in plugin
+
+    review = (output / "skills" / "phx-review" / "SKILL.md").read_text()
+    investigate = (output / "skills" / "phx-investigate" / "SKILL.md").read_text()
+    assert "elixir_phoenix_parallel_review" in review
+    assert "elixir_phoenix_parallel_investigate" in investigate
+
+
+def test_generated_plugin_runtime_policies_with_bun(tmp_path) -> None:
+    bun = shutil.which("bun")
+    if not bun:
+        pytest.skip("Bun is required for the generated Amp plugin behavior harness")
+
+    output = tmp_path / "amp"
+    workspace = tmp_path / "workspace"
+    amp.build_target(SOURCE_PLUGIN_DIR, output)
+    shutil.copytree(output / "skills", workspace / ".agents" / "skills")
+
+    result = subprocess.run(
+        [
+            bun,
+            "run",
+            str(Path(__file__).with_name("amp_plugin_harness.ts")),
+            str(output / amp.PLUGIN_RELATIVE_PATH),
+            str(workspace),
+        ],
+        check=False,
+        capture_output=True,
+        text=True,
+    )
+
+    assert result.returncode == 0, result.stderr or result.stdout
+    assert "Amp plugin behavior harness passed" in result.stdout
+
+
+def test_projects_five_canonical_agents_to_enforced_read_only_prompts() -> None:
+    specialists = amp.discover_specialists(SOURCE_PLUGIN_DIR)
+
+    assert len(specialists) == 5
+    for specialist in specialists:
+        assert "Your only tools are\n`Read` and `finder`" in specialist.instructions
+        assert "Never modify source" in specialist.instructions
+        assert "Save Findings File First" not in specialist.instructions
+        assert "call `Write`" not in specialist.instructions
+        assert "Write audit to" not in specialist.instructions
+        assert "Write review to" not in specialist.instructions
+
+
+def test_missing_required_canonical_specialist_fails_before_replacing_target(
+    tmp_path,
+) -> None:
+    plugin = tmp_path / "plugin"
+    _write_skill(plugin, "one", "phx:one")
+    agents = plugin / "agents"
+    agents.mkdir()
+    output = tmp_path / "output"
+    output.mkdir()
+    sentinel = output / "keep.txt"
+    sentinel.write_text("unchanged\n", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="required Amp specialist source is missing"):
+        amp.build_target(plugin, output)
+
+    assert sentinel.read_text(encoding="utf-8") == "unchanged\n"
+
+
 def test_build_copies_complete_subtree_and_transforms_only_markdown(tmp_path) -> None:
     plugin = tmp_path / "plugin"
     skill = _write_skill(
@@ -181,6 +308,37 @@ def test_build_rejects_name_collisions_before_replacing_output(tmp_path) -> None
         amp.build(plugin, output)
 
     assert sentinel.read_text(encoding="utf-8") == "unchanged"
+
+
+def test_build_rejects_palette_collisions_before_replacing_output(tmp_path) -> None:
+    plugin = tmp_path / "plugin"
+    _write_skill(plugin, "first", "foo")
+    _write_skill(plugin, "second", "phx:foo")
+    output = tmp_path / "output"
+    output.mkdir()
+    sentinel = output / "keep.txt"
+    sentinel.write_text("unchanged", encoding="utf-8")
+
+    with pytest.raises(ValueError, match="palette label collision `phx: foo`"):
+        amp.build_target(plugin, output)
+
+    assert sentinel.read_text(encoding="utf-8") == "unchanged"
+
+
+def test_workflow_command_rejects_reserved_clear_id(tmp_path) -> None:
+    plugin = tmp_path / "plugin"
+    _write_skill(plugin, "clear", "clear-pending-workflow")
+
+    with pytest.raises(ValueError, match="command ID is reserved"):
+        amp.workflow_commands(amp.discover_skills(plugin))
+
+
+def test_workflow_command_rejects_native_palette_label(tmp_path) -> None:
+    plugin = tmp_path / "plugin"
+    _write_skill(plugin, "specialist", "phx:specialist")
+
+    with pytest.raises(ValueError, match="phx: specialist.*reserved"):
+        amp.workflow_commands(amp.discover_skills(plugin))
 
 
 def test_build_reports_missing_resource_with_source_path(tmp_path) -> None:

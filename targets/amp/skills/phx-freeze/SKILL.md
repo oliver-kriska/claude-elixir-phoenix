@@ -42,3 +42,12 @@ cannot enforce or clear it reliably.
    ask before editing outside listed prefixes.
 4. **Keep paths project-relative** — `lib/foo` includes that directory and its
    descendants, not a sibling such as `lib/foobar`.
+
+## Native enforcement option
+
+This skill remains advisory and never creates Claude's `.claude/.freeze`
+sentinel. When the generated Amp plugin is installed, use the `phx: edit lock`
+palette command for a persistent workspace lock enforced at Amp's `tool.call`
+boundary. It blocks Amp-recognized edits outside the selected scope and disables
+shell tools while active. Unknown third-party mutating tools remain outside
+Amp's file-classification helper, so this is not complete Claude-hook parity.

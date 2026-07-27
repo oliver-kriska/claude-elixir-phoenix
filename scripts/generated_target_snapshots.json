@@ -2,9 +2,9 @@
   "format": 1,
   "targets": {
     "amp": {
-      "entries": 379,
-      "files": 251,
-      "sha256": "2f42045a90bc4d13cc2c98d213682beacf27fc5643b8db174947089b4ea43e8b"
+      "entries": 380,
+      "files": 252,
+      "sha256": "d5c017d02362fbda8c2330175977671772934835bef2b5433360033a2b48858b"
     },
     "codex": {
       "entries": 385,

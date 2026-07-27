@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Build or drift-check the Amp skills and lifecycle plugin projection."""
+"""Build or drift-check the Amp skills, workflow, and lifecycle plugin projection."""
 
 from __future__ import annotations
 
@@ -21,7 +21,7 @@ def _differences(expected: Path, actual: Path) -> list[str]:
 
 def check() -> int:
     if not OUTPUT_DIR.exists():
-        print(f"[amp-skills] missing generated target: {OUTPUT_DIR}", file=sys.stderr)
+        print(f"[amp-target] missing generated target: {OUTPUT_DIR}", file=sys.stderr)
         return 1
 
     with tempfile.TemporaryDirectory(prefix="amp-skills-check-") as tmp:
@@ -30,15 +30,21 @@ def check() -> int:
         differences = _differences(generated, OUTPUT_DIR)
 
     if differences:
-        print("[amp-skills] generated target has drift:", file=sys.stderr)
+        print("[amp-target] generated target has drift:", file=sys.stderr)
         for difference in differences:
             print(f"  - {difference}", file=sys.stderr)
-        print("Run `make amp-skills` and commit the result.", file=sys.stderr)
+        print("Run `make amp-target` and commit the result.", file=sys.stderr)
         return 1
 
     skill_count = amp.validate(OUTPUT_DIR / "skills")
     amp.validate_plugin(OUTPUT_DIR / amp.PLUGIN_TARGET_RELATIVE, SOURCE_PLUGIN_DIR)
-    print(f"[amp-target] OK: {skill_count} skills and 1 plugin")
+    skills = amp.discover_skills(SOURCE_PLUGIN_DIR)
+    amp.validate_workflow_plugin(
+        OUTPUT_DIR / amp.WORKFLOW_PLUGIN_RELATIVE_PATH,
+        skills,
+        amp.discover_specialists(SOURCE_PLUGIN_DIR),
+    )
+    print(f"[amp-target] OK: {skill_count} skills and 2 plugins")
     return 0
 
 
@@ -57,7 +63,7 @@ def main() -> int:
     result = amp.build_target(SOURCE_PLUGIN_DIR, OUTPUT_DIR)
     print(
         f"[amp-target] built {result['skills']} skills and "
-        f"{result['plugins']} plugin in {OUTPUT_DIR}"
+        f"{result['plugins']} plugins ({result['commands']} commands) in {OUTPUT_DIR}"
     )
     return 0
 
