@@ -786,7 +786,7 @@ requirements can break unrelated migrations.
 | **workflow-orchestrator**    | opus   | project | Full cycle coordination (plan, work, review) |
 | **planning-orchestrator**    | opus   | project | Parallel research agent coordination         |
 | **parallel-reviewer**        | opus   | --      | 4-agent parallel code review                 |
-| **deep-bug-investigator**    | sonnet | --      | 4-track parallel bug investigation           |
+| **deep-bug-investigator**    | opus   | --      | 4-track parallel bug investigation           |
 | **call-tracer**              | sonnet | --      | Parallel call tree tracing                   |
 | **security-analyzer**        | opus   | --      | OWASP vulnerability scanning                 |
 | **context-supervisor**       | haiku  | --      | Multi-agent output compression               |

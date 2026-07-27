@@ -4,7 +4,7 @@ description: Deep bug investigation using 4 parallel subagents (reproduction, ro
 tools: Read, Grep, Glob, Bash, Agent, Write
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
-model: sonnet
+model: opus
 effort: medium
 omitClaudeMd: true
 maxTurns: 30
@@ -214,11 +214,17 @@ mix compile --warnings-as-errors 2>&1 | head -50
 ### Phase 2: Spawn All 4 Subagents in Parallel
 
 ```
-Agent(subagent_type: "general-purpose", prompt: "Reproduction track...", run_in_background: true)
-Agent(subagent_type: "general-purpose", prompt: "Root cause track...", run_in_background: true)
-Agent(subagent_type: "general-purpose", prompt: "Impact track...", run_in_background: true)
-Agent(subagent_type: "general-purpose", prompt: "Fix strategy track...", run_in_background: true)
+Agent(subagent_type: "general-purpose", model: "sonnet", prompt: "Reproduction track...", run_in_background: true)
+Agent(subagent_type: "general-purpose", model: "sonnet", prompt: "Root cause track...", run_in_background: true)
+Agent(subagent_type: "general-purpose", model: "sonnet", prompt: "Impact track...", run_in_background: true)
+Agent(subagent_type: "general-purpose", model: "sonnet", prompt: "Fix strategy track...", run_in_background: true)
 ```
+
+**Always pass `model: "sonnet"` to the track subagents.** They do
+evidence gathering; without the explicit pin they inherit this
+orchestrator's model (opus), which would raise the cost of the whole
+fan-out without improving the evidence. Opus is reserved for the
+synthesis this orchestrator performs across the four tracks.
 
 **Agent prompts must be FOCUSED.** Scope each prompt to the
 relevant files, stack traces, and error context. Do NOT give
