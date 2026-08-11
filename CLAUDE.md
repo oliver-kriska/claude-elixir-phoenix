@@ -486,7 +486,10 @@ Only trim when content is purely informational and not execution-critical.
 ### Release
 
 - [ ] All markdown passes linting
-- [ ] Version bumped together in the `elixir-phoenix`, `ecto`, and `lv` plugin manifests
+- [ ] Version bumped in all **five** hand-maintained files (see below) — a partial
+      bump fails `scripts/tests/test_codex.py`, not just the install cache
+- [ ] `make generated-skills-sync` re-run so the two generated manifests pick up
+      the new version, then `make generated-skills-snapshots` to bless the digests
 - [ ] `CHANGELOG.md` updated with all changes under new version heading
 - [ ] README updated
 - [ ] `/phx:intro` tutorial content still accurate (commands, agents, features)
@@ -497,6 +500,29 @@ Only trim when content is purely informational and not execution-critical.
 > is a marketplace layout — the plugin lives at
 > `plugins/elixir-phoenix/.claude-plugin/plugin.json`. Tagging stays manual:
 > `git tag vX.Y.Z && git push --tags`.
+
+#### Where the version lives
+
+Seven files carry the version. Five are edited by hand:
+
+| File | Why |
+|---|---|
+| `plugins/elixir-phoenix/.claude-plugin/plugin.json` | Canonical. Every other file is checked against this one |
+| `plugins/ecto/.claude-plugin/plugin.json` | Compatibility dependency for `/ecto:*` |
+| `plugins/lv/.claude-plugin/plugin.json` | Compatibility dependency for `/lv:*` |
+| `package.json` | Publishes the Pi package metadata (started tracking the plugin version at v3.0.0) |
+| `package-lock.json` | Two entries. Do **not** hand-edit — run `npm install --package-lock-only`, since an unrelated dependency may share the version string |
+
+Two more are **generated** and need no manual edit — the builders template them
+from the canonical manifest, so `make generated-skills-sync` after the bump
+updates both, and `make generated-skills-snapshots` re-blesses the digests:
+
+- `targets/codex/.codex-plugin/plugin.json`
+- `targets/pi/package.json`
+
+`plugins/catchup/` versions independently and is not part of this bump.
+`.claude-plugin/marketplace.json` carries a marketplace schema version, not the
+plugin version — leave it alone.
 
 ### Versioning
 

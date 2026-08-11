@@ -201,7 +201,7 @@ Use these commands:
 - grep -rn "{function_name}" lib/*_web/controllers/
 - Read the router.ex to find routes
 
-Max 1000 words. List entry points concisely with file:line references.
+List entry points as `file:line` references with a one-line note each — this feeds a call tree, not a narrative.
 
 Output a structured list of controller entry points.
 Do not trace LiveView, workers, or internal modules - other subagents handle those.
@@ -221,7 +221,7 @@ Your task:
    - Pattern matching in function head
 3. If the call is inside a helper function, trace that helper's callers
 
-Max 1000 words. List entry points concisely with file:line references.
+List entry points as `file:line` references with a one-line note each — this feeds a call tree, not a narrative.
 
 Focus only on LiveView modules. Output a structured list.
 ```
@@ -240,7 +240,7 @@ Your task:
    - Whether user context is available
 3. Flag any security concerns (missing auth in worker context)
 
-Max 1000 words. List entry points concisely with file:line references.
+List entry points as `file:line` references with a one-line note each — this feeds a call tree, not a narrative.
 
 Focus only on worker modules. Output a structured list.
 ```

@@ -241,7 +241,7 @@ Running `/skill:phx-init` injects enforcement rules **directly into your project
 
 What it adds:
 
-- **7-step mandatory procedure** — complexity scoring, interview questions before coding, reference loading
+- **Routing table** — which `/skill:phx-*` command fits which kind of request, and what to ask about scope before building
 - **Iron Laws with STOP protocol** — explicitly tells Claude to halt on violations
 - **Verification rules** — `mix compile --warnings-as-errors && mix format` after code changes
 - **Stack-specific rules** — detects Phoenix version, Oban, Ash, Tidewave from `mix.exs`

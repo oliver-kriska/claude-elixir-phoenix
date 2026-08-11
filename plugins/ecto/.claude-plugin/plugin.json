@@ -1,7 +1,7 @@
 {
   "name": "ecto",
   "displayName": "Elixir/Phoenix — Ecto command compatibility",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Compatibility namespace for the Elixir/Phoenix plugin's /ecto:* commands",
   "author": {
     "name": "Oliver Kriska"

@@ -37,9 +37,34 @@ consistent. **Contributor tooling — not shipped in the plugin.**
   - **PATCH** — bug fix, doc/reference update, description tweak
 - **Consolidation check** (per memory): if several phased branch bumps never released, collapse to ONE bump from the last released tag — don't stack intermediate versions.
 
-## Step 1: Bump `plugin.json` version
+## Step 1: Bump the version — five files by hand, two generated
 
-Set `"version"` in `plugins/elixir-phoenix/.claude-plugin/plugin.json` to `X.Y.Z`.
+A partial bump does not just cost users the update; it fails
+`scripts/tests/test_codex.py`, which asserts the Codex manifest matches canonical.
+
+Set `"version"` to `X.Y.Z` in:
+
+1. `plugins/elixir-phoenix/.claude-plugin/plugin.json` — canonical
+2. `plugins/ecto/.claude-plugin/plugin.json`
+3. `plugins/lv/.claude-plugin/plugin.json`
+4. `package.json` — Pi package metadata, tracks the plugin version since v3.0.0
+5. `package-lock.json` — run `npm install --package-lock-only`, never hand-edit
+   (an unrelated dependency can share the old version string)
+
+Then regenerate the two templated manifests and bless their digests:
+
+```
+make generated-skills-sync        # updates targets/codex + targets/pi manifests
+make generated-skills-snapshots   # re-bless after reviewing the diff
+```
+
+Confirm every file agrees before moving on:
+
+```
+grep -rn '"version"' plugins/*/.claude-plugin/plugin.json package.json \
+  targets/codex/.codex-plugin/plugin.json targets/pi/package.json
+```
+
 (Often already bumped during the feature work — confirm it matches the target.)
 
 ## Step 2: Finalize CHANGELOG

@@ -59,8 +59,9 @@ test-quick: ## Run pytest (no verbose, fast)
 
 # --- Validate ---
 
-validate: ## Run claude plugin validate on plugin structure
+validate: ## Run claude plugin validate on plugin + marketplace manifests
 	@claude plugin validate plugins/elixir-phoenix
+	@claude plugin validate .
 
 amp-skills: ## Generate Amp skills from the canonical Claude plugin
 	@python3 -m scripts.build_amp_skills

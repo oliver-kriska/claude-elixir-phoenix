@@ -296,4 +296,3 @@ tokens (confirmed across 56 sessions). One summary line suffices:
 
 - Check versions: Use Grep tool on `mix.lock` for `argon2|bcrypt|bodyguard`
 - Fetch docs: Read `deps/{library}/lib/` files directly
-- Note: You do NOT have Bash access. Use Read, Grep, and Glob tools for all analysis.

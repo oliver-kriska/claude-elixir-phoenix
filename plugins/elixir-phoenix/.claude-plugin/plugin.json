@@ -1,7 +1,7 @@
 {
   "name": "phx",
   "displayName": "Elixir/Phoenix",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Elixir/Phoenix/LiveView development with specialist agents, Iron Laws, and Tidewave MCP integration",
   "keywords": ["elixir", "phoenix", "liveview", "ecto", "oban", "otp"],
   "author": {

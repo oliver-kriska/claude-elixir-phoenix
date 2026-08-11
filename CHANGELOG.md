@@ -13,6 +13,54 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+## [3.0.1] - 2026-08-10
+
+Maintenance release: closes a bypass in the destructive-command hook, retires
+injected CLAUDE.md prose that session analysis measured as inert, and brings the
+marketplace manifest under CI validation.
+
+### Changed
+
+- **`/phx:init` writes a routing table instead of a seven-step procedure** — the
+  template injected into your `CLAUDE.md` carried an "EXECUTE BEFORE EVERY
+  RESPONSE" block: classify the request, total a complexity score from an
+  eight-row point table, route off the number, then consult a file-pattern
+  auto-load table. Session analysis across 400 sessions measured that style of
+  CLAUDE.md prose firing ~0% of the time, which is why plugin routing moved into
+  the `UserPromptSubmit` hook and Iron Laws into the `SubagentStart` hook. The
+  injected template had never been updated to match and still shipped the
+  pre-measurement design. It is now a compact routing table plus the rules that
+  carry real content — every routing decision is preserved, including that
+  security work does not skip planning. Iron Laws, verification, and the
+  stack-conditional sections are unchanged. Re-run `/phx:init --update` to pick
+  it up.
+
+- **Marketplace manifest is now validated in CI** — `make validate` ran only
+  `claude plugin validate plugins/elixir-phoenix`, so the marketplace manifest
+  and its `ecto` / `lv` / `catchup` entries were never checked. CC 2.1.221 added
+  name warnings for entries that Claude Desktop's managed marketplace sync would
+  reject; `make ci` now catches them.
+
+- **Trimmed dated prompt scaffolding from four agents** — removed fixed word
+  ceilings from the `deep-bug-investigator` and `call-tracer` subagent prompts
+  (`deep-bug-investigator` already compresses every track through
+  `context-supervisor`, so the cap was degrading input to its own compression
+  layer), and dropped duplicated "you do not have Bash access" restatements in
+  `iron-law-judge` and `security-analyzer` where the frontmatter tool list
+  already enforces it.
+
+### Fixed
+
+- **Closed a leading-whitespace and subshell bypass in the destructive-command
+  hook** — all three deny patterns anchored on `^` with no leading whitespace
+  permitted, so a leading tab before `mix ecto.drop`, leading spaces before
+  `git push --force`, and a subshell-wrapped `(MIX_ENV=prod mix release)` each
+  executed while evading the block. The anchor
+  is now `^[[:space:](]*`. Claude Code fixed the same padding-hides-the-command
+  class of hole in its own permission prompts in 2.1.223. The quoted-mention
+  protection from issue #61 is preserved — `echo "(git push --force)"` still does
+  not trigger — and the regression suite covers both directions.
+
 ## [3.0.0] - 2026-07-25
 
 Major release: keep Claude Code as the full canonical plugin while adding

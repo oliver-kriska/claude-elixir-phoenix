@@ -273,8 +273,6 @@ for the canonical implementation. Do NOT flag this pattern as a violation.
 
 ## Execution Strategy
 
-**IMPORTANT: You do NOT have Bash access. Use Grep and Read tools ONLY.**
-
 Run checks by category using parallel Grep tool calls:
 
 ### LiveView checks

@@ -55,9 +55,10 @@ emit_block() {
 # (`MIX_ENV=test mix ecto.reset`), `mix do ecto.drop`, and multiple spaces —
 # a plain word like `echo` is not an assignment, so quoted mentions stay safe.
 # Trailing class requires `reset`/`drop` to be followed by whitespace, comma
-# (`mix do ecto.drop, ecto.create`), separator, or end-of-command — preserving
-# sibling tasks like `mix ecto.gen.migration`.
-if [[ "$is_elixir" == 1 ]] && echo "$COMMAND" | grep -qE '(^|[;&|]+[[:space:]]*)(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*mix[[:space:]]+(do[[:space:]]+)?ecto\.(reset|drop)([[:space:];&|,]|$)'; then
+# (`mix do ecto.drop, ecto.create`), separator, `)`, or end-of-command —
+# preserving sibling tasks like `mix ecto.gen.migration`.
+# See ANCHOR NOTE below the force-push pattern for `^[[:space:](]*`.
+if [[ "$is_elixir" == 1 ]] && echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*mix[[:space:]]+(do[[:space:]]+)?ecto\.(reset|drop)([[:space:];&|,)]|$)'; then
   emit_block \
 "BLOCKED: Destructive database operation detected.
 mix ecto.reset/drop will destroy all data. If intentional, run manually
@@ -75,17 +76,33 @@ fi
 # matched. It also scanned past `&&`/`;`/`|` and tripped on quoted strings
 # elsewhere on the line. This anchored pattern fixes both:
 #
-#   - `(^|[;&|]+[[:space:]]*)` — start-of-line or after a shell command
-#     separator. Plain whitespace is NOT an anchor, so `echo "git push --force"`
-#     no longer matches (`git push` is preceded by a space inside the quote,
-#     not a separator).
+#   - `(^[[:space:](]*|[;&|]+[[:space:]]*)` — start-of-line or after a shell
+#     command separator. Plain whitespace is NOT an anchor mid-line, so
+#     `echo "git push --force"` no longer matches (`git push` is preceded by a
+#     space inside the quote, not a separator).
 #   - `[^;|&]*[[:space:]]` — scan stays within the current command, so a later
 #     `&& gh ... --force-with-lease` on the same line is out of scope.
-#   - `(--force|-f)([[:space:];&|]|$)` — the flag must end at a word terminator
-#     (whitespace, separator, or end-of-command). `--force-with-lease` ends in
-#     `-`, which is not a terminator, so it is allowed; `--force` and `-f` as
+#   - `(--force|-f)([[:space:];&|)]|$)` — the flag must end at a word terminator
+#     (whitespace, separator, `)`, or end-of-command). `--force-with-lease` ends
+#     in `-`, which is not a terminator, so it is allowed; `--force` and `-f` as
 #     real flags are still blocked.
-if echo "$COMMAND" | grep -qE '(^|[;&|]+[[:space:]]*)git push[^;|&]*[[:space:]](--force|-f)([[:space:];&|]|$)'; then
+#
+# ANCHOR NOTE (CC 2.1.223 class of bug, fixed here 2026-08-10). The
+# start-of-line alternative was a bare `^`, which permitted NO leading
+# whitespace — so `\tmix ecto.drop`, `  git push --force`, and
+# `(MIX_ENV=prod mix release)` all executed while evading every deny. Claude
+# Code fixed the same padding-hides-the-command hole in its own permission
+# prompts in 2.1.223. `^[[:space:](]*` now absorbs leading whitespace and
+# subshell parens.
+#
+# `(` is deliberately NOT added to the separator class `[;&|]`. Doing so would
+# make `echo "(git push --force)"` match, reintroducing the quoted-mention
+# false positive that issue #61 fixed. Only the start-of-line branch is widened.
+#
+# Invisible Unicode padding (U+00A0 et al) is intentionally out of scope: the
+# shell would treat ` mix` as a command named ` mix`, which does not
+# execute, so it is not an evasion path.
+if echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)git push[^;|&]*[[:space:]](--force|-f)([[:space:];&|)]|$)'; then
   emit_block \
 "BLOCKED: Force push detected — this rewrites remote history.
 If intentional, run manually outside Codex.
@@ -97,7 +114,8 @@ fi
 # `echo "never use MIX_ENV=prod mix in dev"` doesn't trigger. Tolerates an
 # optional `env` prefix, other assignments around MIX_ENV=prod, and multiple
 # spaces (`env MIX_ENV=prod mix release`, `FOO=1 MIX_ENV=prod mix compile`).
-if [[ "$is_elixir" == 1 ]] && echo "$COMMAND" | grep -qE '(^|[;&|]+[[:space:]]*)(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*MIX_ENV=prod([[:space:]]+[A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*)*[[:space:]]+mix'; then
+# See ANCHOR NOTE above for `^[[:space:](]*`.
+if [[ "$is_elixir" == 1 ]] && echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*MIX_ENV=prod([[:space:]]+[A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*)*[[:space:]]+mix'; then
   emit_block \
 "WARNING: MIX_ENV=prod detected. This runs in production mode.
 If building a release, this is expected. Otherwise, reconsider." \

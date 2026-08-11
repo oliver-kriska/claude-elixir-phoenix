@@ -9,6 +9,12 @@
 # force-push, the lease variant, and unrelated commands sharing a line all
 # triggered the same deny.
 #
+# Anchor bypass (2026-08-10, CC 2.1.223 class of bug): the start-of-line
+# alternative was a bare `^`, permitting no leading whitespace — so a leading
+# tab/space, or a subshell wrapper `(cmd)`, executed while evading every deny.
+# The anchor is now `^[[:space:](]*`. `(` stays OUT of the separator class so
+# `echo "(git push --force)"` still does NOT match (issue #61 protection).
+#
 # Tests check three categories per pattern:
 #   1. Real dangerous command  → MUST block
 #   2. Safer alternative       → MUST allow
@@ -72,6 +78,14 @@ run_hook block "git push --force-with-lease=ref --force"  # lease + raw force to
 run_hook block "cd repo && git push --force"
 run_hook block "cd repo; git push -f"
 
+# Anchor bypasses: leading whitespace / subshell wrapper. MUST block.
+run_hook block "$(printf '\tgit push --force')"
+run_hook block "  git push --force"
+run_hook block "  git push -f origin main"
+run_hook block "(git push --force)"
+run_hook block "( git push -f )"
+run_hook block "(cd repo && git push --force)"
+
 # Lease variant: MUST allow (issue #61 headline)
 run_hook allow "git push --force-with-lease"
 run_hook allow "git push --force-with-lease origin main"
@@ -83,6 +97,11 @@ run_hook allow "git push --force-with-includes"  # hypothetical future flag
 run_hook allow 'git push origin main && gh issue create --body "use --force-with-lease"'
 run_hook allow 'git push origin main; echo "next step uses --force-with-lease"'
 run_hook allow 'echo "do not run git push --force without --force-with-lease"'
+
+# Quoted mention wrapped in parens: `(` must NOT act as a mid-line separator,
+# or the issue #61 protection regresses. MUST allow.
+run_hook allow 'echo "(git push --force)"'
+run_hook allow 'gh pr comment --body "never (git push --force) on main"'
 
 # Unrelated commands: MUST allow
 run_hook allow "git status"
@@ -119,6 +138,14 @@ run_hook block "mix do ecto.reset"
 run_hook block "mix do ecto.drop, ecto.create"
 run_hook block "mix  ecto.reset"  # double space
 
+# Anchor bypasses: leading whitespace / subshell wrapper. MUST block.
+run_hook block "$(printf '\tmix ecto.drop')"
+run_hook block "  mix ecto.reset"
+run_hook block "  MIX_ENV=test mix ecto.reset"
+run_hook block "(mix ecto.drop)"
+run_hook block "( mix ecto.reset )"
+run_hook block "(cd app && mix ecto.drop)"
+
 run_hook allow "mix ecto.migrate"
 run_hook allow "mix ecto.rollback --step 1"
 run_hook allow "mix ecto.gen.migration add_users"
@@ -126,6 +153,7 @@ run_hook allow "MIX_ENV=test mix ecto.migrate"
 run_hook allow "mix do ecto.migrate, test"
 run_hook allow 'echo "do not run mix ecto.reset" && mix test'  # scan-past
 run_hook allow 'echo "never MIX_ENV=test mix ecto.reset" && mix test'  # quoted env-prefix
+run_hook allow 'echo "(mix ecto.drop)" && mix test'  # quoted, paren-wrapped
 
 echo ""
 echo "── MIX_ENV=prod mix (Elixir-only) ───────────────────────────────"
@@ -140,10 +168,17 @@ run_hook block "MIX_ENV=prod  mix release"  # double space
 run_hook block "FOO=1 MIX_ENV=prod mix compile"
 run_hook block "MIX_ENV=prod PORT=4000 mix release"
 
+# Anchor bypasses: leading whitespace / subshell wrapper. MUST block.
+run_hook block "$(printf '\tMIX_ENV=prod mix release')"
+run_hook block "  MIX_ENV=prod mix release"
+run_hook block "(MIX_ENV=prod mix release)"
+run_hook block "( env MIX_ENV=prod mix release )"
+
 run_hook allow "MIX_ENV=dev mix compile"
 run_hook allow "MIX_ENV=test mix test"
 run_hook allow 'echo "never use MIX_ENV=prod mix in dev" && mix compile'  # scan-past
 run_hook allow 'echo "env MIX_ENV=prod mix release is for CI" && mix test'  # quoted env form
+run_hook allow 'echo "(MIX_ENV=prod mix release)" && mix test'  # quoted, paren-wrapped
 
 # Without mix.exs: MUST allow even for prod (cross-project bleed guard from #55)
 unset CLAUDE_PROJECT_DIR

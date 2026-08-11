@@ -115,7 +115,7 @@ The exact content to inject is in `${CLAUDE_SKILL_DIR}/references/injectable-tem
 
 **Key structure:**
 
-1. **7-Step Mandatory Procedure** — Claude Code MUST execute before every response
+1. **Routing table** — which `/phx:*` command fits which kind of request
 2. **Iron Laws** — STOP behavior on violations
 3. **Conditional Sections** — Include based on detected stack:
    - `{OBAN_SECTION}` — If Oban detected (not Pro)

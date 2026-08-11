@@ -89,6 +89,15 @@ npx markdownlint CHANGELOG.md README.md plugins/.../changed.md
   Tagging is always manual: `git tag vX.Y.Z && git push origin vX.Y.Z`.
 - **Users only get updates when `plugin.json` version changes** (install cache).
   CHANGELOG/code changes alone are invisible to installed users.
+- **The version lives in seven files, not one.** Five by hand
+  (`plugins/{elixir-phoenix,ecto,lv}/.claude-plugin/plugin.json`, `package.json`,
+  `package-lock.json`) and two generated from canonical
+  (`targets/codex/.codex-plugin/plugin.json`, `targets/pi/package.json`, refreshed
+  by `make generated-skills-sync`). A partial bump fails
+  `scripts/tests/test_codex.py`, which asserts the Codex manifest matches
+  canonical — caught in the v3.0.1 release. Regenerate `package-lock.json` with
+  `npm install --package-lock-only`; a hand-edit can hit an unrelated dependency
+  that happens to share the old version string.
 - **Version consolidation**: phased per-branch bumps that never released should
   collapse into ONE bump measured from the last released tag — don't release a
   chain of intermediate patch versions.

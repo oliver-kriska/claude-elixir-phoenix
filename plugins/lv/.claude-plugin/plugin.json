@@ -1,7 +1,7 @@
 {
   "name": "lv",
   "displayName": "Elixir/Phoenix — LiveView command compatibility",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "description": "Compatibility namespace for the Elixir/Phoenix plugin's /lv:* commands",
   "author": {
     "name": "Oliver Kriska"

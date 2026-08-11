@@ -68,7 +68,7 @@ Available information:
 {stack_trace}
 {user_reported_steps}
 
-Max 1500 words. Focus on actionable findings, skip lengthy background.
+Report actionable findings — what to change and where. Skip background the synthesis step already has.
 
 Output format:
 ## Reproduction Analysis
@@ -109,7 +109,7 @@ Apply its controller, LiveView, worker, and internal tracing procedures directly
 when needed. Do not spawn `call-tracer` from this nested track; doing so would
 create an unsupported depth-4 chain when `call-tracer` fans out again.
 
-Max 1500 words. Focus on actionable findings, skip lengthy background.
+Report actionable findings — what to change and where. Skip background the synthesis step already has.
 
 Output format:
 ## Root Cause Analysis
@@ -145,7 +145,7 @@ Your task:
 
 Bug location: {root_cause_location}
 
-Max 1500 words. Focus on actionable findings, skip lengthy background.
+Report actionable findings — what to change and where. Skip background the synthesis step already has.
 
 Output format:
 ## Impact Assessment
@@ -182,7 +182,7 @@ Your task:
 Bug location: {root_cause_location}
 Root cause: {root_cause_explanation}
 
-Max 1500 words. Focus on actionable findings, skip lengthy background.
+Report actionable findings — what to change and where. Skip background the synthesis step already has.
 
 Output format:
 ## Fix Strategy
