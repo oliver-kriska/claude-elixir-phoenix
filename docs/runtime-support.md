@@ -39,9 +39,9 @@ installation and troubleshooting remain in the linked guides.
 | `phx-freeze` | Hook-enforced advisory lock | Advisory skill + native classified edit lock | Advisory only | Advisory only | Advisory only |
 | Remaining workflow/admin skills | Full | Guidance/baseline | Guidance/baseline | Guidance/baseline | Guidance/baseline |
 | Claude namespaced slash commands | Full | Not applicable | Not applicable | Not applicable | Not applicable |
-| Deterministic workflow invocation | Slash commands | 45 generated palette commands | Skill reference | `/skill:*` | Skill tool |
+| Deterministic workflow invocation | Slash commands | Native `skill: invoke`; 40 wrappers when paired locally | Skill reference | `/skill:*` | Skill tool |
 | Bundled custom agents | Full | Five read-only specialists | Deferred | Deferred | Deferred |
-| Lifecycle/enforcement hooks | Full | Edit lock + bounded verification gate | One optional safeguard | Deferred | Deferred |
+| Lifecycle/enforcement hooks | Full | Edit lock; bounded verification gate only through paired `phx: full` | One optional safeguard | Deferred | Deferred |
 | Tidewave MCP connection | External | External | External | External | External |
 | Plugin-root instructions | Full | Deferred | Deferred | Deferred | Deferred |
 | Deterministic generated target | Canonical source | Yes | Yes | Yes | Yes |
@@ -60,7 +60,7 @@ Tidewave, named custom agents, or Claude-only task APIs.
 | Runtime | Reliable explicit invocation | Distribution | Guide |
 | --- | --- | --- | --- |
 | Claude Code | `/phx:investigate`, `/phx:review` | Claude plugin marketplace | [Claude Code installation](../README.md#claude-code) |
-| Amp | Generated palette commands such as `phx: investigate` and `phx: review` | Direct GitHub skills and plugin install | [Amp guide](amp.md) |
+| Amp | Native `skill: invoke`; paired-full also provides `phx: investigate` and `phx: review` | Personal/workspace hosted repositories or direct GitHub/curl | [Amp guide](amp.md) |
 | Codex | `$elixir-phoenix:phx-investigate`, `$elixir-phoenix:phx-review` | Native Codex Git marketplace plugin | [Codex guide](codex.md) |
 | Pi | `/skill:phx-investigate`, `/skill:phx-review` | Native Pi Git package | [Pi guide](pi.md) |
 | OpenCode | Ask the skill tool to load the skill; in the tested 1.17.2 setup, `/phx-investigate` and `/phx-review` also work | Sparse Git checkout | [OpenCode guide](opencode.md) |
@@ -70,6 +70,16 @@ does not provide a native Git skills-package installer, so a sparse checkout is
 the supported installation and update mechanism. Start a fresh process after
 installing, updating, or removing skills because runtime discovery may be
 cached when a session starts.
+
+Amp's **hosted-native** profile publishes skills and plugin independently to
+personal or workspace hosted repositories and uses native `skill: invoke`.
+Specialists, parallel commands, and edit lock do not need filesystem skill
+resolution. The 40 wrappers cannot resolve hosted-only skills, and native
+`phx-full` does not activate the plugin gate. **Paired-full** installs matching
+skills and plugin at supported local roots, preserving all wrappers and the
+wrapper-activated gate. `amp skill add --global` is machine-local, not personal
+hosted/account-wide. The standalone repository, green-only mutable `stable`
+branch, generated target, paired install, and GitHub/curl fallback are retained.
 
 The same lifecycle boundary applies to every generated runtime: install,
 update, clean reinstall, ref change, and uninstall affect newly started
@@ -91,18 +101,23 @@ project and port. Portability fixes must not weaken this behavior.
 
 ### Amp
 
-Amp installs `targets/amp/skills` as standard Agent Skills and two plugins.
-`targets/amp/plugins/elixir-phoenix.ts` is a native command-palette plugin
-exposing all 40 public workflows plus clear, specialist, parallel review,
-parallel investigation, and edit-lock commands. It injects the selected
-installed skill once on `agent.start`, projects five canonical agents with only
-`Read`/`finder`, and provides bounded local review/investigation fan-out. Its
-workspace edit lock enforces Amp-classified file changes and blocks shell while
-active; `phx-full` gets one bounded verification follow-up after observable
-edits. `targets/amp/plugins/phx-watch-pr.ts` adds a bounded keep-alive lease,
-durable polling state, and same-thread event delivery for PR watching. The
-generated target does not install the other 21 Claude agents, the complete
-Claude hook graph, permissions, or MCP configuration.
+Amp installs `targets/amp/skills` as standard Agent Skills and
+`targets/amp/plugins/elixir-phoenix.ts` as a native command-palette plugin. The
+plugin exposes all 40 public workflows plus clear, specialist, parallel review,
+parallel investigation, and edit-lock commands. Native `skill: invoke` resolves
+local, built-in, personal hosted, and workspace hosted skills after Amp's full
+precedence. Filesystem wrappers inject a matching supported local skill once on
+`agent.start`; the Plugin API cannot resolve or invoke hosted skills and does
+not expose Amp's original nested invocation path. The plugin projects five
+canonical agents with only `Read`/`finder` and provides bounded local
+review/investigation fan-out. Its workspace edit lock enforces Amp-classified
+file changes and blocks shell while active. Only the paired `phx: full` wrapper
+arms the bounded verification follow-up; native invocation loads the skill's
+instructions but not the plugin gate. The generated target does not install the
+other 21 Claude agents, complete Claude hook graph, permissions, or MCP
+configuration. A second plugin, `targets/amp/plugins/phx-watch-pr.ts`, adds a
+bounded keep-alive lease, durable polling state, and same-thread event delivery
+for PR watching.
 
 ### Codex
 

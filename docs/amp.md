@@ -34,13 +34,30 @@ with Claude Code, Codex, Pi, and OpenCode.
 - An Amp-native `phx-watch-pr` lifecycle plugin with bounded Orb keep-alive,
   durable state, required-check filtering, and serialized same-thread fix
   events for actionable review feedback and required CI failures.
-- Project-local and user-wide installation options.
+- Project-local, machine-local, personal hosted, and workspace hosted channels.
 - Compatibility with project-specific skills already in `.claude/skills/`.
 
 The Amp edition ports five of the canonical 26 custom agents. It does not
 install the other 21 agents, Claude Code hooks or permission settings, or MCP
 configuration. See [Feature compatibility](#feature-compatibility) before
 relying on a workflow or administration skill.
+
+## Choose a target profile
+
+The same generated snapshot supports three profiles. Hosting changes where
+artifacts are delivered; it does not change canonical ownership or make plugin
+and skill publication atomic.
+
+| Profile | Skill invocation | Plugin behavior |
+| --- | --- | --- |
+| **Hosted-native** | Native `skill: invoke` from personal or workspace hosted skills | Specialists, parallel review/investigation, and edit lock work. Filesystem workflow wrappers cannot resolve hosted-only skills; native `phx-full` does not arm the plugin gate. |
+| **Paired-full** | Native `skill: invoke` or generated `phx:*`/`ecto:*`/`lv:*` wrappers | Matching local skills let all 40 wrappers inject one turn; `phx: full` also activates the bounded verification gate. |
+| **Skills-only GitHub compatibility** | Native `skill: invoke` after `amp skill add` | No plugin controls or gate. |
+
+Use hosted-native for intentional account-wide or team-wide availability across
+machines and orbs. Use paired-full for project pinning, offline compatibility,
+and the complete wrapper/gate contract. Keep GitHub skills plus the curl plugin
+fallback for public, reproducible installs and older Amp clients.
 
 ## Requirements
 
@@ -52,7 +69,7 @@ lower-cost specialist work. Confirm that model is available with
 `amp plugins show-agent-options`; [choose another model](#choose-the-specialist-model)
 when necessary.
 
-## Install in one project (recommended)
+## Install paired-full in one project (recommended)
 
 Project-local installation keeps this opinionated guidance scoped to an
 Elixir/Phoenix repository. From the project that should use the skills:
@@ -90,9 +107,9 @@ skills from `.agents/skills/`. The workspace plugin is installed under
 
 ### Install the PR lifecycle plugin
 
-The standard skills work without a plugin. `phx-watch-pr` requires its generated
-Amp plugin because only the Plugin API can hold an Orb keep-alive lease and wake
-the same thread after inactivity:
+The standard skills work without a plugin. `phx-watch-pr` requires its own
+generated Amp plugin because only the Plugin API can hold an Orb keep-alive
+lease and wake the same thread after inactivity:
 
 ```bash
 amp plugins add \
@@ -104,9 +121,10 @@ Start a fresh Amp process or run `plugins: reload`. Plugins execute code; audit
 the generated TypeScript before installing it. The plugin never merges,
 deploys, publishes, or changes repository webhooks.
 
-## Install for every project
+## Install paired-full on one machine
 
-Use a global installation only if most of your Amp work is Elixir/Phoenix:
+Use a machine-local installation only if most of your work on that computer is
+Elixir/Phoenix:
 
 ```bash
 amp skill add \
@@ -122,26 +140,68 @@ curl --fail --silent --show-error --location \
 ```
 
 Amp installs global skills in `~/.config/agents/skills/` and system plugins in
-`~/.config/amp/plugins/`.
+`~/.config/amp/plugins/`. Here `--global` means machine-local; it does not
+publish to your Amp account and does not follow you to other machines or orbs.
+
+## Publish hosted-native artifacts
+
+Amp stores personal and workspace skills and plugins in four separate hosted
+Git repositories. Personal artifacts apply everywhere you use Amp. Workspace
+artifacts are admin-managed and load by default for members, but local and
+personal artifacts can mask them.
+
+Ask Amp to manage the repositories, use Personal/Workspace Settings, or inspect
+their direct clone commands:
+
+```bash
+amp skills repositories --json
+amp plugins repositories --json
+
+amp clone user-skills
+amp clone user-plugins
+```
+
+Put each skill at `<name>/SKILL.md` in the skills repository and the generated
+plugin at `elixir-phoenix.ts` in the plugins repository. Publish the exact
+validated snapshot in this order:
+
+1. copy all 51 generated `skills/` directories, review, commit, and push;
+2. verify their effective sources after a skill reload and in a new thread;
+3. copy the matching generated plugin, review, commit, and push;
+4. reload plugins separately and verify a new thread.
+
+A push publishes. Skills and plugins have independent repositories and reload
+paths, so publish skills first to reduce mixed-version risk. Hosted repositories
+are deployment mirrors; behavior changes still belong in the canonical source
+and must be regenerated and validated through the standalone distribution.
+
+Do not call a manually copied GitHub artifact an imported shared Amp artifact.
+`amp skill update <name>` and `amp plugins update <name>` update artifacts that
+retain managed provenance from `amp skill import` or `amp plugins import`; they
+do not update ordinary `skill add`, curl, or arbitrary copied files.
 
 ## Verify the installation
 
-Start a fresh Amp process from the target project after installing or updating
-the skills:
+Start a fresh Amp process from the target project after local installation or
+updating. For hosted publication, reload skills and plugins separately in an
+existing thread, then also verify a new thread:
 
 ```bash
 cd /path/to/your-phoenix-project
-amp skill list
+amp skills list --json
 amp plugins list
 amp
 ```
 
-`amp skill list` should show entries such as `phx-investigate`, `testing`, and
+`amp skills list --json` should show entries such as `phx-investigate`, `testing`, and
 `tidewave-integration`. `amp plugins list` should include
-`elixir-phoenix.ts`. For a project-local installation, the skill base
-directories should resolve under the project's `.agents/skills/` directory.
-`amp plugins list` should also show `phx-watch-pr` with the
-`elixir_phoenix_watch_pr` tool.
+`elixir-phoenix.ts`. Inspect each skill's `baseDir` and `source`; successful
+invocation alone does not prove that the intended hosted or local copy won. For
+a project-local installation, base directories should resolve under the
+project's `.agents/skills/`. For hosted-only acceptance, all 51 package skills
+must report the intended personal or workspace hosted source. When the PR
+lifecycle plugin is installed, `amp plugins list` should also show
+`phx-watch-pr` with the `elixir_phoenix_watch_pr` tool.
 
 For an explicit end-to-end check, start a fresh thread and ask:
 
@@ -176,7 +236,23 @@ every prompt.
 
 ### Invoke a workflow deterministically
 
-The generated plugin exposes every public workflow in Amp's command palette:
+Amp's native command works with every effective skill source, including hosted
+repositories:
+
+1. Open the command palette with `Ctrl+O`.
+2. Run `skill: invoke`.
+3. Select `phx-investigate`, `phx-review`, or another skill.
+4. Send the task in your next prompt.
+
+Native invocation is the deterministic default for hosted-native and
+skills-only profiles. It loads the skill Amp selected after applying its full
+source precedence. Exact Claude-style prompt commands such as `/phx:review` are
+not registered in Amp.
+
+### Use paired-full workflow wrappers
+
+When the plugin can resolve a matching local `SKILL.md`, it also exposes every
+public workflow in Amp's command palette:
 
 1. Open the command palette with `Ctrl+O`.
 2. Select `phx: investigate`, `phx: review`, or another generated entry.
@@ -188,9 +264,10 @@ installed `SKILL.md` directly and appends its full instructions as hidden
 context. The pending workflow is consumed once. Run `phx: clear pending
 workflow` to cancel it before submitting a prompt.
 
-Command metadata and skill locations are fixed at generation time, so the
-invocation path does not spawn `amp skill list`. This avoids dynamic discovery
-latency and does not depend on the model deciding to select the workflow.
+Command metadata is fixed at generation time. The wrapper resolves a supported
+local file when armed and does not spawn `amp skill list`, avoiding dynamic
+discovery latency. Use `phx: clear pending workflow` to cancel it before the
+next prompt.
 
 You can also name the skill in your prompt. This is convenient for reusable
 prompts, handoffs, and non-interactive `amp -x` calls:
@@ -208,11 +285,11 @@ The palette keeps the familiar command namespaces:
 
 | Claude Code | Amp |
 | --- | --- |
-| `/phx:plan` | Palette: `phx: plan` |
-| `/phx:investigate` | Palette: `phx: investigate` |
-| `/ecto:n1-check` | Palette: `ecto: n1-check` |
-| `/lv:assigns` | Palette: `lv: assigns` |
-| `liveview-patterns` | Automatic selection or explicit prompt request |
+| `/phx:plan` | Native: `skill: invoke` → `phx-plan`; paired wrapper: `phx: plan` |
+| `/phx:investigate` | Native: `skill: invoke` → `phx-investigate`; paired wrapper: `phx: investigate` |
+| `/ecto:n1-check` | Native: `skill: invoke` → `ecto-n1-check`; paired wrapper: `ecto: n1-check` |
+| `/lv:assigns` | Native: `skill: invoke` → `lv-assigns`; paired wrapper: `lv: assigns` |
+| `liveview-patterns` | Native `skill: invoke`, automatic selection, or explicit prompt request |
 
 For example, the familiar workflows translate as follows:
 
@@ -223,8 +300,8 @@ For example, the familiar workflows translate as follows:
 | Check an Ecto N+1 | `/ecto:n1-check` | Choose `ecto: n1-check`, then send the query or scope. |
 
 Typing only `investigate` as a normal prompt may cause Amp to choose
-`phx-investigate`, but that remains model-driven. Use the generated palette
-command when you need certainty.
+`phx-investigate`, but that remains model-driven. Use native `skill: invoke`
+when you need certainty from any effective source.
 
 ## Run native specialists and parallel workflows
 
@@ -300,15 +377,19 @@ The generated `phx-freeze` skill therefore remains an advisory workflow; use
 
 ## Guard full-workflow verification
 
-When `phx: full` is explicitly armed, the plugin tracks Amp-recognized edits and
-successful Elixir verification shell results in that thread. If the turn stops
-after an edit without a verified zero-exit format check (`mix format
---check-formatted`), compile, test, Credo, Dialyzer, audit, or repository
-verification command, `agent.end` starts one bounded follow-up asking the agent
-to verify. The command must be the shell invocation itself; piped, chained, or
-neutralized commands do not satisfy the gate. A second incomplete stop is
-reported to the user instead of looping, and a no-edit lifecycle expires after
-eight turns.
+Only the paired-full `phx: full` wrapper arms the plugin's lifecycle state. The
+plugin then tracks Amp-recognized edits and successful Elixir verification shell
+results in that thread. If the turn stops after an edit without a verified
+zero-exit format check (`mix format --check-formatted`), compile, test, Credo,
+Dialyzer, audit, or repository verification command, `agent.end` starts one
+bounded follow-up asking the agent to verify. The command must be the shell
+invocation itself; piped, chained, or neutralized commands do not satisfy the
+gate. A second incomplete stop is reported to the user instead of looping, and
+a no-edit lifecycle expires after eight turns.
+
+Native `skill: invoke` → `phx-full` loads and follows the skill's verification
+instructions, but it does not run the wrapper and therefore does not activate
+this plugin-enforced gate. Hosted-only mode supports the former, not the latter.
 
 This guard enforces only the observable verification boundary. Plan approval,
 review quality, compounding, arbitrary shell side effects, and unknown custom
@@ -323,21 +404,52 @@ precedence, from highest to lowest:
 1. `~/.config/agents/skills/`
 2. `~/.agents/skills/`
 3. `~/.config/amp/skills/`
-4. `.agents/skills/`
-5. `.claude/skills/`
+4. `.agents/skills/` in the project and searched parent directories
+5. `.claude/skills/` in those directories
 6. `~/.claude/skills/`
-7. plugins, legacy locations, and built-in skills
+7. `~/.claude/plugins/cache/`
+8. directories in `amp.skills.path`, in configured order
+9. built-in skills
+10. personal hosted skills
+11. active workspace hosted skills
 
-This means an Amp-native project installation overrides an existing
-project-local Claude skill with the same name. Skills with different names
-coexist, allowing an application to keep specific skills—for example,
-deployment or incident workflows—alongside the general Elixir/Phoenix set.
+The first matching frontmatter `name` wins. Machine-local skills can therefore
+mask project-local skills; local and built-in skills mask hosted skills; and
+personal hosted skills mask workspace hosted skills. Skills with different
+names coexist.
 
-Use `amp skill list` to confirm which copy won. Amp can ignore Claude Code skill
-directories entirely through the `amp.skills.disableClaudeCodeSkills` setting
-if an isolated compatibility test requires it.
+Use `amp skills list --json` to confirm which copy won. Amp can ignore Claude
+Code skill directories through `amp.skills.disableClaudeCodeSkills` if an
+isolated compatibility test requires it.
+
+### Wrapper resolver boundary
+
+Native `skill: invoke` uses Amp's complete resolver above. The generated
+filesystem wrappers cannot: the documented Plugin API exposes no `resolveSkill`
+or programmatic skill-invocation operation and does not expose Amp's original
+invocation directory.
+
+The wrapper therefore follows the supported local subset in this order:
+
+1. the three machine-local roots in steps 1–3 above;
+2. `.agents/skills/` from `amp.system.workspaceRoot` through its exposed parents;
+3. `.claude/skills/` through those same directories; and
+4. `~/.claude/skills/`.
+
+It cannot read personal/workspace hosted repositories, built-ins, plugin cache,
+or `amp.skills.path`. If Amp found a nested project skill from an invocation
+directory below `workspaceRoot`, that directory is also unavailable to the
+plugin. Do not scan undocumented hosted caches to work around this. For all 40
+wrappers and the `phx-full` gate, install one matching local copy at a supported
+project or machine root and verify its path. Otherwise use native
+`skill: invoke` and treat the profile as hosted-native or skills-only.
 
 ## Update or remove
+
+Hosted repository owners publish updates by pushing reviewed commits. Reload
+skills and plugins separately in existing threads; new threads load published
+versions automatically. Managed shared imports use `amp skill update <name>` or
+`amp plugins update <name>` only while their import provenance is retained.
 
 Amp copies skills when `amp skill add` runs; starting Amp does not fetch updates
 automatically. Rerun the remote installation with `--overwrite` to install the
@@ -351,7 +463,7 @@ amp skill add \
   --overwrite
 ```
 
-For a global update:
+For a machine-local update:
 
 ```bash
 amp skill add \
@@ -367,7 +479,7 @@ synchronization matters, compare the installed names with
 
 To remove a project-local installation, delete only the skill directories that
 came from this target—or remove `.agents/skills/` if it contains nothing else.
-For a global installation, apply the same rule under
+For a machine-local installation, apply the same rule under
 `~/.config/agents/skills/`; that directory may contain unrelated skills, so do
 not delete it wholesale unless it contains nothing else.
 
@@ -377,7 +489,7 @@ Amp also provides native removal for one known skill at a time:
 # Project-local
 amp skill remove phx-review --target "$PWD/.agents/skills"
 
-# Global (skill remove has no --global flag)
+# Machine-local (skill remove has no --global flag)
 amp skill remove phx-review --target "$HOME/.config/agents/skills"
 ```
 
@@ -406,17 +518,19 @@ amp plugins remove elixir-phoenix.ts --target workspace
 
 ## Feature compatibility
 
-| Capability | Claude Code plugin | Amp edition |
-| --- | --- | --- |
-| 51 skills and bundled resources | Full | Full |
-| Domain knowledge and Iron Laws | Full | Full |
-| Automatic skill selection | Supported | Supported, model-driven |
-| Explicit workflow loading | Slash command | 45 generated palette commands plus `skill: invoke` |
-| 26 named custom subagents | Full | Five focused read-only agents |
-| Parallel workflow orchestration | Full | Review/investigate child threads plus sequential fallback |
-| Lifecycle and enforcement hooks | Full | Edit lock, bounded `phx-full` verification gate, and `phx-watch-pr` keep-alive |
-| Claude permission settings | Full | Not installed |
-| Tidewave MCP connection | User-configured | User-configured |
+| Capability | Claude Code plugin | Hosted-native | Paired-full |
+| --- | --- | --- | --- |
+| 51 skills and bundled resources | Full | Full | Full |
+| Domain knowledge and Iron Laws | Full | Full | Full |
+| Automatic skill selection | Supported | Supported, model-driven | Supported, model-driven |
+| Deterministic skill loading | Slash command | Native `skill: invoke` | Native `skill: invoke` or 40 wrappers |
+| 26 named custom subagents | Full | Five focused read-only agents | Five focused read-only agents |
+| Parallel workflow orchestration | Full | Review/investigate child threads plus sequential fallback | Same |
+| Edit lock | Claude hooks | Amp-classified edits | Amp-classified edits |
+| `phx-full` plugin verification gate | Full | Not activated by native invocation | Activated by `phx: full` wrapper |
+| `phx-watch-pr` keep-alive lifecycle | Background monitor | `phx-watch-pr.ts` plugin | `phx-watch-pr.ts` plugin |
+| Claude permission settings | Full | Not installed | Not installed |
+| Tidewave MCP connection | User-configured | User-configured | User-configured |
 
 Domain and reference skills such as `liveview-patterns`, `ecto-patterns`,
 `testing`, and `security` work directly. The flagship `phx-investigate`,
@@ -495,35 +609,44 @@ not ship such configuration, and Tidewave registration remains external.
 
 - Confirm it is under `.agents/skills/<name>/SKILL.md`, not the project root.
 - Start a fresh Amp process from the project after installation.
-- Run `amp skill list` and inspect the reported base directory.
+- Run `amp skills list --json` and inspect `baseDir` and `source`.
 - Validate that `SKILL.md` has `name` and `description` frontmatter.
 
 ### Amp loads a different copy
 
-Run `amp skill list` and compare the displayed path with the precedence list
-above. A user-wide skill can override a project-local skill. Use a unique name,
-remove the higher-priority duplicate, or install into the intended location.
+Run `amp skills list --json` and compare the effective source with the
+precedence list above. A machine-local or built-in skill can mask a hosted
+skill, and a personal hosted skill can mask a workspace one. Remove or isolate
+only the higher-priority duplicate; do not destroy unrelated user data.
 
 ### Amp does not select a relevant skill automatically
 
 Automatic selection depends on the model matching the prompt to the skill
-description. Open the command palette, choose the generated workflow command,
-and then send the task. For non-interactive use, name the skill explicitly and
-ask Amp to report the loaded base directory.
+description. Open the command palette, run `skill: invoke`, select the effective
+skill, and then send the task. For non-interactive use, name the skill explicitly
+and ask Amp to report the loaded base directory.
 
 ### `/phx:review` does not run in Amp
 
 This is expected. Amp uses a command palette rather than user-defined prompt
-slash commands. Press `Ctrl+O`, choose `phx: review`, then send the review
-scope. The installed workflow is the same generated skill; only the invocation
-surface differs.
+slash commands. Press `Ctrl+O`, run `skill: invoke`, select `phx-review`, then
+send the review scope. In paired-full you may instead choose `phx: review`.
+
+### A wrapper says the skill is not installed
+
+The wrapper found no matching file in its supported local resolver subset. This
+is expected for hosted-only, built-in, plugin-cache, custom-path, and unexposed
+nested project sources. Verify the effective source with
+`amp skills list --json`; use native `skill: invoke`, or install a matching
+local paired copy at a supported root. Do not copy files from undocumented Amp
+caches.
 
 ### The workflow command is missing
 
 Run `amp plugins list` and confirm `elixir-phoenix.ts` is installed at the
 intended workspace or system scope. Start a fresh Amp process after installing
-the plugin. Skills alone provide model-driven selection; deterministic palette
-entries require the generated plugin.
+the plugin. Native `skill: invoke` works without it; generated wrapper and
+control entries require the plugin.
 
 ### A specialist child fails before returning findings
 
@@ -551,9 +674,9 @@ installed.
 
 All four planned phases are implemented with stable Amp APIs:
 
-1. **Deterministic workflows:** 51 skills and 45 palette commands, one-turn
-   workflow arming, hidden installed-skill injection, drift checks, and runtime
-   loading.
+1. **Deterministic workflows:** 51 skills with native `skill: invoke`, plus 40
+   local paired wrappers and five controls, one-turn injection, drift checks,
+   and runtime loading.
 2. **Specialist agents:** five canonical domain prompts projected into custom
    Amp agents with an enforced `Read`/`finder` tool boundary.
 3. **Parallel orchestration:** bounded local review and deep-investigation
@@ -562,10 +685,11 @@ All four planned phases are implemented with stable Amp APIs:
 4. **Safe lifecycle behavior:** a persistent classified-edit lock and one
    bounded `phx-full` verification continuation after observable edits.
 
-The remaining gaps are explicit product boundaries, not unfinished phases:
-Amp cannot classify arbitrary third-party mutating tools, and this plugin does
-not port all 26 Claude agents, Claude's complete hook graph, permission files,
-or project-specific MCP registration.
+The remaining gaps are explicit product boundaries, not unfinished phases: the
+Plugin API cannot resolve or invoke hosted skills for wrappers, Amp cannot
+classify arbitrary third-party mutating tools, and this plugin does not port all
+26 Claude agents, Claude's complete hook graph, permission files, or
+project-specific MCP registration.
 
 ## Maintain the generated target
 

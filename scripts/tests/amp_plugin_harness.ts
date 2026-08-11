@@ -1,13 +1,16 @@
 import assert from 'node:assert/strict'
 import {
+  existsSync,
   mkdirSync,
   mkdtempSync,
+  readFileSync,
+  renameSync,
   rmSync,
   symlinkSync,
   writeFileSync,
 } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join, resolve } from 'node:path'
+import { dirname, join, resolve } from 'node:path'
 import { pathToFileURL } from 'node:url'
 
 const pluginPath = process.argv[2]
@@ -16,6 +19,8 @@ if (!pluginPath || !workspace) {
   throw new Error('usage: amp_plugin_harness.ts <plugin> <workspace>')
 }
 const outsideWorkspace = mkdtempSync(join(tmpdir(), 'amp-elixir-phoenix-outside-'))
+const resolverHome = process.env.HOME
+if (!resolverHome) throw new Error('HOME is required for resolver tests')
 mkdirSync(join(workspace, 'lib', 'app'), { recursive: true })
 symlinkSync(outsideWorkspace, join(workspace, 'lib', 'app', 'outside-link'), 'dir')
 writeFileSync(join(outsideWorkspace, 'existing.ex'), 'defmodule Existing do\nend\n')
@@ -271,6 +276,64 @@ const clearPending = commands.get(
 )!
 const agentStart = handlers.get('agent.start')!
 
+const writeResolverSkill = (root: string, marker: string) => {
+  const directory = join(root, 'phx-review')
+  mkdirSync(directory, { recursive: true })
+  writeFileSync(
+    join(directory, 'SKILL.md'),
+    `---\nname: phx-review\ndescription: Resolver test.\n---\n\n${marker}\n`,
+  )
+}
+const invokeReview = async (threadID: string) => {
+  const ctx = context(threadID)
+  await phxReview(ctx)
+  return agentStart({ thread: { id: threadID } }, ctx)
+}
+const globalAgents = join(resolverHome, '.config', 'agents', 'skills')
+const globalLegacyAgents = join(resolverHome, '.agents', 'skills')
+const globalAmp = join(resolverHome, '.config', 'amp', 'skills')
+writeResolverSkill(globalAmp, 'GLOBAL_AMP_SKILL')
+writeResolverSkill(globalLegacyAgents, 'GLOBAL_LEGACY_AGENTS_SKILL')
+writeResolverSkill(globalAgents, 'GLOBAL_AGENTS_SKILL')
+let startResult = await invokeReview('T-global-agents-precedence')
+assert.match(startResult.message.content, /GLOBAL_AGENTS_SKILL/)
+rmSync(join(globalAgents, 'phx-review', 'SKILL.md'))
+mkdirSync(join(globalAgents, 'phx-review', 'SKILL.md'))
+startResult = await invokeReview('T-invalid-global-agents-fallback')
+assert.match(
+  startResult.message.content,
+  /GLOBAL_LEGACY_AGENTS_SKILL/,
+  'a non-file candidate must not mask a valid lower-precedence skill',
+)
+rmSync(join(globalAgents, 'phx-review'), { recursive: true })
+startResult = await invokeReview('T-global-legacy-agents-precedence')
+assert.match(startResult.message.content, /GLOBAL_LEGACY_AGENTS_SKILL/)
+rmSync(join(globalLegacyAgents, 'phx-review'), { recursive: true })
+startResult = await invokeReview('T-global-amp-precedence')
+assert.match(startResult.message.content, /GLOBAL_AMP_SKILL/)
+rmSync(join(globalAmp, 'phx-review'), { recursive: true })
+
+const projectReview = join(workspace, '.agents', 'skills', 'phx-review', 'SKILL.md')
+const savedProjectReview = `${projectReview}.resolver-backup`
+assert.ok(existsSync(projectReview))
+renameSync(projectReview, savedProjectReview)
+const workspaceClaude = join(workspace, '.claude', 'skills')
+const parentAgents = join(dirname(workspace), '.agents', 'skills')
+writeResolverSkill(workspaceClaude, 'WORKSPACE_CLAUDE_SKILL')
+writeResolverSkill(parentAgents, 'PARENT_AGENTS_SKILL')
+startResult = await invokeReview('T-parent-agents-precedence')
+assert.match(
+  startResult.message.content,
+  /PARENT_AGENTS_SKILL/,
+  'an exposed parent .agents skill must outrank a workspace .claude skill',
+)
+rmSync(join(parentAgents, 'phx-review'), { recursive: true })
+startResult = await invokeReview('T-workspace-claude-fallback')
+assert.match(startResult.message.content, /WORKSPACE_CLAUDE_SKILL/)
+rmSync(join(workspaceClaude, 'phx-review'), { recursive: true })
+renameSync(savedProjectReview, projectReview)
+assert.ok(readFileSync(projectReview, 'utf8').includes('name: phx-review'))
+
 await phxReview(draftContext)
 amp.activeThread.current = { id: 'T-active-draft' }
 assert.deepEqual(
@@ -281,7 +344,7 @@ assert.deepEqual(
   {},
   'a non-active thread must not consume a draft workflow',
 )
-let startResult = await agentStart(
+startResult = await agentStart(
   { thread: { id: 'T-active-draft' } },
   context('T-active-draft'),
 )

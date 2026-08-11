@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import hashlib
+import os
 import shutil
 import stat
 import subprocess
@@ -127,6 +128,9 @@ def test_builds_complete_target_with_public_workflow_commands(tmp_path) -> None:
     assert "elixir-phoenix-${workflow.skillName}" in plugin
     assert "amp.on('agent.start'" in plugin
     assert "amp.activeThread.current?.id === event.thread.id" in plugin
+    assert "function parentDirectories(path: string)" in plugin
+    assert "...projectDirectories.map" in plugin
+    assert "statSync(candidate).isFile()" in plugin
     assert "].join('\\n')" in plugin
     assert "].join('\n')" not in plugin
     assert "amp skill list" not in plugin
@@ -157,6 +161,8 @@ def test_generated_plugin_runtime_policies_with_bun(tmp_path) -> None:
 
     output = tmp_path / "amp"
     workspace = tmp_path / "workspace"
+    home = tmp_path / "home"
+    home.mkdir()
     amp.build_target(SOURCE_PLUGIN_DIR, output)
     shutil.copytree(output / "skills", workspace / ".agents" / "skills")
 
@@ -171,6 +177,7 @@ def test_generated_plugin_runtime_policies_with_bun(tmp_path) -> None:
         check=False,
         capture_output=True,
         text=True,
+        env={**os.environ, "HOME": str(home)},
     )
 
     assert result.returncode == 0, result.stderr or result.stdout
