@@ -124,6 +124,9 @@ def test_builds_complete_target_with_public_workflow_commands(tmp_path) -> None:
 
     plugin = (output / amp.PLUGIN_RELATIVE_PATH).read_text(encoding="utf-8")
     assert plugin.startswith(f"// Distribution: {amp.PLUGIN_DISTRIBUTION_URL}\n")
+    # Hosted Amp transports plugin source through a process argument. Keep enough
+    # headroom below the Linux argument-size boundary for transport encoding.
+    assert len(plugin.encode("utf-8")) < 96_000
     assert "@amp-plugin" not in plugin
     assert "elixir-phoenix-${workflow.skillName}" in plugin
     assert "amp.on('agent.start'" in plugin
@@ -136,6 +139,7 @@ def test_builds_complete_target_with_public_workflow_commands(tmp_path) -> None:
     assert "amp skill list" not in plugin
     assert "--codex" not in plugin
     assert "amp.createAgent" in plugin
+    assert "instructions: specialistInstructionsPrefix + definition.instructions" in plugin
     assert "tools: ['Read', 'finder']" in plugin
     assert "Promise.allSettled" in plugin
     assert "parentThreadID" in plugin
