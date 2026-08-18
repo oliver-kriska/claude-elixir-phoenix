@@ -306,13 +306,17 @@ hosted artifacts are managed through Amp's Personal Settings or personal Git
 repositories and work across machines and orbs. See the complete [Amp guide](docs/amp.md)
 for hosted publication, source precedence, wrapper limits, updates, fallback
 installation, specialists, safety boundaries, and verification.
+
 `phx-watch-pr` additionally needs the separate `phx-watch-pr.ts` plugin.
 Install it into the project where the worker Orb opens and watches PRs:
 
 ```bash
-amp plugins add \
-  https://raw.githubusercontent.com/oliver-kriska/claude-elixir-phoenix/main/targets/amp/plugins/phx-watch-pr.ts \
-  --target workspace
+mkdir -p .amp/plugins
+plugin=".amp/plugins/phx-watch-pr.ts"
+temporary="$(mktemp "${plugin}.XXXXXX")"
+curl --fail --silent --show-error --location \
+  https://raw.githubusercontent.com/oliver-kriska/amp-elixir-phoenix/stable/plugins/phx-watch-pr.ts \
+  --output "$temporary" && mv "$temporary" "$plugin"
 ```
 
 It holds a bounded Orb keep-alive lease, filters deployment-like checks out of

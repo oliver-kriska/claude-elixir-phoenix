@@ -443,7 +443,10 @@ def test_native_watch_plugin_lifecycle_harness(tmp_path) -> None:
         cwd=Path(__file__).parents[2],
         text=True,
         capture_output=True,
-        timeout=60,
+        # The harness drives a fake clock with real 80ms flushes: advance() runs
+        # up to 21 of them and is called 23 times, so the run is ~59s of waiting
+        # against ~3s of CPU. A 60s limit left under a second of margin.
+        timeout=240,
     )
 
     assert result.returncode == 0, result.stderr or result.stdout

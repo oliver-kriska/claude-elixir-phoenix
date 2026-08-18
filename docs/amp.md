@@ -112,9 +112,12 @@ generated Amp plugin because only the Plugin API can hold an Orb keep-alive
 lease and wake the same thread after inactivity:
 
 ```bash
-amp plugins add \
-  https://raw.githubusercontent.com/oliver-kriska/claude-elixir-phoenix/main/targets/amp/plugins/phx-watch-pr.ts \
-  --target workspace
+mkdir -p .amp/plugins
+plugin=".amp/plugins/phx-watch-pr.ts"
+temporary="$(mktemp "${plugin}.XXXXXX")"
+curl --fail --silent --show-error --location \
+  https://raw.githubusercontent.com/oliver-kriska/amp-elixir-phoenix/stable/plugins/phx-watch-pr.ts \
+  --output "$temporary" && mv "$temporary" "$plugin"
 ```
 
 Start a fresh Amp process or run `plugins: reload`. Plugins execute code; audit
@@ -501,18 +504,22 @@ normal update path, but removal followed by installation is the exact-sync path
 when a release deletes or renames a skill.
 
 Amp currently restricts `amp plugins add` and directive-based auto-updates to
-Amp-hosted plugins. Update this GitHub-hosted plugin by downloading the current
-validated file again, or remove it with Amp:
+Amp-hosted plugins; it rejects any other URL outright. Update these
+GitHub-hosted plugins by downloading the current validated file again, or remove
+them with Amp:
 
 ```bash
-# Update the workspace plugin atomically
-plugin=".amp/plugins/elixir-phoenix.ts"
-temporary="$(mktemp "${plugin}.XXXXXX")"
-curl --fail --silent --show-error --location \
-  https://raw.githubusercontent.com/oliver-kriska/amp-elixir-phoenix/stable/plugins/elixir-phoenix.ts \
-  --output "$temporary" && mv "$temporary" "$plugin"
+# Update a workspace plugin atomically
+for name in elixir-phoenix phx-watch-pr; do
+  plugin=".amp/plugins/${name}.ts"
+  [ -f "$plugin" ] || continue
+  temporary="$(mktemp "${plugin}.XXXXXX")"
+  curl --fail --silent --show-error --location \
+    "https://raw.githubusercontent.com/oliver-kriska/amp-elixir-phoenix/stable/plugins/${name}.ts" \
+    --output "$temporary" && mv "$temporary" "$plugin"
+done
 
-# Remove the workspace-scoped installation
+# Remove a workspace-scoped installation
 amp plugins remove elixir-phoenix.ts --target workspace
 ```
 

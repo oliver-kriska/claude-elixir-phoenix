@@ -99,6 +99,27 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **The `phx-watch-pr` harness test was one second from red** — it ran with a
+  60-second subprocess timeout and takes ~59 seconds of wall time for ~3 seconds
+  of CPU: the harness drives a fake clock with real 80ms flushes, and `advance()`
+  performs up to 21 of them across 23 calls. Observed locally at 58.9s, 60.4s,
+  and 73.9s on consecutive runs, so it passes or fails on runner load alone —
+  and it is a required check, meaning it would have started blocking unrelated
+  PRs. Raised to 240s; the harness itself is unchanged, since shortening the
+  flush would trade a timeout flake for a race.
+
+- **The `phx-watch-pr` install command could never have worked** — README and
+  `docs/amp.md` told users to run `amp plugins add` against a
+  `raw.githubusercontent.com` URL. Amp `0.0.1787045288` rejects that with
+  `For now, only https://ampcode.com/@amp/plugins/*.ts ... URLs are allowed` and
+  writes nothing. The same `docs/amp.md` already said, 390 lines further down,
+  that "Amp currently restricts `amp plugins add` ... to Amp-hosted plugins" —
+  the file contradicted itself, and the install instruction was the wrong half.
+  Both call sites now use the atomic `curl` + `mv` pattern already documented
+  for `elixir-phoenix.ts`, pointing at the standalone repository's `stable`
+  branch. The update section covers both plugins instead of only the workflow
+  one.
+
 - **Upgrading from v2.x no longer lands users in a dead install** (reported by
   @barquesurlocean, #135) — v3.0.0 renamed the plugin manifest to `phx` (which
   is what makes `/phx:*` correct; pre-v3 versions namespaced their commands as
