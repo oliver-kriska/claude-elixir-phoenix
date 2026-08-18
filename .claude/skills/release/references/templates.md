@@ -57,6 +57,32 @@ printf '\n---\n\nDocs, install guides, and the runtime compatibility matrix: <ht
 gh release create vX.Y.Z --title "vX.Y.Z — <summary>" --notes-file /tmp/relnotes.md
 ```
 
+## Upgrade warning block (Iron Law 9)
+
+When the release requires anything beyond `/plugin update` — a new dependency,
+a renamed manifest, a manual migration — **prepend** this block so it is the
+first thing on the release page, above the changelog body:
+
+```bash
+cat > /tmp/relnotes.md <<'EOF'
+> [!WARNING]
+> **Upgrading from vN.x requires these commands in this order.** <one line on
+> what breaks otherwise, in user-visible terms.>
+>
+> ```bash
+> <exact commands>
+> ```
+
+EOF
+awk '/^## \[X\.Y\.Z\]/{f=1} f&&/^## \[/&&!/X\.Y\.Z/{exit} f' CHANGELOG.md >> /tmp/relnotes.md
+```
+
+State the blast radius in what the user loses, not in mechanism. "The plugin
+fails to load — all 36 `/phx:*` commands disappear" lands; "enters a
+missing-dependency state" does not. v3.0.0 used the second phrasing, buried in
+a `### Changed` bullet, and users still upgraded into a broken install
+(issue #135).
+
 Title format matches history: `vX.Y.Z — <short summary>` (em dash).
 
 **The docs footer is not optional.** A release body is read at the exact moment

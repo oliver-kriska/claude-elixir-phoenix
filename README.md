@@ -140,18 +140,23 @@ that prevent the mistakes Elixir developers actually make in production.
 /plugin install elixir-phoenix
 ```
 
-The install name stays `elixir-phoenix`, while its public workflow commands
-remain `/phx:*`. Claude Code now derives plugin command names from the plugin
-namespace and each skill's final command name. On a fresh install, it also pulls
-in two small compatibility namespaces for `/ecto:*` and `/lv:*` automatically;
-you do not need to install them separately. Existing v2 installations should
-follow the staged upgrade below. After an update, run `/reload-plugins` before
-trying the commands in an already-open session.
+Requires **Claude Code 2.1.110 or newer**. The install name stays
+`elixir-phoenix`, while its public workflow commands remain `/phx:*` — Claude
+Code namespaces commands by the plugin's manifest name, not its install name.
+A fresh install also pulls in two small compatibility namespaces for `/ecto:*`
+and `/lv:*` automatically; you do not need to install them separately. After an
+update, run `/reload-plugins` before trying the commands in an already-open
+session.
 
 #### Updating from v2.x
 
-Update the marketplace, install the two compatibility namespaces introduced in
-v3, then update the main plugin:
+> [!WARNING]
+> **Do not run `claude plugin update` on its own.** v3 introduced two
+> compatibility plugins (`ecto`, `lv`) that v2 never declared, and
+> `claude plugin update` does not install dependencies a new version newly
+> declares. The updated plugin then fails to load entirely — you lose all 36
+> `/phx:*` commands, not just `/ecto:*` and `/lv:*`. Install the two
+> compatibility plugins **first**, using the exact order below.
 
 ```bash
 claude plugin marketplace update oliver-kriska
@@ -160,11 +165,33 @@ claude plugin install lv@oliver-kriska
 claude plugin update elixir-phoenix@oliver-kriska
 ```
 
-Installing the compatibility plugins first prevents the updated main plugin
-from entering a missing-dependency state. Restart Claude Code afterward. In an
-already-open session, `/reload-plugins` reloads the updated skills, agents, and
-hooks. Confirm that `/phx:help`, `/ecto:n1-check`, and `/lv:assigns` appear
-before continuing work.
+Restart Claude Code afterward. In an already-open session, `/reload-plugins`
+reloads the updated skills, agents, and hooks. Confirm that `/phx:help`,
+`/ecto:n1-check`, and `/lv:assigns` appear before continuing work.
+
+##### Already updated in the wrong order?
+
+If `claude plugin list` reports `✘ failed to load` with
+`Dependency "ecto@oliver-kriska" is not installed`, install the two
+compatibility plugins to recover — nothing is lost, and no reinstall is needed:
+
+```bash
+claude plugin install ecto@oliver-kriska
+claude plugin install lv@oliver-kriska
+```
+
+Note that `claude plugin install elixir-phoenix@oliver-kriska` also repairs the
+state, but resolves only **one** missing dependency per run, so it needs two
+invocations here.
+
+#### Commands are `/phx:*`, not `/elixir-phoenix:*`
+
+Plugin versions before v3.0.0 shipped a manifest named `elixir-phoenix`, so
+their commands resolved as `/elixir-phoenix:work` even though `/phx:init` wrote
+`/phx:*` into `CLAUDE.md`. v3.0.0 renamed the manifest to `phx`, which is what
+makes `/phx:*` correct. If Claude Code reports `/phx:` commands as unknown,
+you are on a pre-v3 version — follow the upgrade steps above, then re-run
+`/phx:init --update`.
 
 #### Claude Code subagent compatibility
 

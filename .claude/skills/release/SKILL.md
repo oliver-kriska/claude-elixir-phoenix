@@ -24,6 +24,7 @@ consistent. **Contributor tooling — not shipped in the plugin.**
 6. **ALWAYS leave a fresh empty `## [Unreleased]`** — one `[Unreleased]` becomes one version heading; re-add an empty one on top.
 7. **NEVER force-push** — `git push --force` is hook-blocked here. If history needs rewriting, the user runs it via `!`.
 8. **EVERY release body links the docs site** — append the `https://phxagents.dev` footer. Releases are this project's one measured promotion lever (v3.0.1: 51 → 120 cloners in a day).
+9. **UPGRADE-BREAKING RELEASES LEAD WITH THE WARNING** — if users must do anything beyond `/plugin update`, the release body opens with a `> [!WARNING]` block carrying the exact commands (see #135).
 
 ## Step 0: Preconditions
 
@@ -117,8 +118,8 @@ gh release create vX.Y.Z --title "vX.Y.Z — <summary>" --notes-file <changelog-
 ```
 
 Use the new CHANGELOG section as release notes (extract it to a temp file or `--notes`),
-then **append the docs footer** before publishing — a release body is read at the
-moment someone decides whether to install:
+then **prepend any upgrade warning** (Iron Law 9) and **append the docs footer** before
+publishing — a release body is read at the moment someone decides whether to install:
 
 ```
 ---

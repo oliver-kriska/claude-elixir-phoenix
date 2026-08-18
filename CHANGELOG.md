@@ -50,6 +50,16 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   subagents were never affected — their own frontmatter wins — so
   `parallel-reviewer` and `planning-orchestrator` needed no change.
 
+- **The `release` contributor skill hoists upgrade warnings to the top of the
+  release body** — a new Iron Law and template: when a release needs anything
+  beyond `/plugin update`, the body opens with a `> [!WARNING]` block carrying
+  the exact commands, and states the blast radius in what the user loses rather
+  than in mechanism. v3.0.0 documented its staged upgrade correctly but placed
+  it at roughly line 145 of a long changelog dump, phrased as "a temporary
+  missing-dependency state" — and users upgraded into a broken install anyway
+  (#135). A correct instruction nobody reaches is indistinguishable from a
+  missing one.
+
 - **CLAUDE.md model-tier rules describe the actual split** — the guidance said
   "opus for primary workflow orchestrators, sonnet for secondary orchestrators
   (investigation, tracing)", which stopped matching the plugin once
@@ -59,6 +69,35 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `general-purpose` pinning requirement that follows from it.
 
 ### Fixed
+
+- **Upgrading from v2.x no longer lands users in a dead install** (reported by
+  @barquesurlocean, #135) — v3.0.0 renamed the plugin manifest to `phx` (which
+  is what makes `/phx:*` correct; pre-v3 versions namespaced their commands as
+  `/elixir-phoenix:*` while `/phx:init` wrote `/phx:*` into `CLAUDE.md`) and in
+  the same commit introduced the `ecto` and `lv` compatibility plugins as
+  manifest `dependencies`. Adding a dependency turns out to be a breaking
+  change for already-installed users: `claude plugin update` does **not**
+  install dependencies a new version newly declares, and a missing dependency
+  is a hard load failure, so the obvious `/plugin update` leaves the plugin at
+  `✘ failed to load` with all 36 `/phx:*` commands gone — taken down by the 3
+  compatibility commands. Verified on Claude Code 2.1.234, so this is not the
+  2.1.76–2.1.109 version band recorded during #130; it affects every v2 user on
+  every Claude Code version. Nothing self-heals either, because auto-update is
+  off by default for non-Anthropic marketplaces. The README's staged upgrade
+  block was already correct but described the failure as "a missing-dependency
+  state"; it now leads with a warning, states the blast radius in commands
+  lost, declares the 2.1.110 version floor, adds a recovery path for anyone who
+  already updated in the wrong order, and explains the `/phx:` vs
+  `/elixir-phoenix:` prefix history. Note during recovery that
+  `claude plugin install elixir-phoenix@oliver-kriska` resolves only **one**
+  missing dependency per invocation.
+
+- **`make validate` covers every plugin manifest** — the target validated
+  `plugins/elixir-phoenix` and the marketplace only, so `plugins/ecto`,
+  `plugins/lv`, and `plugins/catchup` could ship a schema violation that CI
+  never saw. This is exactly how `displayName` reached users: it was present in
+  all four Claude-facing manifests while the gate looked at one of them. All
+  five manifests are validated now.
 
 - **`displayName` removed from all Claude Code manifests** (reported by
   @ndrean, #130) — the field was introduced alongside the v3 plugin split and
