@@ -87,7 +87,7 @@ def test_builds_complete_target_with_public_workflow_commands(tmp_path) -> None:
 
     result = amp.build_target(SOURCE_PLUGIN_DIR, output)
 
-    assert result == {"skills": 51, "commands": 45, "plugins": 1}
+    assert result == {"skills": 51, "commands": 45, "plugins": 2}
     skills = amp.discover_skills(SOURCE_PLUGIN_DIR)
     specialists = amp.discover_specialists(SOURCE_PLUGIN_DIR)
     commands = amp.workflow_commands(skills)
@@ -101,7 +101,9 @@ def test_builds_complete_target_with_public_workflow_commands(tmp_path) -> None:
     ]
     assert amp.validate(output / "skills") == 51
     assert (
-        amp.validate_plugin(output / amp.PLUGIN_RELATIVE_PATH, skills, specialists)
+        amp.validate_workflow_plugin(
+            output / amp.WORKFLOW_PLUGIN_RELATIVE_PATH, skills, specialists
+        )
         == 45
     )
 
@@ -122,7 +124,7 @@ def test_builds_complete_target_with_public_workflow_commands(tmp_path) -> None:
     assert "security" not in by_skill
     assert "testing" not in by_skill
 
-    plugin = (output / amp.PLUGIN_RELATIVE_PATH).read_text(encoding="utf-8")
+    plugin = (output / amp.WORKFLOW_PLUGIN_RELATIVE_PATH).read_text(encoding="utf-8")
     assert plugin.startswith(f"// Distribution: {amp.PLUGIN_DISTRIBUTION_URL}\n")
     # Hosted Amp transports plugin source through a process argument. Keep enough
     # headroom below the Linux argument-size boundary for transport encoding.
@@ -175,7 +177,7 @@ def test_generated_plugin_runtime_policies_with_bun(tmp_path) -> None:
             bun,
             "run",
             str(Path(__file__).with_name("amp_plugin_harness.ts")),
-            str(output / amp.PLUGIN_RELATIVE_PATH),
+            str(output / amp.WORKFLOW_PLUGIN_RELATIVE_PATH),
             str(workspace),
         ],
         check=False,
@@ -325,6 +327,7 @@ def test_build_rejects_palette_collisions_before_replacing_output(tmp_path) -> N
     plugin = tmp_path / "plugin"
     _write_skill(plugin, "first", "foo")
     _write_skill(plugin, "second", "phx:foo")
+    _write_amp_plugin(plugin)
     output = tmp_path / "output"
     output.mkdir()
     sentinel = output / "keep.txt"
@@ -400,7 +403,7 @@ def test_complete_target_generates_native_watch_plugin_and_overlay(tmp_path) -> 
 
     result = amp.build_target(SOURCE_PLUGIN_DIR, output)
 
-    assert result == {"skills": 51, "plugins": 1}
+    assert result == {"skills": 51, "commands": 45, "plugins": 2}
     assert amp.validate_plugin(
         output / amp.PLUGIN_TARGET_RELATIVE,
         SOURCE_PLUGIN_DIR,

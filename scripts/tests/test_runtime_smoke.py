@@ -108,10 +108,10 @@ def test_amp_uses_native_install_exact_discovery_and_fresh_removal(tmp_path, mon
     assert all("OTEL_EXPORTER_OTLP_ENDPOINT" not in call[1] for call in calls)
     assert all(call[1]["XDG_CONFIG_HOME"] == str(tmp_path / "xdg_config_home") for call in calls)
     assert all(call[2] == tmp_path / "workspace" for call in calls)
-    assert sum(call[0][1:3] == ["plugins", "exec"] for call in calls) == 1
+    assert sum(call[0][1:3] == ["plugins", "exec"] for call in calls) == 2
     assert sum(call[0][1:4] == ["skill", "list", "--json"] for call in calls) == 2
     assert sum(call[0][1:3] == ["skill", "remove"] for call in calls) == 51
-    assert sum(call[0][1:3] == ["plugins", "exec"] for call in calls) == 1
+    assert sum(call[0][1:3] == ["plugins", "exec"] for call in calls) == 2
 
 
 def test_amp_records_require_unique_names_clean_payload_and_path_boundaries(tmp_path) -> None:

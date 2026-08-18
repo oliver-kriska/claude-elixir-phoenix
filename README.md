@@ -322,7 +322,6 @@ failed/cancelled required CI, unresolved feedback, and terminal outcomes. With
 serialized same-thread workflow. It never blindly reruns shared CI, merges, or
 deploys.
 
-
 ### Use with Codex
 
 Codex installs the generated target as a native skills plugin. Registration and
