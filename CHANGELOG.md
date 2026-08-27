@@ -9,6 +9,17 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [3.1.0] - 2026-08-27
+
+A fifth runtime target (DeepSeek Harness), the first user-facing hook
+documentation, and a native Amp `phx-watch-pr` lifecycle.
+
+### Added
+
 - **DeepSeek Harness (dsh) target** (#139) — a fifth generated runtime target
   at `targets/dsh/`, projecting all 51 canonical skills with their complete
   resource subtrees. dsh's `dsh-skill-filesystem` provider scans
