@@ -134,6 +134,9 @@ jobs:
       - name: Check OpenCode generated skills
         run: python3 -m scripts.build_opencode_skills --check
 
+      - name: Check DeepSeek Harness generated skills
+        run: python3 -m scripts.build_dsh_skills --check
+
       - name: Check generated target golden snapshots
         run: python3 -m scripts.generated_target_snapshots --check
 

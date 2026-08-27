@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import shutil
+import socket
 import subprocess
 from pathlib import Path
 
@@ -448,3 +449,191 @@ def test_pi_resource_validation_requires_the_expected_executable(tmp_path) -> No
             runtime_smoke.PI_SOURCE_EXECUTABLE,
             runtime_smoke.EXECUTABLE_RESOURCE,
         )
+
+
+class _FakeProcess:
+    """Minimal Popen stand-in for the dsh smoke's spawn seam."""
+
+    def __init__(self, exit_code: int | None = None, dies_after_polls: int | None = None) -> None:
+        self._exit_code = exit_code
+        self.returncode = exit_code
+        self.terminated = False
+        self.killed = False
+        self._dies_after_polls = dies_after_polls
+        self.polls = 0
+
+    def poll(self):
+        self.polls += 1
+        if (
+            self._dies_after_polls is not None
+            and self.polls > self._dies_after_polls
+            and self._exit_code is None
+        ):
+            self._exit_code = 1
+            self.returncode = 1
+        return self._exit_code
+
+    def terminate(self) -> None:
+        self.terminated = True
+        if self._exit_code is None:
+            self._exit_code = -15
+            self.returncode = self._exit_code
+
+    def kill(self) -> None:
+        self.killed = True
+
+    def wait(self, timeout=None):
+        return self.returncode
+
+
+def _dsh_env(tmp_path, monkeypatch, process, responses):
+    """Wire the dsh smoke to a fixture target and a scripted RPC transport."""
+
+    def build(_source, output):
+        _fixture_target(Path(output))
+
+    monkeypatch.setattr(runtime_smoke.dsh_port, "build", build)
+    monkeypatch.setattr(runtime_smoke, "_executable", lambda name, env: f"/fake/{name}")
+
+    calls: list[str] = []
+
+    def fake_rpc(base_url, method, payload):
+        calls.append(method)
+        outcome = responses.get(method)
+        if isinstance(outcome, Exception):
+            raise outcome
+        return outcome
+
+    monkeypatch.setattr(runtime_smoke, "_dsh_rpc", fake_rpc)
+    monkeypatch.setattr(runtime_smoke.time, "sleep", lambda _seconds: None)
+    return calls
+
+
+def _dsh_ok_responses(count: int = runtime_smoke.EXPECTED_SKILLS) -> dict:
+    names = [
+        "phx-watch-pr" if n == 0 else "phx-deps-audit" if n == 1 else f"skill-{n}"
+        for n in range(count)
+    ]
+    return {
+        "session.list": {},
+        "session.create": {"sessionId": "s-1"},
+        "skill.list": {
+            "skills": [
+                {"name": name, "description": "d", "modelInvocable": True}
+                for name in names
+            ]
+        },
+    }
+
+
+def test_dsh_discovers_every_skill_and_always_stops_the_host(tmp_path, monkeypatch) -> None:
+    process = _FakeProcess()
+    calls = _dsh_env(tmp_path, monkeypatch, process, _dsh_ok_responses())
+
+    runtime_smoke.smoke_dsh(tmp_path, spawn=lambda *a, **k: process)
+
+    assert calls == ["session.list", "session.create", "skill.list"]
+    assert process.terminated
+
+
+def test_dsh_rejects_a_foreign_listener_answering_for_a_dead_child(tmp_path, monkeypatch) -> None:
+    """A squatter on the port must never be mistaken for the spawned host."""
+    process = _FakeProcess(exit_code=1)
+    _dsh_env(tmp_path, monkeypatch, process, _dsh_ok_responses())
+
+    with pytest.raises(RuntimeError, match="exited early"):
+        runtime_smoke.smoke_dsh(tmp_path, spawn=lambda *a, **k: process)
+
+
+def test_dsh_rejects_a_listener_that_outlives_the_child(tmp_path, monkeypatch) -> None:
+    """The child can die between the liveness poll and the probe's reply.
+
+    Something else on the port then answers for it. Without the post-probe
+    re-poll the smoke walks straight into `skill.list` and reports PASS on a
+    host it never started.
+    """
+    process = _FakeProcess(dies_after_polls=1)
+    calls = _dsh_env(tmp_path, monkeypatch, process, _dsh_ok_responses())
+
+    with pytest.raises(RuntimeError, match="a foreign listener answered"):
+        runtime_smoke.smoke_dsh(tmp_path, spawn=lambda *a, **k: process)
+
+    # It must fail on the read-only probe, before creating a session.
+    assert calls == ["session.list"]
+
+
+def test_dsh_reports_missing_skills_rather_than_passing(tmp_path, monkeypatch) -> None:
+    process = _FakeProcess()
+    responses = _dsh_ok_responses()
+    responses["skill.list"] = {"skills": []}
+    _dsh_env(tmp_path, monkeypatch, process, responses)
+
+    with pytest.raises(RuntimeError, match="discovered 0 of"):
+        runtime_smoke.smoke_dsh(tmp_path, spawn=lambda *a, **k: process)
+    assert process.terminated
+
+
+def test_dsh_rejects_a_skill_that_is_not_model_invocable(tmp_path, monkeypatch) -> None:
+    process = _FakeProcess()
+    responses = _dsh_ok_responses()
+    responses["skill.list"]["skills"][3]["modelInvocable"] = False
+    _dsh_env(tmp_path, monkeypatch, process, responses)
+
+    with pytest.raises(RuntimeError, match="not model-invocable"):
+        runtime_smoke.smoke_dsh(tmp_path, spawn=lambda *a, **k: process)
+
+
+def test_dsh_requires_a_session_id(tmp_path, monkeypatch) -> None:
+    process = _FakeProcess()
+    responses = _dsh_ok_responses()
+    responses["session.create"] = {}
+    _dsh_env(tmp_path, monkeypatch, process, responses)
+
+    with pytest.raises(RuntimeError, match="no sessionId"):
+        runtime_smoke.smoke_dsh(tmp_path, spawn=lambda *a, **k: process)
+
+
+def test_dsh_rpc_reports_a_reply_carrying_no_result_object() -> None:
+    """A top-level error must not surface as `failed: None`."""
+    captured: dict = {}
+
+    class _Reply:
+        def __enter__(self):
+            return self
+
+        def __exit__(self, *_args):
+            return False
+
+        def read(self):
+            return json.dumps(captured["body"]).encode()
+
+    def fake_urlopen(request, timeout=None):
+        captured["url"] = request.full_url
+        return _Reply()
+
+    import urllib.request as urllib_request
+
+    original = urllib_request.urlopen
+    urllib_request.urlopen = fake_urlopen
+    try:
+        captured["body"] = {"error": "boom"}
+        with pytest.raises(RuntimeError, match="no result object"):
+            runtime_smoke._dsh_rpc("http://127.0.0.1:1", "skill.list", {})
+        assert captured["url"].endswith("/api/skill.list")
+
+        captured["body"] = {"result": {"ok": False, "error": {"code": "bad-request"}}}
+        with pytest.raises(RuntimeError, match="bad-request"):
+            runtime_smoke._dsh_rpc("http://127.0.0.1:1", "skill.list", {})
+    finally:
+        urllib_request.urlopen = original
+
+
+def test_free_port_returns_an_unbound_loopback_port() -> None:
+    """The contract is that the caller can hand the port to a child and bind it."""
+    port = runtime_smoke._free_port()
+    assert 1024 < port <= 65535
+
+    # The probe socket must be closed, or the spawned host cannot take the port.
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as taker:
+        taker.bind(("127.0.0.1", port))
+        assert taker.getsockname()[1] == port
