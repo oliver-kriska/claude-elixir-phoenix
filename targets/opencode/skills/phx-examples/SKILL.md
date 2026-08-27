@@ -28,11 +28,9 @@ Patterns NOT in official guides (unique to this plugin):
 
 ### Tidewave Integration Workflow
 
-```bash
-# 1. Check if Tidewave is running
-/mcp
+```text
+# Requires connected mcp__tidewave__* tools
 
-# 2. If connected, debug with runtime tools
 # Get exact docs for YOUR dependency versions
 mcp__tidewave__get_docs "Ecto.Query"
 

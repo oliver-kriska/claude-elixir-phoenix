@@ -142,6 +142,19 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **Canonical skills told every runtime to run Claude Code's `/mcp`** (#141) —
+  `tidewave-integration/SKILL.md` (Iron Law 3) and `examples/SKILL.md` both used
+  `/mcp` to check MCP availability, and shipped byte-identical to all five
+  generated targets, where that command does not exist. Iron Law 3 now reads
+  "Call Tidewave only when matching `mcp__tidewave__*` tools are present" — a
+  check that works on every runtime — and the `examples` fence drops the probe
+  for a `# Requires connected mcp__tidewave__* tools` note, switching from a `bash`
+  fence to a `text` one since its contents are tool invocations rather than
+  shell. The one remaining mention stays, already qualified with "in Claude
+  Code". Found while reviewing #140; fixing it in one target would have broken
+  the test asserting the two Agent Skills projections differ only by the
+  runtime name.
+
 - **The `phx-watch-pr` harness test was one second from red** — it ran with a
   60-second subprocess timeout and takes ~59 seconds of wall time for ~3 seconds
   of CPU: the harness drives a fake clock with real 80ms flushes, and `advance()`

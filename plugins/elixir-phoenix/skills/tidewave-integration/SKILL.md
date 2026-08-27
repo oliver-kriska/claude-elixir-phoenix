@@ -13,7 +13,7 @@ Runtime intelligence for Phoenix apps via MCP. Prefer Tidewave tools over Bash w
 
 1. **DEV ONLY** — Never use Tidewave tools in production contexts. Avoid on shared dev servers with production data copies
 2. **PREFER TIDEWAVE OVER BASH** — `mcp__tidewave__get_docs` > `web_fetch`, `execute_sql_query` > `psql`
-3. **CHECK AVAILABILITY FIRST** — Use `/mcp` command or detect `mcp__tidewave__` tools
+3. **CHECK AVAILABILITY FIRST** — Call Tidewave only when matching `mcp__tidewave__*` tools are present
 4. **SQL IS READ-HEAVY** — Use `execute_sql_query` for SELECT, be careful with mutations
 5. **EXACT VERSIONS** — `get_docs` returns docs for YOUR mix.lock versions, not latest
 
