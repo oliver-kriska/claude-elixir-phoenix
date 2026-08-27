@@ -23,31 +23,31 @@ installation and troubleshooting remain in the linked guides.
 
 ## Capability matrix
 
-| Capability | Claude Code | Amp | Codex | Pi | OpenCode |
-| --- | --- | --- | --- | --- | --- |
-| 51 canonical skills | Full | Generated | Generated | Generated | Generated |
-| Complete skill resource trees | Full | Generated | Generated | Generated | Generated |
-| Executable resource modes | Full | Preserved | Preserved | Preserved | Preserved |
-| Automatic skill selection | Full | Model-driven | Model-driven | Model-driven | Model-driven |
-| Flagship `phx-investigate` | Full | Adapted | Adapted | Adapted | Adapted |
-| Flagship read-only `phx-review` | Full | Adapted | Adapted | Adapted | Adapted |
-| `phx-plan` / `phx-work` | Full | Adapted | Adapted | Adapted | Adapted |
-| `phx-pr-review` / `phx-full` | Full | Adapted | Adapted | Adapted | Adapted |
-| `phx-trace` | Full | Adapted | Adapted | Adapted | Adapted |
-| `phx-audit` / `phx-research` | Full | Adapted | Adapted | Adapted | Adapted |
-| `phx-watch-pr` | Background monitor | Native keep-alive plugin | Guidance/baseline | Guidance/baseline | Guidance/baseline |
-| `phx-freeze` | Hook-enforced advisory lock | Advisory skill + native classified edit lock | Advisory only | Advisory only | Advisory only |
-| Remaining workflow/admin skills | Full | Guidance/baseline | Guidance/baseline | Guidance/baseline | Guidance/baseline |
-| Claude namespaced slash commands | Full | Not applicable | Not applicable | Not applicable | Not applicable |
-| Deterministic workflow invocation | Slash commands | Native `skill: invoke`; 40 wrappers when paired locally | Skill reference | `/skill:*` | Skill tool |
-| Bundled custom agents | Full | Five read-only specialists | Deferred | Deferred | Deferred |
-| Lifecycle/enforcement hooks | Full | Edit lock; bounded verification gate only through paired `phx: full` | One optional safeguard | Deferred | Deferred |
-| Tidewave MCP connection | External | External | External | External | External |
-| Plugin-root instructions | Full | Deferred | Deferred | Deferred | Deferred |
-| Deterministic generated target | Canonical source | Yes | Yes | Yes | Yes |
-| Mode-aware CI drift validation | Not applicable | Yes | Yes | Yes | Yes |
-| Golden target snapshot | Not applicable | Yes | Yes | Yes | Yes |
-| Isolated native smoke command | Not applicable | Yes | Yes | Yes | Yes |
+| Capability | Claude Code | Amp | Codex | Pi | OpenCode | dsh |
+| --- | --- | --- | --- | --- | --- | --- |
+| 51 canonical skills | Full | Generated | Generated | Generated | Generated | Generated |
+| Complete skill resource trees | Full | Generated | Generated | Generated | Generated | Generated |
+| Executable resource modes | Full | Preserved | Preserved | Preserved | Preserved | Preserved |
+| Automatic skill selection | Full | Model-driven | Model-driven | Model-driven | Model-driven | Model-driven |
+| Flagship `phx-investigate` | Full | Adapted | Adapted | Adapted | Adapted | Adapted |
+| Flagship read-only `phx-review` | Full | Adapted | Adapted | Adapted | Adapted | Adapted |
+| `phx-plan` / `phx-work` | Full | Adapted | Adapted | Adapted | Adapted | Adapted |
+| `phx-pr-review` / `phx-full` | Full | Adapted | Adapted | Adapted | Adapted | Adapted |
+| `phx-trace` | Full | Adapted | Adapted | Adapted | Adapted | Adapted |
+| `phx-audit` / `phx-research` | Full | Adapted | Adapted | Adapted | Adapted | Adapted |
+| `phx-watch-pr` | Background monitor | Native keep-alive plugin | Guidance/baseline | Guidance/baseline | Guidance/baseline | Guidance/baseline |
+| `phx-freeze` | Hook-enforced advisory lock | Advisory skill + native classified edit lock | Advisory only | Advisory only | Advisory only | Advisory only |
+| Remaining workflow/admin skills | Full | Guidance/baseline | Guidance/baseline | Guidance/baseline | Guidance/baseline | Guidance/baseline |
+| Claude namespaced slash commands | Full | Not applicable | Not applicable | Not applicable | Not applicable | Not applicable |
+| Deterministic workflow invocation | Slash commands | Native `skill: invoke`; 40 wrappers when paired locally | Skill reference | `/skill:*` | Skill tool | `/phx-*` token or skill tool |
+| Bundled custom agents | Full | Five read-only specialists | Deferred | Deferred | Deferred | Not applicable |
+| Lifecycle/enforcement hooks | Full | Edit lock; bounded verification gate only through paired `phx: full` | One optional safeguard | Deferred | Deferred | Deferred |
+| Tidewave MCP connection | External | External | External | External | External | External |
+| Plugin-root instructions | Full | Deferred | Deferred | Deferred | Deferred | Native `CLAUDE.md` read |
+| Deterministic generated target | Canonical source | Yes | Yes | Yes | Yes | Yes |
+| Mode-aware CI drift validation | Not applicable | Yes | Yes | Yes | Yes | Yes |
+| Golden target snapshot | Not applicable | Yes | Yes | Yes | Yes | Yes |
+| Isolated native smoke command | Not applicable | Yes | Yes | Yes | Yes | No runtime introspection API |
 
 “External” Tidewave support means a skill may use Tidewave when the project and
 runtime already expose it. Installing Tidewave in a Phoenix app starts the MCP
@@ -64,6 +64,7 @@ Tidewave, named custom agents, or Claude-only task APIs.
 | Codex | `$elixir-phoenix:phx-investigate`, `$elixir-phoenix:phx-review` | Native Codex Git marketplace plugin | [Codex guide](codex.md) |
 | Pi | `/skill:phx-investigate`, `/skill:phx-review` | Native Pi Git package | [Pi guide](pi.md) |
 | OpenCode | Ask the skill tool to load the skill; in the tested 1.17.2 setup, `/phx-investigate` and `/phx-review` also work | Sparse Git checkout | [OpenCode guide](opencode.md) |
+| dsh | `/phx-investigate`, `/phx-review` (host-injected), or the skill tool | Sparse Git checkout into a scanned skill root | [dsh guide](dsh.md) |
 
 Codex plugin skills are qualified by the plugin manifest name. OpenCode 1.17.2
 does not provide a native Git skills-package installer, so a sparse checkout is
@@ -143,6 +144,28 @@ OpenCode recursively discovers `SKILL.md` files in the installed
 `targets/opencode` tree. The generated package does not install hooks, custom
 agents, separate commands, MCP servers, root instructions, or configuration.
 Use `opencode debug skill --pure` for deterministic discovery diagnostics.
+
+### dsh
+
+DeepSeek Harness discovers `targets/dsh/skills` through its filesystem skill
+provider, which scans `<projectRoot>/.dsh/skills`, `<projectRoot>/.agents/skills`,
+`customSkillDirs`, `$DSH_HOME/skills`, and `$DSH_AGENTS_HOME/skills`. Discovery
+is deliberately **one level deep**, so the target is installed by pointing
+`customSkillDirs` at the generated `skills/` directory or by copying its contents
+into a scanned root — a nested checkout is invisible.
+
+A whitespace-bounded `/phx-*` token naming a user-invocable skill is recognized
+by the host pre-step boundary anywhere in a user message and injects the rendered
+skill body deterministically, which is the closest equivalent to a Claude Code
+slash command. dsh reads `CLAUDE.md` natively (its instruction candidates default
+to `['AGENTS.md', 'CLAUDE.md']`), so `/phx:init` output needs no porting.
+
+The generated target does not install hooks, custom agents, separate commands,
+MCP servers, or configuration. Custom agents are *not applicable* rather than
+deferred: dsh has no markdown agent registry, only a persona string on its
+`subagent` tool. The Claude Code hook bridge covers 7 of 30 events and drops
+`if:` gating, so no hook port ships. dsh exposes no scriptable skill
+introspection, so this target has no smoke harness.
 
 ## Acceptance contract for generated runtimes
 

@@ -45,6 +45,13 @@ is the portable explicit interface. See [Use with OpenCode](#use-with-opencode),
 [OpenCode guide](docs/opencode.md), or the
 [OpenCode install guide](https://phxagents.dev/install/opencode/).
 
+**Using DeepSeek Harness (dsh)?** Install the generated skills-only target for
+all 51 skills. A `/phx-investigate` or `/phx-review` token anywhere in your
+message loads the skill deterministically, and dsh reads your `CLAUDE.md`
+natively. See [Use with DeepSeek Harness](#use-with-deepseek-harness) or the
+[dsh guide](docs/dsh.md); hooks and custom agents are intentionally not
+included, and Tidewave MCP registration is external.
+
 Compare native invocation, installation, and deliberately deferred capabilities
 in the canonical [runtime support matrix](docs/runtime-support.md). Generated
 skills support does not imply full Claude Code feature parity.
@@ -119,7 +126,7 @@ that prevent the mistakes Elixir developers actually make in production.
 ```
 
 > **v3.0.0** -- all 51 canonical skill trees have generated distributions
-> for Amp, Codex, Pi, and OpenCode. Nine core workflows are fully adapted: the
+> for Amp, Codex, Pi, OpenCode, and DeepSeek Harness. Nine core workflows are fully adapted: the
 > six flagship lifecycle workflows plus `phx-trace`, `phx-audit`, and
 > `phx-research`. The remaining projections preserve domain knowledge but may
 > require the runtime to translate Claude-specific orchestration. Claude Code
@@ -389,6 +396,31 @@ Claude-specific orchestration APIs. See the
 [OpenCode installation and support guide](docs/opencode.md) for global setup,
 updates, uninstall, feature-branch review, discovery debugging, and limitations.
 
+### Use with DeepSeek Harness
+
+DeepSeek Harness scans a fixed set of skill roots and does **not** recurse, so
+point its provider at the generated directory rather than nesting a checkout:
+
+```bash
+cd /path/to/your-phoenix-project
+git clone --filter=blob:none --sparse https://github.com/oliver-kriska/claude-elixir-phoenix.git .dsh/vendor/elixir-phoenix
+git -C .dsh/vendor/elixir-phoenix sparse-checkout set targets/dsh
+```
+
+Then add `customSkillDirs: [<abs-path>/.dsh/vendor/elixir-phoenix/targets/dsh/skills]`
+to the `skill-filesystem` row in your profile's `cordis.patch.yml`, or simply copy
+`targets/dsh/skills/.` into `.agents/skills/`.
+
+Use a `/phx-investigate` or `/phx-review` token anywhere in a message — dsh's
+pre-step boundary injects the full skill body deterministically — or ask the
+model to load the skill through its `skill` tool. dsh reads `CLAUDE.md` natively,
+so `/phx:init` output applies with no porting. This target contains skills and
+complete bundled resources only: not hooks, custom agents, or MCP. Custom agents
+are not applicable rather than deferred, because dsh has no markdown agent
+registry. Tested against dsh `0.1.1-rc.2`, which is a developer preview with
+breaking changes expected. See the [dsh guide](docs/dsh.md) for both install
+options, discovery roots, and the full capability boundary.
+
 ## Getting Started
 
 The remainder of this README describes the full Claude Code plugin and uses
@@ -396,8 +428,8 @@ Claude Code `/phx:*`, `/ecto:*`, and `/lv:*` syntax. For generated runtimes,
 translate invocations using the runtime guide: Amp natively uses
 `skill: invoke` and paired-full also provides generated entries such as
 `phx: investigate`; Codex uses
-`$elixir-phoenix:<skill>`, Pi uses `/skill:<name>`, and OpenCode uses its skill
-tool. Generated editions do not install Claude Code's complete custom agent,
+`$elixir-phoenix:<skill>`, Pi uses `/skill:<name>`, OpenCode uses its skill
+tool, and dsh uses a `/phx-<skill>` token or its skill tool. Generated editions do not install Claude Code's complete custom agent,
 lifecycle-hook, permission, or MCP configuration.
 
 New to the plugin? Run the interactive tutorial:

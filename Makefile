@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-target amp-target-sync amp-target-validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-target amp-target-sync amp-target-validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke dsh-skills dsh-skills-sync dsh-skills-validate generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -124,11 +124,22 @@ opencode-skills-validate: ## Check committed OpenCode skills for generated drift
 opencode-runtime-smoke: ## Optional: smoke-test local target with an isolated OpenCode runtime
 	@python3 -m scripts.runtime_smoke opencode
 
-generated-skills-sync: ## Regenerate and verify Amp, Codex, Pi, and OpenCode targets
+dsh-skills: ## Generate the DeepSeek Harness (dsh) skills target
+	@python3 -m scripts.build_dsh_skills
+
+dsh-skills-sync: ## Regenerate and verify the committed DeepSeek Harness target
+	@$(MAKE) dsh-skills
+	@$(MAKE) dsh-skills-validate
+
+dsh-skills-validate: ## Check committed DeepSeek Harness skills for generated drift
+	@python3 -m scripts.build_dsh_skills --check
+
+generated-skills-sync: ## Regenerate and verify Amp, Codex, Pi, OpenCode, and dsh targets
 	@$(MAKE) amp-skills-sync
 	@$(MAKE) codex-skills-sync
 	@$(MAKE) pi-skills-sync
 	@$(MAKE) opencode-skills-sync
+	@$(MAKE) dsh-skills-sync
 	@$(MAKE) generated-skills-snapshots-validate
 
 generated-skills-snapshots: ## Update reviewed byte-and-mode digests for all targets
@@ -149,7 +160,7 @@ security: ## SkillSpector scan of all skills + agents (skips if not installed)
 
 # --- CI (full pipeline) ---
 
-ci: lint test validate amp-skills-validate codex-skills-validate pi-skills-validate opencode-skills-validate generated-skills-snapshots-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
+ci: lint test validate amp-skills-validate codex-skills-validate pi-skills-validate opencode-skills-validate dsh-skills-validate generated-skills-snapshots-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
 
 # --- Clean ---
 

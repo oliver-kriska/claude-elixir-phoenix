@@ -12,7 +12,7 @@ from pathlib import Path
 
 from .port_lib import REPO_ROOT, TARGETS_DIR
 
-TARGET_NAMES = ("amp", "codex", "pi", "opencode")
+TARGET_NAMES = ("amp", "codex", "pi", "opencode", "dsh")
 SNAPSHOT_FILE = REPO_ROOT / "scripts" / "generated_target_snapshots.json"
 FORMAT_VERSION = 1
 
@@ -86,7 +86,7 @@ def check() -> int:
         )
         return 1
     if expected == actual:
-        print("[generated-snapshots] OK: Amp, Codex, Pi, OpenCode")
+        print("[generated-snapshots] OK: Amp, Codex, Pi, OpenCode, dsh")
         return 0
     for name in TARGET_NAMES:
         if expected.get("targets", {}).get(name) != actual["targets"][name]:

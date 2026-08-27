@@ -9,6 +9,24 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **DeepSeek Harness (dsh) target** (#139) — a fifth generated runtime target
+  at `targets/dsh/`, projecting all 51 canonical skills with their complete
+  resource subtrees. dsh's `dsh-skill-filesystem` provider scans
+  `.agents/skills` and friends for single-level `<name>/SKILL.md` bundles, and
+  its pre-step boundary injects the full body for a whitespace-bounded
+  `/phx-*` token, so the plugin's command surface survives intact. dsh also
+  reads `CLAUDE.md` natively, so `/phx:init` output needs no porting. Adds
+  `scripts/port_lib/dsh.py`, `scripts/build_dsh_skills.py`, twelve tests in
+  `scripts/tests/test_dsh.py`, `make dsh-skills{,-sync,-validate}` wired into
+  `generated-skills-sync` and `ci`, a golden snapshot entry, `docs/dsh.md`, and
+  a `dsh` column in `docs/runtime-support.md`. Two dsh-specific build gates:
+  descriptions are capped at the 500-char `catalogDescriptionMaxLength` (dsh
+  truncates silently past it) and nested `SKILL.md` files are rejected (dsh
+  discovery is deliberately one level deep). Skills-only by design — dsh has no
+  markdown agent registry, and its Claude Code hook bridge covers 7 of 30 events
+  while dropping `if:` gating, so neither the 26 agents nor the 30 hooks ship.
+  Tested against dsh `0.1.1-rc.2`, a developer preview.
+
 - **Hook documentation** — the 23 hooks across 10 lifecycle events had no
   user-facing docs; the reasoning lived only in script header comments and a
   terse contributor checklist. Adds `HOOKS.md` at the repo root (what fires
