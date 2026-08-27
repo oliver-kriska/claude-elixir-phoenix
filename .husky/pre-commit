@@ -4,7 +4,12 @@
 
 STAGED_MD=$(git diff --cached --name-only --diff-filter=ACM | grep '\.md$' || true)
 STAGED_JSON=$(git diff --cached --name-only --diff-filter=ACM | grep '\.json$' || true)
-STAGED_SH=$(git diff --cached --name-only --diff-filter=ACM | grep '\.sh$' || true)
+# targets/ holds generated runtime projections whose shell resources are copied
+# byte-for-byte from plugins/. Linting the copies re-reports every canonical
+# finding once per target and cannot be fixed in place, since the next
+# `make <target>-skills` regenerates them. CI scopes shellcheck the same way:
+# hooks/scripts and lab/ only, never targets/.
+STAGED_SH=$(git diff --cached --name-only --diff-filter=ACM | grep '\.sh$' | grep -v '^targets/' || true)
 STAGED_SKILL_AGENT=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^plugins/[^/]+/(skills|agents)/' || true)
 STAGED_CANONICAL_SKILLS=$(git diff --cached --name-only --diff-filter=ACMRD | grep -E '^plugins/elixir-phoenix/skills/' || true)
 STAGED_EVAL_FW=$(git diff --cached --name-only --diff-filter=ACM | grep -E '^lab/eval/' || true)

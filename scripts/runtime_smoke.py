@@ -7,10 +7,14 @@ import argparse
 import json
 import os
 import shutil
+import socket
 import stat
 import subprocess
 import sys
 import tempfile
+import time
+import urllib.error
+import urllib.request
 from pathlib import Path
 from typing import Callable
 from urllib.parse import unquote, urlparse
@@ -19,11 +23,13 @@ from urllib.request import url2pathname
 from scripts.port_lib import SOURCE_PLUGIN_DIR
 from scripts.port_lib import amp as amp_port
 from scripts.port_lib import codex as codex_port
+from scripts.port_lib import dsh as dsh_port
 from scripts.port_lib import opencode as opencode_port
 from scripts.port_lib import pi as pi_port
 
 EXPECTED_SKILLS = 51
 Run = Callable[..., subprocess.CompletedProcess[str]]
+Spawn = Callable[..., "subprocess.Popen[str]"]
 EXECUTABLE_RESOURCE = Path("phx-watch-pr/scripts/watch-pr.sh")
 PI_SOURCE_EXECUTABLE = Path("watch-pr/scripts/watch-pr.sh")
 AMP_EXECUTABLE_RESOURCE = Path("phx-deps-audit/scripts/diff_cves.py")
@@ -505,9 +511,190 @@ def smoke_opencode(root: Path, runner: Run = subprocess.run) -> None:
     print(f"[runtime-smoke] OpenCode {version}: {EXPECTED_SKILLS} skills OK")
 
 
+def _dsh_rpc(base_url: str, method: str, payload: dict) -> dict:
+    """POST one Typert RPC envelope to the dsh web host's /api bridge.
+
+    Verified against dsh 0.1.1-rc.2: the handler does a two-level parse where
+    the URL path equals the method (`POST /api/session.create`), the body is a
+    `client-request` full form, and the reply wraps the business value in
+    `result: {ok, value}`.
+    """
+    body = json.dumps(
+        {
+            "type": "client-request",
+            "rpcId": f"smoke-{method}",
+            "method": method,
+            "payload": payload,
+        }
+    ).encode("utf-8")
+    request = urllib.request.Request(
+        f"{base_url}/api/{method}",
+        data=body,
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:
+        message = json.load(response)
+    if not isinstance(message, dict):
+        raise RuntimeError(f"{method} returned a non-object reply")
+    result = message.get("result")
+    if not isinstance(result, dict):
+        # A top-level `error` (or any other shape) must not be reported as
+        # `failed: None`, which reads like a missing detail rather than a
+        # protocol mismatch.
+        raise RuntimeError(f"{method} returned no result object: {message}")
+    if not result.get("ok"):
+        raise RuntimeError(f"{method} failed: {result.get('error')}")
+    return result.get("value") or {}
+
+
+def _free_port() -> int:
+    """Reserve an ephemeral loopback port and release it for the child.
+
+    A fixed port lets an unrelated listener — a leftover `dsh web`, the user's
+    own session, or a concurrent smoke run — answer the readiness probe, which
+    would report PASS without a byte reaching the process this function
+    launched.
+    """
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as probe:
+        probe.bind(("127.0.0.1", 0))
+        return probe.getsockname()[1]
+
+
+def _dsh_log_tail(log: Path, limit: int = 20) -> str:
+    try:
+        lines = log.read_text(encoding="utf-8", errors="replace").splitlines()
+    except OSError:
+        return "<no output captured>"
+    return "\n".join(lines[-limit:]) or "<no output>"
+
+
+def _dsh_wait_for_host(
+    base_url: str, process: subprocess.Popen, log: Path, timeout: float = 120.0
+) -> None:
+    deadline = time.monotonic() + timeout
+    last = "no response yet"
+    while time.monotonic() < deadline:
+        if process.poll() is not None:
+            raise RuntimeError(
+                f"dsh web exited early with code {process.returncode}\n"
+                f"--- dsh output ---\n{_dsh_log_tail(log)}"
+            )
+        try:
+            # `session.list` is read-only, so probing leaves no stray session.
+            _dsh_rpc(base_url, "session.list", {})
+        except (urllib.error.URLError, OSError, json.JSONDecodeError, RuntimeError) as error:
+            last = str(error)
+            time.sleep(1.0)
+            continue
+        # The child may have died between the poll above and this reply, letting
+        # something else on the port answer for it. This check stays outside the
+        # `except` above, which swallows RuntimeError for the retry path.
+        if process.poll() is not None:
+            raise RuntimeError(
+                f"a foreign listener answered {base_url}; dsh web exited "
+                f"with code {process.returncode}\n"
+                f"--- dsh output ---\n{_dsh_log_tail(log)}"
+            )
+        return
+    raise RuntimeError(
+        f"dsh web did not answer /api within {timeout:.0f}s: {last}\n"
+        f"--- dsh output ---\n{_dsh_log_tail(log)}"
+    )
+
+
+def smoke_dsh(
+    root: Path,
+    runner: Run = subprocess.run,
+    spawn: Spawn = subprocess.Popen,
+) -> None:
+    """Boot an isolated `dsh web --no-open` and assert it discovers the target.
+
+    dsh exposes no CLI skill introspection, so discovery is verified over the
+    loopback RPC bridge. `session.create` and `skill.list` invoke no provider,
+    so this needs no API key and no model. `spawn` is the injection seam that
+    keeps this function testable, mirroring `runner` in the sibling smokes.
+    """
+    home = root / "home"
+    workspace = root / "workspace"
+    for path in (home, workspace):
+        path.mkdir(parents=True)
+    # dsh resolves the project root as the nearest `.git` ancestor.
+    (workspace / ".git").mkdir()
+    install = workspace / ".agents" / "skills"
+    install.parent.mkdir(parents=True, exist_ok=True)
+    dsh_port.build(SOURCE_PLUGIN_DIR, root / "generated")
+    shutil.copytree(root / "generated" / "skills", install)
+    _verify_tree(install)
+
+    env = os.environ.copy()
+    for name in list(env):
+        if name.startswith("DSH_") or name.startswith("XDG_"):
+            del env[name]
+    env |= {
+        "HOME": str(home),
+        "DSH_HOME": str(home / ".dsh"),
+        "DSH_AGENTS_HOME": str(home / ".agents"),
+        "DSH_TELEMETRY_DISABLED": "1",
+    }
+    executable = _executable("dsh", env)
+    port = _free_port()
+    base_url = f"http://127.0.0.1:{port}"
+    log = root / "dsh-web.log"
+    # Never leave the child writing into an undrained pipe: a full buffer can
+    # wedge it before it listens, and the crash reason is the whole point of
+    # the output on the most likely first-run failure.
+    with log.open("w", encoding="utf-8") as sink:
+        process = spawn(
+            [executable, "web", "--no-open", "--host", "127.0.0.1", "--port", str(port)],
+            env=env,
+            cwd=workspace,
+            text=True,
+            stdout=sink,
+            stderr=subprocess.STDOUT,
+        )
+        try:
+            _dsh_wait_for_host(base_url, process, log)
+            session = _dsh_rpc(base_url, "session.create", {"cwd": str(workspace)})
+            session_id = session.get("sessionId")
+            if not session_id:
+                raise RuntimeError("session.create returned no sessionId")
+            listed = _dsh_rpc(base_url, "skill.list", {"sessionId": session_id})
+            entries = listed.get("skills") or []
+            discovered = {
+                entry.get("name") for entry in entries if isinstance(entry, dict)
+            }
+            expected = {path.parent.name for path in install.glob("*/SKILL.md")}
+            missing = expected - discovered
+            if missing:
+                raise RuntimeError(
+                    f"dsh discovered {len(discovered & expected)} of {len(expected)} "
+                    f"generated skills; missing {sorted(missing)[:5]}"
+                )
+            unavailable = sorted(
+                entry.get("name")
+                for entry in entries
+                if isinstance(entry, dict)
+                and entry.get("name") in expected
+                and not entry.get("modelInvocable")
+            )
+            if unavailable:
+                raise RuntimeError(
+                    f"generated skills are not model-invocable in dsh: {unavailable[:5]}"
+                )
+        finally:
+            process.terminate()
+            try:
+                process.wait(timeout=20)
+            except subprocess.TimeoutExpired:
+                process.kill()
+                process.wait(timeout=20)
+    print(f"[runtime-smoke] dsh: {EXPECTED_SKILLS} skills discovered OK")
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("runtime", choices=("amp", "codex", "pi", "opencode"))
+    parser.add_argument("runtime", choices=("amp", "codex", "pi", "opencode", "dsh"))
     args = parser.parse_args()
     try:
         with tempfile.TemporaryDirectory(prefix=f"{args.runtime}-runtime-smoke-") as temporary:
@@ -516,8 +703,16 @@ def main() -> int:
                 "codex": smoke_codex,
                 "pi": smoke_pi,
                 "opencode": smoke_opencode,
+                "dsh": smoke_dsh,
             }[args.runtime](Path(temporary))
-    except (KeyError, OSError, RuntimeError, ValueError, json.JSONDecodeError) as error:
+    except (
+        KeyError,
+        OSError,
+        RuntimeError,
+        ValueError,
+        json.JSONDecodeError,
+        subprocess.TimeoutExpired,
+    ) as error:
         print(f"[runtime-smoke] FAIL: {error}", file=sys.stderr)
         return 1
     return 0

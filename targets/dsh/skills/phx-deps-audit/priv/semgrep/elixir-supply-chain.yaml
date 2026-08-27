@@ -1,0 +1,81 @@
+rules:
+  - id: elixir-compile-time-http
+    message: HTTP fetch at compile time inside __before_compile__
+    languages: [elixir]
+    severity: ERROR
+    pattern-either:
+      - patterns:
+          - pattern-inside: |
+              defmacro __before_compile__($ENV) do
+                ...
+              end
+          - pattern: System.cmd("curl", $ARGS)
+      - patterns:
+          - pattern-inside: |
+              defmacro __before_compile__($ENV) do
+                ...
+              end
+          - pattern: HTTPoison.get(...)
+
+  - id: elixir-eval-string
+    message: Code.eval_string with non-literal argument
+    languages: [elixir]
+    severity: ERROR
+    pattern-either:
+      - pattern: Code.eval_string($PAYLOAD)
+      - pattern: Code.eval_quoted($PAYLOAD)
+    pattern-not-either:
+      - pattern: Code.eval_string("$LITERAL")
+      - pattern: Code.eval_quoted("$LITERAL")
+
+  - id: elixir-dynamic-system-cmd
+    message: System.cmd with variable first argument
+    languages: [elixir]
+    severity: WARNING
+    pattern: System.cmd($CMD, $ARGS)
+    pattern-not: System.cmd("$LITERAL", $ARGS)
+
+  - id: elixir-base64-to-eval
+    message: Base.decode64 result fed directly to Code.eval_string
+    languages: [elixir]
+    severity: ERROR
+    pattern-either:
+      - pattern: Code.eval_string(Base.decode64!($X))
+      - patterns:
+          - pattern: |
+              $X = Base.decode64!(...)
+              ...
+              Code.eval_string($X)
+
+  - id: elixir-on-load-with-side-effects
+    message: __on_load__ callback running System.cmd / File.write
+    languages: [elixir]
+    severity: ERROR
+    pattern-either:
+      - patterns:
+          - pattern-inside: |
+              def __on_load__() do
+                ...
+              end
+          - pattern: System.cmd(...)
+      - patterns:
+          - pattern-inside: |
+              def __on_load__() do
+                ...
+              end
+          - pattern: File.write(...)
+
+  - id: elixir-binary-to-term-literal
+    message: :erlang.binary_to_term called without :safe option
+    languages: [elixir]
+    severity: ERROR
+    patterns:
+      - pattern: :erlang.binary_to_term($X)
+      - pattern-not: :erlang.binary_to_term($X, [:safe])
+
+  - id: elixir-erlang-apply-dynamic
+    message: :erlang.apply with non-literal module or function name
+    languages: [elixir]
+    severity: ERROR
+    pattern: :erlang.apply($MOD, $FUN, $ARGS)
+    pattern-not: :erlang.apply($MOD, :$LITERAL_ATOM, $ARGS)

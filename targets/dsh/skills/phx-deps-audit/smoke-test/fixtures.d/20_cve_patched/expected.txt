@@ -1,0 +1,8 @@
+# 20_cve_patched: decimal 2.3.0 → 3.0.0 patches CVE-2026-32686.
+# diff_cves.py should emit exactly one `patched` finding.
+cve-diff category:patched count:1
+cve-diff category:introduced count:0
+cve-diff category:still_exposed count:0
+cve-diff contains:CVE-2026-32686
+cve-diff contains:"package":"decimal"
+cve-diff contains:"severity":"info"
