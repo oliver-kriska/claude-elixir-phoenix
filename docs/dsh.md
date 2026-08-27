@@ -38,38 +38,10 @@ recommended root: the same checkout is readable by other runtimes that adopt it.
 are discovered, so a checkout parked at `.agents/skills/elixir-phoenix/targets/dsh/…`
 is invisible. Both options below account for that.
 
-### Option A — sparse checkout plus `customSkillDirs` (recommended)
+### Option A — copy into a scanned root (recommended)
 
-Keeps the target updatable with `git pull` and leaves `.agents/skills` free for
-your own skills. Check out anywhere:
-
-```bash
-cd /path/to/your-phoenix-project
-git clone --filter=blob:none --sparse \
-  https://github.com/oliver-kriska/claude-elixir-phoenix.git \
-  .dsh/vendor/elixir-phoenix
-git -C .dsh/vendor/elixir-phoenix sparse-checkout set targets/dsh
-```
-
-Then point the skill provider at the generated `skills/` directory. In your
-profile's `cordis.patch.yml` (`$DSH_HOME/profiles/<name>/cordis.patch.yml`):
-
-```yaml
-- id: skill-filesystem
-  name: '@deepseek-ai/dsh-skill-filesystem'
-  config:
-    customSkillDirs:
-      - /absolute/path/to/your-phoenix-project/.dsh/vendor/elixir-phoenix/targets/dsh/skills
-```
-
-A patch replaces a row's entire `config`, not individual keys. The `dsh-base`
-row carries no config, so the block above is complete as written.
-
-Update later with `git -C .dsh/vendor/elixir-phoenix pull`.
-
-### Option B — copy into a standard root (no config)
-
-Simplest, at the cost of `git pull` updates:
+Works in every profile and preset with no configuration, because each agent
+preset mounts its own `skill-filesystem` row against the default roots:
 
 ```bash
 cd /path/to/your-phoenix-project
@@ -83,7 +55,43 @@ rm -rf "$tmp"
 ```
 
 For a user-level install available in every project, use `~/.agents/skills`
-instead of `.agents/skills`.
+instead of `.agents/skills`. Re-run the same block to update.
+
+### Option B — `customSkillDirs` (advanced, profile-dependent)
+
+Keeps the checkout updatable with `git pull`, but you must know which row your
+profile actually mounts. **In the default `web` profile the base
+`skill-filesystem` row is disabled**: `dsh-web-app` sets `disabled: true` on it
+because agent presets own local discovery. Configuring that row without
+re-enabling it silently does nothing.
+
+```bash
+cd /path/to/your-phoenix-project
+git clone --filter=blob:none --sparse \
+  https://github.com/oliver-kriska/claude-elixir-phoenix.git \
+  .dsh/vendor/elixir-phoenix
+git -C .dsh/vendor/elixir-phoenix sparse-checkout set targets/dsh
+```
+
+In your profile's `cordis.patch.yml`
+(`$DSH_HOME/profiles/<name>/cordis.patch.yml`):
+
+```yaml
+- id: skill-filesystem
+  name: '@deepseek-ai/dsh-skill-filesystem'
+  disabled: false
+  config:
+    customSkillDirs:
+      - /absolute/path/to/your-phoenix-project/.dsh/vendor/elixir-phoenix/targets/dsh/skills
+```
+
+A patch replaces a row's entire `config` rather than merging keys, and must
+restate every key the row needs — including `disabled: false` to undo the
+web bundle's override. This registers the provider into the skill registry's
+**global** layer, which merges with the active preset's layer; a preset skill of
+the same name wins. Confirm with `dsh --profile <name> --dump-config`.
+
+Update later with `git -C .dsh/vendor/elixir-phoenix pull`.
 
 To test a feature branch or tag before merge, add its ref to `git clone`:
 
@@ -191,11 +199,30 @@ validation:
   `**/SKILL.md`. The builder rejects a nested skill rather than shipping one that
   would be invisible at runtime.
 
-There is no `dsh-runtime-smoke` command. The other targets smoke-test against a
-real binary, but dsh's CLI surface is only `dsh --profile`, `dsh plugin`, and
-`dsh web` — it exposes no scriptable skill-introspection command, and its
-`skill.list` RPC requires an attached Web UI session. A runtime smoke lands when
-dsh provides one.
+```bash
+make dsh-runtime-smoke    # optional; needs `dsh` on PATH
+```
+
+Unlike the other targets, dsh exposes no *CLI* skill introspection — its surface
+is only `dsh --profile`, `dsh plugin`, and `dsh web`. Discovery is therefore
+verified over the loopback RPC bridge instead: the smoke installs the target
+into an isolated workspace, boots `dsh web --no-open` against a temporary
+`$DSH_HOME`, and round-trips two Typert RPC calls on the host's `/api` handler:
+
+| Call | Payload | Assertion |
+| --- | --- | --- |
+| `POST /api/session.create` | `{ cwd }` | returns a `sessionId` |
+| `POST /api/skill.list` | `{ sessionId }` | all 51 generated skills present and `modelInvocable` |
+
+Neither call invokes a provider, so the smoke needs no API key and no model.
+
+> **Caveat:** the smoke is written against the rc.2 wire contract read from
+> source (`packages/host/apiproxy/src/api/rpc-map.ts` and the `*.schema.ts`
+> siblings) but has **not yet been executed against an installed `dsh`**. Treat
+> its first run as part of the verification, not as a regression check. Because
+> the endpoints are generated `@Remote` descriptors on a pre-1.0 contract, this
+> is the most breakage-prone part of the target — which is also the point: it is
+> the earliest signal that a dsh release moved the skill surface.
 
 ## Tested against
 

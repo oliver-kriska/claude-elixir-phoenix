@@ -47,7 +47,7 @@ installation and troubleshooting remain in the linked guides.
 | Deterministic generated target | Canonical source | Yes | Yes | Yes | Yes | Yes |
 | Mode-aware CI drift validation | Not applicable | Yes | Yes | Yes | Yes | Yes |
 | Golden target snapshot | Not applicable | Yes | Yes | Yes | Yes | Yes |
-| Isolated native smoke command | Not applicable | Yes | Yes | Yes | Yes | No runtime introspection API |
+| Isolated native smoke command | Not applicable | Yes | Yes | Yes | Yes | Yes (RPC, not yet run live) |
 
 “External” Tidewave support means a skill may use Tidewave when the project and
 runtime already expose it. Installing Tidewave in a Phoenix app starts the MCP
@@ -150,9 +150,11 @@ Use `opencode debug skill --pure` for deterministic discovery diagnostics.
 DeepSeek Harness discovers `targets/dsh/skills` through its filesystem skill
 provider, which scans `<projectRoot>/.dsh/skills`, `<projectRoot>/.agents/skills`,
 `customSkillDirs`, `$DSH_HOME/skills`, and `$DSH_AGENTS_HOME/skills`. Discovery
-is deliberately **one level deep**, so the target is installed by pointing
-`customSkillDirs` at the generated `skills/` directory or by copying its contents
-into a scanned root — a nested checkout is invisible.
+is deliberately **one level deep**, so a nested checkout is invisible; the
+documented install copies the generated `skills/` contents into a scanned root.
+`customSkillDirs` is an advanced alternative that must account for the base
+`skill-filesystem` row being `disabled: true` in the default `web` profile,
+where agent presets own local discovery instead.
 
 A whitespace-bounded `/phx-*` token naming a user-invocable skill is recognized
 by the host pre-step boundary anywhere in a user message and injects the rendered
@@ -164,8 +166,12 @@ The generated target does not install hooks, custom agents, separate commands,
 MCP servers, or configuration. Custom agents are *not applicable* rather than
 deferred: dsh has no markdown agent registry, only a persona string on its
 `subagent` tool. The Claude Code hook bridge covers 7 of 30 events and drops
-`if:` gating, so no hook port ships. dsh exposes no scriptable skill
-introspection, so this target has no smoke harness.
+`if:` gating, so no hook port ships. dsh exposes no CLI skill introspection, so
+`make dsh-runtime-smoke` boots `dsh web --no-open` against an isolated
+`$DSH_HOME` and verifies discovery over the loopback `/api` RPC bridge
+(`session.create` then `skill.list`, neither of which invokes a provider). That
+harness is written against the rc.2 wire contract read from source and has not
+yet been executed against an installed `dsh`.
 
 ## Acceptance contract for generated runtimes
 

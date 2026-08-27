@@ -18,7 +18,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   reads `CLAUDE.md` natively, so `/phx:init` output needs no porting. Adds
   `scripts/port_lib/dsh.py`, `scripts/build_dsh_skills.py`, twelve tests in
   `scripts/tests/test_dsh.py`, `make dsh-skills{,-sync,-validate}` wired into
-  `generated-skills-sync` and `ci`, a golden snapshot entry, `docs/dsh.md`, and
+  `generated-skills-sync` and `ci`, an optional `make dsh-runtime-smoke` that
+  verifies discovery over dsh's loopback `/api` RPC bridge (`session.create` then
+  `skill.list`, no API key needed), a golden snapshot entry, `docs/dsh.md`, and
   a `dsh` column in `docs/runtime-support.md`. Two dsh-specific build gates:
   descriptions are capped at the 500-char `catalogDescriptionMaxLength` (dsh
   truncates silently past it) and nested `SKILL.md` files are rejected (dsh
