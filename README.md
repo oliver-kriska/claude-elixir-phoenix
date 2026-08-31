@@ -48,9 +48,11 @@ is the portable explicit interface. See [Use with OpenCode](#use-with-opencode),
 **Using DeepSeek Harness (dsh)?** Install the generated skills-only target for
 all 51 skills. A `/phx-investigate` or `/phx-review` token anywhere in your
 message loads the skill deterministically, and dsh reads your `CLAUDE.md`
-natively. See [Use with DeepSeek Harness](#use-with-deepseek-harness) or the
-[dsh guide](docs/dsh.md); hooks and custom agents are intentionally not
-included, and Tidewave MCP registration is external.
+natively. See [Use with DeepSeek Harness](#use-with-deepseek-harness), the
+[dsh guide](docs/dsh.md), or the
+[dsh install guide](https://phxagents.dev/install/dsh/); hooks and custom
+agents are intentionally not included, and Tidewave MCP registration is
+external.
 
 Compare native invocation, installation, and deliberately deferred capabilities
 in the canonical [runtime support matrix](docs/runtime-support.md). Generated
