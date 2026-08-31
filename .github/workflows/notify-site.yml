@@ -11,6 +11,7 @@ on:
       - "docs/codex.md"
       - "docs/opencode.md"
       - "docs/pi.md"
+      - "docs/dsh.md"
       - "docs/runtime-support.md"
       - "README.md"
       - "CLAUDE.md"
