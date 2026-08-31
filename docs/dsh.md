@@ -216,18 +216,26 @@ into an isolated workspace, boots `dsh web --no-open` against a temporary
 
 Neither call invokes a provider, so the smoke needs no API key and no model.
 
-> **Caveat:** the smoke is written against the rc.2 wire contract read from
-> source (`packages/host/apiproxy/src/api/rpc-map.ts` and the `*.schema.ts`
-> siblings) but has **not yet been executed against an installed `dsh`**. Treat
-> its first run as part of the verification, not as a regression check. Because
-> the endpoints are generated `@Remote` descriptors on a pre-1.0 contract, this
-> is the most breakage-prone part of the target — which is also the point: it is
-> the earliest signal that a dsh release moved the skill surface.
+Executed against an installed `dsh 0.1.1-rc.2`: the host answered on an
+ephemeral loopback port, `session.create` returned
+`{ agentPreset, sessionId }` (the smoke asserts only `sessionId`), and
+`skill.list` returned all 51 generated skills as
+`{ name, description, modelInvocable }` with `modelInvocable: true` throughout.
+
+The same run confirmed the one-level rule empirically. With the identical 51
+skills installed one directory deeper — `.agents/skills/elixir-phoenix/<name>/`,
+the mistake the install section warns about — dsh discovered **zero** of them
+and did not expose the containing directory as a skill either.
+
+> **Treat this as the target's canary.** The endpoints are generated `@Remote`
+> descriptors on a pre-1.0 contract, so this is the most breakage-prone part of
+> the target — which is also the point: it is the earliest signal that a dsh
+> release moved the skill surface.
 
 ## Tested against
 
 | Component | Version |
 | --- | --- |
-| dsh | `0.1.1-rc.2` (skill contract read from source at `master`) |
+| dsh | `0.1.1-rc.2` (installed; smoke executed against it) |
 | Skill provider | `@deepseek-ai/dsh-skill-filesystem` |
 | Skills generated | 51 |

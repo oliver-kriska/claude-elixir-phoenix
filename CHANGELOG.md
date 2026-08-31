@@ -11,6 +11,18 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **The dsh runtime smoke has now been executed against an installed `dsh`** —
+  it shipped in v3.1.0 written against the rc.2 wire contract read from source
+  but never run, and `docs/dsh.md` carried a caveat saying so. Run against
+  `dsh 0.1.1-rc.2`: `session.create` returns `{ agentPreset, sessionId }` and
+  `skill.list` returns all 51 generated skills as
+  `{ name, description, modelInvocable }`, all model-invocable — the contract
+  matches, no code change needed. The same session confirmed the one-level
+  discovery rule empirically: the identical 51 skills installed one directory
+  deeper are discovered **zero** times, which is the behaviour the builder's
+  nested-`SKILL.md` rejection and the install guide's warning both rest on. The
+  caveat is replaced with the observed results.
+
 ### Fixed
 
 ## [3.1.0] - 2026-08-27
