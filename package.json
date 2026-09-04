@@ -28,7 +28,7 @@
   "devDependencies": {
     "husky": "^9.0.0",
     "markdownlint-cli": "^0.49.1",
-    "tsx": "^4.23.12"
+    "tsx": "^4.23.13"
   },
   "repository": {
     "type": "git",
