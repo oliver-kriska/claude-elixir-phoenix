@@ -1,0 +1,767 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/elixir-mint/mint"
+    },
+    "description": "Small and composable HTTP client.",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "mint",
+  "url": "https://hex.pm/api/packages/mint",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ericmj",
+      "email": "eric.meadows.jonsson@gmail.com",
+      "username": "ericmj"
+    },
+    {
+      "url": "https://hex.pm/api/users/whatyouhide",
+      "email": "hi@andrealeopardi.com",
+      "username": "whatyouhide"
+    }
+  ],
+  "inserted_at": "2019-02-25T16:40:28.746182Z",
+  "updated_at": "2026-09-04T09:45:26.439699Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.10.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.10.0",
+      "has_docs": true,
+      "inserted_at": "2026-09-04T09:45:24.506166Z"
+    },
+    {
+      "version": "1.9.3",
+      "url": "https://hex.pm/api/packages/mint/releases/1.9.3",
+      "has_docs": true,
+      "inserted_at": "2026-07-16T07:01:19.896317Z"
+    },
+    {
+      "version": "1.9.2",
+      "url": "https://hex.pm/api/packages/mint/releases/1.9.2",
+      "has_docs": true,
+      "inserted_at": "2026-07-14T07:22:56.552162Z"
+    },
+    {
+      "version": "1.9.1",
+      "url": "https://hex.pm/api/packages/mint/releases/1.9.1",
+      "has_docs": true,
+      "inserted_at": "2026-07-06T07:29:29.330773Z"
+    },
+    {
+      "version": "1.9.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.9.0",
+      "has_docs": true,
+      "inserted_at": "2026-06-02T14:03:07.242827Z"
+    },
+    {
+      "version": "1.8.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.8.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-08T18:12:57.804474Z"
+    },
+    {
+      "version": "1.7.1",
+      "url": "https://hex.pm/api/packages/mint/releases/1.7.1",
+      "has_docs": true,
+      "inserted_at": "2025-02-05T12:47:03.959218Z"
+    },
+    {
+      "version": "1.7.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.7.0",
+      "has_docs": true,
+      "inserted_at": "2025-02-05T07:48:21.601001Z"
+    },
+    {
+      "version": "1.6.2",
+      "url": "https://hex.pm/api/packages/mint/releases/1.6.2",
+      "has_docs": true,
+      "inserted_at": "2024-07-01T15:50:43.877266Z"
+    },
+    {
+      "version": "1.6.1",
+      "url": "https://hex.pm/api/packages/mint/releases/1.6.1",
+      "has_docs": true,
+      "inserted_at": "2024-06-10T08:34:16.743371Z"
+    },
+    {
+      "version": "1.6.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.6.0",
+      "has_docs": true,
+      "inserted_at": "2024-04-22T09:07:54.088916Z"
+    },
+    {
+      "version": "1.5.2",
+      "url": "https://hex.pm/api/packages/mint/releases/1.5.2",
+      "has_docs": true,
+      "inserted_at": "2023-12-11T11:10:29.616251Z"
+    },
+    {
+      "version": "1.5.1",
+      "url": "https://hex.pm/api/packages/mint/releases/1.5.1",
+      "has_docs": true,
+      "inserted_at": "2023-03-03T15:53:49.521794Z"
+    },
+    {
+      "version": "1.5.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.5.0",
+      "has_docs": true,
+      "inserted_at": "2023-03-01T15:50:54.607083Z"
+    },
+    {
+      "version": "1.4.2",
+      "url": "https://hex.pm/api/packages/mint/releases/1.4.2",
+      "has_docs": true,
+      "inserted_at": "2022-06-13T12:30:07.585985Z"
+    },
+    {
+      "version": "1.4.1",
+      "url": "https://hex.pm/api/packages/mint/releases/1.4.1",
+      "has_docs": true,
+      "inserted_at": "2022-02-17T07:18:14.415889Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2021-09-12T14:21:08.744646Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2021-05-04T14:37:53.102170Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/mint/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2021-02-05T10:15:40.574029Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-02T07:36:53.241672Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-05-19T17:50:09.441722Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/mint/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2019-10-28T14:45:14.821932Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/mint/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2019-10-28T14:42:24.167277Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/mint/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2019-07-17T15:44:53.973348Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/mint/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-20T10:04:48.563759Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/mint/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2019-04-23T21:46:53.125139Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/mint/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2019-04-09T14:05:00.481967Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/mint/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2019-02-25T16:40:28.753160Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/mint",
+  "latest_version": "1.10.0",
+  "downloads": {
+    "all": 64671366,
+    "day": 73403,
+    "recent": 4613893,
+    "week": 416777
+  },
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-82728",
+      "aliases": [
+        "CVE-2026-82728",
+        "GHSA-g83f-2j6r-q6m4"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-g83f-2j6r-q6m4"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-82728.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/19be5558b6a317e271c78666498dd78b151e490a"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        }
+      ],
+      "summary": "Unbounded HTTP/1 status-line and chunk-extension buffering in Mint causes memory-exhaustion DoS",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-82728",
+      "published_at": "2026-09-04T14:31:30Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-82728",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-09-04T14:55:36Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 1.10.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-82729",
+      "aliases": [
+        "CVE-2026-82729",
+        "GHSA-7p8w-j234-7qc8"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/bd2a4e7513594997c140cfef9fe0e968712fb588"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-82729.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-7p8w-j234-7qc8"
+        }
+      ],
+      "summary": "Quadratic chunk-size parsing in Mint.HTTP1.Parse allows CPU-exhaustion DoS",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-82729",
+      "published_at": "2026-09-04T14:31:20Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-82729",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-09-04T14:55:36Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.9.3 and < 1.10.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-59249",
+      "aliases": [
+        "CVE-2026-59249",
+        "GHSA-x3x7-96vm-6h2w"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-x3x7-96vm-6h2w"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-59249.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/fc7d16538db7e40b56ed489f08683225cb0197fa"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        }
+      ],
+      "summary": "Sign-tolerant HTTP/1 chunk-size parser in Mint enables response smuggling against strict intermediaries on pooled connections",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-59249",
+      "published_at": "2026-07-16T11:39:29Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-59249",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 1.9.3"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-59246",
+      "aliases": [
+        "CVE-2026-59246",
+        "GHSA-8pf6-g464-h6h9"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-8pf6-g464-h6h9"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/5779de1666344b32aefc4354184ea07f902f73ce"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-59246.html"
+        }
+      ],
+      "summary": "Zero-length HTTP/2 CONTINUATION frames bypass Mint's header-block byte-size cap and exhaust client memory",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-59246",
+      "published_at": "2026-07-14T08:37:04Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-59246",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 1.9.2"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-58229",
+      "aliases": [
+        "CVE-2026-58229",
+        "GHSA-qrfr-wh4c-3qhw"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-qrfr-wh4c-3qhw"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/566d702e6f29105f77522ca7aabb9f64f2f4e333"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-58229.html"
+        }
+      ],
+      "summary": "Unbounded HTTP/1 response-header and chunked-trailer accumulation in Mint causes memory-exhaustion DoS",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-58229",
+      "published_at": "2026-07-14T08:36:54Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-58229",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:06Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 1.9.2"
+      ]
+    },
+    {
+      "id": "GHSA-g586-ccqf-7x4r",
+      "aliases": [
+        "CVE-2026-48862",
+        "EEF-CVE-2026-48862"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-48862"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-g586-ccqf-7x4r"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-mint/mint"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48862"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-mint/mint/commit/70b97b6a5209fb288b0e04d8e657dda26c59de67"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48862.html"
+        }
+      ],
+      "summary": "mint: Unbounded streams map growth via PUSH_PROMISE without follow-up HEADERS",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-g586-ccqf-7x4r",
+      "published_at": "2026-07-09T23:19:29Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-g586-ccqf-7x4r",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-09T23:30:09Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.2.0 and < 1.9.0"
+      ]
+    },
+    {
+      "id": "GHSA-2p26-p43x-fhp8",
+      "aliases": [
+        "CVE-2026-49754",
+        "EEF-CVE-2026-49754"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-mint/mint/commit/b662d127d3028b5426c88d4c9cc7fe430491a10b"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-49754"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-2p26-p43x-fhp8"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-49754"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-mint/mint"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-49754.html"
+        }
+      ],
+      "summary": "mint: Unbounded CONTINUATION/HEADERS frame accumulation (CONTINUATION flood)",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-2p26-p43x-fhp8",
+      "published_at": "2026-07-09T23:19:23Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-2p26-p43x-fhp8",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-09T23:30:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.9.0"
+      ]
+    },
+    {
+      "id": "GHSA-mjqx-c6f6-7rc2",
+      "aliases": [
+        "CVE-2026-49753",
+        "EEF-CVE-2026-49753"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-mint/mint"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-mint/mint/commit/47e48027480228e4e32a0b4df39db497b4804921"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-mjqx-c6f6-7rc2"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-49753.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-49753"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-49753"
+        }
+      ],
+      "summary": "mint: Content-Length header accepts non-RFC \"+\" sign prefix",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-mjqx-c6f6-7rc2",
+      "published_at": "2026-07-09T23:19:16Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-mjqx-c6f6-7rc2",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-07-09T23:30:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.9.0"
+      ]
+    },
+    {
+      "id": "GHSA-2pg6-44cx-c49v",
+      "aliases": [
+        "CVE-2026-48861",
+        "EEF-CVE-2026-48861"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-mint/mint/commit/fad091454cbb7449b19edb8e1fee12ca7cf28c3a"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48861"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-2pg6-44cx-c49v"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-48861"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-mint/mint"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48861.html"
+        }
+      ],
+      "summary": "mint has potential CRLF injection in its HTTP request line via unvalidated `method`/`target`",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-2pg6-44cx-c49v",
+      "published_at": "2026-07-09T23:19:12Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-2pg6-44cx-c49v",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-07-09T23:30:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.9.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-56810",
+      "aliases": [
+        "CVE-2026-56810",
+        "GHSA-c59h-fq4p-r36r"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-c59h-fq4p-r36r"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56810.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/193ce714907d16e8adc4ab3c40e4f0c2f045b2a6"
+        }
+      ],
+      "summary": "mint buffers an entire chunked response chunk in memory in Mint.HTTP1.decode_body/5",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-56810",
+      "published_at": "2026-07-06T09:17:17Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-56810",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:02Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.5.0 and < 1.9.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-49753",
+      "aliases": [
+        "CVE-2026-49753",
+        "GHSA-mjqx-c6f6-7rc2"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-mjqx-c6f6-7rc2"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/47e48027480228e4e32a0b4df39db497b4804921"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-49753.html"
+        }
+      ],
+      "summary": "HTTP response smuggling in Mint HTTP/1 client via lenient Content-Length parsing",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-49753",
+      "published_at": "2026-06-02T14:15:17Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-49753",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-07-30T18:22:05Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 1.9.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-49754",
+      "aliases": [
+        "CVE-2026-49754",
+        "GHSA-2p26-p43x-fhp8"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/b662d127d3028b5426c88d4c9cc7fe430491a10b"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-2p26-p43x-fhp8"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-49754.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        }
+      ],
+      "summary": "HTTP/2 CONTINUATION flood in Mint client via unbounded header-block accumulation",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-49754",
+      "published_at": "2026-06-02T14:15:14Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-49754",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:11Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 1.9.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-48862",
+      "aliases": [
+        "CVE-2026-48862",
+        "GHSA-g586-ccqf-7x4r"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48862.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/70b97b6a5209fb288b0e04d8e657dda26c59de67"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-g586-ccqf-7x4r"
+        }
+      ],
+      "summary": "Unbounded conn.streams growth in Mint HTTP/2 client via unenforced PUSH_PROMISE concurrency",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-48862",
+      "published_at": "2026-06-02T14:15:10Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-48862",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:05Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.2.0 and < 1.9.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-48861",
+      "aliases": [
+        "CVE-2026-48861",
+        "GHSA-2pg6-44cx-c49v"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/mint"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-mint/mint/security/advisories/GHSA-2pg6-44cx-c49v"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48861.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-mint/mint/commit/fad091454cbb7449b19edb8e1fee12ca7cf28c3a"
+        }
+      ],
+      "summary": "CRLF injection in HTTP/1 request line via unvalidated method in Mint",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-48861",
+      "published_at": "2026-06-02T14:15:09Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-48861",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-07-30T18:22:01Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 1.9.0"
+      ]
+    }
+  ],
+  "docs_html_url": "https://mint.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_mint = hex 1.10.0",
+    "mix.exs": "{:mint, \"~> 1.10\"}",
+    "rebar.config": "{mint, \"1.10.0\"}"
+  },
+  "latest_stable_version": "1.10.0"
+}

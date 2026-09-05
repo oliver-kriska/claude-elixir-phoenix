@@ -1,0 +1,431 @@
+{
+  "meta": {
+    "links": {
+      "Function reference": "https://ninenines.eu/docs/en/cowboy/2.18/manual/",
+      "GitHub": "https://github.com/ninenines/cowboy",
+      "Sponsor": "https://github.com/sponsors/essen",
+      "User guide": "https://ninenines.eu/docs/en/cowboy/2.18/guide/"
+    },
+    "description": "Small, fast, modern HTTP server.",
+    "licenses": [
+      "ISC"
+    ],
+    "maintainers": []
+  },
+  "name": "cowboy",
+  "url": "https://hex.pm/api/packages/cowboy",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ericmj",
+      "email": "eric.meadows.jonsson@gmail.com",
+      "username": "ericmj"
+    },
+    {
+      "url": "https://hex.pm/api/users/essen",
+      "email": "essen@ninenines.eu",
+      "username": "essen"
+    },
+    {
+      "url": "https://hex.pm/api/users/gazler",
+      "email": "gazler@gmail.com",
+      "username": "gazler"
+    }
+  ],
+  "inserted_at": "2014-08-01T16:10:58.000000Z",
+  "updated_at": "2026-07-28T08:46:12.554075Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.18.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.18.0",
+      "has_docs": false,
+      "inserted_at": "2026-07-28T08:46:12.571077Z"
+    },
+    {
+      "version": "2.17.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.17.0",
+      "has_docs": false,
+      "inserted_at": "2026-07-02T09:56:59.054824Z"
+    },
+    {
+      "version": "2.16.1",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.16.1",
+      "has_docs": false,
+      "inserted_at": "2026-06-11T09:03:07.395575Z"
+    },
+    {
+      "version": "2.16.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.16.0",
+      "has_docs": false,
+      "inserted_at": "2026-06-08T13:17:56.988643Z"
+    },
+    {
+      "version": "2.15.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.15.0",
+      "has_docs": false,
+      "inserted_at": "2026-05-12T13:37:34.097068Z"
+    },
+    {
+      "version": "2.14.2",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.14.2",
+      "has_docs": false,
+      "inserted_at": "2025-10-08T09:53:53.357334Z"
+    },
+    {
+      "version": "2.14.1",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.14.1",
+      "has_docs": false,
+      "inserted_at": "2025-10-01T13:35:01.056789Z"
+    },
+    {
+      "version": "2.14.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.14.0",
+      "has_docs": false,
+      "inserted_at": "2025-09-18T11:54:55.683558Z"
+    },
+    {
+      "version": "2.13.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.13.0",
+      "has_docs": false,
+      "inserted_at": "2025-02-18T08:47:01.725091Z"
+    },
+    {
+      "version": "2.12.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.12.0",
+      "has_docs": false,
+      "inserted_at": "2024-03-14T15:33:46.576801Z"
+    },
+    {
+      "version": "2.11.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.11.0",
+      "has_docs": false,
+      "inserted_at": "2024-01-29T14:29:18.762421Z"
+    },
+    {
+      "version": "2.10.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.10.0",
+      "has_docs": false,
+      "inserted_at": "2023-04-28T11:24:48.525748Z"
+    },
+    {
+      "version": "2.9.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.9.0",
+      "has_docs": false,
+      "inserted_at": "2021-05-12T10:01:43.509761Z"
+    },
+    {
+      "version": "2.8.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.8.0",
+      "has_docs": false,
+      "inserted_at": "2020-05-30T07:52:09.058361Z"
+    },
+    {
+      "version": "2.7.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.7.0",
+      "has_docs": false,
+      "inserted_at": "2019-10-16T09:17:56.433013Z"
+    },
+    {
+      "version": "2.6.3",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.6.3",
+      "has_docs": false,
+      "inserted_at": "2019-04-05T09:13:31.981246Z"
+    },
+    {
+      "version": "2.6.2",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.6.2",
+      "has_docs": false,
+      "inserted_at": "2019-04-04T20:05:20.678657Z"
+    },
+    {
+      "version": "2.6.1",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.6.1",
+      "has_docs": false,
+      "inserted_at": "2018-11-28T14:45:37.338545Z"
+    },
+    {
+      "version": "2.6.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.6.0",
+      "has_docs": false,
+      "inserted_at": "2018-11-19T15:12:40.107636Z"
+    },
+    {
+      "version": "2.5.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.5.0",
+      "has_docs": false,
+      "inserted_at": "2018-10-03T09:25:45.556926Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.4.0",
+      "has_docs": false,
+      "inserted_at": "2018-05-02T10:12:07.091952Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.3.0",
+      "has_docs": false,
+      "inserted_at": "2018-04-06T13:31:40.719583Z"
+    },
+    {
+      "version": "2.2.2",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.2.2",
+      "has_docs": false,
+      "inserted_at": "2018-01-24T19:51:11.955686Z"
+    },
+    {
+      "version": "2.2.1",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.2.1",
+      "has_docs": false,
+      "inserted_at": "2018-01-23T17:23:15.918168Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.2.0",
+      "has_docs": false,
+      "inserted_at": "2017-12-13T17:00:48.986783Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.1.0",
+      "has_docs": false,
+      "inserted_at": "2017-11-09T12:41:11.021926Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/2.0.0",
+      "has_docs": false,
+      "inserted_at": "2017-10-05T16:02:54.635787Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/cowboy/releases/1.1.2",
+      "has_docs": false,
+      "inserted_at": "2017-02-06T11:30:33.105625Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/cowboy/releases/1.1.1",
+      "has_docs": false,
+      "inserted_at": "2017-02-06T11:17:31.129366Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/1.1.0",
+      "has_docs": false,
+      "inserted_at": "2017-02-02T14:21:09.121711Z"
+    },
+    {
+      "version": "1.0.4",
+      "url": "https://hex.pm/api/packages/cowboy/releases/1.0.4",
+      "has_docs": false,
+      "inserted_at": "2015-11-17T02:15:09.820729Z"
+    },
+    {
+      "version": "1.0.3",
+      "url": "https://hex.pm/api/packages/cowboy/releases/1.0.3",
+      "has_docs": false,
+      "inserted_at": "2015-09-13T23:03:07.989691Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/cowboy/releases/1.0.2",
+      "has_docs": false,
+      "inserted_at": "2015-07-02T23:26:08.000000Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/cowboy/releases/1.0.1",
+      "has_docs": false,
+      "inserted_at": "2015-07-02T14:04:46.222432Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/cowboy/releases/1.0.0",
+      "has_docs": false,
+      "inserted_at": "2014-08-01T16:11:00.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/cowboy",
+  "latest_version": "2.18.0",
+  "downloads": {
+    "all": 148144818,
+    "day": 52362,
+    "recent": 3757107,
+    "week": 317651
+  },
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-65624",
+      "aliases": [
+        "CVE-2026-65624"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowboy"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/ninenines/cowboy/commit/3a34d8c1cfd94326466aa16a9017236691dc9c55"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-65624.html"
+        }
+      ],
+      "summary": "Cowboy HTTP/1.1 max_headers Bypass via Duplicate Header Names Enables Memory Exhaustion",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-65624",
+      "published_at": "2026-07-28T10:01:01Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-65624",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:11Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0-pre.4 and < 2.18.0"
+      ]
+    },
+    {
+      "id": "GHSA-w4f7-4cxr-rv3c",
+      "aliases": [
+        "CVE-2026-43966",
+        "EEF-CVE-2026-43966"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ninenines/cowlib"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-43966"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43966.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/gun/commit/4f35609eb37109b106a863fc9ba83d7ee64e3e42"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowboy/commit/f77cb9b5e730e300fffb551db1ba5d1c4ed878ef"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowlib/pull/166#issuecomment-5067554701"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowlib/pull/163#issuecomment-4952645232"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43966"
+        }
+      ],
+      "summary": "cowboy and gun affected by an HTTP Request/Response Splitting vulnerability",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-w4f7-4cxr-rv3c",
+      "published_at": "2026-06-08T18:31:51Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-w4f7-4cxr-rv3c",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-07-29T16:11:36Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 2.16.0"
+      ]
+    },
+    {
+      "id": "GHSA-jfc2-q6qh-g5x8",
+      "aliases": [
+        "CVE-2026-8466",
+        "EEF-CVE-2026-8466"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8466"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowboy/commit/5c6a2061b41bb5771c4659fac7d5a822dca5bafb"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8466.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ninenines/cowboy"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-8466"
+        }
+      ],
+      "summary": "Cowboy: Unbounded buffer accumulation in multipart header parsing causes denial of service in cowboy",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-jfc2-q6qh-g5x8",
+      "published_at": "2026-05-13T21:32:06Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-jfc2-q6qh-g5x8",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-19T20:26:06Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 2.15.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-8466",
+      "aliases": [
+        "CVE-2026-8466",
+        "GHSA-jfc2-q6qh-g5x8"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/ninenines/cowboy/commit/5c6a2061b41bb5771c4659fac7d5a822dca5bafb"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8466.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowboy"
+        }
+      ],
+      "summary": "Unbounded buffer accumulation in multipart header parsing causes denial of service in cowboy",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-8466",
+      "published_at": "2026-05-13T18:26:21Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-8466",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:12Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 2.15.0"
+      ]
+    }
+  ],
+  "docs_html_url": null,
+  "configs": {
+    "erlang.mk": "dep_cowboy = hex 2.18.0",
+    "mix.exs": "{:cowboy, \"~> 2.18\"}",
+    "rebar.config": "{cowboy, \"2.18.0\"}"
+  },
+  "retirements": {
+    "2.6.2": {
+      "message": "cowlib version 2.7.2 retired",
+      "reason": "invalid"
+    }
+  },
+  "latest_stable_version": "2.18.0"
+}

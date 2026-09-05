@@ -1,0 +1,250 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/riverrun/bcrypt_elixir/blob/master/CHANGELOG.md",
+      "GitHub": "https://github.com/riverrun/bcrypt_elixir"
+    },
+    "description": "Bcrypt password hashing algorithm for Elixir",
+    "licenses": [
+      "BSD-3-Clause",
+      "ISC",
+      "BSD-4-Clause"
+    ],
+    "maintainers": []
+  },
+  "name": "bcrypt_elixir",
+  "url": "https://hex.pm/api/packages/bcrypt_elixir",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/riverrun",
+      "email": "alovedalongthe@gmail.com",
+      "username": "riverrun"
+    }
+  ],
+  "inserted_at": "2017-07-06T04:27:28.914554Z",
+  "updated_at": "2025-05-19T14:20:02.050358Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "3.3.2",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/3.3.2",
+      "has_docs": true,
+      "inserted_at": "2025-05-19T14:19:57.815927Z"
+    },
+    {
+      "version": "3.3.1",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/3.3.1",
+      "has_docs": true,
+      "inserted_at": "2025-04-30T13:16:10.501347Z"
+    },
+    {
+      "version": "3.3.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/3.3.0",
+      "has_docs": true,
+      "inserted_at": "2025-04-27T13:09:39.956123Z"
+    },
+    {
+      "version": "3.2.1",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/3.2.1",
+      "has_docs": true,
+      "inserted_at": "2025-02-05T00:28:41.446050Z"
+    },
+    {
+      "version": "3.2.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/3.2.0",
+      "has_docs": true,
+      "inserted_at": "2024-10-04T12:53:30.093143Z"
+    },
+    {
+      "version": "3.1.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/3.1.0",
+      "has_docs": true,
+      "inserted_at": "2023-08-26T10:16:48.691676Z"
+    },
+    {
+      "version": "3.0.1",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/3.0.1",
+      "has_docs": true,
+      "inserted_at": "2022-07-18T03:29:15.291452Z"
+    },
+    {
+      "version": "3.0.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/3.0.0",
+      "has_docs": true,
+      "inserted_at": "2022-01-20T04:42:51.780300Z"
+    },
+    {
+      "version": "2.3.1",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/2.3.1",
+      "has_docs": true,
+      "inserted_at": "2022-01-19T04:27:18.128239Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/2.3.0",
+      "has_docs": true,
+      "inserted_at": "2021-01-07T01:31:59.533254Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-01T04:08:26.172569Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-20T07:35:22.907971Z"
+    },
+    {
+      "version": "2.0.3",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/2.0.3",
+      "has_docs": true,
+      "inserted_at": "2019-05-02T00:15:37.881362Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2019-04-05T10:24:53.690705Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2019-02-27T11:30:16.179829Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2019-02-12T04:36:31.543373Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2018-08-29T13:14:24.010534Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2018-08-25T03:07:17.042594Z"
+    },
+    {
+      "version": "1.0.9",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.9",
+      "has_docs": true,
+      "inserted_at": "2018-08-05T05:28:40.252314Z"
+    },
+    {
+      "version": "1.0.8",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.8",
+      "has_docs": true,
+      "inserted_at": "2018-07-11T13:30:22.864235Z"
+    },
+    {
+      "version": "1.0.7",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.7",
+      "has_docs": true,
+      "inserted_at": "2018-05-19T05:28:17.577036Z"
+    },
+    {
+      "version": "1.0.6",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.6",
+      "has_docs": true,
+      "inserted_at": "2018-01-30T11:16:58.619772Z"
+    },
+    {
+      "version": "1.0.5",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.5",
+      "has_docs": true,
+      "inserted_at": "2017-11-22T03:32:20.702964Z"
+    },
+    {
+      "version": "1.0.4",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.4",
+      "has_docs": true,
+      "inserted_at": "2017-09-12T06:16:40.179468Z"
+    },
+    {
+      "version": "1.0.3",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.3",
+      "has_docs": true,
+      "inserted_at": "2017-09-04T15:53:06.192970Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2017-08-31T09:33:35.861203Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2017-08-25T15:06:14.851017Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2017-08-25T03:54:57.117933Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2017-08-03T02:11:36.110892Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-21T08:03:04.041345Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-14T05:11:22.579029Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-12T03:05:27.486255Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-09T16:07:14.325887Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-06T04:27:28.940007Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/bcrypt_elixir",
+  "latest_version": "3.3.2",
+  "downloads": {
+    "all": 53800660,
+    "day": 18122,
+    "recent": 1322942,
+    "week": 111545
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://bcrypt-elixir.hexdocs.pm/",
+  "configs": {
+    "erlang.mk": "dep_bcrypt_elixir = hex 3.3.2",
+    "mix.exs": "{:bcrypt_elixir, \"~> 3.3\"}",
+    "rebar.config": "{bcrypt_elixir, \"3.3.2\"}"
+  },
+  "retirements": {},
+  "latest_stable_version": "3.3.2"
+}

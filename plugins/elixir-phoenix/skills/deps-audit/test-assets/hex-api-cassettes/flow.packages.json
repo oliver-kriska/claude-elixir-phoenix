@@ -1,0 +1,138 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/dashbitco/flow"
+    },
+    "description": "Computational parallel flows for Elixir",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "flow",
+  "url": "https://hex.pm/api/packages/flow",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/dashbit",
+      "username": "dashbit"
+    }
+  ],
+  "inserted_at": "2017-01-18T11:10:49.162814Z",
+  "updated_at": "2023-03-21T18:10:27.112814Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.2.4",
+      "url": "https://hex.pm/api/packages/flow/releases/1.2.4",
+      "has_docs": true,
+      "inserted_at": "2023-03-21T18:10:24.211612Z"
+    },
+    {
+      "version": "1.2.3",
+      "url": "https://hex.pm/api/packages/flow/releases/1.2.3",
+      "has_docs": true,
+      "inserted_at": "2023-01-07T17:20:21.561834Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/flow/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2023-01-06T12:01:52.536689Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/flow/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2022-12-29T15:37:02.856475Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/flow/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2022-02-12T11:16:05.685685Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/flow/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-12-09T17:32:01.900358Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/flow/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-03T11:44:01.391335Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/flow/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2019-10-28T13:47:46.822636Z"
+    },
+    {
+      "version": "0.14.3",
+      "url": "https://hex.pm/api/packages/flow/releases/0.14.3",
+      "has_docs": true,
+      "inserted_at": "2018-10-25T13:08:49.677721Z"
+    },
+    {
+      "version": "0.14.2",
+      "url": "https://hex.pm/api/packages/flow/releases/0.14.2",
+      "has_docs": true,
+      "inserted_at": "2018-07-24T10:50:22.936420Z"
+    },
+    {
+      "version": "0.14.1",
+      "url": "https://hex.pm/api/packages/flow/releases/0.14.1",
+      "has_docs": true,
+      "inserted_at": "2018-07-17T15:01:26.192638Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/flow/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2018-06-10T21:50:07.741297Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/flow/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2018-01-23T17:38:10.686936Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/flow/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2017-05-28T19:58:32.535512Z"
+    },
+    {
+      "version": "0.11.1",
+      "url": "https://hex.pm/api/packages/flow/releases/0.11.1",
+      "has_docs": true,
+      "inserted_at": "2017-03-16T12:49:03.343199Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/flow/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2017-01-18T11:10:49.185363Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/flow",
+  "latest_version": "1.2.4",
+  "downloads": {
+    "all": 10177787,
+    "day": 10981,
+    "recent": 805730,
+    "week": 65764
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://flow.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_flow = hex 1.2.4",
+    "mix.exs": "{:flow, \"~> 1.2\"}",
+    "rebar.config": "{flow, \"1.2.4\"}"
+  },
+  "latest_stable_version": "1.2.4"
+}

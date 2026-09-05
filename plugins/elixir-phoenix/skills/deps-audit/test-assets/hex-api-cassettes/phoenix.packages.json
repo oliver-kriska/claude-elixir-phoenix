@@ -1,0 +1,1534 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://phoenix.hexdocs.pm/changelog.html",
+      "GitHub": "https://github.com/phoenixframework/phoenix"
+    },
+    "description": "Peace of mind from prototype to production",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "phoenix",
+  "url": "https://hex.pm/api/packages/phoenix",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/chrismccord",
+      "email": "chris@chrismccord.com",
+      "username": "chrismccord"
+    },
+    {
+      "url": "https://hex.pm/api/users/gazler",
+      "email": "gazler@gmail.com",
+      "username": "gazler"
+    },
+    {
+      "url": "https://hex.pm/api/users/jeregrine",
+      "email": "stiebs.81@gmail.com",
+      "username": "jeregrine"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/steffend",
+      "username": "steffend"
+    }
+  ],
+  "inserted_at": "2014-04-21T22:38:32.000000Z",
+  "updated_at": "2026-08-25T09:12:08.458607Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.8.13",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.13",
+      "has_docs": true,
+      "inserted_at": "2026-08-25T09:12:05.501145Z"
+    },
+    {
+      "version": "1.8.12",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.12",
+      "has_docs": true,
+      "inserted_at": "2026-08-20T18:06:06.556485Z"
+    },
+    {
+      "version": "1.8.11",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.11",
+      "has_docs": true,
+      "inserted_at": "2026-08-12T07:56:12.292729Z"
+    },
+    {
+      "version": "1.8.10",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.10",
+      "has_docs": true,
+      "inserted_at": "2026-08-10T16:26:27.166240Z"
+    },
+    {
+      "version": "1.8.9",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.9",
+      "has_docs": true,
+      "inserted_at": "2026-07-07T12:23:21.396353Z"
+    },
+    {
+      "version": "1.8.8",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.8",
+      "has_docs": true,
+      "inserted_at": "2026-06-10T18:16:10.573041Z"
+    },
+    {
+      "version": "1.8.7",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.7",
+      "has_docs": true,
+      "inserted_at": "2026-05-06T07:30:24.053937Z"
+    },
+    {
+      "version": "1.8.6",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.6",
+      "has_docs": true,
+      "inserted_at": "2026-05-05T14:57:20.174540Z"
+    },
+    {
+      "version": "1.8.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.5",
+      "has_docs": true,
+      "inserted_at": "2026-03-05T15:22:23.915693Z"
+    },
+    {
+      "version": "1.8.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.4",
+      "has_docs": true,
+      "inserted_at": "2026-02-23T17:02:40.126848Z"
+    },
+    {
+      "version": "1.8.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.3",
+      "has_docs": true,
+      "inserted_at": "2025-12-08T19:30:23.251869Z"
+    },
+    {
+      "version": "1.8.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.2",
+      "has_docs": true,
+      "inserted_at": "2025-11-26T18:35:41.021547Z"
+    },
+    {
+      "version": "1.8.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.1",
+      "has_docs": true,
+      "inserted_at": "2025-08-29T02:06:56.448705Z"
+    },
+    {
+      "version": "1.8.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.0",
+      "has_docs": true,
+      "inserted_at": "2025-08-05T20:09:24.361355Z"
+    },
+    {
+      "version": "1.8.0-rc.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.0-rc.4",
+      "has_docs": true,
+      "inserted_at": "2025-07-14T18:45:10.711787Z"
+    },
+    {
+      "version": "1.8.0-rc.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2025-05-07T04:40:42.585211Z"
+    },
+    {
+      "version": "1.8.0-rc.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2025-04-30T03:58:52.735823Z"
+    },
+    {
+      "version": "1.8.0-rc.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2025-04-17T01:00:08.730907Z"
+    },
+    {
+      "version": "1.8.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.8.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2025-04-01T19:50:42.862854Z"
+    },
+    {
+      "version": "1.7.24",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.24",
+      "has_docs": true,
+      "inserted_at": "2026-07-07T12:25:22.591197Z"
+    },
+    {
+      "version": "1.7.23",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.23",
+      "has_docs": true,
+      "inserted_at": "2026-05-06T07:26:02.089592Z"
+    },
+    {
+      "version": "1.7.22",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.22",
+      "has_docs": true,
+      "inserted_at": "2026-05-05T15:02:14.040658Z"
+    },
+    {
+      "version": "1.7.21",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.21",
+      "has_docs": true,
+      "inserted_at": "2025-03-27T19:06:27.165864Z"
+    },
+    {
+      "version": "1.7.20",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.20",
+      "has_docs": true,
+      "inserted_at": "2025-02-20T19:10:56.095362Z"
+    },
+    {
+      "version": "1.7.19",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.19",
+      "has_docs": true,
+      "inserted_at": "2025-01-31T14:41:32.235221Z"
+    },
+    {
+      "version": "1.7.18",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.18",
+      "has_docs": true,
+      "inserted_at": "2024-12-10T17:04:17.235848Z"
+    },
+    {
+      "version": "1.7.17",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.17",
+      "has_docs": true,
+      "inserted_at": "2024-12-03T21:51:15.330585Z"
+    },
+    {
+      "version": "1.7.16",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.16",
+      "has_docs": true,
+      "inserted_at": "2024-12-03T17:27:16.216974Z"
+    },
+    {
+      "version": "1.7.15",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.15",
+      "has_docs": true,
+      "inserted_at": "2024-12-02T21:08:57.211828Z"
+    },
+    {
+      "version": "1.7.14",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.14",
+      "has_docs": true,
+      "inserted_at": "2024-06-18T17:12:33.509392Z"
+    },
+    {
+      "version": "1.7.13",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.13",
+      "has_docs": true,
+      "inserted_at": "2024-06-18T16:09:03.807012Z"
+    },
+    {
+      "version": "1.7.12",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.12",
+      "has_docs": true,
+      "inserted_at": "2024-04-11T15:53:46.018735Z"
+    },
+    {
+      "version": "1.7.11",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.11",
+      "has_docs": true,
+      "inserted_at": "2024-02-02T04:33:19.989146Z"
+    },
+    {
+      "version": "1.7.10",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.10",
+      "has_docs": true,
+      "inserted_at": "2023-11-03T13:25:41.926377Z"
+    },
+    {
+      "version": "1.7.9",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.9",
+      "has_docs": true,
+      "inserted_at": "2023-10-11T16:11:02.877613Z"
+    },
+    {
+      "version": "1.7.8",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.8",
+      "has_docs": true,
+      "inserted_at": "2023-10-09T14:42:16.568254Z"
+    },
+    {
+      "version": "1.7.7",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.7",
+      "has_docs": true,
+      "inserted_at": "2023-07-10T19:06:28.397722Z"
+    },
+    {
+      "version": "1.7.6",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.6",
+      "has_docs": true,
+      "inserted_at": "2023-06-16T13:26:59.005984Z"
+    },
+    {
+      "version": "1.7.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.5",
+      "has_docs": true,
+      "inserted_at": "2023-06-15T17:44:34.616259Z"
+    },
+    {
+      "version": "1.7.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.4",
+      "has_docs": true,
+      "inserted_at": "2023-06-15T16:26:35.532112Z"
+    },
+    {
+      "version": "1.7.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.3",
+      "has_docs": true,
+      "inserted_at": "2023-05-30T21:21:43.653914Z"
+    },
+    {
+      "version": "1.7.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.2",
+      "has_docs": true,
+      "inserted_at": "2023-03-20T17:08:48.979724Z"
+    },
+    {
+      "version": "1.7.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.1",
+      "has_docs": true,
+      "inserted_at": "2023-03-02T18:38:01.254887Z"
+    },
+    {
+      "version": "1.7.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.0",
+      "has_docs": true,
+      "inserted_at": "2023-02-24T19:30:53.735523Z"
+    },
+    {
+      "version": "1.7.0-rc.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2023-02-15T15:50:12.897829Z"
+    },
+    {
+      "version": "1.7.0-rc.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2023-01-13T16:06:59.294389Z"
+    },
+    {
+      "version": "1.7.0-rc.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2023-01-06T18:34:44.392089Z"
+    },
+    {
+      "version": "1.7.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.7.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2022-11-07T20:18:05.009210Z"
+    },
+    {
+      "version": "1.6.17",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.17",
+      "has_docs": true,
+      "inserted_at": "2026-07-07T12:53:55.070538Z"
+    },
+    {
+      "version": "1.6.16",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.16",
+      "has_docs": true,
+      "inserted_at": "2023-02-17T14:11:15.346554Z"
+    },
+    {
+      "version": "1.6.15",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.15",
+      "has_docs": true,
+      "inserted_at": "2022-10-26T14:33:29.995269Z"
+    },
+    {
+      "version": "1.6.14",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.14",
+      "has_docs": true,
+      "inserted_at": "2022-10-10T14:37:06.707960Z"
+    },
+    {
+      "version": "1.6.13",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.13",
+      "has_docs": true,
+      "inserted_at": "2022-09-29T19:42:27.572133Z"
+    },
+    {
+      "version": "1.6.12",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.12",
+      "has_docs": true,
+      "inserted_at": "2022-09-06T18:17:05.478148Z"
+    },
+    {
+      "version": "1.6.11",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.11",
+      "has_docs": true,
+      "inserted_at": "2022-07-11T18:49:35.118031Z"
+    },
+    {
+      "version": "1.6.10",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.10",
+      "has_docs": true,
+      "inserted_at": "2022-06-01T17:34:55.791289Z"
+    },
+    {
+      "version": "1.6.9",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.9",
+      "has_docs": true,
+      "inserted_at": "2022-05-16T16:41:17.152011Z"
+    },
+    {
+      "version": "1.6.8",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.8",
+      "has_docs": true,
+      "inserted_at": "2022-05-06T14:41:16.180187Z"
+    },
+    {
+      "version": "1.6.7",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.7",
+      "has_docs": true,
+      "inserted_at": "2022-04-15T00:27:46.129116Z"
+    },
+    {
+      "version": "1.6.6",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.6",
+      "has_docs": true,
+      "inserted_at": "2022-01-04T23:21:45.450347Z"
+    },
+    {
+      "version": "1.6.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.5",
+      "has_docs": true,
+      "inserted_at": "2021-12-16T15:28:55.467648Z"
+    },
+    {
+      "version": "1.6.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.4",
+      "has_docs": true,
+      "inserted_at": "2021-12-08T19:14:03.111714Z"
+    },
+    {
+      "version": "1.6.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.3",
+      "has_docs": true,
+      "inserted_at": "2021-12-08T18:01:18.396914Z"
+    },
+    {
+      "version": "1.6.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.2",
+      "has_docs": true,
+      "inserted_at": "2021-10-09T00:26:57.400252Z"
+    },
+    {
+      "version": "1.6.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.1",
+      "has_docs": true,
+      "inserted_at": "2021-10-08T19:08:22.979998Z"
+    },
+    {
+      "version": "1.6.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.0",
+      "has_docs": true,
+      "inserted_at": "2021-09-24T16:48:13.207228Z"
+    },
+    {
+      "version": "1.6.0-rc.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2021-09-22T14:39:46.955798Z"
+    },
+    {
+      "version": "1.6.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.6.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2021-08-27T02:49:30.315967Z"
+    },
+    {
+      "version": "1.5.15",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.15",
+      "has_docs": true,
+      "inserted_at": "2026-07-07T12:56:12.292489Z"
+    },
+    {
+      "version": "1.5.14",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.14",
+      "has_docs": true,
+      "inserted_at": "2022-10-10T14:42:28.774705Z"
+    },
+    {
+      "version": "1.5.13",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.13",
+      "has_docs": true,
+      "inserted_at": "2021-09-22T14:23:30.511510Z"
+    },
+    {
+      "version": "1.5.12",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.12",
+      "has_docs": true,
+      "inserted_at": "2021-08-24T17:37:31.276126Z"
+    },
+    {
+      "version": "1.5.11",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.11",
+      "has_docs": true,
+      "inserted_at": "2021-08-21T01:49:00.502922Z"
+    },
+    {
+      "version": "1.5.10",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.10",
+      "has_docs": true,
+      "inserted_at": "2021-08-06T17:01:17.186428Z"
+    },
+    {
+      "version": "1.5.9",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.9",
+      "has_docs": true,
+      "inserted_at": "2021-05-10T15:56:35.645288Z"
+    },
+    {
+      "version": "1.5.8",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.8",
+      "has_docs": true,
+      "inserted_at": "2021-02-23T20:27:24.357211Z"
+    },
+    {
+      "version": "1.5.7",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.7",
+      "has_docs": true,
+      "inserted_at": "2020-11-20T16:44:29.580412Z"
+    },
+    {
+      "version": "1.5.6",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.6",
+      "has_docs": true,
+      "inserted_at": "2020-10-12T18:50:10.353998Z"
+    },
+    {
+      "version": "1.5.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.5",
+      "has_docs": true,
+      "inserted_at": "2020-09-21T13:53:59.768168Z"
+    },
+    {
+      "version": "1.5.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.4",
+      "has_docs": true,
+      "inserted_at": "2020-07-21T20:14:11.404428Z"
+    },
+    {
+      "version": "1.5.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.3",
+      "has_docs": true,
+      "inserted_at": "2020-05-22T01:10:45.895723Z"
+    },
+    {
+      "version": "1.5.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.2",
+      "has_docs": true,
+      "inserted_at": "2020-05-21T20:13:54.531676Z"
+    },
+    {
+      "version": "1.5.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.1",
+      "has_docs": true,
+      "inserted_at": "2020-04-23T04:17:30.216231Z"
+    },
+    {
+      "version": "1.5.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-22T16:20:38.558330Z"
+    },
+    {
+      "version": "1.5.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.5.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-16T20:33:25.003086Z"
+    },
+    {
+      "version": "1.4.18",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.18",
+      "has_docs": true,
+      "inserted_at": "2022-10-10T14:58:52.723806Z"
+    },
+    {
+      "version": "1.4.17",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.17",
+      "has_docs": true,
+      "inserted_at": "2020-04-23T04:07:10.424571Z"
+    },
+    {
+      "version": "1.4.16",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.16",
+      "has_docs": true,
+      "inserted_at": "2020-03-15T05:28:59.294135Z"
+    },
+    {
+      "version": "1.4.15",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.15",
+      "has_docs": true,
+      "inserted_at": "2020-03-06T16:46:51.770231Z"
+    },
+    {
+      "version": "1.4.14",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.14",
+      "has_docs": true,
+      "inserted_at": "2020-02-21T01:06:07.862637Z"
+    },
+    {
+      "version": "1.4.13",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.13",
+      "has_docs": true,
+      "inserted_at": "2020-02-12T19:38:42.820744Z"
+    },
+    {
+      "version": "1.4.12",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.12",
+      "has_docs": true,
+      "inserted_at": "2020-01-22T22:25:26.142218Z"
+    },
+    {
+      "version": "1.4.11",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.11",
+      "has_docs": true,
+      "inserted_at": "2019-11-09T15:39:10.762985Z"
+    },
+    {
+      "version": "1.4.10",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.10",
+      "has_docs": true,
+      "inserted_at": "2019-09-05T18:05:07.971772Z"
+    },
+    {
+      "version": "1.4.9",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.9",
+      "has_docs": true,
+      "inserted_at": "2019-07-04T03:13:36.472591Z"
+    },
+    {
+      "version": "1.4.8",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.8",
+      "has_docs": true,
+      "inserted_at": "2019-06-12T16:14:15.545892Z"
+    },
+    {
+      "version": "1.4.7",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.7",
+      "has_docs": true,
+      "inserted_at": "2019-06-12T01:29:06.097126Z"
+    },
+    {
+      "version": "1.4.6",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.6",
+      "has_docs": true,
+      "inserted_at": "2019-05-13T14:20:13.796614Z"
+    },
+    {
+      "version": "1.4.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.5",
+      "has_docs": true,
+      "inserted_at": "2019-05-08T17:08:49.596590Z"
+    },
+    {
+      "version": "1.4.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.4",
+      "has_docs": true,
+      "inserted_at": "2019-04-30T21:05:37.531683Z"
+    },
+    {
+      "version": "1.4.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.3",
+      "has_docs": true,
+      "inserted_at": "2019-03-29T19:13:35.609047Z"
+    },
+    {
+      "version": "1.4.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.2",
+      "has_docs": true,
+      "inserted_at": "2019-03-14T02:45:43.861457Z"
+    },
+    {
+      "version": "1.4.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.1",
+      "has_docs": true,
+      "inserted_at": "2019-02-12T23:33:17.795389Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2018-11-07T18:54:18.973710Z"
+    },
+    {
+      "version": "1.4.0-rc.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2018-10-30T16:26:30.305988Z"
+    },
+    {
+      "version": "1.4.0-rc.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2018-10-20T21:57:23.922959Z"
+    },
+    {
+      "version": "1.4.0-rc.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2018-10-12T17:12:59.888937Z"
+    },
+    {
+      "version": "1.4.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.4.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-09T17:49:24.531828Z"
+    },
+    {
+      "version": "1.3.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.5",
+      "has_docs": false,
+      "inserted_at": "2022-10-10T15:10:50.244573Z"
+    },
+    {
+      "version": "1.3.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.4",
+      "has_docs": true,
+      "inserted_at": "2018-08-06T18:33:58.493067Z"
+    },
+    {
+      "version": "1.3.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.3",
+      "has_docs": true,
+      "inserted_at": "2018-06-15T16:42:08.951746Z"
+    },
+    {
+      "version": "1.3.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.2",
+      "has_docs": true,
+      "inserted_at": "2018-03-08T14:05:03.707748Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2018-03-03T05:33:22.710138Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-28T18:50:42.224464Z"
+    },
+    {
+      "version": "1.3.0-rc.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2017-07-24T18:09:09.316021Z"
+    },
+    {
+      "version": "1.3.0-rc.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2017-05-15T19:53:42.588504Z"
+    },
+    {
+      "version": "1.3.0-rc.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2017-03-14T19:16:22.034658Z"
+    },
+    {
+      "version": "1.3.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.3.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2017-03-02T06:18:19.326560Z"
+    },
+    {
+      "version": "1.2.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.2.5",
+      "has_docs": true,
+      "inserted_at": "2017-07-27T15:32:07.171869Z"
+    },
+    {
+      "version": "1.2.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.2.4",
+      "has_docs": true,
+      "inserted_at": "2017-05-15T19:42:51.090821Z"
+    },
+    {
+      "version": "1.2.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.2.3",
+      "has_docs": true,
+      "inserted_at": "2017-03-14T19:29:11.942870Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2017-03-14T16:57:35.738142Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2016-08-11T19:22:25.184351Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2016-06-23T15:55:44.182182Z"
+    },
+    {
+      "version": "1.2.0-rc.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.2.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2016-05-25T12:24:57.031112Z"
+    },
+    {
+      "version": "1.2.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.2.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2016-04-29T15:24:41.275558Z"
+    },
+    {
+      "version": "1.1.9",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.9",
+      "has_docs": true,
+      "inserted_at": "2017-05-15T19:40:31.644086Z"
+    },
+    {
+      "version": "1.1.8",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.8",
+      "has_docs": true,
+      "inserted_at": "2017-03-14T19:47:26.790320Z"
+    },
+    {
+      "version": "1.1.7",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.7",
+      "has_docs": true,
+      "inserted_at": "2017-03-14T17:04:15.063928Z"
+    },
+    {
+      "version": "1.1.6",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.6",
+      "has_docs": true,
+      "inserted_at": "2016-06-03T22:07:54.721805Z"
+    },
+    {
+      "version": "1.1.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.5",
+      "has_docs": true,
+      "inserted_at": "2016-06-01T12:35:17.569603Z"
+    },
+    {
+      "version": "1.1.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.4",
+      "has_docs": true,
+      "inserted_at": "2016-01-25T19:47:31.623848Z"
+    },
+    {
+      "version": "1.1.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.3",
+      "has_docs": true,
+      "inserted_at": "2016-01-20T15:32:22.525885Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2016-01-08T20:39:11.081587Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2015-12-26T20:09:02.228508Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-12-16T14:48:29.927423Z"
+    },
+    {
+      "version": "1.0.6",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.0.6",
+      "has_docs": true,
+      "inserted_at": "2017-03-14T19:53:20.628021Z"
+    },
+    {
+      "version": "1.0.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.0.5",
+      "has_docs": true,
+      "inserted_at": "2017-03-14T17:09:18.122255Z"
+    },
+    {
+      "version": "1.0.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.0.4",
+      "has_docs": true,
+      "inserted_at": "2015-11-30T21:49:48.729377Z"
+    },
+    {
+      "version": "1.0.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.0.3",
+      "has_docs": true,
+      "inserted_at": "2015-09-28T21:19:31.591477Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2015-09-06T23:29:17.097130Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2015-09-03T17:22:05.903641Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-28T15:56:08.222838Z"
+    },
+    {
+      "version": "0.17.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.17.1",
+      "has_docs": true,
+      "inserted_at": "2015-08-26T23:22:11.518975Z"
+    },
+    {
+      "version": "0.17.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.17.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-19T08:27:14.007231Z"
+    },
+    {
+      "version": "0.16.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.16.1",
+      "has_docs": true,
+      "inserted_at": "2015-08-06T15:17:04.136403Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.16.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-05T22:44:18.062196Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2015-07-27T12:30:04.958046Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2015-06-29T22:49:28.390776Z"
+    },
+    {
+      "version": "0.13.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.13.1",
+      "has_docs": true,
+      "inserted_at": "2015-05-17T03:19:18.019179Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2015-05-11T16:39:10.419453Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2015-04-30T22:53:11.155606Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2015-04-07T21:25:30.000000Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2015-03-08T13:27:52.000000Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2015-02-12T14:45:05.000000Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2015-01-11T15:26:01.000000Z"
+    },
+    {
+      "version": "0.7.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.7.2",
+      "has_docs": true,
+      "inserted_at": "2014-12-11T15:26:21.000000Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2014-12-10T03:08:26.000000Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2014-12-10T01:34:41.000000Z"
+    },
+    {
+      "version": "0.6.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.6.2",
+      "has_docs": true,
+      "inserted_at": "2014-12-08T00:46:06.000000Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2014-11-30T15:12:24.000000Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2014-11-22T17:04:39.000000Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2014-10-13T23:28:29.000000Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.4.1",
+      "has_docs": false,
+      "inserted_at": "2014-09-09T02:17:03.000000Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.4.0",
+      "has_docs": false,
+      "inserted_at": "2014-08-30T22:19:24.000000Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.3.1",
+      "has_docs": false,
+      "inserted_at": "2014-07-05T00:43:00.000000Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.3.0",
+      "has_docs": false,
+      "inserted_at": "2014-07-01T02:01:42.000000Z"
+    },
+    {
+      "version": "0.2.11",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.11",
+      "has_docs": false,
+      "inserted_at": "2014-06-30T13:14:29.000000Z"
+    },
+    {
+      "version": "0.2.10",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.10",
+      "has_docs": false,
+      "inserted_at": "2014-06-19T13:48:04.000000Z"
+    },
+    {
+      "version": "0.2.9",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.9",
+      "has_docs": false,
+      "inserted_at": "2014-06-17T18:20:16.000000Z"
+    },
+    {
+      "version": "0.2.8",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.8",
+      "has_docs": false,
+      "inserted_at": "2014-06-16T17:26:51.000000Z"
+    },
+    {
+      "version": "0.2.7",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.7",
+      "has_docs": false,
+      "inserted_at": "2014-06-13T15:27:48.000000Z"
+    },
+    {
+      "version": "0.2.6",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.6",
+      "has_docs": false,
+      "inserted_at": "2014-06-13T13:52:40.000000Z"
+    },
+    {
+      "version": "0.2.5",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.5",
+      "has_docs": false,
+      "inserted_at": "2014-06-11T18:49:45.000000Z"
+    },
+    {
+      "version": "0.2.4",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.4",
+      "has_docs": false,
+      "inserted_at": "2014-05-25T15:46:38.000000Z"
+    },
+    {
+      "version": "0.2.3",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.3",
+      "has_docs": false,
+      "inserted_at": "2014-05-13T13:41:00.000000Z"
+    },
+    {
+      "version": "0.2.2",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.2",
+      "has_docs": false,
+      "inserted_at": "2014-05-06T13:32:18.000000Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.1",
+      "has_docs": false,
+      "inserted_at": "2014-05-01T05:06:01.000000Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.2.0",
+      "has_docs": false,
+      "inserted_at": "2014-05-01T03:33:01.000000Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/phoenix/releases/0.1.0",
+      "has_docs": false,
+      "inserted_at": "2014-04-21T22:38:32.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/phoenix",
+  "latest_version": "1.8.13",
+  "downloads": {
+    "all": 154778192,
+    "day": 67825,
+    "recent": 4381224,
+    "week": 409201
+  },
+  "security_advisories": [
+    {
+      "id": "GHSA-6983-jfq8-485w",
+      "aliases": [
+        "CVE-2026-56811",
+        "EEF-CVE-2026-56811"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-56811"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56811"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/16e295d2fccab185d1292322e2bee5d46c725c8a"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/a612100cd8a4279091abc1a2ef8fb98a6d01c0a1"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/c498ba8cf49f6accbbd0c643a5340b58db891218"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/d19ca0a8d9f82c130b7ed339b9f033433e2dea5e"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56811.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/phoenixframework/phoenix"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-6983-jfq8-485w"
+        }
+      ],
+      "summary": "Phoenix: Unbounded channel joins per transport enables DoS over few connections",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-6983-jfq8-485w",
+      "published_at": "2026-09-03T20:33:03Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-6983-jfq8-485w",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-09-03T20:45:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.8.0-rc.0 and < 1.8.9",
+        ">= 0.11.0 and < 1.5.15",
+        ">= 1.6.0-rc.0 and < 1.6.17",
+        ">= 1.7.0-rc.0 and < 1.7.24"
+      ]
+    },
+    {
+      "id": "GHSA-63mc-hw7g-86rr",
+      "aliases": [
+        "CVE-2026-56812",
+        "EEF-CVE-2026-56812"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56812"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-56812"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/phoenixframework/phoenix"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56812.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/beffc4da1e787e572121f68902c63daf4fe7d9c2"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/b90b22521465ece00eb5a19d5aa2b9465b209c85"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/89a1c4be161e436241e12b2378a719904b9bd96f"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-63mc-hw7g-86rr"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/7f7b971c1ea0994e3fbd1c11ddb05e780bd38ad8"
+        }
+      ],
+      "summary": "Phoenix: Presence keys colliding with `Object.prototype` members break existence checks",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-63mc-hw7g-86rr",
+      "published_at": "2026-09-03T20:30:33Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-63mc-hw7g-86rr",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-09-03T20:45:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.7.0-rc.0 and < 1.7.24",
+        ">= 1.8.0-rc.0 and < 1.8.9",
+        ">= 1.2.0-rc.0 and < 1.5.15",
+        ">= 1.6.0-rc.0 and < 1.6.17"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-56812",
+      "aliases": [
+        "CVE-2026-56812",
+        "GHSA-63mc-hw7g-86rr"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56812.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/7f7b971c1ea0994e3fbd1c11ddb05e780bd38ad8"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/89a1c4be161e436241e12b2378a719904b9bd96f"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/b90b22521465ece00eb5a19d5aa2b9465b209c85"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/beffc4da1e787e572121f68902c63daf4fe7d9c2"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://www.npmjs.com/package/phoenix"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-63mc-hw7g-86rr"
+        }
+      ],
+      "summary": "Phoenix JavaScript presence client crashes on presence keys colliding with Object.prototype members in Presence.syncState/syncDiff",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-56812",
+      "published_at": "2026-07-07T15:22:46Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-56812",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.8.0-rc.0 and < 1.8.9",
+        ">= 1.2.0-rc.0 and < 1.5.15",
+        ">= 1.6.0-rc.0 and < 1.6.17",
+        ">= 1.7.0-rc.0 and < 1.7.24"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-56811",
+      "aliases": [
+        "CVE-2026-56811",
+        "GHSA-6983-jfq8-485w"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/d19ca0a8d9f82c130b7ed339b9f033433e2dea5e"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56811.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/c498ba8cf49f6accbbd0c643a5340b58db891218"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-6983-jfq8-485w"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/16e295d2fccab185d1292322e2bee5d46c725c8a"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/a612100cd8a4279091abc1a2ef8fb98a6d01c0a1"
+        }
+      ],
+      "summary": "Phoenix transports do not limit channel joins per connection, enabling process-exhaustion denial of service",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-56811",
+      "published_at": "2026-07-07T15:09:57Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-56811",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:11Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.11.0 and < 1.5.15",
+        ">= 1.8.0-rc.0 and < 1.8.9",
+        ">= 1.7.0-rc.0 and < 1.7.24",
+        ">= 1.6.0-rc.0 and < 1.6.17"
+      ]
+    },
+    {
+      "id": "GHSA-628h-q48j-jr6q",
+      "aliases": [
+        "CVE-2026-32689",
+        "EEF-CVE-2026-32689"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/phoenixframework/phoenix"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32689.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/912ea181fd247c21dbcc49fb97d0053b947d81bf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/1a67c61ff9ce0a7711662ac7354861917a7c80f7"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32689"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-628h-q48j-jr6q"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-32689"
+        }
+      ],
+      "summary": "Phoenix: Long-poll NDJSON body splitting causes large memory allocation",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-628h-q48j-jr6q",
+      "published_at": "2026-05-08T20:24:15Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-628h-q48j-jr6q",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-08T20:31:38Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.8.0 and < 1.8.6",
+        ">= 1.7.0 and < 1.7.22"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-32689",
+      "aliases": [
+        "CVE-2026-32689",
+        "GHSA-628h-q48j-jr6q"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-628h-q48j-jr6q"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32689.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/1a67c61ff9ce0a7711662ac7354861917a7c80f7"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/912ea181fd247c21dbcc49fb97d0053b947d81bf"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix"
+        }
+      ],
+      "summary": "Long-poll NDJSON body splitting causes unbounded memory allocation in Phoenix",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-32689",
+      "published_at": "2026-05-05T15:17:30Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-32689",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:21:59Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.8.0 and < 1.8.6",
+        ">= 1.7.0 and < 1.7.22"
+      ]
+    },
+    {
+      "id": "GHSA-p8f7-22gq-m7j9",
+      "aliases": [
+        "CVE-2022-42975"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://hexdocs.pm/phoenix/1.6.14/changelog.html#1-6-14-2022-10-10"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/phoenixframework/phoenix"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/6e7185b33a59e0b1d1c0b4223adf340a73e963ae"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2022-42975"
+        }
+      ],
+      "summary": "Phoenix before 1.6.14 mishandles check_origin wildcarding",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-p8f7-22gq-m7j9",
+      "published_at": "2022-10-17T12:00:27Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-p8f7-22gq-m7j9",
+      "cvss_score": 7.5,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:H/A:N",
+      "modified_at": "2025-12-10T00:41:50Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.6.14"
+      ]
+    },
+    {
+      "id": "GHSA-cmfh-8f8r-fj96",
+      "aliases": [
+        "CVE-2017-1000163"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/phoenixframework/phoenix"
+        },
+        {
+          "type": "WEB",
+          "url": "https://elixirforum.com/t/security-releases-for-phoenix/4143"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000163"
+        }
+      ],
+      "summary": "Phoenix Arbitrary URL Redirect",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-cmfh-8f8r-fj96",
+      "published_at": "2022-04-12T21:16:09Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-cmfh-8f8r-fj96",
+      "cvss_score": 6.1,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "modified_at": "2025-12-10T00:29:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.2.0 and < 1.2.3",
+        ">= 1.1.0 and < 1.1.8",
+        "< 1.0.6"
+      ]
+    }
+  ],
+  "docs_html_url": "https://phoenix.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_phoenix = hex 1.8.13",
+    "mix.exs": "{:phoenix, \"~> 1.8\"}",
+    "rebar.config": "{phoenix, \"1.8.13\"}"
+  },
+  "latest_stable_version": "1.8.13"
+}

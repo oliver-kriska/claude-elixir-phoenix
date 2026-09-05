@@ -1,0 +1,1269 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://hexdocs.pm/ecto/changelog.html",
+      "GitHub": "https://github.com/elixir-ecto/ecto"
+    },
+    "description": "A toolkit for data mapping and language integrated query for Elixir",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "ecto",
+  "url": "https://hex.pm/api/packages/ecto",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ericmj",
+      "email": "eric.meadows.jonsson@gmail.com",
+      "username": "ericmj"
+    },
+    {
+      "url": "https://hex.pm/api/users/greg-rychlewski",
+      "email": "greg.rychlewski@gmail.com",
+      "username": "greg-rychlewski"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/michalmuskala",
+      "email": "michal@muskala.eu",
+      "username": "michalmuskala"
+    },
+    {
+      "url": "https://hex.pm/api/users/wojtekmach",
+      "email": "wojtek@wojtekmach.pl",
+      "username": "wojtekmach"
+    }
+  ],
+  "inserted_at": "2014-05-01T20:05:49.000000Z",
+  "updated_at": "2026-08-14T15:59:23.049625Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "3.14.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.14.2",
+      "has_docs": true,
+      "inserted_at": "2026-08-14T15:59:20.362215Z"
+    },
+    {
+      "version": "3.14.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.14.1",
+      "has_docs": true,
+      "inserted_at": "2026-07-09T14:49:17.688889Z"
+    },
+    {
+      "version": "3.14.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.14.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-19T16:02:40.684729Z"
+    },
+    {
+      "version": "3.13.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.13.6",
+      "has_docs": true,
+      "inserted_at": "2026-05-05T14:28:17.970417Z"
+    },
+    {
+      "version": "3.13.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.13.5",
+      "has_docs": true,
+      "inserted_at": "2025-11-09T08:10:52.139053Z"
+    },
+    {
+      "version": "3.13.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.13.4",
+      "has_docs": true,
+      "inserted_at": "2025-10-24T07:47:26.654057Z"
+    },
+    {
+      "version": "3.13.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.13.3",
+      "has_docs": true,
+      "inserted_at": "2025-09-19T13:08:59.585452Z"
+    },
+    {
+      "version": "3.13.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.13.2",
+      "has_docs": true,
+      "inserted_at": "2025-06-24T10:03:30.127278Z"
+    },
+    {
+      "version": "3.13.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.13.1",
+      "has_docs": true,
+      "inserted_at": "2025-06-19T16:10:05.714214Z"
+    },
+    {
+      "version": "3.13.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.13.0",
+      "has_docs": true,
+      "inserted_at": "2025-06-18T11:35:05.560754Z"
+    },
+    {
+      "version": "3.12.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.12.6",
+      "has_docs": true,
+      "inserted_at": "2025-06-11T08:39:28.700607Z"
+    },
+    {
+      "version": "3.12.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.12.5",
+      "has_docs": true,
+      "inserted_at": "2024-11-28T19:19:51.665230Z"
+    },
+    {
+      "version": "3.12.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.12.4",
+      "has_docs": true,
+      "inserted_at": "2024-10-07T08:53:24.365184Z"
+    },
+    {
+      "version": "3.12.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.12.3",
+      "has_docs": true,
+      "inserted_at": "2024-09-06T16:55:43.077403Z"
+    },
+    {
+      "version": "3.12.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.12.2",
+      "has_docs": true,
+      "inserted_at": "2024-08-25T08:42:01.555285Z"
+    },
+    {
+      "version": "3.12.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.12.1",
+      "has_docs": true,
+      "inserted_at": "2024-08-13T06:12:34.655973Z"
+    },
+    {
+      "version": "3.12.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.12.0",
+      "has_docs": true,
+      "inserted_at": "2024-08-12T06:31:53.516465Z"
+    },
+    {
+      "version": "3.11.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.11.2",
+      "has_docs": true,
+      "inserted_at": "2024-03-07T14:49:13.236238Z"
+    },
+    {
+      "version": "3.11.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.11.1",
+      "has_docs": true,
+      "inserted_at": "2023-12-07T06:54:08.805205Z"
+    },
+    {
+      "version": "3.11.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.11.0",
+      "has_docs": true,
+      "inserted_at": "2023-11-14T09:31:37.843653Z"
+    },
+    {
+      "version": "3.10.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.10.3",
+      "has_docs": true,
+      "inserted_at": "2023-07-07T10:27:02.832223Z"
+    },
+    {
+      "version": "3.10.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.10.2",
+      "has_docs": true,
+      "inserted_at": "2023-06-08T09:59:13.760780Z"
+    },
+    {
+      "version": "3.10.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.10.1",
+      "has_docs": true,
+      "inserted_at": "2023-04-12T17:26:32.242863Z"
+    },
+    {
+      "version": "3.10.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.10.0",
+      "has_docs": true,
+      "inserted_at": "2023-04-10T17:44:51.669977Z"
+    },
+    {
+      "version": "3.9.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.9.6",
+      "has_docs": true,
+      "inserted_at": "2023-07-07T10:24:16.764483Z"
+    },
+    {
+      "version": "3.9.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.9.5",
+      "has_docs": true,
+      "inserted_at": "2023-03-22T13:35:05.123729Z"
+    },
+    {
+      "version": "3.9.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.9.4",
+      "has_docs": true,
+      "inserted_at": "2022-12-21T20:45:14.580439Z"
+    },
+    {
+      "version": "3.9.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.9.3",
+      "has_docs": true,
+      "inserted_at": "2022-12-20T19:12:48.604196Z"
+    },
+    {
+      "version": "3.9.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.9.2",
+      "has_docs": true,
+      "inserted_at": "2022-11-17T23:21:38.121406Z"
+    },
+    {
+      "version": "3.9.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.9.1",
+      "has_docs": true,
+      "inserted_at": "2022-10-06T09:31:42.165131Z"
+    },
+    {
+      "version": "3.9.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.9.0",
+      "has_docs": true,
+      "inserted_at": "2022-09-27T09:17:20.422528Z"
+    },
+    {
+      "version": "3.8.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.8.4",
+      "has_docs": true,
+      "inserted_at": "2022-06-04T07:40:37.097203Z"
+    },
+    {
+      "version": "3.8.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.8.3",
+      "has_docs": true,
+      "inserted_at": "2022-05-11T09:40:49.027828Z"
+    },
+    {
+      "version": "3.8.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.8.2",
+      "has_docs": true,
+      "inserted_at": "2022-05-05T07:43:05.472666Z"
+    },
+    {
+      "version": "3.8.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.8.1",
+      "has_docs": true,
+      "inserted_at": "2022-04-27T15:16:26.215163Z"
+    },
+    {
+      "version": "3.8.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.8.0",
+      "has_docs": true,
+      "inserted_at": "2022-04-26T09:35:28.502339Z"
+    },
+    {
+      "version": "3.7.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.7.2",
+      "has_docs": true,
+      "inserted_at": "2022-03-13T08:59:24.262920Z"
+    },
+    {
+      "version": "3.7.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.7.1",
+      "has_docs": true,
+      "inserted_at": "2021-08-27T08:32:35.539039Z"
+    },
+    {
+      "version": "3.7.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.7.0",
+      "has_docs": true,
+      "inserted_at": "2021-08-19T18:53:46.366955Z"
+    },
+    {
+      "version": "3.6.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.6.2",
+      "has_docs": true,
+      "inserted_at": "2021-05-28T12:51:31.014570Z"
+    },
+    {
+      "version": "3.6.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.6.1",
+      "has_docs": true,
+      "inserted_at": "2021-04-12T21:48:39.574729Z"
+    },
+    {
+      "version": "3.6.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.6.0",
+      "has_docs": true,
+      "inserted_at": "2021-04-03T06:49:04.185444Z"
+    },
+    {
+      "version": "3.5.8",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.8",
+      "has_docs": true,
+      "inserted_at": "2021-02-21T17:00:36.181456Z"
+    },
+    {
+      "version": "3.5.7",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.7",
+      "has_docs": true,
+      "inserted_at": "2021-02-07T09:38:03.266594Z"
+    },
+    {
+      "version": "3.5.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.6",
+      "has_docs": true,
+      "inserted_at": "2021-01-20T20:30:49.151361Z"
+    },
+    {
+      "version": "3.5.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.5",
+      "has_docs": true,
+      "inserted_at": "2020-11-12T08:58:08.619535Z"
+    },
+    {
+      "version": "3.5.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.4",
+      "has_docs": true,
+      "inserted_at": "2020-10-28T11:49:18.665108Z"
+    },
+    {
+      "version": "3.5.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.3",
+      "has_docs": true,
+      "inserted_at": "2020-10-21T07:06:45.499815Z"
+    },
+    {
+      "version": "3.5.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.2",
+      "has_docs": true,
+      "inserted_at": "2020-10-12T07:06:13.739185Z"
+    },
+    {
+      "version": "3.5.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.1",
+      "has_docs": true,
+      "inserted_at": "2020-10-08T07:32:14.463352Z"
+    },
+    {
+      "version": "3.5.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-03T11:48:15.285988Z"
+    },
+    {
+      "version": "3.5.0-rc.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2020-09-19T05:57:18.398224Z"
+    },
+    {
+      "version": "3.5.0-rc.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.5.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2020-08-31T14:55:57.262176Z"
+    },
+    {
+      "version": "3.4.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.4.6",
+      "has_docs": true,
+      "inserted_at": "2020-08-07T13:41:36.357679Z"
+    },
+    {
+      "version": "3.4.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.4.5",
+      "has_docs": true,
+      "inserted_at": "2020-06-14T16:24:27.531475Z"
+    },
+    {
+      "version": "3.4.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.4.4",
+      "has_docs": true,
+      "inserted_at": "2020-05-11T08:13:00.428138Z"
+    },
+    {
+      "version": "3.4.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.4.3",
+      "has_docs": true,
+      "inserted_at": "2020-04-27T19:01:21.605439Z"
+    },
+    {
+      "version": "3.4.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.4.2",
+      "has_docs": true,
+      "inserted_at": "2020-04-10T14:24:44.862748Z"
+    },
+    {
+      "version": "3.4.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.4.1",
+      "has_docs": true,
+      "inserted_at": "2020-04-08T13:29:47.954667Z"
+    },
+    {
+      "version": "3.4.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.4.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-24T14:11:24.888864Z"
+    },
+    {
+      "version": "3.3.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.3.4",
+      "has_docs": true,
+      "inserted_at": "2020-02-27T20:28:36.091084Z"
+    },
+    {
+      "version": "3.3.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.3.3",
+      "has_docs": true,
+      "inserted_at": "2020-02-14T13:50:25.394284Z"
+    },
+    {
+      "version": "3.3.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.3.2",
+      "has_docs": true,
+      "inserted_at": "2020-01-28T09:49:31.735780Z"
+    },
+    {
+      "version": "3.3.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.3.1",
+      "has_docs": true,
+      "inserted_at": "2019-12-27T18:32:27.468351Z"
+    },
+    {
+      "version": "3.3.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.3.0",
+      "has_docs": true,
+      "inserted_at": "2019-12-11T12:41:23.141531Z"
+    },
+    {
+      "version": "3.2.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.2.5",
+      "has_docs": true,
+      "inserted_at": "2019-11-03T20:08:36.965249Z"
+    },
+    {
+      "version": "3.2.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.2.4",
+      "has_docs": true,
+      "inserted_at": "2019-11-02T10:45:41.451065Z"
+    },
+    {
+      "version": "3.2.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.2.3",
+      "has_docs": true,
+      "inserted_at": "2019-10-17T16:38:22.274222Z"
+    },
+    {
+      "version": "3.2.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.2.2",
+      "has_docs": true,
+      "inserted_at": "2019-10-01T12:16:22.761826Z"
+    },
+    {
+      "version": "3.2.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.2.1",
+      "has_docs": true,
+      "inserted_at": "2019-09-17T22:02:25.718846Z"
+    },
+    {
+      "version": "3.2.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.2.0",
+      "has_docs": true,
+      "inserted_at": "2019-09-07T11:01:49.496843Z"
+    },
+    {
+      "version": "3.1.7",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.1.7",
+      "has_docs": true,
+      "inserted_at": "2019-06-27T08:44:51.028973Z"
+    },
+    {
+      "version": "3.1.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.1.6",
+      "has_docs": true,
+      "inserted_at": "2019-06-19T18:04:41.355810Z"
+    },
+    {
+      "version": "3.1.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.1.5",
+      "has_docs": true,
+      "inserted_at": "2019-06-06T08:53:27.678902Z"
+    },
+    {
+      "version": "3.1.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.1.4",
+      "has_docs": true,
+      "inserted_at": "2019-05-07T11:46:29.971193Z"
+    },
+    {
+      "version": "3.1.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.1.3",
+      "has_docs": true,
+      "inserted_at": "2019-04-30T21:45:54.879150Z"
+    },
+    {
+      "version": "3.1.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.1.2",
+      "has_docs": true,
+      "inserted_at": "2019-04-24T05:21:03.692679Z"
+    },
+    {
+      "version": "3.1.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.1.1",
+      "has_docs": true,
+      "inserted_at": "2019-04-04T16:59:30.316944Z"
+    },
+    {
+      "version": "3.1.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.1.0",
+      "has_docs": true,
+      "inserted_at": "2019-04-02T12:58:44.804734Z"
+    },
+    {
+      "version": "3.0.9",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.9",
+      "has_docs": true,
+      "inserted_at": "2019-04-30T21:48:02.397095Z"
+    },
+    {
+      "version": "3.0.8",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.8",
+      "has_docs": true,
+      "inserted_at": "2019-03-29T20:22:53.716996Z"
+    },
+    {
+      "version": "3.0.7",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.7",
+      "has_docs": true,
+      "inserted_at": "2019-02-06T09:56:12.809821Z"
+    },
+    {
+      "version": "3.0.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.6",
+      "has_docs": true,
+      "inserted_at": "2018-12-31T12:24:29.901845Z"
+    },
+    {
+      "version": "3.0.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.5",
+      "has_docs": true,
+      "inserted_at": "2018-12-08T16:33:15.944192Z"
+    },
+    {
+      "version": "3.0.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.4",
+      "has_docs": true,
+      "inserted_at": "2018-11-29T18:37:15.798687Z"
+    },
+    {
+      "version": "3.0.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.3",
+      "has_docs": true,
+      "inserted_at": "2018-11-20T10:54:19.754179Z"
+    },
+    {
+      "version": "3.0.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.2",
+      "has_docs": true,
+      "inserted_at": "2018-11-17T10:38:18.406286Z"
+    },
+    {
+      "version": "3.0.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.1",
+      "has_docs": true,
+      "inserted_at": "2018-11-03T14:58:20.723328Z"
+    },
+    {
+      "version": "3.0.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-29T09:53:53.692219Z"
+    },
+    {
+      "version": "3.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2018-10-15T13:33:32.730038Z"
+    },
+    {
+      "version": "3.0.0-rc.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/3.0.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-15T08:22:28.703793Z"
+    },
+    {
+      "version": "2.2.12",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.12",
+      "has_docs": true,
+      "inserted_at": "2019-04-30T21:50:57.650673Z"
+    },
+    {
+      "version": "2.2.11",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.11",
+      "has_docs": true,
+      "inserted_at": "2018-10-03T08:33:27.613500Z"
+    },
+    {
+      "version": "2.2.10",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.10",
+      "has_docs": true,
+      "inserted_at": "2018-04-08T08:09:55.585411Z"
+    },
+    {
+      "version": "2.2.9",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.9",
+      "has_docs": true,
+      "inserted_at": "2018-03-09T14:29:52.470275Z"
+    },
+    {
+      "version": "2.2.8",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.8",
+      "has_docs": true,
+      "inserted_at": "2018-01-13T09:01:46.568684Z"
+    },
+    {
+      "version": "2.2.7",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.7",
+      "has_docs": true,
+      "inserted_at": "2017-12-03T18:21:18.758812Z"
+    },
+    {
+      "version": "2.2.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.6",
+      "has_docs": true,
+      "inserted_at": "2017-09-30T17:32:52.859697Z"
+    },
+    {
+      "version": "2.2.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.5",
+      "has_docs": true,
+      "inserted_at": "2017-09-29T09:34:09.122213Z"
+    },
+    {
+      "version": "2.2.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.4",
+      "has_docs": true,
+      "inserted_at": "2017-09-15T12:18:08.068372Z"
+    },
+    {
+      "version": "2.2.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.3",
+      "has_docs": true,
+      "inserted_at": "2017-09-12T14:51:12.695538Z"
+    },
+    {
+      "version": "2.2.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.2",
+      "has_docs": true,
+      "inserted_at": "2017-09-09T15:21:42.886178Z"
+    },
+    {
+      "version": "2.2.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.1",
+      "has_docs": true,
+      "inserted_at": "2017-08-27T17:55:22.205088Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2017-08-22T18:43:23.081082Z"
+    },
+    {
+      "version": "2.2.0-rc.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2017-08-18T13:31:54.773934Z"
+    },
+    {
+      "version": "2.2.0-rc.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.2.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2017-08-08T16:32:50.803547Z"
+    },
+    {
+      "version": "2.1.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.6",
+      "has_docs": true,
+      "inserted_at": "2017-08-01T10:10:52.561686Z"
+    },
+    {
+      "version": "2.1.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.5",
+      "has_docs": true,
+      "inserted_at": "2017-07-30T17:25:26.116082Z"
+    },
+    {
+      "version": "2.1.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.4",
+      "has_docs": true,
+      "inserted_at": "2017-03-05T15:15:01.973437Z"
+    },
+    {
+      "version": "2.1.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.3",
+      "has_docs": true,
+      "inserted_at": "2017-01-18T11:40:50.327735Z"
+    },
+    {
+      "version": "2.1.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.2",
+      "has_docs": true,
+      "inserted_at": "2017-01-04T18:49:55.318969Z"
+    },
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2016-12-22T09:07:15.463951Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2016-12-17T19:11:49.033760Z"
+    },
+    {
+      "version": "2.1.0-rc.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.0-rc.5",
+      "has_docs": true,
+      "inserted_at": "2016-12-09T15:34:24.139957Z"
+    },
+    {
+      "version": "2.1.0-rc.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.0-rc.4",
+      "has_docs": true,
+      "inserted_at": "2016-11-16T22:14:28.742975Z"
+    },
+    {
+      "version": "2.1.0-rc.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2016-10-23T09:55:11.376654Z"
+    },
+    {
+      "version": "2.1.0-rc.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2016-10-08T19:48:05.601737Z"
+    },
+    {
+      "version": "2.1.0-rc.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2016-09-28T17:01:11.140112Z"
+    },
+    {
+      "version": "2.1.0-rc.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.1.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2016-09-18T09:18:07.435071Z"
+    },
+    {
+      "version": "2.0.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.6",
+      "has_docs": true,
+      "inserted_at": "2016-11-24T21:20:24.641123Z"
+    },
+    {
+      "version": "2.0.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.5",
+      "has_docs": true,
+      "inserted_at": "2016-09-07T12:39:28.857086Z"
+    },
+    {
+      "version": "2.0.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.4",
+      "has_docs": true,
+      "inserted_at": "2016-08-09T15:44:02.712374Z"
+    },
+    {
+      "version": "2.0.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.3",
+      "has_docs": true,
+      "inserted_at": "2016-07-30T08:59:59.645650Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2016-06-27T17:37:47.505154Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2016-06-21T13:17:33.743489Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2016-06-21T09:23:59.074523Z"
+    },
+    {
+      "version": "2.0.0-rc.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-rc.6",
+      "has_docs": true,
+      "inserted_at": "2016-06-16T11:40:30.880488Z"
+    },
+    {
+      "version": "2.0.0-rc.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-rc.5",
+      "has_docs": true,
+      "inserted_at": "2016-05-13T19:24:46.396762Z"
+    },
+    {
+      "version": "2.0.0-rc.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-rc.4",
+      "has_docs": true,
+      "inserted_at": "2016-05-03T18:02:52.222301Z"
+    },
+    {
+      "version": "2.0.0-rc.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2016-04-23T17:30:46.282815Z"
+    },
+    {
+      "version": "2.0.0-rc.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2016-04-23T11:16:44.072167Z"
+    },
+    {
+      "version": "2.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2016-04-19T10:05:36.061768Z"
+    },
+    {
+      "version": "2.0.0-rc.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2016-04-16T16:26:37.851288Z"
+    },
+    {
+      "version": "2.0.0-beta.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-beta.2",
+      "has_docs": true,
+      "inserted_at": "2016-03-04T13:45:55.743137Z"
+    },
+    {
+      "version": "2.0.0-beta.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-beta.1",
+      "has_docs": true,
+      "inserted_at": "2016-02-22T10:43:45.787205Z"
+    },
+    {
+      "version": "2.0.0-beta.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/2.0.0-beta.0",
+      "has_docs": true,
+      "inserted_at": "2016-02-15T22:45:56.273966Z"
+    },
+    {
+      "version": "1.1.9",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.9",
+      "has_docs": true,
+      "inserted_at": "2016-07-14T07:57:42.082046Z"
+    },
+    {
+      "version": "1.1.8",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.8",
+      "has_docs": true,
+      "inserted_at": "2016-05-30T13:27:14.928889Z"
+    },
+    {
+      "version": "1.1.7",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.7",
+      "has_docs": true,
+      "inserted_at": "2016-05-13T17:09:48.294124Z"
+    },
+    {
+      "version": "1.1.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.6",
+      "has_docs": true,
+      "inserted_at": "2016-05-08T20:27:55.177609Z"
+    },
+    {
+      "version": "1.1.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.5",
+      "has_docs": true,
+      "inserted_at": "2016-03-15T13:31:05.862645Z"
+    },
+    {
+      "version": "1.1.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.4",
+      "has_docs": true,
+      "inserted_at": "2016-02-22T11:42:53.552609Z"
+    },
+    {
+      "version": "1.1.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.3",
+      "has_docs": true,
+      "inserted_at": "2016-01-22T12:43:05.823634Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2016-01-22T07:49:15.280085Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2015-12-23T15:30:38.197681Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-12-14T21:47:56.420680Z"
+    },
+    {
+      "version": "1.0.7",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.0.7",
+      "has_docs": true,
+      "inserted_at": "2015-11-28T17:10:12.044439Z"
+    },
+    {
+      "version": "1.0.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.0.6",
+      "has_docs": true,
+      "inserted_at": "2015-10-17T11:58:22.778231Z"
+    },
+    {
+      "version": "1.0.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.0.5",
+      "has_docs": true,
+      "inserted_at": "2015-10-16T17:10:29.231136Z"
+    },
+    {
+      "version": "1.0.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.0.4",
+      "has_docs": true,
+      "inserted_at": "2015-09-28T20:42:15.818217Z"
+    },
+    {
+      "version": "1.0.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.0.3",
+      "has_docs": true,
+      "inserted_at": "2015-09-15T11:36:15.962010Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2015-09-07T13:14:31.932453Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2015-08-30T09:09:38.216936Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-25T11:26:30.123055Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.16.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-15T09:30:01.514695Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-06T17:20:54.780207Z"
+    },
+    {
+      "version": "0.14.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.14.3",
+      "has_docs": true,
+      "inserted_at": "2015-07-23T17:46:30.748155Z"
+    },
+    {
+      "version": "0.14.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.14.2",
+      "has_docs": true,
+      "inserted_at": "2015-07-22T12:10:24.604753Z"
+    },
+    {
+      "version": "0.14.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.14.1",
+      "has_docs": true,
+      "inserted_at": "2015-07-19T21:44:02.802762Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2015-07-19T15:54:04.526096Z"
+    },
+    {
+      "version": "0.13.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.13.1",
+      "has_docs": true,
+      "inserted_at": "2015-06-30T15:24:06.401230Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2015-06-29T12:39:06.805941Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2015-06-25T07:59:44.592018Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2015-06-22T11:19:15.780853Z"
+    },
+    {
+      "version": "0.12.0-rc",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.12.0-rc",
+      "has_docs": true,
+      "inserted_at": "2015-05-30T18:27:34.333058Z"
+    },
+    {
+      "version": "0.11.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.11.3",
+      "has_docs": true,
+      "inserted_at": "2015-05-19T09:13:34.242928Z"
+    },
+    {
+      "version": "0.11.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.11.2",
+      "has_docs": true,
+      "inserted_at": "2015-05-06T12:36:55.085656Z"
+    },
+    {
+      "version": "0.11.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.11.1",
+      "has_docs": true,
+      "inserted_at": "2015-05-05T10:17:30.046207Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2015-05-04T08:59:36.643042Z"
+    },
+    {
+      "version": "0.10.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.10.3",
+      "has_docs": true,
+      "inserted_at": "2015-05-01T13:17:03.086509Z"
+    },
+    {
+      "version": "0.10.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.10.2",
+      "has_docs": true,
+      "inserted_at": "2015-04-10T10:42:37.000000Z"
+    },
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.10.1",
+      "has_docs": true,
+      "inserted_at": "2015-03-25T13:56:03.000000Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2015-03-21T20:27:53.000000Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2015-03-04T23:46:12.000000Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2015-02-13T16:02:54.000000Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2015-02-12T19:58:18.000000Z"
+    },
+    {
+      "version": "0.7.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.7.2",
+      "has_docs": true,
+      "inserted_at": "2015-01-29T08:42:26.000000Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2015-01-27T15:42:27.000000Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2015-01-25T11:02:12.000000Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2015-01-17T09:39:27.000000Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2015-01-13T15:30:06.000000Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2015-01-12T17:31:19.000000Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2015-01-02T16:40:14.000000Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2014-12-26T16:27:59.000000Z"
+    },
+    {
+      "version": "0.2.8",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.2.8",
+      "has_docs": true,
+      "inserted_at": "2014-12-16T15:22:20.000000Z"
+    },
+    {
+      "version": "0.2.7",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.2.7",
+      "has_docs": true,
+      "inserted_at": "2014-12-15T16:36:07.000000Z"
+    },
+    {
+      "version": "0.2.6",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.2.6",
+      "has_docs": true,
+      "inserted_at": "2014-12-13T22:14:37.000000Z"
+    },
+    {
+      "version": "0.2.5",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.2.5",
+      "has_docs": true,
+      "inserted_at": "2014-09-17T18:45:58.000000Z"
+    },
+    {
+      "version": "0.2.4",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.2.4",
+      "has_docs": false,
+      "inserted_at": "2014-09-08T10:30:21.000000Z"
+    },
+    {
+      "version": "0.2.3",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.2.3",
+      "has_docs": false,
+      "inserted_at": "2014-08-03T20:25:32.000000Z"
+    },
+    {
+      "version": "0.2.2",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.2.2",
+      "has_docs": false,
+      "inserted_at": "2014-06-30T10:43:10.000000Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.2.1",
+      "has_docs": false,
+      "inserted_at": "2014-06-18T21:27:48.000000Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.2.0",
+      "has_docs": false,
+      "inserted_at": "2014-05-24T12:38:01.000000Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/ecto/releases/0.1.0",
+      "has_docs": false,
+      "inserted_at": "2014-05-01T20:05:50.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/ecto",
+  "latest_version": "3.14.2",
+  "downloads": {
+    "all": 146355800,
+    "day": 72745,
+    "recent": 4425788,
+    "week": 426063
+  },
+  "security_advisories": [
+    {
+      "id": "GHSA-2xxx-fhc8-9qvq",
+      "aliases": [
+        "CVE-2017-20166"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-20166"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/ecto/pull/2125"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/ecto/commit/db55b0cba6525c24ebddc88ef9ae0c1c00620250"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-ecto/ecto"
+        },
+        {
+          "type": "WEB",
+          "url": "https://groups.google.com/forum/#!topic/elixir-ecto/0m4NPfg_MMU"
+        }
+      ],
+      "summary": "Ecto missing `is_nil` requirement",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-2xxx-fhc8-9qvq",
+      "published_at": "2022-04-12T19:42:45Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-2xxx-fhc8-9qvq",
+      "cvss_score": 9.8,
+      "cvss_rating": "critical",
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "modified_at": "2026-07-08T06:00:56Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.2.0 and < 2.2.1"
+      ]
+    }
+  ],
+  "docs_html_url": "https://ecto.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_ecto = hex 3.14.2",
+    "mix.exs": "{:ecto, \"~> 3.14\"}",
+    "rebar.config": "{ecto, \"3.14.2\"}"
+  },
+  "latest_stable_version": "3.14.2"
+}

@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "elixir": "~> 1.9",
+    "app": "phoenix_view",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.0.4",
+  "checksum": "4e992022ce14f31fe57335db27a28154afcc94e9983266835bb3040243eb620b",
+  "url": "https://hex.pm/api/packages/phoenix_view/releases/2.0.4",
+  "has_docs": true,
+  "inserted_at": "2024-06-13T17:16:46.599791Z",
+  "updated_at": "2024-06-13T17:16:49.224424Z",
+  "html_url": "https://hex.pm/packages/phoenix_view/2.0.4",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/phoenix_view",
+  "downloads": 12896336,
+  "security_advisories": [],
+  "requirements": {
+    "phoenix_html": {
+      "app": "phoenix_html",
+      "optional": true,
+      "requirement": "~> 2.14.2 or ~> 3.0 or ~> 4.0"
+    },
+    "phoenix_template": {
+      "app": "phoenix_template",
+      "optional": false,
+      "requirement": "~> 1.0"
+    }
+  },
+  "docs_html_url": "https://phoenix-view.hexdocs.pm/2.0.4/",
+  "configs": {
+    "erlang.mk": "dep_phoenix_view = hex 2.0.4",
+    "mix.exs": "{:phoenix_view, \"~> 2.0\"}",
+    "rebar.config": "{phoenix_view, \"2.0.4\"}"
+  }
+}

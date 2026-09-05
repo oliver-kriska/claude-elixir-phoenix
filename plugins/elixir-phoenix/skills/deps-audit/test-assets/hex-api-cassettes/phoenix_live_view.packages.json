@@ -1,0 +1,1303 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://phoenix-live-view.hexdocs.pm/changelog.html",
+      "GitHub": "https://github.com/phoenixframework/phoenix_live_view"
+    },
+    "description": "Rich, real-time user experiences with server-rendered HTML",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "phoenix_live_view",
+  "url": "https://hex.pm/api/packages/phoenix_live_view",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/chrismccord",
+      "email": "chris@chrismccord.com",
+      "username": "chrismccord"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/steffend",
+      "username": "steffend"
+    }
+  ],
+  "inserted_at": "2019-08-25T20:09:29.609709Z",
+  "updated_at": "2026-08-27T09:19:36.403330Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.2.11",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.11",
+      "has_docs": true,
+      "inserted_at": "2026-08-27T09:19:34.438848Z"
+    },
+    {
+      "version": "1.2.10",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.10",
+      "has_docs": true,
+      "inserted_at": "2026-08-20T14:41:57.685550Z"
+    },
+    {
+      "version": "1.2.9",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.9",
+      "has_docs": true,
+      "inserted_at": "2026-08-10T09:42:25.692881Z"
+    },
+    {
+      "version": "1.2.8",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.8",
+      "has_docs": true,
+      "inserted_at": "2026-07-27T14:39:02.896993Z"
+    },
+    {
+      "version": "1.2.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.7",
+      "has_docs": true,
+      "inserted_at": "2026-07-13T17:42:30.280801Z"
+    },
+    {
+      "version": "1.2.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.6",
+      "has_docs": true,
+      "inserted_at": "2026-07-07T07:26:02.808253Z"
+    },
+    {
+      "version": "1.2.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.5",
+      "has_docs": true,
+      "inserted_at": "2026-06-30T11:23:41.090708Z"
+    },
+    {
+      "version": "1.2.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.4",
+      "has_docs": true,
+      "inserted_at": "2026-06-29T07:56:20.005144Z"
+    },
+    {
+      "version": "1.2.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.3",
+      "has_docs": true,
+      "inserted_at": "2026-06-16T14:26:48.418001Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2026-06-16T09:07:09.475765Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2026-06-12T09:05:22.466663Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2026-06-10T18:09:29.309626Z"
+    },
+    {
+      "version": "1.2.0-rc.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2026-05-29T13:41:26.438105Z"
+    },
+    {
+      "version": "1.2.0-rc.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2026-05-05T10:41:58.044661Z"
+    },
+    {
+      "version": "1.2.0-rc.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2026-05-04T11:45:04.502933Z"
+    },
+    {
+      "version": "1.2.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.2.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2026-04-23T10:02:56.812182Z"
+    },
+    {
+      "version": "1.1.33",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.33",
+      "has_docs": true,
+      "inserted_at": "2026-08-10T09:43:33.678695Z"
+    },
+    {
+      "version": "1.1.32",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.32",
+      "has_docs": true,
+      "inserted_at": "2026-06-12T09:07:56.865941Z"
+    },
+    {
+      "version": "1.1.31",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.31",
+      "has_docs": true,
+      "inserted_at": "2026-05-29T13:46:23.367376Z"
+    },
+    {
+      "version": "1.1.30",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.30",
+      "has_docs": true,
+      "inserted_at": "2026-05-05T10:40:03.900861Z"
+    },
+    {
+      "version": "1.1.29",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.29",
+      "has_docs": true,
+      "inserted_at": "2026-05-04T11:43:14.465644Z"
+    },
+    {
+      "version": "1.1.28",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.28",
+      "has_docs": true,
+      "inserted_at": "2026-03-27T19:09:09.068957Z"
+    },
+    {
+      "version": "1.1.27",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.27",
+      "has_docs": true,
+      "inserted_at": "2026-03-10T16:57:36.453181Z"
+    },
+    {
+      "version": "1.1.26",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.26",
+      "has_docs": true,
+      "inserted_at": "2026-03-04T12:37:22.812264Z"
+    },
+    {
+      "version": "1.1.25",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.25",
+      "has_docs": true,
+      "inserted_at": "2026-02-26T14:20:01.468513Z"
+    },
+    {
+      "version": "1.1.24",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.24",
+      "has_docs": true,
+      "inserted_at": "2026-02-16T09:53:46.338980Z"
+    },
+    {
+      "version": "1.1.23",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.23",
+      "has_docs": true,
+      "inserted_at": "2026-02-12T12:57:04.819687Z"
+    },
+    {
+      "version": "1.1.22",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.22",
+      "has_docs": true,
+      "inserted_at": "2026-01-28T17:01:50.603053Z"
+    },
+    {
+      "version": "1.1.21",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.21",
+      "has_docs": true,
+      "inserted_at": "2026-01-27T19:17:35.298158Z"
+    },
+    {
+      "version": "1.1.20",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.20",
+      "has_docs": true,
+      "inserted_at": "2026-01-14T16:22:29.163518Z"
+    },
+    {
+      "version": "1.1.19",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.19",
+      "has_docs": true,
+      "inserted_at": "2025-12-12T16:08:56.035950Z"
+    },
+    {
+      "version": "1.1.18",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.18",
+      "has_docs": true,
+      "inserted_at": "2025-11-25T16:20:10.672297Z"
+    },
+    {
+      "version": "1.1.17",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.17",
+      "has_docs": true,
+      "inserted_at": "2025-11-05T00:39:30.030203Z"
+    },
+    {
+      "version": "1.1.16",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.16",
+      "has_docs": true,
+      "inserted_at": "2025-10-22T17:16:43.191894Z"
+    },
+    {
+      "version": "1.1.15",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.15",
+      "has_docs": true,
+      "inserted_at": "2025-10-21T15:51:55.685307Z"
+    },
+    {
+      "version": "1.1.14",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.14",
+      "has_docs": true,
+      "inserted_at": "2025-10-07T14:22:02.031049Z"
+    },
+    {
+      "version": "1.1.13",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.13",
+      "has_docs": true,
+      "inserted_at": "2025-09-18T13:34:33.327098Z"
+    },
+    {
+      "version": "1.1.12",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.12",
+      "has_docs": true,
+      "inserted_at": "2025-09-14T12:50:14.124489Z"
+    },
+    {
+      "version": "1.1.11",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.11",
+      "has_docs": true,
+      "inserted_at": "2025-09-04T16:47:06.917400Z"
+    },
+    {
+      "version": "1.1.10",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.10",
+      "has_docs": true,
+      "inserted_at": "2025-09-03T15:34:11.435713Z"
+    },
+    {
+      "version": "1.1.9",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.9",
+      "has_docs": true,
+      "inserted_at": "2025-09-02T14:59:25.306534Z"
+    },
+    {
+      "version": "1.1.8",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.8",
+      "has_docs": true,
+      "inserted_at": "2025-08-20T09:33:03.334393Z"
+    },
+    {
+      "version": "1.1.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.7",
+      "has_docs": true,
+      "inserted_at": "2025-08-18T18:46:01.696802Z"
+    },
+    {
+      "version": "1.1.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.6",
+      "has_docs": true,
+      "inserted_at": "2025-08-18T18:15:54.127257Z"
+    },
+    {
+      "version": "1.1.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.5",
+      "has_docs": true,
+      "inserted_at": "2025-08-18T11:39:57.257749Z"
+    },
+    {
+      "version": "1.1.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.4",
+      "has_docs": true,
+      "inserted_at": "2025-08-13T16:09:53.763031Z"
+    },
+    {
+      "version": "1.1.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.3",
+      "has_docs": true,
+      "inserted_at": "2025-08-05T12:24:33.923993Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2025-07-31T20:08:39.177333Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2025-07-30T14:45:03.730381Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2025-07-30T09:22:30.030026Z"
+    },
+    {
+      "version": "1.1.0-rc.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.0-rc.4",
+      "has_docs": true,
+      "inserted_at": "2025-07-22T17:29:50.383950Z"
+    },
+    {
+      "version": "1.1.0-rc.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2025-07-15T13:33:34.440995Z"
+    },
+    {
+      "version": "1.1.0-rc.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2025-07-06T15:06:25.913345Z"
+    },
+    {
+      "version": "1.1.0-rc.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2025-06-20T12:34:19.833087Z"
+    },
+    {
+      "version": "1.1.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.1.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2025-06-17T15:38:08.137960Z"
+    },
+    {
+      "version": "1.0.19",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.19",
+      "has_docs": true,
+      "inserted_at": "2026-08-10T09:45:31.913718Z"
+    },
+    {
+      "version": "1.0.18",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.18",
+      "has_docs": true,
+      "inserted_at": "2025-08-20T09:28:58.059250Z"
+    },
+    {
+      "version": "1.0.17",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.17",
+      "has_docs": true,
+      "inserted_at": "2025-06-04T17:55:08.713997Z"
+    },
+    {
+      "version": "1.0.16",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.16",
+      "has_docs": true,
+      "inserted_at": "2025-06-04T10:20:12.629182Z"
+    },
+    {
+      "version": "1.0.15",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.15",
+      "has_docs": true,
+      "inserted_at": "2025-06-05T09:21:59.819062Z"
+    },
+    {
+      "version": "1.0.14",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.14",
+      "has_docs": true,
+      "inserted_at": "2025-05-30T11:58:51.841852Z"
+    },
+    {
+      "version": "1.0.13",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.13",
+      "has_docs": true,
+      "inserted_at": "2025-05-28T09:55:39.144014Z"
+    },
+    {
+      "version": "1.0.12",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.12",
+      "has_docs": true,
+      "inserted_at": "2025-05-20T18:50:32.690646Z"
+    },
+    {
+      "version": "1.0.11",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.11",
+      "has_docs": true,
+      "inserted_at": "2025-05-05T16:50:58.196138Z"
+    },
+    {
+      "version": "1.0.10",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.10",
+      "has_docs": true,
+      "inserted_at": "2025-04-17T08:48:06.014034Z"
+    },
+    {
+      "version": "1.0.9",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.9",
+      "has_docs": true,
+      "inserted_at": "2025-03-26T16:00:44.895802Z"
+    },
+    {
+      "version": "1.0.8",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.8",
+      "has_docs": true,
+      "inserted_at": "2025-03-26T12:53:12.540327Z"
+    },
+    {
+      "version": "1.0.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.7",
+      "has_docs": true,
+      "inserted_at": "2025-03-21T12:19:30.431516Z"
+    },
+    {
+      "version": "1.0.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.6",
+      "has_docs": true,
+      "inserted_at": "2025-03-20T18:23:45.344179Z"
+    },
+    {
+      "version": "1.0.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.5",
+      "has_docs": true,
+      "inserted_at": "2025-02-27T19:56:19.240230Z"
+    },
+    {
+      "version": "1.0.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.4",
+      "has_docs": true,
+      "inserted_at": "2025-02-04T13:15:00.647876Z"
+    },
+    {
+      "version": "1.0.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.3",
+      "has_docs": true,
+      "inserted_at": "2025-01-28T21:15:47.178341Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2025-01-09T16:41:54.452933Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2024-12-13T17:20:34.794439Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2024-12-03T21:39:33.545795Z"
+    },
+    {
+      "version": "1.0.0-rc.9",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.9",
+      "has_docs": true,
+      "inserted_at": "2024-12-03T19:31:08.606662Z"
+    },
+    {
+      "version": "1.0.0-rc.8",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.8",
+      "has_docs": true,
+      "inserted_at": "2024-12-02T19:17:24.694660Z"
+    },
+    {
+      "version": "1.0.0-rc.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.7",
+      "has_docs": true,
+      "inserted_at": "2024-10-17T18:22:15.710830Z"
+    },
+    {
+      "version": "1.0.0-rc.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.6",
+      "has_docs": true,
+      "inserted_at": "2024-06-27T16:58:50.013610Z"
+    },
+    {
+      "version": "1.0.0-rc.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.5",
+      "has_docs": true,
+      "inserted_at": "2024-06-21T12:26:39.725026Z"
+    },
+    {
+      "version": "1.0.0-rc.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.4",
+      "has_docs": true,
+      "inserted_at": "2024-06-21T03:35:12.587201Z"
+    },
+    {
+      "version": "1.0.0-rc.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2024-06-20T15:10:33.490465Z"
+    },
+    {
+      "version": "1.0.0-rc.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2024-06-19T17:41:41.013437Z"
+    },
+    {
+      "version": "1.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2024-06-18T15:46:32.962952Z"
+    },
+    {
+      "version": "1.0.0-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2024-05-08T14:38:29.399016Z"
+    },
+    {
+      "version": "0.20.17",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.17",
+      "has_docs": true,
+      "inserted_at": "2024-06-21T12:29:12.538308Z"
+    },
+    {
+      "version": "0.20.16",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.16",
+      "has_docs": true,
+      "inserted_at": "2024-06-20T20:10:49.299813Z"
+    },
+    {
+      "version": "0.20.15",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.15",
+      "has_docs": true,
+      "inserted_at": "2024-06-18T16:19:20.599532Z"
+    },
+    {
+      "version": "0.20.14",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.14",
+      "has_docs": true,
+      "inserted_at": "2024-03-13T15:37:11.516865Z"
+    },
+    {
+      "version": "0.20.13",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.13",
+      "has_docs": true,
+      "inserted_at": "2024-03-12T18:21:38.511679Z"
+    },
+    {
+      "version": "0.20.12",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.12",
+      "has_docs": true,
+      "inserted_at": "2024-03-05T10:18:33.014612Z"
+    },
+    {
+      "version": "0.20.11",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.11",
+      "has_docs": true,
+      "inserted_at": "2024-02-29T14:56:47.758020Z"
+    },
+    {
+      "version": "0.20.10",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.10",
+      "has_docs": true,
+      "inserted_at": "2024-02-28T19:45:32.945350Z"
+    },
+    {
+      "version": "0.20.9",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.9",
+      "has_docs": true,
+      "inserted_at": "2024-02-19T22:47:43.099770Z"
+    },
+    {
+      "version": "0.20.8",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.8",
+      "has_docs": true,
+      "inserted_at": "2024-02-19T21:40:53.317575Z"
+    },
+    {
+      "version": "0.20.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.7",
+      "has_docs": true,
+      "inserted_at": "2024-02-15T20:33:20.073143Z"
+    },
+    {
+      "version": "0.20.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.6",
+      "has_docs": true,
+      "inserted_at": "2024-02-14T18:39:05.181031Z"
+    },
+    {
+      "version": "0.20.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.5",
+      "has_docs": true,
+      "inserted_at": "2024-02-08T13:43:36.222370Z"
+    },
+    {
+      "version": "0.20.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.4",
+      "has_docs": true,
+      "inserted_at": "2024-02-02T04:40:14.760540Z"
+    },
+    {
+      "version": "0.20.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.3",
+      "has_docs": true,
+      "inserted_at": "2024-01-02T17:57:47.052342Z"
+    },
+    {
+      "version": "0.20.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.2",
+      "has_docs": true,
+      "inserted_at": "2023-12-18T20:17:09.486476Z"
+    },
+    {
+      "version": "0.20.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.1",
+      "has_docs": true,
+      "inserted_at": "2023-10-09T13:29:06.442398Z"
+    },
+    {
+      "version": "0.20.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.20.0",
+      "has_docs": true,
+      "inserted_at": "2023-09-22T17:00:39.344862Z"
+    },
+    {
+      "version": "0.19.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.19.5",
+      "has_docs": true,
+      "inserted_at": "2023-07-19T14:37:34.454720Z"
+    },
+    {
+      "version": "0.19.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.19.4",
+      "has_docs": true,
+      "inserted_at": "2023-07-10T18:31:42.334938Z"
+    },
+    {
+      "version": "0.19.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.19.3",
+      "has_docs": true,
+      "inserted_at": "2023-06-21T13:22:46.470618Z"
+    },
+    {
+      "version": "0.19.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.19.2",
+      "has_docs": true,
+      "inserted_at": "2023-06-12T12:48:45.654223Z"
+    },
+    {
+      "version": "0.19.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.19.1",
+      "has_docs": true,
+      "inserted_at": "2023-06-06T15:26:37.012613Z"
+    },
+    {
+      "version": "0.19.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.19.0",
+      "has_docs": true,
+      "inserted_at": "2023-05-29T19:16:30.296800Z"
+    },
+    {
+      "version": "0.18.18",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.18",
+      "has_docs": true,
+      "inserted_at": "2023-03-16T14:34:19.117078Z"
+    },
+    {
+      "version": "0.18.17",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.17",
+      "has_docs": true,
+      "inserted_at": "2023-03-09T17:35:02.239061Z"
+    },
+    {
+      "version": "0.18.16",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.16",
+      "has_docs": true,
+      "inserted_at": "2023-02-23T17:20:09.199536Z"
+    },
+    {
+      "version": "0.18.15",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.15",
+      "has_docs": true,
+      "inserted_at": "2023-02-16T20:09:18.365849Z"
+    },
+    {
+      "version": "0.18.14",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.14",
+      "has_docs": true,
+      "inserted_at": "2023-02-14T16:43:04.033857Z"
+    },
+    {
+      "version": "0.18.13",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.13",
+      "has_docs": true,
+      "inserted_at": "2023-02-10T18:50:08.306826Z"
+    },
+    {
+      "version": "0.18.12",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.12",
+      "has_docs": true,
+      "inserted_at": "2023-02-10T17:33:44.858343Z"
+    },
+    {
+      "version": "0.18.11",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.11",
+      "has_docs": true,
+      "inserted_at": "2023-01-19T16:06:05.353337Z"
+    },
+    {
+      "version": "0.18.10",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.10",
+      "has_docs": true,
+      "inserted_at": "2023-01-18T16:13:56.704194Z"
+    },
+    {
+      "version": "0.18.9",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.9",
+      "has_docs": true,
+      "inserted_at": "2023-01-17T15:23:20.362554Z"
+    },
+    {
+      "version": "0.18.8",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.8",
+      "has_docs": true,
+      "inserted_at": "2023-01-16T15:25:04.162147Z"
+    },
+    {
+      "version": "0.18.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.7",
+      "has_docs": true,
+      "inserted_at": "2023-01-13T18:00:05.259849Z"
+    },
+    {
+      "version": "0.18.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.6",
+      "has_docs": true,
+      "inserted_at": "2023-01-09T20:00:27.938819Z"
+    },
+    {
+      "version": "0.18.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.5",
+      "has_docs": true,
+      "inserted_at": "2023-01-09T19:51:04.123843Z"
+    },
+    {
+      "version": "0.18.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.4",
+      "has_docs": true,
+      "inserted_at": "2023-01-05T16:23:46.806078Z"
+    },
+    {
+      "version": "0.18.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.3",
+      "has_docs": true,
+      "inserted_at": "2022-10-26T18:17:55.162385Z"
+    },
+    {
+      "version": "0.18.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.2",
+      "has_docs": true,
+      "inserted_at": "2022-10-04T12:20:09.422345Z"
+    },
+    {
+      "version": "0.18.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.1",
+      "has_docs": true,
+      "inserted_at": "2022-09-28T17:04:03.881792Z"
+    },
+    {
+      "version": "0.18.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.18.0",
+      "has_docs": true,
+      "inserted_at": "2022-09-20T19:25:20.731186Z"
+    },
+    {
+      "version": "0.17.14",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.14",
+      "has_docs": true,
+      "inserted_at": "2023-02-16T20:05:37.866305Z"
+    },
+    {
+      "version": "0.17.13",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.13",
+      "has_docs": true,
+      "inserted_at": "2023-02-16T14:47:49.389569Z"
+    },
+    {
+      "version": "0.17.12",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.12",
+      "has_docs": true,
+      "inserted_at": "2022-09-20T19:17:46.563404Z"
+    },
+    {
+      "version": "0.17.11",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.11",
+      "has_docs": true,
+      "inserted_at": "2022-07-11T18:19:29.584529Z"
+    },
+    {
+      "version": "0.17.10",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.10",
+      "has_docs": true,
+      "inserted_at": "2022-05-26T01:52:04.988359Z"
+    },
+    {
+      "version": "0.17.9",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.9",
+      "has_docs": true,
+      "inserted_at": "2022-04-07T19:16:41.124417Z"
+    },
+    {
+      "version": "0.17.8",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.8",
+      "has_docs": true,
+      "inserted_at": "2022-04-06T20:03:35.636738Z"
+    },
+    {
+      "version": "0.17.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.7",
+      "has_docs": true,
+      "inserted_at": "2022-02-08T04:00:25.566511Z"
+    },
+    {
+      "version": "0.17.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.6",
+      "has_docs": true,
+      "inserted_at": "2022-01-18T20:48:05.247427Z"
+    },
+    {
+      "version": "0.17.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.5",
+      "has_docs": true,
+      "inserted_at": "2021-11-02T20:21:58.008706Z"
+    },
+    {
+      "version": "0.17.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.4",
+      "has_docs": true,
+      "inserted_at": "2021-11-01T18:14:55.682177Z"
+    },
+    {
+      "version": "0.17.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.3",
+      "has_docs": true,
+      "inserted_at": "2021-10-29T02:19:52.794799Z"
+    },
+    {
+      "version": "0.17.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.2",
+      "has_docs": true,
+      "inserted_at": "2021-10-22T20:29:41.016527Z"
+    },
+    {
+      "version": "0.17.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.1",
+      "has_docs": true,
+      "inserted_at": "2021-10-21T19:12:09.980743Z"
+    },
+    {
+      "version": "0.17.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.17.0",
+      "has_docs": true,
+      "inserted_at": "2021-10-21T17:41:18.933367Z"
+    },
+    {
+      "version": "0.16.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.16.4",
+      "has_docs": true,
+      "inserted_at": "2021-09-22T15:48:47.196027Z"
+    },
+    {
+      "version": "0.16.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.16.3",
+      "has_docs": true,
+      "inserted_at": "2021-09-03T23:56:19.499945Z"
+    },
+    {
+      "version": "0.16.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.16.2",
+      "has_docs": true,
+      "inserted_at": "2021-09-03T19:55:18.811153Z"
+    },
+    {
+      "version": "0.16.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.16.1",
+      "has_docs": true,
+      "inserted_at": "2021-08-26T20:41:00.818876Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.16.0",
+      "has_docs": true,
+      "inserted_at": "2021-08-10T20:36:06.528486Z"
+    },
+    {
+      "version": "0.15.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.15.7",
+      "has_docs": true,
+      "inserted_at": "2021-05-24T18:28:37.861487Z"
+    },
+    {
+      "version": "0.15.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.15.6",
+      "has_docs": true,
+      "inserted_at": "2021-05-24T17:04:59.592600Z"
+    },
+    {
+      "version": "0.15.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.15.5",
+      "has_docs": true,
+      "inserted_at": "2021-04-20T18:20:54.266830Z"
+    },
+    {
+      "version": "0.15.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.15.4",
+      "has_docs": true,
+      "inserted_at": "2021-01-27T04:24:04.287286Z"
+    },
+    {
+      "version": "0.15.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.15.3",
+      "has_docs": true,
+      "inserted_at": "2021-01-02T19:24:06.098667Z"
+    },
+    {
+      "version": "0.15.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.15.2",
+      "has_docs": true,
+      "inserted_at": "2021-01-01T11:45:19.993167Z"
+    },
+    {
+      "version": "0.15.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.15.1",
+      "has_docs": true,
+      "inserted_at": "2020-12-20T05:52:37.822203Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2020-11-20T16:51:57.869785Z"
+    },
+    {
+      "version": "0.14.8",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.14.8",
+      "has_docs": true,
+      "inserted_at": "2020-10-30T18:30:49.569563Z"
+    },
+    {
+      "version": "0.14.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.14.7",
+      "has_docs": true,
+      "inserted_at": "2020-09-25T20:34:27.170466Z"
+    },
+    {
+      "version": "0.14.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.14.6",
+      "has_docs": true,
+      "inserted_at": "2020-09-21T13:14:08.842772Z"
+    },
+    {
+      "version": "0.14.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.14.5",
+      "has_docs": true,
+      "inserted_at": "2020-09-20T18:30:06.515255Z"
+    },
+    {
+      "version": "0.14.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.14.4",
+      "has_docs": true,
+      "inserted_at": "2020-07-30T13:10:19.469366Z"
+    },
+    {
+      "version": "0.14.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.14.3",
+      "has_docs": true,
+      "inserted_at": "2020-07-25T01:22:28.440606Z"
+    },
+    {
+      "version": "0.14.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.14.2",
+      "has_docs": true,
+      "inserted_at": "2020-07-21T19:40:59.010795Z"
+    },
+    {
+      "version": "0.14.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.14.1",
+      "has_docs": true,
+      "inserted_at": "2020-07-09T21:50:23.230595Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2020-07-07T16:58:13.058354Z"
+    },
+    {
+      "version": "0.13.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.13.3",
+      "has_docs": true,
+      "inserted_at": "2020-06-04T20:58:50.277086Z"
+    },
+    {
+      "version": "0.13.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.13.2",
+      "has_docs": true,
+      "inserted_at": "2020-05-27T12:54:24.740885Z"
+    },
+    {
+      "version": "0.13.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.13.1",
+      "has_docs": true,
+      "inserted_at": "2020-05-26T18:27:44.231940Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2020-05-21T21:01:11.379635Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2020-04-19T14:02:14.930863Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-16T16:14:32.982976Z"
+    },
+    {
+      "version": "0.11.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.11.1",
+      "has_docs": true,
+      "inserted_at": "2020-04-08T15:24:10.653933Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-06T15:55:12.320275Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-18T23:38:20.648650Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-08T15:36:53.534390Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2020-02-27T17:37:56.113139Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-22T20:29:08.209074Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2020-02-13T14:37:21.260108Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-12T19:51:48.275213Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-23T02:40:18.981877Z"
+    },
+    {
+      "version": "0.6.0-dev",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.6.0-dev",
+      "has_docs": true,
+      "inserted_at": "2020-01-22T22:45:00.596330Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.5.2",
+      "has_docs": true,
+      "inserted_at": "2020-01-17T17:38:15.785983Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2020-01-15T21:09:36.353421Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-15T20:02:42.375262Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.4.1",
+      "has_docs": true,
+      "inserted_at": "2019-11-07T21:10:33.178284Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2019-11-07T16:33:51.501163Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2019-09-24T02:00:16.303797Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2019-09-19T16:23:33.256468Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2019-09-17T19:07:54.806856Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2019-09-13T03:09:27.813674Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.1.1",
+      "has_docs": true,
+      "inserted_at": "2019-08-27T15:21:14.051808Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_view/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2019-08-25T20:09:29.685323Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/phoenix_live_view",
+  "latest_version": "1.2.11",
+  "downloads": {
+    "all": 44681105,
+    "day": 52668,
+    "recent": 3414258,
+    "week": 319281
+  },
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-64941",
+      "aliases": [
+        "CVE-2026-64941",
+        "GHSA-36m4-rm57-3prf"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/commit/2068b304d71907064b159b6bc60c5ad85a876ecf"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/security/advisories/GHSA-36m4-rm57-3prf"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix_live_view"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-64941.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/commit/0b8c733133466912f81adecaea72b6712370242e"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/commit/1c164f83df0bb922dfff9c60d125da5b0cfd6619"
+        }
+      ],
+      "summary": "Open redirect in Phoenix.LiveView.validate_local_url!/2 via ASCII tab, LF and CR",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-64941",
+      "published_at": "2026-08-10T11:05:14Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-64941",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:A/VC:N/VI:N/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-08-10T11:25:57Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.5.0 and < 1.0.19",
+        ">= 1.1.0-rc.0 and < 1.1.33",
+        ">= 1.2.0-rc.0 and < 1.2.9"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-58228",
+      "aliases": [
+        "CVE-2026-58228",
+        "GHSA-5cgh-g58j-m9cq"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/security/advisories/GHSA-5cgh-g58j-m9cq"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-58228.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/commit/86165533e311469a1b62093fd182d9d874de8106"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix_live_view"
+        }
+      ],
+      "summary": "Scheme validation bypass in Phoenix.LiveView.Utils leads to XSS via <.link>",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-58228",
+      "published_at": "2026-07-13T18:04:30Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-58228",
+      "cvss_score": 5.1,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:A/VC:L/VI:L/VA:N/SC:H/SI:H/SA:N",
+      "modified_at": "2026-07-30T18:22:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.2.2 and < 1.2.7"
+      ]
+    }
+  ],
+  "docs_html_url": "https://phoenix-live-view.hexdocs.pm/",
+  "retirements": {
+    "1.0.6": {
+      "message": "Bug in form serialization",
+      "reason": "other"
+    },
+    "1.0.8": {
+      "message": "Invalid version in bundled assets",
+      "reason": "other"
+    },
+    "1.1.6": {
+      "message": "Regression",
+      "reason": "other"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_phoenix_live_view = hex 1.2.11",
+    "mix.exs": "{:phoenix_live_view, \"~> 1.2\"}",
+    "rebar.config": "{phoenix_live_view, \"1.2.11\"}"
+  },
+  "latest_stable_version": "1.2.11"
+}

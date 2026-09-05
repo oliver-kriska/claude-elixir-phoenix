@@ -1,0 +1,68 @@
+{
+  "meta": {
+    "elixir": "~> 1.12",
+    "app": "phoenix_live_dashboard",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.8.5",
+  "checksum": "1d73920515554d7d6c548aee0bf10a4780568b029d042eccb336db29ea0dad70",
+  "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.5",
+  "has_docs": true,
+  "inserted_at": "2024-11-14T20:02:00.149341Z",
+  "updated_at": "2024-11-14T20:02:03.079132Z",
+  "html_url": "https://hex.pm/packages/phoenix_live_dashboard/0.8.5",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/phoenix_live_dashboard",
+  "downloads": 767121,
+  "security_advisories": [],
+  "requirements": {
+    "ecto": {
+      "app": "ecto",
+      "optional": true,
+      "requirement": "~> 3.6.2 or ~> 3.7"
+    },
+    "ecto_mysql_extras": {
+      "app": "ecto_mysql_extras",
+      "optional": true,
+      "requirement": "~> 0.5"
+    },
+    "ecto_psql_extras": {
+      "app": "ecto_psql_extras",
+      "optional": true,
+      "requirement": "~> 0.7"
+    },
+    "ecto_sqlite3_extras": {
+      "app": "ecto_sqlite3_extras",
+      "optional": true,
+      "requirement": "~> 1.1.7 or ~> 1.2.0"
+    },
+    "mime": {
+      "app": "mime",
+      "optional": false,
+      "requirement": "~> 1.6 or ~> 2.0"
+    },
+    "phoenix_live_view": {
+      "app": "phoenix_live_view",
+      "optional": false,
+      "requirement": "~> 0.19 or ~> 1.0"
+    },
+    "telemetry_metrics": {
+      "app": "telemetry_metrics",
+      "optional": false,
+      "requirement": "~> 0.6 or ~> 1.0"
+    }
+  },
+  "docs_html_url": "https://phoenix-live-dashboard.hexdocs.pm/0.8.5/",
+  "configs": {
+    "erlang.mk": "dep_phoenix_live_dashboard = hex 0.8.5",
+    "mix.exs": "{:phoenix_live_dashboard, \"~> 0.8.5\"}",
+    "rebar.config": "{phoenix_live_dashboard, \"0.8.5\"}"
+  }
+}

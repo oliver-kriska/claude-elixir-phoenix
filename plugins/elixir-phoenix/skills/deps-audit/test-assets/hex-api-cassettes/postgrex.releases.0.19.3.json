@@ -1,0 +1,214 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "postgrex",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.19.3",
+  "checksum": "d31c28053655b78f47f948c85bb1cf86a9c1f8ead346ba1aa0d0df017fa05b61",
+  "url": "https://hex.pm/api/packages/postgrex/releases/0.19.3",
+  "has_docs": true,
+  "inserted_at": "2024-11-12T10:43:34.143777Z",
+  "updated_at": "2024-11-12T10:43:36.949901Z",
+  "html_url": "https://hex.pm/packages/postgrex/0.19.3",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/postgrex",
+  "downloads": 2509509,
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-66838",
+      "aliases": [
+        "CVE-2026-66838",
+        "GHSA-3gww-3f36-2388"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/4011be852c99dc61ddb98cb01aa41e8775a0e3dd"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-ecto/ecto/security/advisories/GHSA-3gww-3f36-2388"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-66838.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/e1ecba618ddea4cee2556bd6ad9b6285e05f9d3c"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/postgrex"
+        }
+      ],
+      "summary": "SQL injection via the :comment option in Postgrex.stream/4",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-66838",
+      "published_at": "2026-08-07T12:20:02Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-66838",
+      "cvss_score": 5.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-08-07T12:41:01Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.19.3 and < 0.22.4"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-58225",
+      "aliases": [
+        "CVE-2026-58225",
+        "GHSA-4mw9-4qgj-m97w"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/795c6062f62c4394272ff4b89170688857b4f841"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-ecto/ecto/security/advisories/GHSA-4mw9-4qgj-m97w"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/postgrex"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-58225.html"
+        }
+      ],
+      "summary": "SQL injection via unescaped dollar-quote in Postgrex.Notifications reconnect replay causes notification denial of service",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-58225",
+      "published_at": "2026-07-10T10:51:46Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-58225",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:05Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.16.0 and < 0.22.3"
+      ]
+    },
+    {
+      "id": "GHSA-r73h-97w8-m54h",
+      "aliases": [
+        "CVE-2026-32687",
+        "EEF-CVE-2026-32687"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/ecto/security/advisories/GHSA-r73h-97w8-m54h"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-32687"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-ecto/ecto"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32687.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/7cdedbd4316bb65f82e6a9a4f922c0ac491cb770"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32687"
+        }
+      ],
+      "summary": "Postgrex: Channel-name SQL injection in `Postgrex.Notifications.listen/3`",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-r73h-97w8-m54h",
+      "published_at": "2026-05-18T17:53:17Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-r73h-97w8-m54h",
+      "cvss_score": 7.5,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-18T18:04:55Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.16.0 and < 0.22.2"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-32687",
+      "aliases": [
+        "CVE-2026-32687",
+        "GHSA-r73h-97w8-m54h"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32687.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/postgrex"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/7cdedbd4316bb65f82e6a9a4f922c0ac491cb770"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-ecto/ecto/security/advisories/GHSA-r73h-97w8-m54h"
+        }
+      ],
+      "summary": "SQL injection via channel name in Postgrex.Notifications.listen/3 and unlisten/3",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-32687",
+      "published_at": "2026-05-12T14:18:07Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-32687",
+      "cvss_score": 7.5,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:12Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.16.0 and < 0.22.2"
+      ]
+    }
+  ],
+  "requirements": {
+    "db_connection": {
+      "app": "db_connection",
+      "optional": false,
+      "requirement": "~> 2.1"
+    },
+    "decimal": {
+      "app": "decimal",
+      "optional": false,
+      "requirement": "~> 1.5 or ~> 2.0"
+    },
+    "jason": {
+      "app": "jason",
+      "optional": true,
+      "requirement": "~> 1.0"
+    },
+    "table": {
+      "app": "table",
+      "optional": true,
+      "requirement": "~> 0.1.0"
+    }
+  },
+  "docs_html_url": "https://postgrex.hexdocs.pm/0.19.3/",
+  "configs": {
+    "erlang.mk": "dep_postgrex = hex 0.19.3",
+    "mix.exs": "{:postgrex, \"~> 0.19.3\"}",
+    "rebar.config": "{postgrex, \"0.19.3\"}"
+  }
+}

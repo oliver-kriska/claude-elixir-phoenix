@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "elixir": "~> 1.7",
+    "app": "bcrypt_elixir",
+    "build_tools": [
+      "mix",
+      "make"
+    ]
+  },
+  "version": "3.2.0",
+  "checksum": "563e92a6c77d667b19c5f4ba17ab6d440a085696bdf4c68b9b0f5b30bc5422b8",
+  "url": "https://hex.pm/api/packages/bcrypt_elixir/releases/3.2.0",
+  "has_docs": true,
+  "inserted_at": "2024-10-04T12:53:30.093143Z",
+  "updated_at": "2024-10-04T12:53:33.786861Z",
+  "html_url": "https://hex.pm/packages/bcrypt_elixir/3.2.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/riverrun",
+    "email": "alovedalongthe@gmail.com",
+    "username": "riverrun"
+  },
+  "package_url": "https://hex.pm/api/packages/bcrypt_elixir",
+  "downloads": 1282375,
+  "security_advisories": [],
+  "requirements": {
+    "comeonin": {
+      "app": "comeonin",
+      "optional": false,
+      "requirement": "~> 5.3"
+    },
+    "elixir_make": {
+      "app": "elixir_make",
+      "optional": false,
+      "requirement": "~> 0.6"
+    }
+  },
+  "docs_html_url": "https://bcrypt-elixir.hexdocs.pm/3.2.0/",
+  "configs": {
+    "erlang.mk": "dep_bcrypt_elixir = hex 3.2.0",
+    "mix.exs": "{:bcrypt_elixir, \"~> 3.2\"}",
+    "rebar.config": "{bcrypt_elixir, \"3.2.0\"}"
+  }
+}

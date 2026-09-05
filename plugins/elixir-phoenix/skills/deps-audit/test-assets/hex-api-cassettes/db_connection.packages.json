@@ -1,0 +1,377 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/elixir-ecto/db_connection"
+    },
+    "description": "Database connection behaviour for database transactions and connection pooling",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "db_connection",
+  "url": "https://hex.pm/api/packages/db_connection",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ericmj",
+      "email": "eric.meadows.jonsson@gmail.com",
+      "username": "ericmj"
+    },
+    {
+      "url": "https://hex.pm/api/users/fishcakez",
+      "email": "james@fishcakez.com",
+      "username": "fishcakez"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    }
+  ],
+  "inserted_at": "2015-11-26T02:07:32.876101Z",
+  "updated_at": "2026-07-06T07:54:53.916327Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.10.2",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.10.2",
+      "has_docs": true,
+      "inserted_at": "2026-07-06T07:54:52.244979Z"
+    },
+    {
+      "version": "2.10.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.10.1",
+      "has_docs": true,
+      "inserted_at": "2026-05-08T23:02:36.262820Z"
+    },
+    {
+      "version": "2.10.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.10.0",
+      "has_docs": true,
+      "inserted_at": "2026-04-24T10:15:28.224705Z"
+    },
+    {
+      "version": "2.9.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.9.0",
+      "has_docs": true,
+      "inserted_at": "2026-01-10T10:29:25.950217Z"
+    },
+    {
+      "version": "2.8.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.8.1",
+      "has_docs": true,
+      "inserted_at": "2025-09-09T15:36:03.588191Z"
+    },
+    {
+      "version": "2.8.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.8.0",
+      "has_docs": true,
+      "inserted_at": "2025-06-24T09:59:03.389895Z"
+    },
+    {
+      "version": "2.7.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.7.0",
+      "has_docs": true,
+      "inserted_at": "2024-07-02T12:01:21.907366Z"
+    },
+    {
+      "version": "2.6.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.6.0",
+      "has_docs": true,
+      "inserted_at": "2023-10-15T09:54:12.798737Z"
+    },
+    {
+      "version": "2.5.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.5.0",
+      "has_docs": true,
+      "inserted_at": "2023-04-10T18:14:50.451225Z"
+    },
+    {
+      "version": "2.4.3",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.4.3",
+      "has_docs": true,
+      "inserted_at": "2022-11-22T17:51:33.652764Z"
+    },
+    {
+      "version": "2.4.2",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.4.2",
+      "has_docs": true,
+      "inserted_at": "2022-03-03T15:23:09.182175Z"
+    },
+    {
+      "version": "2.4.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.4.1",
+      "has_docs": true,
+      "inserted_at": "2021-10-14T09:01:37.594171Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.4.0",
+      "has_docs": true,
+      "inserted_at": "2021-04-02T12:34:13.076974Z"
+    },
+    {
+      "version": "2.3.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.3.1",
+      "has_docs": true,
+      "inserted_at": "2020-11-24T19:25:26.102358Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.3.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-14T09:19:02.125392Z"
+    },
+    {
+      "version": "2.2.2",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.2.2",
+      "has_docs": true,
+      "inserted_at": "2020-04-22T14:47:49.896877Z"
+    },
+    {
+      "version": "2.2.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.2.1",
+      "has_docs": true,
+      "inserted_at": "2020-02-04T10:30:16.136108Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2019-12-11T12:05:32.680071Z"
+    },
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2019-07-17T19:33:19.292370Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-07T09:07:36.442283Z"
+    },
+    {
+      "version": "2.0.6",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.0.6",
+      "has_docs": true,
+      "inserted_at": "2019-03-24T22:33:20.782811Z"
+    },
+    {
+      "version": "2.0.5",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.0.5",
+      "has_docs": true,
+      "inserted_at": "2019-02-01T17:23:22.031652Z"
+    },
+    {
+      "version": "2.0.4",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.0.4",
+      "has_docs": true,
+      "inserted_at": "2019-02-01T11:36:40.315055Z"
+    },
+    {
+      "version": "2.0.3",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.0.3",
+      "has_docs": true,
+      "inserted_at": "2018-11-29T18:10:50.498747Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2018-11-17T09:43:41.677218Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2018-11-01T10:43:32.540934Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-29T09:45:54.503810Z"
+    },
+    {
+      "version": "2.0.0-rc.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/2.0.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-07T19:46:24.766084Z"
+    },
+    {
+      "version": "1.1.3",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.1.3",
+      "has_docs": true,
+      "inserted_at": "2018-01-14T20:09:01.208911Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2017-03-10T12:21:35.553258Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2017-02-20T17:58:22.690582Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2016-11-08T21:05:18.777525Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-11T17:02:10.868475Z"
+    },
+    {
+      "version": "1.0.0-rc.5",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.0.0-rc.5",
+      "has_docs": false,
+      "inserted_at": "2016-08-18T21:32:56.117753Z"
+    },
+    {
+      "version": "1.0.0-rc.4",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.0.0-rc.4",
+      "has_docs": true,
+      "inserted_at": "2016-07-29T14:23:34.319209Z"
+    },
+    {
+      "version": "1.0.0-rc.3",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.0.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2016-06-23T12:44:16.718487Z"
+    },
+    {
+      "version": "1.0.0-rc.2",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.0.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2016-06-20T13:20:42.168052Z"
+    },
+    {
+      "version": "1.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2016-06-16T11:16:02.825826Z"
+    },
+    {
+      "version": "1.0.0-rc.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/1.0.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2016-06-11T13:14:47.119121Z"
+    },
+    {
+      "version": "0.2.5",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.2.5",
+      "has_docs": true,
+      "inserted_at": "2016-03-31T17:22:53.852302Z"
+    },
+    {
+      "version": "0.2.4",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.2.4",
+      "has_docs": true,
+      "inserted_at": "2016-02-25T18:28:24.013367Z"
+    },
+    {
+      "version": "0.2.3",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.2.3",
+      "has_docs": true,
+      "inserted_at": "2016-01-31T14:43:05.068959Z"
+    },
+    {
+      "version": "0.2.2",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.2.2",
+      "has_docs": true,
+      "inserted_at": "2016-01-27T21:36:42.448364Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2016-01-24T13:12:55.241468Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2016-01-14T12:29:01.059874Z"
+    },
+    {
+      "version": "0.1.8",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.1.8",
+      "has_docs": true,
+      "inserted_at": "2016-01-09T02:34:02.194876Z"
+    },
+    {
+      "version": "0.1.7",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.1.7",
+      "has_docs": true,
+      "inserted_at": "2016-01-04T13:08:29.315160Z"
+    },
+    {
+      "version": "0.1.6",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.1.6",
+      "has_docs": true,
+      "inserted_at": "2016-01-04T10:49:58.175301Z"
+    },
+    {
+      "version": "0.1.5",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.1.5",
+      "has_docs": true,
+      "inserted_at": "2015-12-18T00:51:52.608840Z"
+    },
+    {
+      "version": "0.1.4",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.1.4",
+      "has_docs": true,
+      "inserted_at": "2015-12-18T00:25:46.115969Z"
+    },
+    {
+      "version": "0.1.3",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.1.3",
+      "has_docs": true,
+      "inserted_at": "2015-12-10T23:01:12.831901Z"
+    },
+    {
+      "version": "0.1.2",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.1.2",
+      "has_docs": true,
+      "inserted_at": "2015-11-27T17:42:35.724994Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.1.1",
+      "has_docs": true,
+      "inserted_at": "2015-11-26T16:22:22.342188Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/db_connection/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-11-26T02:07:32.888043Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/db_connection",
+  "latest_version": "2.10.2",
+  "downloads": {
+    "all": 148897026,
+    "day": 66619,
+    "recent": 4214292,
+    "week": 389729
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://db-connection.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_db_connection = hex 2.10.2",
+    "mix.exs": "{:db_connection, \"~> 2.10\"}",
+    "rebar.config": "{db_connection, \"2.10.2\"}"
+  },
+  "latest_stable_version": "2.10.2"
+}

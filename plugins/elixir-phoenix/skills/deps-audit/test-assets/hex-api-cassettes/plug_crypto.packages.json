@@ -1,0 +1,142 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/elixir-plug/plug_crypto"
+    },
+    "description": "Crypto-related functionality for the web",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "plug_crypto",
+  "url": "https://hex.pm/api/packages/plug_crypto",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ericmj",
+      "email": "eric.meadows.jonsson@gmail.com",
+      "username": "ericmj"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/whatyouhide",
+      "email": "hi@andrealeopardi.com",
+      "username": "whatyouhide"
+    }
+  ],
+  "inserted_at": "2018-10-03T10:19:35.447599Z",
+  "updated_at": "2026-07-24T10:46:11.482754Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2026-07-24T10:46:10.019987Z"
+    },
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2025-04-03T12:02:20.333637Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2024-05-02T14:35:37.316823Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2023-10-06T09:46:09.725338Z"
+    },
+    {
+      "version": "1.2.5",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.2.5",
+      "has_docs": true,
+      "inserted_at": "2023-03-10T21:11:25.394112Z"
+    },
+    {
+      "version": "1.2.4",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.2.4",
+      "has_docs": true,
+      "inserted_at": "2023-03-10T07:56:45.156306Z"
+    },
+    {
+      "version": "1.2.3",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.2.3",
+      "has_docs": true,
+      "inserted_at": "2022-08-19T15:16:36.721735Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2021-03-25T07:47:56.716098Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2021-02-17T08:29:45.770783Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-07T14:03:09.438699Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2020-02-15T20:27:32.564010Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2020-02-14T10:27:59.119244Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-11T08:58:57.081290Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/plug_crypto/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-03T10:19:35.457298Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/plug_crypto",
+  "latest_version": "2.2.0",
+  "downloads": {
+    "all": 155604805,
+    "day": 78526,
+    "recent": 5181277,
+    "week": 475013
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://plug-crypto.hexdocs.pm/",
+  "retirements": {
+    "1.1.1": {
+      "message": "Wrong default value is used for salt on encrypt",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_plug_crypto = hex 2.2.0",
+    "mix.exs": "{:plug_crypto, \"~> 2.2\"}",
+    "rebar.config": "{plug_crypto, \"2.2.0\"}"
+  },
+  "latest_stable_version": "2.2.0"
+}

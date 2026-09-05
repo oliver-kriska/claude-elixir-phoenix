@@ -1,0 +1,113 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/beam-telemetry/telemetry_poller"
+    },
+    "description": "Periodically collect measurements and dispatch them as Telemetry events.",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "telemetry_poller",
+  "url": "https://hex.pm/api/packages/telemetry_poller",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/arkgil",
+      "username": "arkgil"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    }
+  ],
+  "inserted_at": "2018-10-25T18:43:31.742838Z",
+  "updated_at": "2025-07-09T10:06:08.801255Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2025-07-09T10:06:04.789600Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2025-03-30T14:19:55.146609Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2024-04-08T21:44:35.461314Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2021-08-17T19:50:04.012724Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2020-06-26T12:57:38.541216Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-14T12:59:48.939593Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/0.4.1",
+      "has_docs": false,
+      "inserted_at": "2019-10-15T08:22:45.248333Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-03T09:59:07.481726Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2019-02-14T11:29:59.038378Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2019-01-16T21:43:16.786318Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/telemetry_poller/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-25T18:43:31.748183Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/telemetry_poller",
+  "latest_version": "1.3.0",
+  "downloads": {
+    "all": 47746317,
+    "day": 51270,
+    "recent": 3275483,
+    "week": 314248
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://telemetry-poller.hexdocs.pm/",
+  "configs": {
+    "erlang.mk": "dep_telemetry_poller = hex 1.3.0",
+    "mix.exs": "{:telemetry_poller, \"~> 1.3\"}",
+    "rebar.config": "{telemetry_poller, \"1.3.0\"}"
+  },
+  "retirements": {},
+  "latest_stable_version": "1.3.0"
+}

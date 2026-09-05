@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "elixir": "~> 1.7",
+    "app": "gen_stage",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.2.1",
+  "checksum": "83e8be657fa05b992ffa6ac1e3af6d57aa50aace8f691fcf696ff02f8335b001",
+  "url": "https://hex.pm/api/packages/gen_stage/releases/1.2.1",
+  "has_docs": true,
+  "inserted_at": "2023-03-20T08:18:56.744559Z",
+  "updated_at": "2023-03-20T08:18:59.703081Z",
+  "html_url": "https://hex.pm/packages/gen_stage/1.2.1",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/gen_stage",
+  "downloads": 12417298,
+  "security_advisories": [],
+  "requirements": {},
+  "docs_html_url": "https://gen-stage.hexdocs.pm/1.2.1/",
+  "configs": {
+    "erlang.mk": "dep_gen_stage = hex 1.2.1",
+    "mix.exs": "{:gen_stage, \"~> 1.2\"}",
+    "rebar.config": "{gen_stage, \"1.2.1\"}"
+  }
+}

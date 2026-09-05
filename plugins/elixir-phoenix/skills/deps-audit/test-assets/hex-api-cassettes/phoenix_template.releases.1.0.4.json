@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "elixir": "~> 1.9",
+    "app": "phoenix_template",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.0.4",
+  "checksum": "2c0c81f0e5c6753faf5cca2f229c9709919aba34fab866d3bc05060c9c444206",
+  "url": "https://hex.pm/api/packages/phoenix_template/releases/1.0.4",
+  "has_docs": true,
+  "inserted_at": "2023-12-19T08:48:12.468499Z",
+  "updated_at": "2023-12-19T08:48:15.182796Z",
+  "html_url": "https://hex.pm/packages/phoenix_template/1.0.4",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/phoenix_template",
+  "downloads": 27510610,
+  "security_advisories": [],
+  "requirements": {
+    "phoenix_html": {
+      "app": "phoenix_html",
+      "optional": true,
+      "requirement": "~> 2.14.2 or ~> 3.0 or ~> 4.0"
+    }
+  },
+  "docs_html_url": "https://phoenix-template.hexdocs.pm/1.0.4/",
+  "configs": {
+    "erlang.mk": "dep_phoenix_template = hex 1.0.4",
+    "mix.exs": "{:phoenix_template, \"~> 1.0\"}",
+    "rebar.config": "{phoenix_template, \"1.0.4\"}"
+  }
+}

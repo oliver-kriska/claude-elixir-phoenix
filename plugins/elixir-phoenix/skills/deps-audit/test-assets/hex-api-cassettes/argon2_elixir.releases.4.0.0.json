@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "elixir": "~> 1.7",
+    "app": "argon2_elixir",
+    "build_tools": [
+      "mix",
+      "make"
+    ]
+  },
+  "version": "4.0.0",
+  "checksum": "f9da27cf060c9ea61b1bd47837a28d7e48a8f6fa13a745e252556c14f9132c7f",
+  "url": "https://hex.pm/api/packages/argon2_elixir/releases/4.0.0",
+  "has_docs": true,
+  "inserted_at": "2023-10-09T00:54:58.258718Z",
+  "updated_at": "2023-10-09T00:55:01.518913Z",
+  "html_url": "https://hex.pm/packages/argon2_elixir/4.0.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/riverrun",
+    "email": "alovedalongthe@gmail.com",
+    "username": "riverrun"
+  },
+  "package_url": "https://hex.pm/api/packages/argon2_elixir",
+  "downloads": 1164703,
+  "security_advisories": [],
+  "requirements": {
+    "comeonin": {
+      "app": "comeonin",
+      "optional": false,
+      "requirement": "~> 5.3"
+    },
+    "elixir_make": {
+      "app": "elixir_make",
+      "optional": false,
+      "requirement": "~> 0.6"
+    }
+  },
+  "docs_html_url": "https://argon2-elixir.hexdocs.pm/4.0.0/",
+  "configs": {
+    "erlang.mk": "dep_argon2_elixir = hex 4.0.0",
+    "mix.exs": "{:argon2_elixir, \"~> 4.0\"}",
+    "rebar.config": "{argon2_elixir, \"4.0.0\"}"
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "elixir": "~> 1.7",
+    "app": "phoenix_html",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "4.1.1",
+  "checksum": "f2f2df5a72bc9a2f510b21497fd7d2b86d932ec0598f0210fed4114adc546c6f",
+  "url": "https://hex.pm/api/packages/phoenix_html/releases/4.1.1",
+  "has_docs": true,
+  "inserted_at": "2024-03-01T19:58:03.853571Z",
+  "updated_at": "2024-03-01T19:58:06.548751Z",
+  "html_url": "https://hex.pm/packages/phoenix_html/4.1.1",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/chrismccord",
+    "email": "chris@chrismccord.com",
+    "username": "chrismccord"
+  },
+  "package_url": "https://hex.pm/api/packages/phoenix_html",
+  "downloads": 5889102,
+  "security_advisories": [],
+  "requirements": {},
+  "docs_html_url": "https://phoenix-html.hexdocs.pm/4.1.1/",
+  "configs": {
+    "erlang.mk": "dep_phoenix_html = hex 4.1.1",
+    "mix.exs": "{:phoenix_html, \"~> 4.1\"}",
+    "rebar.config": "{phoenix_html, \"4.1.1\"}"
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "phoenix_live_reload",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.5.3",
+  "checksum": "b4ec9cd73cb01ff1bd1cac92e045d13e7030330b74164297d1aee3907b54803c",
+  "url": "https://hex.pm/api/packages/phoenix_live_reload/releases/1.5.3",
+  "has_docs": true,
+  "inserted_at": "2024-03-27T13:04:29.940168Z",
+  "updated_at": "2024-03-27T13:04:32.429415Z",
+  "html_url": "https://hex.pm/packages/phoenix_live_reload/1.5.3",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/phoenix_live_reload",
+  "downloads": 4765368,
+  "security_advisories": [],
+  "requirements": {
+    "file_system": {
+      "app": "file_system",
+      "optional": false,
+      "requirement": "~> 0.3 or ~> 1.0"
+    },
+    "phoenix": {
+      "app": "phoenix",
+      "optional": false,
+      "requirement": "~> 1.4"
+    }
+  },
+  "docs_html_url": "https://phoenix-live-reload.hexdocs.pm/1.5.3/",
+  "configs": {
+    "erlang.mk": "dep_phoenix_live_reload = hex 1.5.3",
+    "mix.exs": "{:phoenix_live_reload, \"~> 1.5\"}",
+    "rebar.config": "{phoenix_live_reload, \"1.5.3\"}"
+  }
+}

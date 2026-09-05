@@ -1,0 +1,439 @@
+{
+  "meta": {
+    "elixir": null,
+    "app": "cowlib",
+    "build_tools": [
+      "make",
+      "rebar3"
+    ]
+  },
+  "version": "2.13.0",
+  "checksum": "e1e1284dc3fc030a64b1ad0d8382ae7e99da46c3246b815318a4b848873800a4",
+  "url": "https://hex.pm/api/packages/cowlib/releases/2.13.0",
+  "has_docs": false,
+  "inserted_at": "2024-03-14T15:33:02.593517Z",
+  "updated_at": "2024-03-14T15:33:02.593517Z",
+  "html_url": "https://hex.pm/packages/cowlib/2.13.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/essen",
+    "email": "essen@ninenines.eu",
+    "username": "essen"
+  },
+  "package_url": "https://hex.pm/api/packages/cowlib",
+  "downloads": 12051760,
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-43971",
+      "aliases": [
+        "CVE-2026-43971"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowlib"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43971.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/ninenines/cowlib/commit/89da27ee4c241f5d649ba7d9b7f2188918af6cea"
+        }
+      ],
+      "summary": "Link Header Directive Smuggling via Unescaped target/rel/Attribute Keys in cow_link:link/1",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-43971",
+      "published_at": "2026-08-18T09:01:53Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-43971",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-08-18T16:00:17Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.9.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-59248",
+      "aliases": [
+        "CVE-2026-59248"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/ninenines/cowlib/commit/f582430498072a0c65ad338030321576dc13a343"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-59248.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowlib"
+        }
+      ],
+      "summary": "Unbounded HPACK/QPACK prefixed-integer decoding in Cowlib causes memory-exhaustion DoS",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-59248",
+      "published_at": "2026-07-28T09:54:19Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-59248",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0-pre.1 and < 2.19.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-43966",
+      "aliases": [
+        "CVE-2026-43966",
+        "GHSA-w4f7-4cxr-rv3c"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowboy/commit/f77cb9b5e730e300fffb551db1ba5d1c4ed878ef"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43966.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/gun/commit/4f35609eb37109b106a863fc9ba83d7ee64e3e42"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowlib"
+        }
+      ],
+      "summary": "HTTP Response Splitting via Non-VCHAR Bytes in cow_http_struct_hd:escape_string/2",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-43966",
+      "published_at": "2026-06-08T16:34:33Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-43966",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-08-03T18:23:20Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.9.0"
+      ]
+    },
+    {
+      "id": "GHSA-84f2-rp86-235p",
+      "aliases": [
+        "CVE-2026-43970",
+        "EEF-CVE-2026-43970"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43970.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowlib/commit/16aad3fb9f81f5cda4d1706ff0c54237c619c282"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43970"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-43970"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ninenines/cowlib"
+        }
+      ],
+      "summary": "cowlib: Decompression Bomb in cow_spdy:inflate/2 Allows Memory Exhaustion via Crafted SPDY Frame",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-84f2-rp86-235p",
+      "published_at": "2026-05-13T21:32:06Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-84f2-rp86-235p",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-19T20:26:01Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 2.16.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-43970",
+      "aliases": [
+        "CVE-2026-43970",
+        "GHSA-84f2-rp86-235p"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowlib"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/ninenines/cowlib/commit/16aad3fb9f81f5cda4d1706ff0c54237c619c282"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43970.html"
+        }
+      ],
+      "summary": "Decompression Bomb in cow_spdy:inflate/2 Allows Memory Exhaustion via Crafted SPDY Frame",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-43970",
+      "published_at": "2026-05-13T18:43:11Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-43970",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 2.16.1"
+      ]
+    },
+    {
+      "id": "GHSA-32p9-57cr-4x65",
+      "aliases": [
+        "CVE-2026-7790",
+        "EEF-CVE-2026-7790"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-7790"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-7790"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowlib/commit/a4b8039ce8c93ab00867ef6b7e888822c09f4369"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-7790.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ninenines/cowlib"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowlib/releases/tag/2.16.1"
+        }
+      ],
+      "summary": " cowlib cow_http_te module: Uncontrolled Resource Consumption vulnerability allows Excessive Allocation",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-32p9-57cr-4x65",
+      "published_at": "2026-05-11T21:31:35Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-32p9-57cr-4x65",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-18T17:11:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.6.0 and < 2.16.1"
+      ]
+    },
+    {
+      "id": "GHSA-hv23-4qp7-8c8r",
+      "aliases": [
+        "CVE-2026-43968",
+        "EEF-CVE-2026-43968"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ninenines/cowlib"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowlib/releases/tag/2.16.1"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-43968"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43968.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowlib/commit/6165fc40efa159ba1cceee7e7981e790acba5d9c"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43968"
+        }
+      ],
+      "summary": "ninenines cowlib: Improper Neutralization of CRLF Sequences ('CRLF Injection') vulnerability allows SSE event splitting and injection via unvalidated field values",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-hv23-4qp7-8c8r",
+      "published_at": "2026-05-11T21:31:34Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-hv23-4qp7-8c8r",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-06-08T20:31:01Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.6.0 and < 2.16.1"
+      ]
+    },
+    {
+      "id": "GHSA-g2wm-735q-3f56",
+      "aliases": [
+        "CVE-2026-43969",
+        "EEF-CVE-2026-43969"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/erlef/cowlib/commit/177953dd51540da11090666c1f007214127a1144"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43969"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-43969"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ninenines/cowlib"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43969.html"
+        }
+      ],
+      "summary": "cowlib: Cookie Request Header Injection via Unvalidated Encoder in cow_cookie:cookie/1",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-g2wm-735q-3f56",
+      "published_at": "2026-05-11T21:31:34Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-g2wm-735q-3f56",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-06-08T20:31:01Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.9.0 and <= 2.16.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-43968",
+      "aliases": [
+        "CVE-2026-43968",
+        "GHSA-hv23-4qp7-8c8r"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/ninenines/cowlib/commit/6165fc40efa159ba1cceee7e7981e790acba5d9c"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowlib"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43968.html"
+        }
+      ],
+      "summary": "CR Injection in SSE Encoder Enables Event Splitting via cow_sse:event/1",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-43968",
+      "published_at": "2026-05-11T18:06:42Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-43968",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-07-30T18:22:09Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.6.0 and < 2.16.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-7790",
+      "aliases": [
+        "CVE-2026-7790",
+        "GHSA-32p9-57cr-4x65"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowlib"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/ninenines/cowlib/commit/a4b8039ce8c93ab00867ef6b7e888822c09f4369"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-7790.html"
+        }
+      ],
+      "summary": "Unbounded chunk-size hex digits in cowlib cause quadratic CPU and memory DoS",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-7790",
+      "published_at": "2026-05-11T18:06:41Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-7790",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.6.0 and < 2.16.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-43969",
+      "aliases": [
+        "CVE-2026-43969",
+        "GHSA-g2wm-735q-3f56"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowlib"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43969.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/erlef/cowlib/commit/177953dd51540da11090666c1f007214127a1144"
+        }
+      ],
+      "summary": "Cookie Request Header Injection via Unvalidated Encoder in cow_cookie:cookie/1",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-43969",
+      "published_at": "2026-05-11T18:06:40Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-43969",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-08-18T11:30:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.9.0"
+      ]
+    }
+  ],
+  "requirements": {},
+  "docs_html_url": null,
+  "configs": {
+    "erlang.mk": "dep_cowlib = hex 2.13.0",
+    "mix.exs": "{:cowlib, \"~> 2.13\"}",
+    "rebar.config": "{cowlib, \"2.13.0\"}"
+  }
+}

@@ -1,0 +1,355 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/ericmj/decimal"
+    },
+    "description": "Arbitrary precision decimal arithmetic.",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "decimal",
+  "url": "https://hex.pm/api/packages/decimal",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ericmj",
+      "email": "eric.meadows.jonsson@gmail.com",
+      "username": "ericmj"
+    },
+    {
+      "url": "https://hex.pm/api/users/wojtekmach",
+      "email": "wojtek@wojtekmach.pl",
+      "username": "wojtekmach"
+    }
+  ],
+  "inserted_at": "2014-04-21T18:22:13.000000Z",
+  "updated_at": "2026-05-27T12:42:11.842987Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "3.1.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/3.1.1",
+      "has_docs": true,
+      "inserted_at": "2026-05-27T12:42:10.349392Z"
+    },
+    {
+      "version": "3.1.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/3.1.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-08T17:43:46.870688Z"
+    },
+    {
+      "version": "3.0.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/3.0.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-07T13:53:54.855436Z"
+    },
+    {
+      "version": "2.4.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/2.4.1",
+      "has_docs": true,
+      "inserted_at": "2026-05-08T17:45:33.840188Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/2.4.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-07T13:42:07.867567Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/2.3.0",
+      "has_docs": true,
+      "inserted_at": "2024-12-13T11:43:25.950340Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2024-11-13T14:45:39.203572Z"
+    },
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2023-04-26T16:35:33.941743Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2023-04-26T11:46:05.580862Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2020-09-08T14:29:46.111823Z"
+    },
+    {
+      "version": "2.0.0-rc.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/2.0.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-21T14:06:11.731973Z"
+    },
+    {
+      "version": "1.9.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.9.0",
+      "has_docs": true,
+      "inserted_at": "2020-09-08T13:48:54.963118Z"
+    },
+    {
+      "version": "1.9.0-rc.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.9.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-07T19:46:07.803148Z"
+    },
+    {
+      "version": "1.8.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.8.1",
+      "has_docs": true,
+      "inserted_at": "2019-12-20T12:51:30.468269Z"
+    },
+    {
+      "version": "1.8.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.8.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-24T15:25:17.754533Z"
+    },
+    {
+      "version": "1.7.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.7.0",
+      "has_docs": true,
+      "inserted_at": "2019-02-16T15:44:59.374807Z"
+    },
+    {
+      "version": "1.6.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.6.0",
+      "has_docs": true,
+      "inserted_at": "2018-11-22T09:12:10.317059Z"
+    },
+    {
+      "version": "1.5.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.5.0",
+      "has_docs": true,
+      "inserted_at": "2018-03-24T21:51:08.356086Z"
+    },
+    {
+      "version": "1.4.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.4.1",
+      "has_docs": true,
+      "inserted_at": "2017-10-12T15:37:40.931443Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2017-06-25T20:06:06.807431Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2016-11-11T15:18:43.103263Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2016-11-10T21:41:12.234726Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2016-09-26T21:50:10.582057Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2016-04-24T12:46:14.174024Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2015-12-26T00:31:42.723218Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2014-12-31T21:03:23.000000Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2014-12-16T22:58:10.000000Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2014-12-09T18:32:03.000000Z"
+    },
+    {
+      "version": "0.2.5",
+      "url": "https://hex.pm/api/packages/decimal/releases/0.2.5",
+      "has_docs": true,
+      "inserted_at": "2014-09-09T19:14:04.000000Z"
+    },
+    {
+      "version": "0.2.4",
+      "url": "https://hex.pm/api/packages/decimal/releases/0.2.4",
+      "has_docs": false,
+      "inserted_at": "2014-08-03T21:10:40.000000Z"
+    },
+    {
+      "version": "0.2.3",
+      "url": "https://hex.pm/api/packages/decimal/releases/0.2.3",
+      "has_docs": false,
+      "inserted_at": "2014-07-13T20:22:06.000000Z"
+    },
+    {
+      "version": "0.2.2",
+      "url": "https://hex.pm/api/packages/decimal/releases/0.2.2",
+      "has_docs": false,
+      "inserted_at": "2014-06-18T21:06:12.000000Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/0.2.1",
+      "has_docs": false,
+      "inserted_at": "2014-05-24T12:04:19.000000Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/decimal/releases/0.2.0",
+      "has_docs": false,
+      "inserted_at": "2014-05-01T11:08:46.000000Z"
+    },
+    {
+      "version": "0.1.2",
+      "url": "https://hex.pm/api/packages/decimal/releases/0.1.2",
+      "has_docs": false,
+      "inserted_at": "2014-04-21T23:49:31.000000Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/decimal/releases/0.1.1",
+      "has_docs": false,
+      "inserted_at": "2014-04-21T18:22:14.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/decimal",
+  "latest_version": "3.1.1",
+  "downloads": {
+    "all": 159368041,
+    "day": 100310,
+    "recent": 5438784,
+    "week": 569517
+  },
+  "security_advisories": [
+    {
+      "id": "GHSA-rhv4-8758-jx7v",
+      "aliases": [
+        "CVE-2026-32686",
+        "EEF-CVE-2026-32686"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ericmj/decimal"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ericmj/decimal/releases/tag/v2.4.0"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ericmj/decimal/security/advisories/GHSA-rhv4-8758-jx7v"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-32686"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ericmj/decimal/releases/tag/v3.0.0"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32686"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ericmj/decimal/commit/6a523f3a73b8c9974540e21c7aa88f1258bb35ae"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32686.html"
+        }
+      ],
+      "summary": "Decimal: Unbounded exponent in `Decimal.new` enables unauthenticated DoS",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-rhv4-8758-jx7v",
+      "published_at": "2026-05-12T15:09:20Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-rhv4-8758-jx7v",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-08-05T12:45:47Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 3.0.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-32686",
+      "aliases": [
+        "CVE-2026-32686",
+        "GHSA-rhv4-8758-jx7v"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/ericmj/decimal/security/advisories/GHSA-rhv4-8758-jx7v"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32686.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/ericmj/decimal/commit/6a523f3a73b8c9974540e21c7aa88f1258bb35ae"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/decimal"
+        }
+      ],
+      "summary": "Unbounded exponent in decimal enables unauthenticated DoS",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-32686",
+      "published_at": "2026-05-07T14:04:47Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-32686",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:21:59Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 3.0.0"
+      ]
+    }
+  ],
+  "docs_html_url": "https://decimal.hexdocs.pm/",
+  "configs": {
+    "erlang.mk": "dep_decimal = hex 3.1.1",
+    "mix.exs": "{:decimal, \"~> 3.1\"}",
+    "rebar.config": "{decimal, \"3.1.1\"}"
+  },
+  "retirements": {},
+  "latest_stable_version": "3.1.1"
+}

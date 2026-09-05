@@ -1,0 +1,258 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/elixir-lang/gen_stage"
+    },
+    "description": "Producer and consumer actors with back-pressure for Elixir",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "gen_stage",
+  "url": "https://hex.pm/api/packages/gen_stage",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    }
+  ],
+  "inserted_at": "2016-07-03T15:12:59.967131Z",
+  "updated_at": "2025-07-15T19:19:54.427937Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.3.2",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/1.3.2",
+      "has_docs": true,
+      "inserted_at": "2025-07-15T19:19:51.225710Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2025-06-30T08:39:14.478977Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2025-06-24T10:33:59.499968Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2023-03-20T08:18:56.744559Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2023-02-01T22:44:38.089909Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2021-10-08T15:50:56.000123Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2021-08-13T18:06:36.454799Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2021-02-05T09:45:09.241060Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-03T11:33:51.035345Z"
+    },
+    {
+      "version": "0.14.3",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.14.3",
+      "has_docs": true,
+      "inserted_at": "2019-10-28T13:40:11.053440Z"
+    },
+    {
+      "version": "0.14.2",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.14.2",
+      "has_docs": true,
+      "inserted_at": "2019-06-12T21:54:08.104377Z"
+    },
+    {
+      "version": "0.14.1",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.14.1",
+      "has_docs": true,
+      "inserted_at": "2018-10-08T11:53:42.088704Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2018-06-10T21:07:07.889013Z"
+    },
+    {
+      "version": "0.13.1",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.13.1",
+      "has_docs": true,
+      "inserted_at": "2018-01-28T11:43:49.088499Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2018-01-13T20:03:50.886077Z"
+    },
+    {
+      "version": "0.12.2",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.12.2",
+      "has_docs": true,
+      "inserted_at": "2017-08-20T10:32:52.870372Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2017-07-15T16:45:31.071108Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2017-05-28T19:53:59.542940Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2017-01-18T11:07:27.446612Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2016-12-12T21:00:16.830899Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2016-11-19T10:09:05.713712Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-25T18:43:27.137300Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-18T21:25:06.948788Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2016-10-04T22:39:43.258517Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-03T23:15:12.811232Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2016-08-09T14:06:46.447140Z"
+    },
+    {
+      "version": "0.4.3",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.4.3",
+      "has_docs": true,
+      "inserted_at": "2016-07-27T23:13:58.395217Z"
+    },
+    {
+      "version": "0.4.2",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.4.2",
+      "has_docs": true,
+      "inserted_at": "2016-07-25T21:30:28.832685Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.4.1",
+      "has_docs": true,
+      "inserted_at": "2016-07-21T13:35:00.585935Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2016-07-19T21:24:01.099181Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2016-07-12T12:48:11.663336Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2016-07-07T23:13:04.217850Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2016-07-04T23:17:32.031941Z"
+    },
+    {
+      "version": "0.2.0-dev",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.2.0-dev",
+      "has_docs": true,
+      "inserted_at": "2016-07-04T23:12:53.620883Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/gen_stage/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2016-07-03T15:12:59.970939Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/gen_stage",
+  "latest_version": "1.3.2",
+  "downloads": {
+    "all": 62238197,
+    "day": 26916,
+    "recent": 1911867,
+    "week": 162541
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://gen-stage.hexdocs.pm/",
+  "configs": {
+    "erlang.mk": "dep_gen_stage = hex 1.3.2",
+    "mix.exs": "{:gen_stage, \"~> 1.3\"}",
+    "rebar.config": "{gen_stage, \"1.3.2\"}"
+  },
+  "retirements": {
+    "0.12.0": {
+      "message": "Cancel and info messages in producer_consumer can be delivered out of order, leading to data loss",
+      "reason": "invalid"
+    }
+  },
+  "latest_stable_version": "1.3.2"
+}

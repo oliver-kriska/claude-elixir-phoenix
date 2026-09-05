@@ -1,0 +1,131 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "plug_cowboy",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.7.2",
+  "checksum": "245d8a11ee2306094840c000e8816f0cbed69a23fc0ac2bcf8d7835ae019bb2f",
+  "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.7.2",
+  "has_docs": true,
+  "inserted_at": "2024-09-09T19:45:49.217127Z",
+  "updated_at": "2024-09-09T19:45:51.741959Z",
+  "html_url": "https://hex.pm/packages/plug_cowboy/2.7.2",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/plug_cowboy",
+  "downloads": 5836302,
+  "security_advisories": [
+    {
+      "id": "GHSA-q8x4-x7mp-5vg2",
+      "aliases": [
+        "CVE-2026-32688",
+        "EEF-CVE-2026-32688"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-plug/plug_cowboy"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug_cowboy/security/advisories/GHSA-q8x4-x7mp-5vg2"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-32688"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32688"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug_cowboy/commit/bfb34cb45eb354e56437f7023fb306de1bf9c19b"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32688.html"
+        }
+      ],
+      "summary": "Plug.Cowboy vulnerable to unauthenticated remote DoS via HTTP/2 `:scheme` atom-table exhaustion",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-q8x4-x7mp-5vg2",
+      "published_at": "2026-05-05T21:46:09Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-q8x4-x7mp-5vg2",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-05T22:14:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 2.8.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-32688",
+      "aliases": [
+        "CVE-2026-32688",
+        "GHSA-q8x4-x7mp-5vg2"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug_cowboy/security/advisories/GHSA-q8x4-x7mp-5vg2"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32688.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug_cowboy/commit/bfb34cb45eb354e56437f7023fb306de1bf9c19b"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug_cowboy"
+        }
+      ],
+      "summary": "Atom table exhaustion via HTTP/2 :scheme pseudo-header in plug_cowboy",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-32688",
+      "published_at": "2026-04-27T13:45:35Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-32688",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:09Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 2.8.1"
+      ]
+    }
+  ],
+  "requirements": {
+    "cowboy": {
+      "app": "cowboy",
+      "optional": false,
+      "requirement": "~> 2.7"
+    },
+    "cowboy_telemetry": {
+      "app": "cowboy_telemetry",
+      "optional": false,
+      "requirement": "~> 0.3"
+    },
+    "plug": {
+      "app": "plug",
+      "optional": false,
+      "requirement": "~> 1.14"
+    }
+  },
+  "docs_html_url": "https://plug-cowboy.hexdocs.pm/2.7.2/",
+  "configs": {
+    "erlang.mk": "dep_plug_cowboy = hex 2.7.2",
+    "mix.exs": "{:plug_cowboy, \"~> 2.7\"}",
+    "rebar.config": "{plug_cowboy, \"2.7.2\"}"
+  }
+}

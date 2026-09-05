@@ -1,0 +1,77 @@
+{
+  "meta": {
+    "links": {
+      "Github": "https://github.com/beam-telemetry/cowboy_telemetry"
+    },
+    "description": "Telemetry instrumentation for Cowboy",
+    "licenses": [
+      "Apache 2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "cowboy_telemetry",
+  "url": "https://hex.pm/api/packages/cowboy_telemetry",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/binaryseed",
+      "username": "binaryseed"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    }
+  ],
+  "inserted_at": "2020-06-20T23:28:24.615397Z",
+  "updated_at": "2021-08-25T07:18:12.034081Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/cowboy_telemetry/releases/0.4.0",
+      "has_docs": false,
+      "inserted_at": "2021-08-25T07:18:12.048496Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/cowboy_telemetry/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2020-11-09T23:05:01.242540Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/cowboy_telemetry/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2020-08-06T20:48:01.734253Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/cowboy_telemetry/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-07-26T05:33:40.339124Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/cowboy_telemetry/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-06-20T23:28:24.637524Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/cowboy_telemetry",
+  "latest_version": "0.4.0",
+  "downloads": {
+    "all": 61421416,
+    "day": 33820,
+    "recent": 2460019,
+    "week": 206505
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://cowboy-telemetry.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_cowboy_telemetry = hex 0.4.0",
+    "mix.exs": "{:cowboy_telemetry, \"~> 0.4.0\"}",
+    "rebar.config": "{cowboy_telemetry, \"0.4.0\"}"
+  },
+  "latest_stable_version": "0.4.0"
+}

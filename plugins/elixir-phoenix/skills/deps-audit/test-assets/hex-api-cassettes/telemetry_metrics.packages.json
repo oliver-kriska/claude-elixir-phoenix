@@ -1,0 +1,137 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/beam-telemetry/telemetry_metrics"
+    },
+    "description": "Provides a common interface for defining metrics based on Telemetry events.",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "telemetry_metrics",
+  "url": "https://hex.pm/api/packages/telemetry_metrics",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/arkgil",
+      "username": "arkgil"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    }
+  ],
+  "inserted_at": "2019-01-17T14:39:39.888616Z",
+  "updated_at": "2026-08-25T08:25:28.346845Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2026-08-25T08:25:27.170901Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2025-01-24T20:32:34.916852Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2024-03-18T21:50:14.329960Z"
+    },
+    {
+      "version": "0.6.2",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.6.2",
+      "has_docs": true,
+      "inserted_at": "2024-01-11T09:16:43.266227Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2021-07-03T20:47:03.000922Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-08T06:14:22.628643Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-05-15T07:28:24.540221Z"
+    },
+    {
+      "version": "0.4.2",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.4.2",
+      "has_docs": true,
+      "inserted_at": "2020-03-19T23:23:07.812557Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.4.1",
+      "has_docs": true,
+      "inserted_at": "2020-03-03T15:09:06.232970Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-23T21:42:19.155095Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2019-11-01T19:39:03.400425Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-03T13:12:11.675726Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2019-04-15T07:57:19.246495Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2019-03-25T19:54:59.602902Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/telemetry_metrics/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2019-01-17T14:39:39.895243Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/telemetry_metrics",
+  "latest_version": "1.2.0",
+  "downloads": {
+    "all": 49443557,
+    "day": 55868,
+    "recent": 3442058,
+    "week": 347093
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://telemetry-metrics.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_telemetry_metrics = hex 1.2.0",
+    "mix.exs": "{:telemetry_metrics, \"~> 1.2\"}",
+    "rebar.config": "{telemetry_metrics, \"1.2.0\"}"
+  },
+  "latest_stable_version": "1.2.0"
+}

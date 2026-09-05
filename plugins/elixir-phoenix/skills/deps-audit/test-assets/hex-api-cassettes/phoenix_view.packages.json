@@ -1,0 +1,102 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/phoenixframework/phoenix_view"
+    },
+    "description": "The view layer in Phoenix v1.0-v1.6 apps",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "phoenix_view",
+  "url": "https://hex.pm/api/packages/phoenix_view",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/chrismccord",
+      "email": "chris@chrismccord.com",
+      "username": "chrismccord"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    }
+  ],
+  "inserted_at": "2021-07-18T23:31:05.576634Z",
+  "updated_at": "2024-06-13T17:16:49.225865Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.0.4",
+      "url": "https://hex.pm/api/packages/phoenix_view/releases/2.0.4",
+      "has_docs": true,
+      "inserted_at": "2024-06-13T17:16:46.599791Z"
+    },
+    {
+      "version": "2.0.3",
+      "url": "https://hex.pm/api/packages/phoenix_view/releases/2.0.3",
+      "has_docs": true,
+      "inserted_at": "2023-10-28T09:01:39.493271Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/phoenix_view/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2022-11-07T19:47:33.175879Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/phoenix_view/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2022-10-29T07:31:46.285383Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/phoenix_view/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2022-10-26T13:57:41.930327Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/phoenix_view/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2022-02-02T19:45:46.167157Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/phoenix_view/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2022-01-31T07:33:20.835910Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/phoenix_view/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2022-01-06T14:06:30.098981Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/phoenix_view/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2021-07-18T23:31:05.587374Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/phoenix_view",
+  "latest_version": "2.0.4",
+  "downloads": {
+    "all": 34792968,
+    "day": 25341,
+    "recent": 1680975,
+    "week": 144036
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://phoenix-view.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_phoenix_view = hex 2.0.4",
+    "mix.exs": "{:phoenix_view, \"~> 2.0\"}",
+    "rebar.config": "{phoenix_view, \"2.0.4\"}"
+  },
+  "latest_stable_version": "2.0.4"
+}

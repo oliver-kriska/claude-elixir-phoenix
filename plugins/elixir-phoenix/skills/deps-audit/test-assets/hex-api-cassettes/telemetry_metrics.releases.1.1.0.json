@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "elixir": "~> 1.10",
+    "app": "telemetry_metrics",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.1.0",
+  "checksum": "e7b79e8ddfde70adb6db8a6623d1778ec66401f366e9a8f5dd0955c56bc8ce67",
+  "url": "https://hex.pm/api/packages/telemetry_metrics/releases/1.1.0",
+  "has_docs": true,
+  "inserted_at": "2025-01-24T20:32:34.916852Z",
+  "updated_at": "2025-01-24T20:32:38.195712Z",
+  "html_url": "https://hex.pm/packages/telemetry_metrics/1.1.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/telemetry_metrics",
+  "downloads": 10130598,
+  "security_advisories": [],
+  "requirements": {
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 0.4 or ~> 1.0"
+    }
+  },
+  "docs_html_url": "https://telemetry-metrics.hexdocs.pm/1.1.0/",
+  "configs": {
+    "erlang.mk": "dep_telemetry_metrics = hex 1.1.0",
+    "mix.exs": "{:telemetry_metrics, \"~> 1.1\"}",
+    "rebar.config": "{telemetry_metrics, \"1.1.0\"}"
+  }
+}

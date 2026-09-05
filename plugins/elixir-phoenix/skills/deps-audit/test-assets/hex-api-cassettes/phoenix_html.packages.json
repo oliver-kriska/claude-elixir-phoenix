@@ -1,0 +1,535 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://hexdocs.pm/phoenix_html/changelog.html",
+      "GitHub": "https://github.com/phoenixframework/phoenix_html"
+    },
+    "description": "Phoenix view functions for working with HTML templates",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "phoenix_html",
+  "url": "https://hex.pm/api/packages/phoenix_html",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/chrismccord",
+      "email": "chris@chrismccord.com",
+      "username": "chrismccord"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/steffend",
+      "username": "steffend"
+    }
+  ],
+  "inserted_at": "2015-05-03T13:21:05.210425Z",
+  "updated_at": "2025-10-04T13:02:38.149139Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "4.3.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/4.3.0",
+      "has_docs": true,
+      "inserted_at": "2025-09-28T17:20:09.801535Z"
+    },
+    {
+      "version": "4.2.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/4.2.1",
+      "has_docs": true,
+      "inserted_at": "2025-02-21T09:50:41.295473Z"
+    },
+    {
+      "version": "4.2.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/4.2.0",
+      "has_docs": true,
+      "inserted_at": "2024-12-28T08:43:04.847764Z"
+    },
+    {
+      "version": "4.1.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/4.1.1",
+      "has_docs": true,
+      "inserted_at": "2024-03-01T19:58:03.853571Z"
+    },
+    {
+      "version": "4.1.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/4.1.0",
+      "has_docs": true,
+      "inserted_at": "2024-02-29T20:36:51.588569Z"
+    },
+    {
+      "version": "4.0.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/4.0.0",
+      "has_docs": true,
+      "inserted_at": "2023-12-19T08:42:31.857550Z"
+    },
+    {
+      "version": "3.3.4",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.3.4",
+      "has_docs": true,
+      "inserted_at": "2024-05-30T13:03:23.072894Z"
+    },
+    {
+      "version": "3.3.3",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.3.3",
+      "has_docs": true,
+      "inserted_at": "2023-10-09T19:25:23.364774Z"
+    },
+    {
+      "version": "3.3.2",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.3.2",
+      "has_docs": true,
+      "inserted_at": "2023-08-10T16:59:47.010865Z"
+    },
+    {
+      "version": "3.3.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.3.1",
+      "has_docs": true,
+      "inserted_at": "2023-02-27T11:35:48.337928Z"
+    },
+    {
+      "version": "3.3.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.3.0",
+      "has_docs": true,
+      "inserted_at": "2023-02-10T13:44:30.316226Z"
+    },
+    {
+      "version": "3.2.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.2.0",
+      "has_docs": true,
+      "inserted_at": "2021-12-18T12:53:19.058056Z"
+    },
+    {
+      "version": "3.1.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.1.0",
+      "has_docs": true,
+      "inserted_at": "2021-10-23T13:32:27.357292Z"
+    },
+    {
+      "version": "3.0.4",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.0.4",
+      "has_docs": true,
+      "inserted_at": "2021-09-23T07:28:13.717371Z"
+    },
+    {
+      "version": "3.0.3",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.0.3",
+      "has_docs": true,
+      "inserted_at": "2021-09-04T20:38:53.522057Z"
+    },
+    {
+      "version": "3.0.2",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.0.2",
+      "has_docs": true,
+      "inserted_at": "2021-08-19T18:49:32.453792Z"
+    },
+    {
+      "version": "3.0.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.0.1",
+      "has_docs": true,
+      "inserted_at": "2021-08-14T17:57:20.543534Z"
+    },
+    {
+      "version": "3.0.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/3.0.0",
+      "has_docs": true,
+      "inserted_at": "2021-08-06T17:27:52.210328Z"
+    },
+    {
+      "version": "2.14.3",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.14.3",
+      "has_docs": true,
+      "inserted_at": "2020-12-12T07:44:21.949827Z"
+    },
+    {
+      "version": "2.14.2",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.14.2",
+      "has_docs": true,
+      "inserted_at": "2020-04-30T08:44:12.939008Z"
+    },
+    {
+      "version": "2.14.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.14.1",
+      "has_docs": true,
+      "inserted_at": "2020-03-20T13:15:36.989354Z"
+    },
+    {
+      "version": "2.14.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.14.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-28T09:37:29.377575Z"
+    },
+    {
+      "version": "2.13.4",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.13.4",
+      "has_docs": true,
+      "inserted_at": "2020-01-28T07:20:20.053113Z"
+    },
+    {
+      "version": "2.13.3",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.13.3",
+      "has_docs": true,
+      "inserted_at": "2019-05-31T14:30:57.151240Z"
+    },
+    {
+      "version": "2.13.2",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.13.2",
+      "has_docs": true,
+      "inserted_at": "2019-03-29T19:47:52.411800Z"
+    },
+    {
+      "version": "2.13.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.13.1",
+      "has_docs": true,
+      "inserted_at": "2019-01-05T10:58:32.704967Z"
+    },
+    {
+      "version": "2.13.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.13.0",
+      "has_docs": true,
+      "inserted_at": "2018-12-09T11:31:55.110793Z"
+    },
+    {
+      "version": "2.12.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.12.0",
+      "has_docs": true,
+      "inserted_at": "2018-08-06T09:57:49.983650Z"
+    },
+    {
+      "version": "2.11.2",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.11.2",
+      "has_docs": true,
+      "inserted_at": "2018-04-13T06:44:44.589420Z"
+    },
+    {
+      "version": "2.11.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.11.1",
+      "has_docs": true,
+      "inserted_at": "2018-03-20T19:20:40.439799Z"
+    },
+    {
+      "version": "2.11.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.11.0",
+      "has_docs": true,
+      "inserted_at": "2018-03-09T15:31:32.093449Z"
+    },
+    {
+      "version": "2.10.5",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.10.5",
+      "has_docs": true,
+      "inserted_at": "2017-11-08T12:25:11.238890Z"
+    },
+    {
+      "version": "2.10.4",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.10.4",
+      "has_docs": true,
+      "inserted_at": "2017-08-15T09:44:55.114012Z"
+    },
+    {
+      "version": "2.10.3",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.10.3",
+      "has_docs": true,
+      "inserted_at": "2017-07-30T07:53:27.589922Z"
+    },
+    {
+      "version": "2.10.2",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.10.2",
+      "has_docs": true,
+      "inserted_at": "2017-07-24T12:44:12.623381Z"
+    },
+    {
+      "version": "2.10.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.10.1",
+      "has_docs": true,
+      "inserted_at": "2017-07-22T07:55:39.127516Z"
+    },
+    {
+      "version": "2.10.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.10.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-21T18:42:43.794019Z"
+    },
+    {
+      "version": "2.9.3",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.9.3",
+      "has_docs": true,
+      "inserted_at": "2017-02-02T22:52:22.545353Z"
+    },
+    {
+      "version": "2.9.2",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.9.2",
+      "has_docs": true,
+      "inserted_at": "2016-12-24T09:36:21.096962Z"
+    },
+    {
+      "version": "2.9.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.9.1",
+      "has_docs": true,
+      "inserted_at": "2016-12-20T10:23:32.274321Z"
+    },
+    {
+      "version": "2.9.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.9.0",
+      "has_docs": true,
+      "inserted_at": "2016-12-19T22:08:22.860339Z"
+    },
+    {
+      "version": "2.8.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.8.0",
+      "has_docs": true,
+      "inserted_at": "2016-11-15T19:43:39.002975Z"
+    },
+    {
+      "version": "2.7.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.7.0",
+      "has_docs": true,
+      "inserted_at": "2016-09-26T13:28:13.075996Z"
+    },
+    {
+      "version": "2.7.0-dev",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.7.0-dev",
+      "has_docs": true,
+      "inserted_at": "2016-09-21T12:18:03.919477Z"
+    },
+    {
+      "version": "2.6.2",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.6.2",
+      "has_docs": true,
+      "inserted_at": "2016-07-15T10:25:03.913807Z"
+    },
+    {
+      "version": "2.6.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.6.1",
+      "has_docs": true,
+      "inserted_at": "2016-07-08T07:16:11.791967Z"
+    },
+    {
+      "version": "2.6.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.6.0",
+      "has_docs": true,
+      "inserted_at": "2016-06-16T14:04:19.508824Z"
+    },
+    {
+      "version": "2.5.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.5.1",
+      "has_docs": true,
+      "inserted_at": "2016-03-12T13:17:28.548179Z"
+    },
+    {
+      "version": "2.5.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.5.0",
+      "has_docs": true,
+      "inserted_at": "2016-01-28T14:17:27.135126Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.4.0",
+      "has_docs": true,
+      "inserted_at": "2016-01-21T21:14:01.914569Z"
+    },
+    {
+      "version": "2.4.0-dev",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.4.0-dev",
+      "has_docs": true,
+      "inserted_at": "2016-01-21T21:05:52.728411Z"
+    },
+    {
+      "version": "2.3.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.3.1",
+      "has_docs": true,
+      "inserted_at": "2016-01-07T16:02:14.252662Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.3.0",
+      "has_docs": true,
+      "inserted_at": "2015-12-15T23:41:12.377933Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2015-09-01T15:39:34.767235Z"
+    },
+    {
+      "version": "2.1.2",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.1.2",
+      "has_docs": true,
+      "inserted_at": "2015-08-22T08:00:25.845501Z"
+    },
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2015-08-15T09:46:04.343481Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-06T09:19:38.681692Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2015-07-31T13:36:17.652082Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2015-07-30T16:23:18.199292Z"
+    },
+    {
+      "version": "2.0.0-dev",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/2.0.0-dev",
+      "has_docs": true,
+      "inserted_at": "2015-07-30T16:18:33.895400Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2015-07-26T16:39:37.792138Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2015-07-23T17:47:24.155287Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2015-06-02T22:07:49.635125Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2015-05-30T17:06:05.895248Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-05-21T02:18:42.550319Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2015-05-11T21:12:43.989032Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/phoenix_html/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2015-05-09T18:33:28.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/phoenix_html",
+  "latest_version": "4.3.0",
+  "downloads": {
+    "all": 88865252,
+    "day": 53034,
+    "recent": 3540445,
+    "week": 320744
+  },
+  "security_advisories": [
+    {
+      "id": "GHSA-5g2h-9x5v-5h3x",
+      "aliases": [
+        "CVE-2021-46871"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2021-46871"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix_html/commit/62a0139fb716bcdce697f6221244bd81d321d620"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/advisories/GHSA-j3gg-r6gp-95q2"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix_html"
+        }
+      ],
+      "summary": "phoenix_html allows Cross-site Scripting in HEEx class attributes",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-5g2h-9x5v-5h3x",
+      "published_at": "2023-01-10T06:30:25Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-5g2h-9x5v-5h3x",
+      "cvss_score": 6.1,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:C/C:L/I:L/A:N",
+      "modified_at": "2026-03-13T22:11:07Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 3.0.4"
+      ]
+    },
+    {
+      "id": "GHSA-j3gg-r6gp-95q2",
+      "aliases": [],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix_html/commit/62a0139fb716bcdce697f6221244bd81d321d620"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/phoenixframework/phoenix_html"
+        }
+      ],
+      "summary": "XSS in HEEx class attributes",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-j3gg-r6gp-95q2",
+      "published_at": "2022-04-12T20:22:57Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-j3gg-r6gp-95q2",
+      "cvss_score": null,
+      "cvss_rating": null,
+      "cvss_vector": null,
+      "modified_at": "2026-07-08T06:27:35Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 3.0.4"
+      ]
+    }
+  ],
+  "docs_html_url": "https://phoenix-html.hexdocs.pm/",
+  "retirements": {
+    "3.0.0": {
+      "message": "The :class attribute in content_tag and in class={@class} for HEEx is not escaped against XSS",
+      "reason": "security"
+    },
+    "3.0.1": {
+      "message": "The :class attribute in content_tag and in class={@class} for HEEx is not escaped against XSS",
+      "reason": "security"
+    },
+    "3.0.2": {
+      "message": "The :class attribute in content_tag and in class={@class} for HEEx is not escaped against XSS",
+      "reason": "security"
+    },
+    "3.0.3": {
+      "message": "The :class attribute in content_tag and in class={@class} for HEEx is not escaped against XSS",
+      "reason": "security"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_phoenix_html = hex 4.3.0",
+    "mix.exs": "{:phoenix_html, \"~> 4.3\"}",
+    "rebar.config": "{phoenix_html, \"4.3.0\"}"
+  },
+  "latest_stable_version": "4.3.0"
+}

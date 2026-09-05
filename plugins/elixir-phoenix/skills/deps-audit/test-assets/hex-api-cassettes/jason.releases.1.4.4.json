@@ -19,7 +19,8 @@
     "email": "michal@muskala.eu",
     "username": "michalmuskala"
   },
-  "downloads": 27845888,
+  "package_url": "https://hex.pm/api/packages/jason",
+  "downloads": 30546756,
   "security_advisories": [],
   "requirements": {
     "decimal": {
@@ -28,8 +29,7 @@
       "requirement": "~> 1.0 or ~> 2.0"
     }
   },
-  "docs_html_url": "https://hexdocs.pm/jason/1.4.4/",
-  "package_url": "https://hex.pm/api/packages/jason",
+  "docs_html_url": "https://jason.hexdocs.pm/1.4.4/",
   "configs": {
     "erlang.mk": "dep_jason = hex 1.4.4",
     "mix.exs": "{:jason, \"~> 1.4\"}",

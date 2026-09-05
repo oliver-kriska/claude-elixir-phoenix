@@ -1,0 +1,123 @@
+{
+  "meta": {
+    "elixir": "~> 1.8",
+    "app": "decimal",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.1.1",
+  "checksum": "53cfe5f497ed0e7771ae1a475575603d77425099ba5faef9394932b35020ffcc",
+  "url": "https://hex.pm/api/packages/decimal/releases/2.1.1",
+  "has_docs": true,
+  "inserted_at": "2023-04-26T16:35:33.941743Z",
+  "updated_at": "2023-04-26T16:35:36.423032Z",
+  "html_url": "https://hex.pm/packages/decimal/2.1.1",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/ericmj",
+    "email": "eric.meadows.jonsson@gmail.com",
+    "username": "ericmj"
+  },
+  "package_url": "https://hex.pm/api/packages/decimal",
+  "downloads": 22119776,
+  "security_advisories": [
+    {
+      "id": "GHSA-rhv4-8758-jx7v",
+      "aliases": [
+        "CVE-2026-32686",
+        "EEF-CVE-2026-32686"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ericmj/decimal"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ericmj/decimal/releases/tag/v2.4.0"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ericmj/decimal/security/advisories/GHSA-rhv4-8758-jx7v"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-32686"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ericmj/decimal/releases/tag/v3.0.0"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32686"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ericmj/decimal/commit/6a523f3a73b8c9974540e21c7aa88f1258bb35ae"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32686.html"
+        }
+      ],
+      "summary": "Decimal: Unbounded exponent in `Decimal.new` enables unauthenticated DoS",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-rhv4-8758-jx7v",
+      "published_at": "2026-05-12T15:09:20Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-rhv4-8758-jx7v",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-08-05T12:45:47Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 3.0.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-32686",
+      "aliases": [
+        "CVE-2026-32686",
+        "GHSA-rhv4-8758-jx7v"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/ericmj/decimal/security/advisories/GHSA-rhv4-8758-jx7v"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32686.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/ericmj/decimal/commit/6a523f3a73b8c9974540e21c7aa88f1258bb35ae"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/decimal"
+        }
+      ],
+      "summary": "Unbounded exponent in decimal enables unauthenticated DoS",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-32686",
+      "published_at": "2026-05-07T14:04:47Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-32686",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:21:59Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.1.0 and < 3.0.0"
+      ]
+    }
+  ],
+  "requirements": {},
+  "docs_html_url": "https://decimal.hexdocs.pm/2.1.1/",
+  "configs": {
+    "erlang.mk": "dep_decimal = hex 2.1.1",
+    "mix.exs": "{:decimal, \"~> 2.1\"}",
+    "rebar.config": "{decimal, \"2.1.1\"}"
+  }
+}

@@ -1,0 +1,1302 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/elixir-plug/plug"
+    },
+    "description": "Compose web applications with functions",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "plug",
+  "url": "https://hex.pm/api/packages/plug",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ericmj",
+      "email": "eric.meadows.jonsson@gmail.com",
+      "username": "ericmj"
+    },
+    {
+      "url": "https://hex.pm/api/users/gazler",
+      "email": "gazler@gmail.com",
+      "username": "gazler"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/whatyouhide",
+      "email": "hi@andrealeopardi.com",
+      "username": "whatyouhide"
+    }
+  ],
+  "inserted_at": "2014-04-23T18:58:52.000000Z",
+  "updated_at": "2026-07-09T09:56:17.775540Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.20.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.20.3",
+      "has_docs": true,
+      "inserted_at": "2026-07-09T09:42:46.341861Z"
+    },
+    {
+      "version": "1.20.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.20.2",
+      "has_docs": true,
+      "inserted_at": "2026-06-30T12:46:26.159516Z"
+    },
+    {
+      "version": "1.20.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.20.1",
+      "has_docs": true,
+      "inserted_at": "2026-06-23T15:53:56.010959Z"
+    },
+    {
+      "version": "1.20.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.20.0",
+      "has_docs": true,
+      "inserted_at": "2026-06-23T11:32:44.667819Z"
+    },
+    {
+      "version": "1.19.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.19.5",
+      "has_docs": true,
+      "inserted_at": "2026-07-09T09:46:58.028308Z"
+    },
+    {
+      "version": "1.19.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.19.4",
+      "has_docs": true,
+      "inserted_at": "2026-06-30T14:27:24.114820Z"
+    },
+    {
+      "version": "1.19.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.19.3",
+      "has_docs": true,
+      "inserted_at": "2026-06-23T11:10:15.462407Z"
+    },
+    {
+      "version": "1.19.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.19.2",
+      "has_docs": true,
+      "inserted_at": "2026-05-14T09:20:07.319120Z"
+    },
+    {
+      "version": "1.19.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.19.1",
+      "has_docs": true,
+      "inserted_at": "2025-12-09T07:32:52.189200Z"
+    },
+    {
+      "version": "1.19.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.19.0",
+      "has_docs": true,
+      "inserted_at": "2025-12-08T10:12:42.737160Z"
+    },
+    {
+      "version": "1.18.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.18.5",
+      "has_docs": true,
+      "inserted_at": "2026-07-09T09:50:55.633510Z"
+    },
+    {
+      "version": "1.18.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.18.4",
+      "has_docs": true,
+      "inserted_at": "2026-06-30T14:40:46.098522Z"
+    },
+    {
+      "version": "1.18.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.18.3",
+      "has_docs": true,
+      "inserted_at": "2026-06-23T11:14:44.417559Z"
+    },
+    {
+      "version": "1.18.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.18.2",
+      "has_docs": true,
+      "inserted_at": "2026-05-14T09:22:22.174644Z"
+    },
+    {
+      "version": "1.18.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.18.1",
+      "has_docs": true,
+      "inserted_at": "2025-07-01T16:45:39.233010Z"
+    },
+    {
+      "version": "1.18.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.18.0",
+      "has_docs": true,
+      "inserted_at": "2025-05-28T06:31:58.895804Z"
+    },
+    {
+      "version": "1.17.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.17.4",
+      "has_docs": true,
+      "inserted_at": "2026-07-09T09:54:17.889331Z"
+    },
+    {
+      "version": "1.17.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.17.3",
+      "has_docs": true,
+      "inserted_at": "2026-06-30T14:51:22.377184Z"
+    },
+    {
+      "version": "1.17.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.17.2",
+      "has_docs": true,
+      "inserted_at": "2026-06-23T11:18:43.673885Z"
+    },
+    {
+      "version": "1.17.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.17.1",
+      "has_docs": true,
+      "inserted_at": "2026-05-14T09:23:49.897652Z"
+    },
+    {
+      "version": "1.17.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.17.0",
+      "has_docs": true,
+      "inserted_at": "2025-03-14T16:16:30.798813Z"
+    },
+    {
+      "version": "1.16.6",
+      "url": "https://hex.pm/api/packages/plug/releases/1.16.6",
+      "has_docs": true,
+      "inserted_at": "2026-07-09T09:56:16.221522Z"
+    },
+    {
+      "version": "1.16.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.16.5",
+      "has_docs": true,
+      "inserted_at": "2026-06-30T14:58:55.633243Z"
+    },
+    {
+      "version": "1.16.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.16.4",
+      "has_docs": true,
+      "inserted_at": "2026-06-23T11:21:19.428960Z"
+    },
+    {
+      "version": "1.16.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.16.3",
+      "has_docs": true,
+      "inserted_at": "2026-05-14T09:25:11.732819Z"
+    },
+    {
+      "version": "1.16.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.16.2",
+      "has_docs": true,
+      "inserted_at": "2025-03-14T15:43:07.561881Z"
+    },
+    {
+      "version": "1.16.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.16.1",
+      "has_docs": true,
+      "inserted_at": "2024-06-20T13:57:58.725910Z"
+    },
+    {
+      "version": "1.16.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.16.0",
+      "has_docs": true,
+      "inserted_at": "2024-05-18T09:28:20.121280Z"
+    },
+    {
+      "version": "1.15.6",
+      "url": "https://hex.pm/api/packages/plug/releases/1.15.6",
+      "has_docs": true,
+      "inserted_at": "2026-06-30T15:02:13.615892Z"
+    },
+    {
+      "version": "1.15.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.15.5",
+      "has_docs": true,
+      "inserted_at": "2026-06-23T11:24:31.059276Z"
+    },
+    {
+      "version": "1.15.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.15.4",
+      "has_docs": true,
+      "inserted_at": "2026-05-14T09:27:31.757297Z"
+    },
+    {
+      "version": "1.15.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.15.3",
+      "has_docs": true,
+      "inserted_at": "2024-01-16T07:01:30.552212Z"
+    },
+    {
+      "version": "1.15.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.15.2",
+      "has_docs": true,
+      "inserted_at": "2023-11-14T09:55:27.688653Z"
+    },
+    {
+      "version": "1.15.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.15.1",
+      "has_docs": true,
+      "inserted_at": "2023-10-06T09:51:03.778796Z"
+    },
+    {
+      "version": "1.15.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.15.0",
+      "has_docs": true,
+      "inserted_at": "2023-10-01T18:33:24.992800Z"
+    },
+    {
+      "version": "1.14.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.14.2",
+      "has_docs": true,
+      "inserted_at": "2023-03-23T15:22:08.887949Z"
+    },
+    {
+      "version": "1.14.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.14.1",
+      "has_docs": true,
+      "inserted_at": "2023-03-17T11:05:26.658423Z"
+    },
+    {
+      "version": "1.14.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.14.0",
+      "has_docs": true,
+      "inserted_at": "2022-10-31T15:34:06.093914Z"
+    },
+    {
+      "version": "1.13.6",
+      "url": "https://hex.pm/api/packages/plug/releases/1.13.6",
+      "has_docs": true,
+      "inserted_at": "2022-04-14T09:08:16.297297Z"
+    },
+    {
+      "version": "1.13.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.13.5",
+      "has_docs": true,
+      "inserted_at": "2022-04-11T07:01:06.797472Z"
+    },
+    {
+      "version": "1.13.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.13.4",
+      "has_docs": true,
+      "inserted_at": "2022-03-10T07:15:33.433593Z"
+    },
+    {
+      "version": "1.13.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.13.3",
+      "has_docs": true,
+      "inserted_at": "2022-02-12T11:43:37.340074Z"
+    },
+    {
+      "version": "1.13.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.13.2",
+      "has_docs": true,
+      "inserted_at": "2022-02-04T13:10:48.895139Z"
+    },
+    {
+      "version": "1.13.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.13.1",
+      "has_docs": true,
+      "inserted_at": "2022-02-03T22:08:21.735313Z"
+    },
+    {
+      "version": "1.13.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.13.0",
+      "has_docs": true,
+      "inserted_at": "2022-02-02T19:44:21.975427Z"
+    },
+    {
+      "version": "1.12.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.12.1",
+      "has_docs": true,
+      "inserted_at": "2021-08-01T17:33:14.105620Z"
+    },
+    {
+      "version": "1.12.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.12.0",
+      "has_docs": true,
+      "inserted_at": "2021-07-22T08:02:37.077735Z"
+    },
+    {
+      "version": "1.11.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.11.1",
+      "has_docs": true,
+      "inserted_at": "2021-03-08T09:15:53.623363Z"
+    },
+    {
+      "version": "1.11.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.11.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-29T08:17:43.111246Z"
+    },
+    {
+      "version": "1.10.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.10.4",
+      "has_docs": true,
+      "inserted_at": "2020-08-07T13:22:44.513005Z"
+    },
+    {
+      "version": "1.10.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.10.3",
+      "has_docs": true,
+      "inserted_at": "2020-06-10T17:08:21.857034Z"
+    },
+    {
+      "version": "1.10.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.10.2",
+      "has_docs": true,
+      "inserted_at": "2020-06-06T10:58:37.405169Z"
+    },
+    {
+      "version": "1.10.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.10.1",
+      "has_docs": true,
+      "inserted_at": "2020-05-15T08:08:35.881334Z"
+    },
+    {
+      "version": "1.10.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.10.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-24T10:39:45.206263Z"
+    },
+    {
+      "version": "1.9.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.9.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-07T09:10:56.491446Z"
+    },
+    {
+      "version": "1.8.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.8.3",
+      "has_docs": true,
+      "inserted_at": "2019-07-28T14:56:13.191949Z"
+    },
+    {
+      "version": "1.8.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.8.2",
+      "has_docs": true,
+      "inserted_at": "2019-06-01T12:31:40.739931Z"
+    },
+    {
+      "version": "1.8.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.8.1",
+      "has_docs": true,
+      "inserted_at": "2019-06-01T11:27:23.123809Z"
+    },
+    {
+      "version": "1.8.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.8.0",
+      "has_docs": true,
+      "inserted_at": "2019-03-31T15:09:24.085143Z"
+    },
+    {
+      "version": "1.7.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.7.2",
+      "has_docs": true,
+      "inserted_at": "2019-02-09T10:09:47.998314Z"
+    },
+    {
+      "version": "1.7.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.7.1",
+      "has_docs": true,
+      "inserted_at": "2018-10-24T18:36:12.231252Z"
+    },
+    {
+      "version": "1.7.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.7.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-20T21:15:27.789237Z"
+    },
+    {
+      "version": "1.6.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.6.4",
+      "has_docs": true,
+      "inserted_at": "2018-10-04T16:02:34.022754Z"
+    },
+    {
+      "version": "1.6.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.6.3",
+      "has_docs": true,
+      "inserted_at": "2018-09-14T16:15:00.395792Z"
+    },
+    {
+      "version": "1.6.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.6.2",
+      "has_docs": true,
+      "inserted_at": "2018-08-04T15:00:23.769282Z"
+    },
+    {
+      "version": "1.6.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.6.1",
+      "has_docs": true,
+      "inserted_at": "2018-07-05T06:31:57.727722Z"
+    },
+    {
+      "version": "1.6.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.6.0",
+      "has_docs": true,
+      "inserted_at": "2018-06-16T11:05:29.856028Z"
+    },
+    {
+      "version": "1.5.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.5.1",
+      "has_docs": true,
+      "inserted_at": "2018-05-17T08:05:38.443485Z"
+    },
+    {
+      "version": "1.5.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.5.0",
+      "has_docs": true,
+      "inserted_at": "2018-03-09T15:26:43.961710Z"
+    },
+    {
+      "version": "1.5.0-rc.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.5.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2018-02-10T07:57:22.311423Z"
+    },
+    {
+      "version": "1.5.0-rc.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.5.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2018-01-28T11:06:33.341128Z"
+    },
+    {
+      "version": "1.5.0-rc.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.5.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2017-12-09T10:29:55.378435Z"
+    },
+    {
+      "version": "1.4.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.4.5",
+      "has_docs": true,
+      "inserted_at": "2018-02-16T08:00:05.417730Z"
+    },
+    {
+      "version": "1.4.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.4.4",
+      "has_docs": true,
+      "inserted_at": "2018-01-28T10:26:20.530456Z"
+    },
+    {
+      "version": "1.4.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.4.3",
+      "has_docs": true,
+      "inserted_at": "2017-07-29T17:16:03.461919Z"
+    },
+    {
+      "version": "1.4.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.4.2",
+      "has_docs": true,
+      "inserted_at": "2017-07-27T06:57:55.883664Z"
+    },
+    {
+      "version": "1.4.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.4.1",
+      "has_docs": true,
+      "inserted_at": "2017-07-25T06:39:38.133004Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-20T08:52:44.086577Z"
+    },
+    {
+      "version": "1.4.0-rc.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.4.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-14T12:14:08.593455Z"
+    },
+    {
+      "version": "1.3.6",
+      "url": "https://hex.pm/api/packages/plug/releases/1.3.6",
+      "has_docs": true,
+      "inserted_at": "2018-01-28T10:37:28.842156Z"
+    },
+    {
+      "version": "1.3.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.3.5",
+      "has_docs": true,
+      "inserted_at": "2017-04-17T10:21:43.606910Z"
+    },
+    {
+      "version": "1.3.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.3.4",
+      "has_docs": true,
+      "inserted_at": "2017-03-16T18:18:46.838440Z"
+    },
+    {
+      "version": "1.3.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.3.3",
+      "has_docs": true,
+      "inserted_at": "2017-03-06T13:39:41.073241Z"
+    },
+    {
+      "version": "1.3.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.3.2",
+      "has_docs": true,
+      "inserted_at": "2017-02-28T16:25:22.140894Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2017-02-25T18:18:25.614246Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2016-11-27T16:05:36.214977Z"
+    },
+    {
+      "version": "1.2.6",
+      "url": "https://hex.pm/api/packages/plug/releases/1.2.6",
+      "has_docs": true,
+      "inserted_at": "2018-01-28T10:54:37.806010Z"
+    },
+    {
+      "version": "1.2.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.2.5",
+      "has_docs": true,
+      "inserted_at": "2017-04-17T10:24:23.556615Z"
+    },
+    {
+      "version": "1.2.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.2.4",
+      "has_docs": true,
+      "inserted_at": "2017-03-06T13:42:10.193490Z"
+    },
+    {
+      "version": "1.2.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.2.3",
+      "has_docs": true,
+      "inserted_at": "2017-02-28T16:39:13.889435Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2016-10-04T17:52:50.139790Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2016-09-29T08:44:52.952318Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2016-08-09T15:35:15.884129Z"
+    },
+    {
+      "version": "1.2.0-rc.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.2.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2016-07-13T10:09:53.551108Z"
+    },
+    {
+      "version": "1.1.9",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.9",
+      "has_docs": true,
+      "inserted_at": "2017-04-17T10:26:57.309146Z"
+    },
+    {
+      "version": "1.1.8",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.8",
+      "has_docs": true,
+      "inserted_at": "2017-03-06T13:43:52.919335Z"
+    },
+    {
+      "version": "1.1.7",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.7",
+      "has_docs": true,
+      "inserted_at": "2017-02-28T16:36:38.277422Z"
+    },
+    {
+      "version": "1.1.6",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.6",
+      "has_docs": true,
+      "inserted_at": "2016-06-16T14:01:38.059383Z"
+    },
+    {
+      "version": "1.1.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.5",
+      "has_docs": true,
+      "inserted_at": "2016-05-29T14:38:59.642228Z"
+    },
+    {
+      "version": "1.1.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.4",
+      "has_docs": true,
+      "inserted_at": "2016-04-21T11:26:41.152758Z"
+    },
+    {
+      "version": "1.1.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.3",
+      "has_docs": true,
+      "inserted_at": "2016-03-29T19:55:38.738542Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2016-02-23T09:17:25.218177Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2016-02-13T16:52:18.620480Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2016-01-11T23:15:21.205189Z"
+    },
+    {
+      "version": "1.0.6",
+      "url": "https://hex.pm/api/packages/plug/releases/1.0.6",
+      "has_docs": true,
+      "inserted_at": "2017-04-17T10:30:24.466756Z"
+    },
+    {
+      "version": "1.0.5",
+      "url": "https://hex.pm/api/packages/plug/releases/1.0.5",
+      "has_docs": true,
+      "inserted_at": "2017-03-06T13:46:22.475087Z"
+    },
+    {
+      "version": "1.0.4",
+      "url": "https://hex.pm/api/packages/plug/releases/1.0.4",
+      "has_docs": true,
+      "inserted_at": "2017-02-28T16:32:31.110072Z"
+    },
+    {
+      "version": "1.0.3",
+      "url": "https://hex.pm/api/packages/plug/releases/1.0.3",
+      "has_docs": true,
+      "inserted_at": "2015-11-26T17:59:22.681813Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/plug/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2015-09-18T14:58:27.623652Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/plug/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2015-09-15T14:12:10.139613Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/plug/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-15T10:51:03.878804Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2015-07-29T07:03:28.651208Z"
+    },
+    {
+      "version": "0.13.1",
+      "url": "https://hex.pm/api/packages/plug/releases/0.13.1",
+      "has_docs": true,
+      "inserted_at": "2015-07-26T21:10:03.111809Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2015-06-04T15:57:48.887910Z"
+    },
+    {
+      "version": "0.12.2",
+      "url": "https://hex.pm/api/packages/plug/releases/0.12.2",
+      "has_docs": true,
+      "inserted_at": "2015-05-03T11:57:42.080718Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/plug/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2015-04-21T08:51:21.764671Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2015-04-15T09:19:30.000000Z"
+    },
+    {
+      "version": "0.11.3",
+      "url": "https://hex.pm/api/packages/plug/releases/0.11.3",
+      "has_docs": true,
+      "inserted_at": "2015-04-07T20:17:10.000000Z"
+    },
+    {
+      "version": "0.11.2",
+      "url": "https://hex.pm/api/packages/plug/releases/0.11.2",
+      "has_docs": false,
+      "inserted_at": "2015-04-07T12:16:14.000000Z"
+    },
+    {
+      "version": "0.11.1",
+      "url": "https://hex.pm/api/packages/plug/releases/0.11.1",
+      "has_docs": true,
+      "inserted_at": "2015-03-06T16:12:50.000000Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2015-02-24T20:26:36.000000Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2015-01-18T12:42:33.000000Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2014-12-10T10:09:57.000000Z"
+    },
+    {
+      "version": "0.8.4",
+      "url": "https://hex.pm/api/packages/plug/releases/0.8.4",
+      "has_docs": true,
+      "inserted_at": "2014-11-30T09:58:06.000000Z"
+    },
+    {
+      "version": "0.8.3",
+      "url": "https://hex.pm/api/packages/plug/releases/0.8.3",
+      "has_docs": true,
+      "inserted_at": "2014-11-28T16:53:23.000000Z"
+    },
+    {
+      "version": "0.8.2",
+      "url": "https://hex.pm/api/packages/plug/releases/0.8.2",
+      "has_docs": true,
+      "inserted_at": "2014-10-29T14:23:38.000000Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/plug/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2014-10-06T09:22:24.000000Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.8.0",
+      "has_docs": false,
+      "inserted_at": "2014-09-21T18:51:43.000000Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.7.0",
+      "has_docs": false,
+      "inserted_at": "2014-08-30T17:48:51.000000Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.6.0",
+      "has_docs": false,
+      "inserted_at": "2014-08-17T19:53:26.000000Z"
+    },
+    {
+      "version": "0.5.3",
+      "url": "https://hex.pm/api/packages/plug/releases/0.5.3",
+      "has_docs": false,
+      "inserted_at": "2014-08-01T16:16:26.000000Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/plug/releases/0.5.2",
+      "has_docs": false,
+      "inserted_at": "2014-07-20T13:49:57.000000Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/plug/releases/0.5.1",
+      "has_docs": false,
+      "inserted_at": "2014-06-30T07:51:31.000000Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/plug/releases/0.5.0",
+      "has_docs": false,
+      "inserted_at": "2014-06-16T09:53:41.000000Z"
+    },
+    {
+      "version": "0.4.4",
+      "url": "https://hex.pm/api/packages/plug/releases/0.4.4",
+      "has_docs": false,
+      "inserted_at": "2014-05-24T12:08:52.000000Z"
+    },
+    {
+      "version": "0.4.3",
+      "url": "https://hex.pm/api/packages/plug/releases/0.4.3",
+      "has_docs": false,
+      "inserted_at": "2014-05-11T13:01:43.000000Z"
+    },
+    {
+      "version": "0.4.2",
+      "url": "https://hex.pm/api/packages/plug/releases/0.4.2",
+      "has_docs": false,
+      "inserted_at": "2014-04-27T09:03:58.000000Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/plug/releases/0.4.1",
+      "has_docs": false,
+      "inserted_at": "2014-04-23T18:58:54.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/plug",
+  "latest_version": "1.20.3",
+  "downloads": {
+    "all": 164057798,
+    "day": 75666,
+    "recent": 5142714,
+    "week": 459044
+  },
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-56813",
+      "aliases": [
+        "CVE-2026-56813",
+        "GHSA-wpmj-jh88-rpgm"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-wpmj-jh88-rpgm"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/c6575800b2c4e15af1904df87522ca8a23da020c"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56813.html"
+        }
+      ],
+      "summary": "Cookie attribute injection in Plug.Conn.Cookies.encode/2",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-56813",
+      "published_at": "2026-07-10T12:51:08Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-56813",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-07-30T18:22:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.18.0 and < 1.18.5",
+        ">= 1.19.0 and < 1.19.5",
+        ">= 1.20.0 and < 1.20.3",
+        ">= 0.1.0 and < 1.16.6",
+        ">= 1.17.0 and < 1.17.4"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-56814",
+      "aliases": [
+        "CVE-2026-56814",
+        "GHSA-95qv-c9g9-rm63"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/cae36053350e5215a4e0ca33cd130af9c5fc6364"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/0ee8afcc61466dc5f7a8f048d0632c899165b81f"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/56edca2ce35fe5589cd581644d8a4493fa5f484e"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/981597d3a4271ede64373c7a731702a42c500dd6"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56814.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-95qv-c9g9-rm63"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/df97d3f17f808a9916a7700a701fb85314559d56"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/f7effaed811c00b5f5bf817936bfd9c5df27b7dc"
+        }
+      ],
+      "summary": "Plug: multipart :length limit is not charged for part headers, enabling unbounded temp-file creation (denial of service)",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-56814",
+      "published_at": "2026-07-10T11:14:35Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-56814",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:07Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.19.0 and < 1.19.5",
+        ">= 1.20.0 and < 1.20.3",
+        ">= 1.17.0 and < 1.17.4",
+        ">= 1.4.0 and < 1.16.6",
+        ">= 1.18.0 and < 1.18.5"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-54892",
+      "aliases": [
+        "CVE-2026-54892",
+        "GHSA-j43x-5hjq-rgxf"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-j43x-5hjq-rgxf"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/a61124aa625d819a218fb07f90afbac8aa85eb0e"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/d4e5568392a4b29e545b91e12e87d6098f976145"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/d737eb236f17e31a36290e39f9ef3cd86a1343bd"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/9c5d37c440eaae92869eed7c014c47266744fadb"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/c317d08fdcf96e17931f7419275b2b8c4bf3e951"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-54892.html"
+        }
+      ],
+      "summary": "Plug: quadratic-time decoding of nested query/body parameters enables denial of service",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-54892",
+      "published_at": "2026-06-23T12:31:12Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-54892",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:02Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.19.0 and < 1.19.3",
+        ">= 1.15.0 and < 1.15.5",
+        ">= 1.16.0 and < 1.16.4",
+        ">= 1.17.0 and < 1.17.2",
+        ">= 1.18.0 and < 1.18.3"
+      ]
+    },
+    {
+      "id": "GHSA-468c-vq7p-gh64",
+      "aliases": [
+        "CVE-2026-8468",
+        "EEF-CVE-2026-8468"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-plug/plug"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8466.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/df812a1527bae9e941965e897308a2b8bbf83a94"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/d5dfffe25e975585227b1b85d247b0d14164bc45"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/aa69c5ece99c40ded88b8c6581ecc86664b0b734"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/33858427c7f2737d560a2e40a0c9a9270d77d1d7"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/2cb7958d33030aa826b0c7404375844d4593d43a"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8468"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-468c-vq7p-gh64"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8468.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-8468"
+        }
+      ],
+      "summary": "Plug: Unbounded buffer accumulation in multipart header parsing causes denial of service",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-468c-vq7p-gh64",
+      "published_at": "2026-05-20T15:35:13Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-468c-vq7p-gh64",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-20T15:48:07Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.16.0 and < 1.16.3",
+        ">= 1.4.0 and < 1.15.4",
+        ">= 1.17.0 and < 1.17.1",
+        ">= 1.18.0 and < 1.18.2",
+        ">= 1.19.0 and < 1.19.2"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-8468",
+      "aliases": [
+        "CVE-2026-8468",
+        "GHSA-468c-vq7p-gh64"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/df812a1527bae9e941965e897308a2b8bbf83a94"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-468c-vq7p-gh64"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8468.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8466.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/2cb7958d33030aa826b0c7404375844d4593d43a"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/aa69c5ece99c40ded88b8c6581ecc86664b0b734"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/d5dfffe25e975585227b1b85d247b0d14164bc45"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/33858427c7f2737d560a2e40a0c9a9270d77d1d7"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug"
+        }
+      ],
+      "summary": "Unbounded buffer accumulation in multipart header parsing causes denial of service in plug",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-8468",
+      "published_at": "2026-05-14T10:29:51Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-8468",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.16.0 and < 1.16.3",
+        ">= 1.19.0 and < 1.19.2",
+        ">= 1.18.0 and < 1.18.2",
+        ">= 1.17.0 and < 1.17.1",
+        ">= 1.4.0 and < 1.15.4"
+      ]
+    },
+    {
+      "id": "GHSA-9h73-w7ch-rh73",
+      "aliases": [
+        "CVE-2018-1000883"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/8857f8ab4acf9b9c22e80480dae2636692f5f573"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2018-1000883"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-plug/plug"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/dependabot/elixir-security-advisories/blob/master/packages/plug/2017-04-17.yml"
+        }
+      ],
+      "summary": "Header Injection",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-9h73-w7ch-rh73",
+      "published_at": "2022-04-12T21:26:27Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-9h73-w7ch-rh73",
+      "cvss_score": 6.5,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:3.0/AV:N/AC:L/PR:N/UI:R/S:U/C:N/I:H/A:N",
+      "modified_at": "2025-12-10T00:42:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.0.6",
+        ">= 1.3.0 and < 1.3.5",
+        ">= 1.2.0 and < 1.2.5",
+        ">= 1.1.0 and < 1.1.9"
+      ]
+    },
+    {
+      "id": "GHSA-5v4m-c73v-c7gq",
+      "aliases": [
+        "CVE-2017-1000053"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://elixirforum.com/t/security-releases-for-plug/3913"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000053"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-plug/plug"
+        }
+      ],
+      "summary": "Arbitrary Code Execution in Cookie Serialization",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-5v4m-c73v-c7gq",
+      "published_at": "2022-04-12T21:23:43Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-5v4m-c73v-c7gq",
+      "cvss_score": 8.1,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:3.1/AV:N/AC:H/PR:N/UI:N/S:U/C:H/I:H/A:H",
+      "modified_at": "2025-12-10T00:29:29Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.0.4",
+        ">= 1.3.0 and < 1.3.2",
+        ">= 1.2.0 and < 1.2.3",
+        ">= 1.1.0 and < 1.1.7"
+      ]
+    },
+    {
+      "id": "GHSA-2q6v-32mr-8p8x",
+      "aliases": [
+        "CVE-2017-1000052"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2017-1000052"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-plug/plug"
+        },
+        {
+          "type": "WEB",
+          "url": "https://elixirforum.com/t/security-releases-for-plug/3913"
+        }
+      ],
+      "summary": "Null Byte Injection in Plug.Static",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-2q6v-32mr-8p8x",
+      "published_at": "2022-04-12T21:20:20Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-2q6v-32mr-8p8x",
+      "cvss_score": 7.8,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:3.1/AV:L/AC:L/PR:L/UI:N/S:U/C:H/I:H/A:H",
+      "modified_at": "2025-12-10T00:32:28Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.2.0 and < 1.2.3",
+        ">= 1.1.0 and < 1.1.7",
+        "< 1.0.4",
+        ">= 1.3.0 and < 1.3.2"
+      ]
+    }
+  ],
+  "docs_html_url": "https://plug.hexdocs.pm/",
+  "retirements": {
+    "1.13.0": {
+      "message": "Package has an incompatible breaking change",
+      "reason": "invalid"
+    },
+    "1.13.1": {
+      "message": "Package has an incompatible breaking change",
+      "reason": "invalid"
+    },
+    "1.20.0": {
+      "message": "Accidental breaking change on Plug.Conn.inform",
+      "reason": "invalid"
+    },
+    "1.20.1": {
+      "message": "Accidental breaking change on Plug.Conn.upgrade",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_plug = hex 1.20.3",
+    "mix.exs": "{:plug, \"~> 1.20\"}",
+    "rebar.config": "{plug, \"1.20.3\"}"
+  },
+  "latest_stable_version": "1.20.3"
+}

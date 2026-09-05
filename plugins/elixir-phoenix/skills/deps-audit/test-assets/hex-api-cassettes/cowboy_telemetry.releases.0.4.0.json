@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "elixir": null,
+    "app": "cowboy_telemetry",
+    "build_tools": [
+      "rebar3"
+    ]
+  },
+  "version": "0.4.0",
+  "checksum": "7d98bac1ee4565d31b62d59f8823dfd8356a169e7fcbb83831b8a5397404c9de",
+  "url": "https://hex.pm/api/packages/cowboy_telemetry/releases/0.4.0",
+  "has_docs": false,
+  "inserted_at": "2021-08-25T07:18:12.048496Z",
+  "updated_at": "2021-08-25T07:18:12.048496Z",
+  "html_url": "https://hex.pm/packages/cowboy_telemetry/0.4.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/cowboy_telemetry",
+  "downloads": 42290987,
+  "security_advisories": [],
+  "requirements": {
+    "cowboy": {
+      "app": "cowboy",
+      "optional": false,
+      "requirement": "~> 2.7"
+    },
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 1.0"
+    }
+  },
+  "docs_html_url": null,
+  "configs": {
+    "erlang.mk": "dep_cowboy_telemetry = hex 0.4.0",
+    "mix.exs": "{:cowboy_telemetry, \"~> 0.4.0\"}",
+    "rebar.config": "{cowboy_telemetry, \"0.4.0\"}"
+  }
+}

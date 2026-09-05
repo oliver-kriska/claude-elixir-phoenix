@@ -1,0 +1,37 @@
+{
+  "meta": {
+    "elixir": null,
+    "app": "telemetry_poller",
+    "build_tools": [
+      "rebar3"
+    ]
+  },
+  "version": "1.1.0",
+  "checksum": "9eb9d9cbfd81cbd7cdd24682f8711b6e2b691289a0de6826e58452f28c103c8f",
+  "url": "https://hex.pm/api/packages/telemetry_poller/releases/1.1.0",
+  "has_docs": true,
+  "inserted_at": "2024-04-08T21:44:35.461314Z",
+  "updated_at": "2024-04-08T21:44:39.308601Z",
+  "html_url": "https://hex.pm/packages/telemetry_poller/1.1.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/arkgil",
+    "username": "arkgil"
+  },
+  "package_url": "https://hex.pm/api/packages/telemetry_poller",
+  "downloads": 8827887,
+  "security_advisories": [],
+  "requirements": {
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 1.0"
+    }
+  },
+  "docs_html_url": "https://telemetry-poller.hexdocs.pm/1.1.0/",
+  "configs": {
+    "erlang.mk": "dep_telemetry_poller = hex 1.1.0",
+    "mix.exs": "{:telemetry_poller, \"~> 1.1\"}",
+    "rebar.config": "{telemetry_poller, \"1.1.0\"}"
+  }
+}

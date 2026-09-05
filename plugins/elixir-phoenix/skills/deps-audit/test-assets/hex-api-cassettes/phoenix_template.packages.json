@@ -1,0 +1,84 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/phoenixframework/phoenix_template"
+    },
+    "description": "Template rendering for Phoenix",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "phoenix_template",
+  "url": "https://hex.pm/api/packages/phoenix_template",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/chrismccord",
+      "email": "chris@chrismccord.com",
+      "username": "chrismccord"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    }
+  ],
+  "inserted_at": "2022-10-05T13:47:49.933885Z",
+  "updated_at": "2023-12-19T08:48:15.184236Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.0.4",
+      "url": "https://hex.pm/api/packages/phoenix_template/releases/1.0.4",
+      "has_docs": true,
+      "inserted_at": "2023-12-19T08:48:12.468499Z"
+    },
+    {
+      "version": "1.0.3",
+      "url": "https://hex.pm/api/packages/phoenix_template/releases/1.0.3",
+      "has_docs": true,
+      "inserted_at": "2023-07-15T07:55:34.862354Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/phoenix_template/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2023-07-10T08:53:00.779946Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/phoenix_template/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2023-01-29T16:57:27.474447Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/phoenix_template/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2022-10-26T13:36:37.286933Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/phoenix_template/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2022-10-05T13:47:49.951480Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/phoenix_template",
+  "latest_version": "1.0.4",
+  "downloads": {
+    "all": 40370965,
+    "day": 58874,
+    "recent": 3807913,
+    "week": 358561
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://phoenix-template.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_phoenix_template = hex 1.0.4",
+    "mix.exs": "{:phoenix_template, \"~> 1.0\"}",
+    "rebar.config": "{phoenix_template, \"1.0.4\"}"
+  },
+  "latest_stable_version": "1.0.4"
+}

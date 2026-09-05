@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "elixir": "~> 1.10",
+    "app": "mime",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.0.6",
+  "checksum": "c9945363a6b26d747389aac3643f8e0e09d30499a138ad64fe8fd1d13d9b153e",
+  "url": "https://hex.pm/api/packages/mime/releases/2.0.6",
+  "has_docs": true,
+  "inserted_at": "2024-07-04T10:29:53.986455Z",
+  "updated_at": "2024-07-04T10:29:56.506393Z",
+  "html_url": "https://hex.pm/packages/mime/2.0.6",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/mime",
+  "downloads": 10585948,
+  "security_advisories": [],
+  "requirements": {},
+  "docs_html_url": "https://mime.hexdocs.pm/2.0.6/",
+  "configs": {
+    "erlang.mk": "dep_mime = hex 2.0.6",
+    "mix.exs": "{:mime, \"~> 2.0\"}",
+    "rebar.config": "{mime, \"2.0.6\"}"
+  }
+}

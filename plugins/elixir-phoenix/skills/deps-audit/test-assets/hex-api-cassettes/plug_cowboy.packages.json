@@ -1,0 +1,318 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/elixir-plug/plug_cowboy"
+    },
+    "description": "A Plug adapter for Cowboy",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "plug_cowboy",
+  "url": "https://hex.pm/api/packages/plug_cowboy",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/gazler",
+      "email": "gazler@gmail.com",
+      "username": "gazler"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    }
+  ],
+  "inserted_at": "2018-10-20T21:17:30.184755Z",
+  "updated_at": "2026-06-25T15:50:17.671837Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.9.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.9.0",
+      "has_docs": true,
+      "inserted_at": "2026-06-25T15:50:16.198301Z"
+    },
+    {
+      "version": "2.8.1",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.8.1",
+      "has_docs": true,
+      "inserted_at": "2026-04-27T12:06:47.227952Z"
+    },
+    {
+      "version": "2.8.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.8.0",
+      "has_docs": true,
+      "inserted_at": "2026-02-05T19:51:39.641023Z"
+    },
+    {
+      "version": "2.7.5",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.7.5",
+      "has_docs": true,
+      "inserted_at": "2025-11-12T07:35:58.795227Z"
+    },
+    {
+      "version": "2.7.4",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.7.4",
+      "has_docs": true,
+      "inserted_at": "2025-06-18T11:23:50.416330Z"
+    },
+    {
+      "version": "2.7.3",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.7.3",
+      "has_docs": true,
+      "inserted_at": "2025-02-25T11:16:39.588246Z"
+    },
+    {
+      "version": "2.7.2",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.7.2",
+      "has_docs": true,
+      "inserted_at": "2024-09-09T19:45:49.217127Z"
+    },
+    {
+      "version": "2.7.1",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.7.1",
+      "has_docs": true,
+      "inserted_at": "2024-04-03T08:14:46.889606Z"
+    },
+    {
+      "version": "2.7.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.7.0",
+      "has_docs": true,
+      "inserted_at": "2024-01-29T16:37:16.467227Z"
+    },
+    {
+      "version": "2.6.2",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.6.2",
+      "has_docs": true,
+      "inserted_at": "2024-01-22T14:33:09.836583Z"
+    },
+    {
+      "version": "2.6.1",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.6.1",
+      "has_docs": true,
+      "inserted_at": "2023-03-16T15:30:36.128387Z"
+    },
+    {
+      "version": "2.6.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.6.0",
+      "has_docs": true,
+      "inserted_at": "2022-10-31T16:42:23.094187Z"
+    },
+    {
+      "version": "2.5.2",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.5.2",
+      "has_docs": true,
+      "inserted_at": "2021-09-07T18:58:23.785717Z"
+    },
+    {
+      "version": "2.5.1",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.5.1",
+      "has_docs": true,
+      "inserted_at": "2021-07-22T06:47:02.649788Z"
+    },
+    {
+      "version": "2.5.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.5.0",
+      "has_docs": true,
+      "inserted_at": "2021-04-19T06:51:43.528371Z"
+    },
+    {
+      "version": "2.4.1",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.4.1",
+      "has_docs": true,
+      "inserted_at": "2020-10-31T09:30:59.480981Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.4.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-11T10:40:28.387878Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.3.0",
+      "has_docs": true,
+      "inserted_at": "2020-06-11T17:30:28.380460Z"
+    },
+    {
+      "version": "2.2.2",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.2.2",
+      "has_docs": true,
+      "inserted_at": "2020-05-25T17:40:57.105671Z"
+    },
+    {
+      "version": "2.2.1",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.2.1",
+      "has_docs": true,
+      "inserted_at": "2020-04-21T17:36:04.941987Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-21T14:55:41.421933Z"
+    },
+    {
+      "version": "2.1.3",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.1.3",
+      "has_docs": true,
+      "inserted_at": "2020-04-14T18:40:28.549050Z"
+    },
+    {
+      "version": "2.1.2",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.1.2",
+      "has_docs": true,
+      "inserted_at": "2020-01-28T18:48:22.862154Z"
+    },
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2020-01-08T10:44:33.865589Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-27T09:35:46.055169Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2019-03-18T13:02:01.642348Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2018-12-13T15:11:33.742915Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-20T21:19:29.643670Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/plug_cowboy/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-20T21:17:30.200701Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/plug_cowboy",
+  "latest_version": "2.9.0",
+  "downloads": {
+    "all": 141269879,
+    "day": 36217,
+    "recent": 2607734,
+    "week": 219351
+  },
+  "security_advisories": [
+    {
+      "id": "GHSA-q8x4-x7mp-5vg2",
+      "aliases": [
+        "CVE-2026-32688",
+        "EEF-CVE-2026-32688"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-plug/plug_cowboy"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug_cowboy/security/advisories/GHSA-q8x4-x7mp-5vg2"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-32688"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32688"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug_cowboy/commit/bfb34cb45eb354e56437f7023fb306de1bf9c19b"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32688.html"
+        }
+      ],
+      "summary": "Plug.Cowboy vulnerable to unauthenticated remote DoS via HTTP/2 `:scheme` atom-table exhaustion",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-q8x4-x7mp-5vg2",
+      "published_at": "2026-05-05T21:46:09Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-q8x4-x7mp-5vg2",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-05T22:14:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 2.8.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-32688",
+      "aliases": [
+        "CVE-2026-32688",
+        "GHSA-q8x4-x7mp-5vg2"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug_cowboy/security/advisories/GHSA-q8x4-x7mp-5vg2"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32688.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug_cowboy/commit/bfb34cb45eb354e56437f7023fb306de1bf9c19b"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug_cowboy"
+        }
+      ],
+      "summary": "Atom table exhaustion via HTTP/2 :scheme pseudo-header in plug_cowboy",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-32688",
+      "published_at": "2026-04-27T13:45:35Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-32688",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:09Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 2.8.1"
+      ]
+    }
+  ],
+  "docs_html_url": "https://plug-cowboy.hexdocs.pm/",
+  "retirements": {
+    "2.2.0": {
+      "message": "Broken telemetry support",
+      "reason": "invalid"
+    },
+    "2.2.1": {
+      "message": "Broken telemetry support",
+      "reason": "invalid"
+    },
+    "2.2.2": {
+      "message": "Broken telemetry support",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_plug_cowboy = hex 2.9.0",
+    "mix.exs": "{:plug_cowboy, \"~> 2.9\"}",
+    "rebar.config": "{plug_cowboy, \"2.9.0\"}"
+  },
+  "latest_stable_version": "2.9.0"
+}

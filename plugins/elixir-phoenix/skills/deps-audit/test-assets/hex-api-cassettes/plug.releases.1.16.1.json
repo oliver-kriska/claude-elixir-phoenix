@@ -1,0 +1,338 @@
+{
+  "meta": {
+    "elixir": "~> 1.10",
+    "app": "plug",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.16.1",
+  "checksum": "a13ff6b9006b03d7e33874945b2755253841b238c34071ed85b0e86057f8cddc",
+  "url": "https://hex.pm/api/packages/plug/releases/1.16.1",
+  "has_docs": true,
+  "inserted_at": "2024-06-20T13:57:58.725910Z",
+  "updated_at": "2024-06-20T13:58:01.580817Z",
+  "html_url": "https://hex.pm/packages/plug/1.16.1",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/plug",
+  "downloads": 11261188,
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-56813",
+      "aliases": [
+        "CVE-2026-56813",
+        "GHSA-wpmj-jh88-rpgm"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-wpmj-jh88-rpgm"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/c6575800b2c4e15af1904df87522ca8a23da020c"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56813.html"
+        }
+      ],
+      "summary": "Cookie attribute injection in Plug.Conn.Cookies.encode/2",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-56813",
+      "published_at": "2026-07-10T12:51:08Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-56813",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-07-30T18:22:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.18.0 and < 1.18.5",
+        ">= 0.1.0 and < 1.16.6",
+        ">= 1.17.0 and < 1.17.4",
+        ">= 1.19.0 and < 1.19.5",
+        ">= 1.20.0 and < 1.20.3"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-56814",
+      "aliases": [
+        "CVE-2026-56814",
+        "GHSA-95qv-c9g9-rm63"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/f7effaed811c00b5f5bf817936bfd9c5df27b7dc"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-95qv-c9g9-rm63"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56814.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/981597d3a4271ede64373c7a731702a42c500dd6"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/56edca2ce35fe5589cd581644d8a4493fa5f484e"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/0ee8afcc61466dc5f7a8f048d0632c899165b81f"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/cae36053350e5215a4e0ca33cd130af9c5fc6364"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/df97d3f17f808a9916a7700a701fb85314559d56"
+        }
+      ],
+      "summary": "Plug: multipart :length limit is not charged for part headers, enabling unbounded temp-file creation (denial of service)",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-56814",
+      "published_at": "2026-07-10T11:14:35Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-56814",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:07Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.20.0 and < 1.20.3",
+        ">= 1.19.0 and < 1.19.5",
+        ">= 1.4.0 and < 1.16.6",
+        ">= 1.18.0 and < 1.18.5",
+        ">= 1.17.0 and < 1.17.4"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-54892",
+      "aliases": [
+        "CVE-2026-54892",
+        "GHSA-j43x-5hjq-rgxf"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/c317d08fdcf96e17931f7419275b2b8c4bf3e951"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-54892.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-j43x-5hjq-rgxf"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/a61124aa625d819a218fb07f90afbac8aa85eb0e"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/d4e5568392a4b29e545b91e12e87d6098f976145"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/d737eb236f17e31a36290e39f9ef3cd86a1343bd"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/9c5d37c440eaae92869eed7c014c47266744fadb"
+        }
+      ],
+      "summary": "Plug: quadratic-time decoding of nested query/body parameters enables denial of service",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-54892",
+      "published_at": "2026-06-23T12:31:12Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-54892",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:02Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.15.0 and < 1.15.5",
+        ">= 1.19.0 and < 1.19.3",
+        ">= 1.18.0 and < 1.18.3",
+        ">= 1.17.0 and < 1.17.2",
+        ">= 1.16.0 and < 1.16.4"
+      ]
+    },
+    {
+      "id": "GHSA-468c-vq7p-gh64",
+      "aliases": [
+        "CVE-2026-8468",
+        "EEF-CVE-2026-8468"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-468c-vq7p-gh64"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-8468"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-plug/plug"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8468.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8466.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/df812a1527bae9e941965e897308a2b8bbf83a94"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/d5dfffe25e975585227b1b85d247b0d14164bc45"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/aa69c5ece99c40ded88b8c6581ecc86664b0b734"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/33858427c7f2737d560a2e40a0c9a9270d77d1d7"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/2cb7958d33030aa826b0c7404375844d4593d43a"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8468"
+        }
+      ],
+      "summary": "Plug: Unbounded buffer accumulation in multipart header parsing causes denial of service",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-468c-vq7p-gh64",
+      "published_at": "2026-05-20T15:35:13Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-468c-vq7p-gh64",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-20T15:48:07Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.4.0 and < 1.15.4",
+        ">= 1.16.0 and < 1.16.3",
+        ">= 1.17.0 and < 1.17.1",
+        ">= 1.18.0 and < 1.18.2",
+        ">= 1.19.0 and < 1.19.2"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-8468",
+      "aliases": [
+        "CVE-2026-8468",
+        "GHSA-468c-vq7p-gh64"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/d5dfffe25e975585227b1b85d247b0d14164bc45"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-468c-vq7p-gh64"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8468.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8466.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/2cb7958d33030aa826b0c7404375844d4593d43a"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/aa69c5ece99c40ded88b8c6581ecc86664b0b734"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/df812a1527bae9e941965e897308a2b8bbf83a94"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/33858427c7f2737d560a2e40a0c9a9270d77d1d7"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug"
+        }
+      ],
+      "summary": "Unbounded buffer accumulation in multipart header parsing causes denial of service in plug",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-8468",
+      "published_at": "2026-05-14T10:29:51Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-8468",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.4.0 and < 1.15.4",
+        ">= 1.16.0 and < 1.16.3",
+        ">= 1.17.0 and < 1.17.1",
+        ">= 1.18.0 and < 1.18.2",
+        ">= 1.19.0 and < 1.19.2"
+      ]
+    }
+  ],
+  "requirements": {
+    "mime": {
+      "app": "mime",
+      "optional": false,
+      "requirement": "~> 1.0 or ~> 2.0"
+    },
+    "plug_crypto": {
+      "app": "plug_crypto",
+      "optional": false,
+      "requirement": "~> 1.1.1 or ~> 1.2 or ~> 2.0"
+    },
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 0.4.3 or ~> 1.0"
+    }
+  },
+  "docs_html_url": "https://plug.hexdocs.pm/1.16.1/",
+  "configs": {
+    "erlang.mk": "dep_plug = hex 1.16.1",
+    "mix.exs": "{:plug, \"~> 1.16\"}",
+    "rebar.config": "{plug, \"1.16.1\"}"
+  }
+}

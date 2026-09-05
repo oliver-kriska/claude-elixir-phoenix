@@ -1,0 +1,169 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/ex-aws/ex_aws_s3/blob/main/CHANGELOG.md",
+      "GitHub": "https://github.com/ex-aws/ex_aws_s3"
+    },
+    "description": "ExAws.S3 service package",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "ex_aws_s3",
+  "url": "https://hex.pm/api/packages/ex_aws_s3",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/benwilson512",
+      "email": "benwilson512@gmail.com",
+      "username": "benwilson512"
+    },
+    {
+      "url": "https://hex.pm/api/users/bernard",
+      "email": "bernard@circl.es",
+      "username": "bernard"
+    }
+  ],
+  "inserted_at": "2017-11-10T14:53:29.452734Z",
+  "updated_at": "2025-12-09T04:40:39.900327Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.5.9",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.9",
+      "has_docs": true,
+      "inserted_at": "2025-12-09T04:40:35.929041Z"
+    },
+    {
+      "version": "2.5.8",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.8",
+      "has_docs": true,
+      "inserted_at": "2025-08-12T00:55:55.997414Z"
+    },
+    {
+      "version": "2.5.7",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.7",
+      "has_docs": true,
+      "inserted_at": "2025-04-15T01:30:40.037647Z"
+    },
+    {
+      "version": "2.5.6",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.6",
+      "has_docs": true,
+      "inserted_at": "2024-12-13T02:26:30.653676Z"
+    },
+    {
+      "version": "2.5.5",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.5",
+      "has_docs": true,
+      "inserted_at": "2024-10-31T04:54:50.736540Z"
+    },
+    {
+      "version": "2.5.4",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.4",
+      "has_docs": true,
+      "inserted_at": "2024-09-10T06:28:08.156618Z"
+    },
+    {
+      "version": "2.5.3",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.3",
+      "has_docs": true,
+      "inserted_at": "2024-01-11T05:50:25.493788Z"
+    },
+    {
+      "version": "2.5.2",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.2",
+      "has_docs": true,
+      "inserted_at": "2023-10-16T00:39:33.099636Z"
+    },
+    {
+      "version": "2.5.1",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.1",
+      "has_docs": true,
+      "inserted_at": "2023-10-11T23:44:23.315436Z"
+    },
+    {
+      "version": "2.5.0",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.0",
+      "has_docs": true,
+      "inserted_at": "2023-10-03T23:38:23.332198Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.4.0",
+      "has_docs": true,
+      "inserted_at": "2023-01-10T05:38:51.004256Z"
+    },
+    {
+      "version": "2.3.3",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.3.3",
+      "has_docs": true,
+      "inserted_at": "2022-06-30T09:26:06.070555Z"
+    },
+    {
+      "version": "2.3.2",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.3.2",
+      "has_docs": true,
+      "inserted_at": "2021-12-02T23:05:15.131481Z"
+    },
+    {
+      "version": "2.3.1",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.3.1",
+      "has_docs": true,
+      "inserted_at": "2021-10-18T00:59:19.940964Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.3.0",
+      "has_docs": true,
+      "inserted_at": "2021-07-26T03:00:48.063931Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2021-05-08T03:12:08.862837Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-11-18T01:51:11.257242Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2019-05-10T18:25:49.069258Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2018-06-21T21:44:48.542160Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2017-11-10T14:53:29.499606Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/ex_aws_s3",
+  "latest_version": "2.5.9",
+  "downloads": {
+    "all": 59232652,
+    "day": 21933,
+    "recent": 1547080,
+    "week": 130353
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://ex-aws-s3.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_ex_aws_s3 = hex 2.5.9",
+    "mix.exs": "{:ex_aws_s3, \"~> 2.5\"}",
+    "rebar.config": "{ex_aws_s3, \"2.5.9\"}"
+  },
+  "latest_stable_version": "2.5.9"
+}

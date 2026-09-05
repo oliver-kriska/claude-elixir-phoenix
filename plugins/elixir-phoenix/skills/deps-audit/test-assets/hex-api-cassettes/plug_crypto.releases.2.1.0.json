@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "plug_crypto",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.1.0",
+  "checksum": "131216a4b030b8f8ce0f26038bc4421ae60e4bb95c5cf5395e1421437824c4fa",
+  "url": "https://hex.pm/api/packages/plug_crypto/releases/2.1.0",
+  "has_docs": true,
+  "inserted_at": "2024-05-02T14:35:37.316823Z",
+  "updated_at": "2024-05-02T14:35:39.752439Z",
+  "html_url": "https://hex.pm/packages/plug_crypto/2.1.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/plug_crypto",
+  "downloads": 11509826,
+  "security_advisories": [],
+  "requirements": {},
+  "docs_html_url": "https://plug-crypto.hexdocs.pm/2.1.0/",
+  "configs": {
+    "erlang.mk": "dep_plug_crypto = hex 2.1.0",
+    "mix.exs": "{:plug_crypto, \"~> 2.1\"}",
+    "rebar.config": "{plug_crypto, \"2.1.0\"}"
+  }
+}

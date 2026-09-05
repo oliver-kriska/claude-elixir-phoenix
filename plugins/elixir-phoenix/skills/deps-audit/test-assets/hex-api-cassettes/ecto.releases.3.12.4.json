@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "ecto",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "3.12.4",
+  "checksum": "ef04e4101688a67d061e1b10d7bc1fbf00d1d13c17eef08b71d070ff9188f747",
+  "url": "https://hex.pm/api/packages/ecto/releases/3.12.4",
+  "has_docs": true,
+  "inserted_at": "2024-10-07T08:53:24.365184Z",
+  "updated_at": "2024-10-07T08:53:27.638224Z",
+  "html_url": "https://hex.pm/packages/ecto/3.12.4",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/ecto",
+  "downloads": 1425004,
+  "security_advisories": [],
+  "requirements": {
+    "decimal": {
+      "app": "decimal",
+      "optional": false,
+      "requirement": "~> 2.0"
+    },
+    "jason": {
+      "app": "jason",
+      "optional": true,
+      "requirement": "~> 1.0"
+    },
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 0.4 or ~> 1.0"
+    }
+  },
+  "docs_html_url": "https://ecto.hexdocs.pm/3.12.4/",
+  "configs": {
+    "erlang.mk": "dep_ecto = hex 3.12.4",
+    "mix.exs": "{:ecto, \"~> 3.12\"}",
+    "rebar.config": "{ecto, \"3.12.4\"}"
+  }
+}

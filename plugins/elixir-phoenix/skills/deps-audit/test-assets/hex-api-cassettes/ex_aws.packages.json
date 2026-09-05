@@ -1,0 +1,595 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/ex-aws/ex_aws/blob/master/CHANGELOG.md",
+      "GitHub": "https://github.com/ex-aws/ex_aws"
+    },
+    "description": "AWS client for Elixir. Currently supports Dynamo, DynamoStreams, EC2,\nFirehose, Kinesis, KMS, Lambda, RRDS, Route53, S3, SES, SNS, SQS, STS and others.",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "ex_aws",
+  "url": "https://hex.pm/api/packages/ex_aws",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/benwilson512",
+      "email": "benwilson512@gmail.com",
+      "username": "benwilson512"
+    },
+    {
+      "url": "https://hex.pm/api/users/bernard",
+      "email": "bernard@circl.es",
+      "username": "bernard"
+    }
+  ],
+  "inserted_at": "2015-03-17T21:36:32.000000Z",
+  "updated_at": "2026-05-06T09:27:35.104660Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.7.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.7.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-06T09:27:33.650735Z"
+    },
+    {
+      "version": "2.6.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.6.1",
+      "has_docs": true,
+      "inserted_at": "2025-12-09T04:27:19.514817Z"
+    },
+    {
+      "version": "2.6.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.6.0",
+      "has_docs": true,
+      "inserted_at": "2025-10-03T07:58:57.499540Z"
+    },
+    {
+      "version": "2.5.11",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.11",
+      "has_docs": true,
+      "inserted_at": "2025-08-12T00:51:59.059051Z"
+    },
+    {
+      "version": "2.5.10",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.10",
+      "has_docs": true,
+      "inserted_at": "2025-06-16T03:34:30.852152Z"
+    },
+    {
+      "version": "2.5.9",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.9",
+      "has_docs": true,
+      "inserted_at": "2025-04-15T01:05:01.432326Z"
+    },
+    {
+      "version": "2.5.8",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.8",
+      "has_docs": true,
+      "inserted_at": "2024-12-13T02:21:38.609679Z"
+    },
+    {
+      "version": "2.5.7",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.7",
+      "has_docs": true,
+      "inserted_at": "2024-10-31T04:51:32.943486Z"
+    },
+    {
+      "version": "2.5.6",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.6",
+      "has_docs": true,
+      "inserted_at": "2024-10-09T06:25:20.245942Z"
+    },
+    {
+      "version": "2.5.5",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.5",
+      "has_docs": true,
+      "inserted_at": "2024-09-10T05:10:16.784761Z"
+    },
+    {
+      "version": "2.5.4",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.4",
+      "has_docs": true,
+      "inserted_at": "2024-06-04T02:47:05.405703Z"
+    },
+    {
+      "version": "2.5.3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.3",
+      "has_docs": true,
+      "inserted_at": "2024-03-20T01:54:24.815192Z"
+    },
+    {
+      "version": "2.5.2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.2",
+      "has_docs": true,
+      "inserted_at": "2024-03-19T06:11:28.333904Z"
+    },
+    {
+      "version": "2.5.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.1",
+      "has_docs": true,
+      "inserted_at": "2024-01-11T05:59:34.221365Z"
+    },
+    {
+      "version": "2.5.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.5.0",
+      "has_docs": true,
+      "inserted_at": "2023-08-15T00:43:09.042599Z"
+    },
+    {
+      "version": "2.4.4",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.4.4",
+      "has_docs": true,
+      "inserted_at": "2023-07-21T02:42:58.582719Z"
+    },
+    {
+      "version": "2.4.3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.4.3",
+      "has_docs": true,
+      "inserted_at": "2023-06-20T05:23:07.357721Z"
+    },
+    {
+      "version": "2.4.2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.4.2",
+      "has_docs": true,
+      "inserted_at": "2023-03-21T01:03:14.546871Z"
+    },
+    {
+      "version": "2.4.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.4.1",
+      "has_docs": true,
+      "inserted_at": "2022-11-28T01:14:00.270885Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.4.0",
+      "has_docs": true,
+      "inserted_at": "2022-09-07T05:47:54.593992Z"
+    },
+    {
+      "version": "2.3.4",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.3.4",
+      "has_docs": true,
+      "inserted_at": "2022-08-17T01:22:55.414350Z"
+    },
+    {
+      "version": "2.3.3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.3.3",
+      "has_docs": true,
+      "inserted_at": "2022-06-30T08:59:26.658302Z"
+    },
+    {
+      "version": "2.3.2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.3.2",
+      "has_docs": true,
+      "inserted_at": "2022-05-15T03:59:28.684446Z"
+    },
+    {
+      "version": "2.3.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.3.1",
+      "has_docs": true,
+      "inserted_at": "2022-04-21T23:42:08.109720Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.3.0",
+      "has_docs": true,
+      "inserted_at": "2022-04-12T00:19:22.524030Z"
+    },
+    {
+      "version": "2.2.10",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.10",
+      "has_docs": true,
+      "inserted_at": "2022-01-16T09:58:29.796813Z"
+    },
+    {
+      "version": "2.2.9",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.9",
+      "has_docs": true,
+      "inserted_at": "2021-12-18T08:50:54.525277Z"
+    },
+    {
+      "version": "2.2.8",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.8",
+      "has_docs": true,
+      "inserted_at": "2021-11-07T10:13:18.848648Z"
+    },
+    {
+      "version": "2.2.7",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.7",
+      "has_docs": true,
+      "inserted_at": "2021-10-18T00:27:18.965353Z"
+    },
+    {
+      "version": "2.2.6",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.6",
+      "has_docs": true,
+      "inserted_at": "2021-09-27T01:32:37.358037Z"
+    },
+    {
+      "version": "2.2.5",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.5",
+      "has_docs": true,
+      "inserted_at": "2021-09-06T00:19:15.211627Z"
+    },
+    {
+      "version": "2.2.4",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.4",
+      "has_docs": true,
+      "inserted_at": "2021-08-31T01:07:53.278363Z"
+    },
+    {
+      "version": "2.2.3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.3",
+      "has_docs": true,
+      "inserted_at": "2021-05-08T00:40:37.527109Z"
+    },
+    {
+      "version": "2.2.2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.2",
+      "has_docs": true,
+      "inserted_at": "2021-05-05T06:25:48.765207Z"
+    },
+    {
+      "version": "2.2.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.1",
+      "has_docs": true,
+      "inserted_at": "2021-04-12T23:32:07.020874Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2021-04-10T02:13:16.326323Z"
+    },
+    {
+      "version": "2.1.9",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.9",
+      "has_docs": true,
+      "inserted_at": "2021-03-31T07:19:23.671879Z"
+    },
+    {
+      "version": "2.1.8",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.8",
+      "has_docs": true,
+      "inserted_at": "2021-03-14T02:09:03.346914Z"
+    },
+    {
+      "version": "2.1.7",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.7",
+      "has_docs": true,
+      "inserted_at": "2021-02-05T23:02:12.584032Z"
+    },
+    {
+      "version": "2.1.6",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.6",
+      "has_docs": true,
+      "inserted_at": "2020-10-18T23:28:57.502110Z"
+    },
+    {
+      "version": "2.1.5",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.5",
+      "has_docs": true,
+      "inserted_at": "2020-09-18T15:00:31.424873Z"
+    },
+    {
+      "version": "2.1.4",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.4",
+      "has_docs": true,
+      "inserted_at": "2020-08-13T19:57:59.768745Z"
+    },
+    {
+      "version": "2.1.3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.3",
+      "has_docs": true,
+      "inserted_at": "2020-03-20T22:46:10.177072Z"
+    },
+    {
+      "version": "2.1.2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.2",
+      "has_docs": true,
+      "inserted_at": "2020-02-21T14:19:27.420991Z"
+    },
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2019-05-04T12:25:16.888488Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2018-06-21T21:41:04.443891Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2017-12-05T20:05:18.622376Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2017-11-12T19:47:50.385762Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2017-11-10T13:43:23.407791Z"
+    },
+    {
+      "version": "1.1.5",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.1.5",
+      "has_docs": true,
+      "inserted_at": "2017-10-17T11:12:06.115006Z"
+    },
+    {
+      "version": "1.1.4",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.1.4",
+      "has_docs": true,
+      "inserted_at": "2017-08-22T15:26:28.082018Z"
+    },
+    {
+      "version": "1.1.3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.1.3",
+      "has_docs": true,
+      "inserted_at": "2017-07-01T18:23:45.759745Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2017-03-10T19:26:07.220300Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2017-03-08T21:44:32.865423Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2017-01-24T21:51:34.211008Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2016-12-18T17:43:52.579967Z"
+    },
+    {
+      "version": "1.0.0-rc.4",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.0.0-rc.4",
+      "has_docs": true,
+      "inserted_at": "2016-10-27T21:52:02.821850Z"
+    },
+    {
+      "version": "1.0.0-rc.3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.0.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2016-10-04T23:54:59.823516Z"
+    },
+    {
+      "version": "1.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2016-10-01T14:36:44.068179Z"
+    },
+    {
+      "version": "1.0.0-beta3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.0.0-beta3",
+      "has_docs": true,
+      "inserted_at": "2016-09-11T00:41:33.637833Z"
+    },
+    {
+      "version": "1.0.0-beta2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.0.0-beta2",
+      "has_docs": true,
+      "inserted_at": "2016-09-11T00:37:51.429369Z"
+    },
+    {
+      "version": "1.0.0-beta1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.0.0-beta1",
+      "has_docs": true,
+      "inserted_at": "2016-07-22T19:46:19.902503Z"
+    },
+    {
+      "version": "1.0.0-beta0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/1.0.0-beta0",
+      "has_docs": true,
+      "inserted_at": "2016-07-22T16:21:43.579434Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2016-06-21T14:37:39.861782Z"
+    },
+    {
+      "version": "0.4.19",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.19",
+      "has_docs": true,
+      "inserted_at": "2016-06-01T15:12:00.812400Z"
+    },
+    {
+      "version": "0.4.18",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.18",
+      "has_docs": true,
+      "inserted_at": "2016-03-02T01:55:01.995034Z"
+    },
+    {
+      "version": "0.4.17",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.17",
+      "has_docs": true,
+      "inserted_at": "2016-02-21T12:35:10.716315Z"
+    },
+    {
+      "version": "0.4.15",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.15",
+      "has_docs": true,
+      "inserted_at": "2016-02-02T17:56:18.578014Z"
+    },
+    {
+      "version": "0.4.14",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.14",
+      "has_docs": true,
+      "inserted_at": "2016-01-30T18:23:12.243345Z"
+    },
+    {
+      "version": "0.4.13",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.13",
+      "has_docs": true,
+      "inserted_at": "2015-12-02T15:03:37.850319Z"
+    },
+    {
+      "version": "0.4.11",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.11",
+      "has_docs": true,
+      "inserted_at": "2015-10-16T04:20:05.593097Z"
+    },
+    {
+      "version": "0.4.10",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.10",
+      "has_docs": true,
+      "inserted_at": "2015-09-18T03:54:12.165987Z"
+    },
+    {
+      "version": "0.4.9",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.9",
+      "has_docs": true,
+      "inserted_at": "2015-09-16T16:56:57.475242Z"
+    },
+    {
+      "version": "0.4.8",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.8",
+      "has_docs": true,
+      "inserted_at": "2015-08-31T20:31:11.382646Z"
+    },
+    {
+      "version": "0.4.7",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.7",
+      "has_docs": true,
+      "inserted_at": "2015-08-25T20:48:58.150657Z"
+    },
+    {
+      "version": "0.4.6",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.6",
+      "has_docs": true,
+      "inserted_at": "2015-08-15T20:57:44.464051Z"
+    },
+    {
+      "version": "0.4.5",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.5",
+      "has_docs": true,
+      "inserted_at": "2015-07-20T16:22:44.585970Z"
+    },
+    {
+      "version": "0.4.4",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.4",
+      "has_docs": true,
+      "inserted_at": "2015-07-20T16:11:00.173428Z"
+    },
+    {
+      "version": "0.4.3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.3",
+      "has_docs": true,
+      "inserted_at": "2015-07-11T16:47:18.709138Z"
+    },
+    {
+      "version": "0.4.2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.2",
+      "has_docs": true,
+      "inserted_at": "2015-07-08T19:55:04.410327Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.1",
+      "has_docs": true,
+      "inserted_at": "2015-07-08T17:21:52.603179Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2015-07-02T17:29:07.806234Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2015-06-29T21:35:07.380484Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2015-06-09T11:46:31.556521Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2015-05-25T16:06:43.558113Z"
+    },
+    {
+      "version": "0.1.2",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.1.2",
+      "has_docs": true,
+      "inserted_at": "2015-05-13T20:50:45.756169Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.1.1",
+      "has_docs": false,
+      "inserted_at": "2015-05-13T20:49:17.006010Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-05-10T18:47:33.696396Z"
+    },
+    {
+      "version": "0.0.5",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.0.5",
+      "has_docs": true,
+      "inserted_at": "2015-05-08T15:56:47.494836Z"
+    },
+    {
+      "version": "0.0.4",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.0.4",
+      "has_docs": true,
+      "inserted_at": "2015-05-04T14:35:34.987420Z"
+    },
+    {
+      "version": "0.0.3",
+      "url": "https://hex.pm/api/packages/ex_aws/releases/0.0.3",
+      "has_docs": true,
+      "inserted_at": "2015-03-17T21:36:32.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/ex_aws",
+  "latest_version": "2.7.0",
+  "downloads": {
+    "all": 70921362,
+    "day": 24741,
+    "recent": 1733126,
+    "week": 146459
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://ex-aws.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_ex_aws = hex 2.7.0",
+    "mix.exs": "{:ex_aws, \"~> 2.7\"}",
+    "rebar.config": "{ex_aws, \"2.7.0\"}"
+  },
+  "latest_stable_version": "2.7.0"
+}

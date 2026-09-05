@@ -1,0 +1,404 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "phoenix",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.7.21",
+  "checksum": "336dce4f86cba56fed312a7d280bf2282c720abb6074bdb1b61ec8095bdd0bc9",
+  "url": "https://hex.pm/api/packages/phoenix/releases/1.7.21",
+  "has_docs": true,
+  "inserted_at": "2025-03-27T19:06:27.165864Z",
+  "updated_at": "2025-03-27T19:06:32.952872Z",
+  "html_url": "https://hex.pm/packages/phoenix/1.7.21",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/chrismccord",
+    "email": "chris@chrismccord.com",
+    "username": "chrismccord"
+  },
+  "package_url": "https://hex.pm/api/packages/phoenix",
+  "downloads": 5232474,
+  "security_advisories": [
+    {
+      "id": "GHSA-6983-jfq8-485w",
+      "aliases": [
+        "CVE-2026-56811",
+        "EEF-CVE-2026-56811"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-6983-jfq8-485w"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56811"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/16e295d2fccab185d1292322e2bee5d46c725c8a"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/a612100cd8a4279091abc1a2ef8fb98a6d01c0a1"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/c498ba8cf49f6accbbd0c643a5340b58db891218"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/d19ca0a8d9f82c130b7ed339b9f033433e2dea5e"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56811.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/phoenixframework/phoenix"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-56811"
+        }
+      ],
+      "summary": "Phoenix: Unbounded channel joins per transport enables DoS over few connections",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-6983-jfq8-485w",
+      "published_at": "2026-09-03T20:33:03Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-6983-jfq8-485w",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-09-03T20:45:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.11.0 and < 1.5.15",
+        ">= 1.6.0-rc.0 and < 1.6.17",
+        ">= 1.7.0-rc.0 and < 1.7.24",
+        ">= 1.8.0-rc.0 and < 1.8.9"
+      ]
+    },
+    {
+      "id": "GHSA-63mc-hw7g-86rr",
+      "aliases": [
+        "CVE-2026-56812",
+        "EEF-CVE-2026-56812"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-63mc-hw7g-86rr"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-56812"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/7f7b971c1ea0994e3fbd1c11ddb05e780bd38ad8"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/89a1c4be161e436241e12b2378a719904b9bd96f"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/b90b22521465ece00eb5a19d5aa2b9465b209c85"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/beffc4da1e787e572121f68902c63daf4fe7d9c2"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56812.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/phoenixframework/phoenix"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-56812"
+        }
+      ],
+      "summary": "Phoenix: Presence keys colliding with `Object.prototype` members break existence checks",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-63mc-hw7g-86rr",
+      "published_at": "2026-09-03T20:30:33Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-63mc-hw7g-86rr",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-09-03T20:45:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.2.0-rc.0 and < 1.5.15",
+        ">= 1.6.0-rc.0 and < 1.6.17",
+        ">= 1.7.0-rc.0 and < 1.7.24",
+        ">= 1.8.0-rc.0 and < 1.8.9"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-56812",
+      "aliases": [
+        "CVE-2026-56812",
+        "GHSA-63mc-hw7g-86rr"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-63mc-hw7g-86rr"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/7f7b971c1ea0994e3fbd1c11ddb05e780bd38ad8"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/89a1c4be161e436241e12b2378a719904b9bd96f"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/b90b22521465ece00eb5a19d5aa2b9465b209c85"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/beffc4da1e787e572121f68902c63daf4fe7d9c2"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://www.npmjs.com/package/phoenix"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56812.html"
+        }
+      ],
+      "summary": "Phoenix JavaScript presence client crashes on presence keys colliding with Object.prototype members in Presence.syncState/syncDiff",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-56812",
+      "published_at": "2026-07-07T15:22:46Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-56812",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.6.0-rc.0 and < 1.6.17",
+        ">= 1.8.0-rc.0 and < 1.8.9",
+        ">= 1.2.0-rc.0 and < 1.5.15",
+        ">= 1.7.0-rc.0 and < 1.7.24"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-56811",
+      "aliases": [
+        "CVE-2026-56811",
+        "GHSA-6983-jfq8-485w"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/16e295d2fccab185d1292322e2bee5d46c725c8a"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-6983-jfq8-485w"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-56811.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/c498ba8cf49f6accbbd0c643a5340b58db891218"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/d19ca0a8d9f82c130b7ed339b9f033433e2dea5e"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/a612100cd8a4279091abc1a2ef8fb98a6d01c0a1"
+        }
+      ],
+      "summary": "Phoenix transports do not limit channel joins per connection, enabling process-exhaustion denial of service",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-56811",
+      "published_at": "2026-07-07T15:09:57Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-56811",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:11Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.7.0-rc.0 and < 1.7.24",
+        ">= 1.8.0-rc.0 and < 1.8.9",
+        ">= 0.11.0 and < 1.5.15",
+        ">= 1.6.0-rc.0 and < 1.6.17"
+      ]
+    },
+    {
+      "id": "GHSA-628h-q48j-jr6q",
+      "aliases": [
+        "CVE-2026-32689",
+        "EEF-CVE-2026-32689"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/phoenixframework/phoenix"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32689"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/1a67c61ff9ce0a7711662ac7354861917a7c80f7"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/commit/912ea181fd247c21dbcc49fb97d0053b947d81bf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32689.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-628h-q48j-jr6q"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-32689"
+        }
+      ],
+      "summary": "Phoenix: Long-poll NDJSON body splitting causes large memory allocation",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-628h-q48j-jr6q",
+      "published_at": "2026-05-08T20:24:15Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-628h-q48j-jr6q",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-08T20:31:38Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.7.0 and < 1.7.22",
+        ">= 1.8.0 and < 1.8.6"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-32689",
+      "aliases": [
+        "CVE-2026-32689",
+        "GHSA-628h-q48j-jr6q"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/phoenixframework/phoenix/security/advisories/GHSA-628h-q48j-jr6q"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32689.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/1a67c61ff9ce0a7711662ac7354861917a7c80f7"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix/commit/912ea181fd247c21dbcc49fb97d0053b947d81bf"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix"
+        }
+      ],
+      "summary": "Long-poll NDJSON body splitting causes unbounded memory allocation in Phoenix",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-32689",
+      "published_at": "2026-05-05T15:17:30Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-32689",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:21:59Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.7.0 and < 1.7.22",
+        ">= 1.8.0 and < 1.8.6"
+      ]
+    }
+  ],
+  "requirements": {
+    "castore": {
+      "app": "castore",
+      "optional": false,
+      "requirement": ">= 0.0.0"
+    },
+    "jason": {
+      "app": "jason",
+      "optional": true,
+      "requirement": "~> 1.0"
+    },
+    "phoenix_pubsub": {
+      "app": "phoenix_pubsub",
+      "optional": false,
+      "requirement": "~> 2.1"
+    },
+    "phoenix_template": {
+      "app": "phoenix_template",
+      "optional": false,
+      "requirement": "~> 1.0"
+    },
+    "phoenix_view": {
+      "app": "phoenix_view",
+      "optional": true,
+      "requirement": "~> 2.0"
+    },
+    "plug": {
+      "app": "plug",
+      "optional": false,
+      "requirement": "~> 1.14"
+    },
+    "plug_cowboy": {
+      "app": "plug_cowboy",
+      "optional": true,
+      "requirement": "~> 2.7"
+    },
+    "plug_crypto": {
+      "app": "plug_crypto",
+      "optional": false,
+      "requirement": "~> 1.2 or ~> 2.0"
+    },
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 0.4 or ~> 1.0"
+    },
+    "websock_adapter": {
+      "app": "websock_adapter",
+      "optional": false,
+      "requirement": "~> 0.5.3"
+    }
+  },
+  "docs_html_url": "https://phoenix.hexdocs.pm/1.7.21/",
+  "configs": {
+    "erlang.mk": "dep_phoenix = hex 1.7.21",
+    "mix.exs": "{:phoenix, \"~> 1.7\"}",
+    "rebar.config": "{phoenix, \"1.7.21\"}"
+  }
+}

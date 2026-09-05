@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "elixir": "~> 1.7",
+    "app": "flow",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.2.4",
+  "checksum": "874adde96368e71870f3510b91e35bc31652291858c86c0e75359cbdd35eb211",
+  "url": "https://hex.pm/api/packages/flow/releases/1.2.4",
+  "has_docs": true,
+  "inserted_at": "2023-03-21T18:10:24.211612Z",
+  "updated_at": "2023-03-21T18:10:27.110271Z",
+  "html_url": "https://hex.pm/packages/flow/1.2.4",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/flow",
+  "downloads": 4799461,
+  "security_advisories": [],
+  "requirements": {
+    "gen_stage": {
+      "app": "gen_stage",
+      "optional": false,
+      "requirement": "~> 1.0"
+    }
+  },
+  "docs_html_url": "https://flow.hexdocs.pm/1.2.4/",
+  "configs": {
+    "erlang.mk": "dep_flow = hex 1.2.4",
+    "mix.exs": "{:flow, \"~> 1.2\"}",
+    "rebar.config": "{flow, \"1.2.4\"}"
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "phoenix_ecto",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "4.6.2",
+  "checksum": "3f94d025f59de86be00f5f8c5dd7b5965a3298458d21ab1c328488be3b5fcd59",
+  "url": "https://hex.pm/api/packages/phoenix_ecto/releases/4.6.2",
+  "has_docs": true,
+  "inserted_at": "2024-06-28T15:52:54.765445Z",
+  "updated_at": "2024-06-28T15:52:59.516466Z",
+  "html_url": "https://hex.pm/packages/phoenix_ecto/4.6.2",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/phoenix_ecto",
+  "downloads": 4174508,
+  "security_advisories": [],
+  "requirements": {
+    "ecto": {
+      "app": "ecto",
+      "optional": false,
+      "requirement": "~> 3.5"
+    },
+    "phoenix_html": {
+      "app": "phoenix_html",
+      "optional": true,
+      "requirement": "~> 2.14.2 or ~> 3.0 or ~> 4.1"
+    },
+    "plug": {
+      "app": "plug",
+      "optional": false,
+      "requirement": "~> 1.9"
+    },
+    "postgrex": {
+      "app": "postgrex",
+      "optional": true,
+      "requirement": "~> 0.16 or ~> 1.0"
+    }
+  },
+  "docs_html_url": "https://phoenix-ecto.hexdocs.pm/4.6.2/",
+  "configs": {
+    "erlang.mk": "dep_phoenix_ecto = hex 4.6.2",
+    "mix.exs": "{:phoenix_ecto, \"~> 4.6\"}",
+    "rebar.config": "{phoenix_ecto, \"4.6.2\"}"
+  }
+}

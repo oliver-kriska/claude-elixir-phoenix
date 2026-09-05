@@ -1,0 +1,332 @@
+{
+  "meta": {
+    "links": {
+      "github": "https://github.com/phoenixframework/phoenix_live_dashboard"
+    },
+    "description": "Real-time performance dashboard for Phoenix",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "phoenix_live_dashboard",
+  "url": "https://hex.pm/api/packages/phoenix_live_dashboard",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/chrismccord",
+      "email": "chris@chrismccord.com",
+      "username": "chrismccord"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/mcrumm",
+      "email": "mcrumm@gmail.com",
+      "username": "mcrumm"
+    },
+    {
+      "url": "https://hex.pm/api/users/steffend",
+      "username": "steffend"
+    }
+  ],
+  "inserted_at": "2020-04-16T17:53:47.502386Z",
+  "updated_at": "2026-08-31T12:11:58.939147Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.9.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.9.1",
+      "has_docs": true,
+      "inserted_at": "2026-08-31T12:11:57.348467Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2026-08-12T09:03:38.577665Z"
+    },
+    {
+      "version": "0.8.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.7",
+      "has_docs": true,
+      "inserted_at": "2025-04-28T08:31:11.712952Z"
+    },
+    {
+      "version": "0.8.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.6",
+      "has_docs": true,
+      "inserted_at": "2024-12-30T16:18:54.666931Z"
+    },
+    {
+      "version": "0.8.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.5",
+      "has_docs": true,
+      "inserted_at": "2024-11-14T20:02:00.149341Z"
+    },
+    {
+      "version": "0.8.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.4",
+      "has_docs": true,
+      "inserted_at": "2024-06-21T09:29:40.404826Z"
+    },
+    {
+      "version": "0.8.4-rc.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.4-rc.0",
+      "has_docs": true,
+      "inserted_at": "2024-06-25T13:07:56.600028Z"
+    },
+    {
+      "version": "0.8.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.3",
+      "has_docs": true,
+      "inserted_at": "2023-10-28T10:27:53.547552Z"
+    },
+    {
+      "version": "0.8.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.2",
+      "has_docs": true,
+      "inserted_at": "2023-09-23T16:58:24.504421Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2023-08-12T09:20:49.411715Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2023-05-30T14:44:53.593249Z"
+    },
+    {
+      "version": "0.7.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.7.2",
+      "has_docs": true,
+      "inserted_at": "2022-10-26T19:06:03.434919Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2022-10-13T11:47:35.048377Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2022-09-21T14:37:01.545154Z"
+    },
+    {
+      "version": "0.6.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.6.5",
+      "has_docs": true,
+      "inserted_at": "2022-02-19T23:26:19.533628Z"
+    },
+    {
+      "version": "0.6.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.6.4",
+      "has_docs": true,
+      "inserted_at": "2022-02-03T09:00:58.834826Z"
+    },
+    {
+      "version": "0.6.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.6.3",
+      "has_docs": true,
+      "inserted_at": "2022-01-30T17:25:18.052520Z"
+    },
+    {
+      "version": "0.6.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.6.2",
+      "has_docs": true,
+      "inserted_at": "2021-12-07T08:26:26.369315Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2021-10-29T09:10:10.560061Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2021-10-21T19:22:12.589175Z"
+    },
+    {
+      "version": "0.5.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.5.3",
+      "has_docs": true,
+      "inserted_at": "2021-10-06T21:00:27.077087Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.5.2",
+      "has_docs": true,
+      "inserted_at": "2021-09-21T06:18:27.104492Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2021-09-07T10:14:47.683361Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2021-08-10T21:00:41.415314Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2020-11-20T17:00:24.930932Z"
+    },
+    {
+      "version": "0.3.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.3.6",
+      "has_docs": true,
+      "inserted_at": "2020-10-28T13:18:59.873626Z"
+    },
+    {
+      "version": "0.3.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.3.5",
+      "has_docs": true,
+      "inserted_at": "2020-10-28T07:07:01.892769Z"
+    },
+    {
+      "version": "0.3.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.3.4",
+      "has_docs": true,
+      "inserted_at": "2020-10-27T18:15:47.154264Z"
+    },
+    {
+      "version": "0.3.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.3.3",
+      "has_docs": true,
+      "inserted_at": "2020-10-24T16:27:57.630565Z"
+    },
+    {
+      "version": "0.3.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.3.2",
+      "has_docs": true,
+      "inserted_at": "2020-10-17T17:24:57.745563Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2020-10-16T22:14:01.338194Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-16T17:48:01.284088Z"
+    },
+    {
+      "version": "0.2.10",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.10",
+      "has_docs": true,
+      "inserted_at": "2020-10-13T22:04:14.013219Z"
+    },
+    {
+      "version": "0.2.9",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.9",
+      "has_docs": true,
+      "inserted_at": "2020-09-28T14:09:35.154146Z"
+    },
+    {
+      "version": "0.2.8",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.8",
+      "has_docs": true,
+      "inserted_at": "2020-09-15T09:48:09.179390Z"
+    },
+    {
+      "version": "0.2.7",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.7",
+      "has_docs": true,
+      "inserted_at": "2020-07-07T21:16:00.138822Z"
+    },
+    {
+      "version": "0.2.6",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.6",
+      "has_docs": true,
+      "inserted_at": "2020-06-03T19:46:56.186947Z"
+    },
+    {
+      "version": "0.2.5",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.5",
+      "has_docs": true,
+      "inserted_at": "2020-05-26T22:16:52.230042Z"
+    },
+    {
+      "version": "0.2.4",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.4",
+      "has_docs": true,
+      "inserted_at": "2020-05-22T00:07:55.299820Z"
+    },
+    {
+      "version": "0.2.3",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.3",
+      "has_docs": true,
+      "inserted_at": "2020-05-15T16:33:58.584460Z"
+    },
+    {
+      "version": "0.2.2",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.2",
+      "has_docs": true,
+      "inserted_at": "2020-05-05T16:54:58.108513Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2020-04-29T13:34:07.133610Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-22T14:56:43.497780Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.1.1",
+      "has_docs": true,
+      "inserted_at": "2020-04-18T13:22:11.709928Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/phoenix_live_dashboard/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-16T17:53:47.529913Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/phoenix_live_dashboard",
+  "latest_version": "0.9.1",
+  "downloads": {
+    "all": 35518574,
+    "day": 37930,
+    "recent": 2454553,
+    "week": 230443
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://phoenix-live-dashboard.hexdocs.pm/",
+  "retirements": {
+    "0.3.4": {
+      "message": "Generates wrong route helpers",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_phoenix_live_dashboard = hex 0.9.1",
+    "mix.exs": "{:phoenix_live_dashboard, \"~> 0.9.1\"}",
+    "rebar.config": "{phoenix_live_dashboard, \"0.9.1\"}"
+  },
+  "latest_stable_version": "0.9.1"
+}

@@ -1,0 +1,204 @@
+{
+  "meta": {
+    "elixir": null,
+    "app": "cowboy",
+    "build_tools": [
+      "make",
+      "rebar3"
+    ]
+  },
+  "version": "2.12.0",
+  "checksum": "8a7abe6d183372ceb21caa2709bec928ab2b72e18a3911aa1771639bef82651e",
+  "url": "https://hex.pm/api/packages/cowboy/releases/2.12.0",
+  "has_docs": false,
+  "inserted_at": "2024-03-14T15:33:46.576801Z",
+  "updated_at": "2024-03-14T15:33:46.576801Z",
+  "html_url": "https://hex.pm/packages/cowboy/2.12.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/essen",
+    "email": "essen@ninenines.eu",
+    "username": "essen"
+  },
+  "package_url": "https://hex.pm/api/packages/cowboy",
+  "downloads": 11908163,
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-65624",
+      "aliases": [
+        "CVE-2026-65624"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowboy"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/ninenines/cowboy/commit/3a34d8c1cfd94326466aa16a9017236691dc9c55"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-65624.html"
+        }
+      ],
+      "summary": "Cowboy HTTP/1.1 max_headers Bypass via Duplicate Header Names Enables Memory Exhaustion",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-65624",
+      "published_at": "2026-07-28T10:01:01Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-65624",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:11Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0-pre.4 and < 2.18.0"
+      ]
+    },
+    {
+      "id": "GHSA-w4f7-4cxr-rv3c",
+      "aliases": [
+        "CVE-2026-43966",
+        "EEF-CVE-2026-43966"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ninenines/cowlib"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-43966"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-43966.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/gun/commit/4f35609eb37109b106a863fc9ba83d7ee64e3e42"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowboy/commit/f77cb9b5e730e300fffb551db1ba5d1c4ed878ef"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowlib/pull/166#issuecomment-5067554701"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowlib/pull/163#issuecomment-4952645232"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-43966"
+        }
+      ],
+      "summary": "cowboy and gun affected by an HTTP Request/Response Splitting vulnerability",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-w4f7-4cxr-rv3c",
+      "published_at": "2026-06-08T18:31:51Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-w4f7-4cxr-rv3c",
+      "cvss_score": 6.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-07-29T16:11:36Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 2.16.0"
+      ]
+    },
+    {
+      "id": "GHSA-jfc2-q6qh-g5x8",
+      "aliases": [
+        "CVE-2026-8466",
+        "EEF-CVE-2026-8466"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-8466"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ninenines/cowboy/commit/5c6a2061b41bb5771c4659fac7d5a822dca5bafb"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8466.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/ninenines/cowboy"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-8466"
+        }
+      ],
+      "summary": "Cowboy: Unbounded buffer accumulation in multipart header parsing causes denial of service in cowboy",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-jfc2-q6qh-g5x8",
+      "published_at": "2026-05-13T21:32:06Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-jfc2-q6qh-g5x8",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-19T20:26:06Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 2.15.0"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-8466",
+      "aliases": [
+        "CVE-2026-8466",
+        "GHSA-jfc2-q6qh-g5x8"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/ninenines/cowboy/commit/5c6a2061b41bb5771c4659fac7d5a822dca5bafb"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-8466.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/cowboy"
+        }
+      ],
+      "summary": "Unbounded buffer accumulation in multipart header parsing causes denial of service in cowboy",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-8466",
+      "published_at": "2026-05-13T18:26:21Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-8466",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:12Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 2.15.0"
+      ]
+    }
+  ],
+  "requirements": {
+    "cowlib": {
+      "app": "cowlib",
+      "optional": false,
+      "requirement": "2.13.0"
+    },
+    "ranch": {
+      "app": "ranch",
+      "optional": false,
+      "requirement": "1.8.0"
+    }
+  },
+  "docs_html_url": null,
+  "configs": {
+    "erlang.mk": "dep_cowboy = hex 2.12.0",
+    "mix.exs": "{:cowboy, \"~> 2.12\"}",
+    "rebar.config": "{cowboy, \"2.12.0\"}"
+  }
+}

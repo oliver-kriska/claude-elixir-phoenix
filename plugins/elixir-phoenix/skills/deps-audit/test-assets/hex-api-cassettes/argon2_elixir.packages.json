@@ -1,0 +1,356 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://hexdocs.pm/argon2_elixir/changelog.html",
+      "GitHub": "https://github.com/riverrun/argon2_elixir"
+    },
+    "description": "Argon2 password hashing algorithm for Elixir",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "argon2_elixir",
+  "url": "https://hex.pm/api/packages/argon2_elixir",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/riverrun",
+      "email": "alovedalongthe@gmail.com",
+      "username": "riverrun"
+    }
+  ],
+  "inserted_at": "2016-10-22T14:54:00.219431Z",
+  "updated_at": "2025-04-27T12:39:34.050273Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "4.1.3",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/4.1.3",
+      "has_docs": true,
+      "inserted_at": "2025-04-27T12:39:30.144430Z"
+    },
+    {
+      "version": "4.1.2",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/4.1.2",
+      "has_docs": true,
+      "inserted_at": "2025-02-05T00:23:57.532615Z"
+    },
+    {
+      "version": "4.1.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/4.1.1",
+      "has_docs": true,
+      "inserted_at": "2025-02-03T22:38:06.736553Z"
+    },
+    {
+      "version": "4.1.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/4.1.0",
+      "has_docs": true,
+      "inserted_at": "2024-10-04T12:42:42.077620Z"
+    },
+    {
+      "version": "4.0.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/4.0.0",
+      "has_docs": true,
+      "inserted_at": "2023-10-09T00:54:58.258718Z"
+    },
+    {
+      "version": "3.2.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/3.2.1",
+      "has_docs": true,
+      "inserted_at": "2023-08-26T03:40:02.948828Z"
+    },
+    {
+      "version": "3.2.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/3.2.0",
+      "has_docs": true,
+      "inserted_at": "2023-08-26T01:15:48.655169Z"
+    },
+    {
+      "version": "3.1.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/3.1.0",
+      "has_docs": true,
+      "inserted_at": "2023-03-23T01:19:53.891048Z"
+    },
+    {
+      "version": "3.0.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/3.0.0",
+      "has_docs": true,
+      "inserted_at": "2022-01-20T04:45:07.667142Z"
+    },
+    {
+      "version": "2.4.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.4.1",
+      "has_docs": true,
+      "inserted_at": "2022-01-19T03:38:50.949652Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.4.0",
+      "has_docs": true,
+      "inserted_at": "2021-01-09T03:13:48.591726Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.3.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-01T04:05:39.533626Z"
+    },
+    {
+      "version": "2.2.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.2.1",
+      "has_docs": true,
+      "inserted_at": "2020-01-20T07:36:51.898376Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-15T07:28:10.918729Z"
+    },
+    {
+      "version": "2.1.2",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.1.2",
+      "has_docs": true,
+      "inserted_at": "2019-10-29T06:52:33.669295Z"
+    },
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2019-10-25T23:10:43.146202Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2019-10-21T02:14:27.576715Z"
+    },
+    {
+      "version": "2.0.5",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.0.5",
+      "has_docs": true,
+      "inserted_at": "2019-05-04T04:41:57.632846Z"
+    },
+    {
+      "version": "2.0.4",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.0.4",
+      "has_docs": true,
+      "inserted_at": "2019-05-02T00:17:26.084168Z"
+    },
+    {
+      "version": "2.0.3",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.0.3",
+      "has_docs": true,
+      "inserted_at": "2019-04-30T14:42:28.382259Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2019-04-05T10:27:55.391325Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2019-02-27T11:28:11.207067Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2019-02-12T04:34:35.191288Z"
+    },
+    {
+      "version": "1.3.3",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.3.3",
+      "has_docs": true,
+      "inserted_at": "2018-11-16T03:18:30.621661Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2018-06-28T08:19:15.400361Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2018-05-13T04:20:45.616082Z"
+    },
+    {
+      "version": "1.2.14",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.14",
+      "has_docs": true,
+      "inserted_at": "2017-12-09T06:59:13.740251Z"
+    },
+    {
+      "version": "1.2.13",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.13",
+      "has_docs": true,
+      "inserted_at": "2017-11-10T12:48:19.475094Z"
+    },
+    {
+      "version": "1.2.12",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.12",
+      "has_docs": true,
+      "inserted_at": "2017-11-10T05:27:59.221141Z"
+    },
+    {
+      "version": "1.2.11",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.11",
+      "has_docs": true,
+      "inserted_at": "2017-11-07T03:53:16.575916Z"
+    },
+    {
+      "version": "1.2.10",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.10",
+      "has_docs": true,
+      "inserted_at": "2017-11-06T08:39:48.565586Z"
+    },
+    {
+      "version": "1.2.9",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.9",
+      "has_docs": false,
+      "inserted_at": "2017-10-26T08:02:34.045254Z"
+    },
+    {
+      "version": "1.2.8",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.8",
+      "has_docs": true,
+      "inserted_at": "2017-09-25T05:35:42.174142Z"
+    },
+    {
+      "version": "1.2.7",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.7",
+      "has_docs": true,
+      "inserted_at": "2017-09-12T06:17:09.080026Z"
+    },
+    {
+      "version": "1.2.6",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.6",
+      "has_docs": true,
+      "inserted_at": "2017-08-31T09:36:00.589758Z"
+    },
+    {
+      "version": "1.2.5",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.5",
+      "has_docs": true,
+      "inserted_at": "2017-08-29T14:50:24.714368Z"
+    },
+    {
+      "version": "1.2.4",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.4",
+      "has_docs": true,
+      "inserted_at": "2017-08-03T02:10:21.085274Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2017-07-22T05:47:55.637753Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2017-07-22T03:12:54.121367Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-14T05:13:10.452874Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-12T03:04:48.830907Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-06T11:34:10.583464Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2017-01-16T05:04:54.632560Z"
+    },
+    {
+      "version": "0.11.4",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.11.4",
+      "has_docs": true,
+      "inserted_at": "2016-12-03T03:42:22.332720Z"
+    },
+    {
+      "version": "0.11.3",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.11.3",
+      "has_docs": true,
+      "inserted_at": "2016-11-30T02:00:18.937303Z"
+    },
+    {
+      "version": "0.11.2",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.11.2",
+      "has_docs": true,
+      "inserted_at": "2016-11-28T12:39:23.068123Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2016-11-09T08:12:00.593134Z"
+    },
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.10.1",
+      "has_docs": true,
+      "inserted_at": "2016-11-06T11:59:18.356582Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2016-11-06T08:39:50.535356Z"
+    },
+    {
+      "version": "0.9.1",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.9.1",
+      "has_docs": true,
+      "inserted_at": "2016-11-03T05:26:28.973368Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-28T09:16:11.866243Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/argon2_elixir/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-22T14:54:00.262264Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/argon2_elixir",
+  "latest_version": "4.1.3",
+  "downloads": {
+    "all": 8492160,
+    "day": 6690,
+    "recent": 408239,
+    "week": 40231
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://argon2-elixir.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_argon2_elixir = hex 4.1.3",
+    "mix.exs": "{:argon2_elixir, \"~> 4.1\"}",
+    "rebar.config": "{argon2_elixir, \"4.1.3\"}"
+  },
+  "latest_stable_version": "4.1.3"
+}

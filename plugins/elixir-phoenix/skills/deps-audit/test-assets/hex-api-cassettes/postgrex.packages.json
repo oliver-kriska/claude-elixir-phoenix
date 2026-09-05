@@ -1,0 +1,691 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://hexdocs.pm/postgrex/changelog.html",
+      "GitHub": "https://github.com/elixir-ecto/postgrex"
+    },
+    "description": "PostgreSQL driver for Elixir",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "postgrex",
+  "url": "https://hex.pm/api/packages/postgrex",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ericmj",
+      "email": "eric.meadows.jonsson@gmail.com",
+      "username": "ericmj"
+    },
+    {
+      "url": "https://hex.pm/api/users/fishcakez",
+      "email": "james@fishcakez.com",
+      "username": "fishcakez"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/wojtekmach",
+      "email": "wojtek@wojtekmach.pl",
+      "username": "wojtekmach"
+    }
+  ],
+  "inserted_at": "2014-04-22T12:26:55.000000Z",
+  "updated_at": "2026-08-07T12:06:40.096571Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/1.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2016-11-16T22:11:46.212815Z"
+    },
+    {
+      "version": "1.0.0-rc.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/1.0.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2016-11-16T18:28:53.982802Z"
+    },
+    {
+      "version": "0.22.4",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.22.4",
+      "has_docs": true,
+      "inserted_at": "2026-08-07T12:06:38.464368Z"
+    },
+    {
+      "version": "0.22.3",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.22.3",
+      "has_docs": true,
+      "inserted_at": "2026-07-09T08:50:37.792412Z"
+    },
+    {
+      "version": "0.22.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.22.2",
+      "has_docs": true,
+      "inserted_at": "2026-05-12T14:01:54.767773Z"
+    },
+    {
+      "version": "0.22.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.22.1",
+      "has_docs": true,
+      "inserted_at": "2026-05-05T14:18:04.288691Z"
+    },
+    {
+      "version": "0.22.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.22.0",
+      "has_docs": true,
+      "inserted_at": "2026-01-10T10:31:19.705891Z"
+    },
+    {
+      "version": "0.21.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.21.1",
+      "has_docs": true,
+      "inserted_at": "2025-08-03T15:32:01.906462Z"
+    },
+    {
+      "version": "0.21.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.21.0",
+      "has_docs": true,
+      "inserted_at": "2025-07-31T07:02:31.878896Z"
+    },
+    {
+      "version": "0.20.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.20.0",
+      "has_docs": true,
+      "inserted_at": "2025-02-05T08:58:57.933986Z"
+    },
+    {
+      "version": "0.19.3",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.19.3",
+      "has_docs": true,
+      "inserted_at": "2024-11-12T10:43:34.143777Z"
+    },
+    {
+      "version": "0.19.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.19.2",
+      "has_docs": true,
+      "inserted_at": "2024-10-23T14:56:32.342722Z"
+    },
+    {
+      "version": "0.19.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.19.1",
+      "has_docs": true,
+      "inserted_at": "2024-08-13T06:24:56.884833Z"
+    },
+    {
+      "version": "0.19.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.19.0",
+      "has_docs": true,
+      "inserted_at": "2024-08-03T19:44:05.411653Z"
+    },
+    {
+      "version": "0.18.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.18.0",
+      "has_docs": true,
+      "inserted_at": "2024-05-18T09:17:07.519844Z"
+    },
+    {
+      "version": "0.17.5",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.17.5",
+      "has_docs": true,
+      "inserted_at": "2024-03-01T09:59:03.190546Z"
+    },
+    {
+      "version": "0.17.4",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.17.4",
+      "has_docs": true,
+      "inserted_at": "2023-12-04T10:01:24.473075Z"
+    },
+    {
+      "version": "0.17.3",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.17.3",
+      "has_docs": true,
+      "inserted_at": "2023-08-29T12:40:51.346253Z"
+    },
+    {
+      "version": "0.17.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.17.2",
+      "has_docs": true,
+      "inserted_at": "2023-07-12T09:08:05.185349Z"
+    },
+    {
+      "version": "0.17.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.17.1",
+      "has_docs": true,
+      "inserted_at": "2023-04-13T08:55:57.255432Z"
+    },
+    {
+      "version": "0.17.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.17.0",
+      "has_docs": true,
+      "inserted_at": "2023-04-10T18:12:45.454939Z"
+    },
+    {
+      "version": "0.16.5",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.16.5",
+      "has_docs": true,
+      "inserted_at": "2022-09-20T18:01:15.433717Z"
+    },
+    {
+      "version": "0.16.4",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.16.4",
+      "has_docs": true,
+      "inserted_at": "2022-07-29T10:03:30.229210Z"
+    },
+    {
+      "version": "0.16.3",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.16.3",
+      "has_docs": true,
+      "inserted_at": "2022-04-27T15:32:01.752794Z"
+    },
+    {
+      "version": "0.16.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.16.2",
+      "has_docs": true,
+      "inserted_at": "2022-02-21T12:25:30.740829Z"
+    },
+    {
+      "version": "0.16.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.16.1",
+      "has_docs": true,
+      "inserted_at": "2022-01-24T15:15:21.551834Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.16.0",
+      "has_docs": true,
+      "inserted_at": "2022-01-23T09:58:48.892390Z"
+    },
+    {
+      "version": "0.15.13",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.13",
+      "has_docs": true,
+      "inserted_at": "2021-10-25T14:54:33.025464Z"
+    },
+    {
+      "version": "0.15.12",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.12",
+      "has_docs": true,
+      "inserted_at": "2021-10-17T07:01:11.866439Z"
+    },
+    {
+      "version": "0.15.11",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.11",
+      "has_docs": true,
+      "inserted_at": "2021-09-26T17:45:03.220507Z"
+    },
+    {
+      "version": "0.15.10",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.10",
+      "has_docs": true,
+      "inserted_at": "2021-07-27T18:24:10.715215Z"
+    },
+    {
+      "version": "0.15.9",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.9",
+      "has_docs": true,
+      "inserted_at": "2021-04-24T17:06:43.605914Z"
+    },
+    {
+      "version": "0.15.8",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.8",
+      "has_docs": true,
+      "inserted_at": "2021-01-19T08:55:40.661590Z"
+    },
+    {
+      "version": "0.15.7",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.7",
+      "has_docs": true,
+      "inserted_at": "2020-10-17T11:45:18.122689Z"
+    },
+    {
+      "version": "0.15.6",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.6",
+      "has_docs": true,
+      "inserted_at": "2020-09-21T14:38:38.927715Z"
+    },
+    {
+      "version": "0.15.5",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.5",
+      "has_docs": true,
+      "inserted_at": "2020-06-03T18:45:04.159719Z"
+    },
+    {
+      "version": "0.15.4",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.4",
+      "has_docs": true,
+      "inserted_at": "2020-05-09T10:29:31.272781Z"
+    },
+    {
+      "version": "0.15.3",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.3",
+      "has_docs": true,
+      "inserted_at": "2019-12-11T12:52:59.514340Z"
+    },
+    {
+      "version": "0.15.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.2",
+      "has_docs": true,
+      "inserted_at": "2019-12-04T13:20:07.887822Z"
+    },
+    {
+      "version": "0.15.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.1",
+      "has_docs": true,
+      "inserted_at": "2019-09-16T17:00:44.248551Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2019-07-18T05:55:35.761060Z"
+    },
+    {
+      "version": "0.14.3",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.14.3",
+      "has_docs": true,
+      "inserted_at": "2019-05-08T07:12:20.606533Z"
+    },
+    {
+      "version": "0.14.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.14.2",
+      "has_docs": true,
+      "inserted_at": "2019-04-12T07:25:32.168851Z"
+    },
+    {
+      "version": "0.14.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.14.1",
+      "has_docs": true,
+      "inserted_at": "2018-11-24T09:30:14.888600Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-29T09:48:12.363999Z"
+    },
+    {
+      "version": "0.14.0-rc.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.14.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2018-10-15T08:07:34.607558Z"
+    },
+    {
+      "version": "0.14.0-rc.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.14.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2018-10-07T20:18:42.546421Z"
+    },
+    {
+      "version": "0.13.5",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.13.5",
+      "has_docs": true,
+      "inserted_at": "2018-02-09T17:20:43.851305Z"
+    },
+    {
+      "version": "0.13.4",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.13.4",
+      "has_docs": true,
+      "inserted_at": "2018-01-25T18:29:50.104772Z"
+    },
+    {
+      "version": "0.13.3",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.13.3",
+      "has_docs": true,
+      "inserted_at": "2017-05-31T11:41:28.296422Z"
+    },
+    {
+      "version": "0.13.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.13.2",
+      "has_docs": true,
+      "inserted_at": "2017-03-05T08:45:12.188679Z"
+    },
+    {
+      "version": "0.13.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.13.1",
+      "has_docs": true,
+      "inserted_at": "2017-02-20T17:24:02.122962Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2016-12-17T19:06:27.706514Z"
+    },
+    {
+      "version": "0.13.0-rc.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.13.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2016-12-09T15:29:29.857675Z"
+    },
+    {
+      "version": "0.12.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.12.2",
+      "has_docs": true,
+      "inserted_at": "2017-08-02T19:49:34.346457Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2016-09-29T15:33:40.945206Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2016-09-05T23:29:59.816729Z"
+    },
+    {
+      "version": "0.11.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.11.2",
+      "has_docs": true,
+      "inserted_at": "2016-06-16T08:25:51.953276Z"
+    },
+    {
+      "version": "0.11.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.11.1",
+      "has_docs": true,
+      "inserted_at": "2016-02-15T21:14:29.640212Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2016-01-21T22:50:53.786545Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2015-11-17T20:10:48.324108Z"
+    },
+    {
+      "version": "0.9.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.9.1",
+      "has_docs": true,
+      "inserted_at": "2015-07-14T18:47:15.249197Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2015-07-12T10:26:49.027416Z"
+    },
+    {
+      "version": "0.8.4",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.8.4",
+      "has_docs": true,
+      "inserted_at": "2015-06-23T22:32:38.782689Z"
+    },
+    {
+      "version": "0.8.3",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.8.3",
+      "has_docs": true,
+      "inserted_at": "2015-06-22T15:38:28.532915Z"
+    },
+    {
+      "version": "0.8.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.8.2",
+      "has_docs": true,
+      "inserted_at": "2015-06-01T16:33:07.116484Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2015-04-10T02:25:32.000000Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2015-02-26T16:00:19.000000Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2015-01-20T16:15:48.000000Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2014-09-07T15:54:00.000000Z"
+    },
+    {
+      "version": "0.5.5",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.5.5",
+      "has_docs": false,
+      "inserted_at": "2014-08-20T16:45:06.000000Z"
+    },
+    {
+      "version": "0.5.4",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.5.4",
+      "has_docs": false,
+      "inserted_at": "2014-08-03T23:10:26.000000Z"
+    },
+    {
+      "version": "0.5.3",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.5.3",
+      "has_docs": false,
+      "inserted_at": "2014-07-13T20:36:45.000000Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.5.2",
+      "has_docs": false,
+      "inserted_at": "2014-06-18T21:15:08.000000Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.5.1",
+      "has_docs": false,
+      "inserted_at": "2014-05-24T12:13:08.000000Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.5.0",
+      "has_docs": false,
+      "inserted_at": "2014-05-01T18:29:31.000000Z"
+    },
+    {
+      "version": "0.4.2",
+      "url": "https://hex.pm/api/packages/postgrex/releases/0.4.2",
+      "has_docs": false,
+      "inserted_at": "2014-04-22T12:26:55.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/postgrex",
+  "latest_version": "1.0.0-rc.1",
+  "downloads": {
+    "all": 139534257,
+    "day": 58540,
+    "recent": 3852677,
+    "week": 354198
+  },
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-66838",
+      "aliases": [
+        "CVE-2026-66838",
+        "GHSA-3gww-3f36-2388"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/4011be852c99dc61ddb98cb01aa41e8775a0e3dd"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-ecto/ecto/security/advisories/GHSA-3gww-3f36-2388"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-66838.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/e1ecba618ddea4cee2556bd6ad9b6285e05f9d3c"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/postgrex"
+        }
+      ],
+      "summary": "SQL injection via the :comment option in Postgrex.stream/4",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-66838",
+      "published_at": "2026-08-07T12:20:02Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-66838",
+      "cvss_score": 5.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-08-07T12:41:01Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.19.3 and < 0.22.4"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-58225",
+      "aliases": [
+        "CVE-2026-58225",
+        "GHSA-4mw9-4qgj-m97w"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/795c6062f62c4394272ff4b89170688857b4f841"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-ecto/ecto/security/advisories/GHSA-4mw9-4qgj-m97w"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/postgrex"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-58225.html"
+        }
+      ],
+      "summary": "SQL injection via unescaped dollar-quote in Postgrex.Notifications reconnect replay causes notification denial of service",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-58225",
+      "published_at": "2026-07-10T10:51:46Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-58225",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:05Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.16.0 and < 0.22.3"
+      ]
+    },
+    {
+      "id": "GHSA-r73h-97w8-m54h",
+      "aliases": [
+        "CVE-2026-32687",
+        "EEF-CVE-2026-32687"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/ecto/security/advisories/GHSA-r73h-97w8-m54h"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-32687"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/elixir-ecto/ecto"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32687.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/7cdedbd4316bb65f82e6a9a4f922c0ac491cb770"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-32687"
+        }
+      ],
+      "summary": "Postgrex: Channel-name SQL injection in `Postgrex.Notifications.listen/3`",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-r73h-97w8-m54h",
+      "published_at": "2026-05-18T17:53:17Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-r73h-97w8-m54h",
+      "cvss_score": 7.5,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-05-18T18:04:55Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.16.0 and < 0.22.2"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-32687",
+      "aliases": [
+        "CVE-2026-32687",
+        "GHSA-r73h-97w8-m54h"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-32687.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/postgrex"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/postgrex/commit/7cdedbd4316bb65f82e6a9a4f922c0ac491cb770"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-ecto/ecto/security/advisories/GHSA-r73h-97w8-m54h"
+        }
+      ],
+      "summary": "SQL injection via channel name in Postgrex.Notifications.listen/3 and unlisten/3",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-32687",
+      "published_at": "2026-05-12T14:18:07Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-32687",
+      "cvss_score": 7.5,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:H/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:12Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.16.0 and < 0.22.2"
+      ]
+    }
+  ],
+  "docs_html_url": "https://postgrex.hexdocs.pm/",
+  "retirements": {
+    "1.0.0-rc.0": {
+      "message": "Superseded by v0.13.0-rc.0",
+      "reason": "invalid"
+    },
+    "1.0.0-rc.1": {
+      "message": "Superseded by v0.13.0-rc.0",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_postgrex = hex 0.22.4",
+    "mix.exs": "{:postgrex, \"~> 0.22.4\"}",
+    "rebar.config": "{postgrex, \"0.22.4\"}"
+  },
+  "latest_stable_version": "0.22.4"
+}

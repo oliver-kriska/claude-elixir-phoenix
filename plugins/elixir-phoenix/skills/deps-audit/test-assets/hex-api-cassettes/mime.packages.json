@@ -1,0 +1,161 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/elixir-plug/mime"
+    },
+    "description": "A MIME type module for Elixir",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "mime",
+  "url": "https://hex.pm/api/packages/mime",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/alirz23",
+      "email": "alirz23@gmail.com",
+      "username": "alirz23"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/whatyouhide",
+      "email": "hi@andrealeopardi.com",
+      "username": "whatyouhide"
+    }
+  ],
+  "inserted_at": "2015-10-26T10:42:12.162415Z",
+  "updated_at": "2026-08-25T08:39:02.491045Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.0.7",
+      "url": "https://hex.pm/api/packages/mime/releases/2.0.7",
+      "has_docs": true,
+      "inserted_at": "2025-05-15T07:51:20.273486Z"
+    },
+    {
+      "version": "2.0.6",
+      "url": "https://hex.pm/api/packages/mime/releases/2.0.6",
+      "has_docs": true,
+      "inserted_at": "2024-07-04T10:29:53.986455Z"
+    },
+    {
+      "version": "2.0.5",
+      "url": "https://hex.pm/api/packages/mime/releases/2.0.5",
+      "has_docs": true,
+      "inserted_at": "2023-06-01T07:26:55.691068Z"
+    },
+    {
+      "version": "2.0.4",
+      "url": "https://hex.pm/api/packages/mime/releases/2.0.4",
+      "has_docs": true,
+      "inserted_at": "2023-05-31T14:23:59.206950Z"
+    },
+    {
+      "version": "2.0.3",
+      "url": "https://hex.pm/api/packages/mime/releases/2.0.3",
+      "has_docs": true,
+      "inserted_at": "2022-08-04T16:22:31.386898Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/mime/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2021-10-22T12:42:42.938613Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/mime/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2021-08-15T06:59:42.471906Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/mime/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2021-08-14T07:40:09.768205Z"
+    },
+    {
+      "version": "1.6.0",
+      "url": "https://hex.pm/api/packages/mime/releases/1.6.0",
+      "has_docs": true,
+      "inserted_at": "2021-03-31T12:25:34.629016Z"
+    },
+    {
+      "version": "1.5.0",
+      "url": "https://hex.pm/api/packages/mime/releases/1.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-11-24T08:02:24.053553Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/mime/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2020-08-17T17:20:31.189063Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/mime/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2018-11-24T21:57:12.538123Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/mime/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2018-05-28T14:00:36.715697Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/mime/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2017-12-24T22:11:45.593824Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/mime/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2017-02-16T10:53:44.584928Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/mime/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2016-08-09T15:31:23.444186Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/mime/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2016-05-03T17:54:11.474967Z"
+    },
+    {
+      "version": "0.0.1",
+      "url": "https://hex.pm/api/packages/mime/releases/0.0.1",
+      "has_docs": false,
+      "inserted_at": "2015-10-26T10:42:12.216908Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/mime",
+  "latest_version": "2.0.7",
+  "downloads": {
+    "all": 159949630,
+    "day": 76239,
+    "recent": 5137115,
+    "week": 462061
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://mime.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_mime = hex 2.0.7",
+    "mix.exs": "{:mime, \"~> 2.0\"}",
+    "rebar.config": "{mime, \"2.0.7\"}"
+  },
+  "latest_stable_version": "2.0.7"
+}

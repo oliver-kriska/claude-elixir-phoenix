@@ -1,0 +1,121 @@
+{
+  "meta": {
+    "elixir": "~> 1.14.1 or ~> 1.15",
+    "app": "phoenix_live_view",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.0.5",
+  "checksum": "94abbc84df8a93a64514fc41528695d7326b6f3095e906b32f264ec4280811f3",
+  "url": "https://hex.pm/api/packages/phoenix_live_view/releases/1.0.5",
+  "has_docs": true,
+  "inserted_at": "2025-02-27T19:56:19.240230Z",
+  "updated_at": "2025-02-27T19:56:22.764152Z",
+  "html_url": "https://hex.pm/packages/phoenix_live_view/1.0.5",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/chrismccord",
+    "email": "chris@chrismccord.com",
+    "username": "chrismccord"
+  },
+  "package_url": "https://hex.pm/api/packages/phoenix_live_view",
+  "downloads": 463269,
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-64941",
+      "aliases": [
+        "CVE-2026-64941",
+        "GHSA-36m4-rm57-3prf"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/security/advisories/GHSA-36m4-rm57-3prf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-64941.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/commit/0b8c733133466912f81adecaea72b6712370242e"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/commit/1c164f83df0bb922dfff9c60d125da5b0cfd6619"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix_live_view/commit/2068b304d71907064b159b6bc60c5ad85a876ecf"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix_live_view"
+        }
+      ],
+      "summary": "Open redirect in Phoenix.LiveView.validate_local_url!/2 via ASCII tab, LF and CR",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-64941",
+      "published_at": "2026-08-10T11:05:14Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-64941",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:A/VC:N/VI:N/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-08-10T11:25:57Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.5.0 and < 1.0.19",
+        ">= 1.1.0-rc.0 and < 1.1.33",
+        ">= 1.2.0-rc.0 and < 1.2.9"
+      ]
+    }
+  ],
+  "requirements": {
+    "floki": {
+      "app": "floki",
+      "optional": true,
+      "requirement": "~> 0.36"
+    },
+    "jason": {
+      "app": "jason",
+      "optional": true,
+      "requirement": "~> 1.0"
+    },
+    "phoenix": {
+      "app": "phoenix",
+      "optional": false,
+      "requirement": "~> 1.6.15 or ~> 1.7.0"
+    },
+    "phoenix_html": {
+      "app": "phoenix_html",
+      "optional": false,
+      "requirement": "~> 3.3 or ~> 4.0 or ~> 4.1"
+    },
+    "phoenix_template": {
+      "app": "phoenix_template",
+      "optional": false,
+      "requirement": "~> 1.0"
+    },
+    "phoenix_view": {
+      "app": "phoenix_view",
+      "optional": true,
+      "requirement": "~> 2.0"
+    },
+    "plug": {
+      "app": "plug",
+      "optional": false,
+      "requirement": "~> 1.15"
+    },
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 0.4.2 or ~> 1.0"
+    }
+  },
+  "docs_html_url": "https://phoenix-live-view.hexdocs.pm/1.0.5/",
+  "configs": {
+    "erlang.mk": "dep_phoenix_live_view = hex 1.0.5",
+    "mix.exs": "{:phoenix_live_view, \"~> 1.0\"}",
+    "rebar.config": "{phoenix_live_view, \"1.0.5\"}"
+  }
+}
