@@ -131,10 +131,32 @@ while :; do
 
   # --- checks: emit on terminal conclusion change ---
   if has checks; then
+    # Two shapes live in statusCheckRollup and they share NO state field.
+    # CheckRun (GitHub Actions) carries status/conclusion; StatusContext
+    # (CodeRabbit, CircleCI, anything posting to the commit status API) carries
+    # only `state` — it has no `status` key at all. `.status // .state` compared
+    # against "COMPLETED" therefore counted a PASSING StatusContext as pending
+    # forever, and `pending == 0` never held, so the check event never fired on
+    # any repo using such an integration. Discriminate on __typename, which the
+    # payload already carries.
+    #
+    # `failure` also counts the terminal conclusions that are not FAILURE.
+    # Without them a cancelled or timed-out run scored zero failures with zero
+    # pending, and the watcher reported conclusion "success" for a red run —
+    # the exact "silence is not success" hazard Iron Law 3 names.
     CHECK=$(jq -r '
+      def terminal_bad: ["FAILURE","TIMED_OUT","CANCELLED","STARTUP_FAILURE","ACTION_REQUIRED"];
       (.statusCheckRollup // [])
-      | {pending: ([.[] | select((.status // .state) != "COMPLETED" and (.conclusion // "") == "")] | length),
-         failure: ([.[] | select((.conclusion // .state) == "FAILURE" or (.conclusion // "") == "FAILURE")] | length),
+      | {pending: ([.[] | select(
+             if .__typename == "StatusContext"
+             then ((.state // "PENDING") == "PENDING" or (.state // "") == "EXPECTED")
+             else ((.status // "") != "COMPLETED")
+             end)] | length),
+         failure: ([.[] | select(
+             if .__typename == "StatusContext"
+             then ((.state // "") == "FAILURE" or (.state // "") == "ERROR")
+             else ((.conclusion // "") as $c | terminal_bad | index($c) != null)
+             end)] | length),
          total:   (length)}
       | "pending=\(.pending) failure=\(.failure) total=\(.total)"' <<<"$VIEW")
     if [[ "$CHECK" != "$LAST_CHECK_STATE" ]]; then
