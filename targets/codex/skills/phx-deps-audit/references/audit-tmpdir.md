@@ -184,7 +184,7 @@ No cache, no invalidation problem.
 
 ## Fixture isolation
 
-Smoke fixtures (`smoke-test/{fixtures,corpus}.d/`) operate inside the
+Smoke fixtures (`lab/deps-audit/smoke-test/{fixtures,corpus}.d/`) operate inside the
 runner's own `mktemp -d`, NOT inside `AUDIT_TMPDIR`. This is by
 design: fixtures must be runnable without the full audit driver
 established. The fixture conventions are documented in `testing.md`.

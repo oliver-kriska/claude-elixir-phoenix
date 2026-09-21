@@ -28,33 +28,18 @@ fingerprints:
   file: references/heuristics.md
   reason: 'Hex supply-chain SCANNER: bidi chars, base64, rm -rf are detection signatures
     and smoke-test fixtures, not runtime behavior.'
-- hash: sha256:8193663c19311fb4
-  rule_id: SC3
-  file: smoke-test/fixtures.d/07_base64/setup.sh
-  reason: 'Hex supply-chain SCANNER: bidi chars, base64, rm -rf are detection signatures
-    and smoke-test fixtures, not runtime behavior.'
-- hash: sha256:abfd07d92ff7633d
-  rule_id: TM1
-  file: priv/cassettes/capture.sh
-  reason: 'Hex supply-chain SCANNER: bidi chars, base64, rm -rf are detection signatures
-    and smoke-test fixtures, not runtime behavior.'
-- hash: sha256:6440b61143d402f5
-  rule_id: TM1
-  file: priv/cassettes/capture.sh
-  reason: 'Hex supply-chain SCANNER: bidi chars, base64, rm -rf are detection signatures
-    and smoke-test fixtures, not runtime behavior.'
 - hash: sha256:77bc0d52195ffc57
   rule_id: TM1
   file: references/tarball-fetcher.md
   reason: 'Hex supply-chain SCANNER: bidi chars, base64, rm -rf are detection signatures
     and smoke-test fixtures, not runtime behavior.'
-- hash: sha256:0946c42aa32ebc9e
+- hash: sha256:65cf5d6a8d92816d
   rule_id: TM1
-  file: smoke-test/corpus.d/fetch.sh
+  file: scripts/fetch_tarball.sh
   reason: 'Hex supply-chain SCANNER: bidi chars, base64, rm -rf are detection signatures
     and smoke-test fixtures, not runtime behavior.'
-- hash: sha256:b2a679132f1e92c9
+- hash: sha256:fa9d67e58e0d16b5
   rule_id: TM1
-  file: smoke-test/corpus.d/fetch.sh
+  file: scripts/fetch_tarball.sh
   reason: 'Hex supply-chain SCANNER: bidi chars, base64, rm -rf are detection signatures
     and smoke-test fixtures, not runtime behavior.'

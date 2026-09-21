@@ -119,4 +119,4 @@ parallel with the native rule loop via shell backgrounding.
    but cheaper here for first-pass triage).
 
 Each new rule MUST have a synthetic fixture in
-`smoke-test/fixtures.d/` + an entry in the table above.
+`lab/deps-audit/smoke-test/fixtures.d/` + an entry in the table above.

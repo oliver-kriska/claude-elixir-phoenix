@@ -1,7 +1,7 @@
 name: Regenerate Hex API cassettes
 
 # Monthly regeneration of VCR cassettes under
-# plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+# lab/deps-audit/test-assets/hex-api-cassettes/
 # used by Rules 6 + 8 for offline smoke testing.
 #
 # Captures fresh response bodies from hex.pm, updates the _meta.json SHA
@@ -38,7 +38,7 @@ jobs:
         id: regen
         run: |
           set -u
-          seed_list="plugins/elixir-phoenix/skills/deps-audit/smoke-test/corpus.d/benign-100.txt"
+          seed_list="lab/deps-audit/smoke-test/corpus.d/benign-100.txt"
           if [ ! -f "${seed_list}" ]; then
             echo "::error::seed list missing: ${seed_list}"
             exit 1
@@ -49,7 +49,7 @@ jobs:
             pkg=$(echo "${line}" | awk '{print $1}')
             ver=$(echo "${line}" | awk '{print $2}')
             [ -z "${pkg}" ] && continue
-            bash plugins/elixir-phoenix/skills/deps-audit/priv/cassettes/capture.sh \
+            bash lab/deps-audit/capture.sh \
               "${pkg}" "${ver}" \
               || echo "::warning::capture failed for ${pkg} ${ver}"
             updated=$((updated + 1))
@@ -61,12 +61,12 @@ jobs:
         id: drift
         run: |
           # Diff the cassettes dir; empty diff means no PR needed
-          if git diff --quiet plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/; then
+          if git diff --quiet lab/deps-audit/test-assets/hex-api-cassettes/; then
             echo "drift=false" >> "${GITHUB_OUTPUT}"
             echo "No cassette drift this run."
           else
             echo "drift=true" >> "${GITHUB_OUTPUT}"
-            git diff --stat plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+            git diff --stat lab/deps-audit/test-assets/hex-api-cassettes/
           fi
 
       - name: Open PR (primary path)
@@ -96,7 +96,7 @@ jobs:
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a  # v7
         with:
           name: cassettes-regen-${{ github.run_id }}
-          path: plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+          path: lab/deps-audit/test-assets/hex-api-cassettes/
           retention-days: 90
 
       - name: Job summary

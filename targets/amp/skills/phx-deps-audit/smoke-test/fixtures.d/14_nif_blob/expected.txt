@@ -1,1 +1,0 @@
-rule:7 op:>= count:1

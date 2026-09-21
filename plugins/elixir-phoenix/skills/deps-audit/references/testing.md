@@ -24,17 +24,24 @@ without polluting the plugin's lint surface.
 
 ## Harness layout (Phase 2)
 
+The harness lives in the plugin repo at `lab/deps-audit/`, outside the
+installed skill, so plugin installs and generated targets never ship it.
+
 ```
-smoke-test/
-├── runner.sh             # driver — loads every fixtures.d/<name>/
-├── lib/detectors.sh      # shared rule detectors (perl/grep/awk)
-├── fixtures.d/<name>/    # one dir per fixture
-│   ├── setup.sh          # heredoc'd fixture content, writes into $FIXTURE_DIR
-│   └── expected.txt      # rule:N op:>= count:1 assertions
-└── corpus.d/             # on-demand loader for real Hex tarballs
-    ├── fetch.sh
-    └── README.md
+lab/deps-audit/
+├── smoke-test/
+│   ├── runner.sh             # driver — loads every fixtures.d/<name>/
+│   ├── lib/detectors.sh      # shared rule detectors (perl/grep/awk)
+│   ├── fixtures.d/<name>/    # one dir per fixture
+│   │   ├── setup.sh          # heredoc'd fixture content, writes into $FIXTURE_DIR
+│   │   └── expected.txt      # rule:N op:>= count:1 assertions
+│   └── corpus.d/             # real-package lists (benign-100, EEF CNA CVEs)
+├── test-assets/hex-api-cassettes/   # recorded hex.pm responses (Rules 6 + 8)
+└── capture.sh                # cassette capture helper
 ```
+
+Real tarballs for `corpus.d/` lists are fetched by the skill's runtime
+loader, `scripts/fetch_tarball.sh`.
 
 `runner.sh` discovers fixtures automatically — drop a new directory in
 `fixtures.d/` and it runs next pass.
@@ -42,7 +49,7 @@ smoke-test/
 ## Running the smoke test
 
 ```bash
-bash plugins/elixir-phoenix/skills/deps-audit/smoke-test/runner.sh
+bash lab/deps-audit/smoke-test/runner.sh
 ```
 
 Expected output (~1 second):
@@ -123,5 +130,5 @@ detector worth fixing.
 
 For now the smoke test is run manually. To wire into the eval pipeline,
 add a `smoke` target in `Makefile` whose recipe runs `runner.sh` from
-the harness root. Deferred until corpus fetch from `corpus.d/fetch.sh`
+the harness root. Deferred until corpus fetch from `scripts/fetch_tarball.sh`
 is reliable enough for CI gating (it depends on hex.pm reachability).
