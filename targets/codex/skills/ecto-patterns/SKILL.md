@@ -1,7 +1,7 @@
 ---
 name: ecto-patterns
-description: Ecto patterns — schemas, changesets, queries, migrations, Multi; Use
-  when editing Repo calls, Ecto.Query, or schema…
+description: Write or fix Ecto schemas, changesets, queries, and migrations; Use when
+  adding fields, validations, Repo queries…
 ---
 
 # Ecto Patterns Reference

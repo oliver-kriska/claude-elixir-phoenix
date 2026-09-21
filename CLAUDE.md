@@ -410,6 +410,7 @@ make eval-all      # Structurally score all 51 skills + 26 agents
 make eval-full     # Structural checks + fresh per-skill behavioral gate
 make eval-fix      # Auto-fix lint + show failures + suggest autoresearch
 make eval-tournament # Run tournament on weak skills (<75% trigger accuracy)
+make eval-plugin   # Real-session trigger eval via `claude plugin eval` (paid; SKILL=x)
 make ci            # Full CI pipeline: lint + test + validate + eval + security
 ```
 
@@ -437,6 +438,18 @@ behavioral slot for skills, and five deterministic dimensions for agents.
 - specificity (code examples, concrete vs vague)
 - behavioral (neutral during structural scoring; `make eval-full` runs a fresh
   Haiku gate and requires every skill to reach 75% trigger accuracy)
+
+**Real-session trigger eval** (`lab/plugin_eval/`, CC 2.1.269+): `make eval-plugin`
+runs each `lab/eval/triggers/*.json` prompt in an isolated Claude Code session with
+phx, ecto and lv loaded and checks whether `phx:<skill>` actually fired. The Haiku
+gate only sees descriptions and overstates real routing (100% there vs 20–60% in
+real sessions for several skills), so after a **description** edit also run
+`SKILL=<name> make eval-plugin` (~$1). Opening with the user's task ("Write or fix
+Ecto schemas…") beat noun catalogs ("Ecto patterns — …") for 6 of 8 skills in an
+A/B but made elixir-idioms and phoenix-contexts worse — measure with 3+ runs per
+prompt (single runs swing ±2 of 5), never assume. Never point `claude plugin eval` at `plugins/elixir-phoenix`
+alone: its `dependencies` are unsatisfiable there, CC disables the plugin, and every
+run still gets scored. See `lab/plugin_eval/README.md`.
 
 **What eval checks** (agents — 5 dimensions):
 

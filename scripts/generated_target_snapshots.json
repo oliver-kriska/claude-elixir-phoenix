@@ -4,27 +4,27 @@
     "amp": {
       "entries": 380,
       "files": 252,
-      "sha256": "38f758240def3b23ba11e21f8655f3c9e3457e50d948e24ca6ab1035722be7fb"
+      "sha256": "522bd6b424671190b03697da23d050917cc31a065ca9dcde641e0df70155b919"
     },
     "codex": {
       "entries": 385,
       "files": 254,
-      "sha256": "f817950a5fc066d3bd995a81b4c1436b85a4159ebc0a7f41f30d9be5e375b109"
+      "sha256": "053be42d6516db8b356eab83ba3953ec5467360c3fbc527122ddb6c7df7d9291"
     },
     "dsh": {
       "entries": 379,
       "files": 251,
-      "sha256": "81d6a2711fcf57461186e9a21a3522c16310d23f0ff7c4e1478da7ed3adbf4ed"
+      "sha256": "975fa393e569928d6c85291cd312a852d65709543f587c7b1c55450735fabe5a"
     },
     "opencode": {
       "entries": 379,
       "files": 251,
-      "sha256": "d948b550cd8c74e26d357144eed2c15beb8e1b949dfa2345c025ab796c167d8d"
+      "sha256": "89e0650644e62cec034340ee0d0875444318e79b6acae66b8c60562b2d874002"
     },
     "pi": {
       "entries": 380,
       "files": 252,
-      "sha256": "f49ea53ed5ce86e2b2565d2188b9a331ed0bd29034a33ffcbf97c3aba51318b5"
+      "sha256": "05c62e607edae6c1f3b51da7b3ac2e21952667ac1d076578265c3fb952e9a80d"
     }
   }
 }

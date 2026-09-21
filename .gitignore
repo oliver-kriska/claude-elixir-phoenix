@@ -43,3 +43,8 @@ __pycache__/
 /raw/
 /scripts/imessage-state.json
 /.claude/research
+
+/lab/plugin_eval/cases/
+
+# rtk (Rust Token Killer) local filter cache
+/.rtk/

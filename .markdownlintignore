@@ -8,6 +8,9 @@ analysis/
 scratchpad/
 lab/findings/
 
+# Generated `claude plugin eval` cases + results (lab/plugin_eval/generate.py).
+lab/plugin_eval/cases/
+
 # Untracked non-source content (promo assets, tool cache) — not plugin docs.
 social/
 .rtk/

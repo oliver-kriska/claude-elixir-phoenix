@@ -1,8 +1,8 @@
 ---
 name: ecto-patterns
-description: Ecto patterns — schemas, changesets, queries, migrations, Multi, associations,
-  preloads, upserts. Use when editing Repo calls, Ecto.Query, or schema fields. Skip
-  for Ash.
+description: Write or fix Ecto schemas, changesets, queries, and migrations — preloads,
+  unique constraints, money fields, Multi, upserts. Use when adding fields, validations,
+  Repo queries, or migrations. Skip for Ash.
 ---
 
 # Ecto Patterns Reference

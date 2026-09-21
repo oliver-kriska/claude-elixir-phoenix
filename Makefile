@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-target amp-target-sync amp-target-validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke dsh-skills dsh-skills-sync dsh-skills-validate dsh-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-plugin eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-target amp-target-sync amp-target-validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke dsh-skills dsh-skills-sync dsh-skills-validate dsh-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -34,6 +34,9 @@ eval-ci: ## CI gate: lint + all skills + all agents
 eval-triggers: ## Re-run behavioral gate; every skill must reach 75% (~60 min, Haiku)
 	@bash lab/eval/run_eval.sh --triggers
 
+eval-plugin: ## Real-session trigger eval via `claude plugin eval` (~$$45, ~50 min). SKILL=verify TAG=trigger-pos MIN_RECALL=0.6
+	@bash lab/plugin_eval/run.sh
+
 eval-multimodel: ## Run trigger eval against sonnet (slow, ~$$3, ~3 hr). Override: MODEL=opus make eval-multimodel
 	@python3 -m lab.eval.trigger_scorer --all --model $${MODEL:-sonnet}
 
@@ -52,10 +55,10 @@ eval-agents: ## Score all agents only
 # --- Test ---
 
 test: ## Run pytest for eval framework and port primitives
-	@python3 -m pytest lab/eval/tests/ scripts/tests/ -v --tb=short
+	@python3 -m pytest lab/eval/tests/ lab/plugin_eval/tests/ scripts/tests/ -v --tb=short
 
 test-quick: ## Run pytest (no verbose, fast)
-	@python3 -m pytest lab/eval/tests/ scripts/tests/ -q
+	@python3 -m pytest lab/eval/tests/ lab/plugin_eval/tests/ scripts/tests/ -q
 
 # --- Validate ---
 

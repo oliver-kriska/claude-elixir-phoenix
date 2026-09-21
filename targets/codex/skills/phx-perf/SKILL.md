@@ -1,7 +1,7 @@
 ---
 name: phx-perf
-description: Analyze Elixir/Phoenix performance — N+1 queries, assign bloat, ecto;
-  Use when slowness, timeouts, or high memory…
+description: Find and fix Elixir/Phoenix performance problems — slow pages; Use when
+  something is slow, times out, or must be…
 ---
 
 # Performance Analysis

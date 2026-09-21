@@ -1,7 +1,7 @@
 ---
 name: oban
-description: Oban job processing — workers, perform/1 (OSS) and process/1 (Pro); Use
-  when writing Oban workers, queue config…
+description: Write and debug Oban background jobs — workers, perform/1 and Pro; Use
+  when a job fails, retries, or needs scheduling.
 ---
 
 # Oban Background Jobs Reference

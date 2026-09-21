@@ -1,6 +1,6 @@
 ---
 name: review
-description: Review code with parallel agents — tests, security, Ecto, LiveView, Oban. Use after implementation to catch bugs and anti-patterns before committing.
+description: "Review Elixir/Phoenix changes before committing — bugs, security, Ecto, LiveView, and Oban anti-patterns, via parallel specialist agents. Use when asked to review changes, a component, a diff, or a PR."
 effort: high
 argument-hint: "[test|security|oban|deploy|iron-laws|all]"
 ---

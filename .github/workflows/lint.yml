@@ -120,7 +120,7 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Run pytest
-        run: python3 -m pytest lab/eval/tests/ scripts/tests/ -v --tb=short
+        run: python3 -m pytest lab/eval/tests/ lab/plugin_eval/tests/ scripts/tests/ -v --tb=short
 
       - name: Check Amp generated target
         run: python3 -m scripts.build_amp_skills --check

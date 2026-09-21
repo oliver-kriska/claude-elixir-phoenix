@@ -13,7 +13,7 @@ Usage:
     python3 -m lab.eval.trigger_scorer --all
     python3 -m lab.eval.trigger_scorer --all --cache               # Reuse cached results
     python3 -m lab.eval.trigger_scorer --all --model sonnet        # Evaluate against sonnet
-    python3 -m lab.eval.trigger_scorer --skill plan --model claude-sonnet-4-6
+    python3 -m lab.eval.trigger_scorer --skill plan --model claude-sonnet-5
 
 Cost: approximately $1.50 and 60 minutes for all 51 skills on Haiku.
 Sonnet is roughly 12× more expensive per call.
@@ -52,8 +52,8 @@ class JudgeInvocationError(RuntimeError):
 # 'claude-haiku-4-5' share one cache rather than two.
 MODEL_ALIASES = {
     "haiku": "claude-haiku-4-5",
-    "sonnet": "claude-sonnet-4-6",
-    "opus": "claude-opus-4-7",
+    "sonnet": "claude-sonnet-5",
+    "opus": "claude-opus-5",
 }
 
 

@@ -9,8 +9,31 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **Real-session trigger eval with `claude plugin eval` (CC 2.1.269+)** —
+  `make eval-plugin` turns every `lab/eval/triggers/*.json` prompt into a
+  plugin-eval case and runs it in an isolated Claude Code session with phx,
+  ecto and lv loaded, against a scaffolded Phoenix app (plus plan, review and
+  Ash fixture flavors for skills whose prompts reference those artifacts).
+  `lab/plugin_eval/analyze.py` reports what the pass/fail table cannot: which
+  skills actually fired, stray fires on other skills' prompts, plugin load and
+  hook errors, and per-skill recall (`MIN_RECALL=` gates on it). First full
+  baseline (502 cases, Sonnet 5): positive recall 176/269 (65%), negatives
+  233/233 clean — while the Haiku description-only gate scored several of the
+  weakest skills at 100%. 173 of 176 hits invoked the skill as the *first*
+  tool call, so cases cap at 3 turns (~$0.09/run). Suite lives outside the
+  plugin: phx's `dependencies` are unsatisfiable when `claude plugin eval`
+  loads it alone, which silently disables the plugin while still scoring every
+  run. Unit tests run in `make test` and CI.
+
 ### Changed
 
+- **Six skill descriptions rewritten to lead with the user's task**, each
+  validated by a real-session A/B (15 samples per skill per arm):
+  `security` 8→14/15, `investigate` 7→11, `ecto-patterns` 3→6, `review` 1→4,
+  `perf` 4→7, `oban` 11→13 (pooled 34/90 → 55/90, Fisher p=0.001). All six
+  still clear the 75% Haiku gate. The same rewrite made `elixir-idioms` and
+  `phoenix-contexts` worse, so those two were reverted. Generated targets
+  re-synced.
 - **The dsh runtime smoke has now been executed against an installed `dsh`** —
   it shipped in v3.1.0 written against the rc.2 wire contract read from source
   but never run, and `docs/dsh.md` carried a caveat saying so. Run against
@@ -24,6 +47,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   caveat is replaced with the observed results.
 
 ### Fixed
+
+- **`trigger_scorer --model sonnet|opus` evaluated retired models** — the
+  aliases still resolved to `claude-sonnet-4-6` and `claude-opus-4-7`; they now
+  resolve to `claude-sonnet-5` and `claude-opus-5`.
 
 ## [3.1.0] - 2026-08-27
 

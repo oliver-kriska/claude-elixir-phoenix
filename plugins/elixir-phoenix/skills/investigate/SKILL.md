@@ -1,6 +1,6 @@
 ---
 name: investigate
-description: Investigate bugs and errors in Elixir/Phoenix — root-cause analysis for crashes, exceptions, stack traces, test failures. Use --parallel for deep 4-track investigation.
+description: "Find the root cause of Elixir/Phoenix bugs — crashes, exceptions, stack traces, compile errors, LiveView that won't update, silent failures. Use when something is broken or misbehaves. --parallel for 4 tracks."
 effort: high
 argument-hint: <bug description> [--parallel]
 ---
