@@ -9,6 +9,18 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [3.1.1] - 2026-09-29
+
+Two fixes that reach every runtime — `deps-audit` no longer installs its test
+harness, and `/phx:watch-pr` now reports CI from commit-status integrations —
+plus six skill descriptions that route more reliably in real sessions.
+
+### Added
+
 - **Real-session trigger eval with `claude plugin eval` (CC 2.1.269+)** —
   `make eval-plugin` turns every `lab/eval/triggers/*.json` prompt into a
   plugin-eval case and runs it in an isolated Claude Code session with phx,
