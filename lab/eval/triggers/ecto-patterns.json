@@ -1,15 +1,26 @@
 {
   "skill": "ecto-patterns",
   "should_trigger": [
-    "I'm using float for money in the schema. Fix that.",
+    "I'm adding a credit_balance field to users for money and was going to use float. Set it up properly.",
     "Write a query to preload user posts and comments together",
     "Migration for users table with unique email constraint",
     "Why isn't my changeset validating the email field correctly?",
     "How do I use Ecto.Multi for atomic transactions?"
   ],
+  "should_trigger_test": [
+    "list_users should only return users who confirmed their email, newest first. Add whatever field that needs and update the query.",
+    "Users need a home address with street, city and zip. Should that be its own table or live inside the user record? Set it up.",
+    "create_user also has to insert a default settings row for the user, and both writes must roll back together if either fails",
+    "I want to search users by name from a search box, case-insensitive and partial match. How do I write that query safely?"
+  ],
   "should_not_trigger": [
     "Scan my codebase for N+1 queries and fix them",
     "My LiveView form isn't updating when socket assigns change",
     "Audit the project for technical debt and code quality"
+  ],
+  "should_not_trigger_test": [
+    "I'm getting ** (Ecto.ConstraintError) constraint error when attempting to insert struct: users_email_index (unique_constraint). What's going on?",
+    "UserLive loads every user in mount and the page got slow now that we have 50k rows",
+    "Is it fine for UserLive to call Repo directly, or should all queries go through the Accounts context?"
   ]
 }

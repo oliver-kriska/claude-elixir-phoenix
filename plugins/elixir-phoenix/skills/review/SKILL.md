@@ -37,8 +37,8 @@ the branch and recent commits (see `${CLAUDE_SKILL_DIR}/references/requirements-
 
 ### Step 1: Identify Changed Files and Prepare Directories
 
-**CRITICAL**: Create output dirs BEFORE spawning agents — agents cannot
-create directories and writes will fail.
+Create output dirs before spawning agents — agents cannot create
+directories, so their writes would fail.
 
 1. Determine SLUG via Glob on `.claude/plans/*/` (default: `"review"`)
 2. Run `mkdir -p ".claude/plans/${SLUG}/reviews" ".claude/plans/${SLUG}/summaries" .claude/reviews`
@@ -68,10 +68,10 @@ will emit `NOT AVAILABLE` rather than block the review.
 
 ### Step 2: Spawn Review Agents (MANDATORY)
 
-**NEVER** spawn the same agent role twice per review. One pass per role.
-**NEVER** analyze code yourself — use the Agent tool only. Zero agents = failure.
+Spawn each agent role once per review. Code analysis belongs to the spawned
+agents, not this context — a review that spawns zero agents has failed.
 
-1. Create a Claude Code task per agent via `TaskCreate` and `TaskUpdate` to `in_progress`
+1. If `TaskCreate` is in your tool list (never ToolSearch for it), create a task per agent, set `in_progress`
 2. For `/phx:review` or `/phx:review all`: select agents dynamically per the
    selection table in `${CLAUDE_SKILL_DIR}/references/agent-spawning.md`
 3. For focused reviews (`test|security|oban|deploy|iron-laws`): spawn only the
@@ -85,7 +85,7 @@ will emit `NOT AVAILABLE` rather than block the review.
 5. Spawn in ONE message with `run_in_background: true`. Do not pass the
    deprecated Agent `mode` parameter; Claude Code 2.1.212+ ignores it and
    subagents inherit the parent session's permission mode
-6. **MANDATORY**: pass explicit `output_file` per-agent (mapping in the reference)
+6. Pass an explicit `output_file` per agent (mapping in the reference)
 7. Include the CRITICAL prompt block: write by turn ~12, chat body ≤300 words
 8. Scope every agent to the diff: pass `git diff --name-only` output with
    "Focus on NEW code. Pre-existing: one-line `{file}:{line} — {brief}`. Do
@@ -95,8 +95,8 @@ will emit `NOT AVAILABLE` rather than block the review.
 
 ### Step 3: Collect and Compress Findings
 
-Wait for ALL agents to complete. **Do NOT report status until every agent
-completes.** Mark each task `completed` via `TaskUpdate` as it finishes.
+Wait for ALL agents to complete before writing the verdict — a partial
+panel gives a misleading review. Count one completion notification per agent spawned; mark any task `completed`.
 
 **Missing file fallback** — after each agent finishes, verify its expected
 `output_file` exists. If missing (turn exhaustion, error):

@@ -62,11 +62,7 @@ Use Grep with context (`-B 3`) to find `Repo.get` or `Repo.one` near loop patter
 
 ## Analysis Command
 
-For a context module, run:
-
-Use Grep to find all `Repo.` calls in the context module, then verify each has appropriate preloads.
-
-Then verify each query has appropriate preloads.
+Use Grep to find all `Repo.` calls in a context module, then verify each query has appropriate preloads.
 
 ## References
 

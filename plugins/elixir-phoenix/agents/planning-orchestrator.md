@@ -81,7 +81,7 @@ Always spawn:
 Spawn if evaluating NEW libraries (not in mix.exs):
 +-- hex-library-researcher -> .claude/plans/{slug}/research/libraries.md
 
-Spawn if unfamiliar tech or need community input (haiku — cheap):
+Spawn if unfamiliar tech or need community input:
 +-- web-researcher -> .claude/plans/{slug}/research/research-{topic}.md
     Pass focused query or URLs, NEVER raw description. Multiple topics
     → multiple parallel agents.
@@ -124,13 +124,10 @@ Spawn if changing function signatures or refactoring:
   `Write` in their agent frontmatter. Do not pass the deprecated Agent
   `mode` parameter; subagents inherit the parent session's permission mode.
 
-**CRITICAL: hex-library-researcher rules:**
-
-- Do NOT spawn for libraries already in mix.exs
-- Do NOT spawn when fixing review blockers or refactoring existing code
-- ONLY spawn when evaluating NEW or ALTERNATIVE libraries
-- To understand an existing library's API, use Read/Grep on
-  `deps/{library}/lib/` instead
+**hex-library-researcher** is only for evaluating new or alternative
+libraries. Skip it for libraries already in mix.exs and when fixing review
+blockers or refactoring existing code; to understand an installed library's
+API, Read/Grep `deps/{library}/lib/` — that source matches the locked version.
 
 ### Phase 3: Context Supervision
 
@@ -202,9 +199,7 @@ Do not include full research text — the caller reads
 
 ## Agent Invocation
 
-Use the Agent tool with **FOCUSED prompts** scoped to relevant
-directories and patterns. Do NOT give vague prompts like "analyze
-the codebase."
+Scope each Agent prompt to the relevant directories and patterns:
 
 ```
 Agent({
@@ -216,8 +211,8 @@ Agent({
 })
 ```
 
-Wait for all agents to FULLY complete — you'll be notified as each
-finishes. NEVER start compressing while any agent is still running.
+Wait for every agent to complete — you're notified as each finishes —
+before compressing; compressing early drops the late agents' findings.
 
 ## Memory
 

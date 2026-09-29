@@ -110,15 +110,15 @@ agents' job -- let them handle pattern discovery.
 | Unfamiliar tech, need community input | `web-researcher`         |
 | Changing function signatures          | `call-tracer`            |
 
-**hex-library-researcher rules (STRICT):**
+**hex-library-researcher rules:**
 
 - ONLY spawn when evaluating a library NOT already in mix.exs
 - Do NOT spawn for: review blockers, refactoring, existing libraries
 - To understand an existing library's API, use Read/Grep on
   `deps/{library}/lib/` or use Tidewave's `get_docs` instead
 
-**CRITICAL**: Spawn ALL applicable agents in ONE Tool Use block
-(parallel) with `run_in_background: true`. Minimum 1 agent spawned.
+Spawn all applicable agents in ONE Tool Use block with
+`run_in_background: true` so they run in parallel. Minimum 1 agent spawned.
 
 **Agent prompts must be FOCUSED.** Scope each prompt to the
 relevant directories, files, and patterns. Do NOT give vague
@@ -163,7 +163,7 @@ affordance tables. Use these to build a system map. See
 
 ## Completeness Check
 
-**MANDATORY when planning from review.** List ALL findings from
+**Required when planning from review.** List ALL findings from
 the source and verify every one is covered:
 
 > Source has N items. Coverage:

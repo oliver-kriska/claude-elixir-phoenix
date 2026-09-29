@@ -40,7 +40,7 @@
 
 ## When to Spawn web-researcher
 
-**Model**: haiku (cheap fetch worker — extraction, not reasoning)
+**Model**: sonnet (fetch worker — extraction, not reasoning)
 
 **Spawn when:**
 

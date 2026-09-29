@@ -1,18 +1,18 @@
 {
   "skill": "quick",
   "should_trigger": [
-    "Add a required validation to the email field",
-    "Update the router to add authentication to admin routes",
-    "Fix the component to handle the new prop",
+    "Add a format validation to the email field",
+    "Update list_users to order by email instead of insertion time",
+    "Fix UserLive to show each user's name next to their email",
     "Create a migration to add a status field to users",
-    "Change the controller response format to JSON"
+    "Change the UserLive list to render as a table"
   ],
   "should_trigger_test": [
-    "Rename the :title field to :name in the Post schema",
+    "Rename the :name field to :full_name in the User schema",
     "Add a unique constraint to the email column in the users table",
-    "Update the navbar component to show the user's avatar",
-    "Fix the typo in the error message on the login form",
-    "Add a new route for the /api/health endpoint"
+    "Update UserLive to show a 'No users yet' message when the list is empty",
+    "Default the name to an empty string instead of nil in the User schema",
+    "Add a count_users/0 function to the Accounts context"
   ],
   "should_not_trigger": [
     "Why isn't my form submitting correctly",
@@ -23,5 +23,10 @@
     "Validate my schema design before implementation",
     "Check for N+1 queries in the user loader",
     "Generate API documentation for this endpoint"
+  ],
+  "should_not_trigger_test": [
+    "Add a full user registration flow with email confirmation",
+    "Why does create_user return an error when I pass a name but no email?",
+    "Rename the Accounts context to Identity everywhere in the app"
   ]
 }

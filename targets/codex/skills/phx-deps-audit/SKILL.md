@@ -136,7 +136,7 @@ at full severity. See `references/differential.md`.
 For packages where the aggregate score exceeds 10, the
 `hex-deps-triager` sonnet agent reads finding + diff windows and
 produces structured verdicts (`confidence`, `verdict`, `rationale`,
-`fp_reasons[]`). A `context-supervisor` (haiku) consolidates verdicts
+`fp_reasons[]`). A `context-supervisor` consolidates verdicts
 across packages into `triage/consolidated.md`. Main skill reads only
 the consolidated file.
 

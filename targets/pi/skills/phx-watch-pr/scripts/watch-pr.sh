@@ -3,12 +3,17 @@
 # Designed for the Monitor tool / run_in_background. stdout = event stream.
 # Exits (terminal line first) on: PR closed/merged, max duration, or repeated
 # gh failures. Silence is never success — every terminal state emits a line.
+# WATCH_SEGMENT caps one process below the whole budget: at the cap it emits a
+# non-terminal `rearm` line (baseline, start, check state) and exits 0. The
+# next run with WATCH_RESUME=1 restores that state from the delta file, so a
+# Monitor deadline (at most 30 min) never re-reports or drops an event.
 set -uo pipefail
 
 PR="${1:?usage: watch-pr.sh <pr-number> [reviews,comments,checks]}"
 WATCH="${2:-reviews,comments,checks}"
 INTERVAL="${WATCH_INTERVAL:-30}"
 MAX_DURATION="${WATCH_MAX_DURATION:-3600}"
+SEGMENT="${WATCH_SEGMENT:-$MAX_DURATION}"
 # Anchor to the project root, not cwd — relative .claude/ paths create stray
 # state dirs when the script runs from elsewhere (same bug class as the
 # cc-changelog nested-state-dir incident).
@@ -16,6 +21,7 @@ DELTA_FILE="${WATCH_DELTA_FILE:-${CLAUDE_PROJECT_DIR:-$PWD}/.claude/watch/pr-${P
 mkdir -p "$(dirname "$DELTA_FILE")"
 
 START_EPOCH=$(date -u +%s)
+STARTED_AT=$START_EPOCH
 BASELINE_TS="${WATCH_BASELINE_TS:-$(date -u +%Y-%m-%dT%H:%M:%SZ)}"
 FAIL_COUNT=0
 
@@ -41,12 +47,38 @@ SEEN_REVIEWS=""; SEEN_COMMENTS=""; LAST_CHECK_STATE=""
 CODEX_ACKED=""; CODEX_CLEAN=""; CODEX_TIMEOUT_EMITTED=""
 CODEX_ACK_TIMEOUT="${CODEX_ACK_TIMEOUT:-300}"
 CODEX_SINCE="${WATCH_CODEX_SINCE:-$BASELINE_TS}"
+
+if [[ "${WATCH_RESUME:-0}" == "1" && -s "$DELTA_FILE" ]]; then
+  REARM=$(grep '"kind":"rearm"' "$DELTA_FILE" | tail -n 1)
+  if [[ -n "$REARM" ]]; then
+    BASELINE_TS=$(jq -r '.baseline' <<<"$REARM")
+    STARTED_AT=$(jq -r '.started' <<<"$REARM")
+    LAST_CHECK_STATE=$(jq -r '.checks // ""' <<<"$REARM")
+    CODEX_SINCE="${WATCH_CODEX_SINCE:-$BASELINE_TS}"
+    # Only this watch's lines: the delta file accumulates across watches.
+    SINCE_BASELINE=$(jq -rR --arg b "$BASELINE_TS" \
+      'fromjson? | select(.ts >= $b) | [.kind, (.id // "")] | @tsv' "$DELTA_FILE")
+    SEEN_IDS=$(cut -f2 <<<"$SINCE_BASELINE" | tr '\n' ' ')
+    SEEN_REVIEWS=" $SEEN_IDS"; SEEN_COMMENTS=" $SEEN_IDS"
+    KINDS=$(cut -f1 <<<"$SINCE_BASELINE")
+    grep -qx codex_ack <<<"$KINDS" && CODEX_ACKED=1
+    grep -qx codex_clean <<<"$KINDS" && CODEX_CLEAN=1
+    grep -qx codex_timeout <<<"$KINDS" && CODEX_TIMEOUT_EMITTED=1
+  fi
+fi
 codex_on() { [[ "${WATCH_CODEX:-0}" == "1" ]]; }
+# A segment polls at least once before it re-arms, so a slow start can't turn
+# every segment into an empty rearm.
+POLLED=0
 
 while :; do
   NOW_EPOCH=$(date -u +%s)
-  if (( NOW_EPOCH - START_EPOCH >= MAX_DURATION )); then
+  if (( NOW_EPOCH - STARTED_AT >= MAX_DURATION )); then
     emit "{\"ts\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"kind\":\"watchdog\",\"summary\":\"stopped after ${MAX_DURATION}s\"}"
+    exit 0
+  fi
+  if (( POLLED && NOW_EPOCH - START_EPOCH >= SEGMENT )); then
+    emit "{\"ts\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"kind\":\"rearm\",\"baseline\":\"$BASELINE_TS\",\"started\":$STARTED_AT,\"checks\":\"$LAST_CHECK_STATE\",\"summary\":\"segment limit ${SEGMENT}s reached; restart with WATCH_RESUME=1\"}"
     exit 0
   fi
 
@@ -62,6 +94,7 @@ while :; do
     sleep "$INTERVAL"; continue
   fi
   FAIL_COUNT=0
+  POLLED=1
 
   STATE=$(jq -r '.state' <<<"$VIEW")
 
@@ -75,7 +108,7 @@ while :; do
       RKIND="review"
       # Match the body marker, not the bot login — login differs per endpoint.
       if codex_on && [[ "$is_codex" == "true" ]]; then RKIND="codex_review"; fi
-      emit "{\"ts\":\"$submitted\",\"kind\":\"$RKIND\",\"author\":\"$author\",\"state\":\"$rstate\"}"
+      emit "{\"ts\":\"$submitted\",\"kind\":\"$RKIND\",\"id\":\"$rid\",\"author\":\"$author\",\"state\":\"$rstate\"}"
     done < <(jq -r '.reviews[] | [(.id|tostring), .author.login, .state, .submittedAt, ((.body // "") | contains("Codex Review") | tostring)] | @tsv' <<<"$VIEW")
   fi
 
@@ -96,7 +129,7 @@ while :; do
           CKIND="codex_review"
         fi
       fi
-      emit "{\"ts\":\"$created\",\"kind\":\"$CKIND\",\"author\":\"$author\"}"
+      emit "{\"ts\":\"$created\",\"kind\":\"$CKIND\",\"id\":\"$cid\",\"author\":\"$author\"}"
     done < <(jq -r '.comments[] | [(.id|tostring), (.author.login // "unknown"), .createdAt, ((.body // "") | gsub("[\n\r\t]"; " ") | .[0:160])] | @tsv' <<<"$VIEW")
   fi
 
@@ -123,7 +156,7 @@ while :; do
       CODEX_CLEAN=1
       emit "{\"ts\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"kind\":\"codex_clean\",\"summary\":\"codex reacted +1 — clean pass, no review will be posted\"}"
     fi
-    if [[ -z "$CODEX_ACKED" && -z "$CODEX_TIMEOUT_EMITTED" ]] && (( NOW_EPOCH - START_EPOCH >= CODEX_ACK_TIMEOUT )); then
+    if [[ -z "$CODEX_ACKED" && -z "$CODEX_TIMEOUT_EMITTED" ]] && (( NOW_EPOCH - STARTED_AT >= CODEX_ACK_TIMEOUT )); then
       CODEX_TIMEOUT_EMITTED=1
       emit "{\"ts\":\"$(date -u +%Y-%m-%dT%H:%M:%SZ)\",\"kind\":\"codex_timeout\",\"summary\":\"no ack after ${CODEX_ACK_TIMEOUT}s — repo may lack the Codex connector; continuing normal watch\"}"
     fi

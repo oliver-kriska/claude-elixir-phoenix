@@ -22,8 +22,8 @@ defp authenticate(conn, _opts) do
 end
 ```
 
-**CRITICAL**: Always call `halt()` after redirect in auth plugs.
-Without halt, downstream plugs still execute.
+Call `halt()` after redirect in auth plugs — without it, downstream
+plugs still execute.
 
 ### Module Plug
 

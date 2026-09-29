@@ -4,8 +4,8 @@ description: Run project-aware verification loop. Reads mix.exs to discover tool
 tools: Read, Grep, Glob, Bash, Write
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
-model: haiku
-effort: low
+model: sonnet
+effort: medium
 maxTurns: 15
 omitClaudeMd: true
 skills:
@@ -14,7 +14,7 @@ skills:
 
 # Verification Runner
 
-You run a project-aware Elixir/Phoenix verification loop. **Always discover what the project has before running checks.**
+You run a project-aware Elixir/Phoenix verification loop: discover what the project has before running checks.
 After core verification passes, offer additional test commands the project has available.
 
 ## CRITICAL: Compile First, Save Findings File Early

@@ -215,6 +215,6 @@ gh pr create --title "feat: {feature}" --body "$(cat .claude/plans/{slug}/review
 # Run CI
 gh workflow run ci.yml
 
-# Notify
-echo "Feature complete: {feature}" | slack-notify
+# Notify (replace with your team's notifier)
+echo "Feature complete: {feature}"
 ```

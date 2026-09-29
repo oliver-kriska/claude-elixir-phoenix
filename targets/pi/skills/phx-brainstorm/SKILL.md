@@ -73,8 +73,8 @@ Interview is "sufficient" when total score >= 8 out of 12.
 
 ## Phase 2: Decision Point
 
-**MANDATORY**: Write interview.md FIRST, then use AskUserQuestion.
-Never let the conversation flow past this point without a formal choice.
+Write interview.md first, then use AskUserQuestion — every option below
+relies on the saved file. Move past this point only on a formal choice.
 
 1. Write current state to `.claude/plans/{slug}/interview.md`
 2. Show coverage summary: "Coverage: What 2/2 | Why 2/2 | Scope 1/2 | ..."

@@ -122,9 +122,8 @@ for the optional-worker pattern, sequential fallback, and checkpoint flow.
 - Per-feature: when Tidewave tools are independently configured and exposed, use a behavioral runtime smoke test; otherwise run a focused repository test and a local/manual smoke check (see execution-guide.md)
 - Final gate: `mix test` (full suite — run ONCE at the end, not per-phase)
 
-**Token efficiency**: Do NOT narrate each verification step. Execute
-tool calls directly without "Let me now run..." preamble. Only narrate
-when explaining a non-obvious decision or reporting a failure. When
+**Token efficiency**: Write user-facing text for non-obvious decisions
+and failures; routine verification passes need no commentary. When
 several checkboxes complete together (parallel groups, resume catch-up),
 batch them into ONE edit pass — never one Edit call per checkbox.
 No hook is assumed. Run `mix format` explicitly during verification and
@@ -157,7 +156,7 @@ Key decisions: {brief list from this session}.
 
 Include context beyond checkboxes for fresh session resume.
 
-**NEVER** auto-start /skill:phx-review or any other phase.
+Wait for the user's choice before starting /skill:phx-review or any other phase.
 
 ## Step 6: Check for Additional Plans
 

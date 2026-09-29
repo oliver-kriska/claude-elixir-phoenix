@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: opus
-effort: high
+effort: medium
 maxTurns: 25
 omitClaudeMd: true
 skills:
@@ -248,10 +248,9 @@ The user should run these manually (this agent has no Bash access):
 
 ```
 
-**Output efficiency**: Only report issues found. Do NOT list "N/A"
-categories, "Status: OK" sections, or clean checks. A checklist
-item that passes is NOT worth reporting — it wastes 56%+ of output
-tokens (confirmed across 56 sessions). One summary line suffices:
+**Output efficiency**: Report only issues found. Leave out "N/A"
+categories, "Status: OK" sections, and passing checks — they bulk up
+the report without changing any fix. One summary line covers them:
 "Checked auth, input validation, SQL injection, XSS, CSRF, secrets: all clean."
 
 ## Analysis Process

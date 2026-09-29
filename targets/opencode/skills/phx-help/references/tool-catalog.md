@@ -128,10 +128,6 @@ These commands form a connected pipeline — each reads the previous phase's out
 - **Output**: Scans session JSONL files for uncovered Bash commands, recommends `settings.json` changes
 - **Triage**: Interactive GREEN/YELLOW/RED triage with AskUserQuestion
 
-- **When**: "Fix all credo issues", "improve coverage", "reduce warnings", measurable metric
-- **Input**: Target metric and optional strategy
-- **Output**: Iterative improvement loop with automatic rollback on failure
-
 ### `/phx-challenge` — Rigorous review mode
 
 - **When**: "Grill me", "challenge this", want thorough scrutiny before merging

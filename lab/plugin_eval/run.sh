@@ -4,6 +4,7 @@
 #   SKILL="brief work" bash lab/plugin_eval/run.sh   # some skills (regenerates their cases)
 #   TAG="trigger-pos perf" J=8 bash lab/plugin_eval/run.sh  # tags are OR-ed
 #   MIN_RECALL=0.6 bash lab/plugin_eval/run.sh    # gate on per-skill recall
+#   RUNS=3 TAG="val-perf" bash lab/plugin_eval/run.sh  # 3 runs per case (default 1)
 #
 # Runs from the repo root so case.yaml can load phx together with its ecto/lv
 # dependencies. Every run is a real Sonnet session on your credentials: the full
@@ -14,9 +15,10 @@ cd "$(dirname "$0")/../.." || exit 1
 
 TAG="${TAG:-trigger}"
 J="${J:-8}"
-MODEL="${MODEL:-claude-sonnet-5}"
+MODEL="${MODEL:-claude-sonnet-5-5}"
 MIN_RECALL="${MIN_RECALL:-}"
 MAX_COST="${MAX_COST:-}"
+RUNS="${RUNS:-}"
 
 gen_args=()
 read -r -a tags <<< "${TAG//,/ }"
@@ -32,6 +34,7 @@ eval_args=(. --eval-dir lab/plugin_eval/cases --tag "${tags[@]}"
   --ablation none --scaffold --trust-plugin --no-publish --keep-temp
   --model "$MODEL" -j "$J" --threshold 0)
 [ -n "$MAX_COST" ] && eval_args+=(--max-cost-usd "$MAX_COST")
+[ -n "$RUNS" ] && eval_args+=(--runs "$RUNS")
 
 started=$(date +%s)
 claude plugin eval "${eval_args[@]}"

@@ -4,8 +4,8 @@ description: Fetches and extracts information from web sources efficiently. Opti
 tools: WebSearch, WebFetch, Write
 disallowedTools: Edit, NotebookEdit, Bash
 permissionMode: bypassPermissions
-model: haiku
-effort: low
+model: sonnet
+effort: medium
 maxTurns: 10
 omitClaudeMd: true
 ---
@@ -45,14 +45,14 @@ WebSearch(query: "{5-10 word focused query} site:elixirforum.com OR site:hexdocs
 
 Rules:
 
-- NEVER use raw user input as search query — decompose first
+- Decompose the request into focused queries; raw user input searches poorly
 - Max 10 words per query
 - Prefer `site:` filters for quality
 
 ## Fetch Phase — PARALLEL
 
-Call WebFetch on ALL relevant URLs in a SINGLE tool-use response.
-This makes fetches run in parallel instead of sequentially.
+Call WebFetch on all relevant URLs in one tool-use response so the
+fetches run in parallel.
 
 Use source-specific extraction prompts to minimize token waste:
 

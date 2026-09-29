@@ -6,17 +6,23 @@
 #
 # Complements elixir-failure-hints.sh (generic hints) with failure-specific
 # consolidation that detects REPEATED errors and escalates to structured analysis.
+#
+# Also registered on PostToolUse (Bash, mix): a success resets that command's
+# count, so "attempt #N" means consecutive failures, not lifetime failures.
 
 INPUT=$(cat)
+EVENT=$(echo "$INPUT" | jq -r '.hook_event_name // empty')
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 ERROR=$(echo "$INPUT" | jq -r '.error // empty')
+SESSION=$(echo "$INPUT" | jq -j '.session_id // "nosession"' | tr -c '[:alnum:]-' '_')
 
-# Only handle mix-related failures
+# Only handle mix-related commands
 echo "$COMMAND" | grep -qE '^mix\b|MIX_ENV=\S+ mix' || exit 0
 
-# Use temp dir for failure tracking (persists within session)
-FAILURE_DIR="/tmp/.claude-elixir-failures"
-mkdir -p "$FAILURE_DIR"
+# Per-session state: a count shared across sessions would escalate a fresh
+# session's first failure straight to the loop analysis.
+FAILURE_BASE="${TMPDIR:-/tmp}/.claude-elixir-failures"
+FAILURE_DIR="$FAILURE_BASE/$SESSION"
 
 # Extract the mix subcommand for tracking (ERE for macOS compat)
 MIX_CMD=$(echo "$COMMAND" | grep -oE '(MIX_ENV=[^ ]+ )?mix [^ ]+' | head -1)
@@ -25,6 +31,14 @@ CMD_KEY=$(echo "$MIX_CMD" | tr -c '[:alnum:]' '_')
 
 FAILURE_LOG="$FAILURE_DIR/${CMD_KEY}.log"
 COUNT_FILE="$FAILURE_DIR/${CMD_KEY}.count"
+
+if [[ "$EVENT" == "PostToolUse" ]]; then
+  rm -f "$COUNT_FILE" "$FAILURE_LOG"
+  exit 0
+fi
+
+mkdir -p "$FAILURE_DIR"
+find "$FAILURE_BASE" -type f -mtime +1 -delete 2>/dev/null
 
 # Increment failure count
 if [[ -f "$COUNT_FILE" ]]; then
@@ -53,10 +67,9 @@ fi
 # 2nd failure: warn about pattern
 if [[ "$COUNT" -eq 2 ]]; then
   HINT="REPEATED FAILURE (attempt #${COUNT}): Same command failed before.
-Before retrying, pause and analyze:
-- Is the error message identical to the previous failure?
-- If yes: your fix didn't address the root cause. Re-read the error carefully.
-- If different: progress is being made, but a new issue appeared.
+Before retrying, compare this error with the previous one:
+- Identical: the last fix didn't address the root cause. Re-read the error.
+- Different: progress is being made, but a new issue appeared.
 - Consider: /phx:investigate for structured root-cause analysis."
 
   echo "$HINT" | jq -Rs '{hookSpecificOutput: {hookEventName: "PostToolUseFailure", additionalContext: .}}'
@@ -72,13 +85,12 @@ CRITIC_ANALYSIS="DEBUGGING LOOP DETECTED (attempt #${COUNT}): ${MIX_CMD} has fai
 CRITIC ANALYSIS — Consolidated error history:
 ${ERROR_SUMMARY}
 
-STRUCTURED RECOVERY (do NOT retry the same approach):
-1. STOP retrying the same fix — it has failed ${COUNT} times
-2. Read the FULL error output from attempt #1 (root cause is usually there)
-3. Check if errors are IDENTICAL (same root cause) or DIFFERENT (cascading)
-4. If identical: your mental model of the code is wrong. Re-read the source file
-5. If cascading: fix the FIRST error only, ignore downstream errors
-6. Consider: /phx:investigate for structured root-cause analysis
-7. Consider: grep .claude/solutions/ for previously solved similar errors"
+STRUCTURED RECOVERY — this fix has failed ${COUNT} times, so change the approach rather than retrying it:
+1. Read the full error output from attempt #1 (the root cause is usually there)
+2. Check whether the errors are identical (same root cause) or different (cascading)
+3. If identical: your mental model of the code is wrong. Re-read the source file
+4. If cascading: fix the first error only; downstream errors often resolve with it
+5. Consider: /phx:investigate for structured root-cause analysis
+6. Consider: grep .claude/solutions/ for previously solved similar errors"
 
 echo "$CRITIC_ANALYSIS" | jq -Rs '{hookSpecificOutput: {hookEventName: "PostToolUseFailure", additionalContext: .}}'

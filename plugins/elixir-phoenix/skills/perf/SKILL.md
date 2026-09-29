@@ -1,6 +1,6 @@
 ---
 name: perf
-description: "Find and fix Elixir/Phoenix performance problems — slow pages or queries, timeouts, high memory, GenServer bottlenecks, N+1s, assign bloat. Use when something is slow, times out, or must be optimized."
+description: "Use when anything in a Phoenix app is slow, times out, or uses too much memory, even if the cause looks obvious. Load it before analyzing or fixing: it runs measured Ecto, LiveView and OTP checks and ranks fixes."
 effort: high
 argument-hint: "[page|context|module] [--focus ecto|liveview|otp]"
 ---

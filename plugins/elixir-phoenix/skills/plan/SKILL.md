@@ -54,13 +54,14 @@ structured plan with checkboxes.
    main session: spawn the selected specialist agents directly, wait for them, then spawn
    `phx:context-supervisor` directly if compression is needed. Never spawn an
    orchestrator that cannot delegate. Read only the resulting digest and
-   `summaries/consolidated.md`. Create a Claude Code task per spawn:
+   `summaries/consolidated.md`. If `TaskCreate` is in your tool list (never
+   ToolSearch for it), create a task per spawn:
    `TaskCreate({subject: "{Agent} research", activeForm: "Researching..."})`,
    mark `in_progress` on spawn, `completed` when done
 6. **Wait for ALL agents** — Do NOT proceed until all return
    "completed". NEVER write plan while any agent is still running
 7. **Breadboard** (LiveView) — System map for multi-page features
-8. **Completeness check** — MANDATORY when planning from review
+8. **Completeness check** — required when planning from review
 9. **Split decision** — One plan or multiple, concrete options
 10. **Generate plan** — Checkboxes, phased tasks, code patterns.
     Also create `plans/{slug}/scratchpad.md` for decisions and dead-ends

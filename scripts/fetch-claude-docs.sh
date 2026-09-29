@@ -26,8 +26,12 @@ PAGES=(
   "skills.md"              # Skill format and structure
   "hooks.md"               # Hook events and types
   "hooks-guide.md"         # Hook patterns and examples
-  "plugins-reference.md"   # plugin.json schema
-  "plugin-marketplaces.md" # marketplace.json schema
+  "plugins-reference.md"   # plugin.json schema (manifest reference)
+  "plugins/marketplace-reference.md" # marketplace.json schema
+  "plugins/dependencies.md" # Plugin dependencies and version ranges
+  "plugins/cli-reference.md" # claude plugin validate/tag/details/eval flags
+  "plugins/measure.md"     # Always-on vs on-invoke token cost
+  "plugin-evals.md"        # claude plugin eval cases and graders
   "plugins.md"             # General plugin creation
   "settings.md"            # Permission modes
   "mcp.md"                 # MCP server config
@@ -77,6 +81,7 @@ fetch_page() {
   local page="$1"
   local dest="${CACHE_DIR}/${page}"
   local url="${DOCS_BASE_URL}/${page}"
+  mkdir -p "$(dirname "$dest")"
 
   if is_fresh "$dest"; then
     echo "  [cached] $page (< ${MAX_AGE_HOURS}h old)"

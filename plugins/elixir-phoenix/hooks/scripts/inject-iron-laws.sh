@@ -8,7 +8,7 @@ proj="${CLAUDE_PROJECT_DIR:-$PWD}"
 [ -f "$proj/mix.exs" ] || exit 0
 
 jq -n '{hookSpecificOutput: {hookEventName: "SubagentStart", additionalContext:
-"Elixir/Phoenix Iron Laws (NON-NEGOTIABLE):
+"Elixir/Phoenix Iron Laws:
 - NO unconditional DB queries in mount — use assign_async (or connected? + cache-backed branch for SEO routes)
 - ALWAYS use streams for lists >100 items
 - CHECK connected?/1 before PubSub subscribe
@@ -24,6 +24,7 @@ jq -n '{hookSpecificOutput: {hookEventName: "SubagentStart", additionalContext:
 - NO IMPLICIT CROSS JOINS — from(a in A, b in B) without on: creates Cartesian product
 - @external_resource FOR COMPILE-TIME FILES
 - DEDUP BEFORE cast_assoc WITH SHARED DATA
+- CHECK CHANGESET ERRORS BEFORE UI DEBUGGING — a form save with no visible error and no side effect usually hides an {:error, changeset}
 - HIDDEN INPUTS FOR ALL REQUIRED EMBEDDED FIELDS
 - WRAP THIRD-PARTY LIBRARY APIs behind project-owned modules
 - NEVER use assign_new for values refreshed every mount

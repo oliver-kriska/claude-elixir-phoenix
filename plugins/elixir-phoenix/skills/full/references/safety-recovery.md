@@ -16,8 +16,8 @@ When resuming an interrupted workflow:
 Example resume:
 
 ```bash
-/phx:full --resume magic-link-auth
-# Reads .claude/plans/magic-link-auth/plan.md
+/phx:work --continue
+# Reads the IN_PROGRESS plan, e.g. .claude/plans/magic-link-auth/plan.md
 # Finds first unchecked task: P2-T3
 # Resumes from P2-T3
 ```
@@ -54,37 +54,18 @@ The cycle stops automatically when:
 
 ## Human Checkpoints
 
-Optional checkpoints for human review:
-
-```
-/phx:full {feature} --checkpoint-after plan
-/phx:full {feature} --checkpoint-after each-phase
-```
+`/phx:full` has no checkpoint flag. For a human review between phases, run
+`/phx:plan`, `/phx:work` and `/phx:review` separately instead.
 
 ## Rollback Points
 
-Git commits after each phase enable rollback:
+The commit offered after each phase (see `/phx:work` Commit Strategy) is the
+rollback point:
 
 ```bash
 # If something goes wrong
 git log --oneline  # Find last good commit
 git reset --hard {commit}
-```
-
-## Task-Level Checkpoints
-
-Each completed task creates a git commit:
-
-```bash
-# View task history
-git log --oneline --grep="wip(${SLUG})"
-
-# Rollback specific task
-git revert HEAD  # Reverts last task
-git revert HEAD~2  # Reverts task before last
-
-# Or reset to before task
-git reset --hard HEAD~1  # Reset last task
 ```
 
 ## State Recovery

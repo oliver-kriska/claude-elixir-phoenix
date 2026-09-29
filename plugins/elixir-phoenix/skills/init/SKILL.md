@@ -55,7 +55,7 @@ Read `mix.exs` and use Grep to extract:
 2. Replace with latest behavioral instructions
 3. Preserve everything outside the markers
 
-**CRITICAL: NEVER overwrite or delete existing CLAUDE.md content outside the plugin markers** — user-written rules, project conventions, and other plugin sections must be preserved verbatim
+In both modes, CLAUDE.md content outside the plugin markers — user-written rules, project conventions, other plugin sections — stays verbatim (Iron Law 1)
 
 ### Step 4: Generate Content
 

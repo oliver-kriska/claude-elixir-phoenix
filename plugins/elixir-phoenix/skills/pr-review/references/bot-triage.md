@@ -2,7 +2,7 @@
 
 CI bots (Copilot, Codex, CodeRabbit, SonarCloud) post review passes as
 inline review threads + a review summary. They produce volume — triage in
-batch, but never bulk-resolve without replies (SKILL.md Iron Laws 6 + 9).
+batch, but never bulk-resolve without replies (SKILL.md Iron Laws 6 + 8).
 
 ## Known bot logins
 

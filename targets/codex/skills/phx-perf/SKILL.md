@@ -1,7 +1,7 @@
 ---
 name: phx-perf
-description: Find and fix Elixir/Phoenix performance problems — slow pages; Use when
-  something is slow, times out, or must be…
+description: Use when anything in a Phoenix app is slow, times out, or uses too much
+  memory, even if the cause looks obvious. Load…
 ---
 
 # Performance Analysis

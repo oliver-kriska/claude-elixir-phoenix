@@ -115,8 +115,8 @@ Report each step's pass/fail — not just "smoke test passed".
 
 ## Proactive Runtime Checks
 
-Don't just use Tidewave reactively. **Query runtime state at
-workflow checkpoints** automatically:
+**Query runtime state at workflow checkpoints** without waiting
+to be asked:
 
 - **After code edits**: `get_logs level: :error` (catch runtime crashes)
 - **After features complete**: `project_eval` smoke test (behavioral check)

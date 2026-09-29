@@ -75,7 +75,7 @@ IRON LAW VIOLATION(S) in the change you just made to accounts.ex
 - Iron Law #10 (line 12): String.to_atom/1 detected — atom exhaustion DoS.
   Use String.to_existing_atom/1 or a whitelist map
 
-Fix these before proceeding. These are non-negotiable constraints.
+Fix these before proceeding.
 ```
 
 Comment lines are skipped, so an Iron Law quoted in a `#` comment does not

@@ -1,0 +1,9 @@
+{
+  "tolerance": 0.05,
+  "floor_tokens": 50,
+  "baselines": {
+    "phx": 5796,
+    "ecto": 132,
+    "lv": 64
+  }
+}

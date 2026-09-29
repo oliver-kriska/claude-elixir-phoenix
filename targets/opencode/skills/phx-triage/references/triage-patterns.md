@@ -85,7 +85,7 @@ pattern-matching on severity alone, you're missing context.
 
 When a review has 15+ findings:
 
-1. First pass: Auto-approve all BLOCKERs
+1. First pass: present all BLOCKERs, recommended "Fix it" (skipping one gets a warning)
 2. Second pass: Present WARNINGs for decision
 3. Third pass: Batch SUGGESTIONs — "Skip all suggestions?"
 

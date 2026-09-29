@@ -112,7 +112,7 @@ Senior engineer review checklist:
 
 ## Prior Findings Deduplication (MANDATORY)
 
-CRITICAL: Prevents re-discovering identical issues across consecutive runs.
+Run this before analysis so consecutive runs don't re-report identical issues.
 
 1. **Search** `.claude/plans/*/reviews/` and `.claude/reviews/` for prior findings
 2. **Read ALL** prior findings before analyzing code

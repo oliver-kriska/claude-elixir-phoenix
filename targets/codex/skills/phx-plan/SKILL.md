@@ -51,7 +51,7 @@ $elixir-phoenix:phx-plan .claude/plans/auth/plan.md --existing
    marking each selected track `[x]` only after its evidence is captured.
    NEVER write the plan while any selected track remains unchecked
 8. **Breadboard** (LiveView) — Produce the system map from collected evidence
-9. **Completeness check** — MANDATORY when planning from review
+9. **Completeness check** — required when planning from review
 10. **Split decision** — One plan or multiple, concrete options
 11. **Generate plan** — Checkboxes, phased tasks, code patterns.
     Reuse `.claude/plans/{slug}/scratchpad.md` for decisions and dead-ends

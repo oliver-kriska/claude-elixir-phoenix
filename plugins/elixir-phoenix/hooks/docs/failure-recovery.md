@@ -1,4 +1,4 @@
-# Failure Recovery (`PostToolUseFailure`)
+# Failure Recovery (`PostToolUseFailure`, plus a `PostToolUse` reset)
 
 Two hooks that fire when a `Bash` call running `mix` **fails**. Both inject
 guidance through `hookSpecificOutput.additionalContext`, which is the channel
@@ -11,7 +11,7 @@ escalates.
 | Script | Fires | Purpose |
 |---|---|---|
 | `elixir-failure-hints.sh` | every `mix` failure | Command-specific debugging hints |
-| `error-critic.sh` | 2nd failure onward | Detects debugging loops, consolidates error history |
+| `error-critic.sh` | 2nd consecutive failure onward; `PostToolUse` on success resets | Detects debugging loops, consolidates error history |
 
 Both are registered with `"if": "Bash(*mix*)"`, so a failing `npm test` or
 `curl` never spawns them.
@@ -60,10 +60,11 @@ debugging loops far better than unstructured retry does.
 
 ### How it tracks
 
-State lives in `/tmp/.claude-elixir-failures/`, keyed by the mix subcommand:
+State lives in `$TMPDIR/.claude-elixir-failures/<session_id>/`, keyed by the mix
+subcommand:
 
 ```text
-/tmp/.claude-elixir-failures/
+$TMPDIR/.claude-elixir-failures/<session_id>/
 ├── _mix_test_.count   # failure counter
 └── _mix_test_.log     # last 5 failures, trimmed to 100 lines
 ```
@@ -87,14 +88,13 @@ DEBUGGING LOOP DETECTED (attempt #3): mix test has failed 3 times.
 CRITIC ANALYSIS — Consolidated error history:
 [last 30 lines of accumulated failure log]
 
-STRUCTURED RECOVERY (do NOT retry the same approach):
-1. STOP retrying the same fix — it has failed 3 times
-2. Read the FULL error output from attempt #1 (root cause is usually there)
-3. Check if errors are IDENTICAL (same root cause) or DIFFERENT (cascading)
-4. If identical: your mental model of the code is wrong. Re-read the source file
-5. If cascading: fix the FIRST error only, ignore downstream errors
-6. Consider: /phx:investigate for structured root-cause analysis
-7. Consider: grep .claude/solutions/ for previously solved similar errors
+STRUCTURED RECOVERY — this fix has failed 3 times, so change the approach rather than retrying it:
+1. Read the full error output from attempt #1 (the root cause is usually there)
+2. Check whether the errors are identical (same root cause) or different (cascading)
+3. If identical: your mental model of the code is wrong. Re-read the source file
+4. If cascading: fix the first error only; downstream errors often resolve with it
+5. Consider: /phx:investigate for structured root-cause analysis
+6. Consider: grep .claude/solutions/ for previously solved similar errors
 ```
 
 The instruction to re-read attempt #1's output is the point of the whole hook.
@@ -104,10 +104,17 @@ attention.
 
 ### Counter lifetime
 
-The counters live in `/tmp` and are **not** cleared on success. A command that
-fails, gets fixed, and later fails again for an unrelated reason resumes from
-the old count, so the critic can fire earlier than the raw retry count suggests.
-`/tmp` clears on reboot.
+The count means *consecutive* failures in *this session*:
+
+- The same script is also registered on `PostToolUse` (`Bash`, `"if": "Bash(*mix*)"`).
+  When the command succeeds, it deletes that command's count and log and exits
+  silently.
+- State is keyed by `session_id`, and files older than a day are pruned.
+
+Until v3.1.2 the counters lived in a global `/tmp` directory and were never
+cleared. After two failures of `mix test` in any earlier session, every later
+`mix test` failure — the first one of a fresh session included — escalated
+straight to the debugging-loop analysis.
 
 ### Manual fallback
 

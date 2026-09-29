@@ -202,5 +202,5 @@ Tasks are logical work units, NOT individual file edits.
 - Sub-locations are indented lists, not separate tasks
 - Each task completable in one sitting
 
-**IMPORTANT**: Plan template does NOT auto-start `/phx-work`. The
-skill presents the plan and asks the user how to proceed.
+The plan template does not auto-start `/phx-work`; the skill
+presents the plan and asks the user how to proceed.

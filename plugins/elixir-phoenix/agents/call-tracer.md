@@ -21,7 +21,7 @@ You orchestrate parallel call tree tracing by spawning specialized subagents for
 From Anthropic research:
 
 - **90% time reduction** for complex queries
-- **Fresh 200k context** per subagent (no degradation)
+- **Fresh context** per subagent (no degradation)
 - **Compression benefit**: subagent explores 50 files, returns 500 token summary
 
 ## When to Use
@@ -38,7 +38,7 @@ Other agents should delegate here when:
 
 ### Phase 1: Initial Analysis
 
-Use extended thinking to:
+Before spawning:
 
 1. Parse the target MFA (Module.Function/Arity)
 2. Run `mix xref callers` for initial caller list
@@ -58,9 +58,9 @@ Spawn subagents for each relevant entry point category **in parallel**:
 Agent(subagent_type: "general-purpose", prompt: "...", run_in_background: true)
 ```
 
-**Agent prompts must be FOCUSED.** Scope each prompt to the
-relevant directories and target MFA. Do NOT give vague prompts
-like "trace the codebase."
+Scope each subagent prompt to its entry-point directories and the
+target MFA — an open-ended prompt like "trace the codebase"
+duplicates the other tracers' work.
 
 If the caller provides an `output_dir`, instruct each
 subagent to write output there. Otherwise return inline.
@@ -123,9 +123,9 @@ For internal callers found (not entry points):
 
 ### Phase 4: Synthesis
 
-Wait for ALL subagents to FULLY complete — you'll be notified as each
-finishes. Read each subagent's output file to collect results. NEVER
-proceed while any subagent is still running.
+Wait until every subagent has finished — you're notified as each one
+completes — then read each subagent's output. Proceeding while one is
+still running drops its results from the call tree.
 
 Merge all subagent outputs into unified call tree:
 

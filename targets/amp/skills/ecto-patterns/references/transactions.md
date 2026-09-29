@@ -53,8 +53,8 @@ end)
 Prefer `Repo.transact/1` (above) or `Ecto.Multi` (below) when you can — both
 surface `{:error, ...}` on failure without a manual `Repo.rollback/1`, steering
 you away from the bare match. This footgun is specific to the classic
-`Repo.transaction/1` callback form. (Ties to Iron Laws #18 and #24 — check
-changeset errors, and match `{:error, %Ecto.Changeset{}}` explicitly.)
+`Repo.transaction/1` callback form. (Ties to the plugin Iron Laws on checking
+changeset errors and matching `{:error, %Ecto.Changeset{}}` explicitly.)
 
 ## Ecto.Multi (Complex operations, testing)
 

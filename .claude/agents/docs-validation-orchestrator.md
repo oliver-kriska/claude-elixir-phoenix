@@ -9,7 +9,7 @@ tools: Read, Write, Grep, Glob, Bash, Agent
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: opus
-effort: high
+effort: medium
 ---
 
 # Docs Validation Orchestrator (Contributor Tool)
@@ -50,7 +50,9 @@ Read from `.claude/docs-check/docs-cache/`:
 | `hooks.md` | Hook validation |
 | `hooks-guide.md` | Hook validation (patterns) |
 | `plugins-reference.md` | Plugin config validation |
-| `plugin-marketplaces.md` | Marketplace config validation |
+| `plugins/marketplace-reference.md` | Marketplace config validation |
+| `plugins/dependencies.md` | Plugin dependency validation |
+| `plugins/cli-reference.md`, `plugins/measure.md`, `plugin-evals.md` | Tooling opportunities (validate/tag/details/eval) |
 | `plugins.md` | General plugin validation |
 | `settings.md` | Permission mode validation |
 | `mcp.md` | MCP config validation |

@@ -1,4 +1,4 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-plugin eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate amp-target amp-target-sync amp-target-validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke dsh-skills dsh-skills-sync dsh-skills-validate dsh-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
+.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-plugin eval-quality eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate budget budget-update prompt-audit amp-target amp-target-sync amp-target-validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke dsh-skills dsh-skills-sync dsh-skills-validate dsh-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
 
 # Default target
 help: ## Show available commands
@@ -37,6 +37,9 @@ eval-triggers: ## Re-run behavioral gate; every skill must reach 75% (~60 min, H
 eval-plugin: ## Real-session trigger eval via `claude plugin eval` (~$$45, ~50 min). SKILL=verify TAG=trigger-pos MIN_RECALL=0.6
 	@bash lab/plugin_eval/run.sh
 
+eval-quality: ## Output-quality eval, plugin vs no plugin (~$$2 per run of 6 cases, ~5 min). CASE=money-field RUNS=3 MAX_COST=15
+	@bash lab/plugin_eval/run_quality.sh
+
 eval-multimodel: ## Run trigger eval against sonnet (slow, ~$$3, ~3 hr). Override: MODEL=opus make eval-multimodel
 	@python3 -m lab.eval.trigger_scorer --all --model $${MODEL:-sonnet}
 
@@ -63,11 +66,22 @@ test-quick: ## Run pytest (no verbose, fast)
 # --- Validate ---
 
 validate: ## Run claude plugin validate on every plugin + marketplace manifest
-	@claude plugin validate plugins/elixir-phoenix
-	@claude plugin validate plugins/ecto
-	@claude plugin validate plugins/lv
-	@claude plugin validate plugins/catchup
-	@claude plugin validate .
+	@claude plugin validate --strict plugins/elixir-phoenix
+	@claude plugin validate --strict plugins/ecto
+	@claude plugin validate --strict plugins/lv
+	@claude plugin validate --strict plugins/catchup
+	@claude plugin validate --strict .
+	@claude plugin validate --strict .claude
+
+budget: ## Fail if a plugin's always-on token cost grew >5% past scripts/plugin_budget.json
+	@python3 -m scripts.plugin_budget
+
+budget-update: ## Re-record always-on token baselines after an intended change
+	@python3 -m scripts.plugin_budget --update
+
+prompt-audit: ## Report-only /doctor prompt-audit (CC 2.1.283+). TARGET=plugins/elixir-phoenix/skills/investigate
+	@test -n "$(TARGET)" || { echo "usage: make prompt-audit TARGET=<skill dir, agent file, or CLAUDE.md>"; exit 1; }
+	@claude -p "/doctor prompt-audit $(TARGET)" --permission-mode plan --model sonnet
 
 amp-target: amp-skills ## Generate the complete Amp skills and workflow plugin target
 
@@ -166,7 +180,7 @@ security: ## SkillSpector scan of all skills + agents (skips if not installed)
 
 # --- CI (full pipeline) ---
 
-ci: lint test validate amp-skills-validate codex-skills-validate pi-skills-validate opencode-skills-validate dsh-skills-validate generated-skills-snapshots-validate eval-all security ## Full CI: lint + test + validate + eval + security (same as GitHub Actions)
+ci: lint test validate budget amp-skills-validate codex-skills-validate pi-skills-validate opencode-skills-validate dsh-skills-validate generated-skills-snapshots-validate eval-all security ## Full CI: lint + test + validate + budget + eval + security (same as GitHub Actions)
 
 # --- Clean ---
 

@@ -17,7 +17,7 @@ consistent. **Contributor tooling — not shipped in the plugin.**
 ## Iron Laws — Never Violate These
 
 1. **NEVER release on a red `make ci`** — the gate runs BEFORE committing. No green, no release.
-2. **NEVER `claude plugin tag`** — this is a marketplace layout (`plugins/elixir-phoenix/.claude-plugin/plugin.json`, not repo root). Tag manually: `git tag vX.Y.Z`.
+2. **FOUR TAGS PER RELEASE** — `vX.Y.Z` plus `phx--vX.Y.Z`, `ecto--vX.Y.Z`, `lv--vX.Y.Z` from `claude plugin tag` (what dependency ranges resolve against). Tag only the release commit.
 3. **THREE NUMBERS MUST MATCH** — `plugin.json` version == CHANGELOG heading == git tag (`vX.Y.Z`). Verify before pushing.
 4. **CONFIRM BEFORE PUBLISHING** — pushing the tag and `gh release create` are outward-facing and hard to reverse. Stop and confirm with the user; show exactly what will be pushed/published first.
 5. **USERS ONLY UPDATE ON A `plugin.json` BUMP** — never ship CHANGELOG/code changes without bumping the version, or installed users get nothing (cache).
@@ -103,8 +103,15 @@ End the message with the `Co-Authored-By` trailer (see `CLAUDE.md`).
 
 ## Step 6: Tag
 
+After the release commit, tag each plugin. `claude plugin tag` validates the
+plugin, confirms `plugin.json` matches the marketplace entry, and refuses a
+dirty tree or an existing tag — so a failure here means the release commit is
+wrong, not the tag. Run it with `--dry-run` first if unsure.
+
 ```
+for p in elixir-phoenix ecto lv; do claude plugin tag plugins/$p || break; done
 git tag vX.Y.Z
+git tag --list 'v*' '*--v*' --points-at HEAD   # expect 4 tags
 ```
 
 ## Step 7: CONFIRM, then publish (outward-facing)
@@ -113,7 +120,7 @@ Show the user the pending commit, tag, and release notes. **On confirmation:**
 
 ```
 git push origin main
-git push origin vX.Y.Z
+git push origin vX.Y.Z phx--vX.Y.Z ecto--vX.Y.Z lv--vX.Y.Z
 gh release create vX.Y.Z --title "vX.Y.Z — <summary>" --notes-file <changelog-section>
 ```
 

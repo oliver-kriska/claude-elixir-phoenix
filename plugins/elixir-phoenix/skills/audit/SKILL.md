@@ -36,23 +36,26 @@ Comprehensive project-wide health assessment using 5 parallel specialist subagen
 
 ## Subagent Architecture
 
-Spawn 5 specialists in parallel using Agent tool. Each call routes to a
-declared-model plugin specialist (sonnet/opus) so the work doesn't fall
-through to `general-purpose` (Opus by default):
+Spawn 5 specialists in parallel using Agent tool. Three route to plugin
+specialists with a declared model; the two categories without a specialist use
+`general-purpose` pinned to `model: "sonnet"` — unpinned, they inherit the
+session model (Opus by default):
 
 | Subagent | Focus | Output File | Routes to |
 |----------|-------|-------------|-----------|
 | Architecture Reviewer | Structure quality, coupling, cohesion | `arch-review.md` | `phoenix-patterns-analyst` (sonnet) |
-| Performance Auditor | N+1, indexes, bottlenecks, scalability | `perf-audit.md` | `general-purpose` (TODO: no perf specialist exists yet) |
+| Performance Auditor | N+1, indexes, bottlenecks, scalability | `perf-audit.md` | `general-purpose`, `model: "sonnet"` (no perf specialist yet) |
 | Security Auditor | OWASP scan, auth patterns, secrets | `security-audit.md` | `security-analyzer` (opus) |
 | Test Health Auditor | Coverage, quality, flaky tests | `test-audit.md` | `testing-reviewer` (sonnet) |
-| Dependency Auditor | Vulnerabilities, outdated, unused | `deps-audit.md` | `general-purpose` (TODO: per-package `hex-deps-triager` only) |
+| Dependency Auditor | Vulnerabilities, outdated, unused | `deps-audit.md` | `general-purpose`, `model: "sonnet"` (`hex-deps-triager` is per-package only) |
 
 ## Workflow
 
 ### Step 1: Create Task List and Spawn All 5 Auditors (Parallel)
 
-**Create Claude Code tasks** for real-time progress visibility:
+**If `TaskCreate` is in your tool list**, create Claude Code tasks for
+progress visibility (Sonnet 5+ and Opus 4.8+ omit it unless
+`CLAUDE_CODE_ENABLE_TODO_TOOLS=1`; never ToolSearch for it — skip this block):
 
 ```
 For each auditor:
@@ -66,16 +69,16 @@ covers the audit category:
 
 ```
 Agent(subagent_type: "phx:phoenix-patterns-analyst", prompt: "Architecture audit: analyze module structure, context boundaries, coupling, cohesion. Write findings to .claude/audit/reports/arch-review.md", run_in_background: true)
-Agent(subagent_type: "general-purpose",          prompt: "Performance audit: N+1 queries, missing indexes, bottlenecks, scalability. Write findings to .claude/audit/reports/perf-audit.md", run_in_background: true)
+Agent(subagent_type: "general-purpose", model: "sonnet", prompt: "Performance audit: N+1 queries, missing indexes, bottlenecks, scalability. Write findings to .claude/audit/reports/perf-audit.md", run_in_background: true)
 Agent(subagent_type: "phx:security-analyzer",        prompt: "Security audit: OWASP scan, auth patterns, secret leakage. Write findings to .claude/audit/reports/security-audit.md", run_in_background: true)
 Agent(subagent_type: "phx:testing-reviewer",         prompt: "Test health audit: coverage, quality, flakes. Write findings to .claude/audit/reports/test-audit.md", run_in_background: true)
-Agent(subagent_type: "general-purpose",          prompt: "Dependency audit: vulnerabilities, outdated, unused. Write findings to .claude/audit/reports/deps-audit.md", run_in_background: true)
+Agent(subagent_type: "general-purpose", model: "sonnet", prompt: "Dependency audit: vulnerabilities, outdated, unused. Write findings to .claude/audit/reports/deps-audit.md", run_in_background: true)
 ```
 
-**Why specialist routing matters**: `general-purpose` subagents inherit the
-parent session model (usually Opus). Plugin specialists declare their own
-model in frontmatter (sonnet/haiku for most). Routing 3 of 5 audit tracks to
-declared-model specialists materially cuts Opus subagent volume per audit run.
+**Why specialist routing matters**: a `general-purpose` subagent without
+`model:` inherits the session model — Opus on every plan since CC 2.1.280.
+Plugin specialists declare their own model in frontmatter, and the two
+`general-purpose` tracks pin `model: "sonnet"`, so no audit track runs on Opus.
 
 **Agent prompts must be FOCUSED.** Scope each prompt to the
 relevant directories and patterns. Do NOT give vague prompts
@@ -87,9 +90,9 @@ One summary line per clean area suffices."
 
 ### Step 2: Collect Results
 
-Wait for ALL auditors to complete. Mark each auditor's task as
-`completed` via `TaskUpdate` as it finishes. NEVER proceed while
-any auditor is still running.
+Wait for ALL auditors to complete — one completion notification per agent
+spawned. If you created tasks, mark each `completed` as it finishes. NEVER
+proceed while any auditor is still running.
 
 Read reports from `.claude/audit/reports/`.
 

@@ -5,10 +5,10 @@ name: Regenerate hex_vet seed
 # each, and opens a PR with the updated seed. Human-reviewed before
 # merge — never auto-merged.
 
+# Manual-only: the audit step below is a stub and compose_seed.py does not
+# exist yet, so a scheduled run can only fail. Restore the monthly cron
+# ('0 9 1 * *') once both are implemented.
 on:
-  schedule:
-    # 1st of month at 09:00 UTC
-    - cron: '0 9 1 * *'
   workflow_dispatch:
 
 jobs:

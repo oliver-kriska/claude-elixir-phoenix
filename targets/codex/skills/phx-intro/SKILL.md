@@ -24,7 +24,7 @@ Interactive walkthrough of the Elixir/Phoenix plugin in 6 sections (~5 min).
 
 For each section:
 
-1. Present the section content **completely** — do NOT abbreviate or summarize. Every paragraph, table, and code block in the reference file must appear in output
+1. Present the section content completely — every paragraph, table, and code block from the reference file
    — as **visible response text emitted BEFORE the `AskUserQuestion` call**; content composed only in thinking is invisible to the user
 2. After presenting, use `AskUserQuestion` with options:
    - If sections remain: "Next: [next section title]", "Skip to Cheat Sheet", "Stop here"

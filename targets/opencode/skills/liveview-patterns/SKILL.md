@@ -115,7 +115,7 @@ Does component need BOTH internal state AND event handling?
 
 | Wrong | Right |
 |-------|-------|
-| DB queries without `assign_async` | Use `assign_async` for all queries |
+| DB queries without `assign_async` | Use `assign_async` for mount queries (SEO routes: `connected?` + cached dead render) |
 | `assign(socket, items: list)` for lists | `stream(socket, :items, list)` |
 | PubSub subscribe without `connected?` | `if connected?(socket), do: subscribe()` |
 | Passing socket to context functions | Extract `socket.assigns` first |

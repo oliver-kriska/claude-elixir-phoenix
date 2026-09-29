@@ -60,11 +60,8 @@ intentionally — that file is ephemeral run state, not durable trust.
 
 ### Tri-mode `block_on_unvetted` (Phase 3)
 
-Phase 2 shipped a boolean. Real-world deployment exposed two
-failure modes: `false` is too loose for teams serious about
-supply-chain hygiene; `true` (strict) breaks every existing repo
-before its ledger is seeded. Phase 3 replaces the boolean with an
-atom that fits the actual workflow shape.
+`block_on_unvetted` takes one of four modes (a legacy boolean is
+normalized — see "Migration from Phase 2 boolean" below):
 
 | Mode | Hook behavior | When to pick |
 |------|---------------|--------------|

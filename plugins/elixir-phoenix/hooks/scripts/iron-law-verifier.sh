@@ -111,7 +111,7 @@ IRON LAW VIOLATION(S) in the change you just made to $(basename "$FILE_PATH")
 (line numbers are relative to your edit, not the file):
 $(echo -e "$VIOLATIONS")
 
-Fix these before proceeding. These are non-negotiable constraints.
+Fix these before proceeding.
 MSG
   exit 2
 fi

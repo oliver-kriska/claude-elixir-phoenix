@@ -1,11 +1,17 @@
 {
   "skill": "document",
   "should_trigger": [
-    "Add @moduledoc and @doc comments to the auth context module I just created",
-    "Document the ProfileComponent LiveView component with proper @doc annotations",
-    "Write documentation for the payment schema, including @doc for each field",
-    "Add @moduledoc strings to all the modules under lib/myapp/billing/",
-    "After the review, ensure all new code has proper @moduledoc and @doc comments"
+    "Add @moduledoc and @doc comments to the accounts context module I just created",
+    "Document the UserLive LiveView with proper @doc annotations",
+    "Write documentation for the User schema, including @doc for each field",
+    "Add @moduledoc strings to all the modules under lib/my_app/",
+    "Make sure all the new code on this branch has proper @moduledoc and @doc comments"
+  ],
+  "should_trigger_test": [
+    "The Accounts module has no docs at all. Write proper module and function docs so it reads well in ExDoc.",
+    "I'm about to open a PR for the user changes. Can you write docs for the functions I touched?",
+    "Add usage examples as doctests to the public functions in the Accounts context",
+    "nobody knows what create_user expects or returns. document it"
   ],
   "should_not_trigger": [
     "Fetch HexDocs to understand how to document a schema properly",
@@ -13,5 +19,10 @@
     "Show me examples of well-documented Phoenix components in the wild",
     "Let's capture the design decision we made about context boundaries",
     "Review my code and give feedback on whether it needs more documentation"
+  ],
+  "should_not_trigger_test": [
+    "What does @doc false do, and when should I use it?",
+    "Write an ADR recording why we picked Oban over Exq",
+    "Look up in the ExDoc docs how to group modules in the sidebar"
   ]
 }

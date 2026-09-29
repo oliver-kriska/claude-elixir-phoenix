@@ -46,7 +46,7 @@ Other skills competing for routing:
 Find routing weaknesses in this description. Focus on:
 - Which test prompts would NOT match this description's keywords?
 - What's ambiguous — could another skill's description capture these prompts instead?
-- What keywords are missing that would help routing?
+- Which kinds of user intent or situation does the description fail to cover?
 - Does the description differentiate from similar skills?
 
 Do NOT propose fixes. Just the problems."""
@@ -66,7 +66,7 @@ def author_prompt(
     """
     system = (
         "You are a skill description writer optimizing for routing accuracy. "
-        "Rewrite descriptions to be concise, keyword-rich, and unambiguous. "
+        "Rewrite descriptions to be concise, intent-first, and unambiguous. "
         "Address each criticism directly. Do not make changes that aren't "
         "motivated by an identified problem."
     )
@@ -90,6 +90,9 @@ CONSTRAINTS:
 - Must start with a verb or action phrase
 - Include "Use when..." or "Use proactively when..." phrasing
 - No vague words (various, general, comprehensive, etc.)
+- Generalize to categories of user intent. Do not copy distinctive words or
+  phrases from the prompts above: they are a sample, and held-out prompts you
+  have not seen decide whether the rewrite is accepted
 
 Respond with ONLY the new description text (no quotes, no explanation).
 Then on a new line starting with "FIXES:", list which problems each change addresses."""
@@ -125,8 +128,9 @@ VERSION X: "{version_x}"
 VERSION Y: "{version_y}"
 
 Produce a synthesis that keeps the strongest routing elements from both.
-Pick the best keyword coverage, the clearest differentiation, the most
-accurate trigger phrasing.
+Pick the broadest coverage of user intent, the clearest differentiation, the
+most accurate trigger phrasing. Do not add wording lifted from the prompts
+above; held-out prompts decide acceptance.
 
 CONSTRAINTS:
 - Maximum 250 characters
@@ -177,7 +181,7 @@ Three proposed descriptions for {skill_name}:
 For each proposal, evaluate:
 1. How many of the test prompts would be correctly routed to this description?
 2. Does the description clearly differentiate from competing skills?
-3. Is the description concise and keyword-rich?
+3. Is the description concise, and would it route paraphrases of these prompts, not only their exact wording?
 
 Then rank all three from best to worst. Respond with your ranking in this
 exact format at the end:

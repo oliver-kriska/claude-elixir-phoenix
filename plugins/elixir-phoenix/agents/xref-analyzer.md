@@ -4,8 +4,8 @@ description: Analyze module dependencies and context boundaries using mix xref. 
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
 permissionMode: bypassPermissions
-model: haiku
-effort: low
+model: sonnet
+effort: medium
 maxTurns: 10
 omitClaudeMd: true
 skills:

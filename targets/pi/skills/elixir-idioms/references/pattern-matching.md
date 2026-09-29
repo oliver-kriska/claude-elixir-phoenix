@@ -66,7 +66,7 @@ Guards must be pure, deterministic:
 - Arithmetic: `+`, `-`, `*`, `/`, `abs/1`, `div/2`, `rem/2`
 - Value access: `hd/1`, `tl/1`, `elem/2`, `tuple_size/1`, `map_size/1`, `length/1`
 
-**CRITICAL**: Guards use `and`/`or`/`not`, never short-circuit operators (they require boolean operands)
+Guards use `and`/`or`/`not`, never short-circuit operators (they require boolean operands)
 
 ```elixir
 # CORRECT

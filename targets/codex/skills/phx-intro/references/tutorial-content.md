@@ -2,7 +2,7 @@
 
 Content for each section of the `$elixir-phoenix:phx-intro` tutorial.
 Present ONE section at a time with AskUserQuestion between sections.
-IMPORTANT: Present ALL content in each section — every paragraph, table, and code block. Do NOT abbreviate or summarize.
+Present each section in full — every paragraph, table, and code block, unabridged.
 
 ## Contents
 
@@ -195,12 +195,12 @@ The plugin uses **layered enforcement** — some things run automatically, some 
 | Failure hints | Bash command fails | Injects debugging hints via `additionalContext` |
 | Error critic | Repeated mix failures | Escalates to structured critic analysis after 3+ failures |
 | Iron Laws injection | Any subagent spawns | Injects all 26 Iron Laws into subagents via `additionalContext` |
-| PreCompact rules | Before context compaction | Re-injects workflow rules via JSON `systemMessage` |
+| Compaction rules | After context compaction | Re-injects workflow rules via `SessionStart` (matcher `compact`) |
 
 Format check **warns only** — it doesn't auto-fix (that would cause race conditions with the editor).
 
-The PreCompact hook detects active workflow phases (`$elixir-phoenix:phx-plan`, `$elixir-phoenix:phx-work`, `$elixir-phoenix:phx-full`) and re-injects their critical rules
-before context compaction. This prevents "rule amnesia" where Claude loses behavioral constraints after context is compressed.
+The compaction hook detects active workflow phases (`$elixir-phoenix:phx-plan`, `$elixir-phoenix:phx-work`, `$elixir-phoenix:phx-full`) and re-injects their critical rules
+after context compaction. This prevents "rule amnesia" where Claude loses behavioral constraints after context is compressed.
 
 Note: Compilation verification was moved to `$elixir-phoenix:phx-work` phase checkpoints for speed. The `verify-elixir.sh` hook has been removed.
 
@@ -290,7 +290,7 @@ Being honest about the gaps:
 
 ```text
 AUTOMATIC (hooks):     Format check, security reminders, progress logging, failure hints,
-                       Iron Laws in subagents, PreCompact rule preservation
+                       Iron Laws in subagents, rule re-injection after compaction
 BEHAVIORAL (Claude):   Iron Laws, skill loading, stop-and-explain
 ON-DEMAND (commands):  $elixir-phoenix:phx-review (iron-law-judge), $elixir-phoenix:phx-verify (compile/credo/dialyzer)
 STRENGTHENED BY:       $elixir-phoenix:phx-init (injects rules into project CLAUDE.md)
@@ -362,7 +362,7 @@ missed.
 
 The plugin complements — it doesn't replace — CC's built-in features. A few that pair well with the Elixir workflow:
 
-- **Auto mode + xhigh effort (Opus 4.7, v2.1.111)**: run `$elixir-phoenix:phx-full` hands-off. Auto mode routes permission prompts through a safety classifier instead of blocking on you.
+- **Auto mode + higher effort (`/effort xhigh`)**: run `$elixir-phoenix:phx-full` hands-off. Auto mode routes permission prompts through a safety classifier instead of blocking on you.
 - **`/focus` (v2.1.110)**: hides intermediate tool output. Useful during long `$elixir-phoenix:phx-work` or `$elixir-phoenix:phx-full` runs when you only care about the final state.
 - **Recap (v2.1.108)**: CC summarizes what happened when you return to a session.
   Our scratchpad (`.claude/plans/{slug}/scratchpad.md`) still captures what recap

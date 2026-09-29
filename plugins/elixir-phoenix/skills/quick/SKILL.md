@@ -31,7 +31,7 @@ Skip the planning ceremony. Get working code fast.
 
 ## Workflow
 
-1. **Understand** - Read relevant files (max 3)
+1. **Understand** - Read the files the change touches
 2. **Implement** - Write code directly
 3. **Verify** - Quick compile check
 4. **Done** - No ceremony
@@ -150,6 +150,7 @@ end
 5. Verifying...
 $ mix compile --warnings-as-errors ✓
 $ mix ecto.migrate ✓
+$ mix test test/my_app/accounts_test.exs ✓
 
-Done. Run `mix test` to verify.
+Done.
 ```

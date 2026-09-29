@@ -1,9 +1,8 @@
 ---
 name: phx-help
-description: Choose Phoenix review, plan, debug, or test command. Use when user asks
-  which phx-* command or plugin skill handles a task; do not route only to a domain
-  skill. NEVER for bare /help; NOT for ambiguous requests (use intent-detection) or
-  a plugin tour.
+description: Use when the user asks which phx-* command fits a task (review, plan,
+  debug, test) or how two commands differ. Checks plans and git state, then recommends
+  from the routing table. Not for bare /help, a tour, or ambiguous requests (intent-detection).
 ---
 
 # Plugin Help — Interactive Command Advisor

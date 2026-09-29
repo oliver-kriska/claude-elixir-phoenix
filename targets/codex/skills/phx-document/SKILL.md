@@ -39,10 +39,9 @@ $elixir-phoenix:phx-document  # Auto-detect from recent plan
 
 Run `git diff --name-only HEAD~5 | grep '\.ex$' | head -20` to check for new `.ex` files.
 
-If NO new `.ex` files were added (only modifications), skip the full
+If no new `.ex` files were added (only modifications), skip the full
 audit and report: "No new modules — documentation coverage unchanged."
-This prevents 35-message analysis sessions that conclude "PASS" with
-zero output (confirmed: session bb0a0454 wasted ~2K tokens on no-op).
+A full audit of unchanged coverage produces nothing to add.
 
 1. **Identify** new modules from recent commits or plan file
 2. **Check** documentation coverage (`@moduledoc`, `@doc`)

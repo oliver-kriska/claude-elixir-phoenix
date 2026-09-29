@@ -82,6 +82,14 @@ SKILL_COMMAND_RE = re.compile(r"/(?:phx|ecto|lv):[a-z][a-z0-9_-]*")
 # (https://github.com/earendil-works/pi/blob/main/scripts/session-context-stats.mjs)
 
 MODEL_CONTEXT_WINDOWS = {
+    # Native 1M window, no [1m] variant (Sonnet 5+, Opus 4.8+, Fable).
+    "claude-sonnet-5-5": 1_000_000,
+    "claude-sonnet-5": 1_000_000,
+    "claude-opus-5-5": 1_000_000,
+    "claude-opus-5": 1_000_000,
+    "claude-opus-4-8": 1_000_000,
+    "claude-fable-5-1": 1_000_000,
+    "claude-fable-5": 1_000_000,
     "claude-opus-4-7": 200_000,
     "claude-opus-4-7[1m]": 1_000_000,
     "claude-opus-4-6": 200_000,

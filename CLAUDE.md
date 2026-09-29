@@ -17,9 +17,7 @@ The plugin implements a **Plan → Work → Review → Compound** lifecycle:
 plans/{slug}/  (in namespace) (in namespace) solutions/
 ```
 
-> **Migration note**: The `--depth` flag replaces the old
-> `--detail` flag. Use `quick|standard|deep` instead of
-> `minimal|more|comprehensive`.
+> **Planning depth**: `--depth quick|standard|deep`.
 
 **Key principle**: Filesystem is the state machine. Each phase reads from previous phase's output. Solutions feed back into future cycles.
 
@@ -65,7 +63,7 @@ Each plan owns all its artifacts in a namespace directory:
 ### Context Supervisor Pattern
 
 Orchestrators that spawn multiple sub-agents use a generic
-`context-supervisor` (haiku) to compress worker output before
+`context-supervisor` (sonnet) to compress worker output before
 synthesis. This prevents context exhaustion in the parent:
 
 ```
@@ -91,12 +89,10 @@ investigation track must apply trace procedures directly rather than spawning
 call-tracer, which would create a depth-4 chain. A plugin hook cannot raise the
 parent process's environment.
 
-**Background is the default (CC 2.1.198).** Subagents now run in the background by
-default and inherit the session's extended-thinking config (a free quality lift for
-review/research/council workers). Orchestrators already `run_in_background: true` and
-wait for all workers before compressing — that bg-then-wait model is now automatic
-even for workers spawned without the flag. Keep the explicit flag for self-documentation;
-no change is required to benefit.
+**Background is the default (CC 2.1.198+).** Subagents run in the background by
+default and inherit the session's extended-thinking config. Orchestrators pass
+`run_in_background: true` and wait for all workers before compressing; keep the
+explicit flag for self-documentation.
 
 ## Structure
 
@@ -130,7 +126,7 @@ claude-elixir-phoenix/
 │       ├── agents/                  # 26 specialist agents
 │       │   ├── workflow-orchestrator.md   # Full cycle coordination
 │       │   ├── planning-orchestrator.md
-│       │   ├── context-supervisor.md     # Generic output compressor (haiku)
+│       │   ├── context-supervisor.md     # Generic output compressor (sonnet)
 │       │   └── ...
 │       ├── hooks/
 │       │   └── hooks.json           # Format, progress tracking, Stop warning
@@ -172,20 +168,25 @@ skills:
 
 **Rules:**
 
-- Use `sonnet` model by default — the `sonnet` alias resolves to Sonnet 5 (Claude Code's
-  default model since CC 2.1.197, native 1M context), which achieves near-opus quality at lower cost
+- Use `sonnet` model by default — the alias resolves to Sonnet 5.5 (CC 2.1.284+, native 1M
+  context, $2/$10 per Mtok). `opus` is Opus 5.5 ($4/$20), `haiku` is Haiku 4.5 ($1/$5, 200K).
+  On Bedrock/Vertex/Foundry the aliases point at older models. A family alias follows the
+  session: a session pinned to Sonnet 5 runs `model: sonnet` agents on Sonnet 5
 - Use `opus` for orchestrators that synthesize across parallel workers, and for
   security-critical agents. Currently: `workflow-orchestrator`, `parallel-reviewer`,
   `deep-bug-investigator`, `security-analyzer`
 - Use `sonnet` for orchestrators that fan out without cross-worker synthesis
   (`planning-orchestrator`, `call-tracer`) and for judgment-heavy specialists
-- **An opus orchestrator must pin its `general-purpose` spawns to `model: "sonnet"`.**
-  A subagent with no `model:` in its definition defaults to `inherit`, which resolves
-  to the *spawning parent's* model — so bumping an orchestrator to opus silently
-  promotes its whole fan-out. Named `phx:*` subagents are unaffected (their own
-  frontmatter wins); only bare `general-purpose` spawns inherit
-- Use `haiku` for mechanical tasks: compression, verification, dependency analysis
-- Set `effort:` to match cognitive load: `low` for haiku/mechanical agents, `medium` for sonnet specialists, `high` for opus orchestrators and security-critical agents
+- **Pin `general-purpose` fan-out spawns to `model: "sonnet"`** — in opus orchestrators
+  and in skills that spawn from the main conversation. A subagent with no `model:`
+  inherits the *spawning parent's* model, and Opus 5.5 is the default on every plan since
+  CC 2.1.280. Named `phx:*` subagents are unaffected (their frontmatter wins). Leave
+  implementation workers (`/phx:work` parallel tasks) inheriting the user's chosen model
+- Mechanical agents (compression, verification, dependency analysis, fetch workers) also use
+  `sonnet`: Haiku 4.5 is a generation behind, 200K-context, ignores `effort`, and costs half of
+  Sonnet 5.5 — not enough saving to justify the quality gap
+- Set `effort: medium` — the Opus 5.5 and Sonnet 5.5 default in CC. Opus 5.5 at `medium` matches
+  Opus 5 at `high`; raise an agent to `high` only with an eval showing it helps
 - Review agents are **read-only** (`disallowedTools: Write, Edit, NotebookEdit`)
 - Use `permissionMode: bypassPermissions` for all agents — `default` causes "Bash command permission check failed"
   when agents run in background (safety system scans skill content for shell-like patterns)
@@ -225,11 +226,11 @@ skills/{name}/
 - Use `${CLAUDE_SKILL_DIR}/references/` for reference file paths (not bare `references/`)
 - No `triggers:` field (use `description` for auto-loading)
 - **Description must be under 250 characters** — this is a plugin-side budget discipline,
-  not a hard CC cap. CC raised `MAX_LISTING_DESC_CHARS` from 250 to 1,536 in v2.1.105, but
-  the skill-listing budget is still ~1% of the context window (~8K chars default). With
-  ~40 skills in this plugin, every description has ~200 chars of listing budget on average.
-  Longer descriptions crowd out other skills in the listing, hurting routing accuracy across
-  the whole plugin. Target under 200 chars. Enforced by eval.
+  not a hard CC cap (CC caps `description` + `when_to_use` at 1,536 chars). The skill
+  listing gets 1% of the model's context window, shared by every installed plugin. On
+  overflow CC drops descriptions starting with the least-invoked skills — rarely used
+  phx reference skills lose theirs first. With 51 skills, target under 200 chars.
+  Enforced by eval; `make budget` fails when the always-on total grows >5%.
 
 ### Workflow Skills
 
@@ -260,9 +261,7 @@ Defined in `hooks/hooks.json`:
     "PostToolUseFailure": [...],   // Elixir failure hints + error critic for mix commands
     "UserPromptSubmit": [...],     // route-intent.sh — inject /phx: workflow suggestions
     "SubagentStart": [...],        // Iron Laws injection into all subagents
-    "SessionStart": [...],         // Setup dirs + Tidewave + Ash detection + resume detection
-    "PreCompact": [...],           // Re-inject workflow rules before compaction
-    "PostCompact": [...],          // Verify plan state survived compaction
+    "SessionStart": [...],         // Setup dirs + Tidewave + Ash + resume detection; `compact` re-injects workflow rules
     "StopFailure": [...],          // Log API failures to scratchpad for resume
     "Stop": [...]                  // Warn if uncompleted tasks
   }
@@ -296,16 +295,19 @@ change that ships without them loses that permanently. See
   (these fire on all file types — no `if` filtering)
 - `PostToolUseFailure` (Bash): Elixir-specific debugging hints and **error critic** —
   both use `"if": "Bash(*mix*)"` to only fire on mix command failures (via `additionalContext`)
+- `PostToolUse` (Bash, `"if": "Bash(*mix*)"`): `error-critic.sh` resets that command's failure count
+  on success, so the critic counts consecutive failures per session (state keyed by `session_id`)
 - `UserPromptSubmit`: `route-intent.sh` — inject one-line `/phx:` workflow suggestions for high-signal
   intents (PR URLs → `/phx:pr-review`, Tidewave current-page + stack traces → `/phx:investigate`).
   Gated on `mix.exs`, one suggestion per category per session, always exits 0
 - `SubagentStart`: Inject all Iron Laws into every spawned subagent via `additionalContext` (addresses zero skill auto-loading gap)
-- `PreCompact`: Re-inject workflow rules (plan/work/full) before compaction via JSON `systemMessage`
 - `SessionStart` (all): Setup `.claude/` directories + Tidewave detection + Ash detection (`detect-ash.sh`) (`async: true`)
 - `SessionStart` (startup|resume|fork only): Scratchpad check + resume workflow detection (`check-resume.sh` —
   gated on `mix.exs` OR an existing `.claude/plans/*/plan.md`; sole owner of the resume/no-plan banner
   after the duplicate echo hook was removed) + branch freshness (`async: true`) + workflow hints
-- `PostCompact`: Verify active plan state survived compaction, warn Claude to re-read plan and scratchpad
+- `SessionStart` (compact only): `compact-rules.sh` re-injects workflow rules (plan/work/full) and scratchpad
+  dead ends; `compact-verify.sh` tells Claude to re-read the active plan. Both use stdout — the only
+  post-compaction channel that reaches Claude
 - `StopFailure`: Log API failure to plan scratchpad for resume detection in next session
   (CC ignores StopFailure exit code/output — the scratchpad **write** is the whole job)
 - `Stop` (`check-pending-plans.sh`): user-visible `systemMessage` reminder, gated on running
@@ -314,14 +316,18 @@ change that ships without them loses that permanently. See
   `SessionStart`, so it does NOT re-warn them every turn. Deliberately NOT `additionalContext`
   (that would force Claude to continue on every stop)
 
+Every `command` quotes its script path — `"\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/x.sh\""`.
+Unquoted, a plugin path with a space splits and the `|| exit 0` gate fails open.
+`make validate` runs `claude plugin validate --strict`, and a pytest guard enforces it in CI.
+
 **Hook output patterns (important for contributors):**
 
 - `PostToolUse` stdout is **verbose-mode only** — use `exit 2` + stderr to feed messages to Claude
-- `PreCompact` has **no stdout context injection** — use JSON `systemMessage`
+- `PreCompact` / `PostCompact` **cannot reach Claude** — `systemMessage` and stderr go to the user only.
+  Re-inject after compaction with `SessionStart` matcher `compact` (stdout)
 - `SessionStart` stdout IS added to Claude's context (one of two exceptions along with `UserPromptSubmit`)
 - `SubagentStart` uses `hookSpecificOutput.additionalContext` to inject context into subagents
 - `PostToolUseFailure` uses `hookSpecificOutput.additionalContext` for debugging hints
-- `PostCompact` uses `exit 2` + stderr to warn Claude (same pattern as PostToolUse)
 - `Stop` stdout is **debug-log only** — to reach the user use JSON `systemMessage` (Claude still
   stops); `additionalContext`/`exit 2` instead **continue the turn**, so reserve them for cases
   where you actually want Claude to keep working
@@ -366,8 +372,8 @@ uses plugin namespaces plus skill directory names for effective slash commands;
 frontmatter `name` alone does not preserve these public names.
 
 When editing skills, agents, or hooks mid-session, run `/reload-plugins` to
-pick up changes without restarting Claude Code (v2.1.98+). Skills now hot-reload
-through this command even when provided by installed plugins.
+pick up changes without restarting Claude Code (v2.1.98+). This also reloads
+skills provided by installed plugins.
 
 ### Testing workflow
 
@@ -411,7 +417,10 @@ make eval-full     # Structural checks + fresh per-skill behavioral gate
 make eval-fix      # Auto-fix lint + show failures + suggest autoresearch
 make eval-tournament # Run tournament on weak skills (<75% trigger accuracy)
 make eval-plugin   # Real-session trigger eval via `claude plugin eval` (paid; SKILL=x)
-make ci            # Full CI pipeline: lint + test + validate + eval + security
+make eval-quality  # Output-quality eval, plugin vs no plugin (paid ~$2; CASE=x RUNS=3)
+make budget        # Always-on token cost vs scripts/plugin_budget.json (budget-update to re-record)
+make prompt-audit TARGET=plugins/elixir-phoenix/skills/x  # Report-only /doctor prompt-audit
+make ci            # Full CI pipeline: lint + test + validate + budget + eval + security
 ```
 
 ### Eval Framework (lab/eval/)
@@ -420,7 +429,7 @@ The plugin has seven deterministic structural dimensions plus a neutral
 behavioral slot for skills, and five deterministic dimensions for agents.
 **Run `make eval` after every skill/agent edit.**
 
-**When editing skills/agents, ALWAYS verify your changes pass eval:**
+**Eval loop for skill/agent edits:**
 
 1. Edit the skill or agent file
 2. Run `make eval` — checks only changed files
@@ -496,7 +505,7 @@ Only trim when content is purely informational and not execution-critical.
   explicit instruction, not a tool-enforced security boundary)
 - [ ] `Write` allowed for agents that output reports (research agents, reviewers, context-supervisor). Only agents that neither review nor research should have Write disallowed.
 - [ ] `permissionMode: bypassPermissions`
-- [ ] `effort:` set (low for haiku, medium for sonnet, high for opus/security)
+- [ ] `effort:` set (`medium`; `high` only with eval evidence)
 - [ ] `omitClaudeMd: true` for report-only agents (Write allowed for own report, Edit disallowed). They don't need commit/lint guidelines. Iron Laws injected via SubagentStart hook.
 - [ ] Skills preloaded
 - [ ] Description under 250 characters
@@ -530,11 +539,12 @@ Only trim when content is purely informational and not execution-critical.
 - [ ] `/phx:intro` tutorial content still accurate (commands, agents, features)
 - [ ] Public `/phx:*`, `/ecto:*`, and `/lv:*` command names still match skill directories and compatibility dependencies
 
-> **Tagging note**: `claude plugin tag` (CC 2.1.118+) does NOT work for this
-> repo. It expects `.claude-plugin/plugin.json` at the repo root, but this
-> is a marketplace layout — the plugin lives at
-> `plugins/elixir-phoenix/.claude-plugin/plugin.json`. Tagging stays manual:
-> `git tag vX.Y.Z && git push --tags`.
+> **Tagging note**: each release gets four tags. `git tag vX.Y.Z` carries the
+> GitHub release. `claude plugin tag plugins/<name>` (verified on CC 2.1.284 with
+> this marketplace layout) creates `phx--vX.Y.Z`, `ecto--vX.Y.Z` and `lv--vX.Y.Z` —
+> the scheme dependency version ranges resolve against — after validating the
+> plugin, checking `plugin.json` against the marketplace entry, and refusing a
+> dirty tree. Since v3.1.2.
 
 #### Where the version lives
 
@@ -567,7 +577,7 @@ The plugin uses [semantic versioning](https://semver.org/):
 - **MINOR**: New features (new hooks, skills, agents, commands)
 - **PATCH**: Bug fixes, doc updates, description improvements
 
-**IMPORTANT**: Users only receive updates when the version in `plugin.json`
+Users only receive updates when the version in `plugin.json`
 changes. If you push code without bumping the version, existing users won't
 see the changes due to caching.
 
@@ -580,7 +590,7 @@ On release, rename `[Unreleased]` to `[X.Y.Z] - YYYY-MM-DD` and bump
 
 # Claude Code Behavioral Instructions
 
-**CRITICAL**: These instructions OVERRIDE default behavior for Elixir/Phoenix projects in this codebase.
+These instructions apply to Elixir/Phoenix work in this codebase.
 
 ## Automatic Skill Loading
 
@@ -603,7 +613,7 @@ When working on Elixir/Phoenix code, ALWAYS load relevant skills based on file c
 
 ### Skill Loading Behavior
 
-1. When opening/editing a file matching patterns above, silently load the skill
+1. When opening/editing a file matching patterns above, load the skill
 2. Apply Iron Laws from loaded skills as validation rules
 3. If code violates Iron Law, **stop and explain** before proceeding
 4. Reference detailed docs from `references/` when making implementation decisions
@@ -659,7 +669,7 @@ check if the same bug exists in each variant. Do this BEFORE implementing the fi
 
 ## Iron Laws Enforcement (NON-NEGOTIABLE)
 
-These rules are NEVER violated. If code would violate them, **STOP and explain** before proceeding:
+If code would violate one of these rules, **STOP and explain** before proceeding:
 
 ### LiveView Iron Laws
 
@@ -816,7 +826,7 @@ When working on code, automatically consult relevant reference documentation bef
 ### Consultation Behavior
 
 1. **Before implementing**, read relevant reference for correct pattern
-2. **Silently apply** patterns (don't narrate unless complex)
+2. **Apply** the patterns
 3. **Check Iron Laws** from skill before and after implementation
 4. **Security code ALWAYS gets reference consultation** (authentication.md, authorization.md)
 

@@ -1,5 +1,11 @@
-"""Tests for tournament core: Borda scoring, parsing, convergence."""
+"""Tests for tournament core: Borda scoring, parsing, convergence, held-out split."""
 
+import json
+import sys
+
+import pytest
+
+from lab.tournament import description_tournament as dt
 from lab.tournament.tournament import (
     TournamentState,
     aggregate_borda,
@@ -193,3 +199,47 @@ class TestConvergence:
 
         assert state.pass_number == 5
         assert len(state.history) == 2
+
+
+class TestHeldOutSplit:
+    """Validation must never silently fall back to the prompts a description was tuned on."""
+
+    def _triggers(self, tmp_path, monkeypatch, **data):
+        (tmp_path / "demo.json").write_text(json.dumps(data))
+        monkeypatch.setattr(dt, "TRIGGERS_DIR", str(tmp_path))
+
+    def test_test_split_refuses_without_held_out_prompts(self, tmp_path, monkeypatch):
+        self._triggers(tmp_path, monkeypatch, should_trigger=["train a", "train b"])
+
+        with pytest.raises(dt.MissingHeldOutSplit):
+            dt.load_trigger_prompts("demo", split="test")
+        assert dt.held_out_count("demo") == 0
+        assert dt.load_trigger_prompts("demo", split="train") == ["train a", "train b"]
+
+    def test_splits_stay_separate(self, tmp_path, monkeypatch):
+        self._triggers(tmp_path, monkeypatch, should_trigger=["t1"], should_trigger_test=["v1", "v2", "v3"])
+
+        assert dt.load_trigger_prompts("demo", split="train") == ["t1"]
+        assert dt.load_trigger_prompts("demo", split="test") == ["v1", "v2", "v3"]
+        assert dt.load_trigger_prompts("demo", split="all") == ["t1", "v1", "v2", "v3"]
+        assert dt.held_out_count("demo") == 3
+
+    def test_cli_refuses_a_skill_without_held_out_prompts(self, tmp_path, monkeypatch, capsys):
+        self._triggers(tmp_path, monkeypatch, should_trigger=["t1"])
+        monkeypatch.setattr(dt, "load_all_descriptions", lambda: {"demo": "Demo skill. Use when testing."})
+        monkeypatch.setattr(sys, "argv", ["description_tournament", "--skill", "demo", "--dry-run"])
+
+        with pytest.raises(SystemExit) as exc:
+            dt.main()
+
+        assert exc.value.code == 1
+        assert "no should_trigger_test prompts" in capsys.readouterr().err
+
+    def test_cli_override_runs_a_dry_run(self, tmp_path, monkeypatch, capsys):
+        self._triggers(tmp_path, monkeypatch, should_trigger=["t1"])
+        monkeypatch.setattr(dt, "load_all_descriptions", lambda: {"demo": "Demo skill. Use when testing."})
+        monkeypatch.setattr(sys, "argv", ["description_tournament", "--skill", "demo", "--dry-run", "--allow-unvalidated"])
+
+        dt.main()
+
+        assert '"mode": "dry_run"' in capsys.readouterr().out

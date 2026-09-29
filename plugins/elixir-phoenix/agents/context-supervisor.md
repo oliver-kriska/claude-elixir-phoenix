@@ -4,8 +4,8 @@ description: Compresses multi-agent output into consolidated summaries to preven
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit, Bash, Agent
 permissionMode: bypassPermissions
-model: haiku
-effort: low
+model: sonnet
+effort: medium
 maxTurns: 10
 omitClaudeMd: true
 ---
@@ -29,12 +29,8 @@ You receive three inputs:
 
 ### Step 1: Inventory
 
-Glob `{input_dir}/*.md` to find all worker output files.
-For each file:
-
-- Read contents
-- Estimate tokens (character count / 4)
-- Record filename and topic
+Glob `{input_dir}/*.md` (or the pattern the caller names) and read each worker output file, noting its
+filename, topic, and approximate size (characters / 4 ≈ tokens).
 
 ### Step 2: Strategy Selection
 
@@ -101,14 +97,9 @@ When 2+ files contain the same finding:
 
 ### Step 5: Validate Coverage
 
-**Every input file MUST have at least one item in output.**
-
-After building the consolidated summary, verify:
-
-- Count input files
-- Count files represented in output
-- If any file has zero representation: add a **COVERAGE GAP**
-  warning with the missing filename
+Every input file needs at least one item in the output, so no
+worker's findings vanish silently. For any file without one, add a
+**COVERAGE GAP** warning naming it.
 
 ### Step 6: Write Output
 

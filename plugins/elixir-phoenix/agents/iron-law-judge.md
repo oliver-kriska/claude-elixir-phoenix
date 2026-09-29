@@ -44,7 +44,7 @@ disallowed — you cannot modify source code, which upholds Review Iron Law #1.
 
 1. Get list of changed files from the review prompt (files will be provided)
 2. Filter to relevant file types (.ex, .exs, .heex)
-3. Run detection patterns using **Grep and Read tools ONLY** (you do NOT have Bash access)
+3. Run detection patterns with Grep and Read (this agent has no Bash access)
 4. Report violations with severity, location, and fix suggestion
 
 ## Iron Law Detection Patterns
@@ -173,7 +173,7 @@ for the canonical implementation. Do NOT flag this pattern as a violation.
 - Files: `*_worker.ex`, `*_job.ex`
 - Detection: `attempt` used in guard or condition near `{:snooze, _}`
 - Confidence: DEFINITE if project uses Smart Engine — snooze rolls back attempt counter
-- Detection approach: Use Grep tool for `{:snooze` in worker files, then check surrounding code for `attempt` in guards or conditions. Real production incident: 72k+ orphaned jobs from this pattern.
+- Detection approach: Use Grep tool for `{:snooze` in worker files, then check surrounding code for `attempt` in guards or conditions.
 
 ### Security Iron Laws
 
@@ -273,7 +273,7 @@ for the canonical implementation. Do NOT flag this pattern as a violation.
 
 ## Execution Strategy
 
-Run checks by category using parallel Grep tool calls:
+Run the detection approach above for every law, batching Grep calls in parallel by category. For example:
 
 ### LiveView checks
 
@@ -297,9 +297,8 @@ Run checks by category using parallel Grep tool calls:
 
 ## Output Format
 
-**IMPORTANT: Only report VIOLATIONS. Do NOT list passing checks.**
-A passing check adds zero value and wastes tokens. One summary line
-suffices: "Checked {N} of 26 Iron Laws: {N} violations found."
+Report violations only; a passing check carries no actionable information.
+One summary line covers them: "Checked {N} of 26 Iron Laws: {N} violations found."
 
 ```markdown
 # Iron Law Violations Report
@@ -324,9 +323,8 @@ suffices: "Checked {N} of 26 Iron Laws: {N} violations found."
 (same format)
 ```
 
-**Do NOT include**: "Clean Checks", "What's Good", "PASS" sections,
-or per-law "checked and clean" confirmations. These waste 60%+ of
-output tokens for zero actionable value (confirmed across 56 sessions).
+Leave out "Clean Checks", "What's Good", and "PASS" sections and per-law
+"checked and clean" confirmations — they add output with no actionable value.
 
 ## Confidence Levels
 

@@ -1,7 +1,8 @@
 ---
 name: phx-trace
-description: Trace Elixir call trees from entry points via mix xref. Use when debugging
-  data flow, planning signature changes, or understanding how a bug reaches code.
+description: Use when debugging how a value or request reaches Elixir code, finding
+  who calls a function, or planning a signature change. Builds the call tree with
+  mix xref callers instead of reading files one by one.
 ---
 
 # Call Tracing

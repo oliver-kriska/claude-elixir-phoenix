@@ -77,7 +77,7 @@ A non-zero exit from this script is always a bug, so `hooks.json` appends
 `|| exit 0`:
 
 ```json
-"command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh || exit 0"
+"command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh\" || exit 0"
 ```
 
 This matters. The script once got corrupted by merge-conflict markers, and
@@ -85,6 +85,11 @@ because bash exited non-zero, **every Bash call in the session was blocked**.
 Failing open turns that class of failure into "the guard is off" rather than
 "the session is bricked". If `jq` is missing, the hook prints a notice to stderr
 and exits 0 for the same reason.
+
+The script path is quoted for the same reason. Before v3.1.2 it was not, and
+for a user whose plugin cache path contains a space the shell looked for a
+script named after the first word, failed, and `|| exit 0` turned that into an
+allow — the force-push and destructive-`mix` blocks were silently off.
 
 **Never add a deny path that relies on a non-zero exit code.**
 

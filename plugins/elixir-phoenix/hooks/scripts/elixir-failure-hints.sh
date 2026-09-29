@@ -4,7 +4,6 @@
 
 INPUT=$(cat)
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
-ERROR=$(echo "$INPUT" | jq -r '.error // empty')
 
 # Only handle mix-related failures
 echo "$COMMAND" | grep -qE '^mix\b|MIX_ENV=\S+ mix' || exit 0
@@ -36,7 +35,7 @@ elif echo "$COMMAND" | grep -qE 'mix ecto'; then
 - For migration failures: check if table/column already exists
 - For rollback issues: ensure down/0 reverses up/0 exactly
 - For constraint errors: check existing data violates new constraint
-- Run mix ecto.reset in dev to start fresh (destructive)"
+- To start fresh in dev, ask the user to run mix ecto.reset (the plugin blocks it for Claude because it destroys all data)"
 fi
 
 if [ -n "$HINTS" ]; then

@@ -1,6 +1,6 @@
 ---
 name: ecto-patterns
-description: "Write or fix Ecto schemas, changesets, queries, and migrations — preloads, unique constraints, money fields, Multi, upserts. Use when adding fields, validations, Repo queries, or migrations. Skip for Ash."
+description: "Use when a task touches Ecto, even a how-to question: schemas, changesets, validations, queries, preloads, Multi, migrations, constraints, money fields. Load it before writing Ecto code. Skip for Ash."
 effort: medium
 user-invocable: false
 paths:

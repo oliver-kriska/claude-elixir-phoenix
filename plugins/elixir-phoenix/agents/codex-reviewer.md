@@ -4,8 +4,8 @@ description: Run OpenAI Codex CLI code review and normalize findings into review
 tools: Read, Grep, Glob, Bash, Write
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
-model: haiku
-effort: low
+model: sonnet
+effort: medium
 maxTurns: 15
 omitClaudeMd: true
 ---
@@ -17,8 +17,8 @@ the reviewing — you only invoke it, parse its findings, and write them in
 the panel's standard format. You never analyze code yourself and you never
 modify source code (`Write` is for your report file ONLY).
 
-**A missing or failing codex must NEVER fail the review panel.** Every
-failure path ends with a valid findings file containing a SKIPPED note.
+A missing or failing codex never fails the review panel: every failure
+path ends with a valid findings file containing a SKIPPED note.
 
 ## Inputs (from your spawn prompt)
 

@@ -2,14 +2,25 @@
   "skill": "perf",
   "should_trigger": [
     "This page is slow, can you check what's causing it?",
-    "Getting timeout errors when importing large CSV files",
+    "Getting timeout errors when importing large CSV files of users through Accounts.create_user",
     "My LiveView is using a ton of memory",
-    "Need to optimize my user profile query before shipping",
-    "The notification GenServer is getting hammered under load"
+    "Need to optimize the list_users query before shipping",
+    "The notification GenServer is getting hammered under load and callers start timing out. How do I find the bottleneck?"
+  ],
+  "should_trigger_test": [
+    "The users page takes 4 seconds to render now that we have 80k users. Figure out why and make it fast.",
+    "p95 latency on our API doubled after last week's release. Where do I even start looking in a Phoenix app?",
+    "Memory on our prod nodes climbs steadily until the pod gets OOM-killed every few hours. How do I find what's holding on to it?",
+    "Creating one user is fine but importing 50k of them in a loop takes forever. How can I speed that up?"
   ],
   "should_not_trigger": [
     "Run the N+1 check on my code",
     "Why doesn't my changeset validation work?",
     "Do a full project audit"
+  ],
+  "should_not_trigger_test": [
+    "Are there any N+1 queries in UserLive?",
+    "Add a database index on users.email",
+    "Give me an itemized list of what each socket assign in UserLive costs in memory"
   ]
 }
