@@ -5,7 +5,7 @@ tools: Read, Grep, Glob, Bash, Agent, Write
 disallowedTools: Edit, NotebookEdit
 permissionMode: bypassPermissions
 model: opus
-effort: high
+effort: medium
 omitClaudeMd: true
 maxTurns: 25
 skills:
@@ -31,7 +31,7 @@ and `NotebookEdit` are disallowed — you cannot modify source code.
 ## Why Specialist Delegation
 
 - **No reinvented wheels** — Each specialist agent already knows its domain
-- **Fresh 200k context** per agent for deep, focused analysis
+- **Fresh context** per agent for deep, focused analysis
 - **Skill preloading** — Agents load elixir-idioms, security, testing skills automatically
 - **Consistent output** — Agents produce structured findings in their trained format
 
@@ -156,13 +156,12 @@ toward Claude-side selection logic.
 
 ### Phase 2: Spawn Selected Specialist Agents in Parallel
 
-**CRITICAL**: Spawn selected agents in ONE Tool Use block with `run_in_background: true`.
+Spawn the selected agents in one tool-use block with `run_in_background: true` so they run in parallel.
 
 **Agent prompts must be DIFF-SCOPED.** Include `git diff --name-only`
 output in each agent prompt with instruction: "Focus analysis on
 NEW code from the diff. Pre-existing issues get one line only.
-Do NOT deep-analyze unchanged files." Do NOT give vague prompts
-like "analyze the codebase."
+Do NOT deep-analyze unchanged files."
 
 **Conventions**: If `.claude/conventions.md` exists, include in each agent prompt:
 "Read .claude/conventions.md first. Skip SUPPRESS patterns. Flag ENFORCE violations as WARNINGS."
@@ -174,10 +173,9 @@ Pre-existing issues are reported but don't affect the verdict."
 Do not pass the deprecated Agent `mode` parameter. Claude Code 2.1.212+
 ignores it; subagents inherit the parent session's permission mode.
 
-Spawn the REAL specialist agents directly (they now have Write tool). Do NOT
-use `general-purpose` impersonation — that was a v2.8.0 workaround for when
-specialists lacked Write. Real agents carry their domain checklists, skills,
-and Iron Laws automatically.
+Spawn the real specialist agents directly, not `general-purpose` stand-ins:
+specialists have Write and carry their domain checklists, skills, and Iron
+Laws automatically.
 
 **When `codex: true`, spawn `codex-reviewer` FIRST** (it's the slowest track
 at 1–5 min, so it overlaps the Claude agents; it self-preflights and SKIPs
@@ -240,8 +238,8 @@ Run static analysis on this project.
 
 output_file: {output_dir}/verification.md
 
-CRITICAL: Write the verification report to output_file by turn ~8 (you have
-only 10 turns). Chat response body ≤300 words.
+Write the verification report to output_file by turn ~10 (you have 15
+turns; a report not written by then is lost). Chat response body ≤300 words.
 
 Run (in order, capture output):
 1. mix compile --warnings-as-errors
@@ -256,9 +254,9 @@ Report PASS/FAIL per stage with error snippets.
 
 ### Phase 3: Synthesis
 
-Wait for ALL agents to FULLY complete — you'll be notified as each
-finishes. Read each agent's output file to collect results. NEVER
-proceed while any agent is still running.
+Wait for every agent to complete — you're notified as each finishes —
+then read each agent's output file. Synthesizing while one is still
+running drops its findings.
 
 **Rate-limit circuit breaker:** if 2+ agents return empty results or
 rate-limit/API errors, STOP — do not respawn and do not wait for the

@@ -101,3 +101,42 @@ def test_check_event_classifies_both_rollup_shapes(
         assert events == []
     else:
         assert [event["conclusion"] for event in events] == [expected]
+
+
+def test_rearm_resume_reports_each_event_once(tmp_path: Path) -> None:
+    """A segment cap emits `rearm`; WATCH_RESUME=1 restores baseline and seen state."""
+    review = {"id": "PRR_1", "author": {"login": "alice"}, "state": "COMMENTED",
+              "submittedAt": "2026-09-21T01:00:00Z", "body": ""}
+    comment = {"id": "IC_1", "author": {"login": "bob"}, "createdAt": "2026-09-21T01:05:00Z", "body": "hi"}
+    later = {"id": "IC_2", "author": {"login": "bob"}, "createdAt": "2026-09-21T02:00:00Z", "body": "again"}
+    view_file = tmp_path / "view.json"
+    bin_dir = tmp_path / "bin"
+    bin_dir.mkdir()
+    fake_gh = bin_dir / "gh"
+    fake_gh.write_text(f"#!/bin/sh\ncat '{view_file}'\n", encoding="utf-8")
+    fake_gh.chmod(0o755)
+    env = {
+        **os.environ,
+        "PATH": f"{bin_dir}{os.pathsep}{os.environ['PATH']}",
+        "WATCH_DELTA_FILE": str(tmp_path / "delta.jsonl"),
+        "WATCH_INTERVAL": "1",
+    }
+
+    def run(state: str, comments: list[dict], extra_env: dict[str, str]) -> list[dict]:
+        view_file.write_text(json.dumps({
+            "state": state, "mergedAt": None, "reviews": [review], "comments": comments,
+            "statusCheckRollup": [check_run("COMPLETED", "SUCCESS")],
+            "updatedAt": "2026-09-21T00:00:00Z",
+        }), encoding="utf-8")
+        result = subprocess.run(
+            ["bash", str(WATCH_PR), "1", "reviews,comments,checks"],
+            env={**env, **extra_env}, capture_output=True, text=True, timeout=30, check=True,
+        )
+        return [json.loads(line) for line in result.stdout.splitlines() if line.strip()]
+
+    first = run("OPEN", [comment], {"WATCH_SEGMENT": "1", "WATCH_BASELINE_TS": "2026-09-21T00:00:00Z"})
+    assert [e["kind"] for e in first] == ["review", "comment", "check", "rearm"]
+    assert first[-1]["baseline"] == "2026-09-21T00:00:00Z"
+
+    second = run("CLOSED", [comment, later], {"WATCH_RESUME": "1"})
+    assert [(e["kind"], e.get("id")) for e in second] == [("comment", "IC_2"), ("pr_closed", None)]

@@ -1,4 +1,4 @@
-# Workflow State (`PostToolUse`, `PreCompact`, `PostCompact`, `StopFailure`, `Stop`)
+# Workflow State (`PostToolUse`, `SessionStart` compact, `StopFailure`, `Stop`)
 
 Six hooks that keep the plan workflow coherent across the things that normally
 destroy it: compaction, API failures, and closing the laptop.
@@ -10,8 +10,8 @@ truth — so these hooks exist to make sure Claude keeps *looking* at that state
 |---|---|---|
 | `plan-stop-reminder.sh` | `PostToolUse` on `Write(*plan.md)` | Stop after planning; do not auto-implement |
 | `log-progress.sh` | `PostToolUse` on `Edit`/`Write` | Append edit metrics (JSONL) |
-| `precompact-rules.sh` | `PreCompact` | Re-inject phase rules before context is squashed |
-| `postcompact-verify.sh` | `PostCompact` | Confirm plan state survived |
+| `compact-rules.sh` | `SessionStart` (matcher `compact`) | Re-inject phase rules after context is squashed |
+| `compact-verify.sh` | `SessionStart` (matcher `compact`) | Point Claude back at the active plan |
 | `stop-failure-log.sh` | `StopFailure` | Record an API failure for next session |
 | `check-pending-plans.sh` | `Stop` | Warn about session-created risks on exit |
 
@@ -26,7 +26,7 @@ written, it hard-stops the run:
 ==========================================
 STOP: Plan file created.
 ==========================================
-Do NOT proceed to implementation.
+Don't start implementing — the user reviews the plan first.
 Present a brief summary of the plan to the user,
 then use AskUserQuestion with options:
   - Start in fresh session (recommended)
@@ -73,9 +73,9 @@ wrong. It was replaced with metrics-only.
 
 ---
 
-## `precompact-rules.sh`
+## `compact-rules.sh`
 
-Before compaction, re-injects the rules for whatever phase you are in.
+After compaction, re-injects the rules for whatever phase you are in.
 
 Iron Laws live in the system prompt and survive compaction on their own. What
 does **not** survive is skill-specific procedure loaded into conversation
@@ -92,21 +92,24 @@ The hook detects the phase from the filesystem:
 It also appends the **Dead Ends** section of the active plan's scratchpad:
 
 ```text
-SCRATCHPAD Dead Ends (DO NOT RETRY these approaches):
+Scratchpad dead ends (approaches that already failed — don't retry them):
 - Tried supervising the cache in the app tree — Repo isn't started yet at that point
 ```
 
 Losing that across a compaction means re-walking a dead end you already paid for.
 
-Output goes through JSON **`systemMessage`**. `PreCompact` supports only
-top-level fields — there is no `hookSpecificOutput.additionalContext` for this
-event.
+Output is plain **stdout** on `SessionStart` with the `compact` matcher — the
+channel CC documents for re-injecting context after compaction. Until v3.1.2
+this ran on `PreCompact`, first with `hookSpecificOutput.additionalContext`
+(rejected: `PreCompact` has no such field), then with `systemMessage`, which CC
+shows to the user only. Neither version ever reached Claude. `PreCompact` and
+`PostCompact` have no channel to the model; `PreCompact` can only block.
 
 ---
 
-## `postcompact-verify.sh`
+## `compact-verify.sh`
 
-The other half of the pair. After compaction, if any plan still has unchecked
+The other half of the pair, on the same `SessionStart` `compact` matcher. After compaction, if any plan still has unchecked
 tasks:
 
 ```text
@@ -115,7 +118,8 @@ Re-read .claude/plans/multi-agent-port/plan.md and
 .claude/plans/multi-agent-port/scratchpad.md to restore context.
 ```
 
-Uses **exit 2 + stderr**, the same channel as `PostToolUse`.
+Plain stdout. It used to be a `PostCompact` hook with exit 2 + stderr, which
+CC shows to the user only.
 
 ---
 

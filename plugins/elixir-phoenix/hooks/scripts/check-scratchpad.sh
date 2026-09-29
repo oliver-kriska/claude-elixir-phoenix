@@ -1,15 +1,20 @@
 #!/usr/bin/env bash
 # SessionStart hook: Detect scratchpad files and initialize structured template for new plans
-COUNT=$(ls .claude/plans/*/scratchpad.md 2>/dev/null | wc -l | tr -d ' ')
+shopt -s nullglob
+PADS=(.claude/plans/*/scratchpad.md)
+shopt -u nullglob
+COUNT=${#PADS[@]}
 if [[ "$COUNT" -gt 0 ]]; then
-  LATEST=$(ls -t .claude/plans/*/scratchpad.md 2>/dev/null | head -1)
-  # Check if scratchpad has Dead Ends (most valuable section for resume)
-  # grep -c prints the count even on zero matches (exiting 1) — no `|| echo 0`,
-  # which would append a second line and break the -gt comparison below.
-  DEAD_ENDS=$(grep -c "^- " "$LATEST" 2>/dev/null)
+  # ls -t is the portable mtime sort; plan slugs are kebab-case.
+  # shellcheck disable=SC2012
+  LATEST=$(ls -t "${PADS[@]}" | head -1)
+  # Count bullets in the Dead Ends section only — the template's Handoff
+  # section always has bullets. grep -c prints 0 on no match (exit 1); no
+  # `|| echo 0`, which would append a second line and break the -gt below.
+  DEAD_ENDS=$(sed -n '/^## Dead Ends/,/^## /p' "$LATEST" 2>/dev/null | grep -c "^- ")
   DEAD_ENDS=${DEAD_ENDS:-0}
   if [[ "$DEAD_ENDS" -gt 0 ]]; then
-    echo "Scratchpad: $COUNT note(s) found — latest: $LATEST ($DEAD_ENDS dead-end entries — READ BEFORE RETRYING)"
+    echo "Scratchpad: $COUNT note(s) found — latest: $LATEST ($DEAD_ENDS dead-end entries — read them before retrying an approach)"
   else
     echo "Scratchpad: $COUNT note(s) found — latest: $LATEST"
   fi

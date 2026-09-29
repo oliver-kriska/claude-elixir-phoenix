@@ -3,9 +3,15 @@
   "should_trigger": [
     "Write an Oban worker to send email digests daily",
     "How do I make my Oban job idempotent for retries?",
-    "Debug why this job keeps failing in the queue",
+    "Debug why this job keeps failing in the queue: ** (KeyError) key :user_id not found in: %{\"user_id\" => 42}",
     "Set up a cron schedule for nightly data cleanup",
     "How do I test if a job was enqueued with assert_enqueued?"
+  ],
+  "should_trigger_test": [
+    "When someone signs up I want the welcome email sent in the background instead of inside create_user. Can you set that up with Oban?",
+    "our nightly report job ran twice last night and customers got two copies of the email. how do I stop that from happening again?",
+    "After the deploy, jobs in the mailers queue just sit there as available and never run. What should I check?",
+    "The sync job that calls the billing API should back off exponentially and give up after 5 attempts. How do I configure that?"
   ],
   "should_not_trigger": [
     "Add two-factor authentication to the login flow",
@@ -13,5 +19,10 @@
     "Why is this database query taking so long?",
     "How do I set up Docker for production deployment?",
     "What's the best way to organize test factories?"
+  ],
+  "should_not_trigger_test": [
+    "Should I use Task.async_stream or a GenServer to call three external APIs in parallel during a request?",
+    "Make UserLive refresh the user list every 30 seconds without a page reload",
+    "Our nightly GitHub Actions job fails on mix test with a database connection error"
   ]
 }

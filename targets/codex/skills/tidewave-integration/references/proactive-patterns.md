@@ -11,9 +11,6 @@ understand the relationship between code AND running behavior.
 MCP is pull-only, but we simulate push by proactively querying
 at the right moments.
 
-**Shift from**: "Use Tidewave tools when you need to" (reactive)
-**Shift to**: "Always check runtime state at checkpoints" (proactive)
-
 ## When to Proactively Query
 
 ### During Work Phase (per-task runtime check)
@@ -116,7 +113,7 @@ asking the developer to copy-paste errors.
 ## Fallback Behavior
 
 When Tidewave is NOT available, all proactive checks silently
-skip. The workflow runs exactly as before -- static analysis,
+skip. The workflow falls back to static analysis,
 `mix compile`, `mix test`. No functionality is lost.
 
 When Tidewave IS available but the app is not running,

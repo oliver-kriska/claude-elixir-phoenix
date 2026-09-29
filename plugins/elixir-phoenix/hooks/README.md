@@ -18,10 +18,10 @@ hooks/
 |---|---|---|
 | [Safety Gates](docs/safety-gates.md) | `PreToolUse` | `block-dangerous-ops`, `deps-audit-gate`, `freeze-gate` |
 | [Code Quality](docs/code-quality.md) | `PostToolUse` | `format-elixir`, `iron-law-verifier`, `debug-statement-warning`, `security-reminder` |
-| [Failure Recovery](docs/failure-recovery.md) | `PostToolUseFailure` | `elixir-failure-hints`, `error-critic` |
+| [Failure Recovery](docs/failure-recovery.md) | `PostToolUseFailure`, `PostToolUse` (reset) | `elixir-failure-hints`, `error-critic` |
 | [Context Injection](docs/context-injection.md) | `UserPromptSubmit`, `SubagentStart` | `route-intent`, `inject-iron-laws` |
 | [Session Lifecycle](docs/session-lifecycle.md) | `SessionStart` | `setup-dirs`, `detect-tidewave`, `detect-ash`, `check-scratchpad`, `check-resume`, `check-branch-freshness` |
-| [Workflow State](docs/workflow-state.md) | `PostToolUse`, `PreCompact`, `PostCompact`, `StopFailure`, `Stop` | `plan-stop-reminder`, `log-progress`, `precompact-rules`, `postcompact-verify`, `stop-failure-log`, `check-pending-plans` |
+| [Workflow State](docs/workflow-state.md) | `PostToolUse`, `SessionStart` (`compact`), `StopFailure`, `Stop` | `plan-stop-reminder`, `log-progress`, `compact-rules`, `compact-verify`, `stop-failure-log`, `check-pending-plans` |
 
 ## Output rules per event
 
@@ -36,9 +36,9 @@ produces a hook that runs correctly and is read by nobody.
 | `PostToolUseFailure` | `hookSpecificOutput.additionalContext` | — | |
 | `UserPromptSubmit` | **stdout** (injected) or `additionalContext` | — | **Never exit 2** — it erases the user's prompt |
 | `SubagentStart` | `hookSpecificOutput.additionalContext` | — | |
-| `SessionStart` | **stdout** (injected) | stdout | One of only two events whose stdout reaches Claude |
-| `PreCompact` | JSON `systemMessage` | `systemMessage` | Top-level fields only — no `hookSpecificOutput` |
-| `PostCompact` | **exit 2 + stderr** | — | Same channel as `PostToolUse` |
+| `SessionStart` | **stdout** (injected) | stdout | One of only two events whose stdout reaches Claude. Matcher `compact` fires after compaction — the re-injection channel |
+| `PreCompact` | **nothing** | `systemMessage`; stderr on manual `/compact` | Can only block compaction. Re-inject via `SessionStart` `compact` |
+| `PostCompact` | **nothing** | `systemMessage`; exit 2 stderr | No decision control. Re-inject via `SessionStart` `compact` |
 | `StopFailure` | **nothing** | **nothing** | CC ignores exit code *and* output. Persist to a file instead |
 | `Stop` | `additionalContext` / exit 2 — but this **continues the turn** | JSON `systemMessage` | stdout is debug-log only |
 
@@ -76,7 +76,7 @@ files:
 {
   "type": "command",
   "if": "Edit(*.ex)",
-  "command": "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/format-elixir.sh",
+  "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/format-elixir.sh\"",
   "timeout": 30
 }
 ```
@@ -118,6 +118,15 @@ untouched regions pushes Claude into unrequested refactors.
 Per-session counters use `/tmp/.claude-elixir-*/` keyed by session or command.
 Durable metrics use `$CLAUDE_PLUGIN_DATA` (CC v2.1.78+), which survives plugin
 updates. Never write scratch state into the user's project.
+
+### 8. Quote `${CLAUDE_PLUGIN_ROOT}` in every command
+
+Wrap the placeholder and script path in escaped double quotes:
+`"\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/x.sh\""`. Unquoted, a plugin cache
+under a path with a space (`/Users/John Doe/...`) splits into two words and the
+script never runs — and on the `|| exit 0` gate that means the guard silently
+fails open. `claude plugin validate --strict` (run by `make validate`) and
+`test_hook_commands_quote_plugin_root` both reject an unquoted command.
 
 ## Adding or changing a hook
 

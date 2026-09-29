@@ -16,18 +16,23 @@ Index at `https://code.claude.com/docs/llms.txt`.
 | `hooks.md` | Hooks | Event names, hook types, schema, matcher syntax |
 | `hooks-guide.md` | Hooks | Hook patterns, examples, best practices |
 | `plugins-reference.md` | Plugin config | plugin.json schema, field inventory |
-| `plugin-marketplaces.md` | Marketplace | marketplace.json schema, plugin entries |
+| `plugins/marketplace-reference.md` | Marketplace | marketplace.json schema, plugin entries |
+| `plugins/dependencies.md` | Plugin config | `dependencies`, version ranges, `{name}--v{version}` tags |
+| `plugins/cli-reference.md` | Tooling | `claude plugin validate/tag/details/eval` flags |
+| `plugins/measure.md` | Budget | Always-on vs on-invoke token cost |
+| `plugin-evals.md` | Evals | `claude plugin eval` cases, graders, ablation |
 | `plugins.md` | General | Plugin creation guidance, directory conventions |
 | `settings.md` | Config | Permission mode semantics, global settings |
 | `mcp.md` | MCP | MCP server configuration in plugins |
 
-Total: 9 pages, ~420KB. All fetched on every run. Cached for 24h.
+Total: 13 pages. All fetched on every run. Cached for 24h. `plugin-marketplaces.md`
+is now the "Create a marketplace" guide; the schema moved to `plugins/marketplace-reference.md`.
 
 ## Fetch Strategy
 
 The `scripts/fetch-claude-docs.sh` script handles everything:
 
-- **Default**: Fetch all 9 pages, skip if cached within 24h
+- **Default**: Fetch all 13 pages, skip if cached within 24h
 - **`--force`**: Re-download regardless of cache age
 - **`--quick` mode**: Skill skips fetching entirely (structural checks only)
 

@@ -109,7 +109,7 @@ that prevent the mistakes Elixir developers actually make in production.
 │    phoenix-patterns-analyst        /phx:pr-review /phx:challenge    │
 │    otp-advisor                     /phx:research  /phx:document     │
 │                                                                     │
-│  Investigation (sonnet/haiku)    Knowledge (auto-loaded)            │
+│  Investigation (sonnet)          Knowledge (auto-loaded)            │
 │    deep-bug-investigator           liveview-patterns  ecto-patterns │
 │    call-tracer                     elixir-idioms      security      │
 │    xref-analyzer                   phoenix-contexts   oban          │
@@ -119,7 +119,7 @@ that prevent the mistakes Elixir developers actually make in production.
 │    oban-specialist                 auto-format · auto-compile       │
 │    deployment-validator            iron-law-verify · security-scan  │
 │    hex-library-researcher          debug-stmt-detect · error-critic │
-│    web-researcher (haiku)          progress-tracking · block-danger │
+│    web-researcher                  progress-tracking · block-danger │
 │                                                                     │
 │  ───────────────────────────────────────────────────────────        │
 │  26 Iron Laws · Tidewave-aware · plan→work→verify→review→compound   │
@@ -553,13 +553,12 @@ The plugin uses 26 agents organized into 3 tiers:
              ┌────────────┐      ┌──────────────┐
              │  context-  │      │ Orchestrator  │
              │ supervisor │ ───► │ reads ONLY    │
-             │  (haiku)   │      │ the summary   │
+             │  (sonnet)  │      │ the summary   │
              └────────────┘      └──────────────┘
 ```
 
-**Orchestrators** (opus) -- Primary workflow coordinators, security-critical analysis.
-**Specialists** (sonnet) -- Domain experts, secondary orchestrators, judgment-heavy tasks. `sonnet` resolves to Sonnet 5 (CC's default, 1M context) -- near-opus quality at sonnet pricing.
-**Lightweight** (haiku) -- Mechanical tasks: verification, compression, dependency analysis.
+**Orchestrators** (opus, medium effort) -- Primary workflow coordinators, security-critical analysis.
+**Specialists** (sonnet) -- Domain experts, secondary orchestrators, judgment-heavy tasks. `sonnet` resolves to Sonnet 5.5 (1M context, half Opus 5.5's price).
 
 ### The Context Supervisor Pattern
 
@@ -572,7 +571,7 @@ When an orchestrator spawns 4-8 research agents, their combined output can excee
 └──────────────────┬─────────────────────────────────┘
                    │ spawns AFTER workers finish
 ┌──────────────────▼─────────────────────────────────┐
-│  context-supervisor (haiku, fresh 200k context)    │
+│  context-supervisor (sonnet, fresh 1M context)     │
 │  Reads: all worker output files                    │
 │  Applies: compression strategy based on size       │
 │  Validates: every input file represented           │
@@ -908,10 +907,10 @@ requirements can break unrelated migrations.
 | **deep-bug-investigator**    | opus   | --      | 4-track parallel bug investigation           |
 | **call-tracer**              | sonnet | --      | Parallel call tree tracing                   |
 | **security-analyzer**        | opus   | --      | OWASP vulnerability scanning                 |
-| **context-supervisor**       | haiku  | --      | Multi-agent output compression               |
-| **verification-runner**      | haiku  | --      | mix compile, format, credo, test             |
+| **context-supervisor**       | sonnet | --      | Multi-agent output compression               |
+| **verification-runner**      | sonnet | --      | mix compile, format, credo, test             |
 | **iron-law-judge**           | sonnet | --      | Pattern-based Iron Law detection             |
-| **xref-analyzer**            | haiku  | --      | Module dependency analysis                   |
+| **xref-analyzer**            | sonnet | --      | Module dependency analysis                   |
 | **hex-library-researcher**   | sonnet | --      | Hex.pm library evaluation                    |
 | **liveview-architect**       | sonnet | --      | Component structure, streams, async patterns |
 | **ecto-schema-designer**     | sonnet | --      | Migrations, data models, query patterns      |
@@ -921,13 +920,13 @@ requirements can break unrelated migrations.
 | **oban-specialist**          | sonnet | --      | Worker idempotency, error handling           |
 | **otp-advisor**              | sonnet | --      | GenServer, Supervisor, process design        |
 | **deployment-validator**     | sonnet | --      | Docker, Kubernetes, Fly.io config            |
-| **web-researcher**           | haiku  | --      | ElixirForum, HexDocs, GitHub research        |
+| **web-researcher**           | sonnet | --      | ElixirForum, HexDocs, GitHub research        |
 | **ash-resource-designer**    | sonnet | --      | Ash resource design (the "Ash Way")          |
 | **ash-policy-reviewer**      | sonnet | --      | Ash policy authorization audit               |
 | **ash-query-optimizer**      | sonnet | --      | Ash N+1 loads, aggregates vs load            |
 | **requirements-verifier**    | sonnet | --      | Implementation vs task-requirement check     |
 | **hex-deps-triager**         | sonnet | --      | Hex supply-chain audit finding triage        |
-| **codex-reviewer**           | haiku  | --      | Codex CLI bridge — cross-model review (opt.) |
+| **codex-reviewer**           | sonnet | --      | Codex CLI bridge — cross-model review (opt.) |
 
 Agents with `project` memory build up knowledge across sessions
 in `.claude/agent-memory/<agent-name>/`. Orchestrators remember

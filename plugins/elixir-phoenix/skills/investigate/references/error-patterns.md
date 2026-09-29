@@ -12,7 +12,7 @@
 
 ## Ralph Wiggum Checklist
 
-Spawn `deep-bug-investigator` agent to systematically check:
+Check systematically in the main session (SKILL.md Step 4):
 
 1. Is the file saved?
 2. Atom vs string key mismatch?

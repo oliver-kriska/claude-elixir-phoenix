@@ -45,6 +45,8 @@ __pycache__/
 /.claude/research
 
 /lab/plugin_eval/cases/
+# Output-quality suite results (cases in lab/plugin_eval/quality/ are committed)
+/lab/plugin_eval/quality/results/
 
 # rtk (Rust Token Killer) local filter cache
 /.rtk/

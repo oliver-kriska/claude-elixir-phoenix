@@ -64,12 +64,10 @@ codex exec review --base main --ephemeral --json \
    codex-side plugins for review behavior; AGENTS.md is the only lever.
 7. **Auth** rides the ChatGPT subscription login (`codex login`) — no API
    key. `codex doctor` diagnoses auth/config issues.
-8. **Large diffs run 10+ minutes** (observed: big PR rewrite, session
-   2026-07-10) — set Bash `timeout: 600000` explicitly. If it times out
-   with the process alive, wait with ONE
+8. **Large diffs run 10+ minutes** — set Bash `timeout: 600000`
+   explicitly. If it times out with the process alive, wait with ONE
    `until [ -f {out} ]; do sleep 5; done` call. NEVER `pkill` a running
-   review — the round's quota is spent either way (observed: 5 poll
-   commands then a pkill wasted a full round).
+   review — the round's quota is spent either way.
 9. **codex review holds git locks** — it runs git internally (submodules
    included). A concurrent git command can fail with
    `index.lock: File exists` (observed live). Don't run git mutations

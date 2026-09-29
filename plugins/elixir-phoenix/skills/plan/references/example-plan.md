@@ -7,7 +7,7 @@ For `/phx:plan Add user profile avatars`:
 
 **Status**: PENDING
 **Created**: 2024-01-15
-**Detail Level**: more
+**Detail Level**: standard
 **Input**: from description
 
 ## Summary
@@ -142,7 +142,7 @@ affordances, and wiring before task generation.
 
 **Status**: PENDING
 **Created**: 2024-02-20
-**Detail Level**: comprehensive
+**Detail Level**: deep
 **Input**: from description
 
 ## Summary

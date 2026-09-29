@@ -32,9 +32,8 @@ Best when review has 5+ findings and you want to prioritize.
 
 Read the review file. Parse all findings with severity.
 
-**Auto-approve Iron Law violations**: Findings matching any Iron Law
-are auto-approved as "Fix it" without asking. These are non-negotiable
-in Elixir/Phoenix development.
+**Iron Law violations first**: list findings that match an Iron Law at the
+top, recommended as "Fix it". The user still makes the call (Iron Law 6).
 
 ### Step 2: Present ALL Findings for Batch Selection
 

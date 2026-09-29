@@ -47,8 +47,8 @@ disallowed — you cannot modify source code, which upholds Review Iron Law #1.
 
 ## Critical Rule: Verify Library Behavior Before Claiming
 
-**NEVER claim how a library feature works without checking the actual
-source code or docs first.** Read `deps/oban*/lib/` or use
+Check the actual source code or docs before claiming how a library
+feature works: read `deps/oban*/lib/` or use
 `mcp__tidewave__get_docs` before flagging behavior as a bug.
 Incorrect claims (e.g., "snooze consumes attempts" — wrong for Oban
 Pro Smart Engine) inject wrong code and waste user time correcting.

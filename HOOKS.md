@@ -1,6 +1,6 @@
 # Hooks
 
-The plugin ships **23 hooks across 10 lifecycle events**. They are the
+The plugin ships **23 hooks across 8 lifecycle events**. They are the
 deterministic layer: skills and agents are instructions a model may or may not
 follow, hooks are shell scripts that always run.
 
@@ -72,14 +72,14 @@ Claude to stop retrying — the Critic→Refiner pattern from AutoHarness
       │                    PostToolUseFailure ·· mix hints → loop critic
       ▼
       ├─ PostToolUse ······· format · Iron Laws · debug stmts · security
-      │                      plan STOP · edit metrics
+      │                      plan STOP · edit metrics · reset loop critic
       │
       ├─ SubagentStart ····· inject Iron Laws into every spawned agent
       ▼
-  context fills up
+  context compacted
       │
-      ├─ PreCompact ········ re-inject phase rules + scratchpad dead ends
-      ├─ PostCompact ······· verify plan state survived
+      ├─ SessionStart ······ (matcher compact) re-inject phase rules +
+      │                      scratchpad dead ends, re-read the active plan
       ▼
   turn ends
       │
@@ -113,7 +113,7 @@ Claude to stop retrying — the Critic→Refiner pattern from AutoHarness
 | Hook | Does |
 |---|---|
 | `elixir-failure-hints` | Command-specific hints for `compile` / `test` / `credo` / `ecto` |
-| `error-critic` | Counts repeats. Attempt 2 warns; attempt 3+ consolidates the error history and blocks the retry reflex |
+| `error-critic` | Counts consecutive repeats per session. Attempt 2 warns; attempt 3+ consolidates the error history and blocks the retry reflex. Also runs on `PostToolUse` to reset the count when the command succeeds |
 
 ### `UserPromptSubmit` / `SubagentStart` — context injection
 
@@ -137,8 +137,8 @@ Claude to stop retrying — the Critic→Refiner pattern from AutoHarness
 
 | Hook | Event | Does |
 |---|---|---|
-| `precompact-rules` | `PreCompact` | Re-injects the active phase's rules plus scratchpad dead ends |
-| `postcompact-verify` | `PostCompact` | Tells Claude to re-read the plan if tasks remain |
+| `compact-rules` | `SessionStart` (`compact`) | Re-injects the active phase's rules plus scratchpad dead ends after compaction |
+| `compact-verify` | `SessionStart` (`compact`) | Tells Claude to re-read the plan if tasks remain |
 | `stop-failure-log` | `StopFailure` | Writes an API-failure note to the scratchpad |
 | `check-pending-plans` | `Stop` | Warns about running background tasks and scheduled crons |
 
@@ -160,6 +160,9 @@ plugin globally rather than per-project.
 
 No hook uses `set -e`. Denials are expressed as JSON data, never as an exit
 code, and the always-on Bash gate is registered as `script.sh || exit 0`.
+Every registered command quotes its `${CLAUDE_PLUGIN_ROOT}` path, so a plugin
+installed under a directory with a space still runs its hooks instead of
+failing open.
 
 This is not theoretical. The safety script once got corrupted by
 merge-conflict markers, and because bash exited non-zero, **every Bash command

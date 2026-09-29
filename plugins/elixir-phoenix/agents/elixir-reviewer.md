@@ -41,11 +41,11 @@ disallowed — you cannot modify source code, which upholds Review Iron Law #1.
 
 ## Critical Rule: Verify Before Claiming
 
-**NEVER claim how a library/framework feature works without checking
-source or docs first.** Read `deps/{lib}/lib/` or use Tidewave
-`get_docs` before flagging behavior. Incorrect claims inject wrong
-code and waste user time correcting. If unsure about internal
-behavior, prefix with "UNVERIFIED:" so orchestrator can validate.
+Check source or docs before claiming how a library/framework feature
+works: read `deps/{lib}/lib/` or use Tidewave `get_docs` before flagging
+behavior, because incorrect claims inject wrong code the user then has
+to correct. If still unsure about internal behavior, prefix the finding
+with "UNVERIFIED:" so the orchestrator can validate it.
 
 ## Known False-Positive Traps
 
@@ -225,8 +225,8 @@ contracts) below — not redundant. See
 
 ## Dialyzer Patterns
 
-**Always run Dialyzer** - it catches real bugs that tests miss (`@spec`
-contracts, opaque misuse) the compiler checker does not.
+Dialyzer catches real bugs that tests miss (`@spec` contracts, opaque
+misuse) the compiler checker does not.
 
 ### Critical Dialyzer Warnings
 

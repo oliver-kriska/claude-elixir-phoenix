@@ -135,6 +135,8 @@ Confirm to user: "Added `<pkg>` `<version>` to hex_vet.exs."
 - **Run before** merging a `mix.lock` PR to certify new versions.
 - **Run `$elixir-phoenix:phx-deps-vet --check`** to detect ledger drift vs `mix.lock`.
 - **`$elixir-phoenix:phx-deps-audit`** auto-downgrades vetted findings to INFO.
+- **`policy.block_on_unvetted`** is enforced by the plugin's `deps-audit-gate.sh`
+  PreToolUse hook on `mix deps.get` / `mix deps.update`.
 
 ## References
 
@@ -147,7 +149,5 @@ Confirm to user: "Added `<pkg>` `<version>` to hex_vet.exs."
 
 - **Mix task surface** — defer `mix phx.deps_vet` to a separate Hex
   package `phx_deps_vet` for non-CC users.
-- **Block-on-unvetted enforcement** — defer to a PreToolUse hook
-  that gates `mix deps.get`.
 - **Distributed imports** — defer cargo-vet `imports:` until
   trust-chain semantics are designed.

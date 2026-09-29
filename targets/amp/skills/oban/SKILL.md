@@ -1,8 +1,8 @@
 ---
 name: oban
-description: Write and debug Oban background jobs — workers, perform/1 and Pro process/1,
-  queues, cron, retries, unique jobs, idempotency, testing with assert_enqueued, Pro
-  Workflow/Batch. Use when a job fails, retries, or needs scheduling.
+description: 'Use when writing, scheduling, testing or debugging Oban jobs, even for
+  a how-to question: workers, cron, retries, unique jobs, queues, Pro Workflow/Batch.
+  Load it before touching job code; it holds the job rules.'
 ---
 
 # Oban Background Jobs Reference

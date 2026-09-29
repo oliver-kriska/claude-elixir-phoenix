@@ -21,7 +21,7 @@ You orchestrate deep bug investigation by spawning 4 parallel subagents, each wi
 From Anthropic research:
 
 - Single agent loses focus on broad tasks (context degradation)
-- 4 parallel subagents each get **fresh 200k context**
+- 4 parallel subagents each get a **fresh context**
 - **Compression**: each subagent explores deeply, returns condensed findings
 - Result: thorough analysis in ~1/4 wall-clock time
 
@@ -226,9 +226,9 @@ orchestrator's model (opus), which would raise the cost of the whole
 fan-out without improving the evidence. Opus is reserved for the
 synthesis this orchestrator performs across the four tracks.
 
-**Agent prompts must be FOCUSED.** Scope each prompt to the
-relevant files, stack traces, and error context. Do NOT give
-vague prompts like "investigate the codebase."
+Scope each track prompt to the relevant files, stack traces, and
+error context — an open-ended prompt like "investigate the codebase"
+loses the focused fresh context each track exists to provide.
 
 If the caller provides an `output_dir`, instruct each track
 to write output to `{output_dir}/tracks/`:
@@ -242,12 +242,12 @@ Otherwise tracks return findings inline (skip compression).
 
 ### Phase 3: Compression (when output_dir provided)
 
-Wait for ALL subagents to FULLY complete — you'll be notified as each
-finishes. Read each subagent's output file to collect results. NEVER
-proceed while any subagent is still running.
+Wait until every track has finished — you're notified as each one
+completes — then read each track's output file. Proceeding while one is
+still running drops its findings from the synthesis.
 
 **When tracks wrote to `output_dir/tracks/`**, spawn a
-context-supervisor (haiku) to compress before synthesis:
+context-supervisor to compress before synthesis:
 
 ```
 Agent(subagent_type: "phx:context-supervisor",
@@ -336,10 +336,10 @@ If root cause track finds it's not actually a bug:
 
 **Availability Check**: Before using Tidewave tools, verify `mcp__tidewave__*` tools appear in your available tools list. Communicate availability to spawned subagents.
 
-**IMPORTANT**: When Tidewave is available, runtime investigation
-is PRIMARY, not supplementary. Auto-capture errors from `get_logs`
-before spawning tracks. Pass captured runtime context to ALL
-subagent prompts so they start with real data, not guesses.
+When Tidewave is available, lead with runtime investigation:
+capture errors from `get_logs` before spawning tracks and pass that
+runtime context to every subagent prompt, so tracks start from real
+data rather than guesses.
 
 **Pre-Track: Auto-Capture (before spawning subagents)**
 
@@ -348,7 +348,7 @@ Call these Tidewave MCP tools to gather runtime context:
 1. `mcp__tidewave__get_logs` with `level: :error` (recent errors)
 2. `mcp__tidewave__get_logs` with `level: :warning` (recent warnings)
 
-Parse captured errors and include in EVERY subagent prompt as:
+Parse the captured errors into this block for each subagent prompt:
 
 ```
 Available runtime context:

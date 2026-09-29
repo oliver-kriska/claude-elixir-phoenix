@@ -43,8 +43,6 @@ Before any architectural decisions, check these:
 4. **LOAD primary data in mount/3, pagination in handle_params/3**
 5. **NEVER pass socket to business logic** → Extract data first
 
-These are NON-NEGOTIABLE.
-
 ## Decision Framework
 
 ### When to Use LiveView

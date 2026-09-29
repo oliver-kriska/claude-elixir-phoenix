@@ -104,5 +104,5 @@ Python repo should not be told about `assign_async` and `cast_assoc`.
 ## Related
 
 - [Session Lifecycle](session-lifecycle.md) — the other event whose stdout reaches Claude
-- [Workflow State](workflow-state.md) — `PreCompact` re-injection, the third injection path
+- [Workflow State](workflow-state.md) — post-compaction re-injection (`SessionStart`, matcher `compact`)
 - `CLAUDE.md` → "Workflow Routing (Hook-Driven)"

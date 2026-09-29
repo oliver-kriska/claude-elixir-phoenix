@@ -215,11 +215,10 @@ After each task passes verification:
 
 ## Phase Transitions
 
-**CRITICAL: Auto-continue between phases.** When all tasks in a
-phase complete, mark it `[COMPLETED]` and IMMEDIATELY start the
-next phase. Do NOT stop to ask the user. Do NOT output a summary
-between phases. Just keep going until all phases are done or a
-BLOCKER is hit.
+**Auto-continue between phases.** When all tasks in a phase
+complete, mark it `[COMPLETED]` and start the next phase in the same
+turn — the user approved the whole plan, so there is nothing to ask.
+Keep going until all phases are done or a BLOCKER is hit.
 
 ```markdown
 # Before

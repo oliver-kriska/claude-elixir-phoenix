@@ -14,7 +14,7 @@ human reviewer. **No finding is auto-suppressed without human review.**
    score exceeds 10 (BLOCK=10, WARN=3, INFO=1). Below threshold,
    the deterministic output is the final word.
 3. **TWO-TIER MANDATORY.** Per-package triagers write JSON files;
-   a `context-supervisor` (haiku) consolidates. Main skill reads
+   a `context-supervisor` consolidates. Main skill reads
    ONLY the consolidated file. Reading per-package outputs directly
    in the main context blows the budget on 5+ packages.
 4. **NO INVENTED FINDINGS.** Each verdict maps 1:1 to an input
@@ -32,7 +32,7 @@ deps-audit body
     │            ↓ writes triage/<pkg>-<ts>.json
     │
     ▼   (wait for all triagers)
-context-supervisor (haiku)
+context-supervisor
     │
     ▼ reads triage/<pkg>-*.json files
     │
@@ -51,13 +51,13 @@ synthesize.
 
 Splitting the work: per-package triager has its own context, writes
 a small structured verdict (1-3KB). The supervisor's input is
-N × 3KB ≈ 30KB even at 10 packages — well within haiku's window.
+N × 3KB ≈ 30KB even at 10 packages — well within the supervisor's window.
 Main skill reads a single consolidated.md (<5KB).
 
 ## Triager spawn pattern
 
 The skill body builds one input JSON per package, then spawns
-triagers in parallel via the Task tool:
+triagers in parallel via the Agent tool:
 
 ```bash
 # Pseudocode — the skill's actual body uses Task() blocks

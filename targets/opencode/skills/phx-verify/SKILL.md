@@ -42,7 +42,7 @@ Strategy: Running `mix check` then asking about E2E
 
 ## Verification Sequence
 
-**CRITICAL**: Before using ANY discovered alias or composite command, verify it works:
+Before using any discovered alias or composite command, confirm it runs:
 
 1. Check the dependency is in `mix.lock` (not just `mix.exs`) — deps may not be fetched
 2. Run the command — if it fails with "command not found" or dependency error, fall back to individual steps

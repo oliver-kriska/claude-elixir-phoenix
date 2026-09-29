@@ -95,9 +95,10 @@ artifacts, verification gates, retry/cycle limits, and review-to-fix loop.
 Never tell the user to set an environment variable just to make `/phx:full`
 work.
 
-Save state in `.claude/plans/{slug}/progress.md` AND via Claude Code
-tasks. Create one task per phase at start, mark `in_progress` on
-entry and `completed` on exit:
+Save state in `.claude/plans/{slug}/progress.md`. If `TaskCreate` is in
+your tool list (Sonnet 5+ and Opus 4.8+ omit it unless
+`CLAUDE_CODE_ENABLE_TODO_TOOLS=1`; never ToolSearch for it), also create one
+task per phase at start, mark `in_progress` on entry and `completed` on exit:
 
 ```
 TaskCreate({subject: "Discover & assess complexity", activeForm: "Discovering..."})
@@ -146,14 +147,10 @@ Use Ralph Wiggum Loop for fully autonomous execution:
    verification-runner (work phase already verified), skip iron-law-judge
    if PostToolUse hooks verified all files. For <200 lines changed,
    spawn only elixir-reviewer + security-analyzer (if auth files)
-7. **ZERO narration in autonomous mode** — This is a HARD rule, not
-   a suggestion. NEVER write "Let me now...", "Now I need to...",
-   "I'll now...", "Next, I will...", or any preamble before a tool
-   call. Just call the tool. Only output text for: decisions that
-   need explanation, errors, or phase transitions. If you catch
-   yourself narrating, delete the text and just make the tool call.
-   (Post-PR validation: 30% of messages still violated this — the
-   instruction was too soft. This stronger wording is required.)
+7. **Write text where the user needs it** — In autonomous mode your text is
+   how the user follows the cycle. Write it at phase transitions (one line:
+   state, cycle N of max, what's next), for decisions that need a reason,
+   and for errors and blockers. Routine tool calls need no preamble.
 
 ## References
 

@@ -9,11 +9,10 @@ The default invocation runs **all 8 MVP rules** plus all available external
 tools (`mix hex.audit`, `mix_audit`, `osv-scanner`) plus Hex API enrichment
 plus the differential CVE pass.
 
-**There is no interactive choice prompt.** Earlier prototypes asked the
-user "run heuristics?" before kicking off rule execution. That created a
-silent-failure footgun on large diffs — the user picked "no" to save
-time, the skill reported "no findings," and a bidi-char trojan landed in
-the lock with no warning. **Removed.** Heuristics run by default.
+**There is no interactive choice prompt** — heuristics run by default.
+A "run heuristics?" prompt is a silent-failure footgun on large diffs:
+the user picks "no" to save time, the skill reports "no findings," and a
+bidi-char trojan lands in the lock with no warning.
 
 ```
 /skill:phx-deps-audit          ← runs the full pipeline
@@ -59,10 +58,8 @@ The full scan emits one line per package per phase to stdout:
 [25/25] phoenix 1.8.7 — done (0 findings)
 ```
 
-This was previously a `--verbose` opt-in. The dogfood session
-(2026-05-12) showed users staring at silent terminals for 60-90s with
-no signal — they assumed the skill had hung and Ctrl-C'd before
-results came back. Streaming progress is now the default UX.
+Streaming progress is the default: facing a silent terminal for 60-90s,
+users assume the skill has hung and Ctrl-C before results come back.
 
 Format spec:
 
@@ -123,14 +120,13 @@ no diff), and 10-lite (no headline, just table).
 | 50-100 packages | 2-4 min | 15-30s |
 | 200+ packages | 5-10 min | <60s |
 
-Numbers from the 2026-05-12 virgil dogfood (25 packages, ~75s default).
-Older tarball-fetcher.md claimed 5-10 min was realistic; that was
-pessimistic — the 4-way parallel fetcher is actually fast.
+Measured on a real 25-package update (~75s default) with the 4-way
+parallel fetcher.
 
 ## `--trace` flag (Iron Law #1 auditability)
 
-The 2026-05-13 enaia-main dogfood surfaced a verification gap: when
-the audit reports "8 rules clean", there's no on-disk evidence the
+Without a trace there is a verification gap: when the audit
+reports "8 rules clean", there's no on-disk evidence the
 rules actually ran. The tmpdir is gone, no Bash trace is captured by
 ccrider, and a fast model could in principle synthesize a plausible
 verdict from the lock-diff text alone — exactly the Iron Law #1 false

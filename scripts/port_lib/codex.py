@@ -656,13 +656,13 @@ cannot enforce or clear it reliably.
 WHOLESALE_SOURCE_SHA256 = {
     "freeze/SKILL.md": "57830e672d503013211e7022580123ed5d35343fab5a55dd4b2c7aff62bd08c2",
     "pr-review/SKILL.md": "31ff21551f99b4eb24d9285f4640cdd99a806673a65ff5b2885b8039a4910089",
-    "full/SKILL.md": "4841c1d713299048fb953f32f11fabeb14f0bd14053cd184413b899eba2e552a",
+    "full/SKILL.md": "e2697e42e721395f3912299015474f100a949ddb7cb656406d486e4dacd8aadc",
     "full/references/execution-steps.md": "b608c047414f9ad464f5c0ecc0eb1562f509cfdc30ef3782ed6b4e566a37382c",
-    "full/references/safety-recovery.md": "94595d350b9e3c809e0762676b7d8c3b831782a51173db9213585bebc8869234",
+    "full/references/safety-recovery.md": "ec6f33f6bbacd1f680aab372ef0161adff301c0056d8bacfa31510cedd7c2c76",
     "full/references/example-run.md": "8b72b77afcf947127978c74c2de560fb7abc826e541f71fcd06835101dad7bc8",
-    "full/references/cycle-patterns.md": "454b6d6d6df3c26b3b783cbc4bf3007c2497618603d55b447328821a443bd685",
+    "full/references/cycle-patterns.md": "f507c58d1d6e93cebc50aa552f5bd79b628683b3116eb3d35fe564957bafb1c9",
     "pr-review/references/gh-commands.md": "b4c90be961e7310ffb29a50ed8cae6dd0f3da9b5f12cecc95d70cc29e68aaa64",
-    "pr-review/references/bot-triage.md": "6426509d3319a1117abd5c9d150c4ec01d47505be8e9193bc932bb16a534bfef",
+    "pr-review/references/bot-triage.md": "40f48d69361802c2e073a74571a6dc7f4eeff8edc691627851bba683ec6df4c5",
 }
 
 
@@ -826,7 +826,8 @@ def _portable_plan_work_overlay(
    main session: spawn the selected specialist agents directly, wait for them, then spawn
    `phx:context-supervisor` directly if compression is needed. Never spawn an
    orchestrator that cannot delegate. Read only the resulting digest and
-   `summaries/consolidated.md`. Create a Claude Code task per spawn:
+   `summaries/consolidated.md`. If `TaskCreate` is in your tool list (never
+   ToolSearch for it), create a task per spawn:
    `TaskCreate({subject: "{Agent} research", activeForm: "Researching..."})`,
    mark `in_progress` on spawn, `completed` when done
 6. **Wait for ALL agents** — Do NOT proceed until all return
@@ -1382,13 +1383,13 @@ Without Tidewave, run all applicable fallbacks:
         )
         source = _replace_anchored(
             source,
-            '2. **Complete Claude Code task**: `TaskUpdate({taskId, status: "completed"})`\n   This updates the live progress indicator visible in the UI.',
+            '2. **Complete Claude Code task** (only if `TaskUpdate` is in your tool list):\n   `TaskUpdate({taskId, status: "completed"})` updates the UI progress indicator.',
             "2. **Log completion**: Append the task ID, changed files, and verification result to `progress.md`.",
             source_file,
         )
         source = _replace_anchored(
             source,
-            '5. **Start next task**: `TaskUpdate({nextTaskId, status: "in_progress"})`\n   then move to next unchecked task',
+            '5. **Start next task**: `TaskUpdate({nextTaskId, status: "in_progress"})` if\n   available, then move to the next unchecked task',
             "5. **Start next task**: Log its start, then select the next unchecked\n   non-`[BLOCKED]` task. Stop if an unresolved blocker precedes it unless\n   `--skip-blockers` was explicitly supplied",
             source_file,
         )
@@ -2173,7 +2174,7 @@ follow-up workflow automatically.
         "references/error-patterns.md"
     ):
         source = source_file.read_text(encoding="utf-8")
-        marker = "Spawn `deep-bug-investigator` agent to systematically check:"
+        marker = "Check systematically in the main session (SKILL.md Step 4):"
         if marker not in source:
             raise ValueError(f"{source_file}: Codex error-pattern anchors changed")
         transformed = source.replace(

@@ -1,6 +1,6 @@
 {
   "name": "phx",
-  "version": "3.1.1",
+  "version": "3.1.2",
   "description": "Elixir/Phoenix/LiveView development with specialist agents, Iron Laws, and Tidewave MCP integration",
   "keywords": ["elixir", "phoenix", "liveview", "ecto", "oban", "otp"],
   "author": {
@@ -8,5 +8,6 @@
   },
   "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
   "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "license": "MIT",
   "dependencies": ["ecto", "lv"]
 }

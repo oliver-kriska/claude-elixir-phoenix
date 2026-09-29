@@ -1,7 +1,7 @@
 ---
 name: oban
-description: Write and debug Oban background jobs — workers, perform/1 and Pro; Use
-  when a job fails, retries, or needs scheduling.
+description: 'Use when writing, scheduling, testing or debugging Oban jobs, even for
+  a how-to question: workers, cron, retries…'
 ---
 
 # Oban Background Jobs Reference

@@ -214,7 +214,7 @@ def test_session_start_continuity_includes_forked_sessions() -> None:
         entry
         for entry in hooks["SessionStart"]
         if any(
-            hook.get("command", "").endswith("/check-resume.sh")
+            hook.get("command", "").rstrip('"').endswith("/check-resume.sh")
             for hook in entry["hooks"]
         )
     )
@@ -224,3 +224,24 @@ def test_session_start_continuity_includes_forked_sessions() -> None:
         "resume",
         "fork",
     }
+
+
+def test_hook_commands_quote_plugin_root() -> None:
+    # An unquoted plugin root word-splits on paths with spaces; with `|| exit 0`
+    # the safety gate then fails open instead of blocking.
+    hooks = _json(CANONICAL_PLUGIN / "hooks" / "hooks.json")["hooks"]
+    commands = [
+        hook["command"]
+        for entries in hooks.values()
+        for entry in entries
+        for hook in entry["hooks"]
+        if "CLAUDE_PLUGIN_ROOT" in hook.get("command", "")
+    ]
+
+    assert commands
+    unquoted = [
+        command
+        for command in commands
+        if not re.match(r'^"\$\{CLAUDE_PLUGIN_ROOT\}/[^"\s]+"(\s|$)', command)
+    ]
+    assert unquoted == []

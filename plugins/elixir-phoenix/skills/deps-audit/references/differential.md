@@ -157,6 +157,6 @@ The differ is O(n + m) where n = NEW findings, m = OLD findings. With
 `mix.lock` PR, a deps PR is ~800 findings. Differ runs in <200 ms.
 
 Cost dominator is the **rule pass on OLD** — running rules 1-4 + 7
-twice per package roughly doubles the audit's wall time. Mitigation
-options noted in `performance.md` (Phase 3 follow-up): keep OLD
-findings cached, only re-run when OLD tarball mtime changes.
+twice per package roughly doubles the audit's wall time. Planned
+mitigation (Phase 3, not implemented): keep OLD findings cached and
+re-run only when the OLD tarball mtime changes.

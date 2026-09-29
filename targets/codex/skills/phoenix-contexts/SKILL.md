@@ -29,7 +29,7 @@ lib/my_app/
 
 ## Phoenix 1.8+ Scopes (CRITICAL)
 
-All context functions MUST accept scope as first parameter:
+Context functions take the scope as their first parameter, so queries are filtered to the caller:
 
 ```elixir
 def list_posts(%Scope{} = scope) do

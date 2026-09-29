@@ -1,7 +1,7 @@
 ---
 name: ecto-patterns
-description: Write or fix Ecto schemas, changesets, queries, and migrations; Use when
-  adding fields, validations, Repo queries…
+description: 'Use when a task touches Ecto, even a how-to question: schemas, changesets,
+  validations, queries, preloads, Multi…'
 ---
 
 # Ecto Patterns Reference

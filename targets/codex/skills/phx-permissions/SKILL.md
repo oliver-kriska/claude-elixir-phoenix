@@ -44,7 +44,7 @@ Run the extraction script from `references/extraction-script.md`.
 This scans all project JSONL files from the last N days, checks each Bash command
 against current `settings.json` patterns, and reports uncovered commands with counts.
 
-**IMPORTANT**: Run this FIRST. Do NOT skip to settings cleanup.
+Run this before any settings cleanup — missing permissions are the primary goal.
 
 ### Step 2: Classify and Recommend
 

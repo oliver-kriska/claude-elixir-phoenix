@@ -129,7 +129,7 @@ end
 
 **Use for**: Complex coordination, serializing access, managing external resources, monitors/timers
 
-**DO NOT use for**: Code organization, stateless computation, simple get/update
+**Don't use for**: Code organization, stateless computation, simple get/update
 
 ```elixir
 defmodule ConnectionPool do

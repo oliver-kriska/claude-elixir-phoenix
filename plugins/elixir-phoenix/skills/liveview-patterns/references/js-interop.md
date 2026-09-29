@@ -298,8 +298,8 @@ Translated text can change DOM structure (different word count, RTL, different e
 
 ### Rules
 
-1. **NEVER use positional selectors** (`children[0]`, `firstChild`, `nth-child`) in JS hooks
-2. **ALWAYS use `querySelector` with `data-*` attributes** for stable element targeting
+1. **Don't use positional selectors** (`children[0]`, `firstChild`, `nth-child`) in JS hooks
+2. **Use `querySelector` with `data-*` attributes** for stable element targeting
 3. **Test with longest locale** — German/Finnish strings are often 30-50% longer than English
 
 ### Anti-Pattern

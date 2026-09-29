@@ -64,10 +64,11 @@ fallback for public, reproducible installs and older Amp clients.
 1. Install [Amp](https://ampcode.com/).
 2. Run the installation from the Elixir/Phoenix project where Amp will work.
 
-The child agents default to `anthropic/claude-haiku-4-5-20251001` for bounded,
-lower-cost specialist work. Confirm that model is available with
-`amp plugins show-agent-options`; [choose another model](#choose-the-specialist-model)
-when necessary.
+The child agents follow the canonical agents' models: the security specialist
+runs on `anthropic/claude-opus-5-5`, and the other specialists and the
+investigation tracks run on `anthropic/claude-sonnet-5`. Confirm those models are
+available with `amp plugins show-agent-options`;
+[choose another model](#choose-the-specialist-model) when necessary.
 
 ## Install paired-full in one project (recommended)
 
@@ -342,8 +343,15 @@ normal parent synthesis turn.
 
 ### Choose the specialist model
 
-The default child model is Claude Haiku 4.5. Override it for the Amp process
-with any current public `provider/model` ID:
+Each specialist uses the Amp equivalent of its canonical agent's `model:`:
+Claude Opus 5.5 for `security-analyzer`, Claude Sonnet 5 for the Elixir, Ecto,
+LiveView, and testing reviewers. The four investigation tracks use Claude
+Sonnet 5, matching the canonical deep-bug-investigator tracks. The canonical
+`sonnet` alias is Sonnet 5.5 in Claude Code, but Amp does not list a Sonnet 5.5
+plugin-agent model, so the Amp target uses Sonnet 5.
+
+Override every child for the Amp process with any current public
+`provider/model` ID:
 
 ```bash
 amp plugins show-agent-options

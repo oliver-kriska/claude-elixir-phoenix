@@ -29,7 +29,7 @@ WRITE_EXEMPT_NAMES = {
 MODEL_EFFORT_MAP = {
     "haiku": "low",
     "sonnet": "medium",
-    "opus": "high",
+    "opus": "medium",
 }
 
 # Agents that are orchestrators (higher line limits, opus justified)
@@ -111,7 +111,7 @@ def agent_bypass_permissions(content: str, **_) -> tuple[bool, str]:
 def agent_model_appropriate(content: str, **_) -> tuple[bool, str]:
     """Check that model matches effort level and agent role.
 
-    haiku = low (mechanical), sonnet = medium (specialist), opus = high (orchestrator/security).
+    haiku = low, sonnet = medium, opus = medium — Opus 5.5's own default; `high` is a deliberate step up.
     """
     fm = parse_frontmatter(content)
     model = str(fm.get("model", "")).lower()

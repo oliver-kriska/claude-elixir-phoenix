@@ -7,6 +7,11 @@
     "How do I know if I need /phx:investigate?",
     "Which command should I run for Oban worker debugging?"
   ],
+  "should_trigger_test": [
+    "Is there a phx command that checks my changes before I open a PR?",
+    "what's the difference between /phx:review and /phx:challenge, and when would I use each?",
+    "Which plugin skill should I use to find where a function gets called from?"
+  ],
   "should_not_trigger": [
     "I'm building a feature but don't know which workflow to start",
     "Show me all the plugin commands and what they do",
@@ -15,5 +20,10 @@
     "/help",
     "What's the right pattern for Phoenix plug middleware?",
     "Deploy this app to production with Docker"
+  ],
+  "should_not_trigger_test": [
+    "Give me a tour of everything this plugin can do",
+    "Run /phx:verify on my changes",
+    "How do I install the plugin's rules into this project's CLAUDE.md?"
   ]
 }

@@ -70,8 +70,8 @@ each. Apply this list **before** running `make eval`.
 - Read-only agents (no Write): set `disallowedTools: Edit,
   NotebookEdit` (NOT Write — agents need Write to save their own
   findings file). Set `omitClaudeMd: true`.
-- `effort:` must match model: `low` for haiku, `medium` for sonnet,
-  `high` for opus. Mismatch fails the consistency check.
+- `effort:` must match model: `low` for haiku, `medium` for sonnet
+  and opus. Mismatch fails the consistency check.
 
 ## Description keyword reference
 

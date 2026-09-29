@@ -37,8 +37,7 @@ rest of the renderer is ASCII to keep diff/grep-friendly.)
 
 When `diff_cves.py` emits any `patched`, `introduced`, or `still_exposed`
 findings, the renderer **prepends a headline section** before the
-package table. This is the actionable narrative the 2026-05-12 virgil
-dogfood revealed was missing.
+package table — the actionable summary of what the update changed.
 
 ### Render order
 

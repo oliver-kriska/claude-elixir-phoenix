@@ -99,7 +99,7 @@ Release vX.Y.Z — <short summary>
 
 <optional body: what changed, why it's this bump level>
 
-Co-Authored-By: Claude Opus 4.8 (1M context) <noreply@anthropic.com>
+Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>
 ```
 
 Release commits historically touch only `CHANGELOG.md` + `plugin.json`
@@ -122,9 +122,10 @@ npx markdownlint CHANGELOG.md README.md plugins/.../changed.md
 
 ## Gotchas
 
-- **`claude plugin tag` does not work here.** Marketplace layout puts
-  `plugin.json` under `plugins/elixir-phoenix/.claude-plugin/`, not repo root.
-  Tagging is always manual: `git tag vX.Y.Z && git push origin vX.Y.Z`.
+- **Each release gets four tags.** `git tag vX.Y.Z` carries the GitHub release;
+  `claude plugin tag plugins/<name>` (verified on CC 2.1.284 with this marketplace
+  layout) creates `phx--vX.Y.Z`, `ecto--vX.Y.Z`, `lv--vX.Y.Z` — the scheme
+  dependency version ranges (`^3.1`) resolve against. Push all four together.
 - **Users only get updates when `plugin.json` version changes** (install cache).
   CHANGELOG/code changes alone are invisible to installed users.
 - **The version lives in seven files, not one.** Five by hand

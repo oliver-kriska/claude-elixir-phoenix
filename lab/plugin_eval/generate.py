@@ -12,6 +12,13 @@ Why the cases live here instead of plugins/elixir-phoenix/evals/:
   the eval runs against — so the suite runs from the repo root.
 - Keeping cases out of the plugin keeps them out of every user's install.
 
+Held-out split: `should_trigger`/`should_not_trigger` are the train set (the
+prompts a description may be tuned against); `should_trigger_test`/
+`should_not_trigger_test` are the validation set that accepts or rejects a
+change. Every case is tagged `split-train` or `split-val`, plus
+`train-<skill>`/`val-<skill>` because `--tag` values are OR-ed and cannot
+intersect a skill with a split.
+
 Usage:
     python3 -m lab.plugin_eval.generate                  # all skills
     python3 -m lab.plugin_eval.generate --skill verify   # one skill
@@ -111,6 +118,20 @@ def write_case(case_dir: str, name: str, prompt: str, tags: list[str], grader: s
         f.write(grader)
 
 
+# (trigger JSON field, case-name prefix, split, positive?). Train case names
+# keep their original `pos-N`/`neg-N` so runs stay comparable across versions.
+SPLITS = [
+    ("should_trigger", "pos", "train", True),
+    ("should_not_trigger", "neg", "train", False),
+    ("should_trigger_test", "val-pos", "val", True),
+    ("should_not_trigger_test", "val-neg", "val", False),
+]
+
+
+def case_tags(skill: str, split: str, positive: bool) -> list[str]:
+    return ["trigger", "trigger-pos" if positive else "trigger-neg", skill, f"split-{split}", f"{split}-{skill}"]
+
+
 def generate(only: set[str] | None, max_turns: int, timeout: int) -> tuple[int, int]:
     triggers = load_triggers(only)
     targets = [OUT_DIR] if not only else [os.path.join(OUT_DIR, s) for s in only]
@@ -121,16 +142,16 @@ def generate(only: set[str] | None, max_turns: int, timeout: int) -> tuple[int, 
     for skill, data in triggers.items():
         matcher = skill_matcher(skill)
         flavors = SKILL_FLAVORS.get(skill, [])
-        for i, prompt in enumerate(data.get("should_trigger", []), 1):
-            grader = f"---\ntype: tool_used\ntool: Skill\ninput_match: '{matcher}'\n---\n"
-            write_case(os.path.join(OUT_DIR, skill, f"pos-{i}"), f"{skill}--pos-{i}", prompt,
-                       ["trigger", "trigger-pos", skill], grader, max_turns, timeout, flavors)
-            pos += 1
-        for i, prompt in enumerate(data.get("should_not_trigger", []), 1):
-            grader = f"---\ntype: tool_used\ntool: Skill\ninput_match: '{matcher}'\nmin: 0\nmax: 0\narm: both\n---\n"
-            write_case(os.path.join(OUT_DIR, skill, f"neg-{i}"), f"{skill}--neg-{i}", prompt,
-                       ["trigger", "trigger-neg", skill], grader, max_turns, timeout, flavors)
-            neg += 1
+        for field, prefix, split, positive in SPLITS:
+            grader = f"---\ntype: tool_used\ntool: Skill\ninput_match: '{matcher}'\n"
+            grader += "---\n" if positive else "min: 0\nmax: 0\narm: both\n---\n"
+            for i, prompt in enumerate(data.get(field, []), 1):
+                write_case(os.path.join(OUT_DIR, skill, f"{prefix}-{i}"), f"{skill}--{prefix}-{i}", prompt,
+                           case_tags(skill, split, positive), grader, max_turns, timeout, flavors)
+                if positive:
+                    pos += 1
+                else:
+                    neg += 1
     return pos, neg
 
 

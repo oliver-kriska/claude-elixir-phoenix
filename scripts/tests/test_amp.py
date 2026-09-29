@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import hashlib
 import os
+import re
 import shutil
 import stat
 import subprocess
@@ -201,6 +202,68 @@ def test_projects_five_canonical_agents_to_enforced_read_only_prompts() -> None:
         assert "call `Write`" not in specialist.instructions
         assert "Write audit to" not in specialist.instructions
         assert "Write review to" not in specialist.instructions
+
+
+def test_specialists_follow_canonical_agent_models() -> None:
+    specialists = amp.discover_specialists(SOURCE_PLUGIN_DIR)
+
+    assert {specialist.name: specialist.model for specialist in specialists} == {
+        "elixir-reviewer": "anthropic/claude-sonnet-5",
+        "ecto-schema-designer": "anthropic/claude-sonnet-5",
+        "liveview-architect": "anthropic/claude-sonnet-5",
+        "security-analyzer": "anthropic/claude-opus-5-5",
+        "testing-reviewer": "anthropic/claude-sonnet-5",
+    }
+    assert amp.INVESTIGATION_TRACK_MODEL == "anthropic/claude-sonnet-5"
+
+    plugin = amp.render_plugin(amp.discover_skills(SOURCE_PLUGIN_DIR), specialists)
+    assert '"model":"anthropic/claude-opus-5-5"' in plugin
+    assert "model: modelOverride ?? definition.model" in plugin
+    assert "model: modelOverride ?? investigationTrackModel" in plugin
+    assert (
+        "const investigationTrackModel: PluginAIModel = 'anthropic/claude-sonnet-5'"
+        in plugin
+    )
+    assert "haiku" not in plugin
+
+
+def test_specialist_without_amp_model_mapping_fails(tmp_path) -> None:
+    plugin = tmp_path / "plugin"
+    shutil.copytree(SOURCE_PLUGIN_DIR / "agents", plugin / "agents")
+    agent = plugin / "agents" / "testing-reviewer.md"
+    source = agent.read_text(encoding="utf-8")
+    assert "\nmodel: sonnet\n" in source
+    agent.write_text(
+        source.replace("\nmodel: sonnet\n", "\nmodel: haiku\n", 1), encoding="utf-8"
+    )
+
+    with pytest.raises(ValueError, match="no Amp model for canonical model `haiku`"):
+        amp.discover_specialists(plugin)
+
+
+def test_specialist_model_override_accepts_amp_provider_namespaces() -> None:
+    plugin = amp.render_plugin(amp.discover_skills(SOURCE_PLUGIN_DIR))
+    match = re.search(r"if \(configured && /(.+?)/\.test\(configured\)\)", plugin)
+    assert match
+    override = re.compile(match.group(1))
+
+    for model in (
+        "anthropic/claude-opus-5-5",
+        "openai/gpt-5-mini",
+        "google-vertex/gemini-3.5-flash",
+        "fireworks-ai/accounts/fireworks/models/kimi-k3",
+        "zhipuai/glm-5.3",
+        "minimax/MiniMax-M3",
+    ):
+        assert override.search(model), model
+    for model in (
+        "claude-sonnet-5",
+        "Anthropic/claude-sonnet-5",
+        "anthropic/",
+        "anthropic/claude sonnet",
+        "anthropic/claude;true",
+    ):
+        assert not override.search(model), model
 
 
 def test_missing_required_canonical_specialist_fails_before_replacing_target(

@@ -71,8 +71,9 @@ guess, corrections are expensive.
 Read plan file, count `[x]` (completed) vs `[ ]` (remaining).
 Find first unchecked task by `[Pn-Tm]` ID.
 
-**Create Claude Code tasks** from ALL unchecked plan items using
-`TaskCreate`. This gives real-time progress visibility in the UI:
+**Create Claude Code tasks** only if `TaskCreate` is in your tool list (Sonnet 5+ and Opus 4.8+
+omit it unless `CLAUDE_CODE_ENABLE_TODO_TOOLS=1`; never ToolSearch for it). Without it, skip every
+`TaskCreate`/`TaskUpdate` step in this skill — plan checkboxes and `progress.md` are the state:
 
 ```
 For each unchecked `- [ ] [Pn-Tm] Description`:
@@ -83,9 +84,8 @@ For each unchecked `- [ ] [Pn-Tm] Description`:
   })
 ```
 
-Skip already-checked items (`[x]`) — don't create tasks for them.
-Set up `blockedBy` dependencies between phases (Phase 2 tasks
-blocked by Phase 1 tasks).
+Skip already-checked items (`[x]`). Set `blockedBy` between phases
+(Phase 2 tasks blocked by Phase 1 tasks).
 
 With `--from P2-T3`: Skip to that specific task.
 
@@ -125,9 +125,8 @@ for spawning pattern, prompt template, and checkpoint flow.
   (create record, fetch, verify -- see execution-guide.md)
 - Final gate: `mix test` (full suite — run ONCE at the end, not per-phase)
 
-**Token efficiency**: Do NOT narrate each verification step. Execute
-tool calls directly without "Let me now run..." preamble. Only narrate
-when explaining a non-obvious decision or reporting a failure. When
+**Token efficiency**: Write user-facing text for non-obvious decisions
+and failures; routine verification passes need no commentary. When
 several checkboxes complete together (parallel groups, resume catch-up),
 batch them into ONE edit pass — never one Edit call per checkbox.
 The PostToolUse hook checks formatting but does NOT modify files —
@@ -160,7 +159,7 @@ Key decisions: {brief list from this session}.
 
 Include context beyond checkboxes for fresh session resume.
 
-**NEVER** auto-start /phx:review or any other phase.
+Wait for the user's choice before starting /phx:review or any other phase.
 
 ## Step 6: Check for Additional Plans
 

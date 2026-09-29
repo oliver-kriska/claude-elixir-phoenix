@@ -77,13 +77,13 @@ If code would violate ANY of these, you MUST:
 
 ## VERIFICATION — MANDATORY after code changes
 
-After ANY code change, you MUST run before presenting results:
+After each code change, run this before presenting results:
 
 ```
 mix compile --warnings-as-errors && mix format --check-formatted
 ```
 
-Do NOT present code as complete until verification passes.
+Present code as complete only after verification passes.
 Offer `mix test` after significant changes.
 
 ## POST-ACTION — Offer follow-ups

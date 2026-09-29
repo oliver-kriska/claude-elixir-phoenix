@@ -112,6 +112,10 @@ def load_all_descriptions() -> dict[str, str]:
     return descriptions
 
 
+class MissingHeldOutSplit(ValueError):
+    """The skill has no `should_trigger_test` prompts to validate against."""
+
+
 def load_trigger_prompts(skill_name: str, split: str = "train") -> list[str] | None:
     """Load trigger prompts for a skill.
 
@@ -123,6 +127,11 @@ def load_trigger_prompts(skill_name: str, split: str = "train") -> list[str] | N
 
     Returns:
         List of prompts, or None if no trigger file exists.
+
+    Raises:
+        MissingHeldOutSplit: split="test" and the file has no held-out prompts.
+            Falling back to the train prompts would score a description on the
+            prompts it was tuned against and report that as validation.
     """
     path = os.path.join(TRIGGERS_DIR, f"{skill_name}.json")
     if not os.path.isfile(path):
@@ -136,10 +145,19 @@ def load_trigger_prompts(skill_name: str, split: str = "train") -> list[str] | N
     if split == "train":
         return train
     elif split == "test":
-        return test if test else train
+        if not test:
+            raise MissingHeldOutSplit(
+                f"{skill_name} has no should_trigger_test prompts in {path}; "
+                "add at least 3 held-out prompts before validating a description"
+            )
+        return test
     elif split == "all":
         return train + test
     return train
+
+
+def acceptance_command(skill_name: str) -> str:
+    return f'RUNS=3 TAG="train-{skill_name} val-{skill_name}" MAX_COST=10 make eval-plugin'
 
 
 def run_pass(
@@ -341,6 +359,10 @@ def run_tournament(
         "passes": state.pass_number,
         "converged": check_convergence(state, k=config["convergence_threshold"]),
         "structural_gate": {"passed": structural_passed, "failures": structural_failures},
+        # Judges only ever see the train prompts, so a changed description is a
+        # candidate until the held-out split accepts it in a real session.
+        "validated": False,
+        "accept_with": acceptance_command(skill_name),
         "history_summary": [
             {"pass": h["pass"], "winner": h["winner"], "scores": h.get("borda_scores", {})}
             for h in state.history
@@ -348,16 +370,25 @@ def run_tournament(
     }
 
     print(f"\n{'='*60}")
-    print(f"Result: {'CHANGED' if result['changed'] else 'UNCHANGED'}")
+    print(f"Result: {'CHANGED (unvalidated candidate)' if result['changed'] else 'UNCHANGED'}")
     if result["changed"]:
         print(f"Before: \"{original}\"")
         print(f"After:  \"{state.incumbent}\"")
+        print("Accept only if val recall beats a baseline run of the old description (same RUNS, same model):")
+        print(f"  {result['accept_with']}")
     elif structural_failures:
         print(f"Reverted due to structural failures: {structural_failures}")
     print(f"Passes: {state.pass_number}, Converged: {result['converged']}")
     print(f"{'='*60}")
 
     return result
+
+
+def held_out_count(skill_name: str) -> int:
+    try:
+        return len(load_trigger_prompts(skill_name, split="test") or [])
+    except MissingHeldOutSplit:
+        return 0
 
 
 def find_weak_skills(threshold: float = 0.75) -> list[tuple[str, float]]:
@@ -382,6 +413,8 @@ def main():
     parser.add_argument("--weak", action="store_true", help="Auto-target skills below 75%% accuracy")
     parser.add_argument("--dry-run", action="store_true", help="Show what would happen without LLM calls")
     parser.add_argument("--config", help="Override config file path")
+    parser.add_argument("--allow-unvalidated", action="store_true",
+                        help="Run even without should_trigger_test prompts (the candidate can never be accepted)")
     args = parser.parse_args()
 
     config = load_config(args.config) if args.config else load_config()
@@ -393,6 +426,11 @@ def main():
         if not trigger_prompts:
             print(f"No trigger file for {args.skill}", file=sys.stderr)
             sys.exit(1)
+        if not held_out_count(args.skill) and not args.allow_unvalidated:
+            print(f"Refusing: {args.skill} has no should_trigger_test prompts, so a winner could only be "
+                  "judged on the prompts it was tuned against. Add at least 3 held-out prompts to "
+                  f"lab/eval/triggers/{args.skill}.json, or pass --allow-unvalidated.", file=sys.stderr)
+            sys.exit(1)
         result = run_tournament(args.skill, all_descriptions, trigger_prompts, config, args.dry_run)
         print(json.dumps(result, indent=2))
 
@@ -402,7 +440,13 @@ def main():
             print("No skills below 75% accuracy threshold")
             sys.exit(0)
         print(f"Found {len(weak)} weak skills: {', '.join(f'{s} ({a:.0%})' for s, a in weak)}")
+        unvalidatable = [s for s, _ in weak if not held_out_count(s)]
+        if unvalidatable and not args.allow_unvalidated:
+            print(f"SKIPPING {len(unvalidatable)} without should_trigger_test prompts (no way to accept a winner): "
+                  f"{', '.join(unvalidatable)}", file=sys.stderr)
         for skill_name, accuracy in weak:
+            if skill_name in unvalidatable and not args.allow_unvalidated:
+                continue
             trigger_prompts = load_trigger_prompts(skill_name)
             if not trigger_prompts:
                 continue

@@ -159,7 +159,7 @@ Synthesize affordance tables and the system map from the completed research-trac
 
 ## Completeness Check
 
-**MANDATORY when planning from review.** List ALL findings from
+**Required when planning from review.** List ALL findings from
 the source and verify every one is covered:
 
 > Source has N items. Coverage:

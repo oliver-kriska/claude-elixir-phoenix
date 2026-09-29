@@ -242,12 +242,12 @@ After each task passes verification:
    implementation note** — key decisions, gotchas, actual values.
    Example: `- [x] [P2-T2] Add password_hash — used Bcrypt, 12 rounds, added virtual :password`
    These notes survive context compaction since the plan is re-read on resume.
-2. **Complete Claude Code task**: `TaskUpdate({taskId, status: "completed"})`
-   This updates the live progress indicator visible in the UI.
+2. **Complete Claude Code task** (only if `TaskUpdate` is in your tool list):
+   `TaskUpdate({taskId, status: "completed"})` updates the UI progress indicator.
 3. **Update phase status**: If all tasks done, change to `[COMPLETED]`
 4. **Log progress**: Append to `.claude/plans/{feature}/progress.md`
-5. **Start next task**: `TaskUpdate({nextTaskId, status: "in_progress"})`
-   then move to next unchecked task
+5. **Start next task**: `TaskUpdate({nextTaskId, status: "in_progress"})` if
+   available, then move to the next unchecked task
 
 ### Progress Log Entry
 
@@ -261,11 +261,10 @@ After each task passes verification:
 
 ## Phase Transitions
 
-**CRITICAL: Auto-continue between phases.** When all tasks in a
-phase complete, mark it `[COMPLETED]` and IMMEDIATELY start the
-next phase. Do NOT stop to ask the user. Do NOT output a summary
-between phases. Just keep going until all phases are done or a
-BLOCKER is hit.
+**Auto-continue between phases.** When all tasks in a phase
+complete, mark it `[COMPLETED]` and start the next phase in the same
+turn — the user approved the whole plan, so there is nothing to ask.
+Keep going until all phases are done or a BLOCKER is hit.
 
 ```markdown
 # Before

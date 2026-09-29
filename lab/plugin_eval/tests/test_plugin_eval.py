@@ -42,6 +42,59 @@ def test_generated_case_loads_dependency_plugins_from_repo_root(tmp_path, monkey
     assert "max: 0" in negative and "arm: both" in negative
 
 
+def _tags(case_dir):
+    header = (case_dir / "prompt.md").read_text().split("---")[1]
+    line = next(line for line in header.splitlines() if line.startswith("tags:"))
+    return line.split("[", 1)[1].rstrip("]").split(", ")
+
+
+def test_held_out_prompts_become_val_cases_with_split_tags(tmp_path, monkeypatch):
+    out = tmp_path / "cases" / "triggers"
+    monkeypatch.setattr(generate, "OUT_DIR", str(out))
+    monkeypatch.setattr(generate, "load_triggers", lambda only: {"perf": {
+        "should_trigger": ["train pos"],
+        "should_trigger_test": ["val pos 1", "val pos 2"],
+        "should_not_trigger": ["train neg"],
+        "should_not_trigger_test": ["val neg"],
+    }})
+
+    pos, neg = generate.generate(None, max_turns=3, timeout=180)
+
+    assert (pos, neg) == (3, 2)
+    skill_dir = out / "perf"
+    assert sorted(p.name for p in skill_dir.iterdir()) == ["neg-1", "pos-1", "val-neg-1", "val-pos-1", "val-pos-2"]
+    # Existing tags are kept so TAG=trigger-pos and TAG=<skill> still select the same cases.
+    assert _tags(skill_dir / "pos-1") == ["trigger", "trigger-pos", "perf", "split-train", "train-perf"]
+    assert _tags(skill_dir / "neg-1") == ["trigger", "trigger-neg", "perf", "split-train", "train-perf"]
+    assert _tags(skill_dir / "val-pos-2") == ["trigger", "trigger-pos", "perf", "split-val", "val-perf"]
+    assert _tags(skill_dir / "val-neg-1") == ["trigger", "trigger-neg", "perf", "split-val", "val-perf"]
+    assert (skill_dir / "val-pos-2" / "prompt.md").read_text().rstrip().endswith("val pos 2")
+    assert "max: 0" not in (skill_dir / "val-pos-1" / "graders" / "skill.md").read_text()
+    assert "max: 0" in (skill_dir / "val-neg-1" / "graders" / "skill.md").read_text()
+
+
+def test_val_cases_score_as_the_skill_they_belong_to(tmp_path):
+    """The analyzer reads the skill from the grader, so val cases need no special casing."""
+    hit = tmp_path / "hit.jsonl"
+    _write_trace(hit, skills=["phx:perf"])
+    data = {"cases": [_case("perf--val-pos-1", "perf", hit), _case("perf--val-neg-1", "perf", hit, negative=True)]}
+
+    stats = analyze.summarize(data, str(tmp_path))["per_skill"]["perf"]
+
+    assert (stats["pos_hit"], stats["pos"], stats["neg_clean"], stats["neg"]) == (1, 1, 0, 1)
+
+
+def test_trigger_files_keep_train_and_val_prompts_disjoint():
+    """A prompt in both splits would let a description be tuned on its own acceptance test."""
+    for skill, data in generate.load_triggers(None).items():
+        for train_key, val_key in (("should_trigger", "should_trigger_test"),
+                                   ("should_not_trigger", "should_not_trigger_test")):
+            overlap = set(data.get(train_key, [])) & set(data.get(val_key, []))
+            assert not overlap, f"{skill}: {sorted(overlap)} in both {train_key} and {val_key}"
+        held_out = data.get("should_trigger_test", [])
+        assert not held_out or len(held_out) >= 3, f"{skill}: a val split needs at least 3 positive prompts"
+
+
 def test_every_trigger_file_maps_to_a_shipped_skill():
     triggers = generate.load_triggers(None)
     assert triggers, "no trigger files found"

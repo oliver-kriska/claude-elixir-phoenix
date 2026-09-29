@@ -13,6 +13,167 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+## [3.1.2] - 2026-09-29
+
+Claude Code 2.1.284 and the 5.5 models. Hooks now work when the plugin's install
+path contains a space. Workflow rules are re-injected after compaction. Agents run
+on Sonnet 5.5 at medium effort, and the prompts are reworded for the new
+models. Six skills that rarely fired on Sonnet 5.5 have new descriptions.
+
+### Added
+
+- **`make eval-quality`, an output-quality eval (contributor tooling).** Six
+  `claude plugin eval` cases run each workflow with and without the plugin
+  (`--ablation with-without`) and grade the resulting code, plan or findings.
+  The cases are money stored as a float, queries in `mount` on a 50k-row list,
+  an idempotent Oban worker, a plan with checkbox tasks, an investigation that
+  can reuse a prior solution doc, and a review with nine seeded defects. On
+  Sonnet 5.5, five runs per arm, the plugin's clearest gains are writing code
+  against a bad local convention (money field +0.20, LiveView list +0.20) and
+  reusing `.claude/solutions/` (+0.16). Review is a tie: Claude without the
+  plugin found all nine defects in 5 of 8 runs. Paid and not part of `make ci`
+  (about $2 per run of all six cases).
+
+### Changed
+
+- **Aligned with the Claude 5.5 models** (Opus 5.5 default since CC 2.1.280,
+  Sonnet 5.5 since CC 2.1.284). `/phx:audit` pins its two `general-purpose`
+  tracks to `model: "sonnet"`: Opus is now the default model on every plan,
+  including Pro and Team Standard, so an unpinned track ran on Opus for
+  everyone. The eval tooling follows the new models — `trigger_scorer`'s
+  `sonnet`/`opus` aliases resolve to `claude-sonnet-5-5`/`claude-opus-5-5`,
+  `make eval-plugin` pins Sonnet 5.5, with a new baseline of 164/269
+  positive recall and 233/233 clean negatives (Sonnet 5: 176/269), and `/session-scan` knows the 1M context window of Sonnet 5+,
+  Opus 4.8+ and Fable. Contributor docs record that `effort: high` is now a
+  step above the Opus 5.5/Sonnet 5.5 default of `medium`, and that Haiku 4.5
+  ignores `effort`.
+- **`make validate` now runs `claude plugin validate --strict`**, so a
+  validator warning fails the gate instead of printing "passed with
+  warnings". A pytest guard checks hook quoting in GitHub CI, which has no
+  `claude` binary.
+- **The five former Haiku agents run on Sonnet 5.5**: `context-supervisor`,
+  `web-researcher`, `xref-analyzer`, `codex-reviewer` and
+  `verification-runner`. Haiku 4.5 is a generation behind, has a 200K window,
+  ignores `effort`, and its retirement window opens on October 15, 2026;
+  Sonnet 5.5 costs twice as much. Every agent now runs at `effort: medium`,
+  the CC default for the 5.5 models — three of the four Opus agents drop
+  from `high`, since Opus 5.5 at `medium` matches Opus 5 at `high`.
+- **Prompts reworded for the 5.5 models.** Anthropic's prompting guide for
+  this generation warns that emphatic CRITICAL/MUST/NEVER wording
+  over-triggers. About 100 edits across skills, agents, hook messages and
+  `CLAUDE.md` replace unexplained caps, duplicated prohibitions, session-ID
+  history notes and narration suppressors with the instruction and its
+  reason. Iron Laws, headings, and text the port builders anchor on are
+  unchanged.
+- **`/phx:full` Iron Law 7 now says when to write text, instead of banning
+  it.** It was an older-model rule: a list of banned phrases and "if you catch
+  yourself narrating, delete the text". Opus 5.5 follows such rules literally,
+  which risks a silent autonomous run. The law now asks for a one-line status at
+  each phase transition, a reason for each non-obvious decision, and a report of
+  every error and blocker.
+- **Amp specialists follow the canonical agent models instead of Haiku 4.5.**
+  The security specialist runs on `anthropic/claude-opus-5-5`; the other
+  reviewers and the four investigation tracks run on `anthropic/claude-sonnet-5`,
+  because Amp does not offer Sonnet 5.5 to plugin agents. Amp accepts any model
+  ID at load and fails each child run at inference, so the build now fails on a
+  canonical model alias it has no Amp mapping for.
+  `ELIXIR_PHOENIX_AMP_SPECIALIST_MODEL` accepts any `provider/model` ID Amp
+  lists (it used to reject providers such as `google-vertex`).
+- **Six skill descriptions rewritten after they almost never fired on Sonnet 5.5**:
+  `document`, `ecto-patterns`, `oban`, `perf`, `help` and `trace`. Sonnet 5.5
+  does Ecto, Oban and performance work itself unless the description asks it to
+  load the skill first, so each now opens with the user's task and, where it
+  helped, says to load the skill before acting. Measured on held-out prompts the
+  rewrites never saw (3 runs each): `perf` 0/12 → 9/12, `oban` 3/12 → 7/12,
+  `ecto-patterns` 0/12 → 6/12, `document` 5/12 → 9/12; `help` and `trace` gained
+  on one or two prompts. No skill lost precision on negative prompts. `quick`
+  kept its description; neither rewrite helped it.
+- **`make eval-plugin` has a held-out split, and the description tournament
+  requires it** (contributor tooling). Trigger files take `should_trigger_test` /
+  `should_not_trigger_test` prompts, tagged `split-val` (`TAG=split-train`
+  reproduces the old 502 cases). `description_tournament.py` refuses a skill with
+  no held-out prompts unless `--allow-unvalidated` is passed, and its prompts no
+  longer ask for keyword-stuffed descriptions. Half the zero-recall prompts named
+  code the eval fixture doesn't have, so Claude asked a question instead of
+  loading a skill; they now target the fixture's real files.
+- **`/phx:triage` no longer auto-approves Iron Law violations and
+  BLOCKERs.** It lists them first as recommended fixes and lets the user
+  decide, as its own Iron Law 6 requires.
+- **`/phx:investigate` checks migration status (`mix ecto.migrations`)**
+  instead of running `mix ecto.migrate` during a diagnosis.
+- **Contributor tooling adopts the new `claude plugin` commands.**
+  - `make budget` fails when a plugin's always-on token cost
+    (`claude plugin details`) grows more than 5% past `scripts/plugin_budget.json`.
+  - `make prompt-audit TARGET=...` runs a report-only `/doctor prompt-audit`.
+  - `make validate` also covers the contributor `.claude/` skills and agents.
+  - `/docs-check` fetches the plugin CLI, marketplace, dependency,
+    measurement and plugin-eval reference pages.
+  - The plugin manifests declare `"license": "MIT"`.
+  - Each release now also gets `phx--vX.Y.Z`, `ecto--vX.Y.Z` and `lv--vX.Y.Z`
+    tags from `claude plugin tag`, so other plugins can depend on these with a
+    version range.
+
+### Fixed
+
+- **Every hook failed when the plugin was installed under a path with a
+  space** (for example `/Users/John Doe/.claude/...`). All 30 commands in
+  `hooks.json` left `${CLAUDE_PLUGIN_ROOT}` unquoted, so the shell split the
+  path and the script never ran. On the always-on Bash gate, `|| exit 0` then
+  turned that into an allow: the force-push and destructive-`mix` blocks were
+  silently off. Commands are now quoted; `claude plugin validate` has flagged
+  this since CC 2.1.281.
+- **`/phx:work`, `/phx:full`, `/phx:plan`, `/phx:audit` and `/phx:review`
+  told Claude to call task tools that current models don't have.** Since CC
+  2.1.233 (narrowed further in 2.1.268), `TaskCreate`/`TaskUpdate`/`TodoWrite`
+  exist only on older models unless `CLAUDE_CODE_ENABLE_TODO_TOOLS=1` is set.
+  Those steps are now conditional on the tool being present, and `/phx:audit`
+  and `/phx:review` wait on agent completion notifications instead of task
+  status. Plan checkboxes and `progress.md` were already the real state.
+- **`/phx:watch-pr` asked Monitor for a 60–120 minute watch and a
+  `persistent` option that no longer exist.** Since CC 2.1.271 a Monitor
+  watch ends within 30 minutes. The watcher now runs in segments
+  (`WATCH_SEGMENT`): before the deadline it emits a non-terminal `rearm`
+  event, and a restart with `WATCH_RESUME=1` restores the baseline, the
+  already-reported reviews and comments, the check state and the codex flags
+  from its delta file, so nothing is reported twice or missed.
+  `WATCH_MAX_DURATION` still bounds the whole watch. Each segment polls at least
+  once before it re-arms, and review and comment events now carry an `id`.
+- **Workflow rules were never re-injected after compaction.** The PreCompact
+  hook sent them as `systemMessage` and the PostCompact hook as exit 2 +
+  stderr, and CC shows both to the user only. Both now run on `SessionStart`
+  with the `compact` matcher, whose stdout reaches Claude, as
+  `compact-rules.sh` and `compact-verify.sh`.
+- **The debugging-loop critic escalated a session's first `mix` failure.**
+  `error-critic.sh` kept its failure counts in a global `/tmp` directory and
+  never cleared them. After a command had failed twice in any earlier session,
+  every later failure of it went straight to the "debugging loop" analysis. The
+  count is now per session and resets when the command succeeds (the script is
+  also registered on `PostToolUse` for `mix` commands).
+- **The session-start scratchpad banner reported dead ends that didn't exist.**
+  It counted every bullet in the file, including the template's Handoff
+  bullets. It now counts only the Dead Ends section.
+- **The Iron Laws injected into subagents skipped Law 18** (check changeset
+  errors before UI debugging). All 26 are now injected.
+- **The Ecto failure hint told Claude to run `mix ecto.reset`**, which the
+  dangerous-ops hook blocks. It now tells Claude to ask the user.
+- **Stale facts in skills and agents**:
+  - `pr-review` cited Iron Laws 6 + 9 (it has 8).
+  - The compound-docs schema limited `iron_law_number` to 1–13.
+  - `/phx:deps-vet` listed unvetted-dependency blocking as future work; the
+    `deps-audit-gate.sh` hook already enforces it.
+  - The help catalog kept orphan bullets from the removed `/phx:autoresearch`.
+  - `context-supervisor` ignored caller-supplied globs such as `/phx:deps-audit`'s
+    `triage/*.json`.
+  - `parallel-reviewer` told `verification-runner` it had 10 turns (it has 15).
+  - The `/phx:full` references documented nonexistent `--resume` and
+    `--checkpoint-after` flags, and a commit per task.
+  - "Fresh 200k context" claims predated 1M windows.
+  - The example plans used retired `--detail` values.
+- **The monthly "Regenerate hex_vet seed" workflow failed on every run since
+  June** (contributor CI). Its audit step is a placeholder and the
+  `compose_seed.py` script it calls was never committed. The workflow is now
+  manual-only until both exist.
+
 ## [3.1.1] - 2026-09-29
 
 Two fixes that reach every runtime — `deps-audit` no longer installs its test

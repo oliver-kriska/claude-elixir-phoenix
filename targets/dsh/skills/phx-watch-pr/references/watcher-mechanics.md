@@ -23,7 +23,7 @@ Claude's context is untouched until a real event arrives.
 | Mechanism | Idle token cost | Notes |
 |-----------|----------------|-------|
 | Foreground bash loop | Worst — every poll in context | Reject |
-| **Monitor tool** (v2.1.98+) | ≈0 — streams filtered event lines | **Preferred.** Purpose-built: background script, each stdout line returns as an event. Not available on Bedrock/Vertex/Foundry |
+| **Monitor tool** (v2.1.98+) | ≈0 — streams filtered event lines | **Preferred.** Purpose-built: background script, each stdout line returns as an event. Capped at 30 min per watch since v2.1.271 — the script re-arms via `rearm` segments. Not available on Bedrock/Vertex/Foundry |
 | Bash `run_in_background` | ≈0 — Claude re-invoked when the script exits | Portable fallback; one shot per launch (exit-on-first-terminal-event) |
 | `/loop` + ScheduleWakeup | One full turn per wake (context reload each time) | Fallback only; clamped to [60s, 3600s]; Anthropic's own docs note dynamic /loop may switch to Monitor because it's cheaper |
 
@@ -35,6 +35,7 @@ re-running a prompt on an interval."
 
 - **Inputs**: PR number, dimensions (`reviews,comments,checks`), env
   overrides `WATCH_INTERVAL` (default 30s), `WATCH_MAX_DURATION` (3600s),
+  `WATCH_SEGMENT` (default = max duration), `WATCH_RESUME`,
   `WATCH_BASELINE_TS`, `WATCH_DELTA_FILE`
 - **One `gh pr view --json` per cycle** covers state, reviews, comments,
   and checks — cheaper than four REST calls, and the JSON never reaches
@@ -45,6 +46,14 @@ re-running a prompt on an interval."
 - **Terminal lines (silence ≠ success)**: `merged`, `pr_closed`,
   `watchdog` (max duration), `watch_error` (5 consecutive gh failures —
   don't loop forever on a dead token)
+- **Segments (CC 2.1.271+)**: Monitor watches end within 30 min (10 in
+  `-p` runs) and the old no-timeout `persistent` option is gone. After
+  `WATCH_SEGMENT` seconds the script emits a non-terminal `rearm` line
+  carrying `baseline`, `started` and the last check state, then exits 0.
+  Restarting with `WATCH_RESUME=1` reads that line back from the delta
+  file and seeds seen review/comment ids (events carry `id`) and codex
+  flags from this watch's rows, so nothing is re-reported or dropped.
+  `WATCH_MAX_DURATION` still bounds the whole watch across segments
 
 ## Codex mode (`--codex`)
 

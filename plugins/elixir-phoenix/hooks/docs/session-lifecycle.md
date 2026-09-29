@@ -99,8 +99,12 @@ most valuable section on resume:
 
 ```text
 Scratchpad: 22 note(s) found — latest: .claude/plans/cc-2-1-226-adoption/scratchpad.md
-  (3 dead-end entries — READ BEFORE RETRYING)
+  (3 dead-end entries — read them before retrying an approach)
 ```
+
+Only bullets inside the `## Dead Ends` section count. Until v3.1.2 it counted
+every `- ` line in the file, so the template's Handoff bullets alone reported
+"3 dead-end entries" on a scratchpad with none.
 
 **Initializes a template** for any plan directory that has a `plan.md` but no
 scratchpad, with sections for Dead Ends, Decisions, Open Questions, and Handoff

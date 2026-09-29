@@ -109,8 +109,9 @@ scripts/watch-pr.sh {n} reviews,comments,checks
 
 Monitor is a deferred tool — load its schema FIRST via ToolSearch
 (`select:Monitor`); calling it blind fails with InputValidationError
-(params are `command`, `description`, `timeout_ms`, `persistent` — do
-not invent others). Set `timeout_ms` = MAX_DURATION × 1000.
+(use only the params its schema lists). A Monitor watch ends within 30 min
+(10 in `-p` runs, CC 2.1.271+), so export `WATCH_SEGMENT=1740` (`540` in `-p`)
+and set `timeout_ms` = 1800000 (600000). The script emits `rearm` before that.
 Where Monitor is unavailable
 (Bedrock/Vertex/Foundry), run the same script via Bash
 `run_in_background: true` — it exits on the first terminal event instead.
@@ -126,6 +127,7 @@ Stay idle or keep working until an event lands.
 | `codex_review` | Stop the watcher. Run `/phx-pr-review {n} --bots-only` (fix → reply → resolve; user approves and pushes). If rounds < `--codex-rounds`: post `@codex review` again, restart watcher with the new trigger id, round+1. Else: report remaining findings, stop |
 | `codex_clean` | Codex is clean (👍 reaction OR a "Didn't find any major issues" bot comment). If checks also green → terminal success "codex + CI clean"; else keep watching CI |
 | `codex_timeout` | Inform: repo likely lacks the Codex connector; continue as a plain watch |
+| `rearm` | Not terminal. Start the same command again with `WATCH_RESUME=1` added — it restores baseline, seen events and check state from the delta file |
 | `merged` / `pr_closed` / `watchdog` / `watch_error` | Stop, report final state |
 
 A `codex_review` whose `/phx-pr-review --bots-only` fetch finds zero

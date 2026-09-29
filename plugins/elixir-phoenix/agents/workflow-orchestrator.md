@@ -5,7 +5,7 @@ tools: Read, Write, Grep, Glob, Bash, Agent
 disallowedTools: NotebookEdit
 permissionMode: bypassPermissions
 model: opus
-effort: high
+effort: medium
 maxTurns: 50
 memory: project
 skills:
@@ -132,18 +132,16 @@ Track state in progress file at `.claude/plans/{slug}/progress.md`:
 
 1. Spawn research agents based on complexity and feature type:
    - **Standard**: phoenix-patterns-analyst + 1-2 relevant specialists
-   - **Comprehensive** (replaces old brainstorm): 4+ agents including
+   - **Comprehensive**: 4+ agents including
      web-researcher, hex-library-researcher, phoenix-patterns-analyst,
      and conditional specialists (liveview-architect, ecto-schema-designer,
      oban-specialist, security-analyzer)
 
-   **Agent prompts must be FOCUSED.** Scope each prompt to the
-   relevant directories and patterns. Do NOT give vague prompts
-   like "analyze the codebase."
+   Scope each agent prompt to the relevant directories and patterns.
 
-2. Wait for ALL agents to FULLY complete — you'll be notified as each
-   finishes. Read each agent's output file to collect results. NEVER
-   proceed while any agent is still running.
+2. Wait for every agent to complete — you're notified as each finishes —
+   then read each agent's output file. Synthesizing while one is still
+   running drops its findings.
 3. Synthesize findings into structured plan with:
    - Phases
    - Checkbox tasks with `[Pn-Tm][annotation]` format

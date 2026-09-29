@@ -41,11 +41,9 @@ spawn an orchestrator that cannot delegate.
 
 **Otherwise**: Run the sequential workflow below.
 
-**Avoid confirmatory subagents**: Do NOT spawn parallel subagents
-to "verify" findings you already identified in the main context.
-If Step 3-4 already identified the root cause with high confidence,
-present it directly — don't spend ~80K tokens on 4 subagents to
-confirm what's already obvious (confirmed waste: session c135330a).
+**Avoid confirmatory subagents**: once Steps 3-4 identify the root cause
+with high confidence, present it directly — four subagents (~80K tokens)
+re-verifying a finding already made in this context add cost, not evidence.
 
 ## Iron Laws
 
@@ -91,7 +89,8 @@ This eliminates copy-pasting errors between app and agent.
 
 ### Step 1: Sanity Checks
 
-Run `mix compile --warnings-as-errors 2>&1 | head -50`, then `mix ecto.migrate`.
+Run `mix compile --warnings-as-errors 2>&1 | head -50`, then `mix ecto.migrations`
+(lists pending migrations without running them — ask before migrating).
 
 ### Step 2: Reproduce
 

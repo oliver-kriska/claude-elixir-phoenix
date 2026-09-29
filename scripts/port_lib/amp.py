@@ -117,7 +117,16 @@ Amp's file-classification helper, so this is not complete Claude-hook parity.
 }
 WORKFLOW_PLUGIN_RELATIVE_PATH = Path("plugins") / "elixir-phoenix.ts"
 PLUGIN_DISTRIBUTION_URL = "https://github.com/oliver-kriska/amp-elixir-phoenix"
-SPECIALIST_DEFAULT_MODEL = "anthropic/claude-haiku-4-5-20251001"
+# Canonical agent `model:` aliases projected to Amp plugin-agent IDs. Use only IDs
+# that `amp plugins show-agent-options` lists: Amp loads any `provider/model` and
+# fails each child run at inference instead. Amp lists no Sonnet 5.5 for plugin
+# agents, so `sonnet` maps to Sonnet 5; re-check that list before bumping it.
+AMP_MODEL_BY_CANONICAL_ALIAS = {
+    "sonnet": "anthropic/claude-sonnet-5",
+    "opus": "anthropic/claude-opus-5-5",
+}
+# deep-bug-investigator pins its four track subagents to `sonnet`.
+INVESTIGATION_TRACK_MODEL = AMP_MODEL_BY_CANONICAL_ALIAS["sonnet"]
 SPECIALIST_INSTRUCTIONS_PREFIX = """# Amp read-only specialist contract
 
 You are a child specialist in an Amp workflow. Analyze the current workspace and
@@ -232,6 +241,7 @@ class SpecialistAgent:
     color: str
     description: str
     instructions: str
+    model: str
 
 
 def discover_skills(source_plugin_dir: str | Path) -> list[SkillSource]:
@@ -349,6 +359,14 @@ def discover_specialists(source_plugin_dir: str | Path) -> list[SpecialistAgent]
             raise ValueError(f"{agent_file}: specialist must retain read access")
         if not isinstance(disallowed, str) or "Edit" not in disallowed:
             raise ValueError(f"{agent_file}: specialist must disallow source edits")
+        alias = frontmatter.data.get("model")
+        model = (
+            AMP_MODEL_BY_CANONICAL_ALIAS.get(alias) if isinstance(alias, str) else None
+        )
+        if model is None:
+            raise ValueError(
+                f"{agent_file}: no Amp model for canonical model `{alias}`"
+            )
         instructions = _project_specialist_instructions(frontmatter.body)
         discovered.append(
             SpecialistAgent(
@@ -358,6 +376,7 @@ def discover_specialists(source_plugin_dir: str | Path) -> list[SpecialistAgent]
                 color=spec["color"],
                 description=description,
                 instructions=instructions,
+                model=model,
             )
         )
 
@@ -568,6 +587,7 @@ def render_plugin(
                 "instructions": specialist.instructions.removeprefix(
                     SPECIALIST_INSTRUCTIONS_PREFIX
                 ),
+                "model": specialist.model,
             }
             for specialist in specialists
         ],
@@ -620,6 +640,7 @@ interface SpecialistDefinition {
   color: string
   description: string
   instructions: string
+  model: PluginAIModel
 }
 
 interface InvestigationTrack {
@@ -654,7 +675,7 @@ const workflows: Workflow[] = __WORKFLOWS__
 const specialists: SpecialistDefinition[] = __SPECIALISTS__
 const specialistInstructionsPrefix = __SPECIALIST_INSTRUCTIONS_PREFIX__
 const investigationTracks: InvestigationTrack[] = __INVESTIGATION_TRACKS__
-const defaultSpecialistModel = '__DEFAULT_SPECIALIST_MODEL__'
+const investigationTrackModel: PluginAIModel = '__INVESTIGATION_TRACK_MODEL__'
 const editLockKey = 'elixirPhoenixEditLock'
 const childTimeoutMs = 300_000
 const maxTaskLength = 8_000
@@ -672,12 +693,9 @@ function clip(text: string, limit: number): string {
   return `${text.slice(0, limit)}\\n\\n[truncated by elixir-phoenix Amp plugin]`
 }
 
-function configuredSpecialistModel(amp: PluginAPI): PluginAIModel {
+function specialistModelOverride(amp: PluginAPI): PluginAIModel | undefined {
   const configured = process.env.ELIXIR_PHOENIX_AMP_SPECIALIST_MODEL
-  if (
-    configured &&
-    /^(?:amp|anthropic|baseten|fireworks|openai|vertexai|xai)\\/[A-Za-z0-9._/-]+$/.test(configured)
-  ) {
+  if (configured && /^[a-z0-9][a-z0-9-]*\\/[A-Za-z0-9._/-]+$/.test(configured)) {
     return configured as PluginAIModel
   }
   if (configured) {
@@ -685,7 +703,7 @@ function configuredSpecialistModel(amp: PluginAPI): PluginAIModel {
       `Ignoring invalid ELIXIR_PHOENIX_AMP_SPECIALIST_MODEL: ${configured}`,
     )
   }
-  return defaultSpecialistModel as PluginAIModel
+  return undefined
 }
 
 function parentDirectories(path: string): string[] {
@@ -1108,14 +1126,14 @@ export default function (amp: PluginAPI) {
   const fullLifecycleByThread = new Map<string, FullLifecycleState>()
   let pendingDraft: PendingWorkflow | undefined
 
-  const model = configuredSpecialistModel(amp)
+  const modelOverride = specialistModelOverride(amp)
   const specialistAgents = new Map<string, Agent>()
   for (const definition of specialists) {
     specialistAgents.set(
       definition.key,
       amp.createAgent({
         name: `elixir-phoenix-${definition.name}`,
-        model,
+        model: modelOverride ?? definition.model,
         instructions: specialistInstructionsPrefix + definition.instructions,
         tools: ['Read', 'finder'],
         reasoningEffort: 'low',
@@ -1130,7 +1148,7 @@ export default function (amp: PluginAPI) {
       track.key,
       amp.createAgent({
         name: `elixir-phoenix-investigation-${track.key}`,
-        model,
+        model: modelOverride ?? investigationTrackModel,
         instructions: [
           '# Amp read-only investigation contract',
           'Use only Read and finder. Never edit, create files, run shell commands, or invoke agents.',
@@ -1672,7 +1690,7 @@ export default function (amp: PluginAPI) {
         .replace("__SPECIALISTS__", specialist_payload)
         .replace("__SPECIALIST_INSTRUCTIONS_PREFIX__", specialist_prefix_payload)
         .replace("__INVESTIGATION_TRACKS__", investigation_payload)
-        .replace("__DEFAULT_SPECIALIST_MODEL__", SPECIALIST_DEFAULT_MODEL)
+        .replace("__INVESTIGATION_TRACK_MODEL__", INVESTIGATION_TRACK_MODEL)
     )
 
 

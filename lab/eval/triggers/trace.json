@@ -1,15 +1,26 @@
 {
   "skill": "trace",
   "should_trigger": [
-    "Trace the call path from user login to the database query",
-    "Show me all functions that call authenticate_user",
-    "Map how the error message flows through exception handlers",
-    "How does the checkout flow reach the payment provider API?",
-    "Where does the user_id come from in this nested function?"
+    "Trace the call path from the UserLive mount to the database query",
+    "Show me all functions that call Accounts.list_users",
+    "Map how a validation error from User.changeset flows back to the caller",
+    "How does a create_user call reach the database insert?",
+    "Where do the attrs that User.changeset receives come from?"
+  ],
+  "should_trigger_test": [
+    "Before I change create_user/1 to take a scope as its first argument, show me everything that would have to change",
+    "Walk me through what happens, function by function, when UserLive mounts",
+    "Somewhere between the caller and the insert the name gets dropped. Follow the data through create_user and tell me where.",
+    "Who calls get_user!/1, and with what arguments?"
   ],
   "should_not_trigger": [
     "Debug why my authentication is failing",
     "Teach me Ecto patterns for transactions",
     "Verify my context boundaries follow best practices"
+  ],
+  "should_not_trigger_test": [
+    "Explain what Repo.preload does under the hood",
+    "get_user!/1 raises Ecto.NoResultsError in production for some ids. Fix it.",
+    "Draw a diagram of our contexts and which ones call each other"
   ]
 }

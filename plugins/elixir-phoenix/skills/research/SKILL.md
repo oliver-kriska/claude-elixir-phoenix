@@ -63,7 +63,7 @@ Tidewave is unavailable or the topic needs community discussion
 
 ### 1. Query Decomposition (CRITICAL — before any search)
 
-**NEVER pass raw $ARGUMENTS into WebSearch.** Decompose first:
+Decompose `$ARGUMENTS` before searching — raw prose makes a poor query:
 
 - If `$ARGUMENTS` < 30 words and focused → use as single query
 - If `$ARGUMENTS` > 30 words or multi-topic → extract 2-4 queries
@@ -115,7 +115,7 @@ Rules:
 - **Max 5 URLs per agent** (diminishing returns beyond that)
 - If only 1-3 URLs total, use single foreground agent
 - **Pass URLs explicitly** — agents should NOT re-search
-- Agents are haiku — cheap, fast, focused on extraction
+- Agents are focused on extraction, not synthesis
 
 ### 4. Write Output (File-First — NEVER Dump Inline)
 

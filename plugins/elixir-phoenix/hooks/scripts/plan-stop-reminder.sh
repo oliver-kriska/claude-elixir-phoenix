@@ -36,7 +36,7 @@ cat >&2 <<'MSG'
 ==========================================
 STOP: Plan file created.
 ==========================================
-Do NOT proceed to implementation.
+Don't start implementing — the user reviews the plan first.
 Present a brief summary of the plan to the user,
 then use AskUserQuestion with options:
   - Start in fresh session (recommended)

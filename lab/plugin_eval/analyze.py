@@ -103,7 +103,7 @@ def parse_trace(trace_path: str | None) -> dict:
                 info["plugin_errors"] = event.get("plugin_errors") or []
                 continue
             if etype == "system" and subtype == "hook_response":
-                # exit 2 is a deliberate feedback channel for PostToolUse/PostCompact hooks
+                # exit 2 is a deliberate feedback channel for PostToolUse hooks
                 if event.get("outcome") != "success" or event.get("exit_code") not in (0, 2) or event.get("stderr"):
                     stderr = (event.get("stderr") or "")[:240]
                     info["hook_errors"].append(f"{event.get('hook_name')}: exit={event.get('exit_code')} {stderr}")

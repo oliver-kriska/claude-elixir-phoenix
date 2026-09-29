@@ -15,11 +15,11 @@ mount/3 (connected) → handle_params/3 → render/1
 handle_event/3, handle_info/2, handle_async/3
 ```
 
-**Critical**: Code in mount runs TWICE unless you use `assign_async` or check `connected?/1`
+Code in mount runs twice unless you use `assign_async` or check `connected?/1`
 
 ## Async Assigns (LiveView 1.0+)
 
-**CRITICAL**: Extract variables BEFORE closure to avoid copying socket:
+Extract variables before the closure to avoid copying the socket:
 
 ```elixir
 def mount(%{"slug" => slug}, _session, socket) do

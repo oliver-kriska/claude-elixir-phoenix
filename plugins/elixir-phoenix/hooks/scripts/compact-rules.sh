@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# PreCompact hook: Re-inject critical SKILL-SPECIFIC rules before compaction.
-# Iron Laws from CLAUDE.md survive compaction (system prompt), so we only
-# re-inject rules from loaded skills that live in conversation context.
+# SessionStart (matcher: compact) hook: re-inject SKILL-SPECIFIC workflow rules
+# after compaction. Iron Laws from CLAUDE.md survive compaction (system prompt),
+# so only rules from loaded skills, which live in conversation context, need it.
 #
-# PreCompact hookSpecificOutput only supports top-level fields.
-# Use "systemMessage" to inject context that survives compaction.
+# SessionStart stdout is the channel that reaches Claude. PreCompact/PostCompact
+# can't: their systemMessage and stderr are shown to the user only.
 
 # Skip in non-Elixir projects (cross-project bleed guard — issue #55)
 proj="${CLAUDE_PROJECT_DIR:-$PWD}"
@@ -52,40 +52,39 @@ done
 CONTEXT=""
 
 if [ "$ACTIVE_PLAN" = true ] && [ "$FULL_MODE" = false ]; then
-  CONTEXT="PRESERVE ACROSS COMPACTION — active /phx:plan session:"
+  CONTEXT="Workflow rules restored after compaction — active /phx:plan session:"
   CONTEXT+="\n"
   if [ -n "$PLAN_SLUG" ]; then
     CONTEXT+="\n- Active plan: ${PLAN_SLUG} — ${PLAN_INTENT}"
     CONTEXT+="\n- Plan file: .claude/plans/${PLAN_SLUG}/plan.md"
     CONTEXT+="\n"
   fi
-  CONTEXT+="\nCRITICAL: After writing plan.md, you MUST STOP."
-  CONTEXT+="\nDo NOT proceed to implementation or /phx:work."
+  CONTEXT+="\nAfter writing plan.md, stop — the user reviews the plan before implementation or /phx:work starts."
   CONTEXT+="\nPresent the plan summary and use AskUserQuestion with options:"
   CONTEXT+="\n  - Start in fresh session (recommended)"
   CONTEXT+="\n  - Get a briefing (/phx:brief)"
   CONTEXT+="\n  - Start here"
   CONTEXT+="\n  - Review or adjust the plan"
-  CONTEXT+="\nWait for user response. This is Iron Law #1 of /phx:plan."
+  CONTEXT+="\nWait for the user's response (/phx:plan Iron Law #1)."
 fi
 
 if [ "$ACTIVE_WORK" = true ] && [ "$FULL_MODE" = false ]; then
-  CONTEXT="PRESERVE ACROSS COMPACTION — active /phx:work session:"
+  CONTEXT="Workflow rules restored after compaction — active /phx:work session:"
   CONTEXT+="\n"
   if [ -n "$PLAN_SLUG" ]; then
     CONTEXT+="\n- Active plan: ${PLAN_SLUG} — ${PLAN_INTENT}"
     CONTEXT+="\n- Plan file: .claude/plans/${PLAN_SLUG}/plan.md"
     CONTEXT+="\n"
   fi
-  CONTEXT+="\n- Verify after EVERY task (mix compile --warnings-as-errors)"
+  CONTEXT+="\n- Verify after each task (mix compile --warnings-as-errors)"
   CONTEXT+="\n- Max 3 retries per task, then mark BLOCKER"
-  CONTEXT+="\n- Auto-continue between phases, but STOP when ALL phases done"
-  CONTEXT+="\n- NEVER auto-start /phx:review — ask user what to do next"
+  CONTEXT+="\n- Continue between phases automatically; stop when all phases are done"
+  CONTEXT+="\n- Don't auto-start /phx:review — ask the user what to do next"
   CONTEXT+="\n- Re-read plan.md for current state (checkboxes are the source of truth)"
 fi
 
 if [ "$FULL_MODE" = true ]; then
-  CONTEXT="PRESERVE ACROSS COMPACTION — /phx:full autonomous mode:"
+  CONTEXT="Workflow rules restored after compaction — /phx:full autonomous mode:"
   CONTEXT+="\n"
   if [ -n "$PLAN_SLUG" ]; then
     CONTEXT+="\n- Active plan: ${PLAN_SLUG} — ${PLAN_INTENT}"
@@ -104,13 +103,12 @@ if [ -n "$PLAN_SLUG" ]; then
   if [ -f "$SCRATCHPAD" ]; then
     DEAD_ENDS=$(sed -n '/^## Dead Ends/,/^## /p' "$SCRATCHPAD" | head -20)
     if [ -n "$DEAD_ENDS" ] && ! echo "$DEAD_ENDS" | grep -q "(none yet)"; then
-      CONTEXT+="\n\nSCRATCHPAD Dead Ends (DO NOT RETRY these approaches):"
+      CONTEXT+="\n\nScratchpad dead ends (approaches that already failed — don't retry them):"
       CONTEXT+="\n${DEAD_ENDS}"
     fi
   fi
 fi
 
-# Output as JSON with systemMessage (hookSpecificOutput doesn't support PreCompact hookEventName)
 if [ -n "$CONTEXT" ]; then
-  printf '%b' "$CONTEXT" | jq -Rs '{systemMessage: .}'
+  printf '%b\n' "$CONTEXT"
 fi
