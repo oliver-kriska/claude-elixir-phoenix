@@ -131,10 +131,20 @@ while :; do
 
   # --- checks: emit on terminal conclusion change ---
   if has checks; then
+    # The rollup mixes two shapes with no shared field: CheckRun (GitHub
+    # Actions) has status + conclusion, StatusContext (commit status API:
+    # CodeRabbit, CircleCI, ...) has only state.
     CHECK=$(jq -r '
+      def failed: ["FAILURE", "ERROR", "TIMED_OUT", "CANCELLED", "STARTUP_FAILURE", "ACTION_REQUIRED", "STALE"];
       (.statusCheckRollup // [])
-      | {pending: ([.[] | select((.status // .state) != "COMPLETED" and (.conclusion // "") == "")] | length),
-         failure: ([.[] | select((.conclusion // .state) == "FAILURE" or (.conclusion // "") == "FAILURE")] | length),
+      | {pending: ([.[] | select(
+             if .__typename == "StatusContext"
+             then (.state // "PENDING") as $s | $s == "PENDING" or $s == "EXPECTED"
+             else (.status // "") != "COMPLETED"
+             end)] | length),
+         failure: ([.[] | select(
+             ((if .__typename == "StatusContext" then .state else .conclusion end) // "") as $c
+             | any(failed[]; . == $c))] | length),
          total:   (length)}
       | "pending=\(.pending) failure=\(.failure) total=\(.total)"' <<<"$VIEW")
     if [[ "$CHECK" != "$LAST_CHECK_STATE" ]]; then

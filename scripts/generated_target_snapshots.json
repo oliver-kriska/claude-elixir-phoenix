@@ -9,22 +9,22 @@
     "codex": {
       "entries": 385,
       "files": 254,
-      "sha256": "053be42d6516db8b356eab83ba3953ec5467360c3fbc527122ddb6c7df7d9291"
+      "sha256": "34cbe9c7336a121f543badea4d89b514c4441dadf6b19501335f7de0b7cd2511"
     },
     "dsh": {
       "entries": 379,
       "files": 251,
-      "sha256": "975fa393e569928d6c85291cd312a852d65709543f587c7b1c55450735fabe5a"
+      "sha256": "23cfd515627696ab577f08aa8fb9e88b134e09b2f4d24a0438489b792889ce1d"
     },
     "opencode": {
       "entries": 379,
       "files": 251,
-      "sha256": "89e0650644e62cec034340ee0d0875444318e79b6acae66b8c60562b2d874002"
+      "sha256": "199c331fc1b99116c07d1190683657329a7c4245232640d5bcaeab862e653a87"
     },
     "pi": {
       "entries": 380,
       "files": 252,
-      "sha256": "05c62e607edae6c1f3b51da7b3ac2e21952667ac1d076578265c3fb952e9a80d"
+      "sha256": "49475c5ae0492ee4abb2164b213ecd023c826891603160b347a3af57c1251524"
     }
   }
 }
