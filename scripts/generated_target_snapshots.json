@@ -2,29 +2,29 @@
   "format": 1,
   "targets": {
     "amp": {
-      "entries": 380,
-      "files": 252,
-      "sha256": "522bd6b424671190b03697da23d050917cc31a065ca9dcde641e0df70155b919"
+      "entries": 300,
+      "files": 200,
+      "sha256": "677656a2b0824ab408c91552f2c23d4b2541ccd5dfd1fc50f2c5c884a70a9e34"
     },
     "codex": {
-      "entries": 385,
-      "files": 254,
-      "sha256": "34cbe9c7336a121f543badea4d89b514c4441dadf6b19501335f7de0b7cd2511"
+      "entries": 305,
+      "files": 202,
+      "sha256": "adfb807508ee9e4adb4076a8c90574463804681d331ef8f4c2c773a681cd6023"
     },
     "dsh": {
-      "entries": 379,
-      "files": 251,
-      "sha256": "23cfd515627696ab577f08aa8fb9e88b134e09b2f4d24a0438489b792889ce1d"
+      "entries": 299,
+      "files": 199,
+      "sha256": "2a5682ae5b8cbb240ea47bfde5929db8489e9bf228ccfd884c82144d4edde2e0"
     },
     "opencode": {
-      "entries": 379,
-      "files": 251,
-      "sha256": "199c331fc1b99116c07d1190683657329a7c4245232640d5bcaeab862e653a87"
+      "entries": 299,
+      "files": 199,
+      "sha256": "6e546321f8602db9ce4a69aeb38f7b2973ae423c78b3d04cf6e99149155f9add"
     },
     "pi": {
-      "entries": 380,
-      "files": 252,
-      "sha256": "49475c5ae0492ee4abb2164b213ecd023c826891603160b347a3af57c1251524"
+      "entries": 300,
+      "files": 200,
+      "sha256": "ee3faa7d08fc904af11821cf0c5a3bcf8df2a876260799831b0c51ceb5514700"
     }
   }
 }

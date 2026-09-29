@@ -30,7 +30,7 @@ endpoints those rules consume.
 ## Cassette layout
 
 ```text
-plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+lab/deps-audit/test-assets/hex-api-cassettes/   # repo only, not shipped
 ├── phoenix.packages.json
 ├── phoenix.releases.1.7.20.json
 ├── phoenix.releases.1.7.21.json
@@ -98,7 +98,7 @@ Mirrors `hex.pm` API verbatim (only fields we consume):
 # Helper script — capture.sh
 pkg=$1
 ver=$2
-out_dir=plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes
+out_dir=lab/deps-audit/test-assets/hex-api-cassettes
 
 curl -fsSL "https://hex.pm/api/packages/${pkg}" \
   | jq '.' > "${out_dir}/${pkg}.packages.json"
@@ -187,8 +187,8 @@ runtime.
 `workflow_dispatch`:
 
 1. Check out repo, install jq + Python 3.
-2. Iterate over the top-100 seed list (`smoke-test/corpus.d/benign-100.txt`).
-3. For each package, call `bash priv/cassettes/capture.sh <pkg>` against
+2. Iterate over the top-100 seed list (`lab/deps-audit/smoke-test/corpus.d/benign-100.txt`).
+3. For each package, call `bash lab/deps-audit/capture.sh <pkg>` against
    live `https://hex.pm/api`. The script updates `_meta.json` SHA
    entries.
 4. If any cassette content changed, open a PR via
@@ -238,8 +238,8 @@ When a user adds a `hex_vet.exs` entry for a package without a
 cassette, document the manual flow in the PR:
 
 ```bash
-bash plugins/elixir-phoenix/skills/deps-audit/priv/cassettes/capture.sh <pkg> <ver>
-git add plugins/elixir-phoenix/skills/deps-audit/test-assets/hex-api-cassettes/
+bash lab/deps-audit/capture.sh <pkg> <ver>
+git add lab/deps-audit/test-assets/hex-api-cassettes/
 ```
 
 Reviewers should diff the cassette body and the `_meta.json` SHA

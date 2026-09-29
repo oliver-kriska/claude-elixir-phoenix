@@ -81,7 +81,7 @@ Run the deps-audit corpus loader. Cache lives at
 `~/.cache/phx-deps-audit/corpus/<pkg>/<version>/contents/`. Use:
 
 ```text
-bash ../phx-deps-audit/smoke-test/corpus.d/fetch.sh \
+bash ../phx-deps-audit/scripts/fetch_tarball.sh \
     <pkg> <version>
 ```
 

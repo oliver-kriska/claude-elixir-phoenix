@@ -187,4 +187,4 @@ priority order:
 4. `Cachex.put_or_create` with dynamic module names.
 
 Each new rule MUST land alongside a synthetic fixture in
-`smoke-test/fixtures.d/` plus an entry in this file's table.
+`lab/deps-audit/smoke-test/fixtures.d/` plus an entry in this file's table.

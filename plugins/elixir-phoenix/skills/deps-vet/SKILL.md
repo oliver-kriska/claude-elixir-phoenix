@@ -82,7 +82,7 @@ Run the deps-audit corpus loader. Cache lives at
 `~/.cache/phx-deps-audit/corpus/<pkg>/<version>/contents/`. Use:
 
 ```text
-bash plugins/elixir-phoenix/skills/deps-audit/smoke-test/corpus.d/fetch.sh \
+bash ${CLAUDE_SKILL_DIR}/../deps-audit/scripts/fetch_tarball.sh \
     <pkg> <version>
 ```
 

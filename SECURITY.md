@@ -55,7 +55,7 @@ threshold) stay `CAUTION` and are not baselined — they are documented below.
 | `skills/quick` | `skip verification` (EA2) | `SKILL.md:41` → **"NEVER skip verification"** | Same negation-blindness. |
 | `skills/permissions` | `chmod 777`, `git push --force` (TM1/PE2) | `SKILL.md:25` → **"NEVER auto-allow RED — `rm`, `sudo`, … `chmod 777`"** | A risk table of commands the skill tells Claude to *refuse to allow*. |
 | `skills/permissions` | `~/.claude/settings.json` (AS1 "agent snooping") | by design | The skill's job is to help you configure Claude Code's own permission allowlist. |
-| `skills/deps-audit` | bidi chars, base64, `rm -rf` (P2/SC3/TM1) | detection signatures + smoke-test fixtures | This skill **is** a Hex supply-chain scanner; it contains the attack patterns it teaches Claude to detect. |
+| `skills/deps-audit` | bidi chars, `rm -rf` (P2/TM1) | detection signatures + tarball cache cleanup | This skill **is** a Hex supply-chain scanner; it contains the attack patterns it teaches Claude to detect, and `scripts/fetch_tarball.sh` prunes its own cache under `~/.cache/phx-deps-audit/`. |
 | `agents/ash-policy-reviewer` | `bypass policy` (AR3/YR4, conf 0.9) | `.md:34,49` | `bypass` is the Ash policy DSL keyword *and* the audit target ("undocumented bypass is a critical finding"). |
 
 In short: the components that score "worst" are precisely the ones whose job is

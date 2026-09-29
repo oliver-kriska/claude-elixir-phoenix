@@ -61,6 +61,16 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **`trigger_scorer --model sonnet|opus` evaluated retired models** — the
   aliases still resolved to `claude-sonnet-4-6` and `claude-opus-4-7`; they now
   resolve to `claude-sonnet-5` and `claude-opus-5`.
+- **`deps-audit` shipped its test harness to every install** — the Claude Code
+  plugin and all five generated targets (Amp, Codex, dsh, OpenCode, Pi)
+  installed 53 dev-only files: the `smoke-test/` fixture suite, the recorded
+  hex.pm cassettes in `test-assets/`, and `priv/cassettes/capture.sh`. They now
+  live in the repo at `lab/deps-audit/`, and a test fails if a skill folder
+  holds anything besides `SKILL.md`, `references/`, `scripts/` and `priv/`.
+  The Hex tarball loader was the one runtime piece in that suite: it moved to
+  `deps-audit/scripts/fetch_tarball.sh`, and `/phx:deps-vet` now calls it
+  through `${CLAUDE_SKILL_DIR}` instead of a repo-relative path that did not
+  exist inside a user's project.
 
 ## [3.1.0] - 2026-08-27
 
