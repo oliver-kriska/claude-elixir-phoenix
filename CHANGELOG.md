@@ -48,6 +48,16 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **`/phx:watch-pr` never reported CI on repos with commit-status checks, and
+  reported cancelled runs as green** ([#144](https://github.com/oliver-kriska/claude-elixir-phoenix/issues/144),
+  reported by @aquental) — the watcher read every `statusCheckRollup` entry
+  as a GitHub Actions CheckRun, but StatusContext entries (CodeRabbit,
+  CircleCI and other commit-status integrations) carry only `state`. A passing
+  one counted as pending forever, so the `check` event never fired and the
+  watcher ran silently to its watchdog. CheckRuns concluding `CANCELLED`,
+  `TIMED_OUT`, `STARTUP_FAILURE`, `ACTION_REQUIRED` or `STALE` counted as
+  success. Entries are now classified by `__typename`; a regression test runs
+  the real script against 19 rollups.
 - **`trigger_scorer --model sonnet|opus` evaluated retired models** — the
   aliases still resolved to `claude-sonnet-4-6` and `claude-opus-4-7`; they now
   resolve to `claude-sonnet-5` and `claude-opus-5`.
