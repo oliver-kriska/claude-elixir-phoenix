@@ -37,7 +37,7 @@ def check() -> int:
         return 1
 
     skill_count = amp.validate(OUTPUT_DIR / "skills")
-    amp.validate_plugin(OUTPUT_DIR / amp.PLUGIN_TARGET_RELATIVE, SOURCE_PLUGIN_DIR)
+    amp.validate_plugin(OUTPUT_DIR / amp.PLUGIN_TARGET_RELATIVE)
     skills = amp.discover_skills(SOURCE_PLUGIN_DIR)
     amp.validate_workflow_plugin(
         OUTPUT_DIR / amp.WORKFLOW_PLUGIN_RELATIVE_PATH,

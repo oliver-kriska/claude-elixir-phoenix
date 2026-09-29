@@ -29,7 +29,7 @@ consistent. **Contributor tooling — not shipped in the plugin.**
 ## Step 0: Preconditions
 
 - On `main`, working tree clean except intended release files. If feature work is uncommitted, commit it first.
-- Determine version. Run `git describe --tags --abbrev=0` FIRST — the last
+- Determine version. Run `git describe --tags --abbrev=0 --match 'v*'` FIRST (the annotated `phx--`/`ecto--`/`lv--` tags would win otherwise) — the last
   released tag is the bump base, NOT `plugin.json` (which may carry an
   unreleased phased bump). If `plugin.json` is already ahead of the tag,
   apply the consolidation check below before picking a number.
@@ -141,7 +141,7 @@ appends it to the extracted notes.
 
 ```
 gh release view vX.Y.Z
-git describe --tags --abbrev=0    # should print vX.Y.Z
+git describe --tags --abbrev=0 --match 'v*'    # should print vX.Y.Z
 ```
 
 Confirm to the user: released, tag pushed, GitHub release live.

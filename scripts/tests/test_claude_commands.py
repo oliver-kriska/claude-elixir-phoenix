@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import subprocess
 from pathlib import Path
 
 from scripts.port_lib.frontmatter import parse_file
@@ -226,22 +227,44 @@ def test_session_start_continuity_includes_forked_sessions() -> None:
     }
 
 
-def test_hook_commands_quote_plugin_root() -> None:
-    # An unquoted plugin root word-splits on paths with spaces; with `|| exit 0`
-    # the safety gate then fails open instead of blocking.
+def test_hook_commands_are_one_literal_script() -> None:
+    # Unquoted, the plugin root word-splits on paths with spaces and the safety
+    # gate never runs. Shell operators (`|| exit 0`, pipes, arguments) make the
+    # Anthropic plugin directory block the submission: it only follows a
+    # literal ${CLAUDE_PLUGIN_ROOT}/<file> path.
     hooks = _json(CANONICAL_PLUGIN / "hooks" / "hooks.json")["hooks"]
     commands = [
         hook["command"]
         for entries in hooks.values()
         for entry in entries
         for hook in entry["hooks"]
-        if "CLAUDE_PLUGIN_ROOT" in hook.get("command", "")
+        if hook.get("type") == "command"
     ]
 
     assert commands
-    unquoted = [
+    literal = re.compile(r'"\$\{CLAUDE_PLUGIN_ROOT\}/(hooks/scripts/[\w.-]+\.sh)"')
+    not_literal = [command for command in commands if not literal.fullmatch(command)]
+    assert not_literal == []
+    missing = [
         command
         for command in commands
-        if not re.match(r'^"\$\{CLAUDE_PLUGIN_ROOT\}/[^"\s]+"(\s|$)', command)
+        if not (CANONICAL_PLUGIN / literal.fullmatch(command).group(1)).is_file()
     ]
-    assert unquoted == []
+    assert missing == []
+
+
+def test_hook_scripts_parse() -> None:
+    # Claude Code blocks a tool call on hook exit 2, and bash exits 2 on a
+    # syntax error: a merge-conflict marker in block-dangerous-ops.sh once
+    # blocked every Bash call. The hook command has no `|| exit 0` to absorb it.
+    scripts = sorted((CANONICAL_PLUGIN / "hooks" / "scripts").glob("*.sh"))
+    assert scripts
+    conflict = re.compile(r"^(<{7}|={7}|>{7})( |$)", re.MULTILINE)
+    with_markers = [s.name for s in scripts if conflict.search(s.read_text())]
+    assert with_markers == []
+    unparseable = [
+        s.name
+        for s in scripts
+        if subprocess.run(["bash", "-n", str(s)], capture_output=True).returncode != 0
+    ]
+    assert unparseable == []

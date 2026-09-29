@@ -304,7 +304,7 @@ change that ships without them loses that permanently. See
 - `SessionStart` (all): Setup `.claude/` directories + Tidewave detection + Ash detection (`detect-ash.sh`) (`async: true`)
 - `SessionStart` (startup|resume|fork only): Scratchpad check + resume workflow detection (`check-resume.sh` —
   gated on `mix.exs` OR an existing `.claude/plans/*/plan.md`; sole owner of the resume/no-plan banner
-  after the duplicate echo hook was removed) + branch freshness (`async: true`) + workflow hints
+  after the duplicate echo hook was removed) + branch freshness (`async: true`, mix.exs-gated, local refs only — never `git fetch`) + workflow hints
 - `SessionStart` (compact only): `compact-rules.sh` re-injects workflow rules (plan/work/full) and scratchpad
   dead ends; `compact-verify.sh` tells Claude to re-read the active plan. Both use stdout — the only
   post-compaction channel that reaches Claude
@@ -316,8 +316,9 @@ change that ships without them loses that permanently. See
   `SessionStart`, so it does NOT re-warn them every turn. Deliberately NOT `additionalContext`
   (that would force Claude to continue on every stop)
 
-Every `command` quotes its script path — `"\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/x.sh\""`.
-Unquoted, a plugin path with a space splits and the `|| exit 0` gate fails open.
+Every `command` is exactly one quoted script path — `"\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/x.sh\""` —
+with no `|| exit 0`, pipes or arguments. Unquoted, a plugin path with a space splits and the
+gate fails open; with shell operators, the Anthropic plugin directory blocks the submission.
 `make validate` runs `claude plugin validate --strict`, and a pytest guard enforces it in CI.
 
 **Hook output patterns (important for contributors):**

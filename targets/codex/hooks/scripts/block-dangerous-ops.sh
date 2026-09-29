@@ -9,10 +9,12 @@
 # block is intentionally global and stays ungated.
 #
 # FAIL-OPEN CONTRACT: every intentional deny goes through emit_block (JSON
-# permissionDecision + exit 0). A non-zero exit from this script is always
-# an error (e.g. the script file corrupted by merge-conflict markers once
-# blocked ALL Bash calls), so hooks.json appends `|| exit 0` to fail open.
-# Never add a deny path that relies on a non-zero exit code.
+# permissionDecision + exit 0). Never add a deny path that relies on a
+# non-zero exit code. A syntax error makes bash exit 2, the blocking exit
+# code, so the script parses itself first and steps aside if it is corrupt
+# (a copy with merge-conflict markers once blocked every Bash call), and
+# test_hook_scripts_parse keeps syntax errors out of the repo.
+bash -n "$0" 2>/dev/null || exit 0
 
 if ! command -v jq >/dev/null 2>&1; then
   printf '%s\n' \

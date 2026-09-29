@@ -38,13 +38,6 @@ def _write_skill(
     return skill_dir
 
 
-def _write_amp_plugin(root: Path) -> None:
-    source = SOURCE_PLUGIN_DIR / amp.PLUGIN_SOURCE_RELATIVE
-    target = root / amp.PLUGIN_SOURCE_RELATIVE
-    target.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(source, target)
-
-
 def test_builds_all_repository_skills_without_mutating_claude_source(tmp_path) -> None:
     before = _tree_hash(SOURCE_PLUGIN_DIR)
     output = tmp_path / "skills"
@@ -390,7 +383,6 @@ def test_build_rejects_palette_collisions_before_replacing_output(tmp_path) -> N
     plugin = tmp_path / "plugin"
     _write_skill(plugin, "first", "foo")
     _write_skill(plugin, "second", "phx:foo")
-    _write_amp_plugin(plugin)
     output = tmp_path / "output"
     output.mkdir()
     sentinel = output / "keep.txt"
@@ -467,10 +459,7 @@ def test_complete_target_generates_native_watch_plugin_and_overlay(tmp_path) -> 
     result = amp.build_target(SOURCE_PLUGIN_DIR, output)
 
     assert result == {"skills": 51, "commands": 45, "plugins": 2}
-    assert amp.validate_plugin(
-        output / amp.PLUGIN_TARGET_RELATIVE,
-        SOURCE_PLUGIN_DIR,
-    ) == 1
+    assert amp.validate_plugin(output / amp.PLUGIN_TARGET_RELATIVE) == 1
     watch = (output / "skills/phx-watch-pr/SKILL.md").read_text(encoding="utf-8")
     assert "elixir_phoenix_watch_pr" in watch
     assert "keep-alive lease" in watch
@@ -572,7 +561,6 @@ def test_build_restores_previous_target_when_installation_fails(
 def test_drift_check_is_read_only(tmp_path, monkeypatch) -> None:
     plugin = tmp_path / "plugin"
     _write_skill(plugin, "one", "phx:one")
-    _write_amp_plugin(plugin)
     output = tmp_path / "target"
     amp.build_target(plugin, output)
     before = _tree_hash(output)

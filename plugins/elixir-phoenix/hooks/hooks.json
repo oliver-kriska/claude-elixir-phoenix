@@ -133,7 +133,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh\" || exit 0",
+            "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh\"",
             "timeout": 10
           },
           {

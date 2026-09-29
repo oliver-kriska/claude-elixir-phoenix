@@ -41,9 +41,12 @@ IGNORED_FILES = {".DS_Store"}
 CLAUDE_HOOK_UNAVAILABLE = (
     "[Claude Code-only hook unavailable in the Amp skills-only target: {path}]"
 )
-PLUGIN_SOURCE_RELATIVE = Path("amp") / "phx-watch-pr.ts"
+# Amp-only sources stay outside plugins/elixir-phoenix: everything in that
+# directory ships to every Claude Code install.
+AMP_SOURCE_DIR = Path(__file__).resolve().parent / "amp_overlay"
+PLUGIN_SOURCE = AMP_SOURCE_DIR / "phx-watch-pr.ts"
 PLUGIN_TARGET_RELATIVE = Path("plugins") / "phx-watch-pr.ts"
-WATCH_OVERLAY_ROOT = Path("amp") / "watch-pr"
+WATCH_OVERLAY_ROOT = AMP_SOURCE_DIR / "watch-pr"
 PORTABLE_WORKFLOWS = (
     "phx-investigate",
     "phx-review",
@@ -1698,7 +1701,7 @@ def _amp_overlay(source_file: Path, current: SkillSource) -> str | None:
     """Reuse the anchored portable workflows with Amp-native terminology."""
     if current.target_name == "phx-watch-pr":
         relative = source_file.relative_to(current.source_dir)
-        overlay_file = current.source_dir.parent.parent / WATCH_OVERLAY_ROOT / relative
+        overlay_file = WATCH_OVERLAY_ROOT / relative
         if overlay_file.is_file():
             if relative == Path("SKILL.md"):
                 return parse_file(overlay_file).body
@@ -1746,7 +1749,7 @@ def _populate(skills: list[SkillSource], output_dir: Path) -> None:
     )
     watch = next((skill for skill in skills if skill.target_name == "phx-watch-pr"), None)
     if watch:
-        overlay_root = watch.source_dir.parent.parent / WATCH_OVERLAY_ROOT
+        overlay_root = WATCH_OVERLAY_ROOT
         overlay_files = {
             path.relative_to(overlay_root)
             for path in overlay_root.rglob("*")
@@ -1890,23 +1893,20 @@ def validate(output_dir: str | Path) -> int:
     return len(skill_files)
 
 
-def plugin_source(source_plugin_dir: str | Path) -> Path:
+def plugin_source() -> Path:
     """Return the canonical Amp plugin source after validating its node type."""
-    source = Path(source_plugin_dir) / PLUGIN_SOURCE_RELATIVE
+    source = PLUGIN_SOURCE
     if source.is_symlink() or not source.is_file():
         raise ValueError(f"{source}: canonical Amp plugin must be a regular file")
     return source
 
 
-def validate_plugin(
-    plugin_file: str | Path,
-    source_plugin_dir: str | Path,
-) -> int:
+def validate_plugin(plugin_file: str | Path) -> int:
     """Validate generated plugin bytes and required current Plugin API usage."""
     generated = Path(plugin_file)
     if generated.is_symlink() or not generated.is_file():
         raise ValueError(f"{generated}: generated Amp plugin must be a regular file")
-    expected = plugin_source(source_plugin_dir).read_bytes()
+    expected = plugin_source().read_bytes()
     if generated.read_bytes() != expected:
         raise ValueError(f"{generated}: generated Amp plugin content does not match source")
     text = expected.decode("utf-8")
@@ -1988,8 +1988,8 @@ def build_target(source_plugin_dir: str | Path, output_dir: str | Path) -> dict[
 
         staged_watch_plugin = staged / PLUGIN_TARGET_RELATIVE
         staged_watch_plugin.parent.mkdir(parents=True)
-        shutil.copy2(plugin_source(source), staged_watch_plugin)
-        plugin_count = validate_plugin(staged_watch_plugin, source)
+        shutil.copy2(plugin_source(), staged_watch_plugin)
+        plugin_count = validate_plugin(staged_watch_plugin)
 
         staged_workflow_plugin = staged / WORKFLOW_PLUGIN_RELATIVE_PATH
         staged_workflow_plugin.parent.mkdir(parents=True, exist_ok=True)

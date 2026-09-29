@@ -149,11 +149,15 @@ and `detect-ash.sh`.
 ## `check-branch-freshness.sh` (async)
 
 ```text
-⚠ Branch 'feat/notifications' is 12 commits behind main. Consider rebasing.
+⚠ Branch 'feat/notifications' is 12 commits behind origin/main (as of your last fetch). Consider rebasing.
 ```
 
-Silent on `main` / `master`, silent when fresh, silent outside a git repo. It
-runs `git fetch --quiet` and ignores failures, so being offline costs nothing.
+Silent on `main` / `master`, silent when fresh, silent outside a git repo or a
+project without `mix.exs`. It does **not** run `git fetch`: it compares against
+`origin/main` as it stood at your last fetch. A hook that fetched on every
+session start would contact your remotes with your SSH key or credential
+helper, in the background, without being asked, and the Anthropic plugin
+directory flags that.
 
 ## Related
 

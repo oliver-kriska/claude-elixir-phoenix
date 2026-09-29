@@ -62,8 +62,11 @@ in `block-dangerous-ops.sh`, which is dangerous everywhere.
 
 No `set -e` in hook scripts. A hook that errors must degrade to "guard is off",
 never to "session is broken". Denials are expressed as **data** (JSON
-`permissionDecision`), never as an exit code, and `hooks.json` appends
-`|| exit 0` to the always-on Bash gate. See the fail-open contract in
+`permissionDecision`), never as an exit code: Claude Code blocks only on exit 2,
+and bash exits 2 on a syntax error, so `test_hook_scripts_parse` keeps every
+hook script parseable, and a blocking gate (`block-dangerous-ops.sh`) starts
+with `bash -n "$0" 2>/dev/null || exit 0` so a copy corrupted on disk steps
+aside. See the fail-open contract in
 [Safety Gates](docs/safety-gates.md#fail-open-contract) for the incident that
 established this rule.
 
@@ -124,9 +127,11 @@ updates. Never write scratch state into the user's project.
 Wrap the placeholder and script path in escaped double quotes:
 `"\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/x.sh\""`. Unquoted, a plugin cache
 under a path with a space (`/Users/John Doe/...`) splits into two words and the
-script never runs — and on the `|| exit 0` gate that means the guard silently
-fails open. `claude plugin validate --strict` (run by `make validate`) and
-`test_hook_commands_quote_plugin_root` both reject an unquoted command.
+script never runs, so the guard silently fails open. The command must be
+that one quoted path and nothing else — no `|| exit 0`, pipes or arguments:
+the Anthropic plugin directory blocks a submission whose hook command it
+cannot follow. `claude plugin validate --strict` (run by `make validate`) and
+`test_hook_commands_are_one_literal_script` reject anything else.
 
 ## Adding or changing a hook
 

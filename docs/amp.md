@@ -709,7 +709,7 @@ project-specific MCP registration.
 ## Maintain the generated target
 
 Never edit `targets/amp` manually. Change the canonical Claude skill, the Amp
-generator, or the Amp source under `plugins/elixir-phoenix/amp/`, then
+generator, or the Amp source under `scripts/port_lib/amp_overlay/`, then
 regenerate and verify the complete target with one command:
 
 ```bash

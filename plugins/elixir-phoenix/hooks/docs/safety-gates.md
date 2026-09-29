@@ -73,23 +73,29 @@ it is not an execution path.
 ### Fail-open contract
 
 Every intentional deny goes through `emit_block` — JSON output plus **exit 0**.
-A non-zero exit from this script is always a bug, so `hooks.json` appends
-`|| exit 0`:
+Claude Code blocks a tool call only when a PreToolUse hook exits **2**; any
+other non-zero exit is a non-blocking error and the command runs. The trap is
+that bash itself exits 2 on a syntax error. The script once got corrupted by
+merge-conflict markers, and **every Bash call in the session was blocked**.
 
-```json
-"command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh\" || exit 0"
-```
+`hooks.json` used to append `|| exit 0` to the command to fail open. The
+Anthropic plugin directory rejects shell operators in hook commands, so the
+command is now the bare quoted script path, and the guard moved into the
+script and CI:
 
-This matters. The script once got corrupted by merge-conflict markers, and
-because bash exited non-zero, **every Bash call in the session was blocked**.
-Failing open turns that class of failure into "the guard is off" rather than
-"the session is bricked". If `jq` is missing, the hook prints a notice to stderr
-and exits 0 for the same reason.
+- The script's first command is `bash -n "$0" 2>/dev/null || exit 0`. Bash
+  runs a script command by command, so the self-check executes before it
+  reaches a corrupt line, and a broken copy on a user's machine steps aside
+  instead of exiting 2. It costs one extra `bash` process per Bash call.
+- `test_hook_scripts_parse` runs `bash -n` on every hook script and rejects
+  merge-conflict markers, so a broken copy cannot ship.
 
-The script path is quoted for the same reason. Before v3.1.2 it was not, and
-for a user whose plugin cache path contains a space the shell looked for a
-script named after the first word, failed, and `|| exit 0` turned that into an
-allow — the force-push and destructive-`mix` blocks were silently off.
+If `jq` is missing, the hook prints a notice to stderr and exits 0.
+
+The script path is quoted because, before v3.1.2, a user whose plugin cache
+path contained a space got a shell looking for a script named after the first
+word; the command failed, and the force-push and destructive-`mix` blocks were
+silently off.
 
 **Never add a deny path that relies on a non-zero exit code.**
 

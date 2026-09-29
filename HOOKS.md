@@ -11,7 +11,7 @@ lives here instead.
 
 Every script is plain, auditable bash in
 [`plugins/elixir-phoenix/hooks/scripts/`](plugins/elixir-phoenix/hooks/scripts/).
-No telemetry, no network calls except a localhost Tidewave probe and `git fetch`.
+No telemetry, and no network calls except a localhost Tidewave probe.
 
 ## Contents
 
@@ -131,7 +131,7 @@ Claude to stop retrying — the Critic→Refiner pattern from AutoHarness
 | `detect-ash` | Detects Ash, prints codegen rules, checks `usage_rules` config |
 | `check-scratchpad` | Surfaces dead-end notes; seeds a scratchpad template |
 | `check-resume` | `↻ Plan 'x' has N remaining tasks. Resume with: /phx:work …` |
-| `check-branch-freshness` | Warns when your branch is behind `main` |
+| `check-branch-freshness` | Warns when your branch is behind `origin/main` as of your last fetch (never fetches) |
 
 ### Compaction and exit
 
@@ -159,10 +159,13 @@ plugin globally rather than per-project.
 ### Hooks fail open, never closed
 
 No hook uses `set -e`. Denials are expressed as JSON data, never as an exit
-code, and the always-on Bash gate is registered as `script.sh || exit 0`.
-Every registered command quotes its `${CLAUDE_PLUGIN_ROOT}` path, so a plugin
-installed under a directory with a space still runs its hooks instead of
-failing open.
+code; Claude Code blocks only on exit 2. Every registered command is a single
+quoted `${CLAUDE_PLUGIN_ROOT}` script path with no shell operators, so a plugin
+installed under a directory with a space still runs its hooks, and the
+Anthropic plugin directory can follow each one. Because bash exits 2 on a
+syntax error, the Bash safety gate parses itself first and exits 0 if it is
+corrupt, and CI runs `bash -n` on every hook script and rejects merge-conflict
+markers.
 
 This is not theoretical. The safety script once got corrupted by
 merge-conflict markers, and because bash exited non-zero, **every Bash command

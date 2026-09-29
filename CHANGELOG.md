@@ -13,6 +13,54 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+## [3.1.3] - 2026-09-29
+
+Ready for the Anthropic plugin directory. Every hook command is a single script
+path, four skills no longer pre-approve Bash, the plugin has an icon and its own
+README, and Amp-only code no longer ships to Claude Code. The branch-freshness
+hook no longer runs `git fetch` with your credentials, and it only runs in
+Elixir projects.
+
+### Added
+
+- **Plugin icon and README.** `.claude-plugin/icon.svg` (the phxagents.dev
+  mark) and `plugins/elixir-phoenix/README.md`, which lists what the plugin runs
+  on your machine: hooks, network calls (the Tidewave probe on
+  `localhost:4000`, `hex.pm`, your own `gh` and `codex`) and the files it writes.
+- **`test_hook_scripts_parse` (contributor tooling).** Every hook script must
+  pass `bash -n` and contain no merge-conflict markers.
+
+### Changed
+
+- **The Bash safety gate's hook command is now one quoted script path.** The
+  plugin directory rejects hook commands with shell operators, and
+  `block-dangerous-ops.sh` was the only one with `|| exit 0`. That suffix had
+  kept a corrupted script (bash exits 2 on a syntax error, and exit 2 blocks
+  the call) from blocking every Bash command. The script now checks its own
+  syntax first (`bash -n "$0" || exit 0`), and `test_hook_scripts_parse` checks
+  every hook script in CI. `test_hook_commands_are_one_literal_script` replaces the
+  quoting test and also rejects operators, arguments and missing scripts. The
+  Codex target keeps `|| exit 0`.
+- **Narrower `allowed-tools`.** `/lv:assigns`, `/phx:boundaries` and
+  `/ecto:n1-check` no longer pre-approve Bash, so their `mix` commands ask for
+  permission like any other. `/phx:deps-audit` pre-approves `WebFetch` only for
+  `hex.pm` and `diff.hex.pm`, not every domain, and no longer pre-approves Bash.
+- **The Amp-only watch-pr sources moved out of the Claude Code plugin.**
+  `plugins/elixir-phoenix/amp/` (the `phx-watch-pr.ts` Amp plugin, which keeps
+  a webhook credential under `~/.config/amp/`, and its skill overlay) is now
+  `scripts/port_lib/amp_overlay/`. Claude Code installs no longer receive it.
+  The generated `targets/amp` output is byte-identical.
+
+### Fixed
+
+- **`check-branch-freshness` no longer runs `git fetch`, and it only runs in
+  Elixir projects.** At every session start on a non-main branch, the hook
+  fetched from your remotes with your SSH key or credential helper, in any git
+  repository, Elixir or not. It now needs a `mix.exs` and compares against
+  `origin/main` as of your last fetch.
+- **`/release` skill (contributor tooling):** `git describe` matches `v*` tags
+  only. After `claude plugin tag` it returned `lv--vX.Y.Z` as the last release.
+
 ## [3.1.2] - 2026-09-29
 
 Claude Code 2.1.284 and the 5.5 models. Hooks now work when the plugin's install
