@@ -23,7 +23,7 @@ if [[ "$COUNT" -gt 0 ]]; then
   # ls -t is the portable mtime sort; plan slugs are kebab-case.
   # shellcheck disable=SC2012
   LATEST=$(ls -t "${PADS[@]}" | head -1)
-  # Count bullets in the Dead Ends section only — the template's Handoff
+  # Count bullets in the Dead Ends section only — the template’s Handoff
   # section always has bullets. grep -c prints 0 on no match (exit 1); no
   # `|| echo 0`, which would append a second line and break the -gt below.
   DEAD_ENDS=$(dead_ends_section "$LATEST" 2>/dev/null | grep -c "^- ")
@@ -35,7 +35,7 @@ if [[ "$COUNT" -gt 0 ]]; then
   fi
 fi
 
-# Initialize structured scratchpad template for new plans that don't have one
+# Initialize structured scratchpad template for new plans that don’t have one
 for dir in .claude/plans/*/; do
   [ -f "${dir}plan.md" ] || continue
   SCRATCHPAD="${dir}scratchpad.md"

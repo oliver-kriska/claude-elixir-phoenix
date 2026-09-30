@@ -14,7 +14,7 @@ if echo "$COMMAND" | grep -qE 'mix compile'; then
   HINTS="Compile failure hints:
 - Read the FIRST error — later errors are often cascading
 - Check for missing module aliases or imports
-- If struct error: ensure the struct's module compiles first
+- If struct error: ensure the struct’s module compiles first
 - If protocol not implemented: check if you need @derive
 - Scope fix to files YOU changed — pre-existing warnings are not your problem"
 elif echo "$COMMAND" | grep -qE 'mix test'; then
@@ -26,7 +26,7 @@ elif echo "$COMMAND" | grep -qE 'mix test'; then
 - Run the single failing test first: mix test path/to/test.exs:LINE"
 elif echo "$COMMAND" | grep -qE 'mix credo'; then
   HINTS="Credo failure hints:
-- Fix highest priority issues first (consistency > readability > refactoring)
+- Fix highest priority issues first (consistency, then readability, then refactoring)
 - For module attribute warnings: move to module top
 - For pipe chain warnings: ensure first arg flows through pipe
 - Run with --strict for all issues or without for priority only"

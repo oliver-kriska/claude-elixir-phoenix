@@ -35,7 +35,7 @@ if [[ "${PHX_SKIP_DEPS_AUDIT:-}" == "1" ]]; then
   exit 0
 fi
 
-# Locate project root (cwd, since the gate runs in the user's project)
+# Locate project root (cwd, since the gate runs in the user’s project)
 PROJECT_ROOT="$(pwd)"
 LOCK_FILE="$PROJECT_ROOT/mix.lock"
 [[ -f "$LOCK_FILE" ]] || exit 0  # no mix.lock yet → first deps.get, defer
@@ -210,7 +210,7 @@ phx-deps-audit: BLOCKED ($POLICY_MODE). Tier 1 found risk signals.
   Override: PHX_SKIP_DEPS_AUDIT=1 mix deps.get
 MSG
     # Tier 2 invocation is intentionally NOT chained here — the hook budget is
-    # already exceeded once we're past Tier 1. :full mode runs Tier 2 via the
+    # already exceeded once we’re past Tier 1. :full mode runs Tier 2 via the
     # /phx:deps-audit skill body, not from the hook.
     exit 2
     ;;

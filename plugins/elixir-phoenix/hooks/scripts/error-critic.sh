@@ -7,7 +7,7 @@
 # Complements elixir-failure-hints.sh (generic hints) with failure-specific
 # consolidation that detects REPEATED errors and escalates to structured analysis.
 #
-# Also registered on PostToolUse (Bash, mix): a success resets that command's
+# Also registered on PostToolUse (Bash, mix): a success resets that command’s
 # count, so "attempt #N" means consecutive failures, not lifetime failures.
 
 INPUT=$(cat)
@@ -20,7 +20,7 @@ SESSION=$(echo "$INPUT" | jq -j '.session_id // "nosession"' | tr -c '[:alnum:]-
 echo "$COMMAND" | grep -qE '^mix\b|MIX_ENV=\S+ mix' || exit 0
 
 # Per-session state: a count shared across sessions would escalate a fresh
-# session's first failure straight to the loop analysis.
+# session’s first failure straight to the loop analysis.
 FAILURE_BASE="${TMPDIR:-/tmp}/.claude-elixir-failures"
 FAILURE_DIR="$FAILURE_BASE/$SESSION"
 
@@ -68,7 +68,7 @@ fi
 if [[ "$COUNT" -eq 2 ]]; then
   HINT="REPEATED FAILURE (attempt #${COUNT}): Same command failed before.
 Before retrying, compare this error with the previous one:
-- Identical: the last fix didn't address the root cause. Re-read the error.
+- Identical: the last fix didn’t address the root cause. Re-read the error.
 - Different: progress is being made, but a new issue appeared.
 - Consider: /phx:investigate for structured root-cause analysis."
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Stop hook: surface session-created risks the user might forget on exit.
 #
-# Output model (CC hooks ref): a Stop hook's plain stdout goes to the debug log
+# Output model (CC hooks ref): a Stop hook’s plain stdout goes to the debug log
 # ONLY — it is never shown in the transcript. The two ways to reach anyone are:
 #   - hookSpecificOutput.additionalContext / exit 2  → feeds Claude and CONTINUES
 #     the turn. Wrong here: it would force Claude to keep working on every stop.
@@ -11,7 +11,7 @@
 # Stop fires once per turn, so we gate the systemMessage on the RARE,
 # session-created signals — running background_tasks[] and session_crons[]
 # (added to Stop input in CC 2.1.145). A forgotten `mix phx.server` / `iex` /
-# scheduled job is exactly what SessionStart can't know about. Pending plans and
+# scheduled job is exactly what SessionStart can’t know about. Pending plans and
 # an uncommitted working tree are already surfaced by the SessionStart resume
 # (check-resume.sh) and branch-freshness (check-branch-freshness.sh) hooks, so we
 # only fold them in as supporting context WHEN a background signal is present —
@@ -45,7 +45,7 @@ BRANCH=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 if [[ -n "$BRANCH" && "$BRANCH" != "main" && "$BRANCH" != "master" && "$BRANCH" != "HEAD" ]]; then
   DIRTY=$(git status --porcelain 2>/dev/null | wc -l | tr -d ' ')
   [[ "$DIRTY" =~ ^[0-9]+$ ]] && (( DIRTY > 0 )) && \
-    warnings+=("$DIRTY uncommitted change(s) on '$BRANCH' — commit or stash before switching/rebasing")
+    warnings+=("$DIRTY uncommitted change(s) on ‘$BRANCH’ — commit or stash before switching/rebasing")
 fi
 
 MSG="⚠ Before you leave:"

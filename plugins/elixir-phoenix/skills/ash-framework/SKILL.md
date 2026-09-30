@@ -35,14 +35,14 @@ defmodule MyApp.Accounts do
 
   resources do
     resource MyApp.Accounts.User do
-      define :register_user, action: :create, args: [:email, :password]
+      define :register_user, action: :create, args: [:email, :name]
       define :get_user_by_email, action: :read, get_by: [:email]
     end
   end
 end
 
 # In LiveView/Controller — always via domain, never Ash.create directly
-{:ok, user} = MyApp.Accounts.register_user(email, password, actor: nil)
+{:ok, user} = MyApp.Accounts.register_user(email, name, actor: nil)
 user = MyApp.Accounts.get_user_by_email!(email, actor: current_user)
 ```
 

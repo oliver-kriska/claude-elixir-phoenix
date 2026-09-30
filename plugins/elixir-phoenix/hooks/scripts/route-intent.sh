@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 # UserPromptSubmit hook: detect high-signal task intents and inject a one-line
-# /phx: command suggestion into Claude's context.
+# /phx: command suggestion into Claude’s context.
 #
 # Why a hook (not CLAUDE.md prose): session analysis of 400 sessions found
 # CLAUDE.md routing rules fire ~0% of the time. UserPromptSubmit stdout IS
-# injected into Claude's context (one of two events with that property, the
+# injected into Claude’s context (one of two events with that property, the
 # other being SessionStart), so detection here actually reaches the model.
 #
 # Conventions mirror block-dangerous-ops.sh / error-critic.sh:
 #   - read stdin once, parse with jq, fail open (exit 0) on any miss
 #   - gate Elixir-specific suggestions on mix.exs (cross-project bleed, PR #55)
 #   - inject via hookSpecificOutput.additionalContext JSON
-# No `set -e`: a non-zero from grep/jq must never erase the user's prompt.
+# No `set -e`: a non-zero from grep/jq must never erase the user’s prompt.
 # NEVER exit 2 from this hook — for UserPromptSubmit that BLOCKS processing
-# and erases the user's prompt. Every path exits 0.
+# and erases the user’s prompt. Every path exits 0.
 
 INPUT=$(cat)
 
@@ -23,7 +23,7 @@ PROMPT=$(printf '%s' "$INPUT" | jq -r '.prompt // empty' 2>/dev/null)
 SESSION_ID=$(printf '%s' "$INPUT" | jq -r '.session_id // "nosession"' 2>/dev/null)
 
 # Anti-annoyance #1: never fire on explicit slash commands. If the user already
-# typed a command, they've routed themselves — stay silent.
+# typed a command, they’ve routed themselves — stay silent.
 case "$PROMPT" in
   /*) exit 0 ;;
 esac
@@ -34,21 +34,21 @@ esac
 HEAD=$(printf '%s' "$PROMPT" | head -c 4000)
 
 # Per-session, per-category dedup state. Keyed by session_id so a new session
-# starts fresh. /tmp matches error-critic.sh's failure-tracking convention.
+# starts fresh. /tmp matches error-critic.sh’s failure-tracking convention.
 STATE_DIR="/tmp/.claude-elixir-routing/${SESSION_ID}"
 
-# already_fired CATEGORY → returns 0 (true) if we've already suggested it.
+# already_fired CATEGORY → returns 0 (true) if we’ve already suggested it.
 already_fired() {
   [ -f "${STATE_DIR}/$1" ]
 }
 
-# mark_fired CATEGORY → record that we've suggested it this session.
+# mark_fired CATEGORY → record that we’ve suggested it this session.
 mark_fired() {
   mkdir -p "$STATE_DIR" 2>/dev/null || return 0
   : > "${STATE_DIR}/$1" 2>/dev/null || true
 }
 
-# emit HINT → inject one line into Claude's context and exit. Only one
+# emit HINT → inject one line into Claude’s context and exit. Only one
 # suggestion per prompt (first match wins) to avoid stacking hints.
 emit() {
   printf '%s' "$1" | jq -Rs \
@@ -61,7 +61,7 @@ is_elixir=0
 [ -f "$proj/mix.exs" ] && is_elixir=1
 
 # ── Category 1: PR review intent ──────────────────────────────────────────
-# A GitHub PR URL, or explicit review-feedback phrasing. PR work isn't
+# A GitHub PR URL, or explicit review-feedback phrasing. PR work isn’t
 # Elixir-specific in principle, but /phx:pr-review is — gate on mix.exs.
 # URL form: github.com/<owner>/<repo>/pull/<n>  (also matches /pulls/ rarely).
 if [ "$is_elixir" = 1 ] && ! already_fired pr-review; then

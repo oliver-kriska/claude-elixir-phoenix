@@ -30,7 +30,7 @@ if echo "$BASENAME" | grep -qiE '(^|[_.-])(auth|session|password|token|permissio
   cat >&2 <<MSG
 SECURITY FILE DETECTED: $BASENAME
 Iron Laws — verify these apply:
-  - AUTHORIZE in EVERY LiveView handle_event (don't trust mount auth)
+  - AUTHORIZE in EVERY LiveView handle_event (don’t trust mount auth)
   - NO String.to_atom with user input (atom exhaustion DoS)
   - NEVER use raw/1 with untrusted content (XSS)
   - Pin values with ^ in Ecto queries (no user input interpolation)

@@ -145,6 +145,12 @@ instead, and write any script path as literal
 macOS is 3.2. `test_hook_scripts_run_only_paths_the_directory_can_follow`
 enforces this.
 
+Keep message text free of ASCII quote characters. Write `user’s`, not
+`user's`, and quote commands as `‘mix format’`, because a reader that loses
+track of double quotes would treat an apostrophe as the start of a
+single-quoted string. Write placeholders as `NAME`, not `<name>`.
+`test_hook_script_prose_has_no_ascii_apostrophes` checks the apostrophes.
+
 ## Adding or changing a hook
 
 1. Write the script in `scripts/`, `chmod +x`, following the conventions above.

@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 # PreToolUse hook: scoped edit lock ("freeze").
 #
-# Implements the on-demand / skill-scoped hook pattern from Anthropic's
+# Implements the on-demand / skill-scoped hook pattern from Anthropic’s
 # "how we use skills" — a guard you switch on for a focused task instead of
 # leaving always-on. CC has no native skill-scoped hooks, so this is driven by
 # a sentinel file the /phx:freeze skill writes (via Bash, never Edit/Write, so
-# this gate can't block the skill from toggling itself).
+# this gate can’t block the skill from toggling itself).
 #
 # Sentinel: $proj/.claude/.freeze
 #   - missing            => no-op (hook dormant; safe to ship enabled)
@@ -37,7 +37,7 @@ esac
 
 emit_deny() {
   local reason="$1"
-  local ctx="Edit freeze is active ($reason). Do not retry this edit. The user must run '/phx:freeze off' to lift the lock, or '/phx:freeze <dir>' to allow a directory. If this edit is necessary, ask the user rather than retrying."
+  local ctx="Edit freeze is active ($reason). Do not retry this edit. The user must run ‘/phx:freeze off’ to lift the lock, or ‘/phx:freeze DIR’ to allow a directory. If this edit is necessary, ask the user rather than retrying."
   jq -nc --arg reason "$reason" --arg ctx "$ctx" \
     '{
       hookSpecificOutput: {

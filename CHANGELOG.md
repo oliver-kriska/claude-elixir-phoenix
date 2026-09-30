@@ -27,6 +27,20 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `check-scratchpad.sh` and `compact-rules.sh` used `awk` and `sed`, now
   replaced by plain bash. A differential test against the old scripts gave
   identical output on bash 5.3 and on macOS's bash 3.2.
+- **Hook message text no longer uses ASCII quotes.** v3.1.3 plus the fix above
+  still failed at `.`, next to the Bash gate's deny messages. Those messages
+  held apostrophes (`user's`) and `'…'`-quoted commands inside double-quoted
+  strings, which a reader that loses track of double quotes misparses. Every
+  hook script now uses `’`/`‘…’` in prose and `NAME` for placeholders, and
+  `test_hook_script_prose_has_no_ascii_apostrophes` guards it.
+- **Fewer credential review holds.** The `/phx:ash-framework` code-interface
+  example registered a user with `password`, in the same file as a
+  `hexdocs.pm` link, and the directory read that as a credential sent to a
+  remote host. It now uses `[:email, :name]`.
+- **Dev dependency advisories (contributor tooling).** `brace-expansion`,
+  `js-yaml` and `markdown-it` patch updates. An `overrides` entry lifts
+  markdownlint-cli's `js-yaml ~5.2.1` pin to `^5.4.1` (Dependabot #18,
+  GHSA-r3ph-w7gj-g6xm).
 
 ## [3.1.3] - 2026-09-29
 

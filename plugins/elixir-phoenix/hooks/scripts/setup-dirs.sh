@@ -2,7 +2,7 @@
 # SessionStart hook: Create core workflow directories (other dirs created by skills on demand)
 
 # Skip in non-Elixir projects (cross-project bleed guard — issue #55).
-# Don't litter .claude/{plans,reviews,solutions,audit,...} into non-Elixir repos.
+# Don’t litter .claude/{plans,reviews,solutions,audit,...} into non-Elixir repos.
 proj="${CLAUDE_PROJECT_DIR:-$PWD}"
 [ -f "$proj/mix.exs" ] || exit 0
 

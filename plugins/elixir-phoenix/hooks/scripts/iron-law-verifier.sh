@@ -20,7 +20,7 @@ fi
 
 # Blame-aware: scan ONLY the content this edit introduced (new_string for
 # Edit, content for Write) — never the whole file. Pre-existing violations
-# in untouched regions are not this edit's fault and forcing refactors on
+# in untouched regions are not this edit’s fault and forcing refactors on
 # them wastes turns (session-analysis 2026-06-11, blame-unaware fires).
 SCAN_CONTENT=$(echo "$INPUT" | jq -r '.tool_input.new_string // .tool_input.content // empty')
 [[ -n "$SCAN_CONTENT" ]] || exit 0
@@ -90,7 +90,7 @@ fi
 if ! grep -q 'use Supervisor' "$FILE_PATH" 2>/dev/null; then
   MATCH=$(check_violation '(GenServer|Agent)\.start_link\(')
   if [[ -n "$MATCH" ]]; then
-    # Check if it's inside a child_spec or start_link def (OK) vs bare call
+    # Check if it’s inside a child_spec or start_link def (OK) vs bare call
     if ! grep -qE 'def (start_link|child_spec|init)\b' "$FILE_PATH" 2>/dev/null; then
       LINE=$(echo "$MATCH" | cut -d: -f1)
       VIOLATIONS="${VIOLATIONS}\n- Iron Law #14 (line $LINE): Bare GenServer/Agent.start_link outside module definition — supervise all long-lived processes"

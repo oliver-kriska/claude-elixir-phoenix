@@ -4,7 +4,7 @@
 # so only rules from loaded skills, which live in conversation context, need it.
 #
 # SessionStart stdout is the channel that reaches Claude. PreCompact/PostCompact
-# can't: their systemMessage and stderr are shown to the user only.
+# can’t: their systemMessage and stderr are shown to the user only.
 
 # Skip in non-Elixir projects (cross-project bleed guard — issue #55)
 proj="${CLAUDE_PROJECT_DIR:-$PWD}"
@@ -82,7 +82,7 @@ if [ "$ACTIVE_PLAN" = true ] && [ "$FULL_MODE" = false ]; then
   CONTEXT+="\n  - Get a briefing (/phx:brief)"
   CONTEXT+="\n  - Start here"
   CONTEXT+="\n  - Review or adjust the plan"
-  CONTEXT+="\nWait for the user's response (/phx:plan Iron Law #1)."
+  CONTEXT+="\nWait for the user’s response (/phx:plan Iron Law #1)."
 fi
 
 if [ "$ACTIVE_WORK" = true ] && [ "$FULL_MODE" = false ]; then
@@ -96,7 +96,7 @@ if [ "$ACTIVE_WORK" = true ] && [ "$FULL_MODE" = false ]; then
   CONTEXT+="\n- Verify after each task (mix compile --warnings-as-errors)"
   CONTEXT+="\n- Max 3 retries per task, then mark BLOCKER"
   CONTEXT+="\n- Continue between phases automatically; stop when all phases are done"
-  CONTEXT+="\n- Don't auto-start /phx:review — ask the user what to do next"
+  CONTEXT+="\n- Don’t auto-start /phx:review — ask the user what to do next"
   CONTEXT+="\n- Re-read plan.md for current state (checkboxes are the source of truth)"
 fi
 
@@ -120,7 +120,7 @@ if [ -n "$PLAN_SLUG" ]; then
   if [ -f "$SCRATCHPAD" ]; then
     DEAD_ENDS=$(dead_ends_section "$SCRATCHPAD" | head -20)
     if [ -n "$DEAD_ENDS" ] && ! echo "$DEAD_ENDS" | grep -q "(none yet)"; then
-      CONTEXT+="\n\nScratchpad dead ends (approaches that already failed — don't retry them):"
+      CONTEXT+="\n\nScratchpad dead ends (approaches that already failed — don’t retry them):"
       CONTEXT+="\n${DEAD_ENDS}"
     fi
   fi

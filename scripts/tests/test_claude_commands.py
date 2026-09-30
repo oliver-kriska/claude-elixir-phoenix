@@ -311,3 +311,18 @@ def test_dangerous_ops_gate_steps_aside_when_corrupt(tmp_path) -> None:
     corrupt = subprocess.run([str(gate)], input=event, capture_output=True, text=True, env=env)
     assert corrupt.returncode == 0
     assert "deny" not in corrupt.stdout
+
+
+def test_hook_script_prose_has_no_ascii_apostrophes() -> None:
+    # A shell reader that loses track of double quotes turns `user's` into an
+    # open single-quoted string and misparses the rest of the file; v3.1.3
+    # failed "Command path can't be followed" at `.` next to such a message.
+    # Prose in hook scripts uses the typographic apostrophe instead.
+    apostrophe = re.compile(r"[A-Za-z]'[A-Za-z]")
+    offenders = [
+        f"{script.name}:{number}"
+        for script in sorted((CANONICAL_PLUGIN / "hooks" / "scripts").glob("*.sh"))
+        for number, line in enumerate(script.read_text().splitlines(), 1)
+        if apostrophe.search(line)
+    ]
+    assert offenders == []
