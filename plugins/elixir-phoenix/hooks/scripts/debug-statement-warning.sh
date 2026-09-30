@@ -37,11 +37,10 @@ if [[ -n "$MATCH" ]]; then
 fi
 
 if [[ -n "$DEBUGS" ]]; then
-  cat >&2 <<MSG
-DEBUG STATEMENTS in $(basename "$FILE_PATH"):
-$(echo -e "$DEBUGS")
-
-Remove before committing. Use Logger for intentional logging.
-MSG
+  printf '%s\n' \
+    "DEBUG STATEMENTS in $(basename "$FILE_PATH"):" \
+    "$(echo -e "$DEBUGS")" \
+    "" \
+    "Remove before committing. Use Logger for intentional logging." >&2
   exit 2
 fi

@@ -42,26 +42,25 @@ for dir in .claude/plans/*/; do
   if [ ! -f "$SCRATCHPAD" ]; then
     SLUG=$(basename "$dir")
     BRANCH=$(git branch --show-current 2>/dev/null || echo "unknown")
-    cat > "$SCRATCHPAD" << TEMPLATE
-# Scratchpad: ${SLUG}
-
-## Dead Ends (DO NOT RETRY)
-
-(none yet)
-
-## Decisions
-
-(none yet)
-
-## Open Questions
-
-(none yet)
-
-## Handoff
-
-- Branch: ${BRANCH}
-- Plan: .claude/plans/${SLUG}/plan.md
-- Next: (to be filled on session end)
-TEMPLATE
+    printf '%s\n' \
+      "# Scratchpad: ${SLUG}" \
+      "" \
+      "## Dead Ends (DO NOT RETRY)" \
+      "" \
+      "(none yet)" \
+      "" \
+      "## Decisions" \
+      "" \
+      "(none yet)" \
+      "" \
+      "## Open Questions" \
+      "" \
+      "(none yet)" \
+      "" \
+      "## Handoff" \
+      "" \
+      "- Branch: ${BRANCH}" \
+      "- Plan: .claude/plans/${SLUG}/plan.md" \
+      "- Next: (to be filled on session end)" > "$SCRATCHPAD"
   fi
 done

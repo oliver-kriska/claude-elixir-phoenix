@@ -172,43 +172,39 @@ findings_summary=$(jq -s 'group_by(.rule_id) | map("\(.[0].rule_id): \(length) f
 
 case "$POLICY_MODE" in
   "false")
-    cat >&2 <<MSG
-phx-deps-audit: Tier 1 found risk signals (warn-only mode).
-  $findings_summary
-  Run /phx:deps-audit for full triage.
-MSG
+    printf '%s\n' \
+      "phx-deps-audit: Tier 1 found risk signals (warn-only mode)." \
+      "  $findings_summary" \
+      "  Run /phx:deps-audit for full triage." >&2
     exit 0
     ;;
 
   ":new_only")
     # Only block if findings are on NEW dep additions
     if grep -q '"rule_id":1' "$tier1_findings_file"; then
-      cat >&2 <<MSG
-phx-deps-audit: BLOCKED (:new_only). Bidi control char in mix.lock.
-  $findings_summary
-  Override: PHX_SKIP_DEPS_AUDIT=1 mix deps.get
-MSG
+      printf '%s\n' \
+        "phx-deps-audit: BLOCKED (:new_only). Bidi control char in mix.lock." \
+        "  $findings_summary" \
+        "  Override: PHX_SKIP_DEPS_AUDIT=1 mix deps.get" >&2
       exit 2
     fi
     if grep -q '"rule_id":5' "$tier1_findings_file"; then
-      cat >&2 <<MSG
-phx-deps-audit: BLOCKED (:new_only). New :git/:path dep needs vetting.
-  $findings_summary
-  Vet first: /phx:deps-vet <pkg> <ver>
-  Override:  PHX_SKIP_DEPS_AUDIT=1 mix deps.get
-MSG
+      printf '%s\n' \
+        "phx-deps-audit: BLOCKED (:new_only). New :git/:path dep needs vetting." \
+        "  $findings_summary" \
+        "  Vet first: /phx:deps-vet PKG VER" \
+        "  Override:  PHX_SKIP_DEPS_AUDIT=1 mix deps.get" >&2
       exit 2
     fi
     exit 0
     ;;
 
   ":strict"|":full")
-    cat >&2 <<MSG
-phx-deps-audit: BLOCKED ($POLICY_MODE). Tier 1 found risk signals.
-  $findings_summary
-  Vet:      /phx:deps-vet
-  Override: PHX_SKIP_DEPS_AUDIT=1 mix deps.get
-MSG
+    printf '%s\n' \
+      "phx-deps-audit: BLOCKED ($POLICY_MODE). Tier 1 found risk signals." \
+      "  $findings_summary" \
+      "  Vet:      /phx:deps-vet" \
+      "  Override: PHX_SKIP_DEPS_AUDIT=1 mix deps.get" >&2
     # Tier 2 invocation is intentionally NOT chained here — the hook budget is
     # already exceeded once we’re past Tier 1. :full mode runs Tier 2 via the
     # /phx:deps-audit skill body, not from the hook.

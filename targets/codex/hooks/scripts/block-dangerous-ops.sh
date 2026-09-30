@@ -33,20 +33,14 @@ proj="${CLAUDE_PROJECT_DIR:-$PWD}"
 is_elixir=0
 [ -f "$proj/mix.exs" ] && is_elixir=1
 
+# emit_block CONTEXT REASON_LINE... joins the reason lines with newlines.
 emit_block() {
-  local reason="$1"
-  local ctx="$2"
-  jq -nc \
-    --arg reason "$reason" \
-    --arg ctx "$ctx" \
-    '{
-      hookSpecificOutput: {
-        hookEventName: "PreToolUse",
-        permissionDecision: "deny",
-        permissionDecisionReason: $reason,
-        additionalContext: $ctx
-      }
-    }'
+  local ctx="$1" reason
+  shift
+  printf -v reason '%s\n' "$@"
+  reason=${reason%$'\n'}
+  jq -nc --arg reason "$reason" --arg ctx "$ctx" \
+    '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: $reason, additionalContext: $ctx}}'
   exit 0
 }
 
@@ -62,12 +56,12 @@ emit_block() {
 # See ANCHOR NOTE below the force-push pattern for `^[[:space:](]*`.
 if [[ "$is_elixir" == 1 ]] && echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*mix[[:space:]]+(do[[:space:]]+)?ecto\.(reset|drop)([[:space:];&|,)]|$)'; then
   emit_block \
-"BLOCKED: Destructive database operation detected.
-mix ecto.reset/drop will destroy all data. If intentional, run manually
-outside Codex. Safer alternatives:
-- mix ecto.rollback --step 1 (undo last migration)
-- mix ecto.migrate (apply pending migrations)" \
-"The user’s previous Bash call (‘mix ecto.reset’ / ‘mix ecto.drop’) was blocked by the elixir-phoenix plugin to prevent data loss. Prefer ‘mix ecto.rollback --step 1’ to undo the last migration, ‘mix ecto.migrate’ to apply pending ones, or author a corrective migration with ‘mix ecto.gen.migration NAME’. Do not retry the reset/drop unless the user explicitly asks again."
+    "The user’s previous Bash call (‘mix ecto.reset’ / ‘mix ecto.drop’) was blocked by the elixir-phoenix plugin to prevent data loss. Prefer ‘mix ecto.rollback --step 1’ to undo the last migration, ‘mix ecto.migrate’ to apply pending ones, or author a corrective migration with ‘mix ecto.gen.migration NAME’. Do not retry the reset/drop unless the user explicitly asks again." \
+    "BLOCKED: Destructive database operation detected." \
+    "mix ecto.reset/drop will destroy all data. If intentional, run manually" \
+    "outside Codex. Safer alternatives:" \
+    "- mix ecto.rollback --step 1 (undo last migration)" \
+    "- mix ecto.migrate (apply pending migrations)"
 fi
 
 # Global: force-push (intentionally not gated on mix.exs).
@@ -106,10 +100,10 @@ fi
 # execute, so it is not an evasion path.
 if echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)git push[^;|&]*[[:space:]](--force|-f)([[:space:];&|)]|$)'; then
   emit_block \
-"BLOCKED: Force push detected — this rewrites remote history.
-If intentional, run manually outside Codex.
-Safer alternative: git push --force-with-lease" \
-"The user’s previous ‘git push --force’ / ‘git push -f’ was blocked by the elixir-phoenix plugin. Use ‘git push --force-with-lease’ which refuses to clobber unseen commits. Only the user should run an unguarded force-push (via ‘!’ prefix in their terminal). Do not retry."
+    "The user’s previous ‘git push --force’ / ‘git push -f’ was blocked by the elixir-phoenix plugin. Use ‘git push --force-with-lease’ which refuses to clobber unseen commits. Only the user should run an unguarded force-push (via ‘!’ prefix in their terminal). Do not retry." \
+    "BLOCKED: Force push detected — this rewrites remote history." \
+    "If intentional, run manually outside Codex." \
+    "Safer alternative: git push --force-with-lease"
 fi
 
 # Elixir-only: production env warning. Anchored so a quoted mention inside
@@ -119,9 +113,9 @@ fi
 # See ANCHOR NOTE above for `^[[:space:](]*`.
 if [[ "$is_elixir" == 1 ]] && echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*MIX_ENV=prod([[:space:]]+[A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*)*[[:space:]]+mix'; then
   emit_block \
-"WARNING: MIX_ENV=prod detected. This runs in production mode.
-If building a release, this is expected. Otherwise, reconsider." \
-"The user’s previous command used ‘MIX_ENV=prod’ and was blocked by the elixir-phoenix plugin. This is only appropriate when building releases (‘mix release’, ‘mix phx.gen.release’). For local development omit MIX_ENV or use ‘MIX_ENV=dev’/‘MIX_ENV=test’. Confirm release intent with the user before retrying."
+    "The user’s previous command used ‘MIX_ENV=prod’ and was blocked by the elixir-phoenix plugin. This is only appropriate when building releases (‘mix release’, ‘mix phx.gen.release’). For local development omit MIX_ENV or use ‘MIX_ENV=dev’/‘MIX_ENV=test’. Confirm release intent with the user before retrying." \
+    "WARNING: MIX_ENV=prod detected. This runs in production mode." \
+    "If building a release, this is expected. Otherwise, reconsider."
 fi
 
 exit 0

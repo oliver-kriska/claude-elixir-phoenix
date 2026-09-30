@@ -39,14 +39,7 @@ emit_deny() {
   local reason="$1"
   local ctx="Edit freeze is active ($reason). Do not retry this edit. The user must run ‘/phx:freeze off’ to lift the lock, or ‘/phx:freeze DIR’ to allow a directory. If this edit is necessary, ask the user rather than retrying."
   jq -nc --arg reason "$reason" --arg ctx "$ctx" \
-    '{
-      hookSpecificOutput: {
-        hookEventName: "PreToolUse",
-        permissionDecision: "deny",
-        permissionDecisionReason: $reason,
-        additionalContext: $ctx
-      }
-    }'
+    '{hookSpecificOutput: {hookEventName: "PreToolUse", permissionDecision: "deny", permissionDecisionReason: $reason, additionalContext: $ctx}}'
   exit 0
 }
 

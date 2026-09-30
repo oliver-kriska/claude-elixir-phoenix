@@ -24,6 +24,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `check-scratchpad.sh` and `compact-rules.sh` used `awk` and `sed`, now
   replaced by plain bash. A differential test against the old scripts gave
   identical output on bash 5.3 and on macOS's bash 3.2.
+- **Hook message text no longer uses ASCII quotes.** v3.1.3 plus the fix above
+  still failed at `.`, next to the Bash gate's deny messages. Those messages
+  held apostrophes (`user's`) and `'…'`-quoted commands inside double-quoted
+  strings, which a reader that loses track of double quotes misparses. Every
+  hook script now uses `’`/`‘…’` in prose and `NAME` for placeholders, and
+  `test_hook_script_prose_has_no_ascii_apostrophes` guards it.
 - **Hook scripts no longer run other programs by path.** Still blocked at
   `.` after the fixes above. The Bash gate re-parsed itself with `bash -n` on
   its own path and looked up `jq` with `command -v`; `deps-audit-gate.sh`
@@ -34,12 +40,15 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `jq --version` replaces `command -v jq`, and the bidi scan is a
   `grep` byte pattern under `LC_ALL=C` that matched the perl version on every
   test input with BSD grep, GNU grep and ugrep.
-- **Hook message text no longer uses ASCII quotes.** v3.1.3 plus the fix above
-  still failed at `.`, next to the Bash gate's deny messages. Those messages
-  held apostrophes (`user's`) and `'…'`-quoted commands inside double-quoted
-  strings, which a reader that loses track of double quotes misparses. Every
-  hook script now uses `’`/`‘…’` in prose and `NAME` for placeholders, and
-  `test_hook_script_prose_has_no_ascii_apostrophes` guards it.
+- **Hook scripts no longer use heredocs or strings that span lines.** Still
+  blocked at `.` after the fixes above. Read with heredoc bodies as code,
+  `deps-audit-gate.sh`'s `BLOCKED (:new_only). Bidi …` message is a subshell
+  followed by a `.` command; read line by line, the Bash gate's multi-line
+  deny messages give the same `). Do not retry.` shape. Eleven scripts now
+  print with `printf '%s\n'` and one quoted argument per line. A 43-case
+  before/after run on bash 5.3 and macOS's bash 3.2 gave byte-identical
+  output except the `/phx:deps-vet` hint, which now reads `PKG VER` instead
+  of `<pkg> <ver>`. `test_hook_scripts_keep_each_string_on_one_line` guards it.
 - **Fewer credential review holds.** The `/phx:ash-framework` code-interface
   example registered a user with `password`, in the same file as a
   `hexdocs.pm` link, and the directory read that as a credential sent to a

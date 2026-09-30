@@ -151,6 +151,13 @@ track of double quotes would treat an apostrophe as the start of a
 single-quoted string. Write placeholders as `NAME`, not `<name>`.
 `test_hook_script_prose_has_no_ascii_apostrophes` checks the apostrophes.
 
+No heredocs, and no quoted string that continues onto the next line. The
+directory's reader treats a heredoc body as commands, so
+`BLOCKED (:new_only). Bidi …` inside `cat <<MSG` became a subshell followed by
+a `.` command and blocked the submission. Print multi-line text with
+`printf '%s\n' \` and one quoted argument per line (`printf -v VAR` to build a
+variable). `test_hook_scripts_keep_each_string_on_one_line` enforces this.
+
 ## Adding or changing a hook
 
 1. Write the script in `scripts/`, `chmod +x`, following the conventions above.

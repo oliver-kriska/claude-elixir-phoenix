@@ -66,13 +66,14 @@ fi
 
 # 2nd failure: warn about pattern
 if [[ "$COUNT" -eq 2 ]]; then
-  HINT="REPEATED FAILURE (attempt #${COUNT}): Same command failed before.
-Before retrying, compare this error with the previous one:
-- Identical: the last fix didn’t address the root cause. Re-read the error.
-- Different: progress is being made, but a new issue appeared.
-- Consider: /phx:investigate for structured root-cause analysis."
+  printf -v HINT '%s\n' \
+    "REPEATED FAILURE (attempt #${COUNT}): Same command failed before." \
+    "Before retrying, compare this error with the previous one:" \
+    "- Identical: the last fix didn’t address the root cause. Re-read the error." \
+    "- Different: progress is being made, but a new issue appeared." \
+    "- Consider: /phx:investigate for structured root-cause analysis."
 
-  echo "$HINT" | jq -Rs '{hookSpecificOutput: {hookEventName: "PostToolUseFailure", additionalContext: .}}'
+  printf '%s' "$HINT" | jq -Rs '{hookSpecificOutput: {hookEventName: "PostToolUseFailure", additionalContext: .}}'
   exit 0
 fi
 
@@ -80,17 +81,18 @@ fi
 # Extract unique error signatures from the log
 ERROR_SUMMARY=$(grep -A2 'Failure #' "$FAILURE_LOG" 2>/dev/null | grep -v '^--$' | tail -30)
 
-CRITIC_ANALYSIS="DEBUGGING LOOP DETECTED (attempt #${COUNT}): ${MIX_CMD} has failed ${COUNT} times.
+printf -v CRITIC_ANALYSIS '%s\n' \
+  "DEBUGGING LOOP DETECTED (attempt #${COUNT}): ${MIX_CMD} has failed ${COUNT} times." \
+  "" \
+  "CRITIC ANALYSIS — Consolidated error history:" \
+  "${ERROR_SUMMARY}" \
+  "" \
+  "STRUCTURED RECOVERY — this fix has failed ${COUNT} times, so change the approach rather than retrying it:" \
+  "1. Read the full error output from attempt #1 (the root cause is usually there)" \
+  "2. Check whether the errors are identical (same root cause) or different (cascading)" \
+  "3. If identical: your mental model of the code is wrong. Re-read the source file" \
+  "4. If cascading: fix the first error only; downstream errors often resolve with it" \
+  "5. Consider: /phx:investigate for structured root-cause analysis" \
+  "6. Consider: grep .claude/solutions/ for previously solved similar errors"
 
-CRITIC ANALYSIS — Consolidated error history:
-${ERROR_SUMMARY}
-
-STRUCTURED RECOVERY — this fix has failed ${COUNT} times, so change the approach rather than retrying it:
-1. Read the full error output from attempt #1 (the root cause is usually there)
-2. Check whether the errors are identical (same root cause) or different (cascading)
-3. If identical: your mental model of the code is wrong. Re-read the source file
-4. If cascading: fix the first error only; downstream errors often resolve with it
-5. Consider: /phx:investigate for structured root-cause analysis
-6. Consider: grep .claude/solutions/ for previously solved similar errors"
-
-echo "$CRITIC_ANALYSIS" | jq -Rs '{hookSpecificOutput: {hookEventName: "PostToolUseFailure", additionalContext: .}}'
+printf '%s' "$CRITIC_ANALYSIS" | jq -Rs '{hookSpecificOutput: {hookEventName: "PostToolUseFailure", additionalContext: .}}'

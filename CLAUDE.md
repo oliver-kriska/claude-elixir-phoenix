@@ -321,7 +321,8 @@ with no `|| exit 0`, pipes or arguments. Unquoted, a plugin path with a space sp
 gate fails open; with shell operators, the Anthropic plugin directory blocks the submission.
 The directory also follows each script: keep hook scripts plain bash — no inline `awk`/`sed`/
 `perl`/`python3 -c` programs, `eval`, `source`, `bash <file>`, `command -v`, or `$0`-based
-paths (hooks README rule 9).
+paths, and no heredocs or quoted strings spanning lines — use `printf '%s\n'` with one argument
+per line (hooks README rule 9).
 `make validate` runs `claude plugin validate --strict`, and a pytest guard enforces it in CI.
 
 **Hook output patterns (important for contributors):**

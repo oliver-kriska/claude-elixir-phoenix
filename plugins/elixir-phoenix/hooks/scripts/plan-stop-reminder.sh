@@ -31,18 +31,17 @@ if [ -f "${PLAN_DIR}/progress.md" ] && grep -q '\*\*State\*\*:' "${PLAN_DIR}/pro
 fi
 
 # PostToolUse: exit 2 + stderr feeds message to Claude (stdout is verbose-mode only)
-cat >&2 <<'MSG'
-
-==========================================
-STOP: Plan file created.
-==========================================
-Don’t start implementing — the user reviews the plan first.
-Present a brief summary of the plan to the user,
-then use AskUserQuestion with options:
-  - Start in fresh session (recommended)
-  - Get a briefing (/phx:brief)
-  - Start here
-  - Review or adjust the plan
-==========================================
-MSG
+printf '%s\n' \
+  "" \
+  "==========================================" \
+  "STOP: Plan file created." \
+  "==========================================" \
+  "Don’t start implementing — the user reviews the plan first." \
+  "Present a brief summary of the plan to the user," \
+  "then use AskUserQuestion with options:" \
+  "  - Start in fresh session (recommended)" \
+  "  - Get a briefing (/phx:brief)" \
+  "  - Start here" \
+  "  - Review or adjust the plan" \
+  "==========================================" >&2
 exit 2

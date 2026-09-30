@@ -293,6 +293,58 @@ def test_hook_scripts_run_only_paths_the_directory_can_follow() -> None:
     assert offenders == []
 
 
+def _quoted_spans_crossing_lines(text: str) -> list[int]:
+    # Line numbers where a '…' or "…" string opens and is still open at the
+    # end of that line. Comments and backslash escapes are skipped.
+    opened, quote, escaped, comment, line, prev = [], None, False, False, 1, "\n"
+    for char in text:
+        if char == "\n":
+            if quote and (not opened or opened[-1] != line):
+                opened.append(line)
+            comment, escaped, line, prev = False, False, line + 1, char
+            continue
+        if comment:
+            pass
+        elif escaped:
+            escaped = False
+        elif quote == "'":
+            quote = None if char == "'" else quote
+        elif quote == '"':
+            if char == "\\":
+                escaped = True
+            elif char == '"':
+                quote = None
+        elif char == "\\":
+            escaped = True
+        elif char in "'\"":
+            quote = char
+        elif char == "#" and prev in " \t\n;":
+            comment = True
+        prev = char
+    return opened
+
+
+def test_hook_scripts_keep_each_string_on_one_line() -> None:
+    # The plugin directory's shell reader misreads heredoc bodies and strings
+    # that span lines as commands: `BLOCKED (:new_only). Bidi …` in a heredoc
+    # read as a subshell followed by a `.` (source) command, and the
+    # submission failed "Command path can't be followed" at `.`. Print
+    # multi-line text with printf '%s\n' and one quoted argument per line.
+    heredoc = re.compile(r"<<-?\s*['\"]?[A-Za-z_]+")
+    offenders = []
+    for script in sorted((CANONICAL_PLUGIN / "hooks" / "scripts").glob("*.sh")):
+        text = script.read_text()
+        offenders += [
+            f"{script.name}:{number}: string spans lines"
+            for number in _quoted_spans_crossing_lines(text)
+        ]
+        for number, line in enumerate(text.splitlines(), 1):
+            code = line.split(" #", 1)[0]
+            if not code.lstrip().startswith("#") and heredoc.search(code):
+                offenders.append(f"{script.name}:{number}: heredoc")
+    assert offenders == []
+
+
 def test_hook_script_prose_has_no_ascii_apostrophes() -> None:
     # A shell reader that loses track of double quotes turns `user's` into an
     # open single-quoted string and misparses the rest of the file; v3.1.3

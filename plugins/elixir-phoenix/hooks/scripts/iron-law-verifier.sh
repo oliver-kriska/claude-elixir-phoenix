@@ -106,12 +106,11 @@ if [[ -n "$MATCH" ]]; then
 fi
 
 if [ -n "$VIOLATIONS" ]; then
-  cat >&2 <<MSG
-IRON LAW VIOLATION(S) in the change you just made to $(basename "$FILE_PATH")
-(line numbers are relative to your edit, not the file):
-$(echo -e "$VIOLATIONS")
-
-Fix these before proceeding.
-MSG
+  printf '%s\n' \
+    "IRON LAW VIOLATION(S) in the change you just made to $(basename "$FILE_PATH")" \
+    "(line numbers are relative to your edit, not the file):" \
+    "$(echo -e "$VIOLATIONS")" \
+    "" \
+    "Fix these before proceeding." >&2
   exit 2
 fi
