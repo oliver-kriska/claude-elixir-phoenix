@@ -11,16 +11,12 @@
 # FAIL-OPEN CONTRACT: every intentional deny goes through emit_block (JSON
 # permissionDecision + exit 0). Never add a deny path that relies on a
 # non-zero exit code. A syntax error makes bash exit 2, the blocking exit
-# code, so the script parses itself first and steps aside if it is corrupt
-# (a copy with merge-conflict markers once blocked every Bash call), and
-# test_hook_scripts_parse keeps syntax errors out of the repo. The path is
-# spelled as literal ${CLAUDE_PLUGIN_ROOT}/<file>: the plugin directory
-# rejects commands whose path comes from any other variable, `$0` included.
-if [ -f "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh" ]; then
-  bash -n "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh" 2>/dev/null || exit 0
-fi
+# code (a copy with merge-conflict markers once blocked every Bash call), so
+# test_hook_scripts_parse keeps syntax errors and conflict markers out. The
+# script must not re-run itself (`bash -n <path>`) or look programs up with
+# `command -v`: the plugin directory blocks a script that runs another path.
 
-if ! command -v jq >/dev/null 2>&1; then
+if ! jq --version >/dev/null 2>&1; then
   printf '%s\n' \
     'elixir-phoenix safety hook disabled: jq is unavailable (failing open).' >&2
   exit 0

@@ -163,9 +163,8 @@ code; Claude Code blocks only on exit 2. Every registered command is a single
 quoted `${CLAUDE_PLUGIN_ROOT}` script path with no shell operators, so a plugin
 installed under a directory with a space still runs its hooks, and the
 Anthropic plugin directory can follow each one. Because bash exits 2 on a
-syntax error, the Bash safety gate parses itself first and exits 0 if it is
-corrupt, and CI runs `bash -n` on every hook script and rejects merge-conflict
-markers.
+syntax error, CI runs `bash -n` on every hook script and rejects
+merge-conflict markers.
 
 This is not theoretical. The safety script once got corrupted by
 merge-conflict markers, and because bash exited non-zero, **every Bash command

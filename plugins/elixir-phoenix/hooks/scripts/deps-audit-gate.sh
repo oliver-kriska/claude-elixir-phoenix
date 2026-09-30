@@ -113,10 +113,10 @@ tier1_findings_file="$(mktemp -t phx-tier1-findings.XXXXXX)"
 trap 'rm -f "$tier1_findings_file"' EXIT
 
 tier1_rule1_bidi() {
-  # Scan mix.lock for bidi/RLO chars that could smuggle hostile content in
-  # dep entries. Fast: single file, single perl pass. -CSD enables UTF-8 so
-  # the \x{NNNN} character classes match the UTF-8 encoding, not bytes.
-  if perl -CSD -ne 'exit 1 if /[\x{202A}-\x{202E}\x{2066}-\x{2069}]/' "$LOCK_FILE" 2>/dev/null; then
+  # Scan mix.lock for bidi/RLO chars (U+202A–U+202E, U+2066–U+2069) that could
+  # smuggle hostile content in dep entries. Matches their UTF-8 bytes under
+  # LC_ALL=C, so no Unicode locale and no inline perl program is needed.
+  if ! LC_ALL=C grep -qE $'\xe2\x80[\xaa-\xae]|\xe2\x81[\xa6-\xa9]' "$LOCK_FILE" 2>/dev/null; then
     return 0  # clean
   fi
   echo '{"rule_id":1,"severity":"block","file":"mix.lock","message":"Bidi control char in mix.lock"}' \

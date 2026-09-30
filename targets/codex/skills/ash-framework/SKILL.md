@@ -13,10 +13,10 @@ Only data access patterns shift toward Ash actions and domain code interfaces.
 ## Iron Laws
 
 1. **USE DOMAIN CODE INTERFACES** — Never call `Ash.create/Ash.read` directly in LiveViews or Controllers; use domain code interfaces: `MyApp.Accounts.register_user()` not `Ash.create(User, attrs)`
-2. **SET ACTOR/SCOPE AT QUERY PREP, NOT EXECUTION** — Pass `actor:` or `scope:` to
+2. **SET ACTOR/SCOPE AT QUERY PREP, NOT EXECUTION** — Give `actor:` or `scope:` to
    `for_read/for_create/for_action` (prep), NOT to `Ash.read!/Ash.create!` (execution);
    execution-level actor bypasses row-level policy evaluation. If project uses `Ash.Scope`,
-   pass `scope:` consistently instead of bare `actor:` — do not mix styles
+   use `scope:` consistently instead of bare `actor:` — do not mix styles
 3. **GENERATORS FIRST** — Before writing Ash code manually, run `mix ash.gen.resource` or `mix ash.gen.domain` with `--yes`; check `mix help ash.gen.<task>` for options
 4. **CODEGEN AFTER RESOURCE CHANGES** — Always run `mix ash.codegen` after modifying resources; this generates migrations from resource snapshots — never write AshPostgres migrations by hand
 5. **ACTIONS OVER FUNCTIONS** — Put business logic in named actions, not domain functions; expose via code interfaces defined on the domain
@@ -66,7 +66,7 @@ MyApp.Post
 
 ### Ash.Scope — When the Project Uses It
 
-`Ash.Scope` bundles `actor + tenant + context` into a single struct passed through actions.
+`Ash.Scope` bundles `actor + tenant + context` into a single struct carried through actions.
 Implement `Ash.Scope.ToOpts` on a project-defined scope struct:
 
 ```elixir

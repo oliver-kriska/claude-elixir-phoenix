@@ -64,9 +64,8 @@ No `set -e` in hook scripts. A hook that errors must degrade to "guard is off",
 never to "session is broken". Denials are expressed as **data** (JSON
 `permissionDecision`), never as an exit code: Claude Code blocks only on exit 2,
 and bash exits 2 on a syntax error, so `test_hook_scripts_parse` keeps every
-hook script parseable, and a blocking gate (`block-dangerous-ops.sh`) starts
-by running `bash -n` on its own literal `${CLAUDE_PLUGIN_ROOT}` path so a copy
-corrupted on disk steps aside. See the fail-open contract in
+hook script parseable. A script cannot re-parse itself at runtime (rule 9
+forbids running another path). See the fail-open contract in
 [Safety Gates](docs/safety-gates.md#fail-open-contract) for the incident that
 established this rule.
 
@@ -137,10 +136,11 @@ cannot follow. `claude plugin validate --strict` (run by `make validate`) and
 
 The plugin directory also follows each script and blocks the submission on
 anything it cannot read: an inline program (`awk '…'`, `sed '…'`, `perl -e`,
-`python3 -c`, `node -e`), `eval`, sourcing another file, or a path built from a
-variable other than `${CLAUDE_PLUGIN_ROOT}` (`$0` and `BASH_SOURCE` included).
-Use bash parameter expansion, `[[ =~ ]]` with `BASH_REMATCH`, `grep` and `jq`
-instead, and write any script path as literal
+`python3 -c`, `node -e`), `eval`, sourcing another file, running another path
+(`bash -n <file>`, `command -v`), or a path built from a variable other than
+`${CLAUDE_PLUGIN_ROOT}` (`$0` and `BASH_SOURCE` included). Use bash parameter
+expansion, `[[ =~ ]]` with `BASH_REMATCH`, `grep` and `jq` instead (probe for a
+tool with `jq --version`, not `command -v jq`), and write any script path as literal
 `"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/<file>"`. Remember that `/bin/bash` on
 macOS is 3.2. `test_hook_scripts_run_only_paths_the_directory_can_follow`
 enforces this.

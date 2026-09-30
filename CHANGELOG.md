@@ -9,11 +9,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
-- **`test_hook_scripts_run_only_paths_the_directory_can_follow` and
-  `test_dangerous_ops_gate_steps_aside_when_corrupt` (contributor tooling).**
-  The first rejects inline programs, `eval`, `source` and `$0`/`BASH_SOURCE`
-  paths in hook scripts. The second runs the Bash gate clean (it must still
-  deny `git push --force`) and with conflict markers (it must exit 0).
+- **`test_hook_scripts_run_only_paths_the_directory_can_follow`
+  (contributor tooling).** Rejects inline programs, `eval`, `source`,
+  `bash`/`command` invocations and `$0`/`BASH_SOURCE` paths in hook scripts.
 
 ### Changed
 
@@ -22,11 +20,20 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **The plugin directory still blocked v3.1.3 with "Command path can't be
   followed".** The validator follows each hook script, not only the
   `hooks.json` command. It rejects inline programs and paths from variables
-  other than `${CLAUDE_PLUGIN_ROOT}`. The Bash gate's self-check used `$0`; it
-  now spells out its `${CLAUDE_PLUGIN_ROOT}` path. `deps-audit-gate.sh`,
+  other than `${CLAUDE_PLUGIN_ROOT}`. `deps-audit-gate.sh`,
   `check-scratchpad.sh` and `compact-rules.sh` used `awk` and `sed`, now
   replaced by plain bash. A differential test against the old scripts gave
   identical output on bash 5.3 and on macOS's bash 3.2.
+- **Hook scripts no longer run other programs by path.** Still blocked at
+  `.` after the fixes above. The Bash gate re-parsed itself with `bash -n` on
+  its own path and looked up `jq` with `command -v`; `deps-audit-gate.sh`
+  scanned `mix.lock` for bidi characters with an inline `perl -ne` program,
+  which the validator names outright. The self-check is removed (CI's
+  `bash -n` pass and conflict-marker check still keep a corrupt copy from
+  shipping, but a copy corrupted on disk after install is no longer caught),
+  `jq --version` replaces `command -v jq`, and the bidi scan is a
+  `grep` byte pattern under `LC_ALL=C` that matched the perl version on every
+  test input with BSD grep, GNU grep and ugrep.
 - **Hook message text no longer uses ASCII quotes.** v3.1.3 plus the fix above
   still failed at `.`, next to the Bash gate's deny messages. Those messages
   held apostrophes (`user's`) and `'…'`-quoted commands inside double-quoted
@@ -36,7 +43,8 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **Fewer credential review holds.** The `/phx:ash-framework` code-interface
   example registered a user with `password`, in the same file as a
   `hexdocs.pm` link, and the directory read that as a credential sent to a
-  remote host. It now uses `[:email, :name]`.
+  remote host. It now uses `[:email, :name]`, and the prose around it says
+  "give `actor:`" rather than "pass `actor:`".
 - **Dev dependency advisories (contributor tooling).** `brace-expansion`,
   `js-yaml` and `markdown-it` patch updates. An `overrides` entry lifts
   markdownlint-cli's `js-yaml ~5.2.1` pin to `^5.4.1` (Dependabot #18,

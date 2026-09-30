@@ -80,21 +80,16 @@ merge-conflict markers, and **every Bash call in the session was blocked**.
 
 `hooks.json` used to append `|| exit 0` to the command to fail open. The
 Anthropic plugin directory rejects shell operators in hook commands, so the
-command is now the bare quoted script path, and the guard moved into the
-script and CI:
+command is now the bare quoted script path, and the guard moved into CI:
+`test_hook_scripts_parse` runs `bash -n` on every hook script and rejects
+merge-conflict markers, and the pre-commit hook runs shellcheck, so a broken
+copy cannot ship.
 
-- The script's first command runs
-  `bash -n "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh"` and
-  exits 0 if that fails. Bash runs a script command by command, so the
-  self-check executes before it reaches a corrupt line, and a broken copy on a
-  user's machine steps aside instead of exiting 2. The path is spelled out
-  rather than taken from `$0` because the plugin directory blocks commands
-  whose path comes from any other variable. Outside Claude Code (tests, the
-  Codex copy) the file test fails and the check is skipped. It costs one extra
-  `bash` process per Bash call. `test_dangerous_ops_gate_steps_aside_when_corrupt`
-  checks both the clean and the corrupted copy.
-- `test_hook_scripts_parse` runs `bash -n` on every hook script and rejects
-  merge-conflict markers, so a broken copy cannot ship.
+For a while the script also parsed itself first (`bash -n` on its own path)
+and stepped aside if that failed. The plugin directory blocks a hook script
+that runs another path, so that self-check is gone: a copy corrupted on a
+user's disk after install is no longer caught at runtime. The same rule is why
+the script probes for `jq` with `jq --version` rather than `command -v jq`.
 
 If `jq` is missing, the hook prints a notice to stderr and exits 0.
 
