@@ -15,6 +15,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **Directory listing metadata.** `plugin.json` sets `displayName`
+  (`Elixir/Phoenix`, so the plugin directory no longer lists it as "Phx") and
+  `supportUrl` (GitHub issues). The plugin README now says which data leaves
+  the machine: dependency names to `hex.pm`, PR reads and replies to GitHub
+  through `gh`, and, only with `--codex`, the diff under review to OpenAI.
+
 ### Fixed
 
 - **The plugin directory still blocked v3.1.3 with "Command path can't be

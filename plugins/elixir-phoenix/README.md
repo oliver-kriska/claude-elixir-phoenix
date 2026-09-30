@@ -36,10 +36,12 @@ The `ecto` and `lv` dependency plugins install with it and provide the
   commands such as `mix ecto.reset` or `git push --force`. No hook runs
   `git fetch` or uses your credentials.
 - **Network**: at session start a hook probes `localhost:4000` for a running
-  Tidewave server. `/phx:deps-audit` reads package metadata from `hex.pm`.
-  `/phx:pr-review`, `/phx:watch-pr` and `/phx:deps-update` call GitHub through
-  your own `gh` login, and `/phx:codex-loop` / `--codex` run your own `codex`
-  CLI. The plugin stores no credentials and sends no telemetry.
+  Tidewave server. `/phx:deps-audit` sends your dependency names and versions
+  to `hex.pm` to read package metadata. `/phx:pr-review`, `/phx:watch-pr` and
+  `/phx:deps-update` read and post to GitHub through your own `gh` login.
+  `/phx:codex-loop` and the `--codex` options send the diff under review to
+  OpenAI through your own `codex` CLI; they run only when you ask for them.
+  The plugin stores no credentials and sends no telemetry.
 - **Files**: plans, reviews and solution notes go to your project's `.claude/`
   directory. `/phx:init` adds rules to `CLAUDE.md` (and `AGENTS.md` if you
   ask) only when you run it. Hooks keep small counters in `/tmp` and in the
