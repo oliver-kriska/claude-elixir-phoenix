@@ -35,5 +35,10 @@
     "url": "https://github.com/oliver-kriska/claude-elixir-phoenix.git"
   },
   "author": "Oliver Kriska",
-  "license": "MIT"
+  "license": "MIT",
+  "overrides": {
+    "markdownlint-cli": {
+      "js-yaml": "^5.4.1"
+    }
+  }
 }
