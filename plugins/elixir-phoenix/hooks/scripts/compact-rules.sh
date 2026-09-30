@@ -10,6 +10,21 @@
 proj="${CLAUDE_PROJECT_DIR:-$PWD}"
 [ -f "$proj/mix.exs" ] || exit 0
 
+# Print the "## Dead Ends" section, heading included, through the next "## "
+# heading.
+dead_ends_section() {
+  local in_section=0 line
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    if (( in_section )); then
+      printf '%s\n' "$line"
+      [[ $line == "## "* ]] && in_section=0
+    elif [[ $line == "## Dead Ends"* ]]; then
+      printf '%s\n' "$line"
+      in_section=1
+    fi
+  done < "$1"
+}
+
 FULL_MODE=false
 ACTIVE_PLAN=false
 ACTIVE_WORK=false
@@ -44,7 +59,9 @@ PLAN_INTENT=""
 for dir in .claude/plans/*/; do
   [ -f "${dir}plan.md" ] || continue
   PLAN_SLUG="$(basename "$dir")"
-  PLAN_INTENT="$(head -5 "${dir}plan.md" | grep '^#' | head -1 | sed 's/^#* *//')"
+  PLAN_INTENT="$(head -5 "${dir}plan.md" | grep '^#' | head -1)"
+  PLAN_INTENT="${PLAN_INTENT#"${PLAN_INTENT%%[!#]*}"}"
+  PLAN_INTENT="${PLAN_INTENT#"${PLAN_INTENT%%[! ]*}"}"
   break
 done
 
@@ -101,7 +118,7 @@ fi
 if [ -n "$PLAN_SLUG" ]; then
   SCRATCHPAD=".claude/plans/${PLAN_SLUG}/scratchpad.md"
   if [ -f "$SCRATCHPAD" ]; then
-    DEAD_ENDS=$(sed -n '/^## Dead Ends/,/^## /p' "$SCRATCHPAD" | head -20)
+    DEAD_ENDS=$(dead_ends_section "$SCRATCHPAD" | head -20)
     if [ -n "$DEAD_ENDS" ] && ! echo "$DEAD_ENDS" | grep -q "(none yet)"; then
       CONTEXT+="\n\nScratchpad dead ends (approaches that already failed — don't retry them):"
       CONTEXT+="\n${DEAD_ENDS}"

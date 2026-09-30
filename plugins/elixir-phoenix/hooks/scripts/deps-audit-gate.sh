@@ -57,20 +57,19 @@ read_policy_mode() {
     echo "false"
     return
   fi
-  local stripped matches count mode
-  stripped=$(sed 's/#.*$//' "$HEX_VET")
-  matches=$(printf '%s\n' "$stripped" \
-            | grep -oE 'block_on_unvetted:[[:space:]]*(:[a-z_]+|true|false)' \
-            | sed -E 's/.*block_on_unvetted:[[:space:]]*//')
-  if [[ -n "$matches" ]]; then
-    count=$(printf '%s\n' "$matches" | wc -l | tr -d ' ')
-  else
-    count=0
-  fi
+  local line count=0 mode=""
+  local re='block_on_unvetted:[[:space:]]*(:[a-z_]+|true|false)'
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    line=${line%%#*}
+    while [[ $line =~ $re ]]; do
+      mode=${BASH_REMATCH[1]}
+      count=$((count + 1))
+      line=${line#*"${BASH_REMATCH[0]}"}
+    done
+  done < "$HEX_VET"
   if [[ "$count" -gt 1 ]]; then
     echo "phx-deps-audit: hex_vet.exs has $count uncommented block_on_unvetted keys; using last (Elixir map-literal semantics)" >&2
   fi
-  mode=$(printf '%s\n' "$matches" | tail -1)
   case "$mode" in
     "false"|":new_only"|":strict"|":full") echo "$mode" ;;
     "true")
@@ -88,7 +87,8 @@ tier0_cache_hit() {
   [[ -f "$LAST_RUN" ]] || return 1
 
   local lock_sha cached_sha cached_passed cached_policy
-  lock_sha=$(shasum -a 256 "$LOCK_FILE" | awk '{print $1}')
+  lock_sha=$(shasum -a 256 "$LOCK_FILE")
+  lock_sha=${lock_sha%% *}
   cached_sha=$(jq -r '.lock_sha // empty' "$LAST_RUN" 2>/dev/null)
   cached_passed=$(jq -r '.audit_passed // false' "$LAST_RUN" 2>/dev/null)
   cached_policy=$(jq -r '.policy_mode // empty' "$LAST_RUN" 2>/dev/null)
@@ -147,8 +147,8 @@ tier1_rule5_git_path_deps() {
 
   while IFS= read -r line; do
     [[ -z "$line" ]] && continue
-    local dep
-    dep=$(echo "$line" | grep -oE '\{:[a-z_0-9]+' | head -1 | sed 's/{://')
+    local dep="" re_dep='[{]:([a-z_0-9]+)'
+    [[ $line =~ $re_dep ]] && dep=${BASH_REMATCH[1]}
     printf '{"rule_id":5,"severity":"warn","file":"mix.exs","message":"New non-Hex dep","dep":"%s"}\n' "$dep" \
       >> "$tier1_findings_file"
   done <<< "$added"

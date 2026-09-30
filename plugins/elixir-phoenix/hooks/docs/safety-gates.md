@@ -83,10 +83,16 @@ Anthropic plugin directory rejects shell operators in hook commands, so the
 command is now the bare quoted script path, and the guard moved into the
 script and CI:
 
-- The script's first command is `bash -n "$0" 2>/dev/null || exit 0`. Bash
-  runs a script command by command, so the self-check executes before it
-  reaches a corrupt line, and a broken copy on a user's machine steps aside
-  instead of exiting 2. It costs one extra `bash` process per Bash call.
+- The script's first command runs
+  `bash -n "${CLAUDE_PLUGIN_ROOT}/hooks/scripts/block-dangerous-ops.sh"` and
+  exits 0 if that fails. Bash runs a script command by command, so the
+  self-check executes before it reaches a corrupt line, and a broken copy on a
+  user's machine steps aside instead of exiting 2. The path is spelled out
+  rather than taken from `$0` because the plugin directory blocks commands
+  whose path comes from any other variable. Outside Claude Code (tests, the
+  Codex copy) the file test fails and the check is skipped. It costs one extra
+  `bash` process per Bash call. `test_dangerous_ops_gate_steps_aside_when_corrupt`
+  checks both the clean and the corrupted copy.
 - `test_hook_scripts_parse` runs `bash -n` on every hook script and rejects
   merge-conflict markers, so a broken copy cannot ship.
 

@@ -319,6 +319,8 @@ change that ships without them loses that permanently. See
 Every `command` is exactly one quoted script path — `"\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/x.sh\""` —
 with no `|| exit 0`, pipes or arguments. Unquoted, a plugin path with a space splits and the
 gate fails open; with shell operators, the Anthropic plugin directory blocks the submission.
+The directory also follows each script: keep hook scripts plain bash — no inline `awk`/`sed`/
+`perl`/`python3 -c` programs, `eval`, `source`, or `$0`-based paths (hooks README rule 9).
 `make validate` runs `claude plugin validate --strict`, and a pytest guard enforces it in CI.
 
 **Hook output patterns (important for contributors):**

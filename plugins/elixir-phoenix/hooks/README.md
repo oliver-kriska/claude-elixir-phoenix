@@ -65,8 +65,8 @@ never to "session is broken". Denials are expressed as **data** (JSON
 `permissionDecision`), never as an exit code: Claude Code blocks only on exit 2,
 and bash exits 2 on a syntax error, so `test_hook_scripts_parse` keeps every
 hook script parseable, and a blocking gate (`block-dangerous-ops.sh`) starts
-with `bash -n "$0" 2>/dev/null || exit 0` so a copy corrupted on disk steps
-aside. See the fail-open contract in
+by running `bash -n` on its own literal `${CLAUDE_PLUGIN_ROOT}` path so a copy
+corrupted on disk steps aside. See the fail-open contract in
 [Safety Gates](docs/safety-gates.md#fail-open-contract) for the incident that
 established this rule.
 
@@ -132,6 +132,18 @@ that one quoted path and nothing else — no `|| exit 0`, pipes or arguments:
 the Anthropic plugin directory blocks a submission whose hook command it
 cannot follow. `claude plugin validate --strict` (run by `make validate`) and
 `test_hook_commands_are_one_literal_script` reject anything else.
+
+### 9. Plain bash inside the scripts
+
+The plugin directory also follows each script and blocks the submission on
+anything it cannot read: an inline program (`awk '…'`, `sed '…'`, `perl -e`,
+`python3 -c`, `node -e`), `eval`, sourcing another file, or a path built from a
+variable other than `${CLAUDE_PLUGIN_ROOT}` (`$0` and `BASH_SOURCE` included).
+Use bash parameter expansion, `[[ =~ ]]` with `BASH_REMATCH`, `grep` and `jq`
+instead, and write any script path as literal
+`"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/<file>"`. Remember that `/bin/bash` on
+macOS is 3.2. `test_hook_scripts_run_only_paths_the_directory_can_follow`
+enforces this.
 
 ## Adding or changing a hook
 

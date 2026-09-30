@@ -9,9 +9,24 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+- **`test_hook_scripts_run_only_paths_the_directory_can_follow` and
+  `test_dangerous_ops_gate_steps_aside_when_corrupt` (contributor tooling).**
+  The first rejects inline programs, `eval`, `source` and `$0`/`BASH_SOURCE`
+  paths in hook scripts. The second runs the Bash gate clean (it must still
+  deny `git push --force`) and with conflict markers (it must exit 0).
+
 ### Changed
 
 ### Fixed
+
+- **The plugin directory still blocked v3.1.3 with "Command path can't be
+  followed".** The validator follows each hook script, not only the
+  `hooks.json` command. It rejects inline programs and paths from variables
+  other than `${CLAUDE_PLUGIN_ROOT}`. The Bash gate's self-check used `$0`; it
+  now spells out its `${CLAUDE_PLUGIN_ROOT}` path. `deps-audit-gate.sh`,
+  `check-scratchpad.sh` and `compact-rules.sh` used `awk` and `sed`, now
+  replaced by plain bash. A differential test against the old scripts gave
+  identical output on bash 5.3 and on macOS's bash 3.2.
 
 ## [3.1.3] - 2026-09-29
 

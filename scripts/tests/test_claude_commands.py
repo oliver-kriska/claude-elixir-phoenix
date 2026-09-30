@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import json
 import re
+import shutil
 import subprocess
 from pathlib import Path
 
@@ -268,3 +269,45 @@ def test_hook_scripts_parse() -> None:
         if subprocess.run(["bash", "-n", str(s)], capture_output=True).returncode != 0
     ]
     assert unparseable == []
+
+
+def test_hook_scripts_run_only_paths_the_directory_can_follow() -> None:
+    # The plugin directory follows plain shell scripts and blocks the submission
+    # on an inline program it cannot read (awk, sed, perl -e, python3 -c, ...),
+    # on a script path built from any variable but ${CLAUDE_PLUGIN_ROOT} ($0
+    # included), and on sourcing another file.
+    forbidden = re.compile(
+        r"(^|[|;&(!`]|\$\(|\b(then|do|else)\b)\s*"
+        r"(awk|gawk|nawk|sed|perl|python3?|node|ruby|php|eval|source|\.)(\s|$)"
+        r"|\$0\b|\$\{0\}|BASH_SOURCE"
+    )
+    offenders = []
+    for script in sorted((CANONICAL_PLUGIN / "hooks" / "scripts").glob("*.sh")):
+        for number, line in enumerate(script.read_text().splitlines(), 1):
+            code = line.split(" #", 1)[0]
+            if code.lstrip().startswith("#"):
+                continue
+            if forbidden.search(code):
+                offenders.append(f"{script.name}:{number}: {line.strip()}")
+    assert offenders == []
+
+
+def test_dangerous_ops_gate_steps_aside_when_corrupt(tmp_path) -> None:
+    source = CANONICAL_PLUGIN / "hooks" / "scripts" / "block-dangerous-ops.sh"
+    scripts = tmp_path / "hooks" / "scripts"
+    scripts.mkdir(parents=True)
+    gate = scripts / "block-dangerous-ops.sh"
+    event = json.dumps({"tool_name": "Bash", "tool_input": {"command": "git push --force"}})
+    env = {"PATH": "/usr/bin:/bin:/usr/local/bin:/opt/homebrew/bin", "CLAUDE_PLUGIN_ROOT": str(tmp_path)}
+
+    shutil.copy2(source, gate)
+    clean = subprocess.run([str(gate)], input=event, capture_output=True, text=True, env=env)
+    assert clean.returncode == 0
+    assert '"permissionDecision":"deny"' in clean.stdout
+
+    lines = source.read_text().splitlines(keepends=True)
+    middle = len(lines) // 2
+    gate.write_text("".join(lines[:middle] + ["<<<<<<< HEAD\n", "=======\n", ">>>>>>> other\n"] + lines[middle:]))
+    corrupt = subprocess.run([str(gate)], input=event, capture_output=True, text=True, env=env)
+    assert corrupt.returncode == 0
+    assert "deny" not in corrupt.stdout
