@@ -20,6 +20,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `supportUrl` (GitHub issues). The plugin README now says which data leaves
   the machine: dependency names to `hex.pm`, PR reads and replies to GitHub
   through `gh`, and, only with `--codex`, the diff under review to OpenAI.
+- **Listing metadata for the `ecto` and `lv` compatibility plugins.** Each
+  gets a `displayName` (`Elixir/Phoenix: Ecto`, `Elixir/Phoenix: LiveView`),
+  keywords, `supportUrl`, an icon matching the main plugin's, and a README
+  saying it is installed with the Elixir/Phoenix plugin and only hands its
+  commands off to `/phx:` skills.
 
 ### Fixed
 

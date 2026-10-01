@@ -1,11 +1,14 @@
 {
   "name": "ecto",
+  "displayName": "Elixir/Phoenix: Ecto",
   "version": "3.1.3",
   "description": "Compatibility namespace for the Elixir/Phoenix plugin's /ecto:* commands",
+  "keywords": ["elixir", "phoenix", "ecto"],
   "author": {
     "name": "Oliver Kriska"
   },
   "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
   "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "supportUrl": "https://github.com/oliver-kriska/claude-elixir-phoenix/issues",
   "license": "MIT"
 }

@@ -1,11 +1,14 @@
 {
   "name": "lv",
+  "displayName": "Elixir/Phoenix: LiveView",
   "version": "3.1.3",
   "description": "Compatibility namespace for the Elixir/Phoenix plugin's /lv:* commands",
+  "keywords": ["elixir", "phoenix", "liveview"],
   "author": {
     "name": "Oliver Kriska"
   },
   "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
   "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "supportUrl": "https://github.com/oliver-kriska/claude-elixir-phoenix/issues",
   "license": "MIT"
 }
