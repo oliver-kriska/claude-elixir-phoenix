@@ -1,5 +1,6 @@
 {
   "name": "catchup",
+  "displayName": "Catchup",
   "version": "0.1.0",
   "description": "Async-team return-from-absence briefing. /catchup fans out to GitHub, git, Linear, and calendar, then emits one prioritized Context Brief instead of a firehose.",
   "keywords": ["productivity", "briefing", "async-team", "github", "linear", "catchup"],
@@ -8,5 +9,6 @@
   },
   "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
   "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "supportUrl": "https://github.com/oliver-kriska/claude-elixir-phoenix/issues",
   "license": "MIT"
 }

@@ -4,7 +4,7 @@ description: "Easter-egg alias for /catchup. Same return-from-absence briefing, 
 effort: medium
 disable-model-invocation: true
 argument-hint: "[--since \"friday\"|\"2h\"|\"last-active\"|\"last-commit\"] [--sources github,git,linear,calendar] [--depth quick|standard|deep] [--focus prs,reviews-requested,mentions,impact]"
-allowed-tools: Read, Grep, Glob, Bash, Write, WebFetch, Agent
+allowed-tools: Read, Grep, Glob
 ---
 
 # Ketchup 🍅 — alias for /catchup

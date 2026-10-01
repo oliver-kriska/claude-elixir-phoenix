@@ -61,12 +61,25 @@ a tight summary is printed inline. Format follows the 10-element
 Context Brief Framework scoped to a personal catch-up brief: Intent +
 ranked priorities, what moved, conflict risks, today's timeline.
 
-## Privacy
+## What it reads and where data goes
 
-Excerpt-only by default. No raw issue/PR/thread bodies in the brief.
-Slack and Gmail are v2, opt-in, and double-gated. See
-`skills/catchup/references/config-schema.md` for the (designed, not yet
-built) v2 surface: scheduling, per-project config, cross-project rollup.
+- **GitHub**, through your own `gh` login: notifications, pull requests
+  and review requests for the current repo (all repos with
+  `--scope all`). Read-only.
+- **Git**: `git fetch` of the default branch from `origin`, then
+  `git log` and `git diff`. Commit authors' names and emails are read
+  to separate your commits from others'.
+- **Linear and Google Calendar**, only through MCP connectors you have
+  already installed. The plugin declares none of its own.
+- **Your last activity**: the modification time of this repo's Claude
+  Code session files under `~/.claude/projects/`, never their content.
+
+The brief is written to `.claude/catchup/brief-YYYY-MM-DD.md` in your
+project. It holds one-line excerpts and the names of people involved,
+never raw issue, PR or thread bodies. Nothing is sent anywhere else, and
+there is no telemetry. Slack and Gmail are v2, opt-in, and
+double-gated; see `skills/catchup/references/config-schema.md` for the
+designed (not yet built) v2 surface.
 
 ## Status
 

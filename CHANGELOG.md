@@ -25,6 +25,14 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   keywords, `supportUrl`, an icon matching the main plugin's, and a README
   saying it is installed with the Elixir/Phoenix plugin and only hands its
   commands off to `/phx:` skills.
+- **`catchup` is ready for the plugin directory.** `/catchup` and `/ketchup`
+  pre-approve only `Read, Grep, Glob`; bare `Bash`, `Write`, `WebFetch` and
+  `Agent` drew directory holds and none of them is needed for pre-approval
+  (`gh`/`git` calls now ask once like any other command). The plugin gets a
+  `displayName`, `supportUrl`, an icon, and a README section listing what it
+  reads (GitHub via `gh`, `git fetch` from `origin`, your own Linear/Calendar
+  connectors, session-file timestamps) and that the brief stays in your
+  project.
 
 ### Fixed
 
