@@ -3,7 +3,6 @@ name: ash-policy-reviewer
 description: Ash policy security reviewer — audits policies, checks, and authorization rules for gaps, bypass patterns, and ordering hazards. Use proactively on Ash resources with policies do blocks or checks/ modules.
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 omitClaudeMd: true

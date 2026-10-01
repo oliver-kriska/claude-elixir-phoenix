@@ -73,6 +73,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `hexdocs.pm` link, and the directory read that as a credential sent to a
   remote host. It now uses `[:email, :name]`, and the prose around it says
   "give `actor:`" rather than "pass `actor:`".
+- **No agent sets `permissionMode` any more.** The plugin directory's
+  security scan failed `catchup` as "Weakens permission or sandbox controls"
+  over `permissionMode: bypassPermissions` on `catchup-runner`, and all 26
+  `phx` agents carried the same line. Claude Code ignores `permissionMode` on
+  plugin agents, so they already ran under your session's permission mode;
+  nothing changes at runtime. The agent eval now fails an agent that sets it,
+  and `test_plugin_agents_do_not_set_permission_mode` checks every plugin.
 - **Dev dependency advisories (contributor tooling).** `brace-expansion`,
   `js-yaml` and `markdown-it` patch updates. An `overrides` entry lifts
   markdownlint-cli's `js-yaml ~5.2.1` pin to `^5.4.1` (Dependabot #18,

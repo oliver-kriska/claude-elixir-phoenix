@@ -3,7 +3,6 @@ name: workflow-orchestrator
 description: Orchestrates the full agentic workflow cycle (plan → work → review). Internal use by /phx:full command.
 tools: Read, Write, Grep, Glob, Bash, Agent
 disallowedTools: NotebookEdit
-permissionMode: bypassPermissions
 model: opus
 effort: medium
 maxTurns: 50

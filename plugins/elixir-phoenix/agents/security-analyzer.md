@@ -3,7 +3,6 @@ name: security-analyzer
 description: Security audit specialist for Elixir/Phoenix - authentication, authorization, input validation, OWASP vulnerabilities. Use proactively when implementing auth or handling user input.
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: opus
 effort: medium
 maxTurns: 25

@@ -96,9 +96,9 @@ the table.
   `NotebookEdit` disallowed and retain `Write` only for report artifacts. This
   reduces accidental source edits but is not a security boundary; inspect each
   agent's tool list and instructions before enabling it.
-- **`bypassPermissions` on agents** is required so background subagents don't
-  hang on permission prompts; it does not grant them more tools than listed in
-  each agent's `tools:` field.
+- **Agents do not change your permission mode.** No agent sets
+  `permissionMode`; plugin agents run under your session's permission mode and
+  never get more tools than their `tools:` field lists.
 
 ## Reporting a vulnerability
 

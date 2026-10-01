@@ -18,7 +18,7 @@ from lab.eval.matchers import (
     no_dangerous_patterns,
 )
 from lab.eval.agent_matchers import (
-    agent_tools_valid, agent_readonly_enforced, agent_bypass_permissions,
+    agent_tools_valid, agent_readonly_enforced, agent_no_permission_mode,
     agent_model_appropriate, agent_has_skills, agent_omit_claudemd, ORCHESTRATOR_NAMES,
 )
 
@@ -59,7 +59,6 @@ def score_agent_request(request: ScoreRequest) -> ScoreResult:
         ("frontmatter-tools", "Has tools", *frontmatter_field(content, field="tools")),
         ("frontmatter-model", "Has model", *frontmatter_field(content, field="model")),
         ("frontmatter-effort", "Has effort", *frontmatter_field(content, field="effort")),
-        ("frontmatter-perm", "Has permissionMode", *frontmatter_field(content, field="permissionMode")),
     ]
     dimensions["completeness"] = DimensionResult.from_assertions("completeness", [
         AssertionResult(id=cid, check_type="frontmatter_field", description=desc, passed=p, evidence=e)
@@ -92,9 +91,9 @@ def score_agent_request(request: ScoreRequest) -> ScoreResult:
 
     # --- Safety (0.20) ---
     safety_assertions = []
-    p, e = agent_bypass_permissions(content)
-    safety_assertions.append(AssertionResult(id="safe-perm", check_type="agent_bypass_permissions",
-        description="bypassPermissions set", passed=p, evidence=e))
+    p, e = agent_no_permission_mode(content)
+    safety_assertions.append(AssertionResult(id="safe-perm", check_type="agent_no_permission_mode",
+        description="permissionMode not set", passed=p, evidence=e))
     p, e = agent_readonly_enforced(content)
     safety_assertions.append(AssertionResult(id="safe-readonly", check_type="agent_readonly_enforced",
         description="Read-only agents block writes", passed=p, evidence=e))

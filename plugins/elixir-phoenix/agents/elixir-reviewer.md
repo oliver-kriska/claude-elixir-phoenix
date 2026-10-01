@@ -3,7 +3,6 @@ name: elixir-reviewer
 description: Expert Elixir/Phoenix code reviewer - idioms, patterns, performance, conventions. Use proactively after writing Elixir code.
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 25

@@ -1039,7 +1039,7 @@ Skills must score >= 0.95 to pass. Run `make eval-all` for details.
 ### Development Rules
 
 - **Skills**: ~100 lines SKILL.md + `references/` for details. Must include Iron Laws, "Use when..." in description.
-- **Agents**: under 300 lines, `disallowedTools: Write, Edit, NotebookEdit` for reviewers, `permissionMode: bypassPermissions` always.
+- **Agents**: under 300 lines, `disallowedTools: Write, Edit, NotebookEdit` for reviewers, no `permissionMode` (plugin agents ignore it).
 - **All markdown** passes `npm run lint`
 - **New skills/agents** must pass `npm run eval` before merging
 - **Autoresearch**: Run `npm run eval:fix` to auto-detect and fix quality issues

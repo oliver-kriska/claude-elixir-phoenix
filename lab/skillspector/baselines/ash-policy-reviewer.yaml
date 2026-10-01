@@ -3,17 +3,17 @@
 version: 1
 rules: []
 fingerprints:
-- hash: sha256:e3b88b43340a11a6
+- hash: sha256:fc4ebb7becb06f01
   rule_id: AR3
   file: ash-policy-reviewer.md
   reason: '''bypass'' is the Ash policy DSL keyword and the audit target (''undocumented
     bypass is a critical finding'').'
-- hash: sha256:5f7d661fe1e3dd1d
+- hash: sha256:5d62733256b72dc7
   rule_id: AR3
   file: ash-policy-reviewer.md
   reason: '''bypass'' is the Ash policy DSL keyword and the audit target (''undocumented
     bypass is a critical finding'').'
-- hash: sha256:9697c6d6e580cfb2
+- hash: sha256:9250364e2abf80ec
   rule_id: YR4
   file: ash-policy-reviewer.md
   reason: '''bypass'' is the Ash policy DSL keyword and the audit target (''undocumented

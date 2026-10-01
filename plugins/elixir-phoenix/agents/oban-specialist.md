@@ -3,7 +3,6 @@ name: oban-specialist
 description: Oban worker specialist - reviews idempotency, error handling, and production safety. Use proactively when implementing or reviewing background jobs.
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 25

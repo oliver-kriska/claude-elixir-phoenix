@@ -3,7 +3,6 @@ name: call-tracer
 description: Orchestrates parallel call tree tracing using subagents for each entry point category (Controllers, LiveViews, Workers, GenServers). Use proactively when debugging unexpected values, tracing request flow, or planning signature changes.
 tools: Read, Grep, Glob, Bash, Agent
 disallowedTools: Write, Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 omitClaudeMd: true

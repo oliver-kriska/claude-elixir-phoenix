@@ -3,7 +3,6 @@ name: catchup-runner
 description: Does the catch-up fan-out, impact analysis, and brief assembly for /catchup on Sonnet (cheaper/faster than the caller's session). Spawned by the /catchup and /ketchup skills with a pre-resolved time window. Not user-invoked directly.
 tools: Read, Grep, Glob, Bash, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 60

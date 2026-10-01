@@ -3,7 +3,6 @@ name: deployment-validator
 description: Deployment configuration validator - releases, Docker, Kubernetes, Fly.io. Use proactively before deploying to production.
 tools: Read, Grep, Glob, Bash, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 25

@@ -3,7 +3,6 @@ name: hex-deps-triager
 description: Triage Hex supply-chain audit findings in Elixir/Phoenix — review diff windows and metadata to produce structured security verdicts. Use after /phx:deps-audit.
 tools: Read, Grep, Glob, Bash, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 12

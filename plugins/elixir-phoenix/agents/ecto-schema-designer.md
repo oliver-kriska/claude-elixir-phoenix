@@ -3,7 +3,6 @@ name: ecto-schema-designer
 description: Ecto schema architect - designs migrations, data models, and query patterns. Use proactively when planning database structure for new features.
 tools: Read, Grep, Glob, Bash, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 20

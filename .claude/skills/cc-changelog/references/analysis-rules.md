@@ -22,7 +22,7 @@ When analyzing CC changelog entries, map them to specific plugin components:
 |-------------------|-----------------------|
 | New frontmatter fields | All 26 agents in `plugins/elixir-phoenix/agents/*.md` |
 | `model:` value changes | Agents using specific model values |
-| `permissionMode:` changes | All agents (all use `bypassPermissions`) |
+| `permissionMode:` changes | None of our plugin agents set it (ignored on plugin agents); `.claude/agents/` contributor agents use `bypassPermissions` |
 | `effort:` level changes | All agents with effort levels |
 | `tools:` / `disallowedTools:` | Review agents (read-only enforcement) |
 | `omitClaudeMd:` behavior | Agents with `omitClaudeMd: true` |

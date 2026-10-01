@@ -3,7 +3,6 @@ name: verification-runner
 description: Run project-aware verification loop. Reads mix.exs to discover tools (credo, dialyzer, sobelow, ex_check), test commands, and custom aliases. Use proactively after code changes.
 tools: Read, Grep, Glob, Bash, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 15

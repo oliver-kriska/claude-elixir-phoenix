@@ -3,7 +3,6 @@ name: testing-reviewer
 description: Reviews test code for Elixir best practices - ExUnit patterns, Mox usage, LiveView testing, factory patterns. Use proactively after writing tests or during code review.
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 25

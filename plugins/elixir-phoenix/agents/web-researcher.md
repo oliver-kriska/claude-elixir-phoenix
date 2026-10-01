@@ -3,7 +3,6 @@ name: web-researcher
 description: Fetches and extracts information from web sources efficiently. Optimized for ElixirForum, HexDocs, and GitHub. Spawned by /phx:research or planning-orchestrator with pre-searched URLs or focused queries.
 tools: WebSearch, WebFetch, Write
 disallowedTools: Edit, NotebookEdit, Bash
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 10

@@ -3,7 +3,6 @@ name: iron-law-judge
 description: "Checks code for Iron Law violations using pattern analysis. Use proactively after code changes or as part of review."
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 25

@@ -95,17 +95,18 @@ def agent_readonly_enforced(content: str, **_) -> tuple[bool, str]:
     return True, f"Read-only agent correctly blocks source modification: {sorted(required)}"
 
 
-def agent_bypass_permissions(content: str, **_) -> tuple[bool, str]:
-    """Check that agent has permissionMode: bypassPermissions.
+def agent_no_permission_mode(content: str, **_) -> tuple[bool, str]:
+    """Check that agent does not set permissionMode.
 
-    Without this, background agents get 'Bash command permission check failed'
-    when skill content contains shell-like patterns.
+    Claude Code ignores permissionMode on plugin agents, and Anthropic's plugin
+    directory fails the security scan on bypassPermissions ("Weakens permission
+    or sandbox controls").
     """
     fm = parse_frontmatter(content)
-    mode = fm.get("permissionMode", "")
-    if mode == "bypassPermissions":
-        return True, "permissionMode: bypassPermissions set"
-    return False, f"permissionMode is '{mode}' (must be 'bypassPermissions' for background agents)"
+    mode = fm.get("permissionMode")
+    if mode is None:
+        return True, "permissionMode not set"
+    return False, f"permissionMode: {mode} set (ignored on plugin agents, flagged by the plugin directory)"
 
 
 def agent_model_appropriate(content: str, **_) -> tuple[bool, str]:
@@ -220,7 +221,7 @@ def agent_omit_claudemd(content: str, **_) -> tuple[bool, str]:
 AGENT_MATCHERS = {
     "agent_tools_valid": agent_tools_valid,
     "agent_readonly_enforced": agent_readonly_enforced,
-    "agent_bypass_permissions": agent_bypass_permissions,
+    "agent_no_permission_mode": agent_no_permission_mode,
     "agent_model_appropriate": agent_model_appropriate,
     "agent_has_skills": agent_has_skills,
     "agent_omit_claudemd": agent_omit_claudemd,

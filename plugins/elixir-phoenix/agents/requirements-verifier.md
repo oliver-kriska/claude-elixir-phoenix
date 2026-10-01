@@ -3,7 +3,6 @@ name: requirements-verifier
 description: Cross-check implementation against task requirements (Linear issue, GitHub issue, plan, spec). Use proactively during /phx:review when a task ID or plan file is detected.
 tools: Read, Grep, Glob, Bash, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 20

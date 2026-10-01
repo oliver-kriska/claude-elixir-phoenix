@@ -3,7 +3,6 @@ name: liveview-architect
 description: LiveView architecture specialist - component structure, real-time patterns, streams vs assigns, async patterns. Use proactively when planning interactive features.
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 20

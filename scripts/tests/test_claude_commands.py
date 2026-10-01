@@ -181,6 +181,18 @@ def test_claude_agent_contract_matches_current_runtime() -> None:
     assert undeclared_agent_tool_uses == []
 
 
+def test_plugin_agents_do_not_set_permission_mode() -> None:
+    # Claude Code ignores permissionMode on plugin agents, and the plugin
+    # directory's security scan fails a plugin whose agent sets bypassPermissions.
+    offenders = [
+        agent.relative_to(ROOT)
+        for agent in sorted((ROOT / "plugins").glob("*/agents/*.md"))
+        if "permissionMode" in parse_file(agent).data
+    ]
+
+    assert offenders == []
+
+
 def test_nested_orchestrator_workflows_resolve_depth_and_have_fallbacks() -> None:
     required_fallbacks = {
         "full": "spawn leaf research/review specialists directly",

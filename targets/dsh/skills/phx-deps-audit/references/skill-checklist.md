@@ -63,10 +63,9 @@ each. Apply this list **before** running `make eval`.
 
 ## Agent-specific
 
-- `permissionMode: bypassPermissions` for **every** agent. `default`
-  triggers "Bash command permission check failed" when the agent runs
-  in background — the safety system pattern-scans skill content for
-  shell-like substrings.
+- No `permissionMode` on any agent. Claude Code ignores it on plugin
+  agents, and the plugin directory's security scan fails
+  `bypassPermissions`.
 - Read-only agents (no Write): set `disallowedTools: Edit,
   NotebookEdit` (NOT Write — agents need Write to save their own
   findings file). Set `omitClaudeMd: true`.

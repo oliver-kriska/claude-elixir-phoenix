@@ -157,7 +157,6 @@ name: my-agent
 description: Description with "Use proactively when..." guidance
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 memory: project
@@ -188,11 +187,11 @@ skills:
 - Set `effort: medium` — the Opus 5.5 and Sonnet 5.5 default in CC. Opus 5.5 at `medium` matches
   Opus 5 at `high`; raise an agent to `high` only with an eval showing it helps
 - Review agents are **read-only** (`disallowedTools: Write, Edit, NotebookEdit`)
-- Use `permissionMode: bypassPermissions` for all agents — `default` causes "Bash command permission check failed"
-  when agents run in background (safety system scans skill content for shell-like patterns)
-  - **Docs-drift note**: current Claude Code docs state that *plugin* subagents IGNORE `permissionMode`
-    (also `hooks` and `mcpServers`). The field stays for backward-compat with older CC versions, and
-    `.claude/agents/` (non-plugin) agents still honor it.
+- **Never set `permissionMode`** on a plugin agent. Claude Code ignores it there (also `hooks`,
+  `mcpServers`, `initialPrompt`), and the plugin directory's security scan fails a plugin whose
+  agent sets `bypassPermissions` as "Weakens permission or sandbox controls" (catchup, 2026-10-01).
+  `test_plugin_agents_do_not_set_permission_mode` and the agent eval enforce it.
+  `.claude/agents/` contributor agents are not plugin agents and still honor the field
 - Use `memory: project` for agents that benefit from cross-session learning (orchestrators, pattern analysts).
   Note: `memory` auto-enables Read, Write, Edit — only add to agents that already have Write access
 - Preload relevant skills via `skills:` field
@@ -470,7 +469,7 @@ run still gets scored. See `lab/plugin_eval/README.md`.
 - completeness (frontmatter: name, description, tools, model, effort)
 - accuracy (preloaded skills exist, tools valid)
 - conciseness (line limits per agent type)
-- safety (bypassPermissions, read-only enforcement)
+- safety (no `permissionMode`, read-only enforcement)
 - consistency (model matches effort level)
 
 ## Size Guidelines
@@ -485,7 +484,7 @@ run still gets scored. See `lab/plugin_eval/README.md`.
 
 ### Why orchestrators and command skills exceed targets
 
-Even with `permissionMode: bypassPermissions`, plugin files live in `~/.claude/plugins/cache/` — outside the project.
+Plugin files live in `~/.claude/plugins/cache/` — outside the project.
 This means agents **cannot reliably read** skill `references/*.md` at runtime.
 
 Content must be inline (in agent prompt or preloaded SKILL.md) to be available:
@@ -509,7 +508,7 @@ Only trim when content is purely informational and not execution-critical.
   available only for findings artifacts; the read-only source rule is also an
   explicit instruction, not a tool-enforced security boundary)
 - [ ] `Write` allowed for agents that output reports (research agents, reviewers, context-supervisor). Only agents that neither review nor research should have Write disallowed.
-- [ ] `permissionMode: bypassPermissions`
+- [ ] No `permissionMode` (ignored on plugin agents; the directory fails `bypassPermissions`)
 - [ ] `effort:` set (`medium`; `high` only with eval evidence)
 - [ ] `omitClaudeMd: true` for report-only agents (Write allowed for own report, Edit disallowed). They don't need commit/lint guidelines. Iron Laws injected via SubagentStart hook.
 - [ ] Skills preloaded

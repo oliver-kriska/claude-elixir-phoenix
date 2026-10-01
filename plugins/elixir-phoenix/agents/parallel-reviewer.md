@@ -3,7 +3,6 @@ name: parallel-reviewer
 description: Parallel code review using 4 specialist agents (elixir-reviewer, security-analyzer, testing-reviewer, verification-runner). Use for thorough review of significant changes.
 tools: Read, Grep, Glob, Bash, Agent, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: opus
 effort: medium
 omitClaudeMd: true

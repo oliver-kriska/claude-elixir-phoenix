@@ -3,7 +3,6 @@ name: ash-resource-designer
 description: Ash resource architect — designs resources the "Ash Way" with built-in changes, validations, types, and policy checks before hand-rolling. Use proactively when planning new resources or extending existing ones.
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 omitClaudeMd: true

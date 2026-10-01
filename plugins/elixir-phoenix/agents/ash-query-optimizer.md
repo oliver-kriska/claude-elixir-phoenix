@@ -3,7 +3,6 @@ name: ash-query-optimizer
 description: Ash query optimizer — detects N+1 loads, suggests aggregates over load+Enum, identifies calculation vs load tradeoffs. Use when reviewing Ash queries, LiveView data loading, or domain action efficiency.
 tools: Read, Grep, Glob, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 omitClaudeMd: true

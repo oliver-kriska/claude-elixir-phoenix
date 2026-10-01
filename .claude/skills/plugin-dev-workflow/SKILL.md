@@ -69,7 +69,7 @@ make ci            # Full CI pipeline
 1. Make your changes
 2. Run `make eval-agents` to score all agents
 3. Agent requirements:
-   - `permissionMode: bypassPermissions` (always — background agents need it)
+   - no `permissionMode` (plugin agents ignore it; the plugin directory fails `bypassPermissions`)
    - `disallowedTools: Write, Edit, NotebookEdit` for review/analysis agents
    - model matches effort: haiku=low, sonnet=medium, opus=high
    - Under 300 lines (specialist) or 535 lines (orchestrator)

@@ -3,7 +3,6 @@ name: codex-reviewer
 description: Run OpenAI Codex CLI code review and normalize findings into review panel format. Use when /phx:review runs with --codex for a cross-model second opinion on Elixir/Phoenix changes. Requires codex CLI; degrades to SKIPPED note.
 tools: Read, Grep, Glob, Bash, Write
 disallowedTools: Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 15

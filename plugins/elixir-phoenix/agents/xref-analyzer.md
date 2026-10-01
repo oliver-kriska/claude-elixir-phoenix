@@ -3,7 +3,6 @@ name: xref-analyzer
 description: Analyze module dependencies and context boundaries using mix xref. Use proactively before major refactors or when reviewing architectural changes.
 tools: Read, Grep, Glob, Bash
 disallowedTools: Write, Edit, NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 10

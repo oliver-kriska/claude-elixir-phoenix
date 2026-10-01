@@ -3,7 +3,6 @@ name: planning-orchestrator
 description: Fans out and compresses parallel Elixir/Phoenix planning research (codebase patterns, libraries, schema/OTP/LiveView design) into one digest. Use when /phx:plan needs 3+ research agents; returns findings only, never plans or asks the user.
 tools: Read, Write, Grep, Glob, Agent
 disallowedTools: NotebookEdit
-permissionMode: bypassPermissions
 model: sonnet
 effort: medium
 maxTurns: 40
