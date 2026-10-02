@@ -1,0 +1,15 @@
+{
+  "skill": "autoresearch",
+  "should_trigger": [
+    "Fix all credo violations in the codebase automatically",
+    "Improve test coverage iteratively without breaking tests",
+    "Eliminate compile warnings through iterative refinement",
+    "Run autoresearch to clean up code quality issues",
+    "Keep improving until credo strict is satisfied"
+  ],
+  "should_not_trigger": [
+    "Review my code and suggest improvements \u2014 belongs to review skill",
+    "Find all technical debt in the project \u2014 belongs to techdebt skill",
+    "Check for N+1 queries and performance issues \u2014 belongs to perf skill"
+  ]
+}
