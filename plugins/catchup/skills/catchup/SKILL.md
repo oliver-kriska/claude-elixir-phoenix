@@ -4,7 +4,6 @@ description: "Summarize and review what changed while you were away. Use after a
 effort: medium
 disable-model-invocation: true
 argument-hint: "[--since \"friday\"|\"2h\"|\"last-active\"|\"last-commit\"] [--scope repo|all] [--sources github,git,linear,calendar] [--depth quick|standard|deep] [--focus prs,reviews-requested,mentions,impact]"
-allowed-tools: Read, Grep, Glob
 ---
 
 # Catchup — Async-Team Return Briefing

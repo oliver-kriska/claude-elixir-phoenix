@@ -68,7 +68,7 @@ Check each `skills/*/` directory against `skills.md` docs.
 | `argument-hint` | No | Shown in command help |
 | `disable-model-invocation` | No | Boolean, default false |
 | `user-invocable` | No | Boolean, default true. Set false to hide from `/` menu |
-| `allowed-tools` | No | Restrict tools when skill is active |
+| `allowed-tools` | No | Pre-approves tools while the skill is active (never restricts). Plugin skills must not set it |
 | `model` | No | Model to use when skill is active |
 | `context` | No | Set to `fork` to run in forked subagent |
 | `agent` | No | Subagent type when `context: fork` is set |

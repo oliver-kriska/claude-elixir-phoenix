@@ -26,9 +26,8 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   saying it is installed with the Elixir/Phoenix plugin and only hands its
   commands off to `/phx:` skills.
 - **`catchup` is ready for the plugin directory.** `/catchup` and `/ketchup`
-  pre-approve only `Read, Grep, Glob`; bare `Bash`, `Write`, `WebFetch` and
-  `Agent` drew directory holds and none of them is needed for pre-approval
-  (`gh`/`git` calls now ask once like any other command). The plugin gets a
+  no longer pre-approve any tool (`gh`/`git` calls ask once like any other
+  command). The plugin gets a
   `displayName`, `supportUrl`, an icon, and a README section listing what it
   reads (GitHub via `gh`, `git fetch` from `origin`, your own Linear/Calendar
   connectors, session-file timestamps) and that the brief stays in your
@@ -80,6 +79,15 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   plugin agents, so they already ran under your session's permission mode;
   nothing changes at runtime. The agent eval now fails an agent that sets it,
   and `test_plugin_agents_do_not_set_permission_mode` checks every plugin.
+- **No skill pre-approves tools any more.** The directory reviewer rejected
+  `phx` because "a hook or setting auto-approves its own tool calls". Hooks
+  only ever deny, but `allowed-tools` on `/phx:deps-audit`,
+  `/phx:boundaries`, `/phx:assigns-audit`, `/phx:n1-check`, `/catchup` and
+  `/ketchup` approved tools without a prompt. They listed only `Read`,
+  `Grep` and `Glob`, which never prompt inside the project, and
+  `/phx:deps-audit`'s `WebFetch` for `hex.pm`, which it does not use (it
+  fetches through `python3`). `test_plugin_skills_do_not_preapprove_tools`
+  guards it.
 - **Dev dependency advisories (contributor tooling).** `brace-expansion`,
   `js-yaml` and `markdown-it` patch updates. An `overrides` entry lifts
   markdownlint-cli's `js-yaml ~5.2.1` pin to `^5.4.1` (Dependabot #18,

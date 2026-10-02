@@ -193,6 +193,18 @@ def test_plugin_agents_do_not_set_permission_mode() -> None:
     assert offenders == []
 
 
+def test_plugin_skills_do_not_preapprove_tools() -> None:
+    # allowed-tools approves tool calls without a prompt while the skill runs;
+    # the plugin directory rejects plugins that approve their own actions.
+    offenders = [
+        skill.relative_to(ROOT)
+        for skill in sorted((ROOT / "plugins").glob("*/skills/*/SKILL.md"))
+        if "allowed-tools" in parse_file(skill).data
+    ]
+
+    assert offenders == []
+
+
 def test_nested_orchestrator_workflows_resolve_depth_and_have_fallbacks() -> None:
     required_fallbacks = {
         "full": "spawn leaf research/review specialists directly",

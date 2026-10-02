@@ -3,7 +3,6 @@ name: deps-audit
 description: Audit Hex deps for supply-chain security risk — bidi chars, compile-time exec, maintainer changes, typosquats, CVEs. Use after mix deps.update, when checking if a package upgrade is safe, or reviewing mix.lock PR diffs.
 effort: medium
 argument-hint: "[--base <ref> | --preview [pkg...]] [--quick] [--json] [--sarif <path>] [--ci] [--strict] [--no-differential] [--no-llm | --llm] [--trace]"
-allowed-tools: Read, Grep, Glob, WebFetch(domain:hex.pm), WebFetch(domain:diff.hex.pm)
 ---
 
 # Hex Dependency Audit

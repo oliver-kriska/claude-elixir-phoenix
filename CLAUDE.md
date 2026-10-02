@@ -224,6 +224,9 @@ skills/{name}/
 - Set `effort:` to match skill complexity: `low` for mechanical (verify, quick, compound), `medium` for reference skills, `high` for complex reasoning (plan, full, investigate, review)
 - Use `${CLAUDE_SKILL_DIR}/references/` for reference file paths (not bare `references/`)
 - No `triggers:` field (use `description` for auto-loading)
+- No `allowed-tools:` field. It approves tool calls without a prompt while the skill runs, and
+  the plugin directory rejects plugins that approve their own actions. Enforced by
+  `test_plugin_skills_do_not_preapprove_tools`
 - **Description must be under 250 characters** — this is a plugin-side budget discipline,
   not a hard CC cap (CC caps `description` + `when_to_use` at 1,536 chars). The skill
   listing gets 1% of the model's context window, shared by every installed plugin. On
@@ -522,6 +525,7 @@ Only trim when content is purely informational and not execution-critical.
 - [ ] `references/` paths use `${CLAUDE_SKILL_DIR}/references/`
 - [ ] `effort:` set (low/medium/high)
 - [ ] No `triggers:` field
+- [ ] No `allowed-tools:` field
 - [ ] Description under 250 characters (CC internal budget cap)
 
 ### New workflow skill
