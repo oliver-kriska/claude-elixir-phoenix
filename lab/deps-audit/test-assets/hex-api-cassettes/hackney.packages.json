@@ -1,0 +1,1714 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/benoitc/hackney/blob/master/NEWS.md",
+      "GitHub": "https://github.com/benoitc/hackney"
+    },
+    "description": "Simple HTTP client with HTTP/1.1, HTTP/2, and HTTP/3 support",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "hackney",
+  "url": "https://hex.pm/api/packages/hackney",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/benoitc",
+      "email": "bchesneau@gmail.com",
+      "username": "benoitc"
+    }
+  ],
+  "inserted_at": "2014-08-14T21:51:54.000000Z",
+  "updated_at": "2026-10-03T23:14:09.847711Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "4.8.5",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.8.5",
+      "has_docs": true,
+      "inserted_at": "2026-10-03T23:14:06.862949Z"
+    },
+    {
+      "version": "4.8.4",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.8.4",
+      "has_docs": true,
+      "inserted_at": "2026-09-27T08:07:51.398474Z"
+    },
+    {
+      "version": "4.8.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.8.3",
+      "has_docs": true,
+      "inserted_at": "2026-09-27T07:04:38.318261Z"
+    },
+    {
+      "version": "4.8.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.8.2",
+      "has_docs": true,
+      "inserted_at": "2026-09-26T19:01:12.572176Z"
+    },
+    {
+      "version": "4.8.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.8.1",
+      "has_docs": true,
+      "inserted_at": "2026-09-25T09:54:50.755170Z"
+    },
+    {
+      "version": "4.8.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.8.0",
+      "has_docs": true,
+      "inserted_at": "2026-09-24T08:19:46.422906Z"
+    },
+    {
+      "version": "4.7.4",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.7.4",
+      "has_docs": true,
+      "inserted_at": "2026-08-12T05:54:52.076445Z"
+    },
+    {
+      "version": "4.7.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.7.3",
+      "has_docs": true,
+      "inserted_at": "2026-08-11T07:39:46.403644Z"
+    },
+    {
+      "version": "4.7.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.7.2",
+      "has_docs": true,
+      "inserted_at": "2026-07-17T09:52:36.612694Z"
+    },
+    {
+      "version": "4.7.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.7.1",
+      "has_docs": true,
+      "inserted_at": "2026-07-17T00:01:16.555902Z"
+    },
+    {
+      "version": "4.7.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.7.0",
+      "has_docs": true,
+      "inserted_at": "2026-07-16T22:47:54.721598Z"
+    },
+    {
+      "version": "4.6.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.6.1",
+      "has_docs": true,
+      "inserted_at": "2026-07-15T18:06:54.279328Z"
+    },
+    {
+      "version": "4.6.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.6.0",
+      "has_docs": true,
+      "inserted_at": "2026-07-15T07:35:23.015379Z"
+    },
+    {
+      "version": "4.5.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.5.2",
+      "has_docs": true,
+      "inserted_at": "2026-07-06T06:07:59.602356Z"
+    },
+    {
+      "version": "4.5.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.5.1",
+      "has_docs": true,
+      "inserted_at": "2026-07-04T13:32:23.396001Z"
+    },
+    {
+      "version": "4.5.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.5.0",
+      "has_docs": true,
+      "inserted_at": "2026-07-04T09:53:30.246993Z"
+    },
+    {
+      "version": "4.4.5",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.4.5",
+      "has_docs": true,
+      "inserted_at": "2026-06-18T15:01:57.936806Z"
+    },
+    {
+      "version": "4.4.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.4.3",
+      "has_docs": true,
+      "inserted_at": "2026-06-17T08:59:29.403118Z"
+    },
+    {
+      "version": "4.4.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.4.2",
+      "has_docs": true,
+      "inserted_at": "2026-06-16T09:24:26.032768Z"
+    },
+    {
+      "version": "4.4.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.4.1",
+      "has_docs": true,
+      "inserted_at": "2026-06-16T08:57:15.941020Z"
+    },
+    {
+      "version": "4.4.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.4.0",
+      "has_docs": true,
+      "inserted_at": "2026-06-13T15:04:52.561571Z"
+    },
+    {
+      "version": "4.3.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.3.0",
+      "has_docs": true,
+      "inserted_at": "2026-06-12T21:21:12.908939Z"
+    },
+    {
+      "version": "4.2.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.2.3",
+      "has_docs": true,
+      "inserted_at": "2026-06-10T19:17:41.282776Z"
+    },
+    {
+      "version": "4.2.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.2.2",
+      "has_docs": true,
+      "inserted_at": "2026-06-07T09:29:23.008187Z"
+    },
+    {
+      "version": "4.2.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.2.1",
+      "has_docs": true,
+      "inserted_at": "2026-06-05T09:40:18.092875Z"
+    },
+    {
+      "version": "4.2.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.2.0",
+      "has_docs": true,
+      "inserted_at": "2026-06-03T22:02:32.536484Z"
+    },
+    {
+      "version": "4.1.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.1.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-29T21:24:49.835293Z"
+    },
+    {
+      "version": "4.0.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.0.3",
+      "has_docs": true,
+      "inserted_at": "2026-05-28T08:25:05.634193Z"
+    },
+    {
+      "version": "4.0.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.0.2",
+      "has_docs": true,
+      "inserted_at": "2026-05-25T16:41:31.858208Z"
+    },
+    {
+      "version": "4.0.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.0.1",
+      "has_docs": true,
+      "inserted_at": "2026-05-25T13:40:49.962499Z"
+    },
+    {
+      "version": "4.0.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/4.0.0",
+      "has_docs": true,
+      "inserted_at": "2026-04-16T07:14:02.346372Z"
+    },
+    {
+      "version": "3.2.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/3.2.1",
+      "has_docs": true,
+      "inserted_at": "2026-03-01T14:19:26.045572Z"
+    },
+    {
+      "version": "3.2.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/3.2.0",
+      "has_docs": true,
+      "inserted_at": "2026-02-21T19:55:49.664899Z"
+    },
+    {
+      "version": "3.1.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/3.1.2",
+      "has_docs": true,
+      "inserted_at": "2026-02-21T02:24:35.979629Z"
+    },
+    {
+      "version": "3.1.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/3.1.1",
+      "has_docs": true,
+      "inserted_at": "2026-02-20T08:45:33.237757Z"
+    },
+    {
+      "version": "3.1.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/3.1.0",
+      "has_docs": true,
+      "inserted_at": "2026-02-17T08:21:19.062131Z"
+    },
+    {
+      "version": "3.0.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/3.0.3",
+      "has_docs": true,
+      "inserted_at": "2026-02-15T19:32:07.477123Z"
+    },
+    {
+      "version": "3.0.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/3.0.2",
+      "has_docs": true,
+      "inserted_at": "2026-02-02T14:12:40.801286Z"
+    },
+    {
+      "version": "3.0.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/3.0.1",
+      "has_docs": true,
+      "inserted_at": "2026-01-27T23:10:23.167910Z"
+    },
+    {
+      "version": "3.0.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/3.0.0",
+      "has_docs": true,
+      "inserted_at": "2026-01-27T22:38:24.500068Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2026-01-21T02:18:33.923925Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2026-01-20T20:00:59.865617Z"
+    },
+    {
+      "version": "2.0.0-beta.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/2.0.0-beta.1",
+      "has_docs": true,
+      "inserted_at": "2026-01-07T20:30:27.597559Z"
+    },
+    {
+      "version": "1.25.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.25.0",
+      "has_docs": true,
+      "inserted_at": "2025-07-24T11:30:16.910469Z"
+    },
+    {
+      "version": "1.24.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.24.1",
+      "has_docs": true,
+      "inserted_at": "2025-05-26T11:42:36.968554Z"
+    },
+    {
+      "version": "1.24.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.24.0",
+      "has_docs": true,
+      "inserted_at": "2025-05-26T03:03:30.986127Z"
+    },
+    {
+      "version": "1.23.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.23.0",
+      "has_docs": true,
+      "inserted_at": "2025-02-25T11:35:25.995723Z"
+    },
+    {
+      "version": "1.22.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.22.0",
+      "has_docs": true,
+      "inserted_at": "2025-02-20T21:57:04.904400Z"
+    },
+    {
+      "version": "1.21.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.21.0",
+      "has_docs": false,
+      "inserted_at": "2025-02-20T14:56:24.057461Z"
+    },
+    {
+      "version": "1.20.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.20.1",
+      "has_docs": false,
+      "inserted_at": "2023-10-11T00:29:31.653544Z"
+    },
+    {
+      "version": "1.20.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.20.0",
+      "has_docs": false,
+      "inserted_at": "2023-10-10T00:39:28.724087Z"
+    },
+    {
+      "version": "1.19.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.19.1",
+      "has_docs": false,
+      "inserted_at": "2023-09-20T22:11:58.304527Z"
+    },
+    {
+      "version": "1.19.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.19.0",
+      "has_docs": false,
+      "inserted_at": "2023-09-20T21:11:20.792329Z"
+    },
+    {
+      "version": "1.18.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.18.2",
+      "has_docs": false,
+      "inserted_at": "2023-08-29T09:27:10.697246Z"
+    },
+    {
+      "version": "1.18.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.18.1",
+      "has_docs": true,
+      "inserted_at": "2022-02-13T16:59:45.756727Z"
+    },
+    {
+      "version": "1.18.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.18.0",
+      "has_docs": false,
+      "inserted_at": "2021-09-28T16:01:11.503959Z"
+    },
+    {
+      "version": "1.17.4",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.17.4",
+      "has_docs": true,
+      "inserted_at": "2021-03-18T22:41:55.621656Z"
+    },
+    {
+      "version": "1.17.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.17.3",
+      "has_docs": true,
+      "inserted_at": "2021-03-17T23:04:39.844633Z"
+    },
+    {
+      "version": "1.17.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.17.2",
+      "has_docs": true,
+      "inserted_at": "2021-03-17T02:45:39.548624Z"
+    },
+    {
+      "version": "1.17.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.17.1",
+      "has_docs": true,
+      "inserted_at": "2021-03-15T11:07:34.905252Z"
+    },
+    {
+      "version": "1.17.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.17.0",
+      "has_docs": true,
+      "inserted_at": "2020-12-19T15:05:01.054957Z"
+    },
+    {
+      "version": "1.16.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.16.0",
+      "has_docs": false,
+      "inserted_at": "2020-05-25T21:04:57.593997Z"
+    },
+    {
+      "version": "1.15.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.15.2",
+      "has_docs": false,
+      "inserted_at": "2019-09-25T21:05:46.393392Z"
+    },
+    {
+      "version": "1.15.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.15.1",
+      "has_docs": false,
+      "inserted_at": "2019-02-26T08:19:55.700735Z"
+    },
+    {
+      "version": "1.15.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.15.0",
+      "has_docs": false,
+      "inserted_at": "2019-01-04T14:34:06.019461Z"
+    },
+    {
+      "version": "1.14.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.14.3",
+      "has_docs": false,
+      "inserted_at": "2018-09-29T13:59:54.035067Z"
+    },
+    {
+      "version": "1.14.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.14.2",
+      "has_docs": false,
+      "inserted_at": "2018-09-28T12:48:57.623593Z"
+    },
+    {
+      "version": "1.14.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.14.0",
+      "has_docs": false,
+      "inserted_at": "2018-09-12T10:19:14.132818Z"
+    },
+    {
+      "version": "1.13.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.13.0",
+      "has_docs": false,
+      "inserted_at": "2018-06-22T19:48:43.059134Z"
+    },
+    {
+      "version": "1.12.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.12.1",
+      "has_docs": true,
+      "inserted_at": "2018-04-03T18:22:15.448639Z"
+    },
+    {
+      "version": "1.12.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.12.0",
+      "has_docs": false,
+      "inserted_at": "2018-04-03T12:21:31.785554Z"
+    },
+    {
+      "version": "1.11.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.11.0",
+      "has_docs": true,
+      "inserted_at": "2018-01-23T09:13:36.170343Z"
+    },
+    {
+      "version": "1.10.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.10.1",
+      "has_docs": false,
+      "inserted_at": "2017-10-20T07:20:32.195976Z"
+    },
+    {
+      "version": "1.10.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.10.0",
+      "has_docs": false,
+      "inserted_at": "2017-10-18T12:04:49.589878Z"
+    },
+    {
+      "version": "1.9.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.9.0",
+      "has_docs": false,
+      "inserted_at": "2017-07-30T17:04:04.078705Z"
+    },
+    {
+      "version": "1.8.6",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.8.6",
+      "has_docs": false,
+      "inserted_at": "2017-06-09T14:31:04.736505Z"
+    },
+    {
+      "version": "1.8.5",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.8.5",
+      "has_docs": false,
+      "inserted_at": "2017-05-30T16:32:33.799590Z"
+    },
+    {
+      "version": "1.8.4",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.8.4",
+      "has_docs": false,
+      "inserted_at": "2017-05-28T07:52:17.506051Z"
+    },
+    {
+      "version": "1.8.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.8.3",
+      "has_docs": false,
+      "inserted_at": "2017-05-22T10:09:18.887768Z"
+    },
+    {
+      "version": "1.8.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.8.2",
+      "has_docs": false,
+      "inserted_at": "2017-05-20T19:48:58.742958Z"
+    },
+    {
+      "version": "1.8.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.8.0",
+      "has_docs": false,
+      "inserted_at": "2017-04-20T04:50:20.394043Z"
+    },
+    {
+      "version": "1.7.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.7.1",
+      "has_docs": false,
+      "inserted_at": "2017-03-02T04:31:10.031767Z"
+    },
+    {
+      "version": "1.7.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.7.0",
+      "has_docs": false,
+      "inserted_at": "2017-03-01T17:11:51.844238Z"
+    },
+    {
+      "version": "1.6.6",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.6.6",
+      "has_docs": false,
+      "inserted_at": "2017-02-26T10:15:50.114638Z"
+    },
+    {
+      "version": "1.6.5",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.6.5",
+      "has_docs": false,
+      "inserted_at": "2016-12-23T05:35:43.098875Z"
+    },
+    {
+      "version": "1.6.4",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.6.4",
+      "has_docs": false,
+      "inserted_at": "2016-12-22T20:21:33.749559Z"
+    },
+    {
+      "version": "1.6.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.6.3",
+      "has_docs": false,
+      "inserted_at": "2016-10-27T07:33:12.226071Z"
+    },
+    {
+      "version": "1.6.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.6.2",
+      "has_docs": false,
+      "inserted_at": "2016-10-22T08:14:14.702277Z"
+    },
+    {
+      "version": "1.6.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.6.1",
+      "has_docs": false,
+      "inserted_at": "2016-07-10T18:56:07.921502Z"
+    },
+    {
+      "version": "1.6.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.6.0",
+      "has_docs": false,
+      "inserted_at": "2016-03-25T09:20:11.188405Z"
+    },
+    {
+      "version": "1.5.7",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.5.7",
+      "has_docs": false,
+      "inserted_at": "2016-03-19T21:35:41.055626Z"
+    },
+    {
+      "version": "1.5.6",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.5.6",
+      "has_docs": false,
+      "inserted_at": "2016-03-19T10:58:56.310125Z"
+    },
+    {
+      "version": "1.5.5",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.5.5",
+      "has_docs": false,
+      "inserted_at": "2016-03-18T22:53:44.249616Z"
+    },
+    {
+      "version": "1.5.4",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.5.4",
+      "has_docs": false,
+      "inserted_at": "2016-03-18T15:34:43.142387Z"
+    },
+    {
+      "version": "1.5.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.5.3",
+      "has_docs": false,
+      "inserted_at": "2016-03-17T05:04:14.844498Z"
+    },
+    {
+      "version": "1.5.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.5.2",
+      "has_docs": false,
+      "inserted_at": "2016-03-15T00:51:59.267193Z"
+    },
+    {
+      "version": "1.5.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.5.1",
+      "has_docs": false,
+      "inserted_at": "2016-03-07T14:05:53.203779Z"
+    },
+    {
+      "version": "1.5.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.5.0",
+      "has_docs": false,
+      "inserted_at": "2016-03-02T22:38:58.436373Z"
+    },
+    {
+      "version": "1.4.10",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.10",
+      "has_docs": false,
+      "inserted_at": "2016-02-27T21:04:38.050317Z"
+    },
+    {
+      "version": "1.4.8",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.8",
+      "has_docs": false,
+      "inserted_at": "2016-01-02T19:54:25.725918Z"
+    },
+    {
+      "version": "1.4.7",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.7",
+      "has_docs": true,
+      "inserted_at": "2015-12-07T12:13:49.832496Z"
+    },
+    {
+      "version": "1.4.6",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.6",
+      "has_docs": false,
+      "inserted_at": "2015-11-24T19:55:47.085406Z"
+    },
+    {
+      "version": "1.4.5",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.5",
+      "has_docs": false,
+      "inserted_at": "2015-11-23T12:18:40.845750Z"
+    },
+    {
+      "version": "1.4.4",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.4",
+      "has_docs": false,
+      "inserted_at": "2015-11-04T09:59:36.136427Z"
+    },
+    {
+      "version": "1.4.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.3",
+      "has_docs": true,
+      "inserted_at": "2015-11-04T08:00:44.739937Z"
+    },
+    {
+      "version": "1.4.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.2",
+      "has_docs": true,
+      "inserted_at": "2015-11-03T12:54:16.105994Z"
+    },
+    {
+      "version": "1.4.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.1",
+      "has_docs": false,
+      "inserted_at": "2015-11-03T08:33:40.434385Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.4.0",
+      "has_docs": false,
+      "inserted_at": "2015-11-01T18:03:15.108527Z"
+    },
+    {
+      "version": "1.3.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.3.2",
+      "has_docs": false,
+      "inserted_at": "2015-09-07T10:07:57.891972Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.3.1",
+      "has_docs": false,
+      "inserted_at": "2015-08-10T12:14:52.728170Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.3.0",
+      "has_docs": false,
+      "inserted_at": "2015-07-27T10:57:36.750496Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.2.0",
+      "has_docs": false,
+      "inserted_at": "2015-07-04T13:35:18.952511Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.1.0",
+      "has_docs": false,
+      "inserted_at": "2015-04-02T15:06:41.000000Z"
+    },
+    {
+      "version": "1.0.6",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.0.6",
+      "has_docs": false,
+      "inserted_at": "2015-01-22T12:49:17.000000Z"
+    },
+    {
+      "version": "1.0.5",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.0.5",
+      "has_docs": false,
+      "inserted_at": "2015-01-12T15:01:48.000000Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.0.2",
+      "has_docs": false,
+      "inserted_at": "2014-12-03T13:07:45.000000Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/1.0.1",
+      "has_docs": false,
+      "inserted_at": "2014-12-01T15:14:51.000000Z"
+    },
+    {
+      "version": "0.15.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/0.15.2",
+      "has_docs": false,
+      "inserted_at": "2014-11-27T13:00:07.000000Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/0.15.0",
+      "has_docs": false,
+      "inserted_at": "2014-11-11T15:04:45.000000Z"
+    },
+    {
+      "version": "0.14.3",
+      "url": "https://hex.pm/api/packages/hackney/releases/0.14.3",
+      "has_docs": false,
+      "inserted_at": "2014-10-28T15:24:32.000000Z"
+    },
+    {
+      "version": "0.14.2",
+      "url": "https://hex.pm/api/packages/hackney/releases/0.14.2",
+      "has_docs": false,
+      "inserted_at": "2014-10-28T10:13:03.000000Z"
+    },
+    {
+      "version": "0.14.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/0.14.1",
+      "has_docs": false,
+      "inserted_at": "2014-09-29T09:41:08.000000Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/hackney/releases/0.14.0",
+      "has_docs": false,
+      "inserted_at": "2014-09-19T16:47:26.000000Z"
+    },
+    {
+      "version": "0.13.1",
+      "url": "https://hex.pm/api/packages/hackney/releases/0.13.1",
+      "has_docs": false,
+      "inserted_at": "2014-08-14T21:51:55.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/hackney",
+  "latest_version": "4.8.5",
+  "downloads": {
+    "all": 173145958,
+    "day": 18734,
+    "recent": 3732725,
+    "week": 320973
+  },
+  "security_advisories": [
+    {
+      "id": "GHSA-9653-rcfr-5c62",
+      "aliases": [
+        "CVE-2026-47067",
+        "EEF-CVE-2026-47067"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47067"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-9653-rcfr-5c62"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47067"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/31f6f0e27e096ad88743dfded4f030a3ee74972e"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47067.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        }
+      ],
+      "summary": "Hackney vulnerable to atom-table exhaustion via unrecognized URL schemes",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-9653-rcfr-5c62",
+      "published_at": "2026-06-26T22:01:36Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-9653-rcfr-5c62",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-06-26T22:15:08Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-q8jg-fgj4-fphf",
+      "aliases": [
+        "CVE-2026-47073",
+        "EEF-CVE-2026-47073"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-q8jg-fgj4-fphf"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47073"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/ce0109e2970ace6e20ff29bae9d05c3ac22ec6dc"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47073.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47073"
+        }
+      ],
+      "summary": "Hackney has unbounded buffer accumulation in WebSocket",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-q8jg-fgj4-fphf",
+      "published_at": "2026-06-26T22:00:16Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-q8jg-fgj4-fphf",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-06-26T22:15:08Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-f9vr-g2g2-x9fg",
+      "aliases": [
+        "CVE-2026-47072",
+        "EEF-CVE-2026-47072"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-f9vr-g2g2-x9fg"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47072"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/52310ca807e7b48441ba0e9129171f535313fdd1"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47072.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47072"
+        }
+      ],
+      "summary": "Hackney has CRLF / header injection in WebSocket upgrade request",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-f9vr-g2g2-x9fg",
+      "published_at": "2026-06-26T21:59:44Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-f9vr-g2g2-x9fg",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:H/SA:N",
+      "modified_at": "2026-06-26T22:15:08Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-j9wq-vxxc-94wf",
+      "aliases": [
+        "CVE-2026-47075",
+        "EEF-CVE-2026-47075"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-j9wq-vxxc-94wf"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47075"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/ca73dd0aba0ed557449c18288bf07241671a43c9"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47075.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47075"
+        }
+      ],
+      "summary": "Hackney has CR/LF injection in query parameter",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-j9wq-vxxc-94wf",
+      "published_at": "2026-06-26T21:58:59Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-j9wq-vxxc-94wf",
+      "cvss_score": 6.8,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:A/VC:N/VI:H/VA:N/SC:N/SI:H/SA:N",
+      "modified_at": "2026-06-26T22:00:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-jq4m-q6p2-8gwc",
+      "aliases": [
+        "CVE-2026-47077",
+        "EEF-CVE-2026-47077"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/3d25f9fea26c90609de9d64366fedfe5065413bc"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-jq4m-q6p2-8gwc"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47077"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/ex-aws/ex_aws_sns/security/advisories/GHSA-8jgf-23q5-x7xx"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47077.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47077"
+        }
+      ],
+      "summary": "Hackney: Per-chunk timeout with unbounded body accumulation enables slow-drip OOM",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-jq4m-q6p2-8gwc",
+      "published_at": "2026-06-26T21:57:33Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-jq4m-q6p2-8gwc",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-06-30T17:41:30Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-h73q-4w9q-82h4",
+      "aliases": [
+        "CVE-2026-47070",
+        "EEF-CVE-2026-47070"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-h73q-4w9q-82h4"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47070"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/c58d5b50bade146360b85caf3dc8065807b08246"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47070.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47070"
+        }
+      ],
+      "summary": "Hackney: Cross-origin Redirect Leaks Authorization, Cookie, and Request Body",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-h73q-4w9q-82h4",
+      "published_at": "2026-06-26T21:56:29Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-h73q-4w9q-82h4",
+      "cvss_score": 6.0,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-06-26T22:00:11Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 3.1.1 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-pj7v-xfvx-wmjq",
+      "aliases": [
+        "CVE-2026-47076",
+        "EEF-CVE-2026-47076"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47076"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47076.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/452620a92ec1da2e6b4862a049a2a4f04b42068f"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47076"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-pj7v-xfvx-wmjq"
+        }
+      ],
+      "summary": "Hackney has SSRF allowlist bypass in hackney_url:normalize/2 via percent-encoded host",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-pj7v-xfvx-wmjq",
+      "published_at": "2026-06-26T21:54:55Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-pj7v-xfvx-wmjq",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
+      "modified_at": "2026-06-26T22:00:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.13.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-mp55-p8c9-rfw2",
+      "aliases": [
+        "CVE-2026-47069",
+        "EEF-CVE-2026-47069"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47069"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47069.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/8e02b99c28aea1b3fa2ddc0e66f51fe5bb0ac540"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47069"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-mp55-p8c9-rfw2"
+        }
+      ],
+      "summary": "Hackney has CRLF / header injection via unvalidated `domain` and `path` options",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-mp55-p8c9-rfw2",
+      "published_at": "2026-06-26T21:54:19Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-mp55-p8c9-rfw2",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-06-26T22:00:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.9.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-gp9c-pm5m-5cxr",
+      "aliases": [
+        "CVE-2026-47071",
+        "EEF-CVE-2026-47071"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-gp9c-pm5m-5cxr"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47071.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/5ccdab725c561a6f03d05a51f2d0664f98236dae"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47071"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47071"
+        }
+      ],
+      "summary": "Hackney: `ssl:connect/2` post-handshake upgrade has no timeout",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-gp9c-pm5m-5cxr",
+      "published_at": "2026-06-26T21:53:50Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-gp9c-pm5m-5cxr",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-06-26T22:00:09Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.10.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-6cp8-v795-jr2j",
+      "aliases": [
+        "CVE-2026-47066",
+        "EEF-CVE-2026-47066"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47066"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-6cp8-v795-jr2j"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/e548aba1f97ffa3f4750da7b772998fb78c01894"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47066.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47066"
+        }
+      ],
+      "summary": "Hackney has an infinite loop on non-token byte at start of an Alt-Svc entry",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-6cp8-v795-jr2j",
+      "published_at": "2026-06-26T21:53:07Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-6cp8-v795-jr2j",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-06-26T22:00:09Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47073",
+      "aliases": [
+        "CVE-2026-47073",
+        "GHSA-q8jg-fgj4-fphf"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/ce0109e2970ace6e20ff29bae9d05c3ac22ec6dc"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-q8jg-fgj4-fphf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47073.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        }
+      ],
+      "summary": "Unbounded memory consumption in WebSocket client in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47073",
+      "published_at": "2026-05-25T14:00:49Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47073",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:05Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47067",
+      "aliases": [
+        "CVE-2026-47067",
+        "GHSA-9653-rcfr-5c62"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47067.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/31f6f0e27e096ad88743dfded4f030a3ee74972e"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-9653-rcfr-5c62"
+        }
+      ],
+      "summary": "Atom table exhaustion via unrecognized URL schemes in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47067",
+      "published_at": "2026-05-25T14:00:48Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47067",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:00Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47072",
+      "aliases": [
+        "CVE-2026-47072",
+        "GHSA-f9vr-g2g2-x9fg"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47072.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-f9vr-g2g2-x9fg"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/52310ca807e7b48441ba0e9129171f535313fdd1"
+        }
+      ],
+      "summary": "CRLF injection in WebSocket upgrade request in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47072",
+      "published_at": "2026-05-25T14:00:47Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47072",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:H/SA:N",
+      "modified_at": "2026-07-30T18:22:06Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47070",
+      "aliases": [
+        "CVE-2026-47070",
+        "GHSA-h73q-4w9q-82h4"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-h73q-4w9q-82h4"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/c58d5b50bade146360b85caf3dc8065807b08246"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47070.html"
+        }
+      ],
+      "summary": "HTTP/3 redirect handler leaks Authorization and Cookie headers to cross-origin redirect target in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47070",
+      "published_at": "2026-05-25T14:00:46Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47070",
+      "cvss_score": 6.0,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:H/VI:N/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:05Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 3.1.1 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47076",
+      "aliases": [
+        "CVE-2026-47076",
+        "GHSA-pj7v-xfvx-wmjq"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/452620a92ec1da2e6b4862a049a2a4f04b42068f"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47076.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-pj7v-xfvx-wmjq"
+        }
+      ],
+      "summary": "SSRF allowlist bypass via percent-encoded host in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47076",
+      "published_at": "2026-05-25T14:00:46Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47076",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:09Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.13.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47075",
+      "aliases": [
+        "CVE-2026-47075",
+        "GHSA-j9wq-vxxc-94wf"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47075.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/ca73dd0aba0ed557449c18288bf07241671a43c9"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-j9wq-vxxc-94wf"
+        }
+      ],
+      "summary": "CR/LF injection in query parameter in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47075",
+      "published_at": "2026-05-25T14:00:45Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47075",
+      "cvss_score": 6.8,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:A/VC:N/VI:H/VA:N/SC:N/SI:H/SA:N",
+      "modified_at": "2026-07-30T18:22:00Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.13.1 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47077",
+      "aliases": [
+        "CVE-2026-47077",
+        "GHSA-jq4m-q6p2-8gwc"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/3d25f9fea26c90609de9d64366fedfe5065413bc"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-jq4m-q6p2-8gwc"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47077.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        }
+      ],
+      "summary": "Unbounded body accumulation in HTTP/3 response loop in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47077",
+      "published_at": "2026-05-25T14:00:42Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47077",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-09-08T03:30:11Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47071",
+      "aliases": [
+        "CVE-2026-47071",
+        "GHSA-gp9c-pm5m-5cxr"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47071.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-gp9c-pm5m-5cxr"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/5ccdab725c561a6f03d05a51f2d0664f98236dae"
+        }
+      ],
+      "summary": "SOCKS5 TLS upgrade ignores caller timeout in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47071",
+      "published_at": "2026-05-25T14:00:41Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47071",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:00Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.10.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47069",
+      "aliases": [
+        "CVE-2026-47069",
+        "GHSA-mp55-p8c9-rfw2"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47069.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-mp55-p8c9-rfw2"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/8e02b99c28aea1b3fa2ddc0e66f51fe5bb0ac540"
+        }
+      ],
+      "summary": "CRLF injection in cookie domain/path options in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47069",
+      "published_at": "2026-05-25T14:00:39Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47069",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-07-30T18:22:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.9.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47066",
+      "aliases": [
+        "CVE-2026-47066",
+        "GHSA-6cp8-v795-jr2j"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/e548aba1f97ffa3f4750da7b772998fb78c01894"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47066.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-6cp8-v795-jr2j"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        }
+      ],
+      "summary": "Infinite loop in Alt-Svc header parser in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47066",
+      "published_at": "2026-05-25T14:00:39Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47066",
+      "cvss_score": 8.7,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:08Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.0.0-beta.1 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-9fm9-hp7p-53mf",
+      "aliases": [
+        "CVE-2025-3864"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cert.pl/en/posts/2025/05/CVE-2025-3864"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/8f13ddac50d1626f8b9a47a08bd599e4efe1773d"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/issues/717"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-3864"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        }
+      ],
+      "summary": "Hackney fails to properly release HTTP connections to the pool",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-9fm9-hp7p-53mf",
+      "published_at": "2025-05-28T12:30:34Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-9fm9-hp7p-53mf",
+      "cvss_score": 2.3,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-02-03T03:05:21Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.24.0"
+      ]
+    },
+    {
+      "id": "GHSA-vq52-99r9-h5pw",
+      "aliases": [
+        "CVE-2025-1211"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-1211"
+        },
+        {
+          "type": "WEB",
+          "url": "https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://security.snyk.io/vuln/SNYK-HEX-HACKNEY-6516131"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/releases/tag/1.21.0"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://gist.github.com/snoopysecurity/996de09ec0cfd0ebdcfdda8ff515deb1"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/9594ce58fabd32cd897fc28fae937694515a3d4a"
+        }
+      ],
+      "summary": "Server-side Request Forgery (SSRF) in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-vq52-99r9-h5pw",
+      "published_at": "2025-02-11T06:30:27Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-vq52-99r9-h5pw",
+      "cvss_score": 2.9,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:N/VA:N/SC:L/SI:L/SA:L/E:P",
+      "modified_at": "2025-12-10T00:40:06Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.21.0"
+      ]
+    }
+  ],
+  "docs_html_url": "https://hackney.hexdocs.pm/",
+  "retirements": {
+    "1.6.4": {
+      "message": null,
+      "reason": "invalid"
+    },
+    "1.6.6": {
+      "message": null,
+      "reason": "invalid"
+    },
+    "3.0.0": {
+      "message": "Use 3.0.1 instead",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_hackney = hex 4.8.5",
+    "mix.exs": "{:hackney, \"~> 4.8\"}",
+    "rebar.config": "{hackney, \"4.8.5\"}"
+  },
+  "latest_stable_version": "4.8.5"
+}

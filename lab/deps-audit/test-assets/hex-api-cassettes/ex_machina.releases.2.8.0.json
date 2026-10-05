@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "ex_machina",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.8.0",
+  "checksum": "79fe1a9c64c0c1c1fab6c4fa5d871682cb90de5885320c187d117004627a7729",
+  "url": "https://hex.pm/api/packages/ex_machina/releases/2.8.0",
+  "has_docs": true,
+  "inserted_at": "2024-06-25T12:51:55.652804Z",
+  "updated_at": "2024-06-25T12:51:58.135008Z",
+  "requirements": {
+    "ecto": {
+      "app": "ecto",
+      "optional": true,
+      "requirement": "~> 2.2 or ~> 3.0"
+    },
+    "ecto_sql": {
+      "app": "ecto_sql",
+      "optional": true,
+      "requirement": "~> 3.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/ex_machina/2.8.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/beam_community",
+    "username": "beam_community"
+  },
+  "package_url": "https://hex.pm/api/packages/ex_machina",
+  "oidc_claims": null,
+  "downloads": 5680415,
+  "security_advisories": [],
+  "docs_html_url": "https://ex-machina.hexdocs.pm/2.8.0/",
+  "configs": {
+    "erlang.mk": "dep_ex_machina = hex 2.8.0",
+    "mix.exs": "{:ex_machina, \"~> 2.8\"}",
+    "rebar.config": "{ex_machina, \"2.8.0\"}"
+  }
+}

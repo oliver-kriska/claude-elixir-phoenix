@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "elixir": "~> 1.13",
+    "app": "ex_aws_s3",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.5.4",
+  "checksum": "c06e7f68b33f7c0acba1361dbd951c79661a28f85aa2e0582990fccca4425355",
+  "url": "https://hex.pm/api/packages/ex_aws_s3/releases/2.5.4",
+  "has_docs": true,
+  "inserted_at": "2024-09-10T06:28:08.156618Z",
+  "updated_at": "2024-09-10T06:28:11.162910Z",
+  "requirements": {
+    "ex_aws": {
+      "app": "ex_aws",
+      "optional": false,
+      "requirement": "~> 2.0"
+    },
+    "sweet_xml": {
+      "app": "sweet_xml",
+      "optional": true,
+      "requirement": ">= 0.0.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/ex_aws_s3/2.5.4",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/bernard",
+    "email": "bernard@circl.es",
+    "username": "bernard"
+  },
+  "package_url": "https://hex.pm/api/packages/ex_aws_s3",
+  "oidc_claims": null,
+  "downloads": 708001,
+  "security_advisories": [],
+  "docs_html_url": "https://ex-aws-s3.hexdocs.pm/2.5.4/",
+  "configs": {
+    "erlang.mk": "dep_ex_aws_s3 = hex 2.5.4",
+    "mix.exs": "{:ex_aws_s3, \"~> 2.5\"}",
+    "rebar.config": "{ex_aws_s3, \"2.5.4\"}"
+  }
+}

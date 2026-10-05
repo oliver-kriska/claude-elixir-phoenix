@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "mox",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.2.0",
+  "checksum": "c7b92b3cc69ee24a7eeeaf944cd7be22013c52fcb580c1f33f50845ec821089a",
+  "url": "https://hex.pm/api/packages/mox/releases/1.2.0",
+  "has_docs": true,
+  "inserted_at": "2024-08-14T08:31:15.208439Z",
+  "updated_at": "2024-08-14T08:31:17.911058Z",
+  "requirements": {
+    "nimble_ownership": {
+      "app": "nimble_ownership",
+      "optional": false,
+      "requirement": "~> 1.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/mox/1.2.0",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/whatyouhide",
+    "email": "hi@andrealeopardi.com",
+    "username": "whatyouhide"
+  },
+  "package_url": "https://hex.pm/api/packages/mox",
+  "oidc_claims": null,
+  "downloads": 7247516,
+  "security_advisories": [],
+  "docs_html_url": "https://mox.hexdocs.pm/1.2.0/",
+  "configs": {
+    "erlang.mk": "dep_mox = hex 1.2.0",
+    "mix.exs": "{:mox, \"~> 1.2\"}",
+    "rebar.config": "{mox, \"1.2.0\"}"
+  }
+}

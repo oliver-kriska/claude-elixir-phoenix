@@ -1,0 +1,149 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/dashbitco/mox"
+    },
+    "description": "Mocks and explicit contracts for Elixir",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "mox",
+  "url": "https://hex.pm/api/packages/mox",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/dashbit",
+      "username": "dashbit"
+    },
+    {
+      "url": "https://hex.pm/api/users/whatyouhide",
+      "email": "hi@andrealeopardi.com",
+      "username": "whatyouhide"
+    }
+  ],
+  "inserted_at": "2017-09-25T10:30:21.182084Z",
+  "updated_at": "2026-09-11T13:08:23.258188Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.3.2",
+      "url": "https://hex.pm/api/packages/mox/releases/1.3.2",
+      "has_docs": true,
+      "inserted_at": "2026-09-11T13:08:21.890488Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/mox/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2026-08-31T12:15:52.642786Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/mox/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2026-08-25T08:30:35.522610Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/mox/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2024-08-14T08:31:15.208439Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/mox/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2023-09-20T07:19:12.805301Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/mox/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2022-05-30T08:09:41.111418Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/mox/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2021-10-15T13:51:29.975772Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/mox/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2020-09-25T10:03:15.018806Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/mox/releases/0.5.2",
+      "has_docs": true,
+      "inserted_at": "2020-02-20T20:54:55.281852Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/mox/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2019-05-24T21:30:08.041115Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/mox/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2019-02-03T10:20:59.737328Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/mox/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2018-07-10T18:03:21.337444Z"
+    },
+    {
+      "version": "0.3.2",
+      "url": "https://hex.pm/api/packages/mox/releases/0.3.2",
+      "has_docs": true,
+      "inserted_at": "2018-03-15T08:15:50.338120Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/mox/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2017-11-09T21:00:29.012506Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/mox/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2017-11-06T10:40:04.077902Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/mox/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2017-10-12T13:08:58.923085Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/mox/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2017-09-25T10:30:21.194842Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/mox",
+  "latest_version": "1.3.2",
+  "downloads": {
+    "all": 31549144,
+    "day": 6982,
+    "recent": 1698947,
+    "week": 151888
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://mox.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_mox = hex 1.3.2",
+    "mix.exs": "{:mox, \"~> 1.3\"}",
+    "rebar.config": "{mox, \"1.3.2\"}"
+  },
+  "latest_stable_version": "1.3.2"
+}

@@ -1,0 +1,157 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/whatyouhide/stream_data",
+      "Sponsor": "https://github.com/sponsors/whatyouhide"
+    },
+    "description": "Data generation and property-based testing for Elixir",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "stream_data",
+  "url": "https://hex.pm/api/packages/stream_data",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/whatyouhide",
+      "email": "hi@andrealeopardi.com",
+      "username": "whatyouhide"
+    }
+  ],
+  "inserted_at": "2017-08-11T14:52:53.424447Z",
+  "updated_at": "2026-07-14T09:54:41.399163Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2026-07-14T09:54:40.043582Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2026-03-09T08:29:31.189187Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2025-03-28T09:06:57.517845Z"
+    },
+    {
+      "version": "1.1.3",
+      "url": "https://hex.pm/api/packages/stream_data/releases/1.1.3",
+      "has_docs": true,
+      "inserted_at": "2025-02-07T08:17:19.845542Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/stream_data/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2024-10-05T12:31:48.931191Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/stream_data/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2024-06-12T10:54:08.573977Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2024-05-29T06:22:34.293400Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2024-05-13T09:28:06.667334Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2023-07-09T14:07:05.053059Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-05-03T08:18:31.569931Z"
+    },
+    {
+      "version": "0.4.3",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.4.3",
+      "has_docs": true,
+      "inserted_at": "2019-04-01T16:02:44.456954Z"
+    },
+    {
+      "version": "0.4.2",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.4.2",
+      "has_docs": true,
+      "inserted_at": "2018-03-07T21:03:01.308008Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.4.1",
+      "has_docs": true,
+      "inserted_at": "2018-02-09T14:16:55.942169Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2017-11-30T09:41:27.534094Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2017-09-19T11:56:19.511637Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2017-08-21T22:22:40.307092Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.1.1",
+      "has_docs": true,
+      "inserted_at": "2017-08-14T19:14:59.611317Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/stream_data/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2017-08-11T14:52:53.437680Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/stream_data",
+  "latest_version": "1.4.0",
+  "downloads": {
+    "all": 37728788,
+    "day": 11547,
+    "recent": 1310910,
+    "week": 156693
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://stream-data.hexdocs.pm/",
+  "configs": {
+    "erlang.mk": "dep_stream_data = hex 1.4.0",
+    "mix.exs": "{:stream_data, \"~> 1.4\"}",
+    "rebar.config": "{stream_data, \"1.4.0\"}"
+  },
+  "retirements": {},
+  "latest_stable_version": "1.4.0"
+}

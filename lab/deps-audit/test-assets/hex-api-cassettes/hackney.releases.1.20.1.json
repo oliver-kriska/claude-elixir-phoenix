@@ -1,0 +1,486 @@
+{
+  "meta": {
+    "elixir": null,
+    "app": "hackney",
+    "build_tools": [
+      "rebar3"
+    ]
+  },
+  "version": "1.20.1",
+  "checksum": "fe9094e5f1a2a2c0a7d10918fee36bfec0ec2a979994cff8cfe8058cd9af38e3",
+  "url": "https://hex.pm/api/packages/hackney/releases/1.20.1",
+  "has_docs": false,
+  "inserted_at": "2023-10-11T00:29:31.653544Z",
+  "updated_at": "2023-10-11T00:29:31.653544Z",
+  "requirements": {
+    "certifi": {
+      "app": "certifi",
+      "optional": false,
+      "requirement": "~>2.12.0"
+    },
+    "idna": {
+      "app": "idna",
+      "optional": false,
+      "requirement": "~>6.1.0"
+    },
+    "metrics": {
+      "app": "metrics",
+      "optional": false,
+      "requirement": "~>1.0.0"
+    },
+    "mimerl": {
+      "app": "mimerl",
+      "optional": false,
+      "requirement": "~>1.1"
+    },
+    "parse_trans": {
+      "app": "parse_trans",
+      "optional": false,
+      "requirement": "3.4.1"
+    },
+    "ssl_verify_fun": {
+      "app": "ssl_verify_fun",
+      "optional": false,
+      "requirement": "~>1.1.0"
+    },
+    "unicode_util_compat": {
+      "app": "unicode_util_compat",
+      "optional": false,
+      "requirement": "~>0.7.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/hackney/1.20.1",
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/benoitc",
+    "email": "bchesneau@gmail.com",
+    "username": "benoitc"
+  },
+  "package_url": "https://hex.pm/api/packages/hackney",
+  "oidc_claims": null,
+  "downloads": 18276965,
+  "security_advisories": [
+    {
+      "id": "GHSA-j9wq-vxxc-94wf",
+      "aliases": [
+        "CVE-2026-47075",
+        "EEF-CVE-2026-47075"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/ca73dd0aba0ed557449c18288bf07241671a43c9"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47075"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47075"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-j9wq-vxxc-94wf"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47075.html"
+        }
+      ],
+      "summary": "Hackney has CR/LF injection in query parameter",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-j9wq-vxxc-94wf",
+      "published_at": "2026-06-26T21:58:59Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-j9wq-vxxc-94wf",
+      "cvss_score": 6.8,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:A/VC:N/VI:H/VA:N/SC:N/SI:H/SA:N",
+      "modified_at": "2026-06-26T22:00:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-pj7v-xfvx-wmjq",
+      "aliases": [
+        "CVE-2026-47076",
+        "EEF-CVE-2026-47076"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47076"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47076.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/452620a92ec1da2e6b4862a049a2a4f04b42068f"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47076"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-pj7v-xfvx-wmjq"
+        }
+      ],
+      "summary": "Hackney has SSRF allowlist bypass in hackney_url:normalize/2 via percent-encoded host",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-pj7v-xfvx-wmjq",
+      "published_at": "2026-06-26T21:54:55Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-pj7v-xfvx-wmjq",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
+      "modified_at": "2026-06-26T22:00:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.13.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-mp55-p8c9-rfw2",
+      "aliases": [
+        "CVE-2026-47069",
+        "EEF-CVE-2026-47069"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/8e02b99c28aea1b3fa2ddc0e66f51fe5bb0ac540"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-mp55-p8c9-rfw2"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47069"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47069.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47069"
+        }
+      ],
+      "summary": "Hackney has CRLF / header injection via unvalidated `domain` and `path` options",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-mp55-p8c9-rfw2",
+      "published_at": "2026-06-26T21:54:19Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-mp55-p8c9-rfw2",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-06-26T22:00:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.9.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-gp9c-pm5m-5cxr",
+      "aliases": [
+        "CVE-2026-47071",
+        "EEF-CVE-2026-47071"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47071.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-47071"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-47071"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-gp9c-pm5m-5cxr"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/5ccdab725c561a6f03d05a51f2d0664f98236dae"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        }
+      ],
+      "summary": "Hackney: `ssl:connect/2` post-handshake upgrade has no timeout",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-gp9c-pm5m-5cxr",
+      "published_at": "2026-06-26T21:53:50Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-gp9c-pm5m-5cxr",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-06-26T22:00:09Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.10.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47076",
+      "aliases": [
+        "CVE-2026-47076",
+        "GHSA-pj7v-xfvx-wmjq"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47076.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-pj7v-xfvx-wmjq"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/452620a92ec1da2e6b4862a049a2a4f04b42068f"
+        }
+      ],
+      "summary": "SSRF allowlist bypass via percent-encoded host in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47076",
+      "published_at": "2026-05-25T14:00:46Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47076",
+      "cvss_score": 6.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:H/VI:N/VA:N/SC:H/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:09Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.13.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47075",
+      "aliases": [
+        "CVE-2026-47075",
+        "GHSA-j9wq-vxxc-94wf"
+      ],
+      "references": [
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/ca73dd0aba0ed557449c18288bf07241671a43c9"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-j9wq-vxxc-94wf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47075.html"
+        }
+      ],
+      "summary": "CR/LF injection in query parameter in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47075",
+      "published_at": "2026-05-25T14:00:45Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47075",
+      "cvss_score": 6.8,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:A/VC:N/VI:H/VA:N/SC:N/SI:H/SA:N",
+      "modified_at": "2026-07-30T18:22:00Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.13.1 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47071",
+      "aliases": [
+        "CVE-2026-47071",
+        "GHSA-gp9c-pm5m-5cxr"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47071.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/5ccdab725c561a6f03d05a51f2d0664f98236dae"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-gp9c-pm5m-5cxr"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        }
+      ],
+      "summary": "SOCKS5 TLS upgrade ignores caller timeout in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47071",
+      "published_at": "2026-05-25T14:00:41Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47071",
+      "cvss_score": 8.2,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-07-30T18:22:00Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.10.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-47069",
+      "aliases": [
+        "CVE-2026-47069",
+        "GHSA-mp55-p8c9-rfw2"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-47069.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/benoitc/hackney/commit/8e02b99c28aea1b3fa2ddc0e66f51fe5bb0ac540"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/hackney"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/benoitc/hackney/security/advisories/GHSA-mp55-p8c9-rfw2"
+        }
+      ],
+      "summary": "CRLF injection in cookie domain/path options in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-47069",
+      "published_at": "2026-05-25T14:00:39Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-47069",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:L/SA:N",
+      "modified_at": "2026-07-30T18:22:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 0.9.0 and < 4.0.1"
+      ]
+    },
+    {
+      "id": "GHSA-9fm9-hp7p-53mf",
+      "aliases": [
+        "CVE-2025-3864"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cert.pl/en/posts/2025/05/CVE-2025-3864"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-3864"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/issues/717"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/8f13ddac50d1626f8b9a47a08bd599e4efe1773d"
+        }
+      ],
+      "summary": "Hackney fails to properly release HTTP connections to the pool",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-9fm9-hp7p-53mf",
+      "published_at": "2025-05-28T12:30:34Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-9fm9-hp7p-53mf",
+      "cvss_score": 2.3,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:P/VC:N/VI:N/VA:L/SC:N/SI:N/SA:N",
+      "modified_at": "2026-02-03T03:05:21Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.24.0"
+      ]
+    },
+    {
+      "id": "GHSA-vq52-99r9-h5pw",
+      "aliases": [
+        "CVE-2025-1211"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2025-1211"
+        },
+        {
+          "type": "WEB",
+          "url": "https://www.blackhat.com/docs/us-17/thursday/us-17-Tsai-A-New-Era-Of-SSRF-Exploiting-URL-Parser-In-Trending-Programming-Languages.pdf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://security.snyk.io/vuln/SNYK-HEX-HACKNEY-6516131"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/releases/tag/1.21.0"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/benoitc/hackney"
+        },
+        {
+          "type": "WEB",
+          "url": "https://gist.github.com/snoopysecurity/996de09ec0cfd0ebdcfdda8ff515deb1"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/benoitc/hackney/commit/9594ce58fabd32cd897fc28fae937694515a3d4a"
+        }
+      ],
+      "summary": "Server-side Request Forgery (SSRF) in hackney",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-vq52-99r9-h5pw",
+      "published_at": "2025-02-11T06:30:27Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-vq52-99r9-h5pw",
+      "cvss_score": 2.9,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:L/VI:N/VA:N/SC:L/SI:L/SA:L/E:P",
+      "modified_at": "2025-12-10T00:40:06Z",
+      "withdrawn_at": null,
+      "affected": [
+        "< 1.21.0"
+      ]
+    }
+  ],
+  "docs_html_url": null,
+  "configs": {
+    "erlang.mk": "dep_hackney = hex 1.20.1",
+    "mix.exs": "{:hackney, \"~> 1.20\"}",
+    "rebar.config": "{hackney, \"1.20.1\"}"
+  }
+}

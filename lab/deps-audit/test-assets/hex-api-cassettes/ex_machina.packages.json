@@ -1,0 +1,193 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/beam-community/ex_machina/releases",
+      "GitHub": "https://github.com/beam-community/ex_machina"
+    },
+    "description": "A factory library by the creators of FactoryBot (née FactoryGirl)",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "ex_machina",
+  "url": "https://hex.pm/api/packages/ex_machina",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/beam_community",
+      "username": "beam_community"
+    }
+  ],
+  "inserted_at": "2015-09-15T15:32:41.515680Z",
+  "updated_at": "2026-08-02T19:46:39.422427Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.8.2",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.8.2",
+      "has_docs": true,
+      "inserted_at": "2026-08-02T19:46:38.539301Z"
+    },
+    {
+      "version": "2.8.1",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.8.1",
+      "has_docs": true,
+      "inserted_at": "2026-07-14T18:03:30.743008Z"
+    },
+    {
+      "version": "2.8.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.8.0",
+      "has_docs": true,
+      "inserted_at": "2024-06-25T12:51:55.652804Z"
+    },
+    {
+      "version": "2.7.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.7.0",
+      "has_docs": true,
+      "inserted_at": "2021-03-05T14:38:17.379100Z"
+    },
+    {
+      "version": "2.6.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.6.0",
+      "has_docs": true,
+      "inserted_at": "2021-02-12T09:58:16.075375Z"
+    },
+    {
+      "version": "2.5.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-12-24T19:47:16.395287Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.4.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-18T15:29:22.914076Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.3.0",
+      "has_docs": true,
+      "inserted_at": "2019-03-01T11:49:27.782570Z"
+    },
+    {
+      "version": "2.2.2",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.2.2",
+      "has_docs": true,
+      "inserted_at": "2018-11-05T01:18:02.391723Z"
+    },
+    {
+      "version": "2.2.1",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.2.1",
+      "has_docs": true,
+      "inserted_at": "2018-10-24T10:34:40.379729Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2018-03-13T17:19:42.615396Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2017-09-01T15:44:53.199334Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2017-03-03T19:57:13.761286Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2016-07-01T19:47:53.048993Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2016-06-24T19:43:33.097751Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2016-06-24T18:20:07.022874Z"
+    },
+    {
+      "version": "0.6.2",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/0.6.2",
+      "has_docs": true,
+      "inserted_at": "2016-09-12T18:52:48.190721Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2016-01-08T19:17:57.583494Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2015-12-16T11:34:41.315554Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2015-11-18T16:19:45.950385Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2015-10-30T17:08:33.926133Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2015-10-09T18:32:01.723462Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2015-09-17T17:49:29.825537Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-09-15T20:31:02.635846Z"
+    },
+    {
+      "version": "0.0.1",
+      "url": "https://hex.pm/api/packages/ex_machina/releases/0.0.1",
+      "has_docs": true,
+      "inserted_at": "2015-09-15T15:32:41.634763Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/ex_machina",
+  "latest_version": "2.8.2",
+  "downloads": {
+    "all": 79727023,
+    "day": 4208,
+    "recent": 1124855,
+    "week": 95194
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://ex-machina.hexdocs.pm/",
+  "configs": {
+    "erlang.mk": "dep_ex_machina = hex 2.8.2",
+    "mix.exs": "{:ex_machina, \"~> 2.8\"}",
+    "rebar.config": "{ex_machina, \"2.8.2\"}"
+  },
+  "retirements": {},
+  "latest_stable_version": "2.8.2"
+}
