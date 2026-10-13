@@ -1,4 +1,11 @@
-.PHONY: help lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-plugin eval-quality eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate budget budget-update prompt-audit amp-target amp-target-sync amp-target-validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke dsh-skills dsh-skills-sync dsh-skills-validate dsh-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
+.PHONY: help venv lint lint-fix eval eval-all eval-fix eval-full eval-ci eval-triggers eval-plugin eval-quality eval-tournament eval-skills eval-agents eval-multimodel eval-compare-models test validate budget budget-update prompt-audit amp-target amp-target-sync amp-target-validate amp-skills amp-skills-sync amp-skills-validate amp-runtime-smoke codex-skills codex-skills-sync codex-skills-validate codex-runtime-smoke pi-skills pi-skills-sync pi-skills-validate pi-runtime-smoke opencode-skills opencode-skills-sync opencode-skills-validate opencode-runtime-smoke dsh-skills dsh-skills-sync dsh-skills-validate dsh-runtime-smoke generated-skills-sync generated-skills-snapshots generated-skills-snapshots-validate security ci clean
+
+# A Homebrew python3 bump can land on a release without pytest or PyYAML. With
+# the repo venv (`make venv`), its python3 comes first on PATH for every recipe
+# and for the scripts they call.
+ifneq ($(wildcard .venv/bin/python3),)
+export PATH := $(CURDIR)/.venv/bin:$(PATH)
+endif
 
 # Default target
 help: ## Show available commands
@@ -182,6 +189,13 @@ security: ## SkillSpector scan of all skills + agents (skips if not installed)
 # --- CI (full pipeline) ---
 
 ci: lint test validate budget amp-skills-validate codex-skills-validate pi-skills-validate opencode-skills-validate dsh-skills-validate generated-skills-snapshots-validate eval-all security ## Full CI: lint + test + validate + budget + eval + security (same as GitHub Actions)
+
+# --- Python ---
+
+venv: ## Create .venv with the Python dev dependencies (pytest, PyYAML); make prefers it. VENV_PYTHON=python3.14
+	@$${VENV_PYTHON:-python3} -m venv .venv
+	@.venv/bin/python3 -m pip install -q --disable-pip-version-check -r requirements.txt
+	@.venv/bin/python3 --version
 
 # --- Clean ---
 

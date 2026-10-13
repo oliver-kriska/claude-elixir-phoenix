@@ -50,3 +50,4 @@ __pycache__/
 
 # rtk (Rust Token Killer) local filter cache
 /.rtk/
+.venv/

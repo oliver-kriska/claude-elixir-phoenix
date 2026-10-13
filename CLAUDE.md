@@ -418,6 +418,7 @@ skills provided by installed plugins.
 
 ```bash
 npm install  # Pre-commit hooks + linting
+make venv    # .venv with pytest + PyYAML; make and the pre-commit hook prefer it
 ```
 
 ### Quality Commands (use `make`)
