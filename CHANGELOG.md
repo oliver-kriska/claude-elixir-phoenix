@@ -35,6 +35,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **Oban cron reference uses the 2.24 form.** `oban/references/queue-config.md`
+  showed `{Oban.Plugins.Cron, ...}` under `plugins:`; Oban 2.24 moved cron to a
+  top-level `cron:` key (`Oban.Cron`, per-entry `timezone:`). The old name is
+  deprecated and still delegates, which the reference now says.
 - **The plugin directory still blocked v3.1.3 with "Command path can't be
   followed".** The validator follows each hook script, not only the
   `hooks.json` command. It rejects inline programs and paths from variables
