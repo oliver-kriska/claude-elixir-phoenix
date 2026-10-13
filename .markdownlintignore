@@ -14,3 +14,6 @@ lab/plugin_eval/cases/
 # Untracked non-source content (promo assets, tool cache) — not plugin docs.
 social/
 .rtk/
+
+# Local Python dev environment (`make venv`).
+.venv/

@@ -2,6 +2,12 @@
 # Pre-commit: scope-gated checks. Each check runs only when its file type is
 # staged. Matches `make ci` for the staged subset — keep in sync.
 
+# Same interpreter as `make`: the repo venv when present, so a python3 upgrade
+# without pytest or PyYAML does not break the hook.
+if [ -x .venv/bin/python3 ]; then
+  PATH="$PWD/.venv/bin:$PATH"
+fi
+
 STAGED_MD=$(git diff --cached --name-only --diff-filter=ACM | grep '\.md$' || true)
 STAGED_JSON=$(git diff --cached --name-only --diff-filter=ACM | grep '\.json$' || true)
 # targets/ holds generated runtime projections whose shell resources are copied

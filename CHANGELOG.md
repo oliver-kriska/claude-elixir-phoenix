@@ -33,6 +33,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   connectors, session-file timestamps) and that the brief stays in your
   project.
 
+- **`make venv` (contributor tooling).** Creates `.venv` from
+  `requirements.txt`. When it exists, `make` and the pre-commit hook put it
+  first on `PATH`, so a `python3` upgrade without pytest or PyYAML (Homebrew
+  moved `python3` to 3.15) no longer breaks `make test` or `make ci`.
+
 ### Fixed
 
 - **The plugin directory still blocked v3.1.3 with "Command path can't be
