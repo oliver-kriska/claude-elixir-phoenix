@@ -78,3 +78,19 @@ def result_key(path: str, name: str) -> str:
     """Key used in `--all` output: bare for the default plugin, `plugin:name` otherwise."""
     plugin = plugin_name_for(path)
     return name if plugin == DEFAULT_PLUGIN else f"{plugin}:{name}"
+
+
+def installed_plugins() -> list[str]:
+    """Plugin directory names that carry a manifest."""
+    if not os.path.isdir(PLUGINS_DIR):
+        return []
+    return [
+        entry for entry in sorted(os.listdir(PLUGINS_DIR))
+        if os.path.isfile(os.path.join(PLUGINS_DIR, entry, ".claude-plugin", "plugin.json"))
+    ]
+
+
+def unknown_plugins(names) -> list[str]:
+    """Explicitly requested plugin names that match no installed plugin directory."""
+    known = set(installed_plugins())
+    return [name for name in names if name not in known]

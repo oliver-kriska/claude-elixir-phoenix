@@ -16,6 +16,12 @@ SCRIPT = (
 
 @pytest.fixture(autouse=True)
 def isolated_git(monkeypatch, tmp_path: Path) -> None:
+    # The script drops inherited GIT_* variables, so an empty HOME is what keeps
+    # the user's global config (LFS filters, excludesfile) out of its git calls.
+    home = tmp_path / "home"
+    home.mkdir()
+    monkeypatch.setenv("HOME", str(home))
+    monkeypatch.setenv("XDG_CONFIG_HOME", str(home / ".config"))
     monkeypatch.setenv("GIT_CONFIG_GLOBAL", os.devnull)
     monkeypatch.setenv("GIT_CONFIG_NOSYSTEM", "1")
     monkeypatch.setenv("GIT_CEILING_DIRECTORIES", str(tmp_path.resolve().parent))
@@ -169,3 +175,152 @@ def test_exclude_outside_dir_is_rejected(repo: Path) -> None:
 
     assert out.returncode == 2
     assert out.stdout == ""
+
+
+def run_cli(directory: Path, *args: str) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        [sys.executable, str(SCRIPT), str(directory), "--json", *args],
+        capture_output=True, text=True,
+    )
+
+
+@pytest.mark.parametrize(
+    "flag, undo",
+    [("--assume-unchanged", "--no-assume-unchanged"), ("--skip-worktree", "--no-skip-worktree")],
+)
+def test_hidden_index_flag_fails_closed(repo: Path, flag: str, undo: str) -> None:
+    git(repo, "update-index", flag, "lib/app.ex")
+    write(repo / "lib/app.ex", "defmodule App do\n  def a, do: 1\nend\n")
+
+    result = run_cli(repo)
+
+    assert result.returncode == 2
+    assert result.stdout == ""
+    assert "lib/app.ex" in result.stderr
+    assert undo in result.stderr
+
+    git(repo, "update-index", undo, "lib/app.ex")
+    assert fp(repo)["dirty_files"] == ["lib/app.ex"]
+
+
+def test_flagged_path_under_exclude_is_ignored(repo: Path) -> None:
+    git(repo, "update-index", "--assume-unchanged", "lib/app.ex")
+
+    assert run_cli(repo).returncode == 2
+    assert run_cli(repo, "--exclude", "lib").returncode == 0
+
+
+def make_repo(root: Path, files: dict[str, str]) -> Path:
+    for rel, text in files.items():
+        write(root / rel, text)
+    git(root, "init", "-q")
+    git(root, "add", ".")
+    git(root, "commit", "-q", "-m", "init")
+    return root
+
+
+def add_submodule(app: Path, lib: Path, path: str) -> None:
+    git(app, "-c", "protocol.file.allow=always", "submodule", "--quiet", "add", str(lib), path)
+    git(app, "commit", "-q", "-m", "vendor")
+
+
+def arm_fsmonitor(tmp_path: Path, probe: str) -> Path:
+    app = make_repo(tmp_path / "app", {"lib/app.ex": "a\n"})
+    git(app, "config", "core.fsmonitor", probe)
+    return app
+
+
+def arm_clean_filter(driver: str):
+    def arm(tmp_path: Path, probe: str) -> Path:
+        app = make_repo(tmp_path / "app", {"lib/app.ex": "a\n", ".gitattributes": f"*.ex filter={driver}\n"})
+        git(app, "config", f"filter.{driver}.clean", f"{probe} --filter")
+        git(app, "config", f"filter.{driver}.required", "true")
+        # Same size, new mtime: git re-hashes the file through the clean filter.
+        os.utime(app / "lib/app.ex", ns=(0, 0))
+        return app
+    return arm
+
+
+def arm_submodule_filter(tmp_path: Path, probe: str) -> Path:
+    lib = make_repo(tmp_path / "lib", {"lib.ex": "a\n", ".gitattributes": "*.ex filter=probe\n"})
+    app = make_repo(tmp_path / "app", {"lib/app.ex": "a\n"})
+    add_submodule(app, lib, "vendored")
+    git(app / "vendored", "config", "filter.probe.clean", f"{probe} --filter")
+    os.utime(app / "vendored/lib.ex", ns=(0, 0))
+    return app
+
+
+@pytest.mark.parametrize(
+    "arm",
+    [arm_fsmonitor, arm_clean_filter("probe"), arm_clean_filter("probe=x"), arm_submodule_filter],
+    ids=["fsmonitor", "clean-filter", "clean-filter-name-with-equals", "submodule-clean-filter"],
+)
+def test_git_never_runs_programs_configured_in_dir(tmp_path: Path, arm) -> None:
+    sentinel = tmp_path / "probe-ran"
+    probe = tmp_path / "probe.sh"
+    probe.write_text(f"#!/bin/sh\ntouch '{sentinel}'\n[ \"$1\" = --filter ] && exec cat\nexit 1\n",
+                     encoding="utf-8")
+    probe.chmod(0o755)
+    app = arm(tmp_path, str(probe))
+
+    result = fp(app)
+
+    assert result["mode"] == "git"
+    assert not sentinel.exists()
+    # The probe is armed: plain git runs it, so the assertion above is not vacuous.
+    subprocess.run(["git", "-C", str(app), "diff", "--name-only", "HEAD"],
+                   capture_output=True, stdin=subprocess.DEVNULL)
+    assert sentinel.exists()
+
+
+def test_inherited_git_environment_does_not_redirect_identity(
+    repo: Path, tmp_path: Path, monkeypatch
+) -> None:
+    other = make_repo(tmp_path / "other", {"other.ex": "b\n"})
+    own = fp(repo)
+    monkeypatch.setenv("GIT_DIR", str(other / ".git"))
+    monkeypatch.setenv("GIT_WORK_TREE", str(other))
+    monkeypatch.setenv("GIT_INDEX_FILE", str(other / ".git/index"))
+    monkeypatch.setenv("GIT_COMMON_DIR", str(other / ".git"))
+    monkeypatch.setenv("GIT_OBJECT_DIRECTORY", str(other / ".git/objects"))
+
+    assert fp(repo) == own
+
+
+def test_edit_inside_submodule_work_tree_changes_fingerprint(tmp_path: Path) -> None:
+    lib = make_repo(tmp_path / "lib", {"lib.ex": "a\n"})
+    app = make_repo(tmp_path / "app", {"lib/app.ex": "a\n"})
+    add_submodule(app, lib, "vendored")
+    before = fp(app)
+    write(app / "vendored/lib.ex", "b\n")
+    edited = fp(app)
+    write(app / "vendored/new.ex", "c\n")
+    added = fp(app)
+    left_out = fp(app, "--exclude", "vendored")
+    write(app / "vendored/lib.ex", "d\n")
+
+    assert before["submodules"] == ["vendored"]
+    assert before["head"] == edited["head"] == added["head"]
+    assert len({before["content_fingerprint"], edited["content_fingerprint"],
+                added["content_fingerprint"]}) == 3
+    assert left_out["submodules"] == []
+    assert fp(app, "--exclude", "vendored") == left_out
+
+    git(app / "vendored", "commit", "-q", "-am", "move the submodule commit")
+    moved = fp(app)
+
+    assert moved["submodules"] == ["vendored"]
+    assert "vendored/lib.ex" in moved["dirty_files"]
+
+
+def test_capture_never_writes_the_index(repo: Path) -> None:
+    write(repo / "lib/staged.ex", "s\n")
+    git(repo, "add", "lib/staged.ex")
+    os.utime(repo / "lib/app.ex", ns=(0, 0))
+    index = repo / ".git/index"
+    before = (index.read_bytes(), index.stat().st_mtime_ns)
+
+    result = fp(repo)
+
+    assert (index.read_bytes(), index.stat().st_mtime_ns) == before
+    assert result["dirty_files"] == ["lib/staged.ex"]

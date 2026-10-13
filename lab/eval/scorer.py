@@ -18,7 +18,8 @@ from lab.eval.schemas import (
 )
 from lab.eval.dimensions import completeness, accuracy, conciseness, triggering, safety, clarity, specificity, behavioral
 from lab.eval.plugins import (
-    DEFAULT_PLUGIN, STRUCTURAL_PLUGINS, TRIGGER_KEYWORDS, plugin_dir, plugin_name_for, plugin_root_for, result_key,
+    DEFAULT_PLUGIN, STRUCTURAL_PLUGINS, TRIGGER_KEYWORDS, installed_plugins, plugin_dir, plugin_name_for,
+    plugin_root_for, result_key, unknown_plugins,
 )
 
 DIMENSION_MODULES = {
@@ -185,9 +186,18 @@ def main():
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON output")
     args = parser.parse_args()
 
+    if args.plugin:
+        unknown = unknown_plugins(args.plugin)
+        if unknown:
+            parser.error(
+                f"unknown plugin(s): {', '.join(unknown)}; installed: {', '.join(installed_plugins())}"
+            )
     if args.all:
         results = {}
-        for skill_path in find_all_skills(tuple(args.plugin or STRUCTURAL_PLUGINS)):
+        skill_paths = find_all_skills(tuple(args.plugin or STRUCTURAL_PLUGINS))
+        if args.plugin and not skill_paths:
+            parser.error(f"no skills found in plugin(s): {', '.join(args.plugin)}")
+        for skill_path in skill_paths:
             skill_name = os.path.basename(os.path.dirname(skill_path))
             eval_path = find_eval(skill_name, skill_path)
             eval_def = EvalDefinition.from_file(eval_path) if eval_path else None

@@ -88,7 +88,7 @@ Bar: ADR-000 ({accepted | ASSUMED}) · Mode: {cutover mode} · Source @ {sha}
 ```
 
 States: `ready` → `seeded` (seed written, no retained plan yet) →
-`planned` (`plan.md` exists and keeps every `D-`/`X-` ID) → `in-progress` →
+`planned` (`plan.md` exists and the handoff map covers every `D-` ID) → `in-progress` →
 `done` (verify gate passed) · `blocked`.
 
 ## Exit Gate

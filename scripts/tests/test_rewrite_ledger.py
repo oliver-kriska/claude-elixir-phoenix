@@ -290,3 +290,46 @@ def test_cli_ids_reports_unknown_ids(rewrite_dir: Path, capsys) -> None:
     out = capsys.readouterr()
     assert '"unmatched_ids": [\n    "M-99"\n  ]' in out.out
     assert "not in the ledger: M-99" in out.err
+
+
+def test_complete_table_does_not_mask_an_incomplete_one(rewrite_dir: Path) -> None:
+    (rewrite_dir / "ledger.md").write_text(
+        "# Ledger\n\n" + HEADER + row("M-01") + row("C-01")
+        + "\n## More\n\n| ID | Verdict |\n|----|----|\n| M-02 | KEEP |\n",
+        encoding="utf-8",
+    )
+
+    errors, warnings = ledger.check(str(rewrite_dir))
+
+    assert "ledger table 2 has no 'impl' column" in errors
+    assert "ledger table 2 has no 'evidence' column" in errors
+    assert "ledger table 2 has no 'departure' column; accepted risks cannot be recorded" in warnings
+    assert not any("table 1" in m for m in errors + warnings)
+
+
+def test_grouped_analysis_definition_requires_every_alias(rewrite_dir: Path) -> None:
+    (rewrite_dir / "analysis/mechanisms.md").write_text(
+        "| ID | Mechanism |\n|----|----|\n| M-01, `M-02` | a and b |\n", encoding="utf-8"
+    )
+    write_ledger(rewrite_dir, row("M-01") + row("C-01"))
+
+    errors, _ = ledger.check(str(rewrite_dir))
+
+    assert errors == ["M-02 (defined in mechanisms.md) is not accounted for in the ledger"]
+
+
+def test_cli_stats_fails_on_malformed_rows(rewrite_dir: Path, capsys) -> None:
+    truncated = row("M-02").rsplit(" not-run | none |", 1)[0] + "\n"
+    write_ledger(rewrite_dir, row("M-01", impl="implemented", evidence="pass") + truncated)
+
+    assert ledger.main(["stats", "--rewrite-dir", str(rewrite_dir)]) == 1
+    out = capsys.readouterr()
+    assert "malformed ledger row (9 cells, header has 11" in out.err
+    assert "verified" not in out.out
+
+
+def test_cli_stats_fails_without_a_ledger_table(rewrite_dir: Path, capsys) -> None:
+    (rewrite_dir / "ledger.md").write_text("# Ledger\n\n| ID | Note |\n|----|----|\n| M-01 | x |\n", encoding="utf-8")
+
+    assert ledger.main(["stats", "--rewrite-dir", str(rewrite_dir)]) == 1
+    assert "no ledger table" in capsys.readouterr().err

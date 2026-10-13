@@ -68,8 +68,10 @@ edge adapters), keeping every ledger ID in exactly one part.
 
 ### 3. Pick the slice and its unresolved decisions
 
-`--next` (default): the first slice not `done` and not blocked by an
-UNDECIDED row. `--slice NN`: that one. `--all`: every such slice (seeds
+`--next` (default): the first `ready` or `seeded` slice not blocked by an
+UNDECIDED row. A `planned` or `in-progress` slice is never re-seeded:
+report it with its `/phx:work` or `/rewrite:verify NN` command first.
+`--slice NN`: that one. `--all`: every `ready` or `seeded` slice (seeds
 only; `/phx:plan` runs for the first). A slice blocked by UNDECIDED rows is
 reported with its blocking questions instead.
 
@@ -123,18 +125,27 @@ decision unresolved (report them). Otherwise invoke it from this session
 Skill(skill: "phx:plan", args: ".claude/plans/{slug}/interview.md")
 ```
 
-After it returns, check every seeded ID by name, not by count:
+After it returns, run two separate checks. **Retention**: every seeded ID
+is still in `scratchpad.md`, by name, not by count:
 
 ```bash
 S=.claude/plans/{slug}; ls "$S/plan.md"
-for id in $(grep -owE "[DX]-[0-9]{2}" "$S/interview.md" | sort -u); do grep -qsw "$id" "$S/plan.md" "$S/scratchpad.md" || echo "missing $id"; done
+for id in $(grep -owE "[DX]-[0-9]{2}" "$S/interview.md" | sort -u); do grep -qsw "$id" "$S/scratchpad.md" || echo "missing $id"; done
 ```
 
 Append each missing entry from `interview.md` to `scratchpad.md` (never
-rewrite user-edited content). Mark the slice `planned` in `roadmap.md` and
-set `status.md` to phase `slice {NN} planned` only when `plan.md` exists
-and no ID was missing. Otherwise mark it `seeded` and report why: no plan
-(phx asked a question), or the IDs the plan dropped.
+rewrite user-edited content). **Coverage**: read `plan.md` against the
+seed and append a `## Handoff map` to `scratchpad.md` with one row per
+`D-NN` and acceptance criterion, naming the plan task (or plan-wide
+constraint) that carries it, and one row per `X-NN`, naming any task that
+adopts the dead end. Retention alone never proves coverage.
+
+Mark the slice `planned` in `roadmap.md` and set `status.md` to phase
+`slice {NN} planned` only when `plan.md` exists, every decision and
+criterion maps to a task or constraint, and no task contradicts a decision
+or adopts a dead end. Otherwise mark it `seeded` and report why: no plan
+(phx asked a question), or the uncovered or contradicted IDs. Never edit
+`plan.md`; the user fixes it or re-runs `/phx:plan`.
 
 ### 6. Tell the user the next commands
 

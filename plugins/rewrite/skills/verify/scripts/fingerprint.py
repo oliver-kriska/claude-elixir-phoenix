@@ -2,10 +2,14 @@
 """Content identity of a directory, for rewrite verification evidence.
 
 In a git work tree the identity is HEAD plus the bytes of every dirty file:
-tracked files changed since HEAD (`git ls-files -m`, `git diff --name-only
-HEAD`) and untracked files that are not ignored (`git ls-files -o
---exclude-standard`). Outside git, or when DIR itself is ignored, every file
-under DIR is hashed. Each file is read in full, in chunks, whatever its size.
+tracked files changed in the work tree or the index (`git ls-files -m`,
+`git diff-index --cached --name-only HEAD`) and untracked files that are not
+ignored (`git ls-files -o --exclude-standard`). Each submodule's work tree is hashed as plain files
+(everything but `.git`, ignored files included), so edits inside it count
+without running git under the submodule's config. Outside git, or when DIR
+itself is ignored, every file under DIR is hashed. Each file is read in full,
+in chunks, whatever its size. Git runs with hooks, fsmonitor and filter
+drivers disabled, so a capture never executes a program the checkout names.
 
 Paths are relative to DIR. An exclude is a DIR-relative path prefix and adds
 to the defaults (verification output and build trees). Two captures taken
@@ -14,7 +18,9 @@ counted file are equal.
 
 Only paths and digests are printed, never file contents or environment
 values. Stdlib only; reads files, never writes them. Exit 2 means the
-identity could not be established.
+identity could not be established, including when tracked files carry
+assume-unchanged or skip-worktree flags (git hides their edits); the flags are
+reported, never cleared.
 
 Usage:
     python3 fingerprint.py DIR [--exclude REL ...] [--json]
@@ -36,20 +42,46 @@ class IdentityError(Exception):
     pass
 
 
-def git(directory, *args):
-    # No optional locks: read commands must not refresh the index of a legacy
-    # checkout. Inherited repository overrides would point git at another tree.
-    env = dict(os.environ, GIT_OPTIONAL_LOCKS="0")
-    for key in ("GIT_DIR", "GIT_WORK_TREE", "GIT_INDEX_FILE"):
-        env.pop(key, None)
+# Config a checkout can carry that makes read-only git commands run programs:
+# an fsmonitor hook, any hook, signature checks (gpg.program) and the transport
+# a partial clone uses to fetch missing objects (core.sshCommand, helpers).
+GIT_SAFE_CONFIG = ("core.fsmonitor=false", f"core.hooksPath={os.devnull}", "log.showSignature=false",
+                   "protocol.allow=never")
+
+
+def git(directory, *args, options=()):
+    # Inherited GIT_* variables can point git at another repository (GIT_DIR,
+    # GIT_COMMON_DIR, GIT_INDEX_FILE, ...) or inject config. Optional locks off:
+    # read commands must not refresh the index of a legacy checkout.
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_") or k == "GIT_CEILING_DIRECTORIES"}
+    env.update(GIT_OPTIONAL_LOCKS="0", GIT_NO_LAZY_FETCH="1", FINGERPRINT_GIT_EMPTY="")
+    cmd = ["git", *(arg for item in GIT_SAFE_CONFIG for arg in ("-c", item)), *options, "-C", directory, *args]
     try:
-        proc = subprocess.run(
-            ["git", "-c", "core.fsmonitor=false", "-C", directory, *args],
-            stdout=subprocess.PIPE, stderr=subprocess.DEVNULL, env=env, check=False,
-        )
+        proc = subprocess.run(cmd, stdin=subprocess.DEVNULL, stdout=subprocess.PIPE,
+                              stderr=subprocess.DEVNULL, env=env, check=False)
     except OSError:
         return None
     return proc.stdout if proc.returncode == 0 else None
+
+
+def blank_filters(directory):
+    """Global options that disable every configured filter driver.
+
+    Commands that compare the work tree (`ls-files -m`, `diff HEAD`) re-hash
+    stat-dirty and racily clean files through clean/process filters, which run
+    whatever command the config names. `-c` splits at the first "=", so a
+    driver name containing one needs --config-env (git 2.31+).
+    """
+    names = set()
+    for entry in (git(directory, "config", "-z", "--get-regexp", r"^filter\.") or b"").split(b"\0"):
+        key = os.fsdecode(entry.split(b"\n", 1)[0])
+        names.add(key[len("filter."):key.rfind(".")])
+    options = []
+    for name in sorted(n for n in names if n):
+        for var in ("clean", "process", "required"):
+            key = f"filter.{name}.{var}"
+            options += [f"--config-env={key}=FINGERPRINT_GIT_EMPTY"] if "=" in name else ["-c", f"{key}="]
+    return options
 
 
 def normalize_excludes(raw):
@@ -117,22 +149,49 @@ def walk(root, start, excludes, files):
                 files[child] = file_digest(entry.path)
 
 
+def check_index_flags(root, excludes):
+    # Git skips assume-unchanged and skip-worktree files when listing changes,
+    # so an edit to one would leave the identity unchanged. In `ls-files -v`
+    # those show as a lowercase tag (assume-unchanged) or `S` (skip-worktree).
+    tagged = git(root, "ls-files", "-v", "-z")
+    if tagged is None:
+        raise IdentityError(f"git could not list index flags in {root}")
+    flagged = []
+    for entry in tagged.split(b"\0"):
+        tag, rel = entry[:1], os.fsdecode(entry[2:])
+        if (tag.islower() or tag == b"S") and not excluded(rel, excludes):
+            flagged.append(rel)
+    if flagged:
+        shown = ", ".join(flagged[:5]) + (", ..." if len(flagged) > 5 else "")
+        raise IdentityError(
+            f"{len(flagged)} tracked file(s) carry an assume-unchanged or skip-worktree "
+            f"flag, so edits to them are invisible to git: {shown}. Clear the flags "
+            "with `git update-index --no-assume-unchanged --no-skip-worktree <path>`"
+            " or exclude the paths with --exclude."
+        )
+
+
 def git_identity(root, excludes):
     inside = git(root, "rev-parse", "--is-inside-work-tree")
     if inside is None or inside.strip() != b"true":
         return None
     if git(root, "check-ignore", "-q", ".") is not None:
         return None
+    check_index_flags(root, excludes)
     head_out = git(root, "rev-parse", "--verify", "-q", "HEAD")
     head = head_out.decode().strip() if head_out else None
-    listed = git(root, "ls-files", "-z", "-m", "-o", "--exclude-standard")
+    options = blank_filters(root)
+    listed = git(root, "ls-files", "-z", "-m", "-o", "--exclude-standard", options=options)
     if head:
-        changed = git(root, "diff", "--name-only", "--relative", "--no-renames",
-                      "--ignore-submodules=none", "-z", "HEAD")
+        # Index against HEAD only; `ls-files -m` covers the work tree. Porcelain
+        # `git diff` rewrites the index when it refreshes stat data, even with
+        # optional locks off, and runs git inside dirty submodules.
+        changed = git(root, "diff-index", "--cached", "--name-only", "--relative", "--no-renames", "-z", "HEAD")
     else:
         # Unborn HEAD: every tracked file is new content.
         changed = git(root, "ls-files", "-z", "-c")
-    if listed is None or changed is None:
+    staged = git(root, "ls-files", "-z", "-s")
+    if listed is None or changed is None or staged is None:
         raise IdentityError(f"git could not list changes in {root}")
     paths = {os.fsdecode(p).rstrip("/") for p in (listed + b"\0" + changed).split(b"\0") if p}
     files = {}
@@ -144,7 +203,18 @@ def git_identity(root, excludes):
             walk(root, rel, excludes, files)
         else:
             files[rel] = file_digest(full)
-    return head, files
+    # Git compares a submodule by commit only, so edits inside its work tree
+    # would be invisible: hash those files directly instead of asking git.
+    gitlinks = {os.fsdecode(e.partition(b"\t")[2]) for e in staged.split(b"\0") if e.startswith(b"160000 ")}
+    submodules, tree_files = [], {}
+    for rel in sorted(gitlinks):
+        full = os.path.join(root, rel)
+        if excluded(rel, excludes) or not os.path.isdir(full) or os.path.islink(full):
+            continue
+        submodules.append(rel)
+        if rel not in paths:
+            walk(root, rel, excludes, tree_files)
+    return head, files, submodules, tree_files
 
 
 def fingerprint(mode, head, excludes, files):
@@ -162,15 +232,17 @@ def identity(directory, extra_excludes=()):
         raise IdentityError(f"not a directory: {directory}")
     found = git_identity(root, excludes)
     if found:
-        mode, (head, files) = "git", found
+        mode, (head, dirty, submodules, tree_files) = "git", found
+        files = {**dirty, **tree_files}
     else:
-        mode, head, files = "tree", None, {}
+        mode, head, dirty, submodules, files = "tree", None, None, None, {}
         walk(root, "", excludes, files)
     return {
         "path": root,
         "mode": mode,
         "head": head,
-        "dirty_files": sorted(files) if mode == "git" else None,
+        "dirty_files": sorted(dirty) if mode == "git" else None,
+        "submodules": submodules,
         "file_count": len(files),
         "excludes": excludes,
         "content_fingerprint": fingerprint(mode, head, excludes, files),
@@ -178,12 +250,16 @@ def identity(directory, extra_excludes=()):
 
 
 def format_text(r):
-    counted = f"dirty_files: {r['file_count']}" if r["mode"] == "git" else f"files: {r['file_count']}"
+    counted = [f"files: {r['file_count']}"]
+    if r["mode"] == "git":
+        counted = [f"dirty_files: {len(r['dirty_files'])}"]
+        if r["submodules"]:
+            counted.append(f"submodules: {', '.join(r['submodules'])} (work trees hashed as plain files)")
     return "\n".join([
         f"path: {r['path']}",
         f"mode: {r['mode']}",
         f"head: {r['head'] or 'none'}",
-        counted,
+        *counted,
         "excludes: " + ", ".join(r["excludes"]),
         f"content_fingerprint: {r['content_fingerprint']}",
     ])

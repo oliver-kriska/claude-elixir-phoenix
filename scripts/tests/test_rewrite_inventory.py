@@ -2,7 +2,9 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import subprocess
+import sys
 from pathlib import Path
 
 import pytest
@@ -462,3 +464,205 @@ def test_extra_steering_roots_are_scanned_without_rescanning_source(tmp_path: Pa
     assert [(s["root"], s["path"]) for s in result["steering"]["extra"]] == [(str(repo), "AGENTS.md")]
     md = inv.to_markdown(result)
     assert f"[extra] `{repo / 'AGENTS.md'}`" in md
+
+
+def git_cmd(repo: Path, *args: str, **kwargs) -> subprocess.CompletedProcess:
+    return subprocess.run(
+        ["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@t", *args],
+        check=True, capture_output=True, text=True, **kwargs,
+    )
+
+
+def git_repo(root: Path, files: dict[str, str]) -> Path:
+    write(root, files)
+    subprocess.run(["git", "init", "-q", str(root)], check=True)
+    git_cmd(root, "add", ".")
+    git_cmd(root, "commit", "-qm", "init")
+    return root
+
+
+def arm_fsmonitor(tmp_path: Path, probe: str) -> tuple[Path, list[str]]:
+    repo = git_repo(tmp_path / "app", {"app.py": "a = 1\n"})
+    git_cmd(repo, "config", "core.fsmonitor", probe)
+    return repo, ["status"]
+
+
+def arm_clean_filter(driver: str):
+    def arm(tmp_path: Path, probe: str) -> tuple[Path, list[str]]:
+        repo = git_repo(tmp_path / "app", {"app.py": "a = 1\n", ".gitattributes": f"*.py filter={driver}\n"})
+        git_cmd(repo, "config", f"filter.{driver}.clean", f"{probe} --filter")
+        git_cmd(repo, "config", f"filter.{driver}.required", "true")
+        # Same size, new mtime: status re-hashes the file through the clean filter.
+        os.utime(repo / "app.py", ns=(0, 0))
+        return repo, ["status"]
+    return arm
+
+
+def arm_submodule_filter(tmp_path: Path, probe: str) -> tuple[Path, list[str]]:
+    lib = git_repo(tmp_path / "lib", {"lib.py": "a = 1\n", ".gitattributes": "*.py filter=probe\n"})
+    repo = git_repo(tmp_path / "app", {"app.py": "a = 1\n"})
+    git_cmd(repo, "-c", "protocol.file.allow=always", "submodule", "--quiet", "add", str(lib), "vendored")
+    git_cmd(repo, "commit", "-qm", "vendor")
+    git_cmd(repo / "vendored", "config", "filter.probe.clean", f"{probe} --filter")
+    os.utime(repo / "vendored/lib.py", ns=(0, 0))
+    return repo, ["status"]
+
+
+def arm_signature_check(tmp_path: Path, probe: str) -> tuple[Path, list[str]]:
+    repo = git_repo(tmp_path / "app", {"app.py": "a = 1\n"})
+    tree = git_cmd(repo, "rev-parse", "HEAD^{tree}").stdout.strip()
+    parent = git_cmd(repo, "rev-parse", "HEAD").stdout.strip()
+    signed = (f"tree {tree}\nparent {parent}\nauthor t <t@t> 1700000000 +0000\n"
+              "committer t <t@t> 1700000000 +0000\ngpgsig -----BEGIN PGP SIGNATURE-----\n \n iQEz\n"
+              " -----END PGP SIGNATURE-----\n\nsigned\n")
+    sha = git_cmd(repo, "hash-object", "-t", "commit", "-w", "--stdin", input=signed).stdout.strip()
+    git_cmd(repo, "update-ref", "HEAD", sha)
+    git_cmd(repo, "config", "log.showSignature", "true")
+    git_cmd(repo, "config", "gpg.program", probe)
+    return repo, ["log", "-1"]
+
+
+@pytest.mark.parametrize(
+    "arm",
+    [arm_fsmonitor, arm_clean_filter("probe"), arm_clean_filter("probe=x"), arm_submodule_filter,
+     arm_signature_check],
+    ids=["fsmonitor", "clean-filter", "clean-filter-name-with-equals", "submodule-clean-filter",
+         "signature-check"],
+)
+def test_git_never_runs_programs_configured_in_source(tmp_path: Path, arm) -> None:
+    sentinel = tmp_path / "probe-ran"
+    probe = tmp_path / "probe.sh"
+    probe.write_text(f"#!/bin/sh\ntouch '{sentinel}'\n[ \"$1\" = --filter ] && exec cat\nexit 1\n",
+                     encoding="utf-8")
+    probe.chmod(0o755)
+    repo, trigger = arm(tmp_path, str(probe))
+
+    result = inv.inventory(str(repo), None, 50)
+
+    assert result["source"]["git"]["available"] is True
+    assert not sentinel.exists()
+    # The probe is armed: plain git runs it, so the assertion above is not vacuous.
+    subprocess.run(["git", "-C", str(repo), *trigger], capture_output=True, stdin=subprocess.DEVNULL)
+    assert sentinel.exists()
+
+
+def test_inherited_git_environment_does_not_redirect_source(tmp_path: Path, monkeypatch) -> None:
+    source = git_repo(tmp_path / "source", {"app.py": "a = 1\n"})
+    other = git_repo(tmp_path / "other", {"other.py": "b = 2\n"})
+    git_cmd(other, "commit", "-q", "--allow-empty", "-m", "second")
+    (other / "untracked.py").write_text("c = 3\n", encoding="utf-8")
+    own_sha = git_cmd(source, "rev-parse", "HEAD").stdout.strip()
+    monkeypatch.setenv("GIT_DIR", str(other / ".git"))
+    monkeypatch.setenv("GIT_WORK_TREE", str(other))
+    monkeypatch.setenv("GIT_INDEX_FILE", str(other / ".git/index"))
+
+    git_info = inv.inventory(str(source), None, 50)["source"]["git"]
+
+    assert git_info["sha"] == own_sha
+    assert git_info["commit_count"] == 1
+    assert git_info["dirty"] is False
+
+
+def test_write_after_a_files_read_is_rejected(tmp_path: Path, monkeypatch, capsys) -> None:
+    repo = write(tmp_path / "app", {"app.py": "before = 1\n", "lib.py": "pass\n"})
+    original, wrote = inv.read_snapshot, []
+
+    def read_then_write(path, *args, **kwargs):
+        result = original(path, *args, **kwargs)
+        if path.endswith("app.py") and not wrote:
+            wrote.append(path)
+            (repo / "app.py").write_text("after = 2\n", encoding="utf-8")
+        return result
+
+    monkeypatch.setattr(inv, "read_snapshot", read_then_write)
+    out = tmp_path / "inventory.json"
+
+    assert inv.main([str(repo), "--json", str(out)]) == 2
+    assert wrote
+    assert "changed during inventory" in capsys.readouterr().err
+    assert not out.exists()
+
+
+def test_file_swapped_between_stat_and_open_is_rejected(tmp_path: Path, monkeypatch) -> None:
+    repo = write(tmp_path / "app", {"app.py": "before = 1\n"})
+    aside = tmp_path / "app.py.orig"
+    real_open, swapped = os.open, []
+
+    def swap_open_restore(path, flags, *args, **kwargs):
+        if str(path).endswith(os.sep + "app.py") and not swapped:
+            swapped.append(path)
+            os.rename(path, aside)
+            Path(path).write_text("other = 2\n", encoding="utf-8")
+            fd = real_open(path, flags, *args, **kwargs)
+            os.replace(aside, path)
+            return fd
+        return real_open(path, flags, *args, **kwargs)
+
+    monkeypatch.setattr(inv.os, "open", swap_open_restore)
+
+    with pytest.raises(ValueError, match="changed during inventory"):
+        inv.inventory(str(repo), None, 50)
+    assert swapped
+
+
+@pytest.mark.parametrize(
+    ("manifest", "text"),
+    [
+        ("pyproject.toml", '[project]\nname = "shop"\ndependencies = ["django>=5", "celery>=5", "redis>=5"]\n'),
+        ("pyproject.toml", '[project]\nname = "shop"\ndependencies = [\n  "Django>=5",\n'
+                           '  "celery[redis]>=5",\n  "redis>=5; python_version >= \'3.11\'",\n]\n'),
+        ("pyproject.toml", '[tool.poetry]\nname = "shop"\n\n[tool.poetry.dependencies]\npython = "^3.11"\n'
+                           'django = "^5.0"\ncelery = { version = "^5", extras = ["redis"] }\nredis = "^5"\n'),
+        ("Pipfile", '[packages]\ndjango = "*"\ncelery = {extras = ["redis"], version = "*"}\n\n'
+                    '[dev-packages]\nredis = "*"\n'),
+    ],
+    ids=["pep621-inline", "pep621-multiline", "poetry", "pipfile"],
+)
+def test_python_manifests_drive_stack_and_signals(tmp_path: Path, manifest: str, text: str) -> None:
+    repo = write(tmp_path / "shop", {manifest: text, "shop/tasks.py": "pass\n"})
+
+    result = inv.inventory(str(repo), None, 50)
+
+    assert {s["stack"]: s["pack"] for s in result["stacks"]}.get("django") == "stacks/django.md"
+    assert {"celery", "redis"} <= set(signals(result))
+    assert result["coverage"]["unparsed_manifests"] == []
+
+
+@pytest.mark.parametrize("cause", ["invalid-toml", "no-tomllib"])
+def test_toml_fallback_keeps_the_manifest_visibly_unparsed(tmp_path: Path, monkeypatch, cause: str) -> None:
+    text = '[project]\ndependencies = [\n  "django>=5",\n  "celery>=5",\n]\n'
+    if cause == "invalid-toml":
+        text += "[project]\n"
+    else:
+        monkeypatch.setattr(inv, "tomllib", None)
+    repo = write(tmp_path / "shop", {"pyproject.toml": text})
+
+    result = inv.inventory(str(repo), None, 50)
+
+    assert "django" in stacks(result)
+    assert "celery" in signals(result)
+    assert result["coverage"]["unparsed_manifests"] == ["pyproject.toml"]
+    assert any("regex fallback" in line for line in result["coverage"]["limitations"])
+
+
+@pytest.mark.skipif(not hasattr(os, "mkfifo"), reason="needs named pipes")
+def test_special_files_are_reported_without_opening(tmp_path: Path) -> None:
+    repo = write(tmp_path / "app", {"app.py": "pass\n"})
+    target = write(tmp_path / "target", {"mix.exs": "defmodule T do\nend\n"})
+    (repo / "run").mkdir()
+    os.mkfifo(repo / "run/dev.fifo")
+    os.mkfifo(repo / "AGENTS.md")
+    os.mkfifo(target / "AGENTS.md")
+    out = tmp_path / "inventory.json"
+
+    proc = subprocess.run(
+        [sys.executable, str(SCRIPT), str(repo), "--target", str(target), "--json", str(out)],
+        capture_output=True, text=True, timeout=20, stdin=subprocess.DEVNULL,
+    )
+
+    assert proc.returncode == 0, proc.stderr
+    coverage = json.loads(out.read_text(encoding="utf-8"))["coverage"]
+    assert coverage["skipped_special_files"] == [
+        {"path": "AGENTS.md", "type": "fifo"}, {"path": "run/dev.fifo", "type": "fifo"},
+    ]
+    assert "special files not read" in proc.stdout

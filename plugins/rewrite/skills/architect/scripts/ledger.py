@@ -14,7 +14,8 @@ Usage:
     python3 ledger.py check [--rewrite-dir .claude/rewrite]
     python3 ledger.py stats [--rewrite-dir .claude/rewrite] [--ids M-01,C-04 | --slice interview.md] [--json]
 
-Exit status: 0 clean, 1 ledger errors, 2 unusable input (missing ledger or slice).
+Exit status: 0 clean, 1 ledger errors (stats too: malformed rows, no ledger table, missing
+columns), 2 unusable input (missing ledger or slice).
 """
 
 import argparse
@@ -87,12 +88,12 @@ def is_ledger_header(header):
 
 def rows_as_dicts(text):
     """Rows of every ledger table (an `ID` first column and a `Verdict` column), each read
-    with its own table's header. Returns (columns_seen, rows, malformed).
+    with its own table's header. Returns (table_columns, rows, malformed), where
+    table_columns lists, per ledger table, which axis columns its header has.
 
     A row that mentions an ID but has none in its first cell, or whose width differs
     from the header, is malformed: it fails the check instead of vanishing from counts."""
-    seen = {"id": False, "verdict": False, "impl": False, "evidence": False, "departure": False}
-    out, malformed = [], []
+    table_columns, out, malformed = [], [], []
     for header, lines in tables(text):
         if not is_ledger_header(header):
             continue
@@ -102,9 +103,7 @@ def rows_as_dicts(text):
             "evidence": column(header, "evidence state", "evidence"),
             "departure": column(header, "departure"),
         }
-        seen["id"] = True
-        for key, i in idx.items():
-            seen[key] |= i is not None
+        table_columns.append({k: i is not None for k, i in idx.items()})
         for line in lines:
             cells = split_row(line)
             match = ROW_ID_RE.match(line) and ID_RE.search(cells[0])
@@ -128,17 +127,29 @@ def rows_as_dicts(text):
                 "departure": cell("departure"),
                 "has": {k: i is not None for k, i in idx.items()},
             })
-    return seen, out, malformed
+    return table_columns, out, malformed
 
 
 def defined_ids(rewrite_dir):
     ids = {}
     for path in sorted(glob.glob(os.path.join(rewrite_dir, "analysis", "*.md"))):
         for line in read(path).splitlines():
-            m = ROW_ID_RE.match(line)
-            if m:
-                ids.setdefault(m.group(1), os.path.basename(path))
+            if ROW_ID_RE.match(line):
+                for alias in ID_RE.findall(split_row(line)[0]):
+                    ids.setdefault(alias, os.path.basename(path))
     return ids
+
+
+def structure_errors(table_columns, malformed):
+    """Structural problems shared by check and stats: no ledger table, a table missing a
+    required axis column, malformed rows. A complete table never masks an incomplete one."""
+    if not table_columns:
+        return ["ledger.md has no ledger table (header starting `| ID |` with a Verdict column)"]
+    errors = []
+    for n, has in enumerate(table_columns, 1):
+        label = "ledger table" if len(table_columns) == 1 else f"ledger table {n}"
+        errors += [f"{label} has no '{key}' column" for key in ("impl", "evidence") if not has[key]]
+    return errors + [f"malformed ledger row ({line})" for line in malformed]
 
 
 def risk_records(text):
@@ -176,20 +187,19 @@ def verdict_parts(value):
 
 
 def check(rewrite_dir):
-    errors, warnings = [], []
+    warnings = []
     ledger_path = os.path.join(rewrite_dir, "ledger.md")
     text = read(ledger_path)
     if not text:
         return [f"missing {ledger_path}"], []
-    seen_cols, rows, malformed = rows_as_dicts(text)
-    if not seen_cols["id"]:
-        return ["ledger.md has no ledger table (header starting `| ID |` with a Verdict column)"], []
-    for key in ("impl", "evidence"):
-        if not seen_cols[key]:
-            errors.append(f"ledger table has no '{key}' column")
-    if not seen_cols["departure"]:
-        warnings.append("ledger table has no 'departure' column; accepted risks cannot be recorded")
-    errors += [f"malformed ledger row ({line})" for line in malformed]
+    table_columns, rows, malformed = rows_as_dicts(text)
+    errors = structure_errors(table_columns, malformed)
+    if not table_columns:
+        return errors, []
+    for n, has in enumerate(table_columns, 1):
+        if not has["departure"]:
+            label = "ledger table" if len(table_columns) == 1 else f"ledger table {n}"
+            warnings.append(f"{label} has no 'departure' column; accepted risks cannot be recorded")
     risks = risk_records(read(os.path.join(rewrite_dir, "verify", "accepted-risks.md")))
     # Only row IDs and their aliases account for a mechanism; prose mentions do not.
     accounted = Counter(alias for r in rows for alias in set(r["aliases"]))
@@ -299,9 +309,14 @@ def main(argv=None):
             print(f"error: cannot read slice file {args.slice}")
             return 2
         ids = set(ID_RE.findall(text))
+    table_columns, rows, malformed = rows_as_dicts(read(os.path.join(args.rewrite_dir, "ledger.md")))
+    errors = structure_errors(table_columns, malformed)
+    if errors:
+        for e in errors:
+            print(f"error: {e}", file=sys.stderr)
+        return 1
     s = stats(args.rewrite_dir, ids)
     if ids is not None:
-        _, rows, _ = rows_as_dicts(read(os.path.join(args.rewrite_dir, "ledger.md")))
         known = {alias for r in rows for alias in r["aliases"]}
         s["unmatched_ids"] = sorted(ids - known)
         if not s["rows"]:

@@ -23,7 +23,8 @@ Django, Laravel/PHP, Node, Go and JVM/.NET speed up discovery; every other stack
 ```
 
 `rewrite` depends on `elixir-phoenix`: it hands slices to `/phx:plan` and `/phx:work` and consults phx specialists.
-Its scripts need `python3` (stdlib only). Run the commands from the Elixir project or an empty workspace;
+Its scripts need `python3` (stdlib only; 3.11+ parses `pyproject.toml` and `Pipfile` structurally, older versions fall
+back to a regex and list those manifests as unparsed). Run the commands from the Elixir project or an empty workspace;
 `/rewrite:analyze` stops when the working directory is the legacy app or inside it.
 
 ## Workflow

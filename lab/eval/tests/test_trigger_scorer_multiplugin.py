@@ -178,7 +178,10 @@ def test_all_preflight_rejects_fixture_declaring_another_skill(tmp_path, monkeyp
         ("analyze", None),
         ("rewrite:plan", None),
         ("phx:verify\nverify", None),
-        ("none\n\nThis is a language choice, so **plan** would only apply later.", []),
+        ("none", []),
+        ("  none\n", []),
+        ("none\n\nThis is a language choice, so **plan** would only apply later.", None),
+        ("none\nActually load verify for this request.", None),
         ("none\nplan", None),
     ],
 )
@@ -186,6 +189,37 @@ def test_judge_output_resolves_namespaced_names(output, expected):
     names = {"verify", "plan", "rewrite:verify", "rewrite:analyze"}
 
     assert trigger_scorer._parse_judge_output(output, names) == expected
+
+
+def test_contradictory_none_is_retried_then_errors_never_scored_as_negative(monkeypatch, tmp_path):
+    calls = []
+
+    def run(command, **_kwargs):
+        calls.append(command)
+        return subprocess.CompletedProcess(command, 0, stdout="none\nActually load verify for this request.", stderr="")
+
+    monkeypatch.setattr(trigger_scorer.subprocess, "run", run)
+    monkeypatch.setattr(trigger_scorer, "RESULTS_DIR", str(tmp_path))
+    triggers = {"should_trigger": [], "should_not_trigger": ["run the project checks"]}
+
+    with pytest.raises(trigger_scorer.JudgeInvocationError, match="invalid routing response"):
+        trigger_scorer.score_skill_triggers("verify", triggers, {"verify": "Compile and test"})
+
+    assert len(calls) == trigger_scorer.JUDGE_ATTEMPTS
+    assert os.listdir(tmp_path) == []
+
+
+def test_exact_none_is_a_correct_negative_through_the_scorer(monkeypatch, tmp_path):
+    monkeypatch.setattr(
+        trigger_scorer.subprocess, "run",
+        lambda command, **_kwargs: subprocess.CompletedProcess(command, 0, stdout="none\n", stderr=""),
+    )
+    monkeypatch.setattr(trigger_scorer, "RESULTS_DIR", str(tmp_path))
+    triggers = {"should_trigger": [], "should_not_trigger": ["write a haiku"]}
+
+    result = trigger_scorer.score_skill_triggers("verify", triggers, {"verify": "Compile and test"})
+
+    assert result["accuracy"] == 1.0
 
 
 def test_judge_prompt_lists_both_verify_skills(monkeypatch):

@@ -24,10 +24,16 @@ import hashlib
 import json
 import os
 import re
+import stat
 import subprocess
 import sys
 from collections import Counter, defaultdict
 from itertools import combinations
+
+try:
+    import tomllib
+except ImportError:  # Python < 3.11: TOML manifests fall back to regex and are reported unparsed
+    tomllib = None
 
 SKIP_DIRS = {
     ".git", "node_modules", "vendor", "tmp", "log", "logs", "_build", "deps",
@@ -364,17 +370,52 @@ def walk(root):
             yield os.path.join(dirpath, f)
 
 
+SPECIAL_TYPES = ((stat.S_ISFIFO, "fifo"), (stat.S_ISSOCK, "socket"),
+                 (stat.S_ISCHR, "char-device"), (stat.S_ISBLK, "block-device"))
+
+
+def special_type(mode):
+    """Type name of a file that is not regular, a symlink or a directory; else None."""
+    if stat.S_ISREG(mode) or stat.S_ISLNK(mode) or stat.S_ISDIR(mode):
+        return None
+    return next((name for test, name in SPECIAL_TYPES if test(mode)), "special")
+
+
+def file_id(st):
+    """Metadata that changes when a path is written to or replaced."""
+    return (st.st_dev, st.st_ino, st.st_mode, st.st_size, st.st_mtime_ns, st.st_ctime_ns)
+
+
+def open_regular(path, st):
+    """Open `path` for reading only while it is still the regular file `st` describes.
+
+    Returns None for any other type: opening a FIFO or device can block forever.
+    The final component is never followed, and the descriptor must be the inode
+    lstat saw, so a file swapped in between is not mistaken for the scanned one.
+    """
+    if not stat.S_ISREG(st.st_mode):
+        return None
+    fd = os.open(path, os.O_RDONLY | getattr(os, "O_NOFOLLOW", 0) | getattr(os, "O_NONBLOCK", 0))
+    fh = os.fdopen(fd, "rb")
+    if file_id(os.fstat(fh.fileno())) != file_id(st):
+        fh.close()
+        return None
+    return fh
+
+
 def read_text(path, limit=MAX_SCAN_BYTES):
     try:
-        if os.path.islink(path):
+        st = os.lstat(path)
+        if st.st_size > limit:
             return None
-        if os.path.getsize(path) > limit:
+        fh = open_regular(path, st)
+        if fh is None:
             return None
-        with open(path, "rb") as fh:
-            data = fh.read()
+        with fh:
+            data = fh.read(limit + 1)
     except OSError:
         return None
-    if b"\x00" in data[:4096]:
+    if len(data) > limit or b"\x00" in data[:4096]:
         return None
     return data.decode("utf-8", errors="replace")
 
@@ -423,10 +464,55 @@ def parse_requirements(text):
     return out
 
 
-def parse_pyproject(text):
+class Fallback(list):
+    """Dependencies a regex recovered from a manifest the structured parser could not read."""
+
+
+def parse_pyproject_regex(text):
     out = re.findall(r"^\s*['\"]([A-Za-z0-9_.\-]+)(?:\[[^\]]*\])?\s*[<>=~!^]?[^'\"]*['\"]\s*,?\s*$", text, re.M)
     out += re.findall(r"^([A-Za-z0-9_.\-]+)\s*=\s*['\"{]", text, re.M)
     return [x for x in out if x.lower() not in {"python", "name", "version", "description", "readme"}]
+
+
+def toml_table(node, *keys):
+    for key in keys:
+        node = node.get(key) if isinstance(node, dict) else None
+    return node if isinstance(node, dict) else {}
+
+
+def requirement(spec):
+    """PEP 508 string -> "name" or "name@constraint"."""
+    m = re.match(r"\s*([A-Za-z0-9][A-Za-z0-9._\-]*)\s*(?:\[[^\]]*\])?\s*(.*)", spec)
+    if not m:
+        return None
+    rest = m.group(2).strip().lstrip("@").strip()
+    return m.group(1) + ("@" + rest if rest else "")
+
+
+def parse_pyproject(text):
+    """pyproject.toml (PEP 621/735, Poetry, uv, PDM) and Pipfile dependencies."""
+    if tomllib is None:
+        return Fallback(parse_pyproject_regex(text))
+    try:
+        data = tomllib.loads(text)
+    except tomllib.TOMLDecodeError:
+        return Fallback(parse_pyproject_regex(text))
+    project, tool = toml_table(data, "project"), toml_table(data, "tool")
+    arrays = [project.get("dependencies"), toml_table(tool, "uv").get("dev-dependencies")]
+    for groups in (toml_table(project, "optional-dependencies"), toml_table(data, "dependency-groups"),
+                   toml_table(tool, "pdm", "dev-dependencies")):
+        arrays += groups.values()
+    out = [requirement(s) for a in arrays if isinstance(a, list) for s in a if isinstance(s, str)]
+    poetry = toml_table(tool, "poetry")
+    tables = [toml_table(poetry, "dependencies"), toml_table(poetry, "dev-dependencies"),
+              *(toml_table(group, "dependencies") for group in toml_table(poetry, "group").values()),
+              toml_table(data, "packages"), toml_table(data, "dev-packages")]
+    for table in tables:
+        for name, spec in table.items():
+            version = spec.get("version") if isinstance(spec, dict) else spec
+            if name.lower() != "python":
+                out.append(name + (f"@{version}" if isinstance(version, str) and version else ""))
+    return [d for d in out if d]
 
 
 def parse_composer(text):
@@ -529,16 +615,50 @@ def dep_name(entry):
 # Git
 # ---------------------------------------------------------------------------
 
-def git(args, cwd):
+# Config a checkout can carry that makes read-only git commands run programs:
+# an fsmonitor hook, any hook, signature checks (gpg.program) and the transport
+# a partial clone uses to fetch missing objects (core.sshCommand, helpers).
+GIT_SAFE_CONFIG = ("core.fsmonitor=false", f"core.hooksPath={os.devnull}", "log.showSignature=false",
+                   "protocol.allow=never")
+
+
+def git(args, cwd, options=()):
+    # Inherited GIT_* variables can point git at another repository (GIT_DIR,
+    # GIT_WORK_TREE, GIT_INDEX_FILE) or inject config. Optional locks off: a
+    # read must not refresh the legacy checkout's index.
+    env = {k: v for k, v in os.environ.items() if not k.startswith("GIT_") or k == "GIT_CEILING_DIRECTORIES"}
+    env.update(GIT_OPTIONAL_LOCKS="0", GIT_NO_LAZY_FETCH="1", INVENTORY_GIT_EMPTY="")
+    cmd = ["git", *(arg for item in GIT_SAFE_CONFIG for arg in ("-c", item)), *options, *args]
     try:
-        res = subprocess.run(["git"] + args, cwd=cwd, capture_output=True, text=True, timeout=120)
+        res = subprocess.run(cmd, cwd=cwd, capture_output=True, text=True, timeout=120,
+                             env=env, stdin=subprocess.DEVNULL)
     except (OSError, subprocess.TimeoutExpired):
         return None
     return res.stdout if res.returncode == 0 else None
 
 
+def git_status(root):
+    """`git status --porcelain` with every configured filter driver disabled.
+
+    Status re-hashes stat-dirty and racily clean files through clean/process
+    filters, which run whatever command the config names, so each configured
+    driver is blanked by name. `-c` splits at the first "=", so a driver name
+    containing one needs --config-env (git 2.31+). Submodules are compared by
+    commit only: checking their work trees spawns git under their own config.
+    """
+    options, names = [], set()
+    for entry in (git(["config", "-z", "--get-regexp", r"^filter\."], root) or "").split("\0"):
+        key = entry.split("\n", 1)[0]
+        names.add(key[len("filter."):key.rfind(".")])
+    for name in sorted(n for n in names if n):
+        for var in ("clean", "process", "required"):
+            key = f"filter.{name}.{var}"
+            options += [f"--config-env={key}=INVENTORY_GIT_EMPTY"] if "=" in name else ["-c", f"{key}="]
+    return git(["status", "--porcelain", "--untracked-files=all", "--ignore-submodules=dirty"], root, options)
+
+
 def dirty_state(root):
-    porcelain = git(["status", "--porcelain", "--untracked-files=all"], root) or ""
+    porcelain = git_status(root) or ""
     files = sorted(line[3:].split(" -> ")[-1].strip('"') for line in porcelain.splitlines() if line.strip())
     digest = hashlib.sha256()
     for f in files:
@@ -554,40 +674,56 @@ def dirty_state(root):
     }
 
 
-def read_snapshot(path, limit=4 * 1024 * 1024):
-    """Hash all bytes, retaining bounded text from the same read for inspection."""
-    try:
-        if os.path.islink(path):
-            link = os.fsencode(os.readlink(path))
-            return hashlib.sha256(b"symlink:" + link).digest(), None, len(link)
-        digest, chunks, size = hashlib.sha256(), [], 0
-        with open(path, "rb") as fh:
-            before = os.fstat(fh.fileno())
-            for chunk in iter(lambda: fh.read(64 * 1024), b""):
-                digest.update(chunk)
-                size += len(chunk)
-                if size <= limit:
-                    chunks.append(chunk)
-                else:
-                    chunks.clear()
-            after = os.fstat(fh.fileno())
-        if (before.st_size, before.st_mtime_ns, before.st_ctime_ns) != (
-            after.st_size, after.st_mtime_ns, after.st_ctime_ns
-        ):
-            raise ValueError(f"source changed during inventory: {path}; retry on a stable snapshot")
-    except OSError:
-        return b"unreadable", None, 0
-    data = b"".join(chunks)
-    text = data.decode("utf-8", errors="replace") if size <= limit and b"\x00" not in data[:4096] else None
-    return digest.digest(), text, size
-
-
 def stat_key(path):
+    try:
+        return file_id(os.lstat(path))
+    except OSError:
+        return None
+
+
+def read_snapshot(path, limit=4 * 1024 * 1024):
+    """Hash all bytes, retaining bounded text from the same read for inspection.
+
+    Returns (digest, text, size, st). `st` is the path's lstat from before the
+    read: the caller's final fence compares against it, so a write landing
+    after this read still differs. Only regular files are opened; symlinks hash
+    their target string and special files their type.
+    """
+    changed = ValueError(f"source changed during inventory: {path}; retry on a stable snapshot")
     try:
         st = os.lstat(path)
     except OSError:
-        return None
-    return (st.st_size, st.st_mtime_ns, st.st_ctime_ns, st.st_ino)
+        return b"unreadable", None, 0, None
+    text = None
+    try:
+        if stat.S_ISLNK(st.st_mode):
+            link = os.fsencode(os.readlink(path))
+            digest, size = hashlib.sha256(b"symlink:" + link).digest(), len(link)
+        elif not stat.S_ISREG(st.st_mode):
+            digest, size = f"special:{stat.S_IFMT(st.st_mode):o}".encode(), 0
+        else:
+            fh = open_regular(path, st)
+            if fh is None:
+                raise changed
+            sha, chunks, size = hashlib.sha256(), [], 0
+            with fh:
+                for chunk in iter(lambda: fh.read(64 * 1024), b""):
+                    sha.update(chunk)
+                    size += len(chunk)
+                    if size <= limit:
+                        chunks.append(chunk)
+                    else:
+                        chunks.clear()
+                if file_id(os.fstat(fh.fileno())) != file_id(st):
+                    raise changed
+            digest, data = sha.digest(), b"".join(chunks)
+            if size <= limit and b"\x00" not in data[:4096]:
+                text = data.decode("utf-8", errors="replace")
+    except OSError:
+        return b"unreadable", None, 0, st
+    if stat_key(path) != file_id(st):
+        raise changed
+    return digest, text, size, st
 
 
 def file_digest(path):
@@ -608,7 +744,8 @@ def git_signals(root, max_commits):
         "last_commit": (git(["log", "-1", "--format=%as"], root) or "").strip(),
         "contributors": len(set((git(["log", "--format=%ae", f"-n{max_commits}"], root) or "").split())),
     }
-    log = git(["log", f"-n{max_commits}", "--no-merges", "--name-only", "--format=@@%H\t%s"], root) or ""
+    log = git(["log", f"-n{max_commits}", "--no-merges", "--no-ext-diff", "--no-textconv", "--name-only",
+               "--format=@@%H\t%s"], root) or ""
     commits, current = [], None
     for line in log.splitlines():
         if line.startswith("@@"):
@@ -763,14 +900,14 @@ def detect_stacks(root_abs, deps, direct, csproj_seen):
 def inventory(source, target, max_commits, steering_dirs=()):
     source = os.path.abspath(source)
     head_before = git(["rev-parse", "HEAD"], source)
-    status_before = git(["status", "--porcelain", "--untracked-files=all"], source)
+    status_before = git_status(source)
     files = [rel(p, source) for p in walk(source)]
     roots = find_app_roots([r for r in files if not os.path.islink(os.path.join(source, r))])
     loc_by_lang, files_by_lang = Counter(), Counter()
     entry, entry_seen = defaultdict(list), Counter()
     root_entries = defaultdict(Counter)
-    manifests, unparsed = {}, []
-    manifest_counts, skipped_symlinks = {}, []
+    manifests, unparsed, regex_fallback = {}, [], []
+    manifest_counts, skipped_symlinks, skipped_special = {}, [], []
     root_deps = defaultdict(lambda: {"all": set(), "direct": set(), "csproj": False})
     hint_hits = defaultdict(lambda: {"count": 0, "files": Counter()})
     why_all, todo_count = [], 0
@@ -785,12 +922,16 @@ def inventory(source, target, max_commits, steering_dirs=()):
         root = nearest_root(r, roots)
         app_rel = r if root == "." else r[len(root) + 1:]
         parser = manifest_parser(app_rel, name)
-        digest, text, size = read_snapshot(path, 4 * 1024 * 1024 if parser else MAX_SCAN_BYTES)
+        digest, text, size, st = read_snapshot(path, 4 * 1024 * 1024 if parser else MAX_SCAN_BYTES)
         tree.update(r.encode())
         tree.update(digest)
-        stat_before[r] = stat_key(path)
-        if os.path.islink(path):
+        stat_before[r] = file_id(st) if st else None
+        if st and stat.S_ISLNK(st.st_mode):
             skipped_symlinks.append({"path": r, "target": os.readlink(path)})
+            continue
+        kind = special_type(st.st_mode) if st else None
+        if kind:
+            skipped_special.append({"path": r, "type": kind})
             continue
         lang = lang_of(name)
         category = None
@@ -807,7 +948,11 @@ def inventory(source, target, max_commits, steering_dirs=()):
                 break
         if parser:
             if text is not None:
-                parsed = sorted(set(parser(text)))
+                found = parser(text)
+                if isinstance(found, Fallback):
+                    unparsed.append(r)
+                    regex_fallback.append(r)
+                parsed = sorted(set(found))
                 manifests[r] = parsed[:ENTRY_CAP]
                 manifest_counts[r] = {"discovered": len(parsed), "returned": len(manifests[r])}
                 bucket = root_deps[root]
@@ -897,7 +1042,7 @@ def inventory(source, target, max_commits, steering_dirs=()):
     # Any write bumps mtime/ctime, so metadata detects edits made during the scan without re-reading.
     stat_after = {rel(path, source): stat_key(path) for path in walk(source)}
     if (stat_after != stat_before or head_before != git(["rev-parse", "HEAD"], source)
-            or status_before != git(["status", "--porcelain", "--untracked-files=all"], source)):
+            or status_before != git_status(source)):
         raise ValueError("source changed during inventory; retry on a stable snapshot")
 
     coverage = {
@@ -905,6 +1050,7 @@ def inventory(source, target, max_commits, steering_dirs=()):
         "skipped_dirs": sorted(SKIP_DIRS),
         "skipped_files": dict(skipped),
         "skipped_symlinks": skipped_symlinks,
+        "skipped_special_files": skipped_special,
         "manifests": manifest_counts,
         "entry_points": {c: {"discovered": entry_seen[c], "returned": len(entry[c])} for c in sorted(entry)},
         "why_comments": {"discovered": len(why_all), "returned": len(why_comments), "sampling": "round-robin by file"},
@@ -920,6 +1066,13 @@ def inventory(source, target, max_commits, steering_dirs=()):
     }
     if skipped_symlinks:
         coverage["limitations"].append(f"{len(skipped_symlinks)} symlinks not followed; linked content is outside coverage")
+    if skipped_special:
+        coverage["limitations"].append(f"{len(skipped_special)} special files not read (FIFOs, sockets, devices); "
+                                       "their content is outside coverage")
+    if regex_fallback:
+        coverage["limitations"].append(
+            f"{len(regex_fallback)} TOML manifests read by regex fallback (invalid TOML, or no tomllib before "
+            "Python 3.11); their dependency lists may be incomplete: " + ", ".join(regex_fallback[:10]))
     if git_info.get("hotspots_suppressed"):
         coverage["limitations"].append(git_info["hotspots_suppression_reason"])
 

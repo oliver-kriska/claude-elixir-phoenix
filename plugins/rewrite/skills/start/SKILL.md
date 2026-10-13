@@ -40,7 +40,8 @@ ls .claude/rewrite/ .claude/rewrite/architecture/ 2>/dev/null && sed -n '1,40p' 
 python3 "${CLAUDE_SKILL_DIR}/../architect/scripts/ledger.py" check --rewrite-dir .claude/rewrite  # once architecture.md exists
 ```
 
-Read the first matching row, top to bottom:
+Read the first matching row, top to bottom. An active slice comes before
+seeding a new one:
 
 | Found | State | Next |
 |-------|-------|------|
@@ -50,8 +51,9 @@ Read the first matching row, top to bottom:
 | ADR-000, no `architecture.md` | architect incomplete | `/rewrite:architect` (resumes at step 4) |
 | ADR-000 + `architecture.md`, but `decisions.md` or `divergences.md` missing, phase `architecting`, or `ledger.py check` fails | architect incomplete | `/rewrite:architect` (resumes at step 4 or 5) |
 | ADR-000 + `architecture.md` + `decisions.md` + `divergences.md`, clean ledger, no `roadmap.md` | architected | `/rewrite:roadmap` |
-| `roadmap.md` with `ready` or `seeded` slices | slicing | `/rewrite:roadmap --next` |
+| a slice `in-progress` with no `- [ ]` left in its `plan.md` | awaiting gate | `/rewrite:verify NN` |
 | a slice `planned` or `in-progress` | building | `/phx:work .claude/plans/{slug}/plan.md`, then `/rewrite:verify NN` |
+| `roadmap.md` with `ready` or `seeded` slices | slicing | `/rewrite:roadmap --next` |
 | every slice `done` | complete | release rehearsal slice, or close out |
 
 ### 2. New rewrite: explain once, then analyze

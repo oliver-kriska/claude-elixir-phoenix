@@ -247,8 +247,8 @@ def _parse_judge_output(text: str, skill_names: set[str]) -> list[str] | None:
     lines = [line.strip() for line in text.splitlines() if line.strip()]
     candidates = [resolve_skill_key(line.lstrip("-*0123456789.) ").strip().strip("`").strip(), skill_names)
                   for line in lines]
-    # Judges often justify a "none" in prose; it stays "none" unless a later line names a skill.
-    if lines and lines[0] == "none" and not any(candidate in skill_names for candidate in candidates[1:]):
+    # "none" is a valid answer only on its own; trailing prose is a malformed response.
+    if text.strip() == "none":
         return []
     if not 1 <= len(lines) <= 3:
         return None

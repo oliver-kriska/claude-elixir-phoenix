@@ -26,16 +26,24 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Versions independently. See `plugins/rewrite/README.md`.
 - **Structural eval scores more than one plugin (contributor tooling).**
   `lab/eval/plugins.py` maps a file to its plugin, so `make eval` and
-  `make eval-all` score `rewrite` skills and agents alongside `phx`.
+  `make eval-all` score `rewrite` skills and agents alongside `phx`. A
+  namespaced agent reference (`phx:x`, `rewrite:x`) resolves only in its own
+  plugin, and an unknown `--plugin` name fails instead of scoring nothing.
 - **Tests for the rewrite scripts (contributor tooling).**
   `scripts/tests/test_rewrite_inventory.py`,
   `scripts/tests/test_rewrite_fingerprint.py` and
-  `scripts/tests/test_rewrite_ledger.py` cover stack detection, coverage
-  counts, the snapshot compare, the refusal to write inside the source, and
+  `scripts/tests/test_rewrite_ledger.py` cover stack detection (PEP 621,
+  Poetry and Pipfile manifests), coverage counts, the snapshot compare, the
+  refusal to write inside the source, that git never runs a program the
+  source checkout configures (fsmonitor, filters, hooks, signature checks),
+  that a file written mid-read or a FIFO never yields a silent inventory, and
   the ledger check: only row IDs and aliases account for a mechanism, rows
   must match their header's width, an `AR-NN` departure needs a complete
-  record (owner, scope listing the row, rationale, review, approval), and an
-  empty or unreadable slice never falls back to the whole ledger. `scripts/tests/test_rewrite_plugin.py`
+  record (owner, scope listing the row, rationale, review, approval), each
+  ledger table needs its own state columns, `stats` fails on a malformed
+  ledger, and an empty or unreadable slice never falls back to the whole
+  ledger. Fingerprinting fails closed when a tracked file is flagged
+  `assume-unchanged` or `skip-worktree`, since git hides its edits. `scripts/tests/test_rewrite_plugin.py`
   checks the plugin's own rules: skill-dir paths resolve, namespaced
   references exist, every KB file an agent names exists, the ledger
   vocabulary matches `ledger.py`, and no stale vocabulary remains.

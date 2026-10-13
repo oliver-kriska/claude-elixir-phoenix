@@ -42,8 +42,13 @@ Use the bundled script for identity; define `fp` in every shell call that uses i
 fp() { python3 "${CLAUDE_SKILL_DIR}/scripts/fingerprint.py" "$@"; }
 ```
 
-- **Output** — `head` and a `content_fingerprint`: SHA-256 over the full bytes of every dirty file (tracked changes plus untracked, non-ignored files), or of every file outside git
+- **Output** — `head` and a `content_fingerprint`: SHA-256 over the full bytes of every dirty file (tracked changes
+  plus untracked, non-ignored files) and of every file in each submodule work tree, or of every file outside git.
+  Git runs with the checkout's hooks, filters and fsmonitor disabled, and never writes the index
 - **Excludes** — `.claude/rewrite/verify/`, `_build/`, `deps/` and `node_modules/` by default
+- **Exit 2** — no identity: DIR is not a directory, a file cannot be read, an exclude leaves DIR, git cannot list
+  changes, or a tracked file is flagged `assume-unchanged`/`skip-worktree` (git hides its edits). Ask the user to
+  clear the flag; never clear it yourself
 - **One list per run** — pass the same `--exclude` set to every capture; add a path only for output the run itself writes (`cover/`), and record it
 
 ### 2. Preflight (static, before running anything)
@@ -144,7 +149,7 @@ python3 "${CLAUDE_SKILL_DIR}/../architect/scripts/ledger.py" stats --rewrite-dir
   --slice .claude/plans/{slug}/interview.md
 ```
 
-A failing `check`, a `stats` exit 2 (unreadable slice) or 0 selected rows fails the gate.
+A failing `check`, a nonzero `stats` (1 = malformed ledger, 2 = unreadable slice) or 0 selected rows fails the gate.
 
 ### 6. Report and gate
 

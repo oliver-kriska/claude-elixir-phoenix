@@ -406,11 +406,11 @@ def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
         if ref in builtin_agents:
             continue
         ns, _, name = ref.rpartition(":")
-        if ns and ns in roots and ns != "phx":
+        if ns and ns in roots:
             if name not in names_in(roots[ns], "agents"):
                 missing.append(ref)
             continue
-        # Strip the current runtime plugin namespace if present.
+        # Unqualified (or `phx:` with no resolvable manifest): the current plugin's agents.
         clean_ref = re.sub(r"^phx:", "", ref)
         if (
             clean_ref not in existing_agents
@@ -419,10 +419,7 @@ def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
             missing.append(ref)
     for ns, name in namespaced:
         root = roots[ns]
-        known = names_in(root, "agents") | names_in(root, "skills")
-        if ns == "phx":
-            known |= existing_agents
-        if name not in known:
+        if name not in names_in(root, "agents") | names_in(root, "skills"):
             missing.append(f"{ns}:{name}")
     refs = list(set(refs)) + [f"{ns}:{name}" for ns, name in namespaced]
 

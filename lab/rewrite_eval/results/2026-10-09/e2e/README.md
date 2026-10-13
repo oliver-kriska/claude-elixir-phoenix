@@ -17,7 +17,7 @@ executed, and nothing else in these files was edited.
 | `campfire/` | `basecamp/once-campfire` (Rails 8, SQLite, Action Cable) | before the Amp review fixes; run 2 resumed run 1 | OK |
 | `node/` | Node/Express/Prisma RealWorld @ `30b68e1` | before the Amp review fixes; run 2 resumed run 1 | 4 errors: R-20/22/23/25 accounted for in prose only, which the stricter parser rejects |
 | `django-v2/` | Django RealWorld @ `29c9d42` | after all review fixes; one invocation | OK: 74 rows, verified 0, UNDECIDED 10 |
-| `django-v2-handoff/` | `django-v2` seed 00a, approval simulated | fresh-session `/phx:plan` on the seed | n/a (`plan.md` keeps every D-/X- ID) |
+| `django-v2-handoff/` | `django-v2` seed 00a, approval simulated | fresh-session `/phx:plan` on the seed | n/a: every seeded ID retained across `plan.md` and `scratchpad.md` (`plan.md` cites only D-06, X-04); task coverage not established |
 
 `campfire/report.md` grades the Campfire run against an Amp-written oracle
 (kept locally in `.claude/research/`): 86/100 with 0 hard failures, but only
@@ -28,7 +28,9 @@ and its defects 1–9 are fixed in the plugin. Cost figures in it are redacted.
 The `django-v2-handoff/` seed differs from `django-v2/plans/` only in its
 `Status:` line and one approval line, since `--auto` correctly blocks every
 handoff. The other files are the `plan.md` and `scratchpad.md` that phx wrote,
-plus the research note from its dependency check. The plan's P-2 caught the
+plus the research note from its dependency check. This run used the earlier
+ID-retention check; roadmap step 5 now also maps each decision to a plan
+task, which this run did not exercise. The plan's P-2 caught the
 architecture's boot fence (a `restart: :temporary` Task cannot stop the app),
 and its P-1 caught ecto_sqlite3 converting the legacy file to WAL. Both are
 now rules in the KB (`data-compat.md`, `sqlite-on-beam.md`).

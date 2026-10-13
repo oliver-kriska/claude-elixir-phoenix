@@ -22,7 +22,9 @@ from lab.eval.agent_matchers import (
     agent_model_appropriate, agent_has_skills, agent_omit_claudemd, ORCHESTRATOR_NAMES,
 )
 
-from lab.eval.plugins import DEFAULT_PLUGIN, STRUCTURAL_PLUGINS, plugin_dir, plugin_root_for, result_key
+from lab.eval.plugins import (
+    DEFAULT_PLUGIN, STRUCTURAL_PLUGINS, installed_plugins, plugin_dir, plugin_root_for, result_key, unknown_plugins,
+)
 
 PLUGIN_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "plugins", "elixir-phoenix")
 
@@ -151,9 +153,18 @@ def main():
     parser.add_argument("--pretty", action="store_true", help="Pretty-print output")
     args = parser.parse_args()
 
+    if args.plugin:
+        unknown = unknown_plugins(args.plugin)
+        if unknown:
+            parser.error(
+                f"unknown plugin(s): {', '.join(unknown)}; installed: {', '.join(installed_plugins())}"
+            )
     if args.all:
         results = {}
-        for path in find_all_agents(tuple(args.plugin or STRUCTURAL_PLUGINS)):
+        agent_paths = find_all_agents(tuple(args.plugin or STRUCTURAL_PLUGINS))
+        if args.plugin and not agent_paths:
+            parser.error(f"no agents found in plugin(s): {', '.join(args.plugin)}")
+        for path in agent_paths:
             name = result_key(path, os.path.basename(path).replace(".md", ""))
             score = score_agent(path)
             results[name] = score.to_dict()
