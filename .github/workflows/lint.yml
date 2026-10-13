@@ -60,7 +60,9 @@ jobs:
       # `from . import signals` in a Django `ready()` is the side effect a
       # control tests, so lint must never rewrite them.
       - name: Ruff lint (Python)
-        run: ruff check lab/ scripts/ --select E,F,W --ignore E501,E402 --extend-exclude lab/rewrite_eval/negative-controls
+        run: >-
+          ruff check lab/ scripts/ --select E,F,W --ignore E501,E402
+          --extend-exclude lab/rewrite_eval/negative-controls
 
       - name: Ruff format check
         run: ruff format --check lab/ scripts/ || true
