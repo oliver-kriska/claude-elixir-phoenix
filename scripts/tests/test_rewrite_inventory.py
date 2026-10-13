@@ -467,8 +467,11 @@ def test_extra_steering_roots_are_scanned_without_rescanning_source(tmp_path: Pa
 
 
 def git_cmd(repo: Path, *args: str, **kwargs) -> subprocess.CompletedProcess:
+    # A commit can start detached auto-maintenance, which writes into .git
+    # while a test is snapshotting it.
     return subprocess.run(
-        ["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@t", *args],
+        ["git", "-C", str(repo), "-c", "user.name=t", "-c", "user.email=t@t",
+         "-c", "maintenance.auto=false", "-c", "gc.auto=0", *args],
         check=True, capture_output=True, text=True, **kwargs,
     )
 

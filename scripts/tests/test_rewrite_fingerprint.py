@@ -31,7 +31,10 @@ def isolated_git(monkeypatch, tmp_path: Path) -> None:
 
 def git(repo: Path, *args: str) -> None:
     subprocess.run(
-        ["git", "-c", "user.email=t@t", "-c", "user.name=t", "-C", str(repo), *args],
+        # A commit can start detached auto-maintenance, which writes into .git
+        # while a test is snapshotting it.
+        ["git", "-c", "user.email=t@t", "-c", "user.name=t", "-c", "maintenance.auto=false",
+         "-c", "gc.auto=0", "-C", str(repo), *args],
         check=True, capture_output=True,
     )
 
