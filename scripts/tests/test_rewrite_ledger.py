@@ -333,3 +333,32 @@ def test_cli_stats_fails_without_a_ledger_table(rewrite_dir: Path, capsys) -> No
 
     assert ledger.main(["stats", "--rewrite-dir", str(rewrite_dir)]) == 1
     assert "no ledger table" in capsys.readouterr().err
+
+
+def test_direct_stats_rejects_a_malformed_ledger(rewrite_dir: Path) -> None:
+    truncated = row("M-02").rsplit(" not-run | none |", 1)[0] + "\n"
+    write_ledger(rewrite_dir, row("M-01", impl="implemented", evidence="pass") + truncated)
+
+    with pytest.raises(ledger.LedgerError) as exc:
+        ledger.stats(str(rewrite_dir))
+
+    assert any(e.startswith("malformed ledger row (9 cells") for e in exc.value.errors)
+
+
+def test_cli_stats_counts_the_snapshot_it_validated(rewrite_dir: Path, capsys, monkeypatch) -> None:
+    body = row("M-01", impl="implemented", evidence="pass") + row("M-02", impl="implemented", evidence="fail")
+    write_ledger(rewrite_dir, body)
+    real_rows = ledger.rows_as_dicts
+
+    def parse_then_truncate(text):
+        result = real_rows(text)
+        truncated = row("M-02").rsplit(" not-run | none |", 1)[0] + "\n"
+        write_ledger(rewrite_dir, row("M-01", impl="implemented", evidence="pass") + truncated)
+        return result
+
+    monkeypatch.setattr(ledger, "rows_as_dicts", parse_then_truncate)
+
+    code = ledger.main(["stats", "--rewrite-dir", str(rewrite_dir)])
+
+    assert code == 0
+    assert "verified 1 of 2 ledger rows" in capsys.readouterr().out

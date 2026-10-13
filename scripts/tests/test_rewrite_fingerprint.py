@@ -313,14 +313,45 @@ def test_edit_inside_submodule_work_tree_changes_fingerprint(tmp_path: Path) -> 
     assert "vendored/lib.ex" in moved["dirty_files"]
 
 
-def test_capture_never_writes_the_index(repo: Path) -> None:
+def snapshot(root: Path) -> dict[str, tuple]:
+    """Bytes, size and mtime of every file and directory under root, .git included."""
+    out = {}
+    for dirpath, dirnames, filenames in os.walk(root):
+        for name in dirnames + filenames:
+            path = Path(dirpath, name)
+            st = path.lstat()
+            data = path.read_bytes() if path.is_file() and not path.is_symlink() else None
+            out[str(path.relative_to(root))] = (data, st.st_size, st.st_mtime_ns)
+    return out
+
+
+def test_capture_writes_nothing_in_an_ordinary_repo(repo: Path) -> None:
     write(repo / "lib/staged.ex", "s\n")
     git(repo, "add", "lib/staged.ex")
+    write(repo / "lib/untracked.ex", "u\n")
     os.utime(repo / "lib/app.ex", ns=(0, 0))
-    index = repo / ".git/index"
-    before = (index.read_bytes(), index.stat().st_mtime_ns)
+    before = snapshot(repo)
 
     result = fp(repo)
 
-    assert (index.read_bytes(), index.stat().st_mtime_ns) == before
-    assert result["dirty_files"] == ["lib/staged.ex"]
+    assert snapshot(repo) == before
+    assert result["dirty_files"] == ["lib/staged.ex", "lib/untracked.ex"]
+
+
+def test_split_index_is_hashed_as_a_tree_without_reading_git(tmp_path: Path) -> None:
+    app = make_repo(tmp_path / "app", {"lib/app.ex": "a\n", "lib/b.ex": "b\n"})
+    git(app, "update-index", "--split-index")
+    shared = list((app / ".git").glob("sharedindex.*"))
+    for path in shared:
+        os.utime(path, ns=(0, 0))
+    write(app / "lib/app.ex", "changed\n")
+    before = snapshot(app)
+
+    result = fp(app)
+
+    assert shared
+    assert snapshot(app) == before
+    assert (result["mode"], result["fallback"], result["head"]) == ("tree", "split-index", None)
+    assert result["file_count"] == 2
+    write(app / "lib/b.ex", "edited\n")
+    assert fp(app)["content_fingerprint"] != result["content_fingerprint"]

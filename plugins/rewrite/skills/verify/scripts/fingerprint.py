@@ -6,8 +6,10 @@ tracked files changed in the work tree or the index (`git ls-files -m`,
 `git diff-index --cached --name-only HEAD`) and untracked files that are not
 ignored (`git ls-files -o --exclude-standard`). Each submodule's work tree is hashed as plain files
 (everything but `.git`, ignored files included), so edits inside it count
-without running git under the submodule's config. Outside git, or when DIR
-itself is ignored, every file under DIR is hashed. Each file is read in full,
+without running git under the submodule's config. Outside git, when DIR
+itself is ignored, or when the index is stored split (`sharedindex.*`; git
+bumps its mtime on every read), every file under DIR is hashed instead and
+the output names the fallback. Each file is read in full,
 in chunks, whatever its size. Git runs with hooks, fsmonitor and filter
 drivers disabled, so a capture never executes a program the checkout names.
 
@@ -36,6 +38,7 @@ import sys
 
 DEFAULT_EXCLUDES = (".claude/rewrite/verify/", "_build/", "deps/", "node_modules/")
 CHUNK = 1 << 20
+SPLIT_INDEX = "split-index"
 
 
 class IdentityError(Exception):
@@ -62,6 +65,25 @@ def git(directory, *args, options=()):
     except OSError:
         return None
     return proc.stdout if proc.returncode == 0 else None
+
+
+def split_index(directory):
+    """True when the index is stored split (`sharedindex.*` beside it).
+
+    Every git command that reads a split index bumps the shared file's mtime,
+    whatever the locks or config, so the index must not be read at all.
+    Leftover shared files from an earlier split also count: a false positive
+    only costs the whole-tree fallback. rev-parse reads no index.
+    """
+    out = git(directory, "rev-parse", "--git-dir", "--git-common-dir")
+    for gitdir in os.fsdecode(out or b"").splitlines():
+        try:
+            names = os.listdir(os.path.join(directory, gitdir))
+        except OSError:
+            continue
+        if any(name.startswith("sharedindex.") for name in names):
+            return True
+    return False
 
 
 def blank_filters(directory):
@@ -175,6 +197,8 @@ def git_identity(root, excludes):
     inside = git(root, "rev-parse", "--is-inside-work-tree")
     if inside is None or inside.strip() != b"true":
         return None
+    if split_index(root):
+        return SPLIT_INDEX
     if git(root, "check-ignore", "-q", ".") is not None:
         return None
     check_index_flags(root, excludes)
@@ -231,7 +255,8 @@ def identity(directory, extra_excludes=()):
     if not os.path.isdir(root):
         raise IdentityError(f"not a directory: {directory}")
     found = git_identity(root, excludes)
-    if found:
+    fallback = found if found == SPLIT_INDEX else None
+    if found and not fallback:
         mode, (head, dirty, submodules, tree_files) = "git", found
         files = {**dirty, **tree_files}
     else:
@@ -240,6 +265,7 @@ def identity(directory, extra_excludes=()):
     return {
         "path": root,
         "mode": mode,
+        "fallback": fallback,
         "head": head,
         "dirty_files": sorted(dirty) if mode == "git" else None,
         "submodules": submodules,
@@ -257,7 +283,7 @@ def format_text(r):
             counted.append(f"submodules: {', '.join(r['submodules'])} (work trees hashed as plain files)")
     return "\n".join([
         f"path: {r['path']}",
-        f"mode: {r['mode']}",
+        f"mode: {r['mode']}" + (f" ({r['fallback']} fallback: git index not read)" if r["fallback"] else ""),
         f"head: {r['head'] or 'none'}",
         *counted,
         "excludes: " + ", ".join(r["excludes"]),

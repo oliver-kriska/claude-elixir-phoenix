@@ -51,7 +51,7 @@ seeding a new one:
 | ADR-000, no `architecture.md` | architect incomplete | `/rewrite:architect` (resumes at step 4) |
 | ADR-000 + `architecture.md`, but `decisions.md` or `divergences.md` missing, phase `architecting`, or `ledger.py check` fails | architect incomplete | `/rewrite:architect` (resumes at step 4 or 5) |
 | ADR-000 + `architecture.md` + `decisions.md` + `divergences.md`, clean ledger, no `roadmap.md` | architected | `/rewrite:roadmap` |
-| a slice `in-progress` with no `- [ ]` left in its `plan.md` | awaiting gate | `/rewrite:verify NN` |
+| a slice `planned` or `in-progress` whose `plan.md` has at least one `- [x]` and no `- [ ]` | awaiting gate | `/rewrite:verify NN` |
 | a slice `planned` or `in-progress` | building | `/phx:work .claude/plans/{slug}/plan.md`, then `/rewrite:verify NN` |
 | `roadmap.md` with `ready` or `seeded` slices | slicing | `/rewrite:roadmap --next` |
 | every slice `done` | complete | release rehearsal slice, or close out |

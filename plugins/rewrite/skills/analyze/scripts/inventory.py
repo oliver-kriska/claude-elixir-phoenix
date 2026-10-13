@@ -637,6 +637,24 @@ def git(args, cwd, options=()):
     return res.stdout if res.returncode == 0 else None
 
 
+def split_index(root):
+    """True when the index is stored split (`sharedindex.*` beside it).
+
+    Every git command that reads a split index bumps the shared file's mtime,
+    whatever the locks or config, so the index must not be read at all.
+    Leftover shared files from an earlier split also count: a false positive
+    only costs the dirty state. rev-parse and the history commands read no index.
+    """
+    for gitdir in (git(["rev-parse", "--git-dir", "--git-common-dir"], root) or "").splitlines():
+        try:
+            names = os.listdir(os.path.join(root, gitdir))
+        except OSError:
+            continue
+        if any(name.startswith("sharedindex.") for name in names):
+            return True
+    return False
+
+
 def git_status(root):
     """`git status --porcelain` with every configured filter driver disabled.
 
@@ -658,6 +676,9 @@ def git_status(root):
 
 
 def dirty_state(root):
+    if split_index(root):
+        return {"dirty": None, "dirty_count": None, "dirty_files": [], "dirty_fingerprint": None,
+                "dirty_unknown": "split index: reading it would bump sharedindex.* timestamps in SOURCE"}
     porcelain = git_status(root) or ""
     files = sorted(line[3:].split(" -> ")[-1].strip('"') for line in porcelain.splitlines() if line.strip())
     digest = hashlib.sha256()
@@ -900,7 +921,7 @@ def detect_stacks(root_abs, deps, direct, csproj_seen):
 def inventory(source, target, max_commits, steering_dirs=()):
     source = os.path.abspath(source)
     head_before = git(["rev-parse", "HEAD"], source)
-    status_before = git_status(source)
+    status_before = None if split_index(source) else git_status(source)
     files = [rel(p, source) for p in walk(source)]
     roots = find_app_roots([r for r in files if not os.path.islink(os.path.join(source, r))])
     loc_by_lang, files_by_lang = Counter(), Counter()
@@ -1042,7 +1063,7 @@ def inventory(source, target, max_commits, steering_dirs=()):
     # Any write bumps mtime/ctime, so metadata detects edits made during the scan without re-reading.
     stat_after = {rel(path, source): stat_key(path) for path in walk(source)}
     if (stat_after != stat_before or head_before != git(["rev-parse", "HEAD"], source)
-            or status_before != git_status(source)):
+            or status_before != (None if split_index(source) else git_status(source))):
         raise ValueError("source changed during inventory; retry on a stable snapshot")
 
     coverage = {
@@ -1075,6 +1096,9 @@ def inventory(source, target, max_commits, steering_dirs=()):
             "Python 3.11); their dependency lists may be incomplete: " + ", ".join(regex_fallback[:10]))
     if git_info.get("hotspots_suppressed"):
         coverage["limitations"].append(git_info["hotspots_suppression_reason"])
+    if git_info.get("dirty_unknown"):
+        coverage["limitations"].append(f"dirty state unknown ({git_info['dirty_unknown']}); "
+                                       "tree_fingerprint still covers every scanned file")
 
     return {
         "version": 2,
@@ -1146,7 +1170,8 @@ def to_markdown(inv):
         lines.append(f"- git: `{g['sha'][:12]}` on `{g['branch']}`, {g['commit_count']} commits, "
                      f"{g['first_commit']} → {g['last_commit']}, {g['contributors']} contributors"
                      + (f" (**dirty tree**: {g['dirty_count']} files, fingerprint `{g['dirty_fingerprint']}`)"
-                        if g["dirty"] else ""))
+                        if g["dirty"] else "")
+                     + (" (dirty state unknown: split index)" if g["dirty"] is None else ""))
     else:
         lines.append("- git: not a repository (no history signals)")
     lines.append(f"- tree fingerprint: `{inv['source']['tree_fingerprint']}`")

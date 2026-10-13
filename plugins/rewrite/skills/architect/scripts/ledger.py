@@ -240,8 +240,22 @@ def check(rewrite_dir):
     return errors, warnings
 
 
+class LedgerError(Exception):
+    """The ledger is structurally invalid, so no count of it can be trusted."""
+
+    def __init__(self, errors):
+        super().__init__("; ".join(errors))
+        self.errors = errors
+
+
 def stats(rewrite_dir, ids=None):
-    _, rows, _ = rows_as_dicts(read(os.path.join(rewrite_dir, "ledger.md")))
+    """Counts from one parse of ledger.md. Raises LedgerError when that same parse is
+    structurally invalid; adds `unmatched_ids` when `ids` is given."""
+    table_columns, rows, malformed = rows_as_dicts(read(os.path.join(rewrite_dir, "ledger.md")))
+    errors = structure_errors(table_columns, malformed)
+    if errors:
+        raise LedgerError(errors)
+    known = {alias for r in rows for alias in r["aliases"]}
     if ids is not None:
         rows = [r for r in rows if set(r["aliases"]) & ids]
     verdicts, impl, evidence = Counter(), Counter(), Counter()
@@ -257,7 +271,7 @@ def stats(rewrite_dir, ids=None):
         if r["impl"] == "implemented" and r["evidence"] == "pass" and not has_departure:
             verified += 1
     retired = impl.get("retired", 0)
-    return {
+    result = {
         "rows": len(rows),
         "verified": verified,
         "denominator": len(rows) - retired,
@@ -268,6 +282,9 @@ def stats(rewrite_dir, ids=None):
         "implementation": dict(sorted(impl.items())),
         "evidence": dict(sorted(evidence.items())),
     }
+    if ids is not None:
+        result["unmatched_ids"] = sorted(ids - known)
+    return result
 
 
 def format_stats(s):
@@ -309,16 +326,13 @@ def main(argv=None):
             print(f"error: cannot read slice file {args.slice}")
             return 2
         ids = set(ID_RE.findall(text))
-    table_columns, rows, malformed = rows_as_dicts(read(os.path.join(args.rewrite_dir, "ledger.md")))
-    errors = structure_errors(table_columns, malformed)
-    if errors:
-        for e in errors:
+    try:
+        s = stats(args.rewrite_dir, ids)
+    except LedgerError as exc:
+        for e in exc.errors:
             print(f"error: {e}", file=sys.stderr)
         return 1
-    s = stats(args.rewrite_dir, ids)
     if ids is not None:
-        known = {alias for r in rows for alias in r["aliases"]}
-        s["unmatched_ids"] = sorted(ids - known)
         if not s["rows"]:
             print("warning: the selection matches no ledger rows; nothing is verified", file=sys.stderr)
         if s["unmatched_ids"]:

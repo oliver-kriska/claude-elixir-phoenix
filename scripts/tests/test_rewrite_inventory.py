@@ -666,3 +666,45 @@ def test_special_files_are_reported_without_opening(tmp_path: Path) -> None:
         {"path": "AGENTS.md", "type": "fifo"}, {"path": "run/dev.fifo", "type": "fifo"},
     ]
     assert "special files not read" in proc.stdout
+
+
+def snapshot(root: Path) -> dict[str, tuple]:
+    """Bytes, size and mtime of every file and directory under root, .git included."""
+    out = {}
+    for dirpath, dirnames, filenames in os.walk(root):
+        for name in dirnames + filenames:
+            path = Path(dirpath, name)
+            st = path.lstat()
+            data = path.read_bytes() if path.is_file() and not path.is_symlink() else None
+            out[str(path.relative_to(root))] = (data, st.st_size, st.st_mtime_ns)
+    return out
+
+
+@pytest.mark.parametrize("split", [False, True], ids=["ordinary-index", "split-index"])
+def test_inventory_writes_nothing_in_a_git_checkout(tmp_path: Path, split: bool) -> None:
+    repo = git_repo(tmp_path / "app", {"app.py": "a = 1\n", "lib/b.py": "b = 2\n"})
+    (repo / "app.py").write_text("a = 3\n", encoding="utf-8")
+    (repo / "new.py").write_text("n = 1\n", encoding="utf-8")
+    os.utime(repo / "lib/b.py", ns=(0, 0))
+    if split:
+        git_cmd(repo, "update-index", "--split-index")
+        for path in (repo / ".git").glob("sharedindex.*"):
+            os.utime(path, ns=(0, 0))
+    before = snapshot(repo)
+    out = tmp_path / "inventory.json"
+
+    proc = subprocess.run([sys.executable, str(SCRIPT), str(repo), "--json", str(out)],
+                          capture_output=True, text=True, timeout=60, stdin=subprocess.DEVNULL)
+
+    assert proc.returncode == 0, proc.stderr
+    assert snapshot(repo) == before
+    result = json.loads(out.read_text(encoding="utf-8"))
+    git_info = result["source"]["git"]
+    assert git_info["sha"] == git_cmd(repo, "rev-parse", "HEAD").stdout.strip()
+    if split:
+        assert any((repo / ".git").glob("sharedindex.*"))
+        assert (git_info["dirty"], git_info["dirty_fingerprint"]) == (None, None)
+        assert any("split index" in line for line in result["coverage"]["limitations"])
+        assert "dirty state unknown" in proc.stdout
+    else:
+        assert git_info["dirty_files"] == ["app.py", "new.py"]

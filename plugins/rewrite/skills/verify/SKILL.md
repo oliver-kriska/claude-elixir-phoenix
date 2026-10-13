@@ -45,6 +45,8 @@ fp() { python3 "${CLAUDE_SKILL_DIR}/scripts/fingerprint.py" "$@"; }
 - **Output** — `head` and a `content_fingerprint`: SHA-256 over the full bytes of every dirty file (tracked changes
   plus untracked, non-ignored files) and of every file in each submodule work tree, or of every file outside git.
   Git runs with the checkout's hooks, filters and fsmonitor disabled, and never writes the index
+- **Split index** — when the git dir holds `sharedindex.*`, git would touch it on read, so the whole tree is hashed
+  instead (`mode: tree`, `fallback: split-index`, no head). Compare only captures taken in the same mode
 - **Excludes** — `.claude/rewrite/verify/`, `_build/`, `deps/` and `node_modules/` by default
 - **Exit 2** — no identity: DIR is not a directory, a file cannot be read, an exclude leaves DIR, git cannot list
   changes, or a tracked file is flagged `assume-unchanged`/`skip-worktree` (git hides its edits). Ask the user to
