@@ -17,7 +17,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 BASELINE_FILE = ROOT / "scripts" / "plugin_budget.json"
-PLUGIN_DIRS = ("plugins/elixir-phoenix", "plugins/ecto", "plugins/lv")
+PLUGIN_DIRS = ("plugins/elixir-phoenix", "plugins/ecto", "plugins/lv", "plugins/rewrite")
 ALWAYS_ON = re.compile(r"Always-on:\s+~?([\d,]+)\s+tok")
 
 

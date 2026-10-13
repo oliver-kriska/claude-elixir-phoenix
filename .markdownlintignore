@@ -14,3 +14,6 @@ lab/plugin_eval/cases/
 # Untracked non-source content (promo assets, tool cache) — not plugin docs.
 social/
 .rtk/
+
+# Raw agent outputs from rewrite eval replays, kept verbatim as graded evidence.
+lab/rewrite_eval/results/*/*/

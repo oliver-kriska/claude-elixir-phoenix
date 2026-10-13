@@ -12,6 +12,45 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **`test_hook_scripts_run_only_paths_the_directory_can_follow`
   (contributor tooling).** Rejects inline programs, `eval`, `source`,
   `bash`/`command` invocations and `$0`/`BASH_SOURCE` paths in hook scripts.
+- **New `rewrite` plugin (Elixir Rewrite Architect, 0.1.0, experimental).**
+  Plans a rewrite of an app from any language into idiomatic Elixir. Five
+  commands (`/rewrite:start`, `analyze`, `architect`, `roadmap`, `verify`),
+  one reference skill (`elixir-way`, with stack packs for Rails, Django,
+  Laravel/PHP, Node, Go and JVM/.NET plus a generic method), seven agents
+  (six sonnet, `elixir-way-architect` on opus) and three stdlib scripts
+  (`inventory.py`, `ledger.py`, and `fingerprint.py`, which stamps verify
+  evidence with the content identity of both trees). Slices reach phx as an `interview.md` seed
+  for `/phx:plan`; phx itself is unchanged. The dependency on
+  `elixir-phoenix` lives in the marketplace entry, not `plugin.json`, so the
+  plugin still loads beside `--plugin-dir ./plugins/elixir-phoenix` (`phx@inline`).
+  Versions independently. See `plugins/rewrite/README.md`.
+- **Structural eval scores more than one plugin (contributor tooling).**
+  `lab/eval/plugins.py` maps a file to its plugin, so `make eval` and
+  `make eval-all` score `rewrite` skills and agents alongside `phx`.
+- **Tests for the rewrite scripts (contributor tooling).**
+  `scripts/tests/test_rewrite_inventory.py`,
+  `scripts/tests/test_rewrite_fingerprint.py` and
+  `scripts/tests/test_rewrite_ledger.py` cover stack detection, coverage
+  counts, the snapshot compare, the refusal to write inside the source, and
+  the ledger check: only row IDs and aliases account for a mechanism, rows
+  must match their header's width, an `AR-NN` departure needs a complete
+  record (owner, scope listing the row, rationale, review, approval), and an
+  empty or unreadable slice never falls back to the whole ledger. `scripts/tests/test_rewrite_plugin.py`
+  checks the plugin's own rules: skill-dir paths resolve, namespaced
+  references exist, every KB file an agent names exists, the ledger
+  vocabulary matches `ledger.py`, and no stale vocabulary remains.
+- **Trigger eval covers the rewrite plugin (contributor tooling).**
+  `trigger_scorer.py` routes over the phx and rewrite skill pools together
+  (phx keys stay bare, others are `rewrite:verify`), with
+  `triggers/rewrite-*.json` fixtures and hard phx near-miss negatives. All six
+  rewrite skills score 100% on the Haiku gate. The behavioral dimension reads
+  `rewrite-verify.json` for `rewrite:verify` instead of phx's `verify.json`.
+- **`make budget` tracks the rewrite plugin** (~1,144 always-on tokens).
+- **Rewrite eval evidence (contributor tooling).** `lab/rewrite_eval/` holds
+  seven negative controls with a grading rubric, their blind-replay results,
+  and the artifacts of three `--auto` end-to-end runs (Campfire, Node and
+  Django RealWorld) plus a fresh-session `/phx:plan` handoff from a Django
+  seed.
 
 ### Changed
 

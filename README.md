@@ -250,6 +250,21 @@ manifest, install only if you want it:
 
 See `plugins/catchup/README.md`. Not coupled to Elixir/Phoenix.
 
+#### Companion plugin: `rewrite` (experimental)
+
+**`rewrite`** (Elixir Rewrite Architect) plans a rewrite of an existing app
+from any language into idiomatic Elixir: features as goals, why each legacy
+mechanism exists, a compatibility bar before any design, then vertical slices
+handed to `/phx:plan` and checked by `/rewrite:verify`. Stack packs for Rails,
+Django, Laravel/PHP, Node, Go and JVM/.NET; a generic method for the rest. It
+depends on `elixir-phoenix`. Version 0.1.0, tested on small apps only:
+
+```bash
+/plugin install rewrite@oliver-kriska
+```
+
+See `plugins/rewrite/README.md`.
+
 #### From Local Path (for development)
 
 ```bash

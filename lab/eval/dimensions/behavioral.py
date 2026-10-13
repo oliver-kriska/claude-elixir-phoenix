@@ -9,6 +9,7 @@ by ``trigger_scorer.py``.
 import json
 import os
 
+from lab.eval.plugins import DEFAULT_PLUGIN, namespace_map, plugin_dir, plugin_root_for
 from lab.eval.schemas import AssertionResult, DimensionResult, EvalDimension
 
 
@@ -34,10 +35,20 @@ def _neutral(skill_name: str, evidence: str) -> DimensionResult:
     )
 
 
+def cache_stem(skill_path: str) -> str:
+    """Trigger cache stem: bare for phx, `{namespace}-{skill}` for other plugins (matches trigger_scorer)."""
+    name = os.path.basename(os.path.dirname(skill_path))
+    root = plugin_root_for(skill_path)
+    if root == plugin_dir(DEFAULT_PLUGIN):
+        return name
+    namespace = next((ns for ns, r in namespace_map().items() if r == root), os.path.basename(root))
+    return f"{namespace}-{name}"
+
+
 def score(content: str, dimension: EvalDimension, skill_path: str = "", plugin_root: str = "") -> DimensionResult:
     """Score cached trigger results only after an explicit opt-in."""
     skill_name = os.path.basename(os.path.dirname(skill_path)) if skill_path else ""
-    cache_path = os.path.join(TRIGGERS_RESULTS_DIR, f"{skill_name}.json")
+    cache_path = os.path.join(TRIGGERS_RESULTS_DIR, f"{cache_stem(skill_path) if skill_path else ''}.json")
 
     if os.environ.get(CACHE_OPT_IN_ENV) != "1":
         return _neutral(

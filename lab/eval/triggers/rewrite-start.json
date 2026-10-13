@@ -1,0 +1,22 @@
+{
+  "skill": "rewrite:start",
+  "should_trigger": [
+    "We want to move our Spring Boot order service to Elixir. Where do we begin?",
+    "Rewrite this Laravel app in Phoenix",
+    "Port our Go worker fleet to Elixir",
+    "Our marketing site is WordPress with a pile of custom plugins and WooCommerce. We'd like to rebuild it as a Phoenix app, can you get that started?",
+    "Where are we on the NestJS to Phoenix rewrite? Show me the status and what comes next",
+    "Pick up the .NET to Elixir migration we started last week",
+    "I want to replace our Python click CLI with an Elixir escript that does exactly the same thing",
+    "Kick off the rewrite of our Rails 6 monolith into Phoenix"
+  ],
+  "should_not_trigger": [
+    "Rewrite this nested case statement as a with chain",
+    "Upgrade our app from Phoenix 1.7 to 1.8",
+    "Plan a new billing feature in Phoenix with Stripe subscriptions",
+    "Migrate our Phoenix app from Heroku to Fly.io",
+    "Write an Ecto migration that renames users.email to users.login",
+    "Should our new greenfield chat service be written in Elixir or Go?",
+    "Show me the status of my current plan and which task is next"
+  ]
+}

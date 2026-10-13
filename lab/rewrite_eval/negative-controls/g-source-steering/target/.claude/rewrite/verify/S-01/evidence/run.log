@@ -1,0 +1,3 @@
+TotalsTest [test/totals_test.exs]
+  * test C-01 preserves integer totals (0.1ms)
+1 test, 0 failures, 0 excluded

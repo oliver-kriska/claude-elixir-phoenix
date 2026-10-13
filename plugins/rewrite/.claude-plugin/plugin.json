@@ -1,0 +1,14 @@
+{
+  "name": "rewrite",
+  "displayName": "Elixir Rewrite Architect",
+  "version": "0.1.0",
+  "description": "Rewrite an app from any stack into Elixir the Elixir way: analyze features and why each mechanism exists, set the compatibility bar, design a Phoenix/Ecto/Oban/OTP architecture, plan slices for /phx:plan, and verify parity.",
+  "keywords": ["elixir", "phoenix", "rewrite", "port", "migration", "legacy", "architecture", "rails", "django", "php", "node", "go", "java", "dotnet"],
+  "author": {
+    "name": "Oliver Kriska"
+  },
+  "homepage": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "repository": "https://github.com/oliver-kriska/claude-elixir-phoenix",
+  "supportUrl": "https://github.com/oliver-kriska/claude-elixir-phoenix/issues",
+  "license": "MIT"
+}

@@ -23,6 +23,9 @@ cd "$PROJECT_ROOT"
 
 MODE="${1:---changed}"
 FAILURES=0
+# Plugins scored structurally; keep in sync with STRUCTURAL_PLUGINS in lab/eval/plugins.py
+SKILL_PATHS=(plugins/elixir-phoenix/skills/ plugins/rewrite/skills/)
+AGENT_PATHS=(plugins/elixir-phoenix/agents/ plugins/rewrite/agents/)
 
 run_skills() {
     local filter="$1"  # "all" or "changed"
@@ -31,15 +34,15 @@ run_skills() {
     if [ "$filter" = "changed" ]; then
         local changed_files=""
         # 1. Uncommitted changes (staged + unstaged)
-        changed_files=$(git diff --name-only HEAD -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+        changed_files=$(git diff --name-only HEAD -- "${SKILL_PATHS[@]}" 2>/dev/null || echo "")
         local staged
-        staged=$(git diff --cached --name-only -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+        staged=$(git diff --cached --name-only -- "${SKILL_PATHS[@]}" 2>/dev/null || echo "")
         if [ -n "$staged" ]; then
             changed_files=$(printf "%s\n%s" "$changed_files" "$staged")
         fi
         # Untracked (brand-new skills are invisible to git diff)
         local untracked
-        untracked=$(git ls-files --others --exclude-standard -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+        untracked=$(git ls-files --others --exclude-standard -- "${SKILL_PATHS[@]}" 2>/dev/null || echo "")
         if [ -n "$untracked" ]; then
             changed_files=$(printf "%s\n%s" "$changed_files" "$untracked")
         fi
@@ -48,7 +51,7 @@ run_skills() {
             local last_commit
             last_commit=$(cat "$LAST_EVAL_FILE")
             local since_last
-            since_last=$(git diff --name-only "$last_commit" HEAD -- 'plugins/elixir-phoenix/skills/' 2>/dev/null || echo "")
+            since_last=$(git diff --name-only "$last_commit" HEAD -- "${SKILL_PATHS[@]}" 2>/dev/null || echo "")
             if [ -n "$since_last" ]; then
                 changed_files=$(printf "%s\n%s" "$changed_files" "$since_last")
             fi
@@ -57,12 +60,12 @@ run_skills() {
             echo "  No skill changes since last eval"
             return 0
         fi
-        # Extract unique skill names from changed paths
+        # Extract unique skill directories (plugins/<plugin>/skills/<skill>) from changed paths
         while IFS= read -r file; do
-            local skill_name
-            skill_name=$(echo "$file" | sed -n 's|plugins/elixir-phoenix/skills/\([^/]*\)/.*|\1|p')
-            if [ -n "$skill_name" ]; then
-                skills_to_check+=("$skill_name")
+            local skill_dir
+            skill_dir=$(echo "$file" | sed -n 's|^\(plugins/[^/]*/skills/[^/]*\)/.*|\1|p')
+            if [ -n "$skill_dir" ]; then
+                skills_to_check+=("$skill_dir")
             fi
         done <<< "$changed_files"
         # Deduplicate
@@ -83,13 +86,14 @@ run_skills() {
     else
         result="{"
         local first=true
-        for skill in "${skills_to_check[@]}"; do
-            local path="plugins/elixir-phoenix/skills/$skill/SKILL.md"
+        for skill_dir in "${skills_to_check[@]}"; do
+            local path="$skill_dir/SKILL.md"
             [ -f "$path" ] || continue
-            local score
+            local key score
+            key=$(echo "$skill_dir" | sed 's|^plugins/elixir-phoenix/skills/||; s|^plugins/\([^/]*\)/skills/|\1:|')
             score=$(python3 -m lab.eval.scorer "$path" 2>/dev/null)
             if [ "$first" = true ]; then first=false; else result+=","; fi
-            result+="\"$skill\":$score"
+            result+="\"$key\":$score"
         done
         result+="}"
     fi
@@ -114,20 +118,20 @@ run_agents() {
     if [ "$filter" = "changed" ]; then
         local changed=""
         # Uncommitted + staged
-        changed=$(git diff --name-only HEAD -- 'plugins/elixir-phoenix/agents/' 2>/dev/null || echo "")
+        changed=$(git diff --name-only HEAD -- "${AGENT_PATHS[@]}" 2>/dev/null || echo "")
         local staged
-        staged=$(git diff --cached --name-only -- 'plugins/elixir-phoenix/agents/' 2>/dev/null || echo "")
+        staged=$(git diff --cached --name-only -- "${AGENT_PATHS[@]}" 2>/dev/null || echo "")
         if [ -n "$staged" ]; then changed=$(printf "%s\n%s" "$changed" "$staged"); fi
         # Untracked (brand-new agents are invisible to git diff)
         local untracked
-        untracked=$(git ls-files --others --exclude-standard -- 'plugins/elixir-phoenix/agents/' 2>/dev/null || echo "")
+        untracked=$(git ls-files --others --exclude-standard -- "${AGENT_PATHS[@]}" 2>/dev/null || echo "")
         if [ -n "$untracked" ]; then changed=$(printf "%s\n%s" "$changed" "$untracked"); fi
         # Since last eval
         if [ -f "$LAST_EVAL_FILE" ]; then
             local last_commit
             last_commit=$(cat "$LAST_EVAL_FILE")
             local since_last
-            since_last=$(git diff --name-only "$last_commit" HEAD -- 'plugins/elixir-phoenix/agents/' 2>/dev/null || echo "")
+            since_last=$(git diff --name-only "$last_commit" HEAD -- "${AGENT_PATHS[@]}" 2>/dev/null || echo "")
             if [ -n "$since_last" ]; then changed=$(printf "%s\n%s" "$changed" "$since_last"); fi
         fi
         # Deduplicate and filter empty

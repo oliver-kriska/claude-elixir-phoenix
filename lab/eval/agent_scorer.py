@@ -22,6 +22,8 @@ from lab.eval.agent_matchers import (
     agent_model_appropriate, agent_has_skills, agent_omit_claudemd, ORCHESTRATOR_NAMES,
 )
 
+from lab.eval.plugins import DEFAULT_PLUGIN, STRUCTURAL_PLUGINS, plugin_dir, plugin_root_for, result_key
+
 PLUGIN_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "plugins", "elixir-phoenix")
 
 
@@ -32,7 +34,7 @@ def score_agent(agent_path: str) -> ScoreResult:
     request = ScoreRequest(
         target_path=os.path.abspath(agent_path),
         target_kind="agent",
-        plugin_root=os.path.abspath(PLUGIN_ROOT),
+        plugin_root=plugin_root_for(agent_path),
     )
     return score_agent_request(request)
 
@@ -130,29 +132,29 @@ def score_agent_request(request: ScoreRequest) -> ScoreResult:
     )
 
 
-def find_all_agents() -> list[str]:
-    """Find all agent .md files."""
-    agents_dir = os.path.join(PLUGIN_ROOT, "agents")
-    if not os.path.isdir(agents_dir):
-        return []
-    return sorted(
-        os.path.join(agents_dir, f)
-        for f in os.listdir(agents_dir)
-        if f.endswith(".md")
-    )
+def find_all_agents(plugins: tuple[str, ...] = (DEFAULT_PLUGIN,)) -> list[str]:
+    """Find all agent .md files in the given plugins (default: elixir-phoenix only)."""
+    paths = []
+    for plugin in plugins:
+        agents_dir = os.path.join(plugin_dir(plugin), "agents")
+        if os.path.isdir(agents_dir):
+            paths += sorted(os.path.join(agents_dir, f) for f in os.listdir(agents_dir) if f.endswith(".md"))
+    return paths
 
 
 def main():
     parser = argparse.ArgumentParser(description="Score plugin agents across 5 dimensions")
     parser.add_argument("agent_path", nargs="?", help="Path to agent .md file")
     parser.add_argument("--all", action="store_true", help="Score all agents")
+    parser.add_argument("--plugin", action="append",
+                        help="Plugin directory to score with --all (repeatable; default: every structural plugin)")
     parser.add_argument("--pretty", action="store_true", help="Pretty-print output")
     args = parser.parse_args()
 
     if args.all:
         results = {}
-        for path in find_all_agents():
-            name = os.path.basename(path).replace(".md", "")
+        for path in find_all_agents(tuple(args.plugin or STRUCTURAL_PLUGINS)):
+            name = result_key(path, os.path.basename(path).replace(".md", ""))
             score = score_agent(path)
             results[name] = score.to_dict()
             status = "OK" if score.composite >= 0.95 else "NEEDS WORK"

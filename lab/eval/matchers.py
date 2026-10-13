@@ -287,8 +287,21 @@ def description_no_vague(
 # --- Cross-reference matchers ---
 
 
+def _namespace_roots() -> dict[str, str]:
+    try:
+        from lab.eval.plugins import namespace_map
+    except ImportError:  # matchers imported outside the repo package
+        return {}
+    return namespace_map()
+
+
 def valid_skill_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, str]:
-    """Check all /phx: or skill name references point to existing skills."""
+    """Check slash-command and skill-name references point to existing skills.
+
+    `/ns:name` references resolve against the plugin whose manifest name is `ns`
+    (`phx` → elixir-phoenix, `rewrite` → rewrite, `ecto`, `lv`). Bare "`name` skill"
+    references resolve against the plugin being scored.
+    """
     if not plugin_root:
         # Try to find plugin root relative to common paths
         for candidate in [
@@ -308,32 +321,30 @@ def valid_skill_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
     if not plugin_root or not os.path.isdir(os.path.join(plugin_root, "skills")):
         return True, "Cannot locate plugin root — skipping skill ref check"
 
-    skills_dir = os.path.join(plugin_root, "skills")
-    existing_skills = set(os.listdir(skills_dir))
+    roots = _namespace_roots()
+    roots.setdefault("phx", os.path.join(os.path.dirname(os.path.abspath(plugin_root)), "elixir-phoenix"))
+    aliases = {"n1": "n1-check", "assigns": "assigns-audit"}
 
-    # Find /phx: references
-    refs = re.findall(r"/phx:(\w[\w-]*)", content)
-    # Find skill name references in backticks
-    refs += re.findall(r"`(\w[\w-]+)`\s+skill", content)
+    def skills_of(root: str) -> set[str]:
+        directory = os.path.join(root, "skills")
+        return set(os.listdir(directory)) if os.path.isdir(directory) else set()
 
-    missing = []
-    for ref in set(refs):
-        # Normalize: phx:n1-check -> n1-check
-        skill_name = ref.replace("phx:", "")
-        if skill_name not in existing_skills:
-            # Try common aliases
-            aliases = {
-                "n1": "n1-check",
-                "assigns": "assigns-audit",
-                "lv:assigns": "assigns-audit",
-                "ecto:n1-check": "n1-check",
-            }
-            if skill_name not in aliases.values():
-                missing.append(ref)
+    own_skills = skills_of(plugin_root)
+    missing, checked = [], set()
+    for ns, name in set(re.findall(r"/(\w[\w-]*):(\w[\w-]*)", content)):
+        if ns not in roots:
+            continue
+        checked.add(f"{ns}:{name}")
+        if name not in skills_of(roots[ns]) and aliases.get(name) not in skills_of(roots[ns]):
+            missing.append(f"/{ns}:{name}")
+    for name in set(re.findall(r"`(\w[\w-]+)`\s+skill", content)):
+        checked.add(name)
+        if name not in own_skills and aliases.get(name) not in own_skills:
+            missing.append(name)
 
     if not missing:
-        return True, f"All {len(set(refs))} skill references valid"
-    return False, f"Missing skills: {missing}"
+        return True, f"All {len(checked)} skill references valid"
+    return False, f"Missing skills: {sorted(missing)}"
 
 
 def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, str]:
@@ -374,9 +385,30 @@ def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
     # Built-in Claude Code agent types (not in plugin agents/ dir)
     builtin_agents = {"general-purpose", "Explore", "Plan", "code-simplifier"}
 
+    roots = _namespace_roots()
+    # Namespaced references in backticks: `rewrite:feature-cartographer`, `phx:ecto-schema-designer`.
+    namespaced = {
+        (ns, name)
+        for ns, name in re.findall(r"`(\w[\w-]*):([\w-]+)`", content)
+        if ns in roots
+    }
+
+    def names_in(root: str, kind: str) -> set[str]:
+        directory = os.path.join(root, kind)
+        if not os.path.isdir(directory):
+            return set()
+        if kind == "agents":
+            return {f.replace(".md", "") for f in os.listdir(directory) if f.endswith(".md")}
+        return set(os.listdir(directory))
+
     missing = []
     for ref in set(refs):
         if ref in builtin_agents:
+            continue
+        ns, _, name = ref.rpartition(":")
+        if ns and ns in roots and ns != "phx":
+            if name not in names_in(roots[ns], "agents"):
+                missing.append(ref)
             continue
         # Strip the current runtime plugin namespace if present.
         clean_ref = re.sub(r"^phx:", "", ref)
@@ -385,6 +417,14 @@ def valid_agent_refs(content: str, plugin_root: str = "", **_) -> tuple[bool, st
             and clean_ref.replace("_", "-") not in existing_agents
         ):
             missing.append(ref)
+    for ns, name in namespaced:
+        root = roots[ns]
+        known = names_in(root, "agents") | names_in(root, "skills")
+        if ns == "phx":
+            known |= existing_agents
+        if name not in known:
+            missing.append(f"{ns}:{name}")
+    refs = list(set(refs)) + [f"{ns}:{name}" for ns, name in namespaced]
 
     if not missing:
         checked = len(set(refs))

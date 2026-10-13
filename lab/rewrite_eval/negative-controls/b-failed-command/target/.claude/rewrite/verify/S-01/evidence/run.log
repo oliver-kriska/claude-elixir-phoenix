@@ -1,0 +1,6 @@
+1) test C-01 rejects negative units (QuantityTest)
+   test/quantity_test.exs:4
+   Assertion with == failed
+   left:  {:ok, -3}
+   right: {:error, :invalid_quantity}
+1 test, 1 failure, 0 excluded

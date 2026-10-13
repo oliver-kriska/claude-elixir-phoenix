@@ -1,0 +1,4 @@
+HealthRouterTest [test/health_router_test.exs]
+  * test C-01 returns public process liveness, not downstream readiness (0.1ms)
+  * test C-02 rejects unknown routes and unsupported methods (0.1ms)
+2 tests, 0 failures, 0 excluded
