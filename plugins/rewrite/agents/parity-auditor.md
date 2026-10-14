@@ -112,7 +112,9 @@ One row per canonical assertion: acceptance probes (positive and negative),
 contract witnesses in scope, ledger guarantees in scope (atomicity,
 durability, ordering, delivery, authorization, visibility) that the source
 evidences or an accepted ADR adopts, each black-box file `## Oracle` assigns
-(its witness is that file's record, run against the port), and omissions.
+(its witness is that file's own record against the release this run started
+with `ev port start`; a wrapper test inside `mix test` or a dev server is not
+one), and omissions.
 Merge duplicates into aliases before counting. A case no test sends is `not-run`.
 
 **Clean `OBLIGATION_IDS`** (cases, no errors): its cases are your acceptance rows, one row each under its ID.

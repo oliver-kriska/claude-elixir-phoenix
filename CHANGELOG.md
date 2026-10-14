@@ -138,7 +138,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   the script for stripping the environment. The skill's absence-check
   example now skips comment lines (`'^\s*([^#\s].*)?Repo\.'`). In slices
   00a and 00b, verify's first `rg` absence check matched a comment and had to
-  be re-run. The verify report quotes
+  be re-run. In ASP.NET slice 02, verify credited the Hurl files from an
+  ExUnit wrapper on the test endpoint. The parity auditor now counts a
+  black-box file only from its own record against the release started with
+  `ev port start`. The load script runs with a `checks` threshold: k6 exits 0
+  when checks fail, which both trials hit. The verify report quotes
   each row's obligation from `parity.md` instead of paraphrasing it (a trial
   report mislabeled TK-08), and verify never schedules a wakeup.
 - **A slice seed's acceptance cases fix the verify denominator.** Two

@@ -88,7 +88,7 @@ the run list, `$EV/commands.md`, before running anything, one line per command: 
 `mix format --check-formatted`); every command an acceptance criterion names, with its arguments as named (the named seeds,
 not a random one; `--force`, the full suite, a test outside the slice paths, a release smoke, a static check such as `rg` or
 `git diff`); and every `## Oracle` command (one per black-box file, whole-file diagnostics, the load script as a short
-smoke). Leave one out only when it cannot run here (a missing tool, a blocked preflight), and say so; a `/phx:work` log
+smoke, with a `checks` threshold: k6 exits 0 when checks fail). Leave one out only when it cannot run here (a missing tool, a blocked preflight), and say so; a `/phx:work` log
 never stands in.
 
 Run each one as `ev run {NN} NAME [--cwd DIR] [--expect-exit N] -- CMD`: it captures both identities, runs the command
