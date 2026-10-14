@@ -34,7 +34,7 @@ list is the denominator.
   SOURCE, captured by the main session just before this audit
 - `DECISIONS` — ADRs with their Status under `.claude/rewrite/architecture/`,
   and `.claude/rewrite/verify/accepted-risks.md`
-- `CLAIMS` — files that assert results (`progress.md`, PR text), may be empty
+- `CLAIMS` — files that assert results or record assumptions (`progress.md`, `scratchpad.md`, PR text), may be empty
 - `OBLIGATION_IDS` — `ledger.py obligations` output for the slice seed: its acceptance cases, the ledger IDs
   each cites, and any errors
 - `PREVIOUS` — the slice's last `parity.md`, moved aside before this audit; may be empty. Its rows, never its
@@ -162,6 +162,9 @@ obligations it would witness stay `not-run`.
 For every departure, read the ADR Status or the AR record and apply rule 7.
 Compare every claim in `CLAIMS` ("parity reached", "faster than legacy",
 "all contracts preserved") with your matrix. Unsupported claims are findings.
+A behavior `CLAIMS` records as assumed, recalled or unwitnessed ("ASSUMED parity, no witness") is a claim too:
+read SOURCE for it. When no obligation covers it, add it as an omission, `not-run` until a test pins the legacy
+behavior; when SOURCE contradicts the port, it is also an unsupported claim citing both anchors.
 
 ## Output Format
 

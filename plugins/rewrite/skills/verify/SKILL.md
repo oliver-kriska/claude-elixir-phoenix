@@ -125,8 +125,8 @@ source anchors from `interview.md` and the ledger rows, nothing wider. Spawn bot
   `CONTRACTS=.claude/rewrite/analysis/contracts.md`, `KB=.claude/rewrite/kb/`, `OUTPUT=.claude/rewrite/verify/{NN}/idiom.md`
 - **`rewrite:parity-auditor`** — `TARGET`, `SOURCE`, `COMPLETENESS`, `OBLIGATIONS` (the interview path plus the analyses),
   `LEDGER`, `EVIDENCE=$EV`, `CURRENT_IDENTITY`, `DECISIONS` (`.claude/rewrite/architecture/`,
-  `.claude/rewrite/verify/accepted-risks.md`), `CLAIMS` (`progress.md`, PR text if any), `OBLIGATION_IDS`, `PREVIOUS` (an
-  earlier `parity.md`, moved aside first), `OUTPUT=.claude/rewrite/verify/{NN}/parity.md`
+  `.claude/rewrite/verify/accepted-risks.md`), `CLAIMS` (`progress.md`, `scratchpad.md`, PR text if any), `OBLIGATION_IDS`, `PREVIOUS` (this slice's
+  `verify/{NN}/parity.md` renamed to `parity-previous.md`; none on a first round; never another slice's), `OUTPUT=.claude/rewrite/verify/{NN}/parity.md`
 
 ### 5. Apply ledger updates
 

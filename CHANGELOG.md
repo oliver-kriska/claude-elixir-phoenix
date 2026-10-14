@@ -144,7 +144,17 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `ev port start`. The load script runs with a `checks` threshold: k6 exits 0
   when checks fail, which both trials hit. The verify report quotes
   each row's obligation from `parity.md` instead of paraphrasing it (a trial
-  report mislabeled TK-08), and verify never schedules a wakeup.
+  report mislabeled TK-08), and verify never schedules a wakeup. Verify
+  names the `PREVIOUS` file exactly: this slice's `parity.md`, renamed to
+  `parity-previous.md`. Told only to move "an earlier `parity.md`" aside,
+  ASP.NET slice 03's first round ran `mv ../02/parity.md /dev/null`; the
+  move failed and the file survived. `CLAIMS` now includes the plan's
+  `scratchpad.md`, and the parity auditor reads the source for every
+  behavior the work phase recorded as assumed, adding it as an omission
+  when no case covers it. Slice 03's work logged three "ASSUMED parity, no
+  witness" entries there that the auditor passed over. One was wrong: the
+  port answered an empty `limit=` with 422, where the legacy binds it to
+  `int?` and serves the default page.
 - **A slice seed's acceptance cases fix the verify denominator.** Two
   auditors had counted 52 and 68 obligations from the same slice 07
   criteria, and slice 04 went 22 → 23 → 32 over three audits. The seed
