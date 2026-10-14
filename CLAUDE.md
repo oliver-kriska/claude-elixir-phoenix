@@ -286,7 +286,10 @@ change that ships without them loses that permanently. See
 
 **Current hooks:**
 
-- `PreToolUse` (Bash): Block destructive operations (`mix ecto.reset/drop`, `git push --force`, `MIX_ENV=prod`) before execution
+- `PreToolUse` (Bash): Block destructive operations (`mix ecto.reset/drop`, `git push --force`,
+  `MIX_ENV=prod` with any task but the release build steps, `pkill`/`killall` naming a BEAM process)
+  before execution; also greps the local script a command runs (`bash x.sh`, `./x.sh`, `dir/x.sh`)
+  for the `MIX_ENV=prod` and pattern-kill denials, failing open on a missing or unreadable file
 - `PreToolUse` (Bash, `"if": "Bash(*mix deps.*)"`): `deps-audit-gate.sh` — blocks unvetted dep operations after `/phx:deps-audit` flags them
 - `PreToolUse` (Edit|Write|NotebookEdit): `freeze-gate.sh` — enforces `/phx:freeze` edit-scope locks (sentinel-backed read-only/dir-scoped locks)
 - `PostToolUse` (Edit): Auto `mix format --check-formatted`, **programmatic Iron Law verification**,

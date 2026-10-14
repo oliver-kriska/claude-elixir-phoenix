@@ -158,21 +158,36 @@ run_hook allow 'echo "(mix ecto.drop)" && mix test'  # quoted, paren-wrapped
 echo ""
 echo "── MIX_ENV=prod mix (Elixir-only) ───────────────────────────────"
 
-run_hook block "MIX_ENV=prod mix release"
-run_hook block "MIX_ENV=prod mix compile"
-run_hook block "cd app && MIX_ENV=prod mix release"
+# Build-only steps are allowed under MIX_ENV=prod; every other task is denied.
+# Pattern kills and script scanning are covered by
+# scripts/tests/test_block_dangerous_ops.py, which also runs this suite.
+run_hook block "MIX_ENV=prod mix ecto.migrate"
+run_hook block "MIX_ENV=prod mix phx.server"
+run_hook block "cd app && MIX_ENV=prod mix ecto.migrate"
 
 # Env-prefix / spacing bypasses (deep-audit 2026-07-03): MUST block
-run_hook block "env MIX_ENV=prod mix release"
-run_hook block "MIX_ENV=prod  mix release"  # double space
-run_hook block "FOO=1 MIX_ENV=prod mix compile"
-run_hook block "MIX_ENV=prod PORT=4000 mix release"
+run_hook block "env MIX_ENV=prod mix ecto.migrate"
+run_hook block "MIX_ENV=prod  mix ecto.migrate"  # double space
+run_hook block "FOO=1 MIX_ENV=prod mix run priv/repo/seeds.exs"
+run_hook block "MIX_ENV=prod PORT=4000 mix phx.server"
 
 # Anchor bypasses: leading whitespace / subshell wrapper. MUST block.
-run_hook block "$(printf '\tMIX_ENV=prod mix release')"
-run_hook block "  MIX_ENV=prod mix release"
-run_hook block "(MIX_ENV=prod mix release)"
-run_hook block "( env MIX_ENV=prod mix release )"
+run_hook block "$(printf '\tMIX_ENV=prod mix ecto.migrate')"
+run_hook block "  MIX_ENV=prod mix ecto.migrate"
+run_hook block "(MIX_ENV=prod mix ecto.migrate)"
+run_hook block "( env MIX_ENV=prod mix phx.server )"
+
+# The same forms running a build step: MUST allow
+run_hook allow "MIX_ENV=prod mix release"
+run_hook allow "MIX_ENV=prod mix compile"
+run_hook allow "cd app && MIX_ENV=prod mix release"
+run_hook allow "env MIX_ENV=prod mix release"
+run_hook allow "MIX_ENV=prod  mix release"  # double space
+run_hook allow "FOO=1 MIX_ENV=prod mix compile"
+run_hook allow "MIX_ENV=prod PORT=4000 mix release"
+run_hook allow "$(printf '\tMIX_ENV=prod mix release')"
+run_hook allow "(MIX_ENV=prod mix release)"
+run_hook allow "( env MIX_ENV=prod mix release )"
 
 run_hook allow "MIX_ENV=dev mix compile"
 run_hook allow "MIX_ENV=test mix test"
@@ -184,7 +199,7 @@ run_hook allow 'echo "(MIX_ENV=prod mix release)" && mix test'  # quoted, paren-
 unset CLAUDE_PROJECT_DIR
 TMP2=$(mktemp -d)
 export CLAUDE_PROJECT_DIR="$TMP2"
-run_hook allow "MIX_ENV=prod mix release"
+run_hook allow "MIX_ENV=prod mix ecto.migrate"
 run_hook allow "mix ecto.reset"
 rm -rf "$TMP2"
 
