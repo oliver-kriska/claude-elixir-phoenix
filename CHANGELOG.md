@@ -60,7 +60,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   release`. A load smoke that errors goes to `/phx:investigate` with the
   error from the server log, never to a bigger pool or a lighter load: the
   first release-based trial smoke failed 25% of requests, and the cause was
-  the password hasher. The elixir-way references now name
+  the password hasher. The run list includes static checks a criterion names
+  (`rg`, `git diff`), and the report keeps the parity auditor's states: a
+  slice 04 trial verify had recorded three greps after the audit and
+  reported them as passing. The elixir-way references now name
   `:crypto.pbkdf2_hmac/5` (a dirty NIF) for Django PBKDF2 hashes instead of
   `pbkdf2_elixir`, whose Elixir loop runs all 1,000,000 rounds on the normal
   schedulers: with 42 hashes in flight a trivial task took up to 412 ms,

@@ -85,11 +85,11 @@ redacted reason (`--no-run` skips straight to the audits with evidence `blocked`
 
 ### 3. Capture evidence
 
-First write the run list, `$EV/commands.md`, before running anything: `MIX_ENV=test mix compile --warnings-as-errors`
-(log `$ts-compile.log`) and `mix test` on the slice's test files (with `--full`, the whole suite and `mix format
---check-formatted`); every command an acceptance criterion names, with its arguments as named (the named seeds, not a
-random one; `--force`, the full suite, a test outside the slice paths, a release smoke); and every `## Oracle` command
-(black-box files, whole-file diagnostics, the load script as a short smoke). Run each through this wrapper. Leave one
+First write the run list, `$EV/commands.md`, before running anything: `MIX_ENV=test mix compile --warnings-as-errors` (log
+`$ts-compile.log`) and `mix test` on the slice's test files (with `--full`, the whole suite and `mix format --check-formatted`);
+every command an acceptance criterion names, with its arguments as named (the named seeds, not a random one; `--force`, the
+full suite, a test outside the slice paths, a release smoke, a static check such as `rg` or `git diff`); and every `## Oracle`
+command (black-box files, whole-file diagnostics, the load script as a short smoke). Run each through this wrapper. Leave one
 out only when it cannot run here (a missing tool, a blocked preflight), and say so; a `/phx:work` log never stands in:
 
 ```bash
@@ -160,9 +160,9 @@ A failing `check`, a nonzero `stats` (1 = malformed ledger, 2 = unreadable slice
 
 ### 6. Report and gate
 
-Write `.claude/rewrite/verify/{NN}/report.md` and show: verified parity (`pass` of the counted obligations),
-accepted departures as a separate list (ADR or AR, never folded into verified), source omissions and scope
-mistakes, idiom BLOCKER titles, rejected and stale evidence, unsupported claims, and the gate result.
+Report the parity auditor's states: a record made after the audits changes none until a new audit scores it. Write
+`.claude/rewrite/verify/{NN}/report.md`: verified parity (`pass` of the counted obligations), accepted departures apart
+(ADR or AR, never verified), source omissions, scope mistakes, idiom BLOCKERs, rejected and stale evidence, unsupported claims, the gate.
 
 The gate passes only when no BLOCKER remains, every black-box file `## Oracle` assigns passed in a fresh record
 (failing or not run fails the gate), and every counted obligation is one of:
@@ -172,8 +172,8 @@ The gate passes only when no BLOCKER remains, every black-box file `## Oracle` a
 - **Accepted risk** — in the Scope of an `AR-NN` record with all five fields filled and an `Approved` you can confirm came from the user
 
 Never count a `proposed` or `ASSUMED` ADR, a bare `## AR-NN` heading or an unconfirmed approval; ask instead.
-Omissions count until the ledger records them or the user moves them out of the slice.
-Update `roadmap.md` to mark the slice `done` only when the gate passes.
+Omissions count until the ledger records them or the user moves them out of the slice. Mark the slice `done` in
+`roadmap.md` only when the gate passes.
 Otherwise list the fixes. Suggest `/phx:work` with the plan, or `/phx:investigate` for a failing witness or a load
 smoke that errors: quote the error from the server log; a bigger pool or a lighter load only hides the cause.
 
