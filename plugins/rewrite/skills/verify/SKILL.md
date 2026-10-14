@@ -101,7 +101,7 @@ ta=$(fp .); sa=$(fp "$SOURCE")
 [ -n "$tb" ] && [ -n "$sb" ] && [ "$tb" = "$ta" ] && [ "$sb" = "$sa" ] && id=fresh || id=stale
 ```
 
-Write one `$EV/$ts-{name}.md` per command:
+Write one `$EV/$ts-{name}.md` per command (`git status` text is never the freshness proof, only a diagnostic):
 
 | Field | Content |
 |-------|---------|
@@ -112,11 +112,11 @@ Write one `$EV/$ts-{name}.md` per command:
 | env | variable names and redacted conclusions, never values |
 | summary, log | `N tests, F failures, E excluded` and the log path |
 
-For black-box files, start the port as it ships: build the release (`MIX_ENV=prod mix release`), run `bin/{app} start` in the
-background with its PID kept (`echo $! > "$EV/port.pid"`), never a dev server, whose `debug_errors` page answers HTML where the
-release answers the error envelope. Run the suite (`$ts-oracle.log`, `$ts-oracle.md` naming each file, the `--oracle` root and its
-result), then `kill` that PID only: `pkill` or `killall` by pattern also stops the user's other BEAM processes. Create and drop
-only a database this run named. Never point it at the legacy app. Never use `git status` text as the freshness proof.
+For black-box files, start the port as it ships: build the release (`MIX_ENV=prod mix release`), then run
+`RELEASE_DISTRIBUTION=none bin/{app} start` in the background with its PID kept (`echo $! > "$EV/port.pid"`). Never a dev
+server: its `debug_errors` page answers HTML where the release answers the envelope. Run the suite (`$ts-oracle.md` names each
+file, the `--oracle` root, each command's own `uid`, the result), then `kill` that PID only: `pkill` or `killall` by pattern also
+stops the user's other BEAM processes. Create and drop only a database this run named. Never point it at the legacy app.
 
 ### 4. Audit in parallel
 

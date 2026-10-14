@@ -63,7 +63,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   the password hasher. The run list includes static checks a criterion names
   (`rg`, `git diff`), and the report keeps the parity auditor's states: a
   slice 04 trial verify had recorded three greps after the audit and
-  reported them as passing. The elixir-way references now name
+  reported them as passing. The release starts with
+  `RELEASE_DISTRIBUTION=none`, so no `epmd` daemon outlives the run, and
+  each Hurl command gets its own `uid`, where two runs in the same second
+  had collided on registration. The parity auditor splits each criterion
+  into one row per case it names: the slice 04 denominator had grown from
+  22 to 32 over three runs as the cases surfaced one at a time. The elixir-way references now name
   `:crypto.pbkdf2_hmac/5` (a dirty NIF) for Django PBKDF2 hashes instead of
   `pbkdf2_elixir`, whose Elixir loop runs all 1,000,000 rounds on the normal
   schedulers: with 42 hashes in flight a trivial task took up to 412 ms,

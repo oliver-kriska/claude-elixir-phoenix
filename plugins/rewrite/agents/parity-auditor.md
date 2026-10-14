@@ -108,7 +108,10 @@ contract witnesses in scope, ledger guarantees in scope (atomicity,
 durability, ordering, delivery, authorization, visibility) that the source
 evidences or an accepted ADR adopts, each black-box file `## Oracle` assigns
 (its witness is the `*-oracle.md` record, run against the port), and
-omissions. Merge duplicates into aliases before counting.
+omissions. Merge duplicates into aliases before counting. Split each
+acceptance criterion into one row per case it names (each token shape,
+filter, route, fixture or "does not change" clause), so the denominator is
+the same on every run; a case no test sends is `not-run`.
 
 ### 3. Find the witness test
 
