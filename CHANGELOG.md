@@ -154,7 +154,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   when no case covers it. Slice 03's work logged three "ASSUMED parity, no
   witness" entries there that the auditor passed over. One was wrong: the
   port answered an empty `limit=` with 422, where the legacy binds it to
-  `int?` and serves the default page.
+  `int?` and serves the default page. A behavior the user adds after a
+  round now gets a new case ID in the seed. The trial operator's additions
+  went into the plan only: slice 00b's auditor counted two as omissions,
+  but slice 03's counted none of four.
 - **A slice seed's acceptance cases fix the verify denominator.** Two
   auditors had counted 52 and 68 obligations from the same slice 07
   criteria, and slice 04 went 22 → 23 → 32 over three audits. The seed

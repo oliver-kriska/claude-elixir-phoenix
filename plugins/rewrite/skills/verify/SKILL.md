@@ -173,8 +173,9 @@ Never count a `proposed` or `ASSUMED` ADR, a bare `## AR-NN` heading or an uncon
 Omissions count until the ledger records them or the user moves them out of the slice. Mark the slice `done` in
 `roadmap.md` only when the gate passes.
 Otherwise list the fixes. Suggest `/phx:work` with the plan, or `/phx:investigate` for a failing witness or a load
-smoke that errors: quote the error from the server log; a bigger pool or a lighter load only hides the cause.
-The report ends the run: never schedule a wakeup or a loop to re-check it.
+smoke that errors: quote the error from the server log; a bigger pool or a lighter load only hides the cause. A behavior
+the user adds or changes after a round gets a new case ID in the seed's Acceptance Criteria (`obligations` must still
+pass): a plan task alone is outside the denominator. The report ends the run: never schedule a wakeup or a loop to re-check it.
 
 ## Arguments
 
