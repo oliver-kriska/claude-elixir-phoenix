@@ -120,6 +120,7 @@ Never use `git status` text as the freshness proof; keep it only as a diagnostic
 
 ### 4. Audit in parallel
 
+First re-run any command whose record lacks its four `fp` values: auditors score records, never a later re-run.
 Run `fp .` and `fp "$SOURCE"` (same excludes) just before spawning and pass
 both as `CURRENT_IDENTITY`; agents cannot run plugin scripts. Build the
 `COMPLETENESS` packet: the slice's ledger IDs with their source anchors,
@@ -171,9 +172,8 @@ The gate passes only when no BLOCKER remains, every black-box file `## Oracle` a
 - **Changed or retired** — by an ADR whose Status is `accepted`
 - **Accepted risk** — in the Scope of an `AR-NN` record with all five fields filled and an `Approved` you can confirm came from the user
 
-Never count a `proposed` or `ASSUMED` ADR, a bare `## AR-NN` heading or an
-unconfirmed approval; ask instead. Omissions count until the ledger records
-them or the user moves them out of the slice.
+Never count a `proposed` or `ASSUMED` ADR, a bare `## AR-NN` heading or an unconfirmed approval; ask instead.
+Omissions count until the ledger records them or the user moves them out of the slice.
 Update `roadmap.md` to mark the slice `done` only when the gate passes.
 Otherwise list the fixes. Suggest `/phx:work` with the plan to address them,
 or `/phx:investigate` for a failing witness.

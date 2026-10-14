@@ -67,6 +67,14 @@ works end to end in Elixir, inside the compatibility bar. It is the unit
     - **Legacy is never executed** — every suite runs against the port only;
       legacy tests are translated into ExUnit, never run, unless an accepted ADR
       or ledger decision grants running the legacy app in isolation
+12. **A row goes where its Target is built** — assign each ledger row to the
+    slice that builds every part of its Target column. A Target that spans
+    slices goes to the last of them: a DELETE of a test-only hasher whose
+    replacement hasher the auth slice writes belongs to the auth slice, not
+    the foundation. A row with nothing to build in the port, such as an
+    untouched external consumer, goes to the slice whose gate exercises it,
+    usually the rehearsal's full suite run. Otherwise verify can only score
+    the row `not-run` and the slice gate fails on work that slice never owned
 
 ## Ordering Heuristics
 

@@ -43,7 +43,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   port only. It also re-runs every other command an acceptance
   criterion names, such as a release smoke, since a `/phx:work` log is a
   claim, and the parity auditor proposes `implemented` for each slice row
-  whose code exists, so passing rows stop counting as unverified.
+  whose code exists, so passing rows stop counting as unverified. A record
+  missing its identity values is re-run before the audits, not after them.
+  Roadmap assigns each ledger row to the slice that builds all of its
+  Target, so a foundation gate no longer fails on a row whose replacement
+  a later slice writes.
 - **Structural eval scores more than one plugin (contributor tooling).**
   `lab/eval/plugins.py` maps a file to its plugin, so `make eval` and
   `make eval-all` score `rewrite` skills and agents alongside `phx`. A
