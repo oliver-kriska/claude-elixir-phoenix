@@ -64,7 +64,10 @@ list is the denominator.
    identity is `stale`
 6. **Implementation and evidence are independent** — failing, stale or
    missing evidence never by itself changes Impl. Propose an Impl change
-   only from code you read (the codec under test does not exist)
+   only from code you read: `pending → implemented` for each slice row whose
+   target code exists in TARGET (cite the module); `none`, naming what is
+   missing, when the code is partial or absent or another slice owns it.
+   A row stays unverified until Impl says `implemented`
 7. **Departures need approval** — `changed (ADR)` and `retired` need an ADR
    whose Status is `accepted` and that names the obligation or its row.
    `accepted risk` needs an `## AR-NN` record with Owner, Scope, Rationale,

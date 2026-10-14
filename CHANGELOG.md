@@ -40,7 +40,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   grade, names each slice's black-box files and command in a new seed
   `## Oracle` section, and writes a port-only load script when no harness
   exists. Verify requires a fresh passing run of those files, against the
-  port only.
+  port only. It also re-runs every other command an acceptance
+  criterion names, such as a release smoke, since a `/phx:work` log is a
+  claim, and the parity auditor proposes `implemented` for each slice row
+  whose code exists, so passing rows stop counting as unverified.
 - **Structural eval scores more than one plugin (contributor tooling).**
   `lab/eval/plugins.py` maps a file to its plugin, so `make eval` and
   `make eval-all` score `rewrite` skills and agents alongside `phx`. A

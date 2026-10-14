@@ -113,7 +113,8 @@ and `mix test` on the slice's test files; with `--full`, the whole suite and
 
 When `## Oracle` lists black-box files, start the port locally as its command expects, run that exact command
 through the same wrapper (`$ts-oracle.log`, `$ts-oracle.md` naming each suite file, the `--oracle` root and its
-result), then stop the port. Never point it at the legacy app.
+result), then stop the port. Never point it at the legacy app. Re-run every other command an acceptance criterion
+names the same way (a release smoke, the Oracle's load script as a short smoke): a `/phx:work` log is a claim.
 
 Never use `git status` text as the freshness proof; keep it only as a diagnostic.
 
