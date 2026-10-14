@@ -68,7 +68,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   each Hurl command gets its own `uid`, where two runs in the same second
   had collided on registration. The parity auditor splits each criterion
   into one row per case it names: the slice 04 denominator had grown from
-  22 to 32 over three runs as the cases surfaced one at a time. Verify
+  22 to 32 over three runs as the cases surfaced one at a time. Splitting
+  alone did not hold it: two slice 07 audits counted 52 and 68, one row per
+  Hurl file where the other had one row in total. The auditor now gets the
+  slice's previous `parity.md` as `PREVIOUS`, starts from its rows (never
+  its states), and names every added, split, merged or dropped row with
+  the old and new count. Verify
   writes each run's script from the skill, never from a copy of another
   slice's or an earlier run's: the fourth slice 04 verify reran its old
   script and the slice 05 verify copied slice 04's, so both started the

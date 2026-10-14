@@ -126,8 +126,10 @@ source anchors from `interview.md` and the ledger rows, nothing wider. Spawn bot
 
 - **`rewrite:idiom-auditor`** — `TARGET`, `SCOPE` (`git diff --name-only` from the slice's base commit in `progress.md`, else the slice's modules), `LEDGER`, `ARCHITECTURE`,
   `CONTRACTS=.claude/rewrite/analysis/contracts.md`, `KB=.claude/rewrite/kb/`, `OUTPUT=.claude/rewrite/verify/{NN}/idiom.md`
-- **`rewrite:parity-auditor`** — `TARGET`, `SOURCE`, `COMPLETENESS`, `OBLIGATIONS` (the interview path plus the analyses), `LEDGER`, `EVIDENCE=$EV`, `CURRENT_IDENTITY`,
-  `DECISIONS` (`.claude/rewrite/architecture/`, `.claude/rewrite/verify/accepted-risks.md`), `CLAIMS` (`progress.md`, PR text if any), `OUTPUT=.claude/rewrite/verify/{NN}/parity.md`
+- **`rewrite:parity-auditor`** — `TARGET`, `SOURCE`, `COMPLETENESS`, `OBLIGATIONS` (the interview path plus the analyses),
+  `LEDGER`, `EVIDENCE=$EV`, `CURRENT_IDENTITY`, `DECISIONS` (`.claude/rewrite/architecture/`,
+  `.claude/rewrite/verify/accepted-risks.md`), `CLAIMS` (`progress.md`, PR text if any), `PREVIOUS` (an earlier `parity.md`,
+  moved aside first), `OUTPUT=.claude/rewrite/verify/{NN}/parity.md`
 
 ### 5. Apply ledger updates
 

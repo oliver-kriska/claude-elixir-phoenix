@@ -35,6 +35,8 @@ list is the denominator.
 - `DECISIONS` — ADRs with their Status under `.claude/rewrite/architecture/`,
   and `.claude/rewrite/verify/accepted-risks.md`
 - `CLAIMS` — files that assert results (`progress.md`, PR text), may be empty
+- `PREVIOUS` — the slice's last `parity.md`, moved aside before this audit; may be empty. Its rows, never its
+  states, seed your matrix (step 2)
 - `OUTPUT` — `.claude/rewrite/verify/{slice}/parity.md`
 
 ## Rules
@@ -113,6 +115,10 @@ acceptance criterion into one row per case it names (each token shape,
 filter, route, fixture or "does not change" clause), so the denominator is
 the same on every run; a case no test sends is `not-run`.
 
+With `PREVIOUS`, start from its rows: keep each ID, re-score it from this run's evidence, and change the list
+only for a reason you state (a case its criterion names that the last run merged, a duplicate it counted twice).
+Report the count as `Denominator: {old} → {new}`, naming each added, split, merged or dropped row.
+
 ### 3. Find the witness test
 
 ```bash
@@ -156,7 +162,8 @@ Target: {TARGET} @ {head} · {content_fingerprint} · Source: {SOURCE} @ {head} 
 ## Totals
 | Obligations | pass | fail | not-run | blocked | stale | changed (ADR) | retired | accepted risk |
 
-Verified: {pass}/{Obligations}, omissions added {n}. Departures are listed below, never as verified.
+Verified: {pass}/{Obligations}, omissions added {n}. Denominator: {old} → {new} (changes named under Completeness).
+Departures are listed below, never as verified.
 
 ## Matrix
 | ID (aliases) | Obligation | Source | Witness test | Evidence | State | Note |
