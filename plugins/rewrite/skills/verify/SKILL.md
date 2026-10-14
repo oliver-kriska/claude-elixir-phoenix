@@ -29,12 +29,10 @@ Elixir quality stays with `/phx:review`.
 
 ### 1. Resolve the slice
 
-Find `.claude/plans/rewrite-{NN}-*/` (or the slug).
-Read its `interview.md`
-(Acceptance Criteria, External Contracts, `## Oracle`, ledger IDs) and `progress.md` if
-present. `TARGET` is the current directory and must contain `mix.exs`;
-`SOURCE` is the legacy path recorded in `.claude/rewrite/status.md`.
-`EV=.claude/rewrite/verify/{NN}/evidence` (create it).
+Find `.claude/plans/rewrite-{NN}-*/` (or the slug). Read its `interview.md`
+(Acceptance Criteria, External Contracts, `## Oracle`, ledger IDs) and `progress.md` if present.
+`TARGET` is the current directory and must contain `mix.exs`; `SOURCE` is the legacy path recorded in
+`.claude/rewrite/status.md`. `EV=.claude/rewrite/verify/{NN}/evidence` (create it).
 
 Use the bundled script for identity; define `fp` in every shell call that uses it:
 
@@ -113,8 +111,10 @@ through the wrapper or write why not; a `/phx:work` log is a claim. Write one `$
 | env | variable names and redacted conclusions, never values |
 | summary, log | `N tests, F failures, E excluded` and the log path |
 
-For black-box files, start the port locally as the command expects, run it (`$ts-oracle.log`, `$ts-oracle.md` naming
-each suite file, the `--oracle` root and its result), then stop the port. Never point it at the legacy app.
+For black-box files, start the port locally as the command expects, in the background with its PID kept
+(`echo $! > "$EV/port.pid"`), run it (`$ts-oracle.log`, `$ts-oracle.md` naming each suite file, the `--oracle` root and
+its result), then `kill` that PID only: `pkill` or `killall` by pattern also stops the user's other BEAM processes.
+Create and drop only a database this run named. Never point it at the legacy app.
 Never use `git status` text as the freshness proof; keep it only as a diagnostic.
 
 ### 4. Audit in parallel
