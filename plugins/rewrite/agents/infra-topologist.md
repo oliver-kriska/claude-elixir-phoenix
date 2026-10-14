@@ -123,7 +123,8 @@ Source: {SOURCE} @ {sha} · Deploy model: {single host / PaaS / k8s / self-hoste
 ## Coverage
 ```
 
-Use `R-` IDs for runtime rows so the architect can merge them into the ledger.
+Use `R-` IDs with two or more digits for runtime rows (`R-07`; a sub-row takes a letter, `R-07a`), so the
+architect can merge them into the ledger. `ledger.py check` rejects any other shape, such as `R-D4`.
 
 ## Return Message
 

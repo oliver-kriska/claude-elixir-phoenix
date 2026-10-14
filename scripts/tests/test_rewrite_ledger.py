@@ -362,3 +362,37 @@ def test_cli_stats_counts_the_snapshot_it_validated(rewrite_dir: Path, capsys, m
 
     assert code == 0
     assert "verified 1 of 2 ledger rows" in capsys.readouterr().out
+
+
+def test_nonconforming_row_id_fails_check_and_stats(rewrite_dir: Path, capsys) -> None:
+    # `R-D4` matched no ID pattern, so its UNDECIDED row vanished and stats reported UNDECIDED 0.
+    write_ledger(rewrite_dir, row("M-01") + row("M-02") + row("C-01") + row("R-D4", "UNDECIDED"))
+
+    errors, _ = ledger.check(str(rewrite_dir))
+
+    assert any(e.startswith("malformed ledger row (nonconforming ID R-D4;") for e in errors)
+    assert ledger.main(["stats", "--rewrite-dir", str(rewrite_dir)]) == 1
+    out = capsys.readouterr()
+    assert "nonconforming ID R-D4" in out.err
+    assert "UNDECIDED" not in out.out
+
+
+def test_nonconforming_alias_does_not_hide_a_valid_id(rewrite_dir: Path) -> None:
+    write_ledger(rewrite_dir, row("M-01") + row("M-02") + row("C-01, R-D5"))
+
+    errors, _ = ledger.check(str(rewrite_dir))
+
+    assert any("nonconforming ID R-D5" in e for e in errors)
+    assert "C-01 (defined in contracts.md) is not accounted for in the ledger" in errors
+
+
+def test_nonconforming_analysis_definition_is_an_error(rewrite_dir: Path) -> None:
+    (rewrite_dir / "analysis/runtime.md").write_text(
+        "| ID | Component |\n|----|----|\n| R-01 | db |\n| R-J1 | jobs |\n", encoding="utf-8"
+    )
+    write_ledger(rewrite_dir, row("M-01") + row("M-02") + row("C-01") + row("R-01") + row("R-01a", "DELETE"))
+
+    errors, _ = ledger.check(str(rewrite_dir))
+
+    assert errors == ["runtime.md defines nonconforming ID R-J1; rename it to M-/R-/C- plus two or more digits "
+                      "so it is counted"]

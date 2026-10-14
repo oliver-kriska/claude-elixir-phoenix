@@ -28,6 +28,8 @@ from collections import Counter
 
 ID_RE = re.compile(r"\b([MRC]-\d{2,}[a-z]?)\b")
 ROW_ID_RE = re.compile(r"^\|\s*[*`_]*([MRC]-\d{2,}[a-z]?)\b")
+# Anything shaped like an M-/R-/C- ID; one that is not ID_RE would vanish from every count.
+ID_LIKE_RE = re.compile(r"\b[MRC]-[A-Za-z0-9]+\b")
 SEPARATOR_RE = re.compile(r"^\|[\s:|-]+\|?$")
 ADR_RE = re.compile(r"\bADR-(\d{3})\b")
 AR_RE = re.compile(r"AR-\d{2,}")
@@ -106,6 +108,11 @@ def rows_as_dicts(text):
         table_columns.append({k: i is not None for k, i in idx.items()})
         for line in lines:
             cells = split_row(line)
+            odd = nonconforming(cells[0])
+            if odd:
+                malformed.append(f"nonconforming ID {', '.join(odd)}; IDs are M-, R- or C- plus two or more "
+                                 f"digits and an optional letter: {line[:80]}")
+                continue
             match = ROW_ID_RE.match(line) and ID_RE.search(cells[0])
             if not match:
                 if ID_RE.search(line):
@@ -128,6 +135,23 @@ def rows_as_dicts(text):
                 "has": {k: i is not None for k, i in idx.items()},
             })
     return table_columns, out, malformed
+
+
+def nonconforming(first_cell):
+    return [t for t in ID_LIKE_RE.findall(first_cell) if not ID_RE.fullmatch(t)]
+
+
+def nonconforming_definitions(rewrite_dir):
+    """Analysis rows whose ID cell holds an ID-shaped token the checker cannot count."""
+    out = []
+    for path in sorted(glob.glob(os.path.join(rewrite_dir, "analysis", "*.md"))):
+        for line in read(path).splitlines():
+            if line.startswith("|") and not SEPARATOR_RE.match(line):
+                odd = nonconforming(split_row(line)[0])
+                if odd:
+                    out.append(f"{os.path.basename(path)} defines nonconforming ID {', '.join(odd)}; rename it "
+                               "to M-/R-/C- plus two or more digits so it is counted")
+    return out
 
 
 def defined_ids(rewrite_dir):
@@ -209,6 +233,7 @@ def check(rewrite_dir):
         warnings.append("only a row's ID cell accounts for an ID, prose does not; a mechanism the "
                         "legacy lacks gets a DELETE row ('absent in legacy')")
     errors += [f"{i} appears in {n} ledger rows" for i, n in sorted(accounted.items()) if n > 1]
+    errors += nonconforming_definitions(rewrite_dir)
     for r in rows:
         parts = verdict_parts(r["verdict"])
         bad = [p for p in parts if p not in VERDICTS]

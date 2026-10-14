@@ -57,7 +57,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   the ledger check: only row IDs and aliases account for a mechanism, rows
   must match their header's width, an `AR-NN` departure needs a complete
   record (owner, scope listing the row, rationale, review, approval), each
-  ledger table needs its own state columns, `stats` fails on a malformed
+  ledger table needs its own state columns, an ID-shaped token that breaks
+  the `M-`/`R-`/`C-` + digits scheme (`R-D4`) fails the check instead of
+  vanishing from every count, `stats` fails on a malformed
   ledger, and an empty or unreadable slice never falls back to the whole
   ledger. Fingerprinting fails closed when a tracked file is flagged
   `assume-unchanged` or `skip-worktree`, since git hides its edits. `scripts/tests/test_rewrite_plugin.py`
