@@ -85,7 +85,11 @@ redacted reason (`--no-run` skips straight to the audits with evidence `blocked`
 
 ### 3. Capture evidence
 
-Use the same wrapper for every command:
+First write the run list, `$EV/commands.md`: `MIX_ENV=test mix compile --warnings-as-errors` (log `$ts-compile.log`)
+and `mix test` on the slice's test files (with `--full`, the whole suite and `mix format --check-formatted`); every
+command an acceptance criterion names, exactly as named (a seed, `--force`, the full suite, a test outside the slice
+paths, a release smoke); and every `## Oracle` command (black-box files, the load script as a short smoke). Run each
+through this wrapper or write why not; a `/phx:work` log is a claim:
 
 ```bash
 fp() { python3 "${CLAUDE_SKILL_DIR}/scripts/fingerprint.py" "$@"; }
@@ -96,11 +100,7 @@ ta=$(fp .); sa=$(fp "$SOURCE")
 [ -n "$tb" ] && [ -n "$sb" ] && [ "$tb" = "$ta" ] && [ "$sb" = "$sa" ] && id=fresh || id=stale
 ```
 
-First write the run list, `$EV/commands.md`: `MIX_ENV=test mix compile --warnings-as-errors` (log `$ts-compile.log`)
-and `mix test` on the slice's test files (with `--full`, the whole suite and `mix format --check-formatted`); every
-command an acceptance criterion names, exactly as named (a seed, `--force`, the full suite, a test outside the slice
-paths, a release smoke); and every `## Oracle` command (black-box files, the load script as a short smoke). Run each
-through the wrapper or write why not; a `/phx:work` log is a claim. Write one `$EV/$ts-{name}.md` per command:
+Write one `$EV/$ts-{name}.md` per command:
 
 | Field | Content |
 |-------|---------|
@@ -111,15 +111,15 @@ through the wrapper or write why not; a `/phx:work` log is a claim. Write one `$
 | env | variable names and redacted conclusions, never values |
 | summary, log | `N tests, F failures, E excluded` and the log path |
 
-For black-box files, start the port locally as the command expects, in the background with its PID kept
-(`echo $! > "$EV/port.pid"`), run it (`$ts-oracle.log`, `$ts-oracle.md` naming each suite file, the `--oracle` root and
-its result), then `kill` that PID only: `pkill` or `killall` by pattern also stops the user's other BEAM processes.
-Create and drop only a database this run named. Never point it at the legacy app.
-Never use `git status` text as the freshness proof; keep it only as a diagnostic.
+For black-box files, start the port locally as the command expects, in the background with its PID kept (`echo $! > "$EV/port.pid"`),
+run it (`$ts-oracle.log`, `$ts-oracle.md` naming each suite file, the `--oracle` root and its result), then `kill` that PID only:
+`pkill` or `killall` by pattern also stops the user's other BEAM processes. Create and drop only a database this run named.
+Never point it at the legacy app. Never use `git status` text as the freshness proof; keep it only as a diagnostic.
 
 ### 4. Audit in parallel
 
-First re-run any command whose record lacks its four `fp` values: auditors score records, never a later re-run.
+No `commands.md` yet? Write it now. Then run each listed command that has no record, and re-run any whose record
+lacks its four `fp` values: auditors score records, never a later re-run.
 Run `fp .` and `fp "$SOURCE"` (same excludes) just before spawning and pass
 both as `CURRENT_IDENTITY`; agents cannot run plugin scripts. Build the
 `COMPLETENESS` packet: the slice's ledger IDs with their source anchors,

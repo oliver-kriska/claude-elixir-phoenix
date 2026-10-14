@@ -48,8 +48,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   Verify writes its run list (`commands.md`) before running anything: the
   default commands, every command an acceptance criterion names exactly as
   named (a seed, `--force`, the full suite) and every `## Oracle` command.
-  The parity auditor checks the list against the criteria and the records.
-  It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
+  The parity auditor checks the list against the criteria and the records,
+  and a missing list is a finding: verify writes it before auditing, where
+  two trial runs had skipped it. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
   fresh, where it had proposed `not-run` because an ADR changed the legacy
   behavior, which left those rows unverified. Verify keeps the PID of the port it starts and stops only that process,
   where a trial run had stopped every BEAM process on the machine with
