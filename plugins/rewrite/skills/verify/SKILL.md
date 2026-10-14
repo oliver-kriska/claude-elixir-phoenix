@@ -34,10 +34,10 @@ Find `.claude/plans/rewrite-{NN}-*/` (or the slug). Read its `interview.md`
 `TARGET` is the current directory and must contain `mix.exs`; `SOURCE` is the legacy path recorded in
 `.claude/rewrite/status.md`. `EV=.claude/rewrite/verify/{NN}/evidence`.
 
-Every record comes from the bundled script; define `ev` in every shell call that uses it:
+Every record comes from the bundled script; define `ev` in every shell call (`EV_PATH` keeps PATH past a `python3` shim):
 
 ```bash
-ev() { python3 "${CLAUDE_SKILL_DIR}/scripts/evidence.py" "$@"; }
+ev() { EV_PATH="$PATH" python3 "${CLAUDE_SKILL_DIR}/scripts/evidence.py" "$@"; }
 ```
 
 - **Identity** — `scripts/fingerprint.py`, which `ev` calls: `head` and a `content_fingerprint`, SHA-256 over every dirty

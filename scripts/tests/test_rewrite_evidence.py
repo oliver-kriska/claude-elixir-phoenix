@@ -215,3 +215,15 @@ def test_run_needs_the_command_after_a_double_dash(target: Path) -> None:
     r = ev(target, "run", "07", "compile")
     assert r.returncode == 125 and "after --" in r.stderr
     assert not records(target, "compile")
+
+
+def test_ev_path_replaces_the_path_an_interpreter_shim_rewrote(target: Path, tmp_path: Path) -> None:
+    tools = tmp_path / "tools"
+    write(tools / "port-tool", "#!/bin/sh\nprintf 'ev_path=%s\\n' \"${EV_PATH-unset}\"\n")
+    (tools / "port-tool").chmod(0o755)
+    env = dict(os.environ, PATH="/usr/bin:/bin", EV_PATH=f"{tools}:/usr/bin:/bin")
+    r = subprocess.run([sys.executable, str(SCRIPT), "run", "07", "tool", "--", "port-tool"],
+                       cwd=target, env=env, capture_output=True, text=True)
+    assert r.returncode == 0, r.stderr
+    log = fields(records(target, "tool")[0])["log"]
+    assert (target / log).read_text(encoding="utf-8").strip() == "ev_path=unset"

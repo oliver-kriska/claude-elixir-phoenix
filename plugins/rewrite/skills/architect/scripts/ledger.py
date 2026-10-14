@@ -7,6 +7,10 @@ check  — every M-/R-/C- ID defined in analysis/*.md is the ID (or an alias) of
          departure has a complete record that scopes the row.
 stats  — counts by verdict, implementation, evidence and departure, with the
          verified numerator kept separate from retired and accepted-risk rows.
+         `--slice` counts the IDs the seed's acceptance cases cite and its
+         mechanism and contract tables list, so an ID that the prose names
+         for another slice is not counted. A file with no acceptance cases
+         counts every ID it mentions.
 obligations — the acceptance cases of a slice seed, one per `- [ ] AC-NN` or
          `AC-NNa` item under `## Acceptance Criteria`, with the ledger IDs each
          cites. Errors: an item without an ID, a duplicate ID, a criterion
@@ -378,6 +382,18 @@ def obligations(text):
     return cases, errors
 
 
+def slice_ids(text):
+    cases, _ = obligations(text)
+    if not cases:
+        return set(ID_RE.findall(text))
+    ids = {i for c in cases for i in c["cites"]}
+    for title, part in sections(text).items():
+        if title.startswith(SLICE_TABLES):
+            for _, rows in tables(part):
+                ids.update(i for row in rows for i in ID_RE.findall(split_row(row)[0]))
+    return ids
+
+
 def format_stats(s):
     lines = [
         f"verified {s['verified']} of {s['denominator']} ledger rows (retired {s['retired']}, "
@@ -394,7 +410,7 @@ def main(argv=None):
     ap.add_argument("command", choices=["check", "stats", "obligations"])
     ap.add_argument("--rewrite-dir", default=".claude/rewrite")
     ap.add_argument("--ids", help="comma-separated ledger IDs to count")
-    ap.add_argument("--slice", help="count only IDs mentioned in this file (a slice interview.md)")
+    ap.add_argument("--slice", help="count only the IDs this slice seed (interview.md) owns")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
     if args.command == "check":
@@ -431,7 +447,7 @@ def main(argv=None):
         if text is None:
             print(f"error: cannot read slice file {args.slice}")
             return 2
-        ids = set(ID_RE.findall(text))
+        ids = slice_ids(text)
     try:
         s = stats(args.rewrite_dir, ids)
     except LedgerError as exc:

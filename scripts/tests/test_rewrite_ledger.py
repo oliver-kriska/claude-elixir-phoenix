@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 
 import pytest
@@ -459,3 +460,13 @@ def test_cli_obligations_exit_status(tmp_path: Path, capsys) -> None:
     seed.write_text(SEED.replace("(C-24):", "(D-05):"), encoding="utf-8")
     assert ledger.main(["obligations", "--slice", str(seed)]) == 1
     assert ledger.main(["obligations", "--slice", str(tmp_path / "missing.md")]) == 2
+
+
+def test_stats_slice_counts_only_the_ids_the_seed_owns(rewrite_dir: Path, tmp_path: Path, capsys) -> None:
+    write_ledger(rewrite_dir, row("M-04") + row("C-11") + row("C-24", impl="implemented", evidence="pass") + row("C-50"))
+    seed = tmp_path / "interview.md"
+    seed.write_text(SEED.replace("## Codebase Context", "## Scope\n\nOut of scope: C-50 belongs to slice 08.\n\n"
+                                 "## Codebase Context"), encoding="utf-8")
+    assert ledger.main(["stats", "--rewrite-dir", str(rewrite_dir), "--slice", str(seed), "--json"]) == 0
+    s = json.loads(capsys.readouterr().out)
+    assert s["rows"] == 3 and s["verified"] == 1  # C-50, named in prose and in an item outside the section, is not counted

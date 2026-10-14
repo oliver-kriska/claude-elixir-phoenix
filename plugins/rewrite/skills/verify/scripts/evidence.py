@@ -28,6 +28,11 @@ status SLICE
     command), outdated (the tree moved since), or the exit status against the
     expected one. Exit 1 when a name is missing or incomplete.
 
+EV_PATH, when set, replaces PATH for the script and every command it runs.
+A version-manager shim on python3 (mise, asdf, pyenv) rewrites PATH for its
+child from that directory's tool config, so a command can resolve other
+binaries than the caller's shell did; `ev` passes the shell's PATH this way.
+
 Stdlib only. Identity comes from fingerprint.py beside this file. Exit 125
 means the evidence itself could not be written or read.
 """
@@ -439,6 +444,8 @@ def cmd_status(args):
 
 
 def main(argv=None):
+    if os.environ.get("EV_PATH"):
+        os.environ["PATH"] = os.environ.pop("EV_PATH")
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
     sub = ap.add_subparsers(dest="command", required=True)
     p = sub.add_parser("init")

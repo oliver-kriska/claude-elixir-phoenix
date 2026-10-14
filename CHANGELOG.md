@@ -131,7 +131,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `--expect-exit 1`, and the parity auditor compares each exit with its
   record's expected exit. Smoke-tested on the trial's prod release: the
   release `exec`s into `beam.smp` under the same PID and leads its own
-  group, and no `epmd` was left after stop. The verify report quotes
+  group, and no `epmd` was left after stop. `ev` passes the shell's PATH
+  as `EV_PATH`, because a mise shim on `python3` rewrites PATH for its
+  child from the directory's tool config. In the ASP.NET trial, the port's
+  `mix` then reached an unpinned `erl` shim and failed, and verify blamed
+  the script for stripping the environment. The verify report quotes
   each row's obligation from `parity.md` instead of paraphrasing it (a trial
   report mislabeled TK-08), and verify never schedules a wakeup.
 - **A slice seed's acceptance cases fix the verify denominator.** Two
@@ -148,7 +152,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   older seed it falls back to splitting criteria, seeded from `PREVIOUS`.
   On the trial seeds it lists 22 cases for slice 04, the first audit's
   count. For slice 07 it flags M-10, C-14 and C-24, which the tables witness
-  but the cases cite only through decision IDs.
+  but the cases cite only through decision IDs. `ledger.py stats --slice`
+  now counts only the IDs the cases cite and the tables list. The ASP.NET
+  trial's first 00a seed named other slices' rows in its prose, and the
+  verify gate line read 5 of 12 rows instead of 5 of 5.
 - **contract-surveyor records framework-rendered responses.** The four
   django-ninja surprises were all answers the framework renders, not a
   handler: the 409 `null` body, a 500 for an undeclared status, pydantic's
