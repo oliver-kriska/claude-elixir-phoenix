@@ -90,8 +90,8 @@ First write the run list, `$EV/commands.md`, before running anything: `MIX_ENV=t
 every command an acceptance criterion names, with its arguments as named (the named seeds, not a random one; `--force`, the
 full suite, a test outside the slice paths, a release smoke, a static check such as `rg` or `git diff`); and every `## Oracle`
 command (black-box files, whole-file diagnostics, the load script as a short smoke). Run each through this wrapper. Leave one
-out only when it cannot run here (a missing tool, a blocked preflight), and say so; a `/phx:work` log never stands in. A
-script an earlier run saved is rebuilt from this step, never reused as is:
+out only when it cannot run here (a missing tool, a blocked preflight), and say so; a `/phx:work` log never stands in. Write
+this run's script from this step, never from a copy of another slice's or an earlier run's script:
 
 ```bash
 fp() { python3 "${CLAUDE_SKILL_DIR}/scripts/fingerprint.py" "$@"; }
@@ -121,9 +121,9 @@ stops the user's other BEAM processes. Create and drop only a database this run 
 
 ### 4. Audit in parallel
 
-No `commands.md` yet? Write it now. Then run each listed command with no record, and re-run any record lacking its four `fp`
-values: auditors score records, never a later re-run. Run `fp .` and `fp "$SOURCE"` (same excludes) right before spawning and
-pass both as `CURRENT_IDENTITY`; agents cannot run plugin scripts. Build the `COMPLETENESS` packet: the slice's ledger IDs and
+No `commands.md`? Write it now. Then run each listed command with no record through the wrapper, and re-run any record lacking
+its four `fp` values: auditors score records, never a later re-run. Run `fp .` and `fp "$SOURCE"` (same excludes) before
+spawning, passed as `CURRENT_IDENTITY`; agents cannot run plugin scripts. Build `COMPLETENESS`: the slice's ledger IDs and
 source anchors from `interview.md` and the ledger rows, nothing wider. Spawn both in ONE message with `run_in_background: true`:
 
 - **`rewrite:idiom-auditor`** — `TARGET`, `SCOPE` (`git diff --name-only` from the slice's base commit in `progress.md`, else the slice's modules), `LEDGER`, `ARCHITECTURE`,

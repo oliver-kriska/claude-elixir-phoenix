@@ -68,10 +68,14 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   each Hurl command gets its own `uid`, where two runs in the same second
   had collided on registration. The parity auditor splits each criterion
   into one row per case it names: the slice 04 denominator had grown from
-  22 to 32 over three runs as the cases surfaced one at a time. A run
-  script saved by an earlier verify is rebuilt from the skill, never
-  reused as is: the fourth slice 04 verify reran its old script, which
-  started the release without `RELEASE_DISTRIBUTION=none`. The elixir-way references now name
+  22 to 32 over three runs as the cases surfaced one at a time. Verify
+  writes each run's script from the skill, never from a copy of another
+  slice's or an earlier run's: the fourth slice 04 verify reran its old
+  script and the slice 05 verify copied slice 04's, so both started the
+  release without `RELEASE_DISTRIBUTION=none` and the copy lacked the
+  static checks its run list named. Catch-up runs before the audits go
+  through the wrapper, where slice 05 ran those checks bare and left them
+  with no record. The elixir-way references now name
   `:crypto.pbkdf2_hmac/5` (a dirty NIF) for Django PBKDF2 hashes instead of
   `pbkdf2_elixir`, whose Elixir loop runs all 1,000,000 rounds on the normal
   schedulers: with 42 hashes in flight a trivial task took up to 412 ms,
