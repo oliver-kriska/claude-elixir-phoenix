@@ -2,7 +2,7 @@
 name: start
 description: "Start or resume an Elixir rewrite of an app in any language (Rails, Django, PHP, Node, Go, Java, .NET, others) and show its status. Use when someone wants to port, migrate or rewrite an app into Elixir/Phoenix."
 effort: medium
-argument-hint: "[<legacy-app-path>] [--steering <dir>] [--status] [--auto]"
+argument-hint: "[<legacy-app-path>] [--steering <dir>] [--oracle <dir>] [--status] [--auto]"
 ---
 
 # Rewrite Start — Entry, Resume, Status
@@ -99,7 +99,7 @@ pending divergences, and the single next command.
 
 ### 5. `--auto` chain
 
-Run `/rewrite:analyze <path> --auto` (passing any `--steering`), then `/rewrite:architect --auto`,
+Run `/rewrite:analyze <path> --auto` (passing any `--steering` or `--oracle`), then `/rewrite:architect --auto`,
 then `/rewrite:roadmap --auto`, each via the Skill tool from this session.
 Stop early when a phase reports a blocker. End with the list of `ASSUMED`
 decisions the user must approve and the next command; `/phx:plan` runs only
@@ -124,5 +124,7 @@ CLAUDE_CODE_PRINT_BG_WAIT_CEILING_MS=0 claude -p "/rewrite:start /path/to/legacy
 ## Arguments
 
 - `<legacy-app-path>` — the app to rewrite (new rewrites)
+- `--steering <dir>`, `--oracle <dir>` — passed to analyze: docs that steer it, and a test or API suite outside the
+  app (read and graded, never run)
 - `--status` — report only
 - `--auto` — chain analyze → architect → roadmap without questions; defaults recorded as ASSUMED
