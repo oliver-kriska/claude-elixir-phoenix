@@ -19,7 +19,7 @@ Elixir quality stays with `/phx:review`.
 ## Iron Laws
 
 1. **PREFLIGHT BEFORE ANY COMMAND** — static proof of the target, a disposable database and no live side effects, printing no secret; a blocked preflight stays `blocked`, never a trial run
-2. **EVIDENCE IS RECORDED** — exit status, target and source identity before and after, redacted environment and log, written before anyone interprets them; identity that moved means `stale`
+2. **EVIDENCE IS RECORDED BY `ev run`** — exit status, target and source identity before and after, redacted environment and log, written before anyone interprets them; identity that moved means `stale`
 3. **THE OBLIGATIONS ARE THE DENOMINATOR** — from the slice seed, the analyses and a source completeness check, never from the tests that happen to exist
 4. **NO PASS BY EXCLUSION** — skipped, excluded, stubbed or stale results never count; pre-existing findings are still findings
 5. **NEVER RUN THE LEGACY APP** — evidence comes from the Elixir target only; the source is read and fingerprinted, never executed; suites hit the port, legacy tests are translated
@@ -32,24 +32,21 @@ Elixir quality stays with `/phx:review`.
 Find `.claude/plans/rewrite-{NN}-*/` (or the slug). Read its `interview.md`
 (Acceptance Criteria, External Contracts, `## Oracle`, ledger IDs) and `progress.md` if present.
 `TARGET` is the current directory and must contain `mix.exs`; `SOURCE` is the legacy path recorded in
-`.claude/rewrite/status.md`. `EV=.claude/rewrite/verify/{NN}/evidence` (create it).
+`.claude/rewrite/status.md`. `EV=.claude/rewrite/verify/{NN}/evidence`.
 
-Use the bundled script for identity; define `fp` in every shell call that uses it:
+Every record comes from the bundled script; define `ev` in every shell call that uses it:
 
 ```bash
-fp() { python3 "${CLAUDE_SKILL_DIR}/scripts/fingerprint.py" "$@"; }
+ev() { python3 "${CLAUDE_SKILL_DIR}/scripts/evidence.py" "$@"; }
 ```
 
-- **Output** — `head` and a `content_fingerprint`: SHA-256 over the full bytes of every dirty file (tracked changes
-  plus untracked, non-ignored files) and of every file in each submodule work tree, or of every file outside git.
-  Git runs with the checkout's hooks, filters and fsmonitor disabled, and never writes the index
-- **Split index** — when the git dir holds `sharedindex.*`, git would touch it on read, so the whole tree is hashed
-  instead (`mode: tree`, `fallback: split-index`, no head). Compare only captures taken in the same mode
-- **Excludes** — `.claude/rewrite/verify/`, `_build/`, `deps/` and `node_modules/` by default
-- **Exit 2** — no identity: DIR is not a directory, a file cannot be read, an exclude leaves DIR, git cannot list
-  changes, or a tracked file is flagged `assume-unchanged`/`skip-worktree` (git hides its edits). Ask the user to
-  clear the flag; never clear it yourself
-- **One list per run** — pass the same `--exclude` set to every capture; add a path only for output the run itself writes (`cover/`), and record it
+- **Identity** — `scripts/fingerprint.py`, which `ev` calls: `head` and a `content_fingerprint`, SHA-256 over every dirty
+  file (tracked changes plus untracked, non-ignored files), every file in each submodule work tree, or every file outside
+  git or under a split index (`mode: tree`). Git runs with hooks, filters and fsmonitor disabled and never writes the index
+- **Excludes** — `.claude/rewrite/verify/`, `_build/`, `deps/` and `node_modules/` by default; `ev init` fixes one list for
+  the run, so add `--exclude cover/` there, and only for output the run itself writes
+- **Capture failed** — DIR unreadable, git cannot list changes, or a file flagged `assume-unchanged`/`skip-worktree` (git
+  hides its edits): `ev status` says `incomplete`. Ask the user to clear the flag; never clear it yourself
 
 ### 2. Preflight (static, before running anything)
 
@@ -85,51 +82,51 @@ redacted reason (`--no-run` skips straight to the audits with evidence `blocked`
 
 ### 3. Capture evidence
 
-First write the run list, `$EV/commands.md`, before running anything: `MIX_ENV=test mix compile --warnings-as-errors` (log
-`$ts-compile.log`) and `mix test` on the slice's test files (with `--full`, the whole suite and `mix format --check-formatted`);
-every command an acceptance criterion names, with its arguments as named (the named seeds, not a random one; `--force`, the
-full suite, a test outside the slice paths, a release smoke, a static check such as `rg` or `git diff`); and every `## Oracle`
-command (black-box files, whole-file diagnostics, the load script as a short smoke). Run each through this wrapper. Leave one
-out only when it cannot run here (a missing tool, a blocked preflight), and say so; a `/phx:work` log never stands in. Write
-this run's script from this step, never from a copy of another slice's or an earlier run's script:
+Start the run with `ev init {NN} --source "$SOURCE"`, which moves earlier records to `verify/{NN}/superseded/`. Then write
+the run list, `$EV/commands.md`, before running anything, one line per command: `` - `NAME` — command — why ``. List
+`MIX_ENV=test mix compile --warnings-as-errors` and `mix test` on the slice's test files (with `--full`, the whole suite and
+`mix format --check-formatted`); every command an acceptance criterion names, with its arguments as named (the named seeds,
+not a random one; `--force`, the full suite, a test outside the slice paths, a release smoke, a static check such as `rg` or
+`git diff`); and every `## Oracle` command (one per black-box file, whole-file diagnostics, the load script as a short
+smoke). Leave one out only when it cannot run here (a missing tool, a blocked preflight), and say so; a `/phx:work` log
+never stands in.
+
+Run each one as `ev run {NN} NAME [--cwd DIR] [--expect-exit N] -- CMD`: it captures both identities, runs the command
+without a shell, captures them again, writes `$EV/{ts}-NAME.md` (exit, times, identities, env names, ExUnit counts) and its
+`.log`, and exits with the command's status. Pass variables as `env NAME=value` (secret-like values are redacted); `{uid}`
+becomes a value unique to the record. Never write a record by hand or copy a run script, this run's or another slice's:
 
 ```bash
-fp() { python3 "${CLAUDE_SKILL_DIR}/scripts/fingerprint.py" "$@"; }
-ts=$(date -u +%Y%m%dT%H%M%SZ); log="$EV/$ts-test.log"; started=$(date -u +%FT%TZ)
-tb=$(fp .); sb=$(fp "$SOURCE")
-MIX_ENV=test mix test {slice test paths} > "$log" 2>&1; t=$?
-ta=$(fp .); sa=$(fp "$SOURCE")
-[ -n "$tb" ] && [ -n "$sb" ] && [ "$tb" = "$ta" ] && [ "$sb" = "$sa" ] && id=fresh || id=stale
+ev run {NN} compile -- env MIX_ENV=test mix compile --warnings-as-errors
+ev run {NN} ac17-rg --expect-exit 1 -- rg -n 'Repo\.' lib/{app}_web  # a check that must find nothing
 ```
 
-Write one `$EV/$ts-{name}.md` per command: the command and cwd; its exit status, which with the log outranks any summary; UTC
-`started_at` and `finished_at`; the four `fp` outputs; `identity`, `fresh` only when all four captures succeeded and each
-before equals its after, else `stale`; env variable names and redacted conclusions, never values; `N tests, F failures, E excluded`
-and the log path. `git status` text is a diagnostic, never the freshness proof.
-
 For black-box files, start the port as it ships, never a dev server (its `debug_errors` page answers HTML where the release
-answers the envelope), on a database this run creates and drops; never point a suite at the legacy app:
+answers the envelope), on a database this run creates and drops; never point a suite at the legacy app. `ev port start`
+runs the release with `RELEASE_DISTRIBUTION=none` in its own process group, and `ev port stop` stops only that group;
+`pkill` or `killall` by pattern stops the user's other BEAM processes:
 
 ```bash
-MIX_ENV=prod mix release --overwrite > "$EV/$ts-release.log" 2>&1
-RELEASE_DISTRIBUTION=none _build/prod/rel/{app}/bin/{app} start > "$EV/$ts-server.log" 2>&1 &  # no epmd outlives it
-echo $! > "$EV/port.pid"  # then the suite: $ts-oracle.md names each file, the --oracle root, its own uid, the result
-kill "$(cat "$EV/port.pid")"  # that PID only: pkill or killall by pattern stops the user's other BEAM processes
+ev run {NN} release -- env MIX_ENV=prod mix release --overwrite
+ev port start {NN} --release _build/prod/rel/{app}/bin/{app} --ready-url http://localhost:{port}/  # export DATABASE_URL and secrets in this call
+ev run {NN} oracle-auth --cwd "$ORACLE" -- hurl --test --variable host=http://localhost:{port} --variable uid={uid} hurl/auth.hurl
+ev port stop {NN}
 ```
 
 ### 4. Audit in parallel
 
-No `commands.md`? Write it now. Then run each listed command with no record through the wrapper, and re-run any record lacking
-its four `fp` values: auditors score records, never a later re-run. Run `fp .` and `fp "$SOURCE"` (same excludes) before
-spawning, passed as `CURRENT_IDENTITY`; agents cannot run plugin scripts. Build `COMPLETENESS`: the slice's ledger IDs and
+Run `ev status {NN}`, which checks each `commands.md` name against its newest record; run every `missing` name and re-run
+every `incomplete` or `outdated` one (auditors score records, never a later re-run). Agents cannot run plugin scripts, so
+pass `ev current {NN}` as `CURRENT_IDENTITY` and, errors included, `python3 "${CLAUDE_SKILL_DIR}/../architect/scripts/ledger.py"
+obligations --slice .claude/plans/{slug}/interview.md` as `OBLIGATION_IDS`. Build `COMPLETENESS`: the slice's ledger IDs and
 source anchors from `interview.md` and the ledger rows, nothing wider. Spawn both in ONE message with `run_in_background: true`:
 
 - **`rewrite:idiom-auditor`** — `TARGET`, `SCOPE` (`git diff --name-only` from the slice's base commit in `progress.md`, else the slice's modules), `LEDGER`, `ARCHITECTURE`,
   `CONTRACTS=.claude/rewrite/analysis/contracts.md`, `KB=.claude/rewrite/kb/`, `OUTPUT=.claude/rewrite/verify/{NN}/idiom.md`
 - **`rewrite:parity-auditor`** — `TARGET`, `SOURCE`, `COMPLETENESS`, `OBLIGATIONS` (the interview path plus the analyses),
   `LEDGER`, `EVIDENCE=$EV`, `CURRENT_IDENTITY`, `DECISIONS` (`.claude/rewrite/architecture/`,
-  `.claude/rewrite/verify/accepted-risks.md`), `CLAIMS` (`progress.md`, PR text if any), `PREVIOUS` (an earlier `parity.md`,
-  moved aside first), `OUTPUT=.claude/rewrite/verify/{NN}/parity.md`
+  `.claude/rewrite/verify/accepted-risks.md`), `CLAIMS` (`progress.md`, PR text if any), `OBLIGATION_IDS`, `PREVIOUS` (an
+  earlier `parity.md`, moved aside first), `OUTPUT=.claude/rewrite/verify/{NN}/parity.md`
 
 ### 5. Apply ledger updates
 
@@ -160,7 +157,8 @@ A failing `check`, a nonzero `stats` (1 = malformed ledger, 2 = unreadable slice
 
 ### 6. Report and gate
 
-Report the parity auditor's states: a record made after the audits changes none until a new audit scores it. Write
+Report the parity auditor's states, quoting each row's obligation text from `parity.md` rather than describing it again. A
+record made after the audits changes no state until a new audit scores it. Write
 `.claude/rewrite/verify/{NN}/report.md`: verified parity (`pass` of the counted obligations), accepted departures apart
 (ADR or AR, never verified), source omissions, scope mistakes, idiom BLOCKERs, rejected and stale evidence, unsupported claims, the gate.
 
@@ -176,10 +174,11 @@ Omissions count until the ledger records them or the user moves them out of the 
 `roadmap.md` only when the gate passes.
 Otherwise list the fixes. Suggest `/phx:work` with the plan, or `/phx:investigate` for a failing witness or a load
 smoke that errors: quote the error from the server log; a bigger pool or a lighter load only hides the cause.
+The report ends the run: never schedule a wakeup or a loop to re-check it.
 
 ## Arguments
 
 - **`<slice>`** — slice number (`02`) or plan slug
-- **`--no-run`** — audit existing evidence only (evidence for new code is `not-run`). Compare `fp .` with the newest
-  record's target-after identity first; when they differ (any commit, docs included), stop before the audits, which would only score `stale`, and suggest a full run
+- **`--no-run`** — audit existing evidence only (evidence for new code is `not-run`). Run `ev status {NN}` first; when a
+  record is `outdated` (any commit, docs included), stop before the audits, which would only score `stale`, and suggest a full run
 - **`--full`** — whole test suite plus format check

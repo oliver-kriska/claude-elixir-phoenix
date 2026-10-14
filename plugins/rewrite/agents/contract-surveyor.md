@@ -90,6 +90,27 @@ web push subscriptions, email links, OAuth callback URLs, mobile clients.
 For non-web shapes: CLI flags, exit codes and output formats; message
 schemas, topics and ack semantics; file formats a pipeline reads and writes.
 
+**Framework-rendered responses.** Some answers come from the framework, not
+from a handler. For each class below, record the status, content type and
+body that the pinned framework version renders. Cite the library function
+that renders it (`ninja/operation.py` `_result_to_response`). Use a register
+row when a consumer or suite asserts it, else Incidental Behaviour:
+
+- a body that does not parse (malformed JSON, the wrong content type)
+- a missing, null or wrong-type field, with the validator's own message (it
+  runs before any custom validator)
+- a path parameter that does not convert (`{id}` given `abc`)
+- an unknown route, and a known route with the wrong method
+- a status a handler returns that the route's declared responses omit, and a
+  return value the response model reshapes (`None` under `Any` renders `null`)
+- an unhandled exception with debug off
+
+Find the pinned version in the lockfile (`poetry.lock`, `requirements*.txt`,
+`Gemfile.lock`, `package-lock.json`, `composer.lock`, `go.sum`). Read that
+version from vendored or installed source in SOURCE. When it is not on disk,
+write the row `UNKNOWN: {package} {version} {function} not read` and add a
+question naming the function. Never infer these bodies from handler code.
+
 ### 4. Operational contracts
 
 Env var names, CLI and rake commands operators run, backup file layout,

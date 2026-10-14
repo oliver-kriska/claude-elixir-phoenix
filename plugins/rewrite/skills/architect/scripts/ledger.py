@@ -7,12 +7,19 @@ check  — every M-/R-/C- ID defined in analysis/*.md is the ID (or an alias) of
          departure has a complete record that scopes the row.
 stats  — counts by verdict, implementation, evidence and departure, with the
          verified numerator kept separate from retired and accepted-risk rows.
+obligations — the acceptance cases of a slice seed, one per `- [ ] AC-NN` or
+         `AC-NNa` item under `## Acceptance Criteria`, with the ledger IDs each
+         cites. Errors: an item without an ID, a duplicate ID, a criterion
+         listed both bare and lettered, and a ledger ID that the slice's
+         mechanism or contract table names but no case cites. These cases are
+         the parity auditor's rows, so its denominator is fixed by the seed.
 
 Stdlib only. Reads files, never writes them.
 
 Usage:
     python3 ledger.py check [--rewrite-dir .claude/rewrite]
     python3 ledger.py stats [--rewrite-dir .claude/rewrite] [--ids M-01,C-04 | --slice interview.md] [--json]
+    python3 ledger.py obligations --slice interview.md [--json]
 
 Exit status: 0 clean, 1 ledger errors (stats too: malformed rows, no ledger table, missing
 columns), 2 unusable input (missing ledger or slice).
@@ -32,6 +39,9 @@ ROW_ID_RE = re.compile(r"^\|\s*[*`_]*([MRC]-\d{2,}[a-z]?)\b")
 ID_LIKE_RE = re.compile(r"\b[MRC]-[A-Za-z0-9]+\b")
 SEPARATOR_RE = re.compile(r"^\|[\s:|-]+\|?$")
 ADR_RE = re.compile(r"\bADR-(\d{3})\b")
+CASE_ITEM_RE = re.compile(r"^\s*[-*] \[[ xX]\]\s*(.*)$")
+CASE_ID_RE = re.compile(r"^[*`_]*(AC-(\d+)([a-z]?))\b")
+SLICE_TABLES = ("legacy mechanism", "external contracts")
 AR_RE = re.compile(r"AR-\d{2,}")
 AR_FIELDS = ("owner", "scope", "rationale", "review", "approved")
 PLACEHOLDER_RE = re.compile(r"^(|—|-|\?|tbd|todo|pending|none|n/a|<[^>]*>)$", re.I)
@@ -312,6 +322,62 @@ def stats(rewrite_dir, ids=None):
     return result
 
 
+def sections(text):
+    """Map each `## ` heading (lowercased) to the text under it."""
+    out, title, lines = {}, None, []
+    for line in text.splitlines() + ["## "]:
+        if line.startswith("## "):
+            if title is not None:
+                out[title] = "\n".join(lines)
+            title, lines = line[3:].strip().lower(), []
+        else:
+            lines.append(line)
+    return out
+
+
+def obligations(text):
+    """Acceptance cases of a slice seed and the errors that make them unusable as a denominator."""
+    parts = sections(text)
+    body = next((v for k, v in parts.items() if k.startswith("acceptance criteria")), None)
+    if body is None:
+        return [], ["no `## Acceptance Criteria` section"]
+    items = []
+    for line in body.splitlines():
+        m = CASE_ITEM_RE.match(line)
+        if m:
+            items.append([m.group(1)])
+        elif items and line.strip() and line[:1].isspace():
+            items[-1].append(line.strip())
+    cases, errors, seen = [], [], set()
+    for item in items:
+        text_ = " ".join(item)
+        m = CASE_ID_RE.match(text_)
+        if not m:
+            errors.append(f"acceptance item without an AC-NN id: {text_[:60]}")
+            continue
+        case = m.group(1)
+        if case in seen:
+            errors.append(f"{case} is listed twice")
+        seen.add(case)
+        cases.append({"id": case, "cites": sorted(set(ID_RE.findall(text_)))})
+    for case in sorted(c for c in seen if not c[-1].isalpha()):
+        if any(c != case and c.startswith(case) and c[len(case):].isalpha() for c in seen):
+            errors.append(f"{case} is listed bare and with lettered cases; keep one form")
+    if not cases:
+        errors.append("no acceptance cases")
+    cited = {i for c in cases for i in c["cites"]}
+    for title, part in parts.items():
+        if not title.startswith(SLICE_TABLES):
+            continue
+        for _, rows in tables(part):
+            for row in rows:
+                for ledger_id in ID_RE.findall(split_row(row)[0]):
+                    if ledger_id not in cited:
+                        errors.append(f"{ledger_id} ({title}) is cited by no acceptance case")
+                        cited.add(ledger_id)
+    return cases, errors
+
+
 def format_stats(s):
     lines = [
         f"verified {s['verified']} of {s['denominator']} ledger rows (retired {s['retired']}, "
@@ -325,7 +391,7 @@ def format_stats(s):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("command", choices=["check", "stats"])
+    ap.add_argument("command", choices=["check", "stats", "obligations"])
     ap.add_argument("--rewrite-dir", default=".claude/rewrite")
     ap.add_argument("--ids", help="comma-separated ledger IDs to count")
     ap.add_argument("--slice", help="count only IDs mentioned in this file (a slice interview.md)")
@@ -338,6 +404,21 @@ def main(argv=None):
         for e in errors:
             print(f"error: {e}")
         print("ledger OK" if not errors else f"{len(errors)} error(s)")
+        return 1 if errors else 0
+    if args.command == "obligations":
+        text = read_required(args.slice) if args.slice else None
+        if text is None:
+            print(f"error: obligations needs a readable --slice file, got {args.slice}")
+            return 2
+        cases, errors = obligations(text)
+        if args.json:
+            print(json.dumps({"cases": cases, "errors": errors}, indent=2))
+        else:
+            print(f"obligations: {len(cases)} acceptance cases")
+            for c in cases:
+                print(f"{c['id']}: {', '.join(c['cites']) or 'no ledger ID'}")
+            for e in errors:
+                print(f"error: {e}")
         return 1 if errors else 0
     if not read(os.path.join(args.rewrite_dir, "ledger.md")):
         print(f"error: missing {os.path.join(args.rewrite_dir, 'ledger.md')}")
