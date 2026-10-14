@@ -166,7 +166,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   that does not convert, an unknown route or wrong method, an undeclared
   status or reshaped return value, and an unhandled exception. When that
   source is not on disk, the row is `UNKNOWN` with a question naming the
-  function, never a body inferred from handler code.
+  function, never a body inferred from handler code. In the ASP.NET trial
+  the pass found the 404, 405, 415 and binder answers at analysis time. It
+  missed two classes, which the 00b seed raised instead: the exact
+  `Content-Type` (the legacy 401 carries no charset) and an unsatisfiable
+  `Accept`, which MVC ignores but Phoenix's `plug :accepts` answers with 406.
+  The pass now records both.
 - **Tests for the rewrite scripts (contributor tooling).**
   `scripts/tests/test_rewrite_inventory.py`,
   `scripts/tests/test_rewrite_fingerprint.py` and
