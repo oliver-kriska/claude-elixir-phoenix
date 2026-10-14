@@ -87,7 +87,8 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   JSON `null`, which a trial analysis had recorded as an empty body, and
   a status the route's `response=` omits raises `ConfigError`, a 500
   unless `DEBUG`: the legacy favorite route returns 409 without declaring
-  it. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
+  it. A 422 for a missing or wrong-type field carries pydantic's own
+  text, which three trial slices had replaced without recording it. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
   fresh, where it had proposed `not-run` because an ADR changed the legacy
   behavior, which left those rows unverified. Verify keeps the PID of the port it starts and stops only that process,
   where a trial run had stopped every BEAM process on the machine with
