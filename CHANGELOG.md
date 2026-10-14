@@ -135,7 +135,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   as `EV_PATH`, because a mise shim on `python3` rewrites PATH for its
   child from the directory's tool config. In the ASP.NET trial, the port's
   `mix` then reached an unpinned `erl` shim and failed, and verify blamed
-  the script for stripping the environment. The verify report quotes
+  the script for stripping the environment. The skill's absence-check
+  example now skips comment lines (`'^\s*([^#\s].*)?Repo\.'`). In slices
+  00a and 00b, verify's first `rg` absence check matched a comment and had to
+  be re-run. The verify report quotes
   each row's obligation from `parity.md` instead of paraphrasing it (a trial
   report mislabeled TK-08), and verify never schedules a wakeup.
 - **A slice seed's acceptance cases fix the verify denominator.** Two

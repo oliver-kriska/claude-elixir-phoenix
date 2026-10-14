@@ -98,7 +98,7 @@ becomes a value unique to the record. Never write a record by hand or copy a run
 
 ```bash
 ev run {NN} compile -- env MIX_ENV=test mix compile --warnings-as-errors
-ev run {NN} ac17-rg --expect-exit 1 -- rg -n 'Repo\.' lib/{app}_web  # a check that must find nothing
+ev run {NN} ac17-rg --expect-exit 1 -- rg -n '^\s*([^#\s].*)?Repo\.' lib/{app}_web  # must find nothing; skips comment lines
 ```
 
 For black-box files, start the port as it ships, never a dev server (its `debug_errors` page answers HTML where the release
