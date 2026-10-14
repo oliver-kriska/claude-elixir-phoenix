@@ -56,9 +56,12 @@ works end to end in Elixir, inside the compatibility bar. It is the unit
       pass, its setup and cleanup requests included: a file that registers a
       user and deletes its article belongs to the slice that adds DELETE, not
       the one it is named after. Earlier slices may run it as a diagnostic that
-      does not gate. The seed lists the files with the exact command under
-      `## Oracle`, run so one failure does not hide the rest (Hurl:
-      `--continue-on-error`); roadmap.md lists unassigned files
+      does not gate, except for a leading run of entries an earlier slice can
+      pass in full (register and login before the user routes): that range
+      gates the earlier slice (Hurl `--to-entry N`, one command per file), and
+      the whole file still gates its own slice. The seed lists the files with
+      the exact command under `## Oracle`, run so one failure does not hide the
+      rest (Hurl: `--continue-on-error`); roadmap.md lists unassigned files
     - **Benchmark or load harness** — P1 in `.claude/rewrite/kb/performance-gates.md` drives the
       baseline and the candidate with it. Without one, slice 00 writes a
       port-only load script (k6 or wrk) over the P0 routes, labelled

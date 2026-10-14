@@ -98,9 +98,11 @@ ta=$(fp .); sa=$(fp "$SOURCE")
 [ -n "$tb" ] && [ -n "$sb" ] && [ "$tb" = "$ta" ] && [ "$sb" = "$sa" ] && id=fresh || id=stale
 ```
 
-Run `MIX_ENV=test mix compile --warnings-as-errors` (log `$ts-compile.log`)
-and `mix test` on the slice's test files; with `--full`, the whole suite and
-`mix format --check-formatted`. Write one `$EV/$ts-{name}.md` per command:
+First write the run list, `$EV/commands.md`: `MIX_ENV=test mix compile --warnings-as-errors` (log `$ts-compile.log`)
+and `mix test` on the slice's test files (with `--full`, the whole suite and `mix format --check-formatted`); every
+command an acceptance criterion names, exactly as named (a seed, `--force`, the full suite, a test outside the slice
+paths, a release smoke); and every `## Oracle` command (black-box files, the load script as a short smoke). Run each
+through the wrapper or write why not; a `/phx:work` log is a claim. Write one `$EV/$ts-{name}.md` per command:
 
 | Field | Content |
 |-------|---------|
@@ -111,10 +113,8 @@ and `mix test` on the slice's test files; with `--full`, the whole suite and
 | env | variable names and redacted conclusions, never values |
 | summary, log | `N tests, F failures, E excluded` and the log path |
 
-When `## Oracle` lists black-box files, start the port locally as its command expects, run that exact command
-through the same wrapper (`$ts-oracle.log`, `$ts-oracle.md` naming each suite file, the `--oracle` root and its
-result), then stop the port. Never point it at the legacy app. Re-run every other command an acceptance criterion
-names the same way (a release smoke, the Oracle's load script as a short smoke): a `/phx:work` log is a claim.
+For black-box files, start the port locally as the command expects, run it (`$ts-oracle.log`, `$ts-oracle.md` naming
+each suite file, the `--oracle` root and its result), then stop the port. Never point it at the legacy app.
 Never use `git status` text as the freshness proof; keep it only as a diagnostic.
 
 ### 4. Audit in parallel

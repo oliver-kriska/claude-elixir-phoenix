@@ -29,7 +29,7 @@ list is the denominator.
 - `LEDGER` — `.claude/rewrite/ledger.md` (rows in the slice)
 - `EVIDENCE` — `.claude/rewrite/verify/{slice}/evidence/*.md` (command,
   exit status, target and source identity before and after, environment,
-  log path), written by `/rewrite:verify`
+  log path), written by `/rewrite:verify`, and its run list `commands.md`
 - `CURRENT_IDENTITY` — `head` and `content_fingerprint` of TARGET and
   SOURCE, captured by the main session just before this audit
 - `DECISIONS` — ADRs with their Status under `.claude/rewrite/architecture/`,
@@ -127,7 +127,10 @@ status, the failure count, skipped and excluded counts (`--exclude`,
 `--only`), the environment (disposable database, network off), and the
 identity: before equals after for TARGET and SOURCE, and after equals
 `CURRENT_IDENTITY`. Exit status and log outrank a summary line. A command
-that failed but was reported as passing is a finding.
+that failed but was reported as passing is a finding. Compare `commands.md`
+with the acceptance criteria and `## Oracle`: a command they name that the
+list leaves out, or a listed command with no record, is a finding, and the
+obligations it would witness stay `not-run`.
 
 ### 5. Check the departures and claims
 

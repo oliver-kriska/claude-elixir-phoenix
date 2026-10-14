@@ -44,14 +44,20 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   criterion names, such as a release smoke, since a `/phx:work` log is a
   claim, and the parity auditor proposes `implemented` for each slice row
   whose code exists, so passing rows stop counting as unverified. A record
-  missing its identity values is re-run before the audits, not after them,
-  and `--no-run` stops before the audits when the target has moved since
+  missing its identity values is re-run before the audits, not after them.
+  Verify writes its run list (`commands.md`) before running anything: the
+  default commands, every command an acceptance criterion names exactly as
+  named (a seed, `--force`, the full suite) and every `## Oracle` command.
+  The parity auditor checks the list against the criteria and the records.
+  `--no-run` stops before the audits when the target has moved since
   its newest record, because they could only score it `stale`.
   Roadmap assigns each ledger row to the slice that builds all of its
   Target, so a foundation gate no longer fails on a row whose replacement
   a later slice writes. Each roadmap run refreshes every slice's
   `Blocked by` first, so `--next` no longer skips a slice whose blockers
-  the user has since resolved.
+  the user has since resolved. A black-box file's leading entries that an
+  earlier slice can pass in full (register and login ahead of the user
+  routes) gate that slice with Hurl `--to-entry`.
 - **Structural eval scores more than one plugin (contributor tooling).**
   `lab/eval/plugins.py` maps a file to its plugin, so `make eval` and
   `make eval-all` score `rewrite` skills and agents alongside `phx`. A
