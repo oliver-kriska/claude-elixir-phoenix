@@ -102,22 +102,20 @@ ta=$(fp .); sa=$(fp "$SOURCE")
 [ -n "$tb" ] && [ -n "$sb" ] && [ "$tb" = "$ta" ] && [ "$sb" = "$sa" ] && id=fresh || id=stale
 ```
 
-Write one `$EV/$ts-{name}.md` per command (`git status` text is never the freshness proof, only a diagnostic):
+Write one `$EV/$ts-{name}.md` per command: the command and cwd; its exit status, which with the log outranks any summary; UTC
+`started_at` and `finished_at`; the four `fp` outputs; `identity`, `fresh` only when all four captures succeeded and each
+before equals its after, else `stale`; env variable names and redacted conclusions, never values; `N tests, F failures, E excluded`
+and the log path. `git status` text is a diagnostic, never the freshness proof.
 
-| Field | Content |
-|-------|---------|
-| command, cwd, exit_status | as run; the exit status and log outrank any summary |
-| started_at, finished_at | UTC |
-| target and source identity | the four `fp` outputs, before and after |
-| identity | `fresh` only when all four captures succeeded and each before equals its after, else `stale` |
-| env | variable names and redacted conclusions, never values |
-| summary, log | `N tests, F failures, E excluded` and the log path |
+For black-box files, start the port as it ships, never a dev server (its `debug_errors` page answers HTML where the release
+answers the envelope), on a database this run creates and drops; never point a suite at the legacy app:
 
-For black-box files, start the port as it ships: build the release (`MIX_ENV=prod mix release`), then run
-`RELEASE_DISTRIBUTION=none bin/{app} start` in the background with its PID kept (`echo $! > "$EV/port.pid"`). Never a dev
-server: its `debug_errors` page answers HTML where the release answers the envelope. Run the suite (`$ts-oracle.md` names each
-file, the `--oracle` root, each command's own `uid`, the result), then `kill` that PID only: `pkill` or `killall` by pattern also
-stops the user's other BEAM processes. Create and drop only a database this run named. Never point it at the legacy app.
+```bash
+MIX_ENV=prod mix release --overwrite > "$EV/$ts-release.log" 2>&1
+RELEASE_DISTRIBUTION=none _build/prod/rel/{app}/bin/{app} start > "$EV/$ts-server.log" 2>&1 &  # no epmd outlives it
+echo $! > "$EV/port.pid"  # then the suite: $ts-oracle.md names each file, the --oracle root, its own uid, the result
+kill "$(cat "$EV/port.pid")"  # that PID only: pkill or killall by pattern stops the user's other BEAM processes
+```
 
 ### 4. Audit in parallel
 

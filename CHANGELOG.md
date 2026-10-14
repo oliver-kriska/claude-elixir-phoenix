@@ -75,7 +75,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   release without `RELEASE_DISTRIBUTION=none` and the copy lacked the
   static checks its run list named. Catch-up runs before the audits go
   through the wrapper, where slice 05 ran those checks bare and left them
-  with no record. The elixir-way references now name
+  with no record. The release start and stop are now a code block in the
+  skill, since the next run wrote a fresh script that still followed the
+  old one's start line and left `epmd` behind again. The elixir-way references now name
   `:crypto.pbkdf2_hmac/5` (a dirty NIF) for Django PBKDF2 hashes instead of
   `pbkdf2_elixir`, whose Elixir loop runs all 1,000,000 rounds on the normal
   schedulers: with 42 hashes in flight a trivial task took up to 412 ms,
