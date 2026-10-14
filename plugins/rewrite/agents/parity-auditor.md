@@ -74,7 +74,11 @@ list is the denominator.
    Review and Approved all filled, and the obligation in its Scope. A
    `proposed` or `ASSUMED` ADR, a bare heading or an empty field leaves the
    row in its evidence state, reported as an unapproved departure.
-   Departures never count as verified; report them apart from it
+   Departures never count as verified; report them apart from it. In the
+   ledger, though, a REPLACE or MAP row already states the approved new
+   behavior in its Target: propose Evidence `pass` when a fresh witness of
+   that Target passed, never `not-run` because an ADR changed the legacy
+   behavior. The ledger's Departure column holds only `AR-NN` records
 8. **Write your file before returning**; return a summary under 15 lines
 
 ## Process

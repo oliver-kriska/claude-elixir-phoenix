@@ -49,7 +49,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   default commands, every command an acceptance criterion names exactly as
   named (a seed, `--force`, the full suite) and every `## Oracle` command.
   The parity auditor checks the list against the criteria and the records.
-  Verify keeps the PID of the port it starts and stops only that process,
+  It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
+  fresh, where it had proposed `not-run` because an ADR changed the legacy
+  behavior, which left those rows unverified. Verify keeps the PID of the port it starts and stops only that process,
   where a trial run had stopped every BEAM process on the machine with
   `pkill -f beam`, and it drops only a database it created itself.
   `--no-run` stops before the audits when the target has moved since
