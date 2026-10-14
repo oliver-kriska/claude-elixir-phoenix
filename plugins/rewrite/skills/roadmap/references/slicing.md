@@ -43,6 +43,30 @@ works end to end in Elixir, inside the compatibility bar. It is the unit
    blocks only the `/phx:plan` handoff
 10. **Size** — 3–8 phx plan tasks and at most ~12 ledger rows per slice;
     the size check in roadmap step 2 splits a larger one into `NNa`/`NNb`
+11. **Oracles set slice 01, each slice's suite files and the perf script** — read the grade in the
+    `## Oracles` section of `.claude/rewrite/inventory/inventory.md`, lowered by the `## Oracle Grade`
+    verdict in `contracts.md` when the surveyor downgraded it. An inventory without that section
+    predates oracle detection: treat the grade as `none` until `/rewrite:analyze` re-runs
+    - **`weak` or `none`** — slice 01 also writes characterization tests: ExUnit
+      tests that assert the legacy captures from rule 3 for every capability in
+      slice 02. No behaviour slice is seeded until slice 01 is `done`
+    - **Black-box or E2E suite** (Hurl, Postman, Bruno, REST Client, Tavern,
+      Dredd, Playwright, Cypress, Gherkin; in SOURCE or an `--oracle` dir) —
+      assign each file to the first slice after which every request in it can
+      pass, its setup and cleanup requests included: a file that registers a
+      user and deletes its article belongs to the slice that adds DELETE, not
+      the one it is named after. Earlier slices may run it as a diagnostic that
+      does not gate. The seed lists the files with the exact command under
+      `## Oracle`, run so one failure does not hide the rest (Hurl:
+      `--continue-on-error`); roadmap.md lists unassigned files
+    - **Benchmark or load harness** — P1 in `.claude/rewrite/kb/performance-gates.md` drives the
+      baseline and the candidate with it. Without one, slice 00 writes a
+      port-only load script (k6 or wrk) over the P0 routes, labelled
+      "no legacy comparison": it catches regressions between port builds and
+      supports no claim about the original
+    - **Legacy is never executed** — every suite runs against the port only;
+      legacy tests are translated into ExUnit, never run, unless an accepted ADR
+      or ledger decision grants running the legacy app in isolation
 
 ## Ordering Heuristics
 
@@ -83,6 +107,7 @@ Bar: ADR-000 ({accepted | ASSUMED}) · Mode: {cutover mode} · Source @ {sha}
 **Contracts**: C-04 (keep legacy cookie), C-09 (keep webhook payload v2)
 **Transition**: {only for staged/coexistence: owner, schema authority, identity, jobs, data movement, cutover, rollback}
 **Acceptance criteria**: {probes from features.md, witnesses from contracts.md}
+**Oracle**: legacy tests to translate {paths} · black-box files {files or requests, `--oracle` root} · perf {harness or port-only script, or none}
 **Exit gate**: `/rewrite:verify 02` — every obligation passes, or is changed or retired by an *accepted* ADR or an AR record whose `Approved` field the user filled; no BLOCKER
 **Plan**: .claude/plans/rewrite-02-checkout/ · State: ready | seeded | planned | in-progress | done
 ```

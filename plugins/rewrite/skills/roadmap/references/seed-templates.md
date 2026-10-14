@@ -86,6 +86,16 @@ it replaces, the guarantees it must keep, and how it will be verified.}
 
 | Contract | Assertion | Witness the tests must implement |
 
+## Oracle
+
+Suites run against the port only, never the legacy app. Legacy tests are
+translated into ExUnit, not run (slicing.md rule 11).
+
+- **Legacy tests to translate**: {path:line per test, from contracts.md legacy witnesses, or `none`}
+- **Black-box files that must pass**: {suite files or requests assigned to this slice, with the `--oracle` root} —
+  `{exact command, e.g. hurl --test --continue-on-error --jobs 1 --variable host=http://localhost:4002 --variable uid=$(date +%s) hurl/auth.hurl}`; or `none`
+- **Performance**: {harness script, or the port-only load script labelled "no legacy comparison", and the P0 gate it serves}; or `none`
+
 ## Transition Contract
 
 {only for staged cutover or coexistence: write owner, routing, schema
@@ -125,7 +135,8 @@ authority, identity, jobs/events, data movement, cutover, rollback}
 ## Verification
 
 `/rewrite:verify {NN}` scores every Acceptance Criteria item and every
-contract witness above against fresh test evidence. An obligation clears
+contract witness above against fresh test evidence, and runs every
+black-box file in `## Oracle` against the port. An obligation clears
 only by passing, or by an accepted ADR or a user-approved AR record that
 changes or retires it; ASSUMED never counts.
 

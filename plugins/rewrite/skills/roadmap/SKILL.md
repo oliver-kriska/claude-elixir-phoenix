@@ -50,8 +50,8 @@ Otherwise read `${CLAUDE_SKILL_DIR}/references/slicing.md` and write
 
 | # | Slice kind | Typical content |
 |---|------------|-----------------|
-| 00 | Foundation | project skeleton per `architecture.md`, Repo(s), legacy schema mapping, auth edge read-only, baseline measurement |
-| 01 | Oracle fixtures | legacy-produced fixture data, cookie and token vectors, captured payloads (synthetic, no production data) |
+| 00 | Foundation | project skeleton per `architecture.md`, Repo(s), legacy schema mapping, auth edge read-only, baseline measurement (or a port-only load script) |
+| 01 | Oracle fixtures | legacy-produced fixture data, cookie and token vectors, captured payloads (synthetic, no production data); characterization tests on a `weak`/`none` grade |
 | 02 | First vertical slice | riskiest core capability end to end, including its negative probes |
 | 03+ | Remaining capabilities | ordered by dependency, then risk |
 | … | Internal replacement | queues, caches, Redis roles retired with their own gates |
@@ -60,6 +60,8 @@ Otherwise read `${CLAUDE_SKILL_DIR}/references/slicing.md` and write
 Per slice: `F-` capabilities, ledger IDs, contracts with witnesses, the
 transition contract (when ADR-000 is staged or coexistence), acceptance
 criteria, exit gate, and `Blocked by` (UNDECIDED rows, unresolved decisions).
+The oracle grade (`## Oracles` in `.claude/rewrite/inventory/inventory.md`, as `contracts.md` confirms or downgrades
+it) sets slice 01, each slice's black-box files and the perf script (slicing.md rule 11). Suites run against the port only.
 
 Size check: count each slice's ledger rows and its likely phx plan tasks
 (logical work units). Split a slice with more than ~12 ledger rows or more
@@ -106,7 +108,7 @@ collision; never hand phx that file or the old one.
 Read `${CLAUDE_SKILL_DIR}/references/seed-templates.md` and write:
 
 - `.claude/plans/{slug}/interview.md` — the phx brainstorm format with
-  rewrite sections (binding decisions, mechanism table, contracts,
+  rewrite sections (binding decisions, mechanism table, contracts, oracle,
   transition contract, acceptance criteria, dead ends, open questions)
 - `.claude/plans/{slug}/scratchpad.md` — `DECISION` and `DEAD-END` entries
 

@@ -35,6 +35,10 @@ Exit: the contract is in the plan.
 
 - **The original first.** Build the original production image and label it exactly: "untouched upstream
   `<sha>`". Never compare against your own intermediate build.
+- **The detected harness drives both arms.** When the inventory's `## Oracles` section lists a benchmark or load
+  harness (k6, wrk, Locust, JMeter, Gatling, Go or JMH benches), the user runs it against the untouched original
+  and the plugin runs it against the port. With none, slice 00 writes a port-only k6 or wrk script over the P0
+  routes, labelled "no legacy comparison": it gates port-to-port regressions and supports no claim about the original.
 - **The host.** A dedicated native Linux host with **≥4 server CPUs** and disjoint CPU sets for the load
   generator (no shared SMT siblings).
 - **Equal limits.** The same `nofile` for server and load generator. A Docker soft limit of 1,024 aborted the

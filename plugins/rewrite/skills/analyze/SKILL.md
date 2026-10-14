@@ -2,7 +2,7 @@
 name: analyze
 description: "Analyze a legacy app in any language before rewriting it in Elixir: inventory, features as goals, why each mechanism exists, runtime topology, external contracts. Use to start or refresh a rewrite."
 effort: high
-argument-hint: <legacy-app-path> [--target <elixir-project>] [--steering <dir>] [--scope <domains|paths>] [--auto]
+argument-hint: <legacy-app-path> [--target <elixir-project>] [--steering <dir>] [--oracle <dir>] [--scope <domains|paths>] [--auto]
 ---
 
 # Rewrite Analyze — Understand Before Porting
@@ -19,7 +19,7 @@ Nothing here proposes Elixir modules; that comes after the compatibility bar.
 
 ## Iron Laws
 
-1. **LEGACY IS READ-ONLY, AND NOT EXECUTED** — never write inside SOURCE; never run its installs, builds, tests or servers
+1. **LEGACY IS READ-ONLY, AND NOT EXECUTED** — never write inside SOURCE or an `--oracle` dir; never run their installs, builds, tests, suites or servers
 2. **RUN FROM THE TARGET WORKSPACE** — the canonical cwd equals the canonical TARGET and sits outside SOURCE; otherwise stop before any `mkdir`
 3. **SCRIPT BEFORE AGENTS** — the deterministic inventory runs first and every agent starts from it
 4. **COVERAGE STAYS VISIBLE** — scope, budgets and gaps are written down; a sample is never reported as a census
@@ -49,17 +49,17 @@ and write `status.md` (step 8 header, phase `analyzing`).
 
 ```bash
 python3 "${CLAUDE_SKILL_DIR}/scripts/inventory.py" "$SOURCE" --target "$TARGET" \
-  --json .claude/rewrite/inventory/inventory.json --md .claude/rewrite/inventory/inventory.md  # + --steering DIR per user-named root
+  --json .claude/rewrite/inventory/inventory.json --md .claude/rewrite/inventory/inventory.md  # + --steering DIR / --oracle DIR as named
 ```
 
-If `inventory.json` already exists, first run the same command with
-`--compare .claude/rewrite/inventory/inventory.json` (exit 1 = snapshot
-changed). On change, list `analysis/*.md` as stale in `status.md` before
-overwriting. Read `inventory.md` (not the JSON) and note stacks, app roots,
-shape hints, infra signals and the coverage section. Set `HISTORY=absent`
-when it reports `hotspots suppressed`, `"hotspots_suppressed": true` or
-`"shallow_repository": true`: history signals then do not exist, and no
-purpose is inferred from one squashed commit.
+Add `--oracle DIR` per test or API suite the user names outside SOURCE (a shared spec repo
+such as RealWorld's `specs/api`): it is read and graded, never run. If `inventory.json` already
+exists, first run the same command with `--compare .claude/rewrite/inventory/inventory.json`
+(exit 1 = snapshot changed). On change, list `analysis/*.md` as stale in `status.md` before
+overwriting. Read `inventory.md` (not the JSON) and note stacks, app roots, shape hints, infra
+signals, the `## Oracles` grade and the coverage section. Set `HISTORY=absent` when it reports
+`hotspots suppressed`, `"hotspots_suppressed": true` or `"shallow_repository": true`: history
+signals then do not exist, and no purpose is inferred from one squashed commit.
 
 ### 3. Materialize the knowledge base
 
@@ -121,14 +121,14 @@ Spawn all four in ONE message with `run_in_background: true`:
 | `rewrite:infra-topologist` | `analysis/runtime.md` |
 | `rewrite:contract-surveyor` | `analysis/contracts.md` |
 
-Each prompt passes `SOURCE`, `INVENTORY=.claude/rewrite/inventory/inventory.md`
-(and `.json`), `KB=.claude/rewrite/kb/`, `OUTPUT`, `SCOPE`, `PACKS`,
-`HISTORY` and `BUDGET` (its `budget.md` row). Never end the turn while an
-analyst runs: headless `claude -p` stops background agents 10 minutes after
-the last turn, so write no summary and ask nothing until all four report. If
-the session cannot wait inside one turn, use `run_in_background: false` in
-the same single message; they still run in parallel. Re-spawn an agent once
-if its file is missing; then record the gap in `status.md` and continue.
+Each prompt passes `SOURCE`, `INVENTORY=.claude/rewrite/inventory/inventory.md` (and `.json`),
+`KB=.claude/rewrite/kb/`, `OUTPUT`, `SCOPE`, `PACKS`, `HISTORY` and `BUDGET` (its `budget.md` row);
+contract-surveyor and feature-cartographer also get `ORACLES` (the `## Oracles` section plus each
+`--oracle DIR`). Never end the turn while an analyst runs: headless `claude -p` stops background
+agents 10 minutes after the last turn, so write no summary and ask nothing until all four report.
+If the session cannot wait inside one turn, use `run_in_background: false` in the same single
+message; they still run in parallel. Re-spawn an agent once if its file is missing; then record
+the gap in `status.md` and continue.
 
 ### 7. Present findings
 
@@ -140,10 +140,10 @@ sed -n '/^## Decisions Needed for ADR-000/,/^## Questions/p' .claude/rewrite/ana
 ```
 
 Show: capability count, mechanism counts by tag (`unknown` called out),
-contracts by surface and class, the top risks, and coverage gaps (budget
-frontiers included). Ask the triage questions with `AskUserQuestion`, at
-most 4 per call and 4 options each. `--auto` answers by class, as the
-`compatibility-bar.md` defaults do:
+contracts by surface and class, the oracle grade as contracts.md confirms or
+downgrades it, the top risks, and coverage gaps (budget frontiers included).
+Ask the triage questions with `AskUserQuestion`, at most 4 per call and 4
+options each. `--auto` answers by class, as the `compatibility-bar.md` defaults do:
 
 - **Ordinary behaviour** — `preserve`, marked `ASSUMED`
 - **Defect** (legacy bug, crash on input) — `UNDECIDED`
@@ -168,12 +168,11 @@ add a question to `status.md` naming both anchors.
 
 ### 8. Record state
 
-Write `.claude/rewrite/status.md`. Its header is four lines: `Phase:
-analyzed`, `Source path: {canonical SOURCE}`, `Target path: {canonical
-TARGET}`, `Plugin version: {from plugin.json}`; later phases read them. Then:
-date, source sha and fingerprints from the inventory, target sha (`git -C
-"$TARGET" rev-parse --verify -q HEAD || echo none`), scope, history (`absent` and why),
-budget hits, artifacts (`ok | missing | stale`), conflicts, open questions.
+Write `.claude/rewrite/status.md`. Its header is four lines: `Phase: analyzed`, `Source path: {canonical SOURCE}`,
+`Target path: {canonical TARGET}`, `Plugin version: {from plugin.json}`; later phases read them. Then: date, source
+sha and fingerprints from the inventory, target sha (`git -C "$TARGET" rev-parse --verify -q HEAD || echo none`),
+scope, history (`absent` and why), oracle grade (correctness and performance from the inventory, the contracts.md
+verdict, `--oracle` roots), budget hits, artifacts (`ok | missing | stale`), conflicts, open questions.
 
 Next step: `/rewrite:architect` (sets the compatibility bar, then designs).
 

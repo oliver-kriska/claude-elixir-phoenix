@@ -22,7 +22,7 @@ Elixir quality stays with `/phx:review`.
 2. **EVIDENCE IS RECORDED** — exit status, target and source identity before and after, redacted environment and log, written before anyone interprets them; identity that moved means `stale`
 3. **THE OBLIGATIONS ARE THE DENOMINATOR** — from the slice seed, the analyses and a source completeness check, never from the tests that happen to exist
 4. **NO PASS BY EXCLUSION** — skipped, excluded, stubbed or stale results never count; pre-existing findings are still findings
-5. **NEVER RUN THE LEGACY APP** — evidence comes from the Elixir target only; the source is read and fingerprinted, never executed
+5. **NEVER RUN THE LEGACY APP** — evidence comes from the Elixir target only; the source is read and fingerprinted, never executed; suites hit the port, legacy tests are translated
 6. **DONE MEANS THE GATE PASSED** — every obligation `pass`, or changed or retired by an accepted ADR or a user-approved AR record, and no BLOCKER
 
 ## Workflow
@@ -31,7 +31,7 @@ Elixir quality stays with `/phx:review`.
 
 Find `.claude/plans/rewrite-{NN}-*/` (or the slug).
 Read its `interview.md`
-(Acceptance Criteria, External Contracts, ledger IDs) and `progress.md` if
+(Acceptance Criteria, External Contracts, `## Oracle`, ledger IDs) and `progress.md` if
 present. `TARGET` is the current directory and must contain `mix.exs`;
 `SOURCE` is the legacy path recorded in `.claude/rewrite/status.md`.
 `EV=.claude/rewrite/verify/{NN}/evidence` (create it).
@@ -79,7 +79,7 @@ Stop with the preflight `blocked` when any of these holds:
 
 - **Database** — not shown disposable (local host or tmp path, a test-only database, SQL sandbox pool); a `_test` name alone is not proof
 - **Environment** — the database or an endpoint is configured from a variable that is `non-local` or unchecked
-- **Side effects** — mail, push, webhooks or HTTP could reach real endpoints
+- **Side effects** — mail, push, webhooks or HTTP could reach real endpoints, or a black-box command targets a non-local host
 - **Mix steps** — an alias or compiler step is destructive or networked
 
 Never run a command to find out whether it was safe; ask the user with the
@@ -110,6 +110,10 @@ and `mix test` on the slice's test files; with `--full`, the whole suite and
 | identity | `fresh` only when all four captures succeeded and each before equals its after, else `stale` |
 | env | variable names and redacted conclusions, never values |
 | summary, log | `N tests, F failures, E excluded` and the log path |
+
+When `## Oracle` lists black-box files, start the port locally as its command expects, run that exact command
+through the same wrapper (`$ts-oracle.log`, `$ts-oracle.md` naming each suite file, the `--oracle` root and its
+result), then stop the port. Never point it at the legacy app.
 
 Never use `git status` text as the freshness proof; keep it only as a diagnostic.
 
@@ -159,7 +163,8 @@ Write `.claude/rewrite/verify/{NN}/report.md` and show: verified parity (`pass` 
 accepted departures as a separate list (ADR or AR, never folded into verified), source omissions and scope
 mistakes, idiom BLOCKER titles, rejected and stale evidence, unsupported claims, and the gate result.
 
-The gate passes only when no BLOCKER remains and every counted obligation is one of:
+The gate passes only when no BLOCKER remains, every black-box file `## Oracle` assigns passed in a fresh record
+(failing or not run fails the gate), and every counted obligation is one of:
 
 - **Verified** — `pass`
 - **Changed or retired** — by an ADR whose Status is `accepted`

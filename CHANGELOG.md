@@ -24,6 +24,23 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `elixir-phoenix` lives in the marketplace entry, not `plugin.json`, so the
   plugin still loads beside `--plugin-dir ./plugins/elixir-phoenix` (`phx@inline`).
   Versions independently. See `plugins/rewrite/README.md`.
+- **The rewrite inventory grades the legacy app's oracles.** `inventory.py`
+  (inventory version 3) adds an `oracles` section: tests by framework with
+  approximate case counts, black-box API suites (Hurl requests and asserts,
+  Postman, Bruno, REST Client, Tavern, Dredd), E2E suites, benchmark and load
+  harnesses, API contracts and coverage config (paths only). A deterministic
+  grade (correctness `strong | moderate | weak | none`, performance
+  `harness | none`) states the counts and the threshold each one crossed.
+  `--oracle DIR` adds a suite outside the source, such as RealWorld's
+  `specs/api`, with the same symlink, special-file and stat-fence safety and
+  outside the source fingerprint; a directory inside the source is not
+  scanned twice. `--compare` still accepts version 2 inventories. The
+  contract-surveyor names a legacy witness per contract and confirms or
+  downgrades the grade. Roadmap puts characterization tests first on a weak
+  grade, names each slice's black-box files and command in a new seed
+  `## Oracle` section, and writes a port-only load script when no harness
+  exists. Verify requires a fresh passing run of those files, against the
+  port only.
 - **Structural eval scores more than one plugin (contributor tooling).**
   `lab/eval/plugins.py` maps a file to its plugin, so `make eval` and
   `make eval-all` score `rewrite` skills and agents alongside `phx`. A

@@ -42,7 +42,7 @@ Each command runs one phase and reads the previous phase's files, so a new sessi
 | Command | What it does | Writes to `.claude/rewrite/` |
 |---------|--------------|------------------------------|
 | `/rewrite:start [<path>] [--status] [--auto]` | Explains the method, detects the phase, checks the source snapshot on resume, names the next command | — |
-| `/rewrite:analyze <path> [--target DIR] [--scope …] [--auto]` | Deterministic inventory, charter, then four analysts in parallel | `inventory/`, `kb/`, `charter.md`, `analysis/`, `status.md` |
+| `/rewrite:analyze <path> [--target DIR] [--oracle DIR] [--scope …] [--auto]` | Deterministic inventory, charter, then four analysts in parallel | `inventory/`, `kb/`, `charter.md`, `analysis/`, `status.md` |
 | `/rewrite:architect [--auto] [--revise ADR-NNN]` | Compatibility bar (ADR-000), phx consults for named open questions, architecture, ledger check | `architecture/`, `ledger.md` |
 | `/rewrite:roadmap [--next] [--slice NN] [--all] [--no-plan] [--auto]` | Cuts vertical slices, writes the seed for one slice, calls `/phx:plan` | `roadmap.md`, `../plans/rewrite-NN-*/` |
 | `/rewrite:verify <NN> [--no-run] [--full]` | Preflight, fresh test evidence, idiom and parity audits, ledger update, slice gate | `verify/NN/` |
@@ -104,6 +104,17 @@ trade them. `/rewrite:architect` asks two rounds:
 
 Under staged cutover or coexistence, ADR-000 and each affected slice also record the transition contract: write
 ownership, routing, schema authority, identity, jobs and events, data movement, cutover and rollback.
+
+## Oracles
+
+A port is only as provably correct as its oracle. The inventory lists tests by framework with approximate case counts,
+black-box API suites (Hurl, Postman, Bruno, REST Client, Tavern, Dredd), E2E suites, benchmark and load harnesses, API
+contracts and coverage config, then grades correctness `strong`, `moderate`, `weak` or `none` and performance `harness`
+or `none`, showing the numbers and thresholds. The grade is a lead: the contract-surveyor names the legacy test or
+request that witnesses each contract and confirms or downgrades it. `--oracle DIR` adds a suite that lives outside the
+source, such as RealWorld's shared `specs/api`; it is read like the source, never executed, and kept out of the source
+fingerprint. A weak grade puts characterization tests first, each slice seed names the suite files it must turn green,
+and suites only ever run against the port.
 
 ## Stack packs, generic method, app shapes
 
@@ -174,8 +185,8 @@ fresh `--auto` run always stops before `/phx:plan`.
 `/rewrite:architect` also consults phx specialists, one per named open question: `ecto-schema-designer`,
 `otp-advisor`, `oban-specialist`, `liveview-architect`, `security-analyzer`, `hex-library-researcher`.
 
-Three stdlib scripts do the deterministic work: `inventory.py` (stacks, infra signals, entry points, steering files, git
-hotspots, discovered vs returned counts), `ledger.py` (every analysis ID accounted for by a row, valid states, complete
+Three stdlib scripts do the deterministic work: `inventory.py` (stacks, infra signals, entry points, oracles, steering
+files, git hotspots, discovered vs returned counts), `ledger.py` (every analysis ID accounted for by a row, valid states, complete
 accepted-risk records, verified counts) and `fingerprint.py` (content identity of SOURCE and TARGET before and after
 each verify command, so evidence from a changed tree is `stale`).
 

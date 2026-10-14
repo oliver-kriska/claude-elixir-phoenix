@@ -25,7 +25,7 @@ list is the denominator.
 - `SOURCE` — legacy root; read it, never run it
 - `COMPLETENESS` — the slice's ledger IDs with their source anchors
 - `OBLIGATIONS` — the slice's `interview.md` (Acceptance Criteria, External
-  contracts), plus `.claude/rewrite/analysis/features.md` and `contracts.md`
+  contracts, `## Oracle`), plus `.claude/rewrite/analysis/features.md` and `contracts.md`
 - `LEDGER` — `.claude/rewrite/ledger.md` (rows in the slice)
 - `EVIDENCE` — `.claude/rewrite/verify/{slice}/evidence/*.md` (command,
   exit status, target and source identity before and after, environment,
@@ -99,8 +99,9 @@ registrations; list anything wider under `Not checked`. Classify each find:
 One row per canonical assertion: acceptance probes (positive and negative),
 contract witnesses in scope, ledger guarantees in scope (atomicity,
 durability, ordering, delivery, authorization, visibility) that the source
-evidences or an accepted ADR adopts, and omissions. Merge duplicates into
-aliases before counting.
+evidences or an accepted ADR adopts, each black-box file `## Oracle` assigns
+(its witness is the `*-oracle.md` record, run against the port), and
+omissions. Merge duplicates into aliases before counting.
 
 ### 3. Find the witness test
 
