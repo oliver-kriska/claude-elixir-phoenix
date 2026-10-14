@@ -50,7 +50,14 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   named (a seed, `--force`, the full suite) and every `## Oracle` command.
   The parity auditor checks the list against the criteria and the records,
   and a missing list is a finding: verify writes it before auditing, where
-  two trial runs had skipped it. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
+  two trial runs had skipped it. Each listed command keeps the arguments
+  its criterion names, and a command is left out only when it cannot run:
+  a trial verify had swapped a named seed for a random one and skipped
+  whole-file diagnostics as already run by `/phx:work`. Black-box files run
+  against the release, not a dev server, whose `debug_errors` page answered
+  HTML where the release answers the JSON envelope. Building the release
+  inline needs the phx gate from #151, which allows `MIX_ENV=prod mix
+  release`. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
   fresh, where it had proposed `not-run` because an ADR changed the legacy
   behavior, which left those rows unverified. Verify keeps the PID of the port it starts and stops only that process,
   where a trial run had stopped every BEAM process on the machine with

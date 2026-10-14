@@ -133,8 +133,9 @@ identity: before equals after for TARGET and SOURCE, and after equals
 `CURRENT_IDENTITY`. Exit status and log outrank a summary line. A command
 that failed but was reported as passing is a finding. Compare `commands.md`
 with the acceptance criteria and `## Oracle`: a missing list, a command they
-name that the list leaves out, or a listed command with no record is a
-finding, and the obligations it would witness stay `not-run`.
+name that the list leaves out or runs with other arguments (another seed, a
+subset of files), or a listed command with no record is a finding, and the
+obligations it would witness stay `not-run`.
 
 ### 5. Check the departures and claims
 
