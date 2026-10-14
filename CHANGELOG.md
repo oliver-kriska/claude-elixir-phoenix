@@ -76,7 +76,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `pbkdf2_elixir`, whose Elixir loop runs all 1,000,000 rounds on the normal
   schedulers: with 42 hashes in flight a trivial task took up to 412 ms,
   against 33 µs through `:crypto`, so concurrent registrations starved the
-  DB pool. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
+  DB pool. The Django stack reference probes django-ninja's per-status
+  response models: `return 409, None` under `response={409: Any}` renders
+  JSON `null`, which a trial analysis had recorded as an empty body. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
   fresh, where it had proposed `not-run` because an ADR changed the legacy
   behavior, which left those rows unverified. Verify keeps the PID of the port it starts and stops only that process,
   where a trial run had stopped every BEAM process on the machine with
