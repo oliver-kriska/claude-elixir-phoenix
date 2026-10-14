@@ -84,7 +84,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   against 33 µs through `:crypto`, so concurrent registrations starved the
   DB pool. The Django stack reference probes django-ninja's per-status
   response models: `return 409, None` under `response={409: Any}` renders
-  JSON `null`, which a trial analysis had recorded as an empty body. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
+  JSON `null`, which a trial analysis had recorded as an empty body, and
+  a status the route's `response=` omits raises `ConfigError`, a 500
+  unless `DEBUG`: the legacy favorite route returns 409 without declaring
+  it. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
   fresh, where it had proposed `not-run` because an ADR changed the legacy
   behavior, which left those rows unverified. Verify keeps the PID of the port it starts and stops only that process,
   where a trial run had stopped every BEAM process on the machine with
