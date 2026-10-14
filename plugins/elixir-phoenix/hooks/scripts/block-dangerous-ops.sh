@@ -106,16 +106,156 @@ if echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)git push[^;|&]
     "Safer alternative: git push --force-with-lease"
 fi
 
-# Elixir-only: production env warning. Anchored so a quoted mention inside
-# `echo "never use MIX_ENV=prod mix in dev"` doesn’t trigger. Tolerates an
-# optional `env` prefix, other assignments around MIX_ENV=prod, and multiple
-# spaces (`env MIX_ENV=prod mix release`, `FOO=1 MIX_ENV=prod mix compile`).
-# See ANCHOR NOTE above for `^[[:space:](]*`.
-if [[ "$is_elixir" == 1 ]] && echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*MIX_ENV=prod([[:space:]]+[A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*)*[[:space:]]+mix'; then
+[[ "$is_elixir" == 1 ]] || exit 0
+
+# Everything below is Elixir-only. Each pattern is checked against the command
+# and against the lines of any local script the command runs, so a denied step
+# cannot hide in `scripts/x.sh`.
+#
+# START is the anchor from the ANCHOR NOTE above: start of a line (after
+# whitespace or subshell parens) or a shell separator. A quoted mention such
+# as `echo "pkill -f beam"` therefore never matches.
+START='(^[[:space:](]*|[;&|]+[[:space:]]*)'
+ASSIGNS='(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*'
+RUNNER='(sudo[[:space:]]+)?([^[:space:];&|()]*/)?'
+
+# Pattern kills of BEAM processes. pkill/killall (and kill fed by pgrep) match
+# every process on the machine, so `pkill -f beam` also stops the user’s own
+# servers, IEx shells and ElixirLS. A name matches as a whole word, case-
+# insensitively: `perl` does not match `erl`, `beam.smp` and `Elixir.App` do.
+# Plain `kill PID`, `kill -0 PID` and `kill %1` never match.
+KILL_ARGS='[[:space:]]([^;&|]*[^[:alnum:]_;&|])?'
+BEAM_NAMES='(beam|beam[.]smp|erl|erlang|epmd|elixir|iex|mix|phx[.]server)([^[:alnum:]_]|$)'
+WORD_END='([[:space:]]|$)'
+KILL_PATTERN="${START}${RUNNER}(pkill|killall)${KILL_ARGS}${BEAM_NAMES}"
+KILL_PGREP="${START}${RUNNER}kill[[:space:]][^;&|]*[$][(][[:space:]]*pgrep${KILL_ARGS}${BEAM_NAMES}"
+PGREP_XARGS="${START}pgrep${KILL_ARGS}${BEAM_NAMES}([^;&|]*[|])?[[:space:]]*xargs[[:space:]]([^;&|]*[[:space:]])?kill${WORD_END}"
+
+# MIX_ENV=prod is for building a release. PROD_STEP captures each command
+# that sets it, up to the next separator; prod_step_allowed decides.
+PROD_STEP="${START}${ASSIGNS}MIX_ENV=prod([[:space:]]+[A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*)*[[:space:]]+[^;&|)]*"
+LEAD_ASSIGN='^[[:space:]]+[A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*'
+MIX_WORD='^[[:space:]]+mix([[:space:]]|$)'
+IEX_WORD='^[[:space:]]+iex([[:space:]]|$)'
+DO_WORD='^[[:space:]]*do([[:space:]]|$)'
+FIRST_WORD='^[[:space:]]*([^[:space:]]+)'
+ONLY_PROD='[[:space:]]--only[[:space:]=]+prod([[:space:]]|$)'
+STEP_TEXT='MIX_ENV=prod.*[^[:space:]]'
+
+# Local scripts the command runs: `bash|sh|zsh|source|. FILE`, `./FILE`,
+# `../FILE` and `DIR/FILE.sh`. The file path is the last word of each match.
+SCRIPT_RUN="${START}${ASSIGNS}(([^[:space:];&|()<>]*/)?(bash|sh|zsh|source|[.])([[:space:]]+-[-A-Za-z]+)*[[:space:]]+[^[:space:];&|()<>-][^[:space:];&|()<>]*|[.][.]?/[^[:space:];&|()<>]+|[^[:space:];&|()<>=]*/[^[:space:];&|()<>/]*[.]sh)"
+
+# prod_task_allowed TASK_AND_ARGS: succeeds for a build-only mix task.
+prod_task_allowed() {
+  [[ $1 =~ $FIRST_WORD ]] || return 1
+  case "${BASH_REMATCH[1]}" in
+    release | compile | deps.compile | assets.deploy | phx.digest) return 0 ;;
+    deps.get) [[ $1 =~ $ONLY_PROD ]] ;;
+    *) return 1 ;;
+  esac
+}
+
+# prod_step_allowed SEGMENT: succeeds unless SEGMENT runs iex, or a mix task
+# outside the build allowlist, under MIX_ENV=prod. `mix do` passes only when
+# every task in it does. Other programs (`MIX_ENV=prod make`) pass.
+prod_step_allowed() {
+  local rest=${1#*MIX_ENV=prod} list
+  while [[ $rest =~ $LEAD_ASSIGN ]]; do
+    rest=${rest:${#BASH_REMATCH[0]}}
+  done
+  [[ $rest =~ $IEX_WORD ]] && return 1
+  [[ $rest =~ $MIX_WORD ]] || return 0
+  rest=${rest:${#BASH_REMATCH[0]}}
+  if [[ $rest =~ $DO_WORD ]]; then
+    list=${rest:${#BASH_REMATCH[0]}}
+    list=${list//+/,}
+    while :; do
+      prod_task_allowed "${list%%,*}" || return 1
+      [[ $list == *,* ]] || return 0
+      list=${list#*,}
+    done
+  fi
+  prod_task_allowed "$rest"
+}
+
+# prod_violation: reads shell text on stdin and prints LINE:SEGMENT for the
+# first MIX_ENV=prod step that is not allowed.
+prod_violation() {
+  local hit
+  grep -nIoE "$PROD_STEP" | while IFS= read -r hit; do
+    if ! prod_step_allowed "${hit#*:}"; then
+      printf '%s\n' "$hit"
+      break
+    fi
+  done
+}
+
+# block_beam_kill WHERE: WHERE is empty or names the script and line.
+block_beam_kill() {
   emit_block \
-    "The user’s previous command used ‘MIX_ENV=prod’ and was blocked by the elixir-phoenix plugin. This is only appropriate when building releases (‘mix release’, ‘mix phx.gen.release’). For local development omit MIX_ENV or use ‘MIX_ENV=dev’/‘MIX_ENV=test’. Confirm release intent with the user before retrying." \
-    "WARNING: MIX_ENV=prod detected. This runs in production mode." \
-    "If building a release, this is expected. Otherwise, reconsider."
+    "The previous Bash call was blocked by the elixir-phoenix plugin: it runs a pattern kill naming a BEAM process$1 (‘pkill -f beam’, ‘pkill -f phx.server’, ‘killall beam.smp’, or ‘kill’ fed by ‘pgrep’). A pattern kill stops every matching process on the machine, including the user’s own Phoenix servers, IEx shells and ElixirLS. Stop only the process you started, by PID: start it in the background, record its PID with ‘pid=\$!’ right after, and stop it with ‘kill \$pid’. If you started it as a background task, stop that task instead. When the kill sits in a script, change the script the same way. Do not retry the pattern kill." \
+    "BLOCKED: pattern kill of BEAM processes$1." \
+    "pkill/killall, or kill fed by pgrep, naming beam, erl, epmd, elixir," \
+    "iex, mix or phx.server stops every matching process on the machine," \
+    "including the user’s other servers, IEx shells and ElixirLS." \
+    "Stop only the process you started, by PID:" \
+    "- start it in the background and record pid=\$! right after" \
+    "- stop it with kill \$pid (kill -0 \$pid checks it is still running)"
+}
+
+# block_prod_step STEP WHERE
+block_prod_step() {
+  emit_block \
+    "The previous Bash call was blocked by the elixir-phoenix plugin: it runs ‘$1’$2. Under MIX_ENV=prod only build steps are allowed: ‘mix release’, ‘mix compile’, ‘mix deps.compile’, ‘mix assets.deploy’, ‘mix phx.digest’ and ‘mix deps.get --only prod’. Every other mix task, and ‘iex -S mix’, runs the app or its code with production config and is denied. Run it under MIX_ENV=dev or MIX_ENV=test, or ask the user to run it outside Claude Code. Do not retry it under MIX_ENV=prod, and do not move it into a script: the scripts a command runs are checked too." \
+    "BLOCKED: $1$2." \
+    "MIX_ENV=prod is allowed only for build steps:" \
+    "- mix release, mix compile, mix deps.compile" \
+    "- mix assets.deploy, mix phx.digest, mix deps.get --only prod" \
+    "Every other mix task under MIX_ENV=prod, and iex, is denied: it runs" \
+    "the app or its code with production config (mix ecto.migrate," \
+    "mix run, mix phx.server, iex -S mix). If intentional, run it" \
+    "manually outside Claude Code."
+}
+
+# step_text SEGMENT: the step from MIX_ENV=prod on, for the deny message.
+step_text() {
+  if [[ $1 =~ $STEP_TEXT ]]; then
+    printf '%s' "${BASH_REMATCH[0]}"
+  else
+    printf '%s' "$1"
+  fi
+}
+
+if [[ $COMMAND == *kill* || $COMMAND == *pgrep* ]] &&
+  printf '%s\n' "$COMMAND" | grep -qiE -e "$KILL_PATTERN" -e "$KILL_PGREP" -e "$PGREP_XARGS"; then
+  block_beam_kill ""
 fi
+
+if [[ $COMMAND == *MIX_ENV=prod* ]]; then
+  hit=$(printf '%s\n' "$COMMAND" | prod_violation)
+  [[ -n "$hit" ]] && block_prod_step "$(step_text "${hit#*:}")" ""
+fi
+
+# Scripts: a file that does not exist or cannot be read is skipped (fail
+# open). Relative paths resolve against the hook input cwd.
+runs=$(printf '%s\n' "$COMMAND" | grep -oE "$SCRIPT_RUN")
+[[ -n "$runs" ]] || exit 0
+cwd=$(echo "$INPUT" | jq -r '.cwd // empty' 2>/dev/null)
+[[ -n "$cwd" ]] || cwd=$proj
+
+while IFS= read -r run; do
+  path=${run##*[[:space:]]}
+  path=${path##*[;&|(]}
+  case "$path" in
+    /*) file=$path ;;
+    *) file="$cwd/$path" ;;
+  esac
+  [[ -f "$file" && -r "$file" ]] || continue
+  hit=$(grep -m 1 -nIiE -e "$KILL_PATTERN" -e "$KILL_PGREP" -e "$PGREP_XARGS" "$file" 2>/dev/null)
+  [[ -n "$hit" ]] && block_beam_kill " in $path, line ${hit%%:*}"
+  hit=$(prod_violation < "$file" 2>/dev/null)
+  [[ -n "$hit" ]] && block_prod_step "$(step_text "${hit#*:}")" " in $path, line ${hit%%:*}"
+done <<< "$runs"
 
 exit 0

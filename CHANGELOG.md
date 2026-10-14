@@ -144,6 +144,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   and the artifacts of three `--auto` end-to-end runs (Campfire, Node and
   Django RealWorld) plus a fresh-session `/phx:plan` handoff from a Django
   seed.
+- **`scripts/tests/test_block_dangerous_ops.py` (contributor tooling).**
+  Pytest cases for the Bash gate's pattern-kill, `MIX_ENV=prod` and script
+  checks. It also runs `hooks/tests/block-dangerous-ops_test.sh`, which no CI
+  job ran before, so `make test` now covers the shell suite too.
 
 ### Changed
 
@@ -176,6 +180,30 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   showed `{Oban.Plugins.Cron, ...}` under `plugins:`; Oban 2.24 moved cron to a
   top-level `cron:` key (`Oban.Cron`, per-entry `timezone:`). The old name is
   deprecated and still delegates, which the reference now says.
+- **The Bash gate now denies pattern kills of BEAM processes.** A headless
+  session stopped a dev server it had started with `pkill -f phx.server`,
+  then `pkill -f beam`, and `/phx:work` ran `pkill -f "mix phx.server"`. A
+  pattern kill stops every Erlang VM on the machine, including the user's
+  own servers, IEx shells and ElixirLS. In a project with `mix.exs`,
+  `pkill`/`killall` naming `beam`, `beam.smp`, `erl`, `erlang`, `epmd`,
+  `elixir`, `iex`, `mix` or `phx.server` (whole words, any case, any flags)
+  is denied, as are `kill $(pgrep …)` and `pgrep … | xargs kill` for the same
+  names. The message says to stop only the process you started, by the PID
+  recorded from `$!`. `kill PID`, `kill -0 PID` and `kill %1` still run.
+- **`MIX_ENV=prod` rule and deny message now agree.** The gate denied every
+  `MIX_ENV=prod … mix …` command while its message said a release build was
+  expected. Build steps now run: `mix release`, `mix compile`,
+  `mix deps.compile`, `mix assets.deploy`, `mix phx.digest`,
+  `mix deps.get --only prod`, and `mix do` chains of only those. Every other
+  mix task and `iex -S mix` stay denied, and the message lists both sides.
+- **A script no longer hides a denied step.** A session ran
+  `MIX_ENV=prod mix release` from `scripts/release_smoke.sh`, which the gate
+  never read, so `MIX_ENV=prod mix ecto.migrate` there would have run too. When a command runs a local file
+  (`bash`/`sh`/`zsh`/`source`/`.` FILE, `./FILE`, `DIR/FILE.sh`), the gate
+  greps it for the `MIX_ENV=prod` and pattern-kill denials and names the
+  script and line. A missing or unreadable file is skipped (fail open).
+  Known gaps (`export MIX_ENV=prod`, `bash -c "…"`, quoted script paths) are
+  listed in `hooks/docs/safety-gates.md`.
 - **The plugin directory still blocked v3.1.3 with "Command path can't be
   followed".** The validator follows each hook script, not only the
   `hooks.json` command. It rejects inline programs and paths from variables
