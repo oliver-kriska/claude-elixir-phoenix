@@ -153,7 +153,7 @@ python3 "${CLAUDE_SKILL_DIR}/../architect/scripts/ledger.py" stats --rewrite-dir
   --slice .claude/plans/{slug}/interview.md
 ```
 
-A failing `check`, a nonzero `stats` (1 = malformed ledger, 2 = unreadable slice) or 0 selected rows fails the gate.
+A failing `check`, a nonzero `stats` (1 = malformed ledger, 2 = unreadable slice) or 0 selected rows fails the gate, unless the slice's `roadmap.md` row lists no ledger rows.
 
 ### 6. Report and gate
 

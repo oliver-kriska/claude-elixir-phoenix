@@ -158,7 +158,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   but the cases cite only through decision IDs. `ledger.py stats --slice`
   now counts only the IDs the cases cite and the tables list. The ASP.NET
   trial's first 00a seed named other slices' rows in its prose, and the
-  verify gate line read 5 of 12 rows instead of 5 of 5.
+  verify gate line read 5 of 12 rows instead of 5 of 5. That scoping exposed
+  a gate rule that failed every slice owning no ledger rows. The trial's
+  oracle-fixtures slice 01 selects 0 rows by design, so verify now exempts a
+  slice whose `roadmap.md` row lists none.
 - **contract-surveyor records framework-rendered responses.** The four
   django-ninja surprises were all answers the framework renders, not a
   handler: the 409 `null` body, a 500 for an undeclared status, pydantic's
