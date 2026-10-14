@@ -57,7 +57,15 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   against the release, not a dev server, whose `debug_errors` page answered
   HTML where the release answers the JSON envelope. Building the release
   inline needs the phx gate from #151, which allows `MIX_ENV=prod mix
-  release`. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
+  release`. A load smoke that errors goes to `/phx:investigate` with the
+  error from the server log, never to a bigger pool or a lighter load: the
+  first release-based trial smoke failed 25% of requests, and the cause was
+  the password hasher. The elixir-way references now name
+  `:crypto.pbkdf2_hmac/5` (a dirty NIF) for Django PBKDF2 hashes instead of
+  `pbkdf2_elixir`, whose Elixir loop runs all 1,000,000 rounds on the normal
+  schedulers: with 42 hashes in flight a trivial task took up to 412 ms,
+  against 33 µs through `:crypto`, so concurrent registrations starved the
+  DB pool. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
   fresh, where it had proposed `not-run` because an ADR changed the legacy
   behavior, which left those rows unverified. Verify keeps the PID of the port it starts and stops only that process,
   where a trial run had stopped every BEAM process on the machine with

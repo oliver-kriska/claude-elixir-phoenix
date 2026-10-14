@@ -6,7 +6,7 @@ Decide the cutover mode and the data decision in ADR-000 first. Keeping the lega
 needs most of this file; a new schema plus ETL needs only the readers.
 
 Versions: Ecto 3.14.2, ecto_sql 3.14.0, ecto_sqlite3 0.25.0, joken 2.7.0, joken_jwks 1.8.0, bcrypt_elixir 3.3.2,
-argon2_elixir 4.1.3, pbkdf2_elixir 2.3.1, cloak_ecto 1.3.0, ex_aws 2.7.0, ex_aws_s3 2.5.9.
+argon2_elixir 4.1.3, cloak_ecto 1.3.0, ex_aws 2.7.0, ex_aws_s3 2.5.9.
 
 ## Ecto Over an Existing Schema
 
@@ -79,7 +79,7 @@ Verify the legacy hash, then rehash on a successful login. Never force a mass re
 | Devise, `has_secure_password` | `$2a$`/`$2b$` bcrypt | `Bcrypt.verify_pass(password <> pepper, hash)`; the Devise `pepper` is empty unless configured |
 | Laravel, PHP `password_hash` | `$2y$` bcrypt | bcrypt_elixir rejects `$2y$`: replace the prefix with `$2b$` and verify (the same algorithm, as the library advises) |
 | Laravel/PHP argon2, Node argon2 | PHC `$argon2id$v=19$m=...` | `Argon2.verify_pass/2` |
-| Django default | `pbkdf2_sha256$<iter>$<salt>$<hash>` | `Pbkdf2.verify_pass/2` (it detects the Django format) |
+| Django default | `pbkdf2_sha256$<iter>$<salt>$<hash>` | `:crypto.pbkdf2_hmac(:sha256, password, salt, iter, 32)`, base64, then `Plug.Crypto.secure_compare/2`; the salt is the raw string. Not `pbkdf2_elixir`: its Elixir loop runs 1,000,000 rounds on the normal schedulers and starves the VM under concurrent logins |
 | Django `bcrypt_sha256` | `bcrypt_sha256$$2b$...` | Strip `bcrypt_sha256$`; the password is SHA256-hex prehashed: `Bcrypt.verify_pass(sha256_hex(password), bcrypt_part)` |
 | Django argon2 | `argon2$argon2id$...` | Strip the `argon2` prefix, then `Argon2.verify_pass/2` |
 | Spring `DelegatingPasswordEncoder` | `{bcrypt}$2a$...`, `{pbkdf2}...`, `{argon2}...` | Strip `{id}` and dispatch on it; reject `{noop}` |

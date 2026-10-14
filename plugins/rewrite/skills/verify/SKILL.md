@@ -174,8 +174,8 @@ The gate passes only when no BLOCKER remains, every black-box file `## Oracle` a
 Never count a `proposed` or `ASSUMED` ADR, a bare `## AR-NN` heading or an unconfirmed approval; ask instead.
 Omissions count until the ledger records them or the user moves them out of the slice.
 Update `roadmap.md` to mark the slice `done` only when the gate passes.
-Otherwise list the fixes. Suggest `/phx:work` with the plan to address them,
-or `/phx:investigate` for a failing witness.
+Otherwise list the fixes. Suggest `/phx:work` with the plan, or `/phx:investigate` for a failing witness or a load
+smoke that errors: quote the error from the server log; a bigger pool or a lighter load only hides the cause.
 
 ## Arguments
 

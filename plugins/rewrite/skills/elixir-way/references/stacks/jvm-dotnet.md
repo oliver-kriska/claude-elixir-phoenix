@@ -158,7 +158,7 @@ Both stacks hide behavior in annotations, proxies and container defaults, so pro
 | Cache | cachex | 4.1.1 | Replaces `@Cacheable`/`IMemoryCache` where still needed |
 | Auth tokens | joken / joken_jwks | 2.7.0 / 1.8.0 | Validate the existing IdP's tokens |
 | OAuth login | assent / ueberauth | 0.3.1 / 0.10.8 | Keep redirect URIs and client ids |
-| Password hashes | bcrypt_elixir / pbkdf2_elixir / argon2_elixir | 3.3.2 / 2.3.1 / 4.1.3 | ASP.NET V3 needs a custom verifier on `:crypto` |
+| Password hashes | bcrypt_elixir / argon2_elixir; PBKDF2 on `:crypto` | 3.3.2 / 4.1.3 / OTP | ASP.NET V3 needs a custom verifier on `:crypto`; `pbkdf2_elixir` loops in Elixir and starves the schedulers |
 | OAuth2 server (rare) | boruta | 2.3.8 | Only if the IdP must live in Elixir |
 | Authorization | bodyguard / let_me | 2.4.3 / 3.0.4 | Replaces `@PreAuthorize` and policies |
 | Audit | carbonite | 0.17.0 | Replaces entity listeners for audit trails |

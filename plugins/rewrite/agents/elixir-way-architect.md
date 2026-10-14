@@ -99,8 +99,9 @@ cross-context calls. A context that only wraps one legacy model is a smell.
 - **Caching** — ETS/Cachex only with a measured need; keys include every
   input (user, locale, permissions, host); errors are never cached
 - **Auth edge** — verify legacy cookies with `Plug.Crypto` key derivation
-  matching the legacy scheme; legacy password hashes via `bcrypt_elixir` or
-  `pbkdf2_elixir` with rehash on login; revocation re-checked on socket reconnect
+  matching the legacy scheme; legacy password hashes via `bcrypt_elixir`, or
+  PBKDF2 on `:crypto.pbkdf2_hmac/5` (a dirty NIF; never `pbkdf2_elixir`, whose
+  Elixir loop starves the schedulers), with rehash on login; revocation re-checked on socket reconnect
 
 ### 5. Process table
 
