@@ -62,12 +62,12 @@ case "$u" in "") echo "DATABASE_URL unset";; *) case "$h" in localhost|127.0.0.1
 Read these without running Mix:
 
 - **`mix.exs`** — `aliases` (what `test` and `compile` really run: `ecto.reset`, seeds, `cmd`, downloads), `compilers:` and any `System.cmd`
-- **Config chain** — `config/config.exs`, `config/test.exs`, every file their `import_config` reaches, and `config/runtime.exs`, which also runs under `MIX_ENV=test`
+- **Config chain** — `config/config.exs`, `config/test.exs`, every file their `import_config` reaches, `config/runtime.exs` (runs under `MIX_ENV=test` too), and `config/prod.exs` for the release
 - **In those files** — Repo `url:`, `hostname:`, `database:` and any `System.get_env`/`fetch_env!` feeding them; mailer, push, HTTP and webhook adapters or base URLs; Oban `testing:`; node connections
 
 ```bash
 grep -nE 'aliases|compilers:|System\.cmd|ecto\.(drop|reset)|"cmd ' mix.exs
-grep -nE 'import_config|url:|hostname:|database:|System\.(get_env|fetch_env)|adapter:|testing:|base_url' config/config.exs config/test.exs config/runtime.exs
+grep -nE 'import_config|url:|hostname:|database:|System\.(get_env|fetch_env)|adapter:|testing:|base_url|ip:' config/{config,test,runtime,prod}.exs
 ```
 
 Stop with the preflight `blocked` when any of these holds:
@@ -77,8 +77,8 @@ Stop with the preflight `blocked` when any of these holds:
 - **Side effects** — mail, push, webhooks or HTTP could reach real endpoints, or a black-box command targets a non-local host
 - **Mix steps** — an alias or compiler step is destructive or networked
 
-Never run a command to find out whether it was safe; ask the user with the
-redacted reason (`--no-run` skips straight to the audits with evidence `blocked`).
+Never run a command to find out whether it was safe; ask the user with the redacted reason (`--no-run` skips straight to
+the audits with evidence `blocked`). Record the release's endpoint `ip:` as read: a wildcard exposes it to the network.
 
 ### 3. Capture evidence
 

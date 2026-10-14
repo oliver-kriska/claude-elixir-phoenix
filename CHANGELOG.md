@@ -157,7 +157,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `int?` and serves the default page. A behavior the user adds after a
   round now gets a new case ID in the seed. The trial operator's additions
   went into the plan only: slice 00b's auditor counted two as omissions,
-  but slice 03's counted none of four.
+  but slice 03's counted none of four. The preflight now also reads
+  `config/prod.exs`, the release's compile-time config, and records the
+  endpoint's `ip:` as read. In ASP.NET slice 04, preflight.md said "loopback
+  only" while the release served the throwaway database on `0.0.0.0:8080`,
+  copying the legacy container's bind.
 - **A slice seed's acceptance cases fix the verify denominator.** Two
   auditors had counted 52 and 68 obligations from the same slice 07
   criteria, and slice 04 went 22 → 23 → 32 over three audits. The seed
