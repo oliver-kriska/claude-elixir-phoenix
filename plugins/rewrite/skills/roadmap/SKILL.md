@@ -70,7 +70,10 @@ edge adapters), keeping every ledger ID in exactly one part.
 
 ### 3. Pick the slice and its unresolved decisions
 
-`--next` (default): the first `ready` or `seeded` slice not blocked by an
+First refresh every slice's `Blocked by` from the current ledger and decisions; a `blocked` slice with nothing
+left there returns to `ready`, and one a new UNDECIDED row or unresolved decision touches becomes `blocked`.
+
+`--next` (default): the first `ready` or `seeded` slice in table order not blocked by an
 UNDECIDED row. A `planned` or `in-progress` slice is never re-seeded:
 report it with its `/phx:work` or `/rewrite:verify NN` command first.
 `--slice NN`: that one. `--all`: every `ready` or `seeded` slice (seeds
