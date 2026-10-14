@@ -20,13 +20,16 @@ what stops it from immediately retrying the same command.
 
 ## `block-dangerous-ops.sh`
 
-Blocks three command shapes before they run.
+Blocks four command shapes before they run, and reads the local scripts a
+command runs for the last two.
 
 | Pattern | Gated on `mix.exs`? | Why |
 |---|---|---|
 | `mix ecto.reset` / `mix ecto.drop` | Yes | Destroys all data |
 | Force push (`--force` / `-f`) | **No — global** | Rewrites remote history |
-| `MIX_ENV=prod mix …` | Yes | Runs in production mode |
+| `MIX_ENV=prod` with a task that is not a build step | Yes | Runs the app or its code with production config |
+| Pattern kill naming a BEAM process (`pkill -f beam`) | Yes | Stops every Erlang VM on the machine, not only yours |
+| A local script the command runs that holds either of the last two | Yes | The same step, one file away |
 
 What you see instead of the command running:
 
@@ -69,6 +72,119 @@ the false positive issue #61 removed. Only the start-of-line branch is widened.
 Invisible Unicode padding (U+00A0 and friends) is intentionally out of scope:
 the shell would treat the padded word as a command name that does not exist, so
 it is not an execution path.
+
+### `MIX_ENV=prod`: build steps only
+
+Until 2026-10-14 the hook denied every `MIX_ENV=prod … mix …` command, while
+its own deny message said "If building a release, this is expected." The rule
+and the message disagreed. In a headless rewrite trial on that date, a session
+then put `MIX_ENV=prod mix release` inside `scripts/release_smoke.sh` and ran
+the script, which the hook never opened. That step is a build and is allowed
+now, but a denied one in the same place would have run unchecked too (see
+[Scripts the command runs](#scripts-the-command-runs)).
+
+The rule now matches what the message promises: building a release under
+`MIX_ENV=prod` is allowed, running anything is not, and the message lists both.
+
+| Under `MIX_ENV=prod` | Result |
+|---|---|
+| `mix release`, `mix compile`, `mix deps.compile`, `mix assets.deploy`, `mix phx.digest` | Allowed |
+| `mix deps.get --only prod` | Allowed. Plain `mix deps.get` is denied |
+| `mix do A, B` / `mix do A + B` | Allowed only when every task in it is |
+| Every other mix task: `mix ecto.migrate`, `mix run`, `mix phx.server`, `mix test`, bare `mix` | Denied |
+| `iex` (`iex -S mix`, `iex -S mix phx.server`) | Denied |
+| Another program (`MIX_ENV=prod make release`) | Not inspected, as before |
+
+The allowed list is the build sequence of a Phoenix release Dockerfile
+(`deps.get --only`, `deps.compile`, `assets.deploy`, `compile`, `release`)
+plus `phx.digest`. A production migration runs from the release
+(`bin/migrate`, `bin/APP eval`), not from `MIX_ENV=prod mix ecto.migrate` on a
+developer machine, which would run against whatever database the production
+config points at.
+
+What you see:
+
+```text
+BLOCKED: MIX_ENV=prod mix ecto.migrate.
+MIX_ENV=prod is allowed only for build steps:
+- mix release, mix compile, mix deps.compile
+- mix assets.deploy, mix phx.digest, mix deps.get --only prod
+Every other mix task under MIX_ENV=prod, and iex, is denied: it runs
+the app or its code with production config (mix ecto.migrate,
+mix run, mix phx.server, iex -S mix). If intentional, run it
+manually outside Claude Code.
+```
+
+### Pattern kills of BEAM processes
+
+In the same trial, a session stopped a Phoenix dev server it had started with
+`pkill -f phx.server`, then `pkill -f beam`, and `/phx:work` ran
+`pkill -f "mix phx.server"`. A pattern kill matches every process on the
+machine: the developer's own Phoenix servers, IEx shells and ElixirLS, which
+are all BEAM VMs. Nothing in the phx hooks stopped it.
+
+Denied: `pkill` or `killall`, with any flags (`-f`, `-9`, `-u`), whose
+arguments name `beam`, `beam.smp`, `erl`, `erlang`, `epmd`, `elixir`, `iex`,
+`mix` or `phx.server`. Also denied: the two `pgrep` rewrites of the same kill,
+`kill $(pgrep -f beam)` and `pgrep -f beam | xargs kill`, because they are what
+a model reaches for once `pkill` is refused.
+
+A name matches as a whole word, case-insensitively. `pkill perl` and
+`pkill -f mix_tool` pass; `pkill -f Elixir.MyApp` and `killall beam.smp` are
+denied.
+
+Allowed: `kill PID`, `kill "$pid"`, `kill -0 PID`, `kill %1`, `pkill -P PID`,
+and pattern kills of anything else (`pkill -f webpack`).
+
+The deny message gives the safe form: stop only the process you started, by
+the PID you recorded when you started it.
+
+```bash
+mix phx.server > /tmp/phx.log 2>&1 &
+pid=$!
+# ... later
+kill "$pid"
+```
+
+The check is gated on `mix.exs` like every other Elixir-specific branch, so
+the force-push block stays the only global one.
+
+### Scripts the command runs
+
+A deny on the command line is easy to sidestep by moving the step into a file.
+When the command runs a local script — `bash FILE`, `sh FILE`, `zsh FILE`,
+`source FILE`, `. FILE`, `./FILE`, `../FILE` or `DIR/FILE.sh` — the hook greps
+that file for the `MIX_ENV=prod` and pattern-kill checks above, and denies with
+the script path and line number:
+
+```text
+BLOCKED: MIX_ENV=prod mix ecto.migrate in scripts/release_smoke.sh, line 12.
+```
+
+Relative paths resolve against the hook input's `cwd`. A file that does not
+exist or cannot be read is skipped and the command runs: the scan fails open.
+Comment lines and quoted mentions inside the script do not match, for the same
+anchor reason as on the command line. The `ecto.reset`/`ecto.drop` and
+force-push checks do not read scripts.
+
+### What it does not catch
+
+These are known gaps, not oversights. Each one would need the hook to track
+shell state or parse quoting, and a PreToolUse gate sits in the latency of
+every Bash call.
+
+- `export MIX_ENV=prod` followed by `mix ecto.migrate`, on the command line or
+  in a script. Only a `MIX_ENV=prod` prefix on the same command counts, so
+  `MIX_ENV=prod ./scripts/x.sh` running a plain `mix ecto.migrate` also passes.
+- `bash -c "…"` and `sh -c "…"`. The inline command is quoted, and quoted text
+  never matches.
+- Release commands (`bin/APP eval`, `bin/APP rpc`). They do not use `MIX_ENV`.
+- A PID looked up in one Bash call and killed in the next
+  (`pid=$(pgrep -f beam)`, then `kill $pid`), and port-based kills
+  (`lsof -ti :4000 | xargs kill`).
+- Script paths in quotes, after a `cd` in the same command, or with neither a
+  `./` prefix nor a `.sh` suffix (`bin/dev`). Scripts called from a script are
+  not read either.
 
 ### Fail-open contract
 

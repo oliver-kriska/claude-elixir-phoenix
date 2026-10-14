@@ -24,9 +24,11 @@ No telemetry, and no network calls except a localhost Tidewave probe.
 
 ## The five things hooks do
 
-**1. Stop destructive commands.** `mix ecto.reset`, `mix ecto.drop`,
-`MIX_ENV=prod mix …`, and force pushes are denied before they execute, with a
-safer alternative attached so Claude does not just retry.
+**1. Stop destructive commands.** `mix ecto.reset`, `mix ecto.drop`, force
+pushes, `MIX_ENV=prod` tasks other than release build steps, and pattern kills
+of BEAM processes (`pkill -f beam`) are denied before they execute, with a
+safer alternative attached so Claude does not just retry. A local script the
+command runs is checked for the last two as well.
 
 **2. Verify code against the Iron Laws.** After every edit to an Elixir file,
 the content you just wrote is scanned for seven of the non-negotiable rules —
@@ -93,7 +95,7 @@ Claude to stop retrying — the Critic→Refiner pattern from AutoHarness
 
 | Hook | Fires on | Does |
 |---|---|---|
-| `block-dangerous-ops` | every `Bash` | Denies `mix ecto.reset/drop`, force push, `MIX_ENV=prod` |
+| `block-dangerous-ops` | every `Bash` | Denies `mix ecto.reset/drop`, force push, non-build `MIX_ENV=prod` tasks, BEAM pattern kills; reads the scripts a command runs |
 | `deps-audit-gate` | `mix deps.*` | Tiered supply-chain gate (cache hit <200 ms, fast rules <2 s) |
 | `freeze-gate` | `Edit`/`Write`/`NotebookEdit` | Enforces `/phx:freeze` edit-scope locks |
 
@@ -193,7 +195,7 @@ built from, and the exact output you see:
 
 | Page | Covers |
 |---|---|
-| [Safety Gates](plugins/elixir-phoenix/hooks/docs/safety-gates.md) | The three blocking hooks, the fail-open contract, whitespace-evasion anchoring |
+| [Safety Gates](plugins/elixir-phoenix/hooks/docs/safety-gates.md) | The three blocking hooks, the `MIX_ENV=prod` build allowlist, BEAM pattern kills, script scanning, the fail-open contract, whitespace-evasion anchoring |
 | [Code Quality](plugins/elixir-phoenix/hooks/docs/code-quality.md) | The 7 verified Iron Laws, blame-aware scanning, why formatting only warns |
 | [Failure Recovery](plugins/elixir-phoenix/hooks/docs/failure-recovery.md) | The escalation ladder and the Critic→Refiner pattern |
 | [Context Injection](plugins/elixir-phoenix/hooks/docs/context-injection.md) | Intent routing, subagent Iron Laws, `omitClaudeMd` vs Iron Laws |

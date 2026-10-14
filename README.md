@@ -650,8 +650,10 @@ Skills and agents are instructions a model may or may not follow. **Hooks are
 shell scripts that always run.** The plugin ships 23 of them across 10 lifecycle
 events:
 
-- **Block destructive commands** — `mix ecto.reset/drop`, `MIX_ENV=prod`, force
-  pushes are denied before they execute, with a safer alternative attached
+- **Block destructive commands** — `mix ecto.reset/drop`, force pushes,
+  `MIX_ENV=prod` tasks other than release builds, and `pkill -f beam`-style
+  pattern kills are denied before they execute (also inside a script the
+  command runs), with a safer alternative attached
 - **Verify Iron Laws on every edit** — the lines you just wrote are scanned for
   `:float` money fields, `String.to_atom` on user input, `raw/1` with a
   variable, implicit cross joins, unsupervised `start_link`

@@ -186,7 +186,7 @@ The plugin uses **layered enforcement** — some things run automatically, some 
 
 | Hook | Trigger | What It Does |
 |------|---------|-------------|
-| Dangerous ops block | Before Bash command | Blocks `mix ecto.reset/drop`, `git push --force`, `MIX_ENV=prod` |
+| Dangerous ops block | Before Bash command | Blocks `mix ecto.reset/drop`, `git push --force`, non-build `MIX_ENV=prod` tasks, `pkill` of BEAM processes |
 | Format check | Every `.ex`/`.exs` edit | Runs `mix format --check-formatted`, warns via stderr + exit 2 |
 | Iron Law verifier | Every `.ex`/`.exs` edit | Scans code content for Iron Law violations with line numbers |
 | Debug stmt warning | Every `.ex` edit | Warns about `IO.inspect`/`dbg()`/`IO.puts` in production code |

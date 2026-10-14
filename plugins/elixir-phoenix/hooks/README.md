@@ -167,7 +167,9 @@ variable). `test_hook_scripts_keep_each_string_on_one_line` enforces this.
    `CLAUDE.md`. This is a required step, not a nicety — the docs are the only
    place the *reasoning* is recorded.
 4. Add a case to `tests/` if the hook has non-trivial matching (see
-   `tests/block-dangerous-ops_test.sh`).
+   `tests/block-dangerous-ops_test.sh`), or a pytest under `scripts/tests/`
+   (see `test_block_dangerous_ops.py`). A shell suite only runs in CI when a
+   pytest calls it.
 5. Run `make lint` and `make ci`.
 6. Add a `CHANGELOG.md` entry under `[Unreleased]`.
 
@@ -185,10 +187,12 @@ echo '{"tool_input":{"file_path":"lib/a.ex","new_string":"String.to_atom(x)"}}' 
   | ./scripts/iron-law-verifier.sh; echo "exit=$?"
 ```
 
-Run the shell suite:
+Run the shell suite, or the pytest that wraps it and adds the pattern-kill and
+script-scan cases (`make test` runs it):
 
 ```bash
 bash tests/block-dangerous-ops_test.sh
+python3 -m pytest scripts/tests/test_block_dangerous_ops.py   # from the repo root
 ```
 
 ## MCP tool hooks
