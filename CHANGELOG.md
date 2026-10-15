@@ -201,7 +201,11 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   missed two classes, which the 00b seed raised instead: the exact
   `Content-Type` (the legacy 401 carries no charset) and an unsatisfiable
   `Accept`, which MVC ignores but Phoenix's `plug :accepts` answers with 406.
-  The pass now records both.
+  The pass now records both. Slice 06 then found that every legacy error body is
+  exactly `application/json` (the error middleware and validation filter set
+  it), where the port's 403, 404, 409 and 422 carried a charset. The Hurl
+  spec asserts no `Content-Type`, so nothing had caught it. The surveyor's
+  wire pass now records the type for success and for each error class.
 - **Tests for the rewrite scripts (contributor tooling).**
   `scripts/tests/test_rewrite_inventory.py`,
   `scripts/tests/test_rewrite_fingerprint.py` and

@@ -83,10 +83,12 @@ magic links, session store (cookie, DB, Redis) and revocation path.
 ### 3. Wire contracts
 
 Public and bookmarked URLs (including redirects), JSON shapes, status codes,
-pagination headers, error formats, content types, webhooks in (signature
-scheme, retries expected) and out (payload, timeout, retry policy),
-websocket and SSE protocols (Action Cable, Socket.IO, SignalR framing),
-web push subscriptions, email links, OAuth callback URLs, mobile clients.
+pagination headers, error formats, the `Content-Type` exactly as sent (charset
+or none) for success and for each error class (an error middleware often sets
+its own), webhooks in (signature scheme, retries expected) and out (payload,
+timeout, retry policy), websocket and SSE protocols (Action Cable, Socket.IO,
+SignalR framing), web push subscriptions, email links, OAuth callback URLs,
+mobile clients.
 For non-web shapes: CLI flags, exit codes and output formats; message
 schemas, topics and ack semantics; file formats a pipeline reads and writes.
 
