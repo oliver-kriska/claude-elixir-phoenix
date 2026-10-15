@@ -190,7 +190,8 @@ Four stdlib scripts do the deterministic work:
 - `inventory.py`: stacks, infra signals, entry points, oracles, steering files, git hotspots, and discovered vs
   returned counts.
 - `ledger.py`: checks every analysis ID is accounted for by a row, that states are valid and accepted-risk records
-  complete, and counts verified rows. It also lists a slice seed's acceptance cases, which fix verify's denominator.
+  complete, and counts verified rows. It also lists a slice seed's acceptance cases, which fix verify's denominator,
+  and `set` writes a row's Impl and Evidence cells by ID for verify.
 - `fingerprint.py`: content identity of SOURCE and TARGET.
 - `evidence.py`: writes every verify record. It captures both identities before and after the command, so evidence
   from a changed tree is `stale`. It also starts and stops the port's release in its own process group, and checks the

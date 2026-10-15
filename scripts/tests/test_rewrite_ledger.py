@@ -470,3 +470,46 @@ def test_stats_slice_counts_only_the_ids_the_seed_owns(rewrite_dir: Path, tmp_pa
     assert ledger.main(["stats", "--rewrite-dir", str(rewrite_dir), "--slice", str(seed), "--json"]) == 0
     s = json.loads(capsys.readouterr().out)
     assert s["rows"] == 3 and s["verified"] == 1  # C-50, named in prose and in an item outside the section, is not counted
+
+
+def test_set_changes_only_impl_and_evidence_cells(rewrite_dir: Path) -> None:
+    other = "| M-02 | `a \\| b` | **y** | business | — | MAP | z | — | pending | not-run | none |\n"
+    write_ledger(rewrite_dir, row("M-01, C-01") + other)
+    before = (rewrite_dir / "ledger.md").read_text(encoding="utf-8")
+
+    code = ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "C-01,M-02", "--impl", "implemented", "--evidence", "pass"])
+
+    after = (rewrite_dir / "ledger.md").read_text(encoding="utf-8")
+    assert code == 0
+    assert after == before.replace("| pending | not-run | none |", "| implemented | pass | none |")
+    assert "`a \\| b` | **y**" in after
+    assert ledger.check(str(rewrite_dir))[0] == []
+
+
+def test_set_one_axis_keeps_the_other(rewrite_dir: Path) -> None:
+    write_ledger(rewrite_dir, row("M-01", impl="implemented") + row("M-02") + row("C-01"))
+
+    assert ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "M-01", "--evidence", "pass"]) == 0
+
+    text = (rewrite_dir / "ledger.md").read_text(encoding="utf-8")
+    assert "| M-01 | x | y | business | — | REPLACE | z | — | implemented | pass | none |" in text
+    assert text.count("| pending | not-run | none |") == 2
+
+
+def test_set_with_an_unknown_id_writes_nothing(rewrite_dir: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    write_ledger(rewrite_dir, row("M-01") + row("M-02") + row("C-01"))
+    before = (rewrite_dir / "ledger.md").read_text(encoding="utf-8")
+
+    code = ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "M-01,C-09", "--impl", "implemented"])
+
+    assert code == 1
+    assert "C-09 is not the ID or an alias of any ledger row" in capsys.readouterr().out
+    assert (rewrite_dir / "ledger.md").read_text(encoding="utf-8") == before
+
+
+def test_set_needs_a_state_and_rejects_unknown_values(rewrite_dir: Path) -> None:
+    write_ledger(rewrite_dir, row("M-01") + row("M-02") + row("C-01"))
+
+    assert ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "M-01"]) == 2
+    with pytest.raises(SystemExit):
+        ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "M-01", "--evidence", "done"])

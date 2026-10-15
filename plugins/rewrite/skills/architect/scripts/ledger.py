@@ -17,16 +17,22 @@ obligations — the acceptance cases of a slice seed, one per `- [ ] AC-NN` or
          listed both bare and lettered, and a ledger ID that the slice's
          mechanism or contract table names but no case cites. These cases are
          the parity auditor's rows, so its denominator is fixed by the seed.
+set    — writes the Impl and/or Evidence cell of each row whose ID cell lists one of
+         `--ids`, keeping every other byte. An unknown ID or a malformed row
+         changes nothing. The only command that writes; it never touches a
+         Departure cell.
 
-Stdlib only. Reads files, never writes them.
+Stdlib only.
 
 Usage:
     python3 ledger.py check [--rewrite-dir .claude/rewrite]
     python3 ledger.py stats [--rewrite-dir .claude/rewrite] [--ids M-01,C-04 | --slice interview.md] [--json]
     python3 ledger.py obligations --slice interview.md [--json]
+    python3 ledger.py set --ids C-40,C-42 [--impl implemented] [--evidence pass] [--rewrite-dir .claude/rewrite]
 
 Exit status: 0 clean, 1 ledger errors (stats too: malformed rows, no ledger table, missing
-columns), 2 unusable input (missing ledger or slice).
+columns; set: unknown ID or malformed row, nothing written), 2 unusable input (missing ledger
+or slice).
 """
 
 import argparse
@@ -394,6 +400,55 @@ def slice_ids(text):
     return ids
 
 
+def set_states(rewrite_dir, ids, impl=None, evidence=None):
+    """Rewrite the Impl and Evidence cells of each ledger row whose ID cell lists one of `ids`.
+    Every other byte of the file is kept. Returns (changes, errors); nothing is written on an error."""
+    path = os.path.join(rewrite_dir, "ledger.md")
+    text = read_required(path)
+    if text is None:
+        raise LedgerError([f"cannot read {path}"])
+    lines = text.splitlines(keepends=True)
+    changes, errors, found = [], [], set()
+    header = None
+    for n, line in enumerate(lines):
+        body = line.rstrip("\r\n")
+        if not body.startswith("|"):
+            header = None
+            continue
+        if header is None:
+            nxt = lines[n + 1].rstrip("\r\n") if n + 1 < len(lines) else ""
+            h = [c.lower() for c in split_row(body)] if SEPARATOR_RE.match(nxt) else []
+            header = h if is_ledger_header(h) else []
+            continue
+        cells = split_row(body)
+        hits = set(ids) & set(ID_RE.findall(cells[0]))
+        if not header or SEPARATOR_RE.match(body) or not hits:
+            continue
+        found |= hits
+        label = ", ".join(sorted(hits))
+        raw = re.split(r"(?<!\\)\|", body)
+        if len(cells) != len(header) or len(raw) != len(header) + 2:
+            errors.append(f"{label}: malformed row, not changed: {body[:80]}")
+            continue
+        idx = (column(header, "impl", "implementation"), column(header, "evidence state", "evidence"))
+        if None in idx:
+            errors.append(f"{label}: its ledger table has no Impl or Evidence column")
+            continue
+        before = [cells[i] for i in idx]
+        after = [new or old for new, old in zip((impl, evidence), before)]
+        for i, value in zip(idx, after):
+            raw[i + 1] = f" {value} "
+        lines[n] = "|".join(raw) + line[len(body):]
+        changes.append(f"{cells[0]}: {' / '.join(before)} -> {' / '.join(after)}")
+    errors += [f"{i} is not the ID or an alias of any ledger row" for i in sorted(set(ids) - found)]
+    if not errors:
+        tmp = path + ".tmp"
+        with open(tmp, "w", encoding="utf-8", newline="") as fh:
+            fh.write("".join(lines))
+        os.replace(tmp, path)
+    return changes, errors
+
+
 def format_stats(s):
     lines = [
         f"verified {s['verified']} of {s['denominator']} ledger rows (retired {s['retired']}, "
@@ -407,12 +462,31 @@ def format_stats(s):
 
 def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__.split("\n")[0])
-    ap.add_argument("command", choices=["check", "stats", "obligations"])
+    ap.add_argument("command", choices=["check", "stats", "obligations", "set"])
     ap.add_argument("--rewrite-dir", default=".claude/rewrite")
-    ap.add_argument("--ids", help="comma-separated ledger IDs to count")
+    ap.add_argument("--ids", help="comma-separated ledger IDs to count, or for set to change")
     ap.add_argument("--slice", help="count only the IDs this slice seed (interview.md) owns")
+    ap.add_argument("--impl", choices=sorted(IMPL_STATES), help="set: the new Impl state")
+    ap.add_argument("--evidence", choices=sorted(EVIDENCE_STATES), help="set: the new Evidence state")
     ap.add_argument("--json", action="store_true")
     args = ap.parse_args(argv)
+    if args.command == "set":
+        ids = [i.strip() for i in (args.ids or "").split(",") if i.strip()]
+        if not ids or (args.impl is None and args.evidence is None):
+            print("error: set needs --ids and at least one of --impl, --evidence")
+            return 2
+        try:
+            changes, errors = set_states(args.rewrite_dir, ids, args.impl, args.evidence)
+        except LedgerError as exc:
+            print(f"error: {exc.errors[0]}")
+            return 2
+        for e in errors:
+            print(f"error: {e}")
+        if errors:
+            print("ledger not changed")
+            return 1
+        print("\n".join(changes))
+        return 0
     if args.command == "check":
         errors, warnings = check(args.rewrite_dir)
         for w in warnings:

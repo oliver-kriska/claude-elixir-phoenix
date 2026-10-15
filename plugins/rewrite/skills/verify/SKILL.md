@@ -131,9 +131,10 @@ and wait for both completion notices; never schedule a wakeup or heartbeat while
 
 ### 5. Apply ledger updates
 
-Apply only the parity auditor's `Proposed Ledger Updates` that have a basis, editing the Impl and Evidence columns of
-`.claude/rewrite/ledger.md`. Never write a Departure cell, an ADR status or an AR record yourself. Only the user creates
-or approves an accepted risk, in `.claude/rewrite/verify/accepted-risks.md`:
+Apply only the parity auditor's `Proposed Ledger Updates` that have a basis, with the ledger script below: one `set
+--ids {IDs} --impl {state} --evidence {state}` per target pair, never `sed -i` (BSD sed leaves a backup beside the ledger).
+Never write a Departure cell, an ADR status or an AR record yourself. Only the user creates or approves an accepted risk, in
+`.claude/rewrite/verify/accepted-risks.md`:
 
 ```markdown
 ## AR-NN — <title>

@@ -147,8 +147,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   report mislabeled TK-08), and verify never schedules a wakeup. That rule
   now sits where verify waits for its auditors: ASP.NET slice 04's round 2
   set a 20-minute fallback wakeup there, which re-entered the finished run.
-  Verify
-  names the `PREVIOUS` file exactly: this slice's `parity.md`, renamed to
+  Verify names the `PREVIOUS` file exactly: this slice's `parity.md`, renamed to
   `parity-previous.md`. Told only to move "an earlier `parity.md`" aside,
   ASP.NET slice 03's first round ran `mv ../02/parity.md /dev/null`; the
   move failed and the file survived. `CLAIMS` now includes the plan's
@@ -164,7 +163,16 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `config/prod.exs`, the release's compile-time config, and records the
   endpoint's `ip:` as read. In ASP.NET slice 04, preflight.md said "loopback
   only" while the release served the throwaway database on `0.0.0.0:8080`,
-  copying the legacy container's bind.
+  copying the legacy container's bind. Verify now writes the ledger's Impl
+  and Evidence cells with `ledger.py set --ids … --impl … --evidence …`,
+  which keeps every other byte and writes nothing on an unknown ID. Each
+  verify had edited those cells with `sed`. In ASP.NET slice 03, macOS
+  `sed -i -E` took `-E` as the backup suffix, and the slice commit carried
+  a stale `ledger.md-E` into the port. The parity auditor now treats a
+  behavior that the seed's Scope or Dead Ends gives to another slice as out
+  of scope, naming that slice's case. Slice 06's first round counted the
+  concurrent article-slug 409 as an omission. The seed had put it in slice
+  03, where AC-4o already passes.
 - **A slice seed's acceptance cases fix the verify denominator.** Two
   auditors had counted 52 and 68 obligations from the same slice 07
   criteria, and slice 04 went 22 → 23 → 32 over three audits. The seed

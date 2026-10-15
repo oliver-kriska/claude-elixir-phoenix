@@ -104,7 +104,10 @@ registrations; list anything wider under `Not checked`. Classify each find:
 - **Strengthening** — the analysis or plan asserts more than the source shows
 - **Out of slice scope** — deferred work, such as persistence enforcement
   in a construction-only slice. Split a mixed anchor: record defaults and
-  relationships can be in scope while DB constraints and cascades are deferred
+  relationships can be in scope while DB constraints and cascades are deferred.
+  A behavior the seed's Scope or Dead Ends gives to another slice is out of
+  scope too, never an omission: name that slice, and the case that covers it
+  in its `verify/{NN}/parity.md` (none there is a question for the user)
 
 ### 2. Build the canonical obligation list
 
