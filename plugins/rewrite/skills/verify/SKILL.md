@@ -119,7 +119,8 @@ Run `ev status {NN}`, which checks each `commands.md` name against its newest re
 every `incomplete` or `outdated` one (auditors score records, never a later re-run). Agents cannot run plugin scripts, so
 pass `ev current {NN}` as `CURRENT_IDENTITY` and, errors included, `python3 "${CLAUDE_SKILL_DIR}/../architect/scripts/ledger.py"
 obligations --slice .claude/plans/{slug}/interview.md` as `OBLIGATION_IDS`. Build `COMPLETENESS`: the slice's ledger IDs and
-source anchors from `interview.md` and the ledger rows, nothing wider. Spawn both in ONE message with `run_in_background: true`:
+source anchors from `interview.md` and the ledger rows, nothing wider. Spawn both in ONE message with `run_in_background: true`
+and wait for both completion notices; never schedule a wakeup or heartbeat while waiting (it re-enters a finished run):
 
 - **`rewrite:idiom-auditor`** — `TARGET`, `SCOPE` (`git diff --name-only` from the slice's base commit in `progress.md`, else the slice's modules), `LEDGER`, `ARCHITECTURE`,
   `CONTRACTS=.claude/rewrite/analysis/contracts.md`, `KB=.claude/rewrite/kb/`, `OUTPUT=.claude/rewrite/verify/{NN}/idiom.md`
@@ -130,11 +131,9 @@ source anchors from `interview.md` and the ledger rows, nothing wider. Spawn bot
 
 ### 5. Apply ledger updates
 
-Apply only the parity auditor's `Proposed Ledger Updates` that have a
-basis, editing the Impl and Evidence columns of `.claude/rewrite/ledger.md`.
-Never write a Departure cell, an ADR status or an AR record yourself. Only
-the user creates or approves an accepted risk, in
-`.claude/rewrite/verify/accepted-risks.md`:
+Apply only the parity auditor's `Proposed Ledger Updates` that have a basis, editing the Impl and Evidence columns of
+`.claude/rewrite/ledger.md`. Never write a Departure cell, an ADR status or an AR record yourself. Only the user creates
+or approves an accepted risk, in `.claude/rewrite/verify/accepted-risks.md`:
 
 ```markdown
 ## AR-NN — <title>
@@ -175,7 +174,7 @@ Omissions count until the ledger records them or the user moves them out of the 
 Otherwise list the fixes. Suggest `/phx:work` with the plan, or `/phx:investigate` for a failing witness or a load
 smoke that errors: quote the error from the server log; a bigger pool or a lighter load only hides the cause. A behavior
 the user adds or changes after a round gets a new case ID in the seed's Acceptance Criteria (`obligations` must still
-pass): a plan task alone is outside the denominator. The report ends the run: never schedule a wakeup or a loop to re-check it.
+pass): a plan task alone is outside the denominator. The report ends the run: no wakeup or loop re-checks it.
 
 ## Arguments
 

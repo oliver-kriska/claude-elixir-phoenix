@@ -144,7 +144,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `ev port start`. The load script runs with a `checks` threshold: k6 exits 0
   when checks fail, which both trials hit. The verify report quotes
   each row's obligation from `parity.md` instead of paraphrasing it (a trial
-  report mislabeled TK-08), and verify never schedules a wakeup. Verify
+  report mislabeled TK-08), and verify never schedules a wakeup. That rule
+  now sits where verify waits for its auditors: ASP.NET slice 04's round 2
+  set a 20-minute fallback wakeup there, which re-entered the finished run.
+  Verify
   names the `PREVIOUS` file exactly: this slice's `parity.md`, renamed to
   `parity-previous.md`. Told only to move "an earlier `parity.md`" aside,
   ASP.NET slice 03's first round ran `mv ../02/parity.md /dev/null`; the
