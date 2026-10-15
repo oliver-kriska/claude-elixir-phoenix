@@ -49,6 +49,28 @@ Redirect BOTH streams — codex prints its full agent transcript (10k+
 lines) to the terminal, and only the `-o` file matters. Read the stream
 log only on failure (last 10 lines for the SKIPPED note).
 
+**Model fallback (verified against codex CLI 0.162.1).** If the run exits
+nonzero with no `-o` file and the stream log matches
+`model is not supported|Model not found` (HTTP 400/404), the configured
+`model`/`review_model` in `~/.codex/config.toml` has been retired for this
+account — OpenAI rotates ChatGPT-plan models every few weeks. Resolve the
+account's current default from the local catalog and retry ONCE:
+
+```bash
+MODEL=$(codex debug models | jq -r '.models | map(select(.visibility == "list")) | sort_by(.priority) | .[0].slug')
+codex exec review --base {base_branch} --ephemeral \
+  -m "$MODEL" -c review_model="$MODEL" \
+  -o /tmp/codex-review-out.md > /tmp/codex-review-stream.log 2>&1
+```
+
+Pass BOTH overrides: a `review_model` pinned in config beats `-m`, so `-m`
+alone retries with the same rejected slug (verified 0.162.1).
+`codex debug models` is instant (local cache, no network) and per-account;
+the lowest-`priority` listed slug is what interactive codex selects by
+default. NEVER hardcode a model name — it is stale within weeks. Record the
+fallback in the report header (`model {slug} — fallback, configured model
+rejected`) and append the config hint from the failure table.
+
 Rules (verified against codex CLI 0.142.5):
 
 - NEVER pass a custom-instructions prompt together with `--base` /
@@ -86,6 +108,7 @@ Mark findings on files NOT in `diff_files` as PRE-EXISTING.
 # Codex Review Findings [codex]
 
 **Tool:** codex exec review --base {base_branch} ({codex version})
+**Model:** {slug — "configured" | "fallback: configured model rejected, set model = \"{slug}\" in ~/.codex/config.toml"}
 **Findings:** {n} (BLOCKER: {n}, WARNING: {n}, SUGGESTION: {n})
 
 ## Codex summary
@@ -110,7 +133,8 @@ Chat response body ≤300 words — the file is the real output.
 | Condition | File content |
 |-----------|--------------|
 | CLI missing | `## SKIPPED — codex CLI not installed` + install hint (`brew install codex` / `npm i -g @openai/codex`, then `codex login`) |
-| Nonzero exit / empty output | `## SKIPPED — codex review failed` + last 10 lines of stderr + `codex doctor` hint |
+| Model rejected (400/404) and the catalog fallback also failed | `## SKIPPED — codex model unavailable` + the `ERROR:` line + hint: pick a slug from `codex debug models`, set `model`/`review_model = "<slug>"` in `~/.codex/config.toml`, or `codex login` again |
+| Nonzero exit / empty output (any other cause) | `## SKIPPED — codex review failed` + last 10 lines of stderr + `codex doctor` hint |
 | Unparseable output | `## RAW OUTPUT (parse failed)` + the raw last message verbatim — never drop findings silently |
 | Zero findings | `Codex: clean pass — no findings on this diff` |
 
@@ -125,3 +149,5 @@ Chat response body ≤300 words — the file is the real output.
 5. **Findings pass through verbatim** — normalize priority and format,
    never editorialize or filter (the orchestrator's anti-noise step does
    that)
+6. **A retired model is a fallback, not a failure** — resolve the slug from
+   `codex debug models`, retry once, never hardcode one
