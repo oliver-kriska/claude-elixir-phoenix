@@ -180,6 +180,18 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   showed `{Oban.Plugins.Cron, ...}` under `plugins:`; Oban 2.24 moved cron to a
   top-level `cron:` key (`Oban.Cron`, per-entry `timezone:`). The old name is
   deprecated and still delegates, which the reference now says.
+- **`--codex` no longer dies when OpenAI retires the configured model.**
+  `codex exec review` exits 1 with `The 'gpt-5.5' model is not supported
+  when using Codex with a ChatGPT account` once the `model` line in
+  `~/.codex/config.toml` is rotated out for the account (observed
+  2026-10-15; every gpt-5.x slug failed, codex-cli 0.162.1). The
+  codex-reviewer agent and `/phx:codex-loop` now resolve the account's
+  current default from `codex debug models` (local cache, instant) and retry
+  once with `-m` plus `-c review_model` (a pinned `review_model` beats `-m`
+  alone — codex's own review of the fix caught that), report the fallback
+  and the config fix, and never hardcode a model name. `codex-cli.md`
+  gotcha 10 records the error shape and the one-liner; gotcha 5 drops the
+  dead `gpt-5-codex-max` example.
 - **The Bash gate now denies pattern kills of BEAM processes.** A headless
   session stopped a dev server it had started with `pkill -f phx.server`,
   then `pkill -f beam`, and `/phx:work` ran `pkill -f "mix phx.server"`. A

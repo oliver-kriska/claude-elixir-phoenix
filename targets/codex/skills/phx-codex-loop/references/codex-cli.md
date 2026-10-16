@@ -1,6 +1,7 @@
 # Codex CLI Review — Recipes and Gotchas
 
-Verified against codex CLI **0.142.5** (2026-07-03). Re-verify flags with
+Verified against codex CLI **0.142.5** (2026-07-03); gotcha 10 (model
+fallback) against **0.162.1** (2026-10-15). Re-verify flags with
 `codex exec review --help` if behavior looks off — the CLI moves fast.
 
 ## Invocation recipes
@@ -58,8 +59,9 @@ codex exec review --base main --ephemeral --json \
 4. **Priorities**: P0/P1 = blocker-grade, P2 = warning, P3 = nit. Map to
    BLOCKER/WARNING/SUGGESTION in review artifacts.
 5. **`review_model`** in `~/.codex/config.toml` pins a dedicated model for
-   reviews (e.g. `review_model = "gpt-5-codex-max"`). Respect the user's
-   config — do not override with `-c` unless asked.
+   reviews (`review_model = "<slug>"`, slug from `codex debug models`).
+   Respect the user's config — do not override with `-c`/`-m` unless asked
+   or the configured model is rejected (gotcha 10).
 6. **Codex plugin hooks do NOT fire under `codex exec`** — don't rely on
    codex-side plugins for review behavior; AGENTS.md is the only lever.
 7. **Auth** rides the ChatGPT subscription login (`codex login`) — no API
@@ -72,6 +74,38 @@ codex exec review --base main --ephemeral --json \
    included). A concurrent git command can fail with
    `index.lock: File exists` (observed live). Don't run git mutations
    while a review is in flight; don't delete the lock file — wait.
+10. **The configured model gets retired without warning.** OpenAI rotates
+    which models a ChatGPT-plan account may use every few weeks; the
+    `model = "..."` line in `~/.codex/config.toml` is not migrated. The run
+    then exits **1** with no `-o` file and the log ends with:
+
+    ```text
+    Review was interrupted. Please re-run /review and wait for it to complete.
+    ERROR: {"type":"error","status":400,"error":{"type":"invalid_request_error","message":"The 'gpt-5.5' model is not supported when using Codex with a ChatGPT account."}}
+    ```
+
+    (a 404 `Model not found` is the same class). Every other slug from the
+    same generation fails identically, so guessing is useless. Resolve the
+    account's current default from the local catalog and retry once with
+    `-m`:
+
+    ```bash
+    MODEL=$(codex debug models | jq -r '.models | map(select(.visibility == "list")) | sort_by(.priority) | .[0].slug')
+    # no jq: codex debug models | grep -o '"slug":"[^"]*"' | head -1 | cut -d'"' -f4
+    codex exec review --base main --ephemeral \
+      -m "$MODEL" -c review_model="$MODEL" \
+      -o /tmp/codex-out.md > /tmp/codex-out.log 2>&1
+    ```
+
+    Pass **both** overrides: when `review_model` is pinned in config it
+    beats `-m`, and the retry fails on the same slug (verified live —
+    codex's own review of this recipe caught it). `codex debug models` reads `~/.codex/models_cache.json` — per-account,
+    refreshed on every codex run, ~20 ms, no network. The lowest `priority`
+    with `visibility == "list"` is the picker's default; `hide` entries
+    (`gpt-reserve`, `codex-auto-review`) are not selectable. Never hardcode
+    a slug in a skill or agent — it is stale within weeks. Tell the user to
+    update `model`/`review_model` in `config.toml` so the next run skips
+    the failed call. Interactive `codex` → `/model` shows the same list.
 
 ## Parse recipe (findings → table)
 

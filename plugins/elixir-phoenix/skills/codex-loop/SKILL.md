@@ -60,7 +60,7 @@ Then two cheap checks that save review rounds:
 - **Commits ahead of the default branch** → `--base {default}`
 - **No commits yet** → `--uncommitted`
 
-### Step 3: Round Loop (max `--max-rounds`, default 3)
+### Step 3: Review Round (max `--max-rounds`, default 3)
 
 1. **Review** — ONE foreground Bash call, explicit `timeout: 600000`
    (large diffs run 10+ min). On timeout with the process alive: ONE
@@ -78,20 +78,30 @@ Then two cheap checks that save review rounds:
    (`/phx:init`). Parse the output file, NOT the exit code (0 even with
    findings). Recipes: `${CLAUDE_SKILL_DIR}/references/codex-cli.md`.
 
-2. **Clean check** — parse the output file; no `- [P{n}]` bullets means
-   CLEAN → go to Step 4.
+   **Retired model** (exit 1, no `-o` file, log: `model is not supported`
+   / `Model not found`): resolve the account default — `MODEL=$(codex debug
+   models | jq -r '.models | map(select(.visibility == "list")) |
+   sort_by(.priority) | .[0].slug')` — retry once with `-m "$MODEL"
+   -c review_model="$MODEL"` (both: a pinned `review_model` beats `-m`),
+   reuse it every round, never hardcode a slug. Tell the user once to set
+   `model`/`review_model = "$MODEL"` in `~/.codex/config.toml`.
 
-3. **Triage** — emit the findings table
+2. **Clean check** — parse the output file; no `- [P{n}]` bullets means
+   CLEAN → go to Step 5.
+
+### Step 4: Triage, Fix, Verify
+
+1. **Triage** — emit the findings table
    (`# | P | file:line | title | proposed action`) as **visible
    response text BEFORE any `AskUserQuestion` call** — a table composed
    only in thinking never renders. Then ask approve-or-skip per finding
    (`AskUserQuestion`). With `--auto`: approve P0/P1/P2, skip P3 (list
    skipped in the round report).
 
-4. **Fix** — apply approved fixes with user-visible diffs. Check each
+2. **Fix** — apply approved fixes with user-visible diffs. Check each
    against Iron Laws first (Law 4).
 
-5. **Verify** — scoped, before the next round:
+3. **Verify** — scoped, before the next round:
 
    ```bash
    mix format {changed_files} && \
@@ -101,9 +111,9 @@ Then two cheap checks that save review rounds:
    If verification fails 3 times, STOP with a BLOCKER report — do not
    burn another codex round on broken code.
 
-6. Next round (n+1).
+4. Next round (n+1) — back to Step 3.
 
-### Step 4: Final Report
+### Step 5: Final Report
 
 ```markdown
 ## Codex Loop Report — {CLEAN | MAX ROUNDS REACHED | BLOCKED}
@@ -126,4 +136,4 @@ implement → /phx:codex-loop (YOU ARE HERE) → clean → commit/PR → /phx:wa
 ## References
 
 - `${CLAUDE_SKILL_DIR}/references/codex-cli.md` — invocation recipes, parse
-  patterns, verified gotchas (CLI 0.142.5)
+  patterns, verified gotchas (CLI 0.142.5; model fallback 0.162.1)
