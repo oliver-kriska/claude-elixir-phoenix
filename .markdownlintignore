@@ -15,5 +15,8 @@ lab/plugin_eval/cases/
 social/
 .rtk/
 
+# Raw agent outputs from rewrite eval replays, kept verbatim as graded evidence.
+lab/rewrite_eval/results/*/*/
+
 # Local Python dev environment (`make venv`).
 .venv/

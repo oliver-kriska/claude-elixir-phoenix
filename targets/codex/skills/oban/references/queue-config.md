@@ -36,20 +36,26 @@ config :my_app, MyApp.Repo, pool_size: 25
 
 ## Cron Scheduling
 
+Oban 2.24+ configures cron as a top-level key (module `Oban.Cron`); timezone
+can be set per entry:
+
 ```elixir
-plugins: [
-  {Oban.Plugins.Cron,
-    timezone: "America/New_York",
+config :my_app, Oban,
+  repo: MyApp.Repo,
+  cron: [
     crontab: [
       {"* * * * *", MyApp.MinuteWorker},
       {"0 * * * *", MyApp.HourlyWorker},
       {"0 0 * * *", MyApp.DailyWorker},
-      {"0 12 * * MON", MyApp.MondayNoonWorker},
+      {"0 12 * * MON", MyApp.MondayNoonWorker, timezone: "America/New_York"},
       {"@daily", MyApp.MidnightWorker},
       {"@reboot", MyApp.StartupWorker}
-    ]}
-]
+    ]
+  ]
 ```
+
+Before 2.24 the same crontab went under `plugins: [{Oban.Plugins.Cron,
+crontab: [...]}]`; that name is deprecated but still delegates to `Oban.Cron`.
 
 ## Smart Engine (Oban Pro)
 

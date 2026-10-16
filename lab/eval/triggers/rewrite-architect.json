@@ -1,0 +1,19 @@
+{
+  "skill": "rewrite:architect",
+  "should_trigger": [
+    "The Django analysis is finished. Now decide what must stay compatible and design the Phoenix contexts and ADRs",
+    "For the Go to Elixir port: should the worker fleet become Oban queues or a Broadway pipeline? Record the decision as a rewrite ADR",
+    "Decide the cutover for the Laravel rewrite: big bang, or a strangler fig with both apps behind the same domain?",
+    "We have to keep the existing JWT cookies and REST URLs from the .NET API. Set that compatibility bar before any Elixir design",
+    "Revise the rewrite ADR on the Kafka consumer: we now want Broadway instead of a hand-rolled GenServer pool",
+    "Analysis of our NestJS app is done. Design how its modules map onto Elixir contexts, Ecto schemas and Oban workers"
+  ],
+  "should_not_trigger": [
+    "Design a new multi-tenant billing system for our Phoenix app",
+    "Should the Accounts context be split into Accounts and Billing?",
+    "Design the Ecto schema for a new comments feature",
+    "Brainstorm approaches for real-time notifications in our Phoenix app",
+    "Is a GenServer the right choice for this rate limiter?",
+    "Set up the Dockerfile and fly.toml for production"
+  ]
+}

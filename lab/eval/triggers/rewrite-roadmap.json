@@ -1,0 +1,19 @@
+{
+  "skill": "rewrite:roadmap",
+  "should_trigger": [
+    "The Django rewrite architecture is accepted. Cut it into vertical slices and hand the first one off for planning",
+    "What's the next slice in the Laravel to Phoenix rewrite? Seed it for the phx planner",
+    "Break the Spring Boot rewrite into risk-first slices with acceptance criteria and exit gates",
+    "Slice 03 of the rewrite is verified. Prepare slice 04",
+    "Which capability should go first when we port the Go worker fleet? Order the rewrite slices",
+    "Write the planning seed for the WordPress membership slice of our Phoenix rebuild"
+  ],
+  "should_not_trigger": [
+    "Plan a new billing feature in Phoenix",
+    "Implement the plan in .claude/plans/rewrite-02-checkout/plan.md",
+    "Split this 30-task plan into smaller plans",
+    "Triage the review findings and decide which to fix first",
+    "Walk me through the reasoning in .claude/plans/rewrite-02-checkout/plan.md before I approve it",
+    "Upgrade Phoenix 1.7 to 1.8 in small reviewable PRs"
+  ]
+}

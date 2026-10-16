@@ -1,0 +1,4 @@
+CodecTest [test/codec_test.exs]
+  * test C-01 reads the v1 session principal (0.1ms)
+  * test C-02 rejects a tampered credential (0.1ms)
+2 tests, 0 failures, 0 excluded

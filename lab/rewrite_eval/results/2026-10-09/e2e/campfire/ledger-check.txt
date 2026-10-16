@@ -1,0 +1,9 @@
+## check
+ledger OK
+exit=0
+## stats
+verified 0 of 151 ledger rows (retired 0, accepted risk 0, UNDECIDED 1)
+verdicts: DELETE 12, KEEP 60, MAP 42, REPLACE 28, SHIM 8, UNDECIDED 1
+implementation: pending 151
+evidence: not-run 151
+exit=0

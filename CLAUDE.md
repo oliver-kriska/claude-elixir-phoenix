@@ -120,6 +120,9 @@ claude-elixir-phoenix/
 ├── scripts/
 │   └── fetch-claude-docs.sh         # Download Claude Code docs for validation
 ├── plugins/
+│   ├── rewrite/                     # Elixir Rewrite Architect (separate plugin, depends on elixir-phoenix)
+│   │   ├── agents/                  # 7 analysis, design and audit agents
+│   │   └── skills/                  # 5 /rewrite:* commands + elixir-way reference skill
 │   └── elixir-phoenix/
 │       ├── .claude-plugin/
 │       │   └── plugin.json
@@ -380,6 +383,12 @@ manifest namespace must stay `phx` so existing `/phx:*` commands remain valid.
 The `ecto` and `lv` dependencies preserve `/ecto:*` and `/lv:*`. Claude Code
 uses plugin namespaces plus skill directory names for effective slash commands;
 frontmatter `name` alone does not preserve these public names.
+
+`rewrite` declares its phx dependency in its **marketplace entry**, not in
+`plugin.json`. A dependency resolves by marketplace name (`elixir-phoenix`),
+but `--plugin-dir` loads phx as `phx@inline`, so a manifest dependency would
+disable `rewrite` in Option A. Test it by adding `--plugin-dir ./plugins/rewrite`
+to Option A. `/rewrite:start` checks for `/phx:plan` at runtime.
 
 When editing skills, agents, or hooks mid-session, run `/reload-plugins` to
 pick up changes without restarting Claude Code (v2.1.98+). This also reloads

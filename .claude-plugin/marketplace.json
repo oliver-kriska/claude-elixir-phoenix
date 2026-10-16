@@ -48,6 +48,17 @@
       "source": "./plugins/catchup",
       "category": "productivity",
       "tags": ["productivity", "briefing", "async-team", "github", "linear"]
+    },
+    {
+      "name": "rewrite",
+      "description": "Elixir Rewrite Architect — rewrite an app from any language or framework (Rails, Django, PHP, Node, Go, JVM, .NET, Rust, Python scripts, CLIs, workers) into Elixir the Elixir way. Analyzes features and why each mechanism exists, decides the compatibility bar, designs a Phoenix/Ecto/Oban/OTP architecture, then hands vertical slices to /phx:plan and verifies parity.",
+      "author": {
+        "name": "Oliver Kriska"
+      },
+      "source": "./plugins/rewrite",
+      "category": "development",
+      "tags": ["elixir", "phoenix", "rewrite", "migration", "architecture"],
+      "dependencies": ["elixir-phoenix"]
     }
   ]
 }

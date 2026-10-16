@@ -1,0 +1,19 @@
+{
+  "skill": "rewrite:verify",
+  "should_trigger": [
+    "Implementation of slice 02 of the Django rewrite just finished. Verify it against its obligations",
+    "Before we claim parity with the old Laravel app, check slice 05's evidence and update the ledger",
+    "Does the checkout slice of our Spring Boot port read like Elixir or like transliterated Java? Audit it",
+    "Run the parity audit for rewrite slice 03, the Kafka consumer replacement",
+    "Capture fresh test evidence for the Go worker fleet slice of the port and mark the ledger",
+    "Is slice 04 of the .NET port really done? Prove each obligation with evidence"
+  ],
+  "should_not_trigger": [
+    "Verify my Phoenix app compiles and all tests pass",
+    "Run compile, format and tests before I open the PR",
+    "Review my Elixir changes before committing",
+    "Check that my implementation covers every requirement in the Linear ticket",
+    "This ExUnit test fails intermittently, help me fix it",
+    "Keep fixing until the Codex review comes back clean"
+  ]
+}

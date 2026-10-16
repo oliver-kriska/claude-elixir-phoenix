@@ -1,0 +1,6 @@
+Excluding tags: [:contract]
+QuantityTest [test/quantity_test.exs]
+  * test C-01 rejects negative units (skipped)
+  * test C-02 rejects fractional units (excluded)
+  * test accepts positive integer units (0.1ms)
+3 tests, 0 failures, 1 excluded, 1 skipped

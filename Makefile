@@ -77,6 +77,7 @@ validate: ## Run claude plugin validate on every plugin + marketplace manifest
 	@claude plugin validate --strict plugins/ecto
 	@claude plugin validate --strict plugins/lv
 	@claude plugin validate --strict plugins/catchup
+	@claude plugin validate --strict plugins/rewrite
 	@claude plugin validate --strict .
 	@claude plugin validate --strict .claude
 

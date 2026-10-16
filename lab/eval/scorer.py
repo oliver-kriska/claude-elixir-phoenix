@@ -17,6 +17,10 @@ from lab.eval.schemas import (
     ScoreRequest, ScoreResult,
 )
 from lab.eval.dimensions import completeness, accuracy, conciseness, triggering, safety, clarity, specificity, behavioral
+from lab.eval.plugins import (
+    DEFAULT_PLUGIN, STRUCTURAL_PLUGINS, TRIGGER_KEYWORDS, installed_plugins, plugin_dir, plugin_name_for,
+    plugin_root_for, result_key, unknown_plugins,
+)
 
 DIMENSION_MODULES = {
     "completeness": completeness,
@@ -35,6 +39,10 @@ PLUGIN_ROOT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..
 def default_eval(skill_path: str) -> EvalDefinition:
     """Generate a generic eval definition when no skill-specific eval exists."""
     skill_name = os.path.basename(os.path.dirname(skill_path))
+    keyword_params = {"min": 3}
+    plugin_keywords = TRIGGER_KEYWORDS.get(plugin_name_for(skill_path))
+    if plugin_keywords:
+        keyword_params["keywords"] = plugin_keywords
     return EvalDefinition(
         skill=skill_name,
         skill_path=skill_path,
@@ -56,7 +64,7 @@ def default_eval(skill_path: str) -> EvalDefinition:
             ]),
             "triggering": EvalDimension(name="triggering", weight=0.15, checks=[
                 EvalCheck(check_type="description_length", description="Description under 250-char plugin listing budget", params={"min": 50, "max": 250}),
-                EvalCheck(check_type="description_keywords", description="Enough trigger keywords", params={"min": 3}),
+                EvalCheck(check_type="description_keywords", description="Enough trigger keywords", params=keyword_params),
             ]),
             "safety": EvalDimension(name="safety", weight=0.10, checks=[
                 EvalCheck(check_type="has_iron_laws", description="Has Iron Laws", params={"min_count": 1}),
@@ -85,7 +93,7 @@ def score_skill(skill_path: str, eval_def: EvalDefinition | None = None) -> Scor
         target_path=os.path.abspath(skill_path),
         target_kind="skill",
         eval_def=eval_def,
-        plugin_root=os.path.abspath(PLUGIN_ROOT),
+        plugin_root=plugin_root_for(skill_path),
     )
     return score_skill_request(request)
 
@@ -139,23 +147,30 @@ def score_skill_request(request: ScoreRequest) -> ScoreResult:
     )
 
 
-def find_all_skills() -> list[str]:
-    """Find all SKILL.md files in the plugin."""
-    skills_dir = os.path.join(PLUGIN_ROOT, "skills")
-    if not os.path.isdir(skills_dir):
-        return []
+def find_all_skills(plugins: tuple[str, ...] = (DEFAULT_PLUGIN,)) -> list[str]:
+    """Find all SKILL.md files in the given plugins (default: elixir-phoenix only)."""
     paths = []
-    for name in sorted(os.listdir(skills_dir)):
-        skill_md = os.path.join(skills_dir, name, "SKILL.md")
-        if os.path.isfile(skill_md):
-            paths.append(skill_md)
+    for plugin in plugins:
+        skills_dir = os.path.join(plugin_dir(plugin), "skills")
+        if not os.path.isdir(skills_dir):
+            continue
+        for name in sorted(os.listdir(skills_dir)):
+            skill_md = os.path.join(skills_dir, name, "SKILL.md")
+            if os.path.isfile(skill_md):
+                paths.append(skill_md)
     return paths
 
 
-def find_eval(skill_name: str) -> str | None:
-    """Find eval definition for a skill."""
+def find_eval(skill_name: str, skill_path: str | None = None) -> str | None:
+    """Find the eval definition for a skill.
+
+    elixir-phoenix skills use `evals/{skill}.json`; other plugins use
+    `evals/{plugin}-{skill}.json`, so `rewrite/verify` never picks up phx's `verify.json`.
+    """
     evals_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), "evals")
-    eval_path = os.path.join(evals_dir, f"{skill_name}.json")
+    plugin = plugin_name_for(skill_path) if skill_path else DEFAULT_PLUGIN
+    filename = f"{skill_name}.json" if plugin == DEFAULT_PLUGIN else f"{plugin}-{skill_name}.json"
+    eval_path = os.path.join(evals_dir, filename)
     if os.path.isfile(eval_path):
         return eval_path
     return None
@@ -166,17 +181,28 @@ def main():
     parser.add_argument("skill_path", nargs="?", help="Path to SKILL.md file")
     parser.add_argument("--eval", help="Path to eval definition JSON")
     parser.add_argument("--all", action="store_true", help="Score all skills")
+    parser.add_argument("--plugin", action="append",
+                        help="Plugin directory to score with --all (repeatable; default: every structural plugin)")
     parser.add_argument("--pretty", action="store_true", help="Pretty-print JSON output")
     args = parser.parse_args()
 
+    if args.plugin:
+        unknown = unknown_plugins(args.plugin)
+        if unknown:
+            parser.error(
+                f"unknown plugin(s): {', '.join(unknown)}; installed: {', '.join(installed_plugins())}"
+            )
     if args.all:
         results = {}
-        for skill_path in find_all_skills():
+        skill_paths = find_all_skills(tuple(args.plugin or STRUCTURAL_PLUGINS))
+        if args.plugin and not skill_paths:
+            parser.error(f"no skills found in plugin(s): {', '.join(args.plugin)}")
+        for skill_path in skill_paths:
             skill_name = os.path.basename(os.path.dirname(skill_path))
-            eval_path = find_eval(skill_name)
+            eval_path = find_eval(skill_name, skill_path)
             eval_def = EvalDefinition.from_file(eval_path) if eval_path else None
             score = score_skill(skill_path, eval_def)
-            results[skill_name] = score.to_dict()
+            results[result_key(skill_path, skill_name)] = score.to_dict()
         output = json.dumps(results, indent=2 if args.pretty else None)
         print(output)
     elif args.skill_path:
@@ -185,7 +211,7 @@ def main():
             eval_def = EvalDefinition.from_file(args.eval)
         else:
             skill_name = os.path.basename(os.path.dirname(args.skill_path))
-            eval_path = find_eval(skill_name)
+            eval_path = find_eval(skill_name, args.skill_path)
             if eval_path:
                 eval_def = EvalDefinition.from_file(eval_path)
 

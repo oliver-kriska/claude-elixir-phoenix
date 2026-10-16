@@ -12,6 +12,138 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - **`test_hook_scripts_run_only_paths_the_directory_can_follow`
   (contributor tooling).** Rejects inline programs, `eval`, `source`,
   `bash`/`command` invocations and `$0`/`BASH_SOURCE` paths in hook scripts.
+- **New `rewrite` plugin (Elixir Rewrite Architect, 0.1.0, experimental).**
+  Plans a rewrite of an app from any language into idiomatic Elixir. Five
+  commands (`/rewrite:start`, `analyze`, `architect`, `roadmap`, `verify`),
+  one reference skill (`elixir-way`, with stack packs for Rails, Django,
+  Laravel/PHP, Node, Go and JVM/.NET plus a generic method), seven agents
+  (six sonnet, `elixir-way-architect` on opus) and three stdlib scripts
+  (`inventory.py`, `ledger.py`, and `fingerprint.py`, which stamps verify
+  evidence with the content identity of both trees). Slices reach phx as an `interview.md` seed
+  for `/phx:plan`; phx itself is unchanged. The dependency on
+  `elixir-phoenix` lives in the marketplace entry, not `plugin.json`, so the
+  plugin still loads beside `--plugin-dir ./plugins/elixir-phoenix` (`phx@inline`).
+  Versions independently. See `plugins/rewrite/README.md`.
+- **The rewrite inventory grades the legacy app's oracles.** `inventory.py`
+  (inventory version 3) adds an `oracles` section: tests by framework with
+  approximate case counts, black-box API suites (Hurl requests and asserts,
+  Postman, Bruno, REST Client, Tavern, Dredd), E2E suites, benchmark and load
+  harnesses, API contracts and coverage config (paths only). A deterministic
+  grade (correctness `strong | moderate | weak | none`, performance
+  `harness | none`) states the counts and the threshold each one crossed.
+  `--oracle DIR` adds a suite outside the source, such as RealWorld's
+  `specs/api`, with the same symlink, special-file and stat-fence safety and
+  outside the source fingerprint; a directory inside the source is not
+  scanned twice. `--compare` still accepts version 2 inventories. The
+  contract-surveyor names a legacy witness per contract and confirms or
+  downgrades the grade. Roadmap puts characterization tests first on a weak
+  grade, names each slice's black-box files and command in a new seed
+  `## Oracle` section, and writes a port-only load script when no harness
+  exists. Verify requires a fresh passing run of those files, against the
+  port only. It also re-runs every other command an acceptance
+  criterion names, such as a release smoke, since a `/phx:work` log is a
+  claim, and the parity auditor proposes `implemented` for each slice row
+  whose code exists, so passing rows stop counting as unverified. A record
+  missing its identity values is re-run before the audits, not after them.
+  Verify writes its run list (`commands.md`) before running anything: the
+  default commands, every command an acceptance criterion names exactly as
+  named (a seed, `--force`, the full suite) and every `## Oracle` command.
+  The parity auditor checks the list against the criteria and the records,
+  and a missing list is a finding: verify writes it before auditing, where
+  two trial runs had skipped it. Each listed command keeps the arguments
+  its criterion names, and a command is left out only when it cannot run:
+  a trial verify had swapped a named seed for a random one and skipped
+  whole-file diagnostics as already run by `/phx:work`. Black-box files run
+  against the release, not a dev server, whose `debug_errors` page answered
+  HTML where the release answers the JSON envelope. Building the release
+  inline needs the phx gate from #151, which allows `MIX_ENV=prod mix
+  release`. A load smoke that errors goes to `/phx:investigate` with the
+  error from the server log, never to a bigger pool or a lighter load: the
+  first release-based trial smoke failed 25% of requests, and the cause was
+  the password hasher. The run list includes static checks a criterion names
+  (`rg`, `git diff`), and the report keeps the parity auditor's states: a
+  slice 04 trial verify had recorded three greps after the audit and
+  reported them as passing. The release starts with
+  `RELEASE_DISTRIBUTION=none`, so no `epmd` daemon outlives the run, and
+  each Hurl command gets its own `uid`, where two runs in the same second
+  had collided on registration. The parity auditor splits each criterion
+  into one row per case it names: the slice 04 denominator had grown from
+  22 to 32 over three runs as the cases surfaced one at a time. Splitting
+  alone did not hold it: two slice 07 audits counted 52 and 68, one row per
+  Hurl file where the other had one row in total. The auditor now gets the
+  slice's previous `parity.md` as `PREVIOUS`, starts from its rows (never
+  its states), and names every added, split, merged or dropped row with
+  the old and new count. Verify
+  writes each run's script from the skill, never from a copy of another
+  slice's or an earlier run's: the fourth slice 04 verify reran its old
+  script and the slice 05 verify copied slice 04's, so both started the
+  release without `RELEASE_DISTRIBUTION=none` and the copy lacked the
+  static checks its run list named. Catch-up runs before the audits go
+  through the wrapper, where slice 05 ran those checks bare and left them
+  with no record. The release start and stop are now a code block in the
+  skill, since the next run wrote a fresh script that still followed the
+  old one's start line and left `epmd` behind again. The elixir-way references now name
+  `:crypto.pbkdf2_hmac/5` (a dirty NIF) for Django PBKDF2 hashes instead of
+  `pbkdf2_elixir`, whose Elixir loop runs all 1,000,000 rounds on the normal
+  schedulers: with 42 hashes in flight a trivial task took up to 412 ms,
+  against 33 µs through `:crypto`, so concurrent registrations starved the
+  DB pool. The Django stack reference probes django-ninja's per-status
+  response models: `return 409, None` under `response={409: Any}` renders
+  JSON `null`, which a trial analysis had recorded as an empty body, and
+  a status the route's `response=` omits raises `ConfigError`, a 500
+  unless `DEBUG`: the legacy favorite route returns 409 without declaring
+  it. A 422 for a missing or wrong-type field carries pydantic's own
+  text, which three trial slices had replaced without recording it. It proposes Evidence `pass` for a REPLACE or MAP row whose Target passed
+  fresh, where it had proposed `not-run` because an ADR changed the legacy
+  behavior, which left those rows unverified. Verify keeps the PID of the port it starts and stops only that process,
+  where a trial run had stopped every BEAM process on the machine with
+  `pkill -f beam`, and it drops only a database it created itself.
+  `--no-run` stops before the audits when the target has moved since
+  its newest record, because they could only score it `stale`.
+  Roadmap assigns each ledger row to the slice that builds all of its
+  Target, so a foundation gate no longer fails on a row whose replacement
+  a later slice writes. Each roadmap run refreshes every slice's
+  `Blocked by` first, so `--next` no longer skips a slice whose blockers
+  the user has since resolved. A black-box file's leading entries that an
+  earlier slice can pass in full (register and login ahead of the user
+  routes) gate that slice with Hurl `--to-entry`.
+- **Structural eval scores more than one plugin (contributor tooling).**
+  `lab/eval/plugins.py` maps a file to its plugin, so `make eval` and
+  `make eval-all` score `rewrite` skills and agents alongside `phx`. A
+  namespaced agent reference (`phx:x`, `rewrite:x`) resolves only in its own
+  plugin, and an unknown `--plugin` name fails instead of scoring nothing.
+- **Tests for the rewrite scripts (contributor tooling).**
+  `scripts/tests/test_rewrite_inventory.py`,
+  `scripts/tests/test_rewrite_fingerprint.py` and
+  `scripts/tests/test_rewrite_ledger.py` cover stack detection (PEP 621,
+  Poetry and Pipfile manifests), coverage counts, the snapshot compare, the
+  refusal to write inside the source, that git never runs a program the
+  source checkout configures (fsmonitor, filters, hooks, signature checks),
+  that a file written mid-read or a FIFO never yields a silent inventory, and
+  the ledger check: only row IDs and aliases account for a mechanism, rows
+  must match their header's width, an `AR-NN` departure needs a complete
+  record (owner, scope listing the row, rationale, review, approval), each
+  ledger table needs its own state columns, an ID-shaped token that breaks
+  the `M-`/`R-`/`C-` + digits scheme (`R-D4`) fails the check instead of
+  vanishing from every count, `stats` fails on a malformed
+  ledger, and an empty or unreadable slice never falls back to the whole
+  ledger. Fingerprinting fails closed when a tracked file is flagged
+  `assume-unchanged` or `skip-worktree`, since git hides its edits. `scripts/tests/test_rewrite_plugin.py`
+  checks the plugin's own rules: skill-dir paths resolve, namespaced
+  references exist, every KB file an agent names exists, the ledger
+  vocabulary matches `ledger.py`, and no stale vocabulary remains.
+- **Trigger eval covers the rewrite plugin (contributor tooling).**
+  `trigger_scorer.py` routes over the phx and rewrite skill pools together
+  (phx keys stay bare, others are `rewrite:verify`), with
+  `triggers/rewrite-*.json` fixtures and hard phx near-miss negatives. All six
+  rewrite skills score 100% on the Haiku gate. The behavioral dimension reads
+  `rewrite-verify.json` for `rewrite:verify` instead of phx's `verify.json`.
+- **`make budget` tracks the rewrite plugin** (~1,144 always-on tokens).
+- **Rewrite eval evidence (contributor tooling).** `lab/rewrite_eval/` holds
+  seven negative controls with a grading rubric, their blind-replay results,
+  and the artifacts of three `--auto` end-to-end runs (Campfire, Node and
+  Django RealWorld) plus a fresh-session `/phx:plan` handoff from a Django
+  seed.
 - **`scripts/tests/test_block_dangerous_ops.py` (contributor tooling).**
   Pytest cases for the Bash gate's pattern-kill, `MIX_ENV=prod` and script
   checks. It also runs `hooks/tests/block-dangerous-ops_test.sh`, which no CI
@@ -44,6 +176,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- **Oban cron reference uses the 2.24 form.** `oban/references/queue-config.md`
+  showed `{Oban.Plugins.Cron, ...}` under `plugins:`; Oban 2.24 moved cron to a
+  top-level `cron:` key (`Oban.Cron`, per-entry `timezone:`). The old name is
+  deprecated and still delegates, which the reference now says.
 - **`--codex` no longer dies when OpenAI retires the configured model.**
   `codex exec review` exits 1 with `The 'gpt-5.5' model is not supported
   when using Codex with a ChatGPT account` once the `model` line in

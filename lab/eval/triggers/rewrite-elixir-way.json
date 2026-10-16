@@ -1,0 +1,21 @@
+{
+  "skill": "rewrite:elixir-way",
+  "should_trigger": [
+    "We're porting a Django app. What replaces Celery beat and Django signals in Elixir?",
+    "In our Laravel port, how should Eloquent observers and queued listeners map to Elixir?",
+    "Our Go service uses a goroutine worker pool fed by channels. What's the idiomatic Elixir equivalent for the rewrite?",
+    "This module from the Spring Boot port still has a service locator and DTO mappers everywhere. Is it Elixir or translationese?",
+    "Map our .NET MediatR handlers and Hangfire jobs to Elixir targets for the port",
+    "The Node app we're rewriting kept a cache in a module-level Map. Does that become ETS, a GenServer, or nothing in Elixir?",
+    "Our WordPress cron and transients need a home in the Phoenix rebuild. What should they turn into?",
+    "What do Sidekiq jobs with Redis locks become when we port the Rails app to Elixir?"
+  ],
+  "should_not_trigger": [
+    "Is this GenServer idiomatic? It holds no state and just wraps two functions",
+    "Rewrite this nested case statement as a with chain",
+    "Explain the difference between Task.async and GenServer.cast",
+    "Review my Elixir changes for anti-patterns",
+    "Upgrade Phoenix 1.7 to 1.8",
+    "Migrate my Ecto schema to add a status enum"
+  ]
+}

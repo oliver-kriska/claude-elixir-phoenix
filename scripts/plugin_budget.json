@@ -4,6 +4,7 @@
   "baselines": {
     "phx": 5796,
     "ecto": 132,
-    "lv": 64
+    "lv": 64,
+    "rewrite": 1144
   }
 }

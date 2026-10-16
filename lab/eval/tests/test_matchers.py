@@ -394,14 +394,19 @@ class TestReferenceValidation:
     def test_namespaced_plugin_agent_reference(self, tmp_path):
         agents = tmp_path / "agents"
         agents.mkdir()
-        (agents / "reviewer.md").write_text("---\nname: reviewer\n---\n")
+        (agents / "local-only.md").write_text("---\nname: local-only\n---\n")
 
         passed, evidence = valid_agent_refs(
-            'Agent(subagent_type: "phx:reviewer", prompt: "Review")',
+            'Agent(subagent_type: "phx:elixir-reviewer", prompt: "Review")',
             plugin_root=str(tmp_path),
         )
-
         assert passed, evidence
+
+        passed, _ = valid_agent_refs(
+            'Agent(subagent_type: "phx:local-only", prompt: "Review")',
+            plugin_root=str(tmp_path),
+        )
+        assert not passed
 
     def test_inline_commands_do_not_count_as_duplicated_prose(self):
         content = (

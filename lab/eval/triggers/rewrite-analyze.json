@@ -1,0 +1,20 @@
+{
+  "skill": "rewrite:analyze",
+  "should_trigger": [
+    "Before we port it, inventory this Django monolith: every feature, the Celery jobs, and which external APIs depend on it",
+    "Analyze /srv/legacy/shop, a Laravel 8 app, for the Elixir rewrite. I need to know why each queue, cache and cron job exists",
+    "Map the features and external contracts of our Express + TypeScript backend before we rewrite it in Phoenix",
+    "The Spring Boot repo has changed since last month's rewrite analysis. Refresh it",
+    "Figure out the runtime topology of our Java Kafka consumer service (consumer groups, retry topics, DLQ) before we rebuild it in Elixir",
+    "What does our legacy Python ETL pipeline actually do, and which of its Airflow steps still matter? We plan to replace it with Elixir and Broadway",
+    "Catalogue the custom WordPress plugins, hooks and REST endpoints we'd have to keep when we move the site to Phoenix"
+  ],
+  "should_not_trigger": [
+    "Audit the health of our Phoenix project before the release",
+    "Find technical debt in our legacy Elixir umbrella app",
+    "Check context boundaries and coupling in our Phoenix app with mix xref",
+    "Who calls Accounts.get_user!/1? Trace it back to the controllers",
+    "Our five-year-old Phoenix app got slow on the orders page; find out why",
+    "Review my Elixir changes before I commit"
+  ]
+}
