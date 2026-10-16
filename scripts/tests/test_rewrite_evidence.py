@@ -159,9 +159,9 @@ def test_status_passes_when_every_listed_command_has_a_record(target: Path) -> N
     assert "missing 0" in r.stdout
 
 
-def fake_release(root: Path) -> Path:
+def fake_release(root: Path, name: str = "app") -> Path:
     # Stands in for _build/prod/rel/app/bin/app: records its environment, then stays up.
-    script = root / "_build/prod/rel/app/bin/app"
+    script = root / f"_build/prod/rel/{name}/bin/{name}"
     write(script, "#!/bin/sh\nprintf '%s\\n' \"$RELEASE_DISTRIBUTION\" > \"$(dirname \"$0\")/../dist.txt\"\n"
                   "while :; do sleep 1; done\n")
     script.chmod(script.stat().st_mode | stat.S_IXUSR)
@@ -195,6 +195,14 @@ def test_port_start_and_stop_own_only_their_process_group(target: Path) -> None:
     finally:
         neighbour.send_signal(signal.SIGTERM)
         neighbour.wait()
+
+
+def test_port_stop_recognises_a_release_on_a_long_path(target: Path) -> None:
+    # procps ps cuts a piped command line at 80 columns unless told -ww, which hid the release root.
+    release = fake_release(target, "a" * 120)
+    assert ev(target, "port", "start", "07", "--release", str(release), "--timeout", "10").returncode == 0
+    r = ev(target, "port", "stop", "07")
+    assert r.returncode == 0 and "stopped" in r.stdout, r.stderr
 
 
 def test_port_start_reports_a_release_that_exits_early(target: Path) -> None:

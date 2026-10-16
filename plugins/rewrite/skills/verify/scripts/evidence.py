@@ -252,7 +252,7 @@ def alive(pid):
 
 def command_of(pid):
     try:
-        return subprocess.run(["ps", "-o", "command=", "-p", str(pid)], capture_output=True, text=True).stdout
+        return subprocess.run(["ps", "-ww", "-o", "command=", "-p", str(pid)], capture_output=True, text=True).stdout
     except OSError:
         return ""
 

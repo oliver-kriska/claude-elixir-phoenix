@@ -172,7 +172,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   behavior that the seed's Scope or Dead Ends gives to another slice as out
   of scope, naming that slice's case. Slice 06's first round counted the
   concurrent article-slug 409 as an omission. The seed had put it in slice
-  03, where AC-4o already passes.
+  03, where AC-4o already passes. On Linux, `ev port stop` refused to
+  stop a release whose path was long. It matches the release root against
+  `ps -o command=`, and procps cuts piped output at 80 columns. It now
+  passes `-ww`.
 - **A slice seed's acceptance cases fix the verify denominator.** Two
   auditors had counted 52 and 68 obligations from the same slice 07
   criteria, and slice 04 went 22 → 23 → 32 over three audits. The seed
