@@ -103,9 +103,17 @@ authority, identity, jobs/events, data movement, cutover, rollback}
 
 ## Acceptance Criteria
 
-- [ ] {probe from features.md, positive}
-- [ ] {negative probe}
-- [ ] {contract witness from contracts.md}
+{One checkbox per case, each with its own ID: `AC-N`. When a criterion names several cases (each token
+shape, filter, route, fixture, black-box file or "does not change" clause), give each case its own
+lettered ID: `AC-Na`, `AC-Nb`. In parentheses, cite every ledger ID the case witnesses. Cite every ID in
+the mechanism and contract tables in at least one case. List only probes; a process step such as
+scoring the ledger is not a case. These IDs are the slice's obligations: verify counts exactly these,
+plus any omissions it finds.}
+
+- [ ] AC-1 (M-04, C-11): {probe from features.md, positive}
+- [ ] AC-2a (C-14): {negative probe, first case it names}
+- [ ] AC-2b (C-14): {negative probe, second case}
+- [ ] AC-3a (C-19): {`hurl/auth.hurl` passes whole against the release}
 
 ## Codebase Context
 

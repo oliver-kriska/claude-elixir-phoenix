@@ -17,9 +17,9 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   commands (`/rewrite:start`, `analyze`, `architect`, `roadmap`, `verify`),
   one reference skill (`elixir-way`, with stack packs for Rails, Django,
   Laravel/PHP, Node, Go and JVM/.NET plus a generic method), seven agents
-  (six sonnet, `elixir-way-architect` on opus) and three stdlib scripts
-  (`inventory.py`, `ledger.py`, and `fingerprint.py`, which stamps verify
-  evidence with the content identity of both trees). Slices reach phx as an `interview.md` seed
+  (six sonnet, `elixir-way-architect` on opus) and four stdlib scripts
+  (`inventory.py`, `ledger.py`, `fingerprint.py` for the content identity of
+  both trees, and `evidence.py`, which writes every verify record). Slices reach phx as an `interview.md` seed
   for `/phx:plan`; phx itself is unchanged. The dependency on
   `elixir-phoenix` lives in the marketplace entry, not `plugin.json`, so the
   plugin still loads beside `--plugin-dir ./plugins/elixir-phoenix` (`phx@inline`).
@@ -112,6 +112,111 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   `make eval-all` score `rewrite` skills and agents alongside `phx`. A
   namespaced agent reference (`phx:x`, `rewrite:x`) resolves only in its own
   plugin, and an unknown `--plugin` name fails instead of scoring nothing.
+- **Verify records come from `evidence.py`, not from a script verify
+  writes.** About 11 of the 19 fixes from the django-ninja trial were
+  mechanics that each verify session worked out again: the wrapper, record
+  fields, identity captures, the release start line, kill by PID, and
+  copying an earlier run's script. `ev init` starts a run and moves old
+  records to `superseded/`. `ev run SLICE NAME -- CMD` captures target and
+  source identity, runs the command without a shell, captures both again
+  and writes the record: exit and expected exit, times, the four
+  identities, app env names (secret-like values redacted), ExUnit counts and
+  the log. `{uid}` gives each Hurl run its own value. `ev port start|stop`
+  runs the release with `RELEASE_DISTRIBUTION=none` in its own process
+  group and stops only that group. `ev status` checks `commands.md` against
+  the records (missing, incomplete, stale, outdated, unexpected exit), and
+  `ev current` gives the auditors `CURRENT_IDENTITY`. Each black-box file
+  now gets its own record, where the trial's verify had bundled 13 Hurl
+  files, curl and k6 into one. A check that must find nothing records
+  `--expect-exit 1`, and the parity auditor compares each exit with its
+  record's expected exit. Smoke-tested on the trial's prod release: the
+  release `exec`s into `beam.smp` under the same PID and leads its own
+  group, and no `epmd` was left after stop. `ev` passes the shell's PATH
+  as `EV_PATH`, because a mise shim on `python3` rewrites PATH for its
+  child from the directory's tool config. In the ASP.NET trial, the port's
+  `mix` then reached an unpinned `erl` shim and failed, and verify blamed
+  the script for stripping the environment. The skill's absence-check
+  example now skips comment lines (`'^\s*([^#\s].*)?Repo\.'`). In slices
+  00a and 00b, verify's first `rg` absence check matched a comment and had to
+  be re-run. In ASP.NET slice 02, verify credited the Hurl files from an
+  ExUnit wrapper on the test endpoint. The parity auditor now counts a
+  black-box file only from its own record against the release started with
+  `ev port start`. The load script runs with a `checks` threshold: k6 exits 0
+  when checks fail, which both trials hit. The verify report quotes
+  each row's obligation from `parity.md` instead of paraphrasing it (a trial
+  report mislabeled TK-08), and verify never schedules a wakeup. That rule
+  now sits where verify waits for its auditors: ASP.NET slice 04's round 2
+  set a 20-minute fallback wakeup there, which re-entered the finished run.
+  Verify names the `PREVIOUS` file exactly: this slice's `parity.md`, renamed to
+  `parity-previous.md`. Told only to move "an earlier `parity.md`" aside,
+  ASP.NET slice 03's first round ran `mv ../02/parity.md /dev/null`; the
+  move failed and the file survived. `CLAIMS` now includes the plan's
+  `scratchpad.md`, and the parity auditor reads the source for every
+  behavior the work phase recorded as assumed, adding it as an omission
+  when no case covers it. Slice 03's work logged three "ASSUMED parity, no
+  witness" entries there that the auditor passed over. One was wrong: the
+  port answered an empty `limit=` with 422, where the legacy binds it to
+  `int?` and serves the default page. A behavior the user adds after a
+  round now gets a new case ID in the seed. The trial operator's additions
+  went into the plan only: slice 00b's auditor counted two as omissions,
+  but slice 03's counted none of four. The preflight now also reads
+  `config/prod.exs`, the release's compile-time config, and records the
+  endpoint's `ip:` as read. In ASP.NET slice 04, preflight.md said "loopback
+  only" while the release served the throwaway database on `0.0.0.0:8080`,
+  copying the legacy container's bind. Verify now writes the ledger's Impl
+  and Evidence cells with `ledger.py set --ids … --impl … --evidence …`,
+  which keeps every other byte and writes nothing on an unknown ID. Each
+  verify had edited those cells with `sed`. In ASP.NET slice 03, macOS
+  `sed -i -E` took `-E` as the backup suffix, and the slice commit carried
+  a stale `ledger.md-E` into the port. The parity auditor now treats a
+  behavior that the seed's Scope or Dead Ends gives to another slice as out
+  of scope, naming that slice's case. Slice 06's first round counted the
+  concurrent article-slug 409 as an omission. The seed had put it in slice
+  03, where AC-4o already passes. On Linux, `ev port stop` refused to
+  stop a release whose path was long. It matches the release root against
+  `ps -o command=`, and procps cuts piped output at 80 columns. It now
+  passes `-ww`.
+- **A slice seed's acceptance cases fix the verify denominator.** Two
+  auditors had counted 52 and 68 obligations from the same slice 07
+  criteria, and slice 04 went 22 → 23 → 32 over three audits. The seed
+  template now gives each case its own ID (`AC-2a`, `AC-2b`: a token shape,
+  route, fixture or black-box file) citing the ledger IDs it witnesses.
+  `ledger.py obligations --slice interview.md` lists the cases and fails on
+  an item without an ID, a duplicate, a criterion listed both bare and
+  lettered, or a mechanism or contract row that no case cites. The roadmap
+  fixes the seed until it passes, and verify passes the list to the parity
+  auditor as `OBLIGATION_IDS`. With a clean list the auditor scores those
+  cases as given and counts anything else as a labelled omission. For an
+  older seed it falls back to splitting criteria, seeded from `PREVIOUS`.
+  On the trial seeds it lists 22 cases for slice 04, the first audit's
+  count. For slice 07 it flags M-10, C-14 and C-24, which the tables witness
+  but the cases cite only through decision IDs. `ledger.py stats --slice`
+  now counts only the IDs the cases cite and the tables list. The ASP.NET
+  trial's first 00a seed named other slices' rows in its prose, and the
+  verify gate line read 5 of 12 rows instead of 5 of 5. That scoping exposed
+  a gate rule that failed every slice owning no ledger rows. The trial's
+  oracle-fixtures slice 01 selects 0 rows by design, so verify now exempts a
+  slice whose `roadmap.md` row lists none.
+- **contract-surveyor records framework-rendered responses.** The four
+  django-ninja surprises were all answers the framework renders, not a
+  handler: the 409 `null` body, a 500 for an undeclared status, pydantic's
+  422 text, and the malformed-JSON 400. They surfaced in slices 05–07, and
+  two of them reached back into slices 02a–04. The surveyor now records,
+  from the pinned framework version's source, the status and body for: a
+  body that does not parse, a missing or wrong-type field, a path parameter
+  that does not convert, an unknown route or wrong method, an undeclared
+  status or reshaped return value, and an unhandled exception. When that
+  source is not on disk, the row is `UNKNOWN` with a question naming the
+  function, never a body inferred from handler code. In the ASP.NET trial
+  the pass found the 404, 405, 415 and binder answers at analysis time. It
+  missed two classes, which the 00b seed raised instead: the exact
+  `Content-Type` (the legacy 401 carries no charset) and an unsatisfiable
+  `Accept`, which MVC ignores but Phoenix's `plug :accepts` answers with 406.
+  The pass now records both. Slice 06 then found that every legacy error body is
+  exactly `application/json` (the error middleware and validation filter set
+  it), where the port's 403, 404, 409 and 422 carried a charset. The Hurl
+  spec asserts no `Content-Type`, so nothing had caught it. The surveyor's
+  wire pass now records the type for success and for each error class.
 - **Tests for the rewrite scripts (contributor tooling).**
   `scripts/tests/test_rewrite_inventory.py`,
   `scripts/tests/test_rewrite_fingerprint.py` and
@@ -128,7 +233,12 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   vanishing from every count, `stats` fails on a malformed
   ledger, and an empty or unreadable slice never falls back to the whole
   ledger. Fingerprinting fails closed when a tracked file is flagged
-  `assume-unchanged` or `skip-worktree`, since git hides its edits. `scripts/tests/test_rewrite_plugin.py`
+  `assume-unchanged` or `skip-worktree`, since git hides its edits.
+  `scripts/tests/test_rewrite_evidence.py` runs `evidence.py` in throwaway
+  repos: fresh and stale identity, the command's own exit status, redaction,
+  `{uid}`, `init` moving old records aside, every `status` state, and a fake
+  release that `port stop` ends while a neighbouring process survives.
+  `obligations` has its own cases in the ledger tests. `scripts/tests/test_rewrite_plugin.py`
   checks the plugin's own rules: skill-dir paths resolve, namespaced
   references exist, every KB file an agent names exists, the ledger
   vocabulary matches `ledger.py`, and no stale vocabulary remains.

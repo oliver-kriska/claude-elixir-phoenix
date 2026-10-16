@@ -185,17 +185,24 @@ fresh `--auto` run always stops before `/phx:plan`.
 `/rewrite:architect` also consults phx specialists, one per named open question: `ecto-schema-designer`,
 `otp-advisor`, `oban-specialist`, `liveview-architect`, `security-analyzer`, `hex-library-researcher`.
 
-Three stdlib scripts do the deterministic work: `inventory.py` (stacks, infra signals, entry points, oracles, steering
-files, git hotspots, discovered vs returned counts), `ledger.py` (every analysis ID accounted for by a row, valid states, complete
-accepted-risk records, verified counts) and `fingerprint.py` (content identity of SOURCE and TARGET before and after
-each verify command, so evidence from a changed tree is `stale`).
+Four stdlib scripts do the deterministic work:
+
+- `inventory.py`: stacks, infra signals, entry points, oracles, steering files, git hotspots, and discovered vs
+  returned counts.
+- `ledger.py`: checks every analysis ID is accounted for by a row, that states are valid and accepted-risk records
+  complete, and counts verified rows. It also lists a slice seed's acceptance cases, which fix verify's denominator,
+  and `set` writes a row's Impl and Evidence cells by ID for verify.
+- `fingerprint.py`: content identity of SOURCE and TARGET.
+- `evidence.py`: writes every verify record. It captures both identities before and after the command, so evidence
+  from a changed tree is `stale`. It also starts and stops the port's release in its own process group, and checks the
+  run list against the records.
 
 ## Limitations
 
 - **Experimental.** Version 0.1.0; templates, vocabulary and commands may change.
 - **Tested on small apps only.** There is no claim that it handles any app at any size. Large apps get a risk-ranked
   domain scope, with uncovered areas written down as gaps, not a full census.
-- **Partly evaluated.** `make eval` scores the skills and agents, and pytest covers the three scripts. Seven static
+- **Partly evaluated.** `make eval` scores the skills and agents, and pytest covers the four scripts. Seven static
   audit controls were replayed blind ([results](../../lab/rewrite_eval/results/2026-10-09/README.md)): they show
   the auditors catch stale, failed, excluded and mocked evidence, but they reason over supplied state and are not
   runtime verification. Headless `/rewrite:start --auto` runs on a small Express app, a small Django app and ONCE

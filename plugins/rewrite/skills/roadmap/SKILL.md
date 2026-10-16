@@ -116,8 +116,15 @@ Read `${CLAUDE_SKILL_DIR}/references/seed-templates.md` and write:
 - `.claude/plans/{slug}/scratchpad.md` — `DECISION` and `DEAD-END` entries
 
 Give every binding decision a stable `D-NN` and every dead end an `X-NN`; a
-re-seed keeps existing IDs. Score coverage honestly with the template's
-rubric. Set `**Status**: COMPLETE` only when Iron Law 4 holds; otherwise
+re-seed keeps existing IDs. The acceptance cases are verify's denominator, so
+check them. Fix the seed until this exits 0 (one ID per case, every mechanism
+and contract row cited by a case):
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/../architect/scripts/ledger.py" obligations --slice .claude/plans/{slug}/interview.md
+```
+
+Score coverage honestly with the template's rubric. Set `**Status**: COMPLETE` only when Iron Law 4 holds; otherwise
 `IN_PROGRESS` so `/phx:plan` asks about the gaps.
 
 ### 5. Hand off to `/phx:plan`

@@ -34,7 +34,9 @@ list is the denominator.
   SOURCE, captured by the main session just before this audit
 - `DECISIONS` — ADRs with their Status under `.claude/rewrite/architecture/`,
   and `.claude/rewrite/verify/accepted-risks.md`
-- `CLAIMS` — files that assert results (`progress.md`, PR text), may be empty
+- `CLAIMS` — files that assert results or record assumptions (`progress.md`, `scratchpad.md`, PR text), may be empty
+- `OBLIGATION_IDS` — `ledger.py obligations` output for the slice seed: its acceptance cases, the ledger IDs
+  each cites, and any errors
 - `PREVIOUS` — the slice's last `parity.md`, moved aside before this audit; may be empty. Its rows, never its
   states, seed your matrix (step 2)
 - `OUTPUT` — `.claude/rewrite/verify/{slice}/parity.md`
@@ -58,7 +60,8 @@ list is the denominator.
    puts it in
 4. **`pass` needs all of**: a test that exercises the obligation's probe
    (read it), that test ran in an evidence record (not skipped or
-   excluded), exit status 0, the record's target and source identity equal
+   excluded), an exit status equal to the record's `expected_exit` (0 unless it names
+   another), the record's target and source identity equal
    before and after the command, and its after identity equal to
    `CURRENT_IDENTITY` for both (`head` and `content_fingerprint`). Status or
    path text is diagnostic, never the freshness proof
@@ -101,7 +104,10 @@ registrations; list anything wider under `Not checked`. Classify each find:
 - **Strengthening** — the analysis or plan asserts more than the source shows
 - **Out of slice scope** — deferred work, such as persistence enforcement
   in a construction-only slice. Split a mixed anchor: record defaults and
-  relationships can be in scope while DB constraints and cascades are deferred
+  relationships can be in scope while DB constraints and cascades are deferred.
+  A behavior the seed's Scope or Dead Ends gives to another slice is out of
+  scope too, never an omission: name that slice, and the case that covers it
+  in its `verify/{NN}/parity.md` (none there is a question for the user)
 
 ### 2. Build the canonical obligation list
 
@@ -109,15 +115,23 @@ One row per canonical assertion: acceptance probes (positive and negative),
 contract witnesses in scope, ledger guarantees in scope (atomicity,
 durability, ordering, delivery, authorization, visibility) that the source
 evidences or an accepted ADR adopts, each black-box file `## Oracle` assigns
-(its witness is the `*-oracle.md` record, run against the port), and
-omissions. Merge duplicates into aliases before counting. Split each
-acceptance criterion into one row per case it names (each token shape,
-filter, route, fixture or "does not change" clause), so the denominator is
-the same on every run; a case no test sends is `not-run`.
+(its witness is that file's own record against the release this run started
+with `ev port start`; a wrapper test inside `mix test` or a dev server is not
+one), and omissions.
+Merge duplicates into aliases before counting. A case no test sends is `not-run`.
 
-With `PREVIOUS`, start from its rows: keep each ID, re-score it from this run's evidence, and change the list
-only for a reason you state (a case its criterion names that the last run merged, a duplicate it counted twice).
-Report the count as `Denominator: {old} → {new}`, naming each added, split, merged or dropped row.
+**Clean `OBLIGATION_IDS`** (cases, no errors): its cases are your acceptance rows, one row each under its ID.
+Never split, merge or drop one. The contract witnesses, ledger guarantees and black-box files a case cites
+are aliases of that row. One that no case covers is an omission (`O-NN`, counted and labelled). A case that
+seems to hide two probes goes under Completeness as a seed question, uncounted. Report
+`Denominator: {cases} cases + {n} omissions`.
+
+**`OBLIGATION_IDS` with errors** (an older seed): name the errors under Completeness, then build the rows
+yourself. Split each acceptance criterion into one row per case it names (each token shape, filter, route,
+fixture or "does not change" clause). With `PREVIOUS`, start from its rows: keep each ID and re-score it
+from this run's evidence. Change the list only for a reason you state, such as a case its criterion names
+that the last run merged, or a duplicate it counted twice. Report `Denominator: {old} → {new}`, naming each
+added, split, merged or dropped row.
 
 ### 3. Find the witness test
 
@@ -151,6 +165,9 @@ obligations it would witness stay `not-run`.
 For every departure, read the ADR Status or the AR record and apply rule 7.
 Compare every claim in `CLAIMS` ("parity reached", "faster than legacy",
 "all contracts preserved") with your matrix. Unsupported claims are findings.
+A behavior `CLAIMS` records as assumed, recalled or unwitnessed ("ASSUMED parity, no witness") is a claim too:
+read SOURCE for it. When no obligation covers it, add it as an omission, `not-run` until a test pins the legacy
+behavior; when SOURCE contradicts the port, it is also an unsupported claim citing both anchors.
 
 ## Output Format
 
@@ -162,7 +179,7 @@ Target: {TARGET} @ {head} · {content_fingerprint} · Source: {SOURCE} @ {head} 
 ## Totals
 | Obligations | pass | fail | not-run | blocked | stale | changed (ADR) | retired | accepted risk |
 
-Verified: {pass}/{Obligations}, omissions added {n}. Denominator: {old} → {new} (changes named under Completeness).
+Verified: {pass}/{Obligations}, omissions added {n}. Denominator: {cases} cases + {n} omissions, or {old} → {new} (named under Completeness).
 Departures are listed below, never as verified.
 
 ## Matrix

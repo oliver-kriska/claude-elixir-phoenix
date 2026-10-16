@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 
 import pytest
@@ -396,3 +397,119 @@ def test_nonconforming_analysis_definition_is_an_error(rewrite_dir: Path) -> Non
 
     assert errors == ["runtime.md defines nonconforming ID R-J1; rename it to M-/R-/C- plus two or more digits "
                       "so it is counted"]
+
+
+SEED = """# Brainstorm: Rewrite slice 07
+
+## Legacy Mechanism → Elixir Decision
+
+| Ledger | Legacy mechanism (anchor) | Purpose | Verdict | Elixir target | Guarantees to keep |
+|---|---|---|---|---|---|
+| M-04, C-11 | optional auth | anonymous reads | MAP | plug | degrade |
+
+## External Contracts
+
+| Contract | Assertion | Witness the tests must implement |
+|---|---|---|
+| C-24 | delete is 204 | ExUnit + curl |
+
+## Acceptance Criteria
+
+- [ ] AC-1 (C-24): the delete answers 204 with no body
+- [ ] AC-2a (M-04, C-11): each bad-token vector on the list
+  reads as anonymous
+- [ ] AC-2b (M-04): a valid token reads as that viewer
+
+## Codebase Context
+
+- [ ] AC-99 (C-50): not an acceptance case, outside the section
+"""
+
+
+def test_obligations_lists_each_case_with_its_ledger_ids() -> None:
+    cases, errors = ledger.obligations(SEED)
+    assert errors == []
+    assert [c["id"] for c in cases] == ["AC-1", "AC-2a", "AC-2b"]
+    assert cases[1]["cites"] == ["C-11", "M-04"]  # continuation line belongs to its item
+
+
+def test_obligations_flags_a_table_id_no_case_cites() -> None:
+    _, errors = ledger.obligations(SEED.replace("- [ ] AC-1 (C-24):", "- [ ] AC-1 (D-05):"))
+    assert errors == ["C-24 (external contracts) is cited by no acceptance case"]
+
+
+@pytest.mark.parametrize("edit, message", [
+    (("- [ ] AC-2b (M-04)", "- [ ] AC-2a (M-04)"), "AC-2a is listed twice"),
+    (("- [ ] AC-2b (M-04)", "- [ ] AC-2 (M-04)"), "AC-2 is listed bare and with lettered cases; keep one form"),
+    (("- [ ] AC-1 (C-24):", "- [ ] (C-24):"), "acceptance item without an AC-NN id: (C-24): the delete answers 204 with no body"),
+])
+def test_obligations_errors_make_the_list_unusable(edit, message) -> None:
+    _, errors = ledger.obligations(SEED.replace(*edit))
+    assert message in errors
+
+
+def test_obligations_without_the_section_is_an_error() -> None:
+    assert ledger.obligations("# Brainstorm\n\n## Summary\n")[1] == ["no `## Acceptance Criteria` section"]
+
+
+def test_cli_obligations_exit_status(tmp_path: Path, capsys) -> None:
+    seed = tmp_path / "interview.md"
+    seed.write_text(SEED, encoding="utf-8")
+    assert ledger.main(["obligations", "--slice", str(seed)]) == 0
+    assert "obligations: 3 acceptance cases" in capsys.readouterr().out
+    seed.write_text(SEED.replace("(C-24):", "(D-05):"), encoding="utf-8")
+    assert ledger.main(["obligations", "--slice", str(seed)]) == 1
+    assert ledger.main(["obligations", "--slice", str(tmp_path / "missing.md")]) == 2
+
+
+def test_stats_slice_counts_only_the_ids_the_seed_owns(rewrite_dir: Path, tmp_path: Path, capsys) -> None:
+    write_ledger(rewrite_dir, row("M-04") + row("C-11") + row("C-24", impl="implemented", evidence="pass") + row("C-50"))
+    seed = tmp_path / "interview.md"
+    seed.write_text(SEED.replace("## Codebase Context", "## Scope\n\nOut of scope: C-50 belongs to slice 08.\n\n"
+                                 "## Codebase Context"), encoding="utf-8")
+    assert ledger.main(["stats", "--rewrite-dir", str(rewrite_dir), "--slice", str(seed), "--json"]) == 0
+    s = json.loads(capsys.readouterr().out)
+    assert s["rows"] == 3 and s["verified"] == 1  # C-50, named in prose and in an item outside the section, is not counted
+
+
+def test_set_changes_only_impl_and_evidence_cells(rewrite_dir: Path) -> None:
+    other = "| M-02 | `a \\| b` | **y** | business | — | MAP | z | — | pending | not-run | none |\n"
+    write_ledger(rewrite_dir, row("M-01, C-01") + other)
+    before = (rewrite_dir / "ledger.md").read_text(encoding="utf-8")
+
+    code = ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "C-01,M-02", "--impl", "implemented", "--evidence", "pass"])
+
+    after = (rewrite_dir / "ledger.md").read_text(encoding="utf-8")
+    assert code == 0
+    assert after == before.replace("| pending | not-run | none |", "| implemented | pass | none |")
+    assert "`a \\| b` | **y**" in after
+    assert ledger.check(str(rewrite_dir))[0] == []
+
+
+def test_set_one_axis_keeps_the_other(rewrite_dir: Path) -> None:
+    write_ledger(rewrite_dir, row("M-01", impl="implemented") + row("M-02") + row("C-01"))
+
+    assert ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "M-01", "--evidence", "pass"]) == 0
+
+    text = (rewrite_dir / "ledger.md").read_text(encoding="utf-8")
+    assert "| M-01 | x | y | business | — | REPLACE | z | — | implemented | pass | none |" in text
+    assert text.count("| pending | not-run | none |") == 2
+
+
+def test_set_with_an_unknown_id_writes_nothing(rewrite_dir: Path, capsys: pytest.CaptureFixture[str]) -> None:
+    write_ledger(rewrite_dir, row("M-01") + row("M-02") + row("C-01"))
+    before = (rewrite_dir / "ledger.md").read_text(encoding="utf-8")
+
+    code = ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "M-01,C-09", "--impl", "implemented"])
+
+    assert code == 1
+    assert "C-09 is not the ID or an alias of any ledger row" in capsys.readouterr().out
+    assert (rewrite_dir / "ledger.md").read_text(encoding="utf-8") == before
+
+
+def test_set_needs_a_state_and_rejects_unknown_values(rewrite_dir: Path) -> None:
+    write_ledger(rewrite_dir, row("M-01") + row("M-02") + row("C-01"))
+
+    assert ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "M-01"]) == 2
+    with pytest.raises(SystemExit):
+        ledger.main(["set", "--rewrite-dir", str(rewrite_dir), "--ids", "M-01", "--evidence", "done"])
