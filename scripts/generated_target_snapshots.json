@@ -9,7 +9,7 @@
     "codex": {
       "entries": 305,
       "files": 202,
-      "sha256": "670bd48a7787f45aca2ee100fa1c2fef880f220be382c41d36a08b7901175bf8"
+      "sha256": "3448158bcf1ea3ea8514a2e742b0374387fcdff083276684f817ba2974d07b19"
     },
     "dsh": {
       "entries": 299,
@@ -24,7 +24,7 @@
     "pi": {
       "entries": 300,
       "files": 200,
-      "sha256": "31b0644a1af4fee0d8807ac3cb7b9be53ddaa2cb847ae5d2f9061065ea0883c8"
+      "sha256": "b3dae340064045ef306377cacc2a4b669d0576615e6f6cccb10430531423317f"
     }
   }
 }

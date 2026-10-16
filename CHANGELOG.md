@@ -9,6 +9,17 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 
+### Changed
+
+### Fixed
+
+## [3.2.0] - 2026-10-16
+
+Adds the experimental `rewrite` plugin (Elixir Rewrite Architect 0.1.0) and fixes the hook
+scripts that still blocked v3.1.3 in the plugin directory.
+
+### Added
+
 - **`test_hook_scripts_run_only_paths_the_directory_can_follow`
   (contributor tooling).** Rejects inline programs, `eval`, `source`,
   `bash`/`command` invocations and `$0`/`BASH_SOURCE` paths in hook scripts.
@@ -261,6 +272,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- **The rewrite README states what the trials showed.** Its Limitations now record the
+  django-ninja and ASP.NET Core trials, what stays untested, and that `rewrite` is Claude
+  Code only: it relies on specialist subagents and a parity auditor in a fresh context, so
+  the Codex, Pi, OpenCode, Amp and dsh ports do not include it.
 - **Directory listing metadata.** `plugin.json` sets `displayName`
   (`Elixir/Phoenix`, so the plugin directory no longer lists it as "Phx") and
   `supportUrl` (GitHub issues). The plugin README now says which data leaves

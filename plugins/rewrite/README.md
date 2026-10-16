@@ -202,12 +202,15 @@ Four stdlib scripts do the deterministic work:
 - **Experimental.** Version 0.1.0; templates, vocabulary and commands may change.
 - **Tested on small apps only.** There is no claim that it handles any app at any size. Large apps get a risk-ranked
   domain scope, with uncovered areas written down as gaps, not a full census.
+- **Claude Code only.** The workflow depends on its specialist subagents, and verify's parity auditor must be a
+  fresh context apart from the session that wrote the code. The phx ports for Codex, Pi, OpenCode, Amp and dsh do
+  not include `rewrite`.
 - **Partly evaluated.** `make eval` scores the skills and agents, and pytest covers the four scripts. Seven static
-  audit controls were replayed blind ([results](../../lab/rewrite_eval/results/2026-10-09/README.md)): they show
-  the auditors catch stale, failed, excluded and mocked evidence, but they reason over supplied state and are not
-  runtime verification. Headless `/rewrite:start --auto` runs on a small Express app, a small Django app and ONCE
-  Campfire reached a roadmap. One slice seed was handed to `/phx:plan` in a fresh session, with approval
-  simulated, and kept every decision and dead-end ID. Contrast probes, live-git verification, and `/phx:work`
-  plus `/rewrite:verify` on a real slice are untested.
+  audit controls were replayed blind ([results](../../lab/rewrite_eval/results/2026-10-09/README.md)). Two full
+  trials ran headless Sonnet sessions from analysis through `/phx:plan`, `/phx:work` and `/rewrite:verify`, with a
+  trial operator standing in for the owner's decisions. On a django-ninja RealWorld app (slices 00–07) and an
+  ASP.NET Core one (slices 00a–06), each port's release passed the whole RealWorld Hurl spec, 13 of 13 files. No
+  ASP.NET slice needed more than two verify rounds. Both apps are small and come with a public black-box oracle;
+  an app without one, a real owner's decisions, and the release-rehearsal and data-migration slices are untested.
 - **Parity is only as strong as the tests.** Verify never runs the legacy app, so values the legacy code must mint
   (signed cookies, tokens, payloads) have to be captured outside the plugin. No speed claims without a measured baseline.
