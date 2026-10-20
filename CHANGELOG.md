@@ -13,6 +13,10 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+- `.gitattributes` now pins `eol=lf` on its `* text=auto` rule. The plugin directory scanner
+  refuses a repository whose line-ending rule leaves `eol` unset, so every commit since
+  `80926d7` failed to fetch
+
 ## [3.2.0] - 2026-10-16
 
 Adds the experimental `rewrite` plugin (Elixir Rewrite Architect 0.1.0) and fixes the hook
