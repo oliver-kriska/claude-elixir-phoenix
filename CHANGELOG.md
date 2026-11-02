@@ -13,6 +13,38 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+## [3.2.1] - 2026-11-02
+
+Patch: the deps-audit gate catches new `github:` deps and every block it raises can be cleared
+in-session (#160); dependent subagent spawns pinned to the foreground for Claude Code 2.1.302+.
+
+### Changed
+
+- **Single subagent spawns whose result the next step reads now run in the foreground.** The
+  context-supervisor spawns in `/phx:audit`, `deep-bug-investigator` and `planning-orchestrator`,
+  the review and compounding spawns in `workflow-orchestrator`, and the `/phx:trace` example pass
+  `run_in_background: false`. Since Claude Code 2.1.302 a subagent's own Agent calls default to
+  foreground on desktop, VS Code and the SDK but stay background in the CLI, so a spawn without
+  the flag could be read before it finished on one surface and not the other
+- `hooks/docs/safety-gates.md` notes that both Bash gates also cover commands started by the
+  Monitor tool (Claude Code 2.1.314+, verified on 2.1.316)
+
+### Fixed
+
+- **`deps-audit-gate.sh` no longer lets new non-Hex deps through, and every block it raises can
+  be cleared in-session (#160, reported by @vknez).** Rule 5 now catches `github:` deps (it only
+  grepped for `git:`/`path:`), joins formatter-split tuples, and ignores commented-out deps. Each
+  new non-Hex dep normalizes to a pin (`my_dep github:org/repo@tag:v1.0`). A matching
+  `hex_vet.exs` entry clears it, and the block message prints the `/phx:deps-vet <dep> <pin>`
+  command for each dep. `/phx:deps-vet` now records these pins. The Tier 0 cache vouches for
+  `mix.lock` only, so it no longer skips rule 5: a new git dep isn't in the lock yet. The
+  override hint no longer suggests a `PHX_SKIP_DEPS_AUDIT=1` command prefix, which never worked
+  because the hook reads Claude Code's environment. A prefix Claude could type itself would
+  also make every block advisory. A `:new_only` mode inferred from a ledger that has no
+  `block_on_unvetted` key is now named in the block message, and `/phx:deps-vet` says the gate
+  turns blocking when it creates the ledger. The `/phx:deps-audit` sidecar schema now documents
+  the `lock_sha`, `audit_passed` and `policy_mode` fields the cache actually reads; the old doc
+  described a 10-minute window the gate never checked
 - `.gitattributes` now pins `eol=lf` on its `* text=auto` rule. The plugin directory scanner
   refuses a repository whose line-ending rule leaves `eol` unset, so every commit since
   `80926d7` failed to fetch

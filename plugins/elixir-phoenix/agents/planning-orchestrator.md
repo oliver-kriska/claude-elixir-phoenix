@@ -142,7 +142,7 @@ Priority: Extract decisions with rationale, file paths with line
 numbers, risks and unknowns (mark with warning emoji),
 architectural patterns found. Keep all code examples that show
 before/after patterns.
-""")
+""", run_in_background: false)
 ```
 
 This prevents research output (often 30k+ tokens across 5-8 agents)

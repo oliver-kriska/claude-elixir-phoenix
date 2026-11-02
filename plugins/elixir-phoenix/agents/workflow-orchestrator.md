@@ -222,8 +222,11 @@ that per-task compile checks miss (test failures, credo violations, type errors)
 
    Changed files: {git diff --name-only}
    Diff: {relevant diff content}
-   """)
+   """, run_in_background: false)
    ```
+
+   Keep `run_in_background: false` on both single spawns in this file: the
+   next step reads their output, and the default differs by surface.
 
 2. Read `.claude/plans/{slug}/summaries/review-consolidated.md`
 3. Categorize by severity (BLOCKER, WARNING, SUGGESTION)
@@ -309,7 +312,7 @@ orchestrator (which may be at 150k+ tokens by this point).
       - Cross-reference with existing solutions
    3. Present compound summary
    4. Output: COMPOUNDING_DONE or COMPOUNDING_SKIPPED
-   """)
+   """, run_in_background: false)
    ```
 
    **Always pass `model: "sonnet"` here.** Compounding reads artifacts and

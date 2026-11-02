@@ -92,7 +92,13 @@ parent process's environment.
 **Background is the default (CC 2.1.198+).** Subagents run in the background by
 default and inherit the session's extended-thinking config. Orchestrators pass
 `run_in_background: true` and wait for all workers before compressing; keep the
-explicit flag for self-documentation.
+explicit flag for self-documentation. A single spawn whose result the next step
+reads (context-supervisor, the reviewer and compound spawns in
+workflow-orchestrator, `/phx:trace`) passes `run_in_background: false`: since CC
+2.1.302 a subagent's own Agent calls default to foreground on desktop, VS Code
+and the SDK but to background in the CLI, so the flag keeps both surfaces the same.
+`CLAUDE_CODE_SUBAGENT_EFFORT` (2.1.316) only sets effort for agents that name
+none; every phx agent pins `effort:`, so it doesn't change them.
 
 ## Structure
 
@@ -293,7 +299,9 @@ change that ships without them loses that permanently. See
   `MIX_ENV=prod` with any task but the release build steps, `pkill`/`killall` naming a BEAM process)
   before execution; also greps the local script a command runs (`bash x.sh`, `./x.sh`, `dir/x.sh`)
   for the `MIX_ENV=prod` and pattern-kill denials, failing open on a missing or unreadable file
-- `PreToolUse` (Bash, `"if": "Bash(*mix deps.*)"`): `deps-audit-gate.sh` — blocks unvetted dep operations after `/phx:deps-audit` flags them
+- `PreToolUse` (Bash, `"if": "Bash(*mix deps.*)"`): `deps-audit-gate.sh` — blocks `mix deps.*` on bidi chars in
+  `mix.lock` or a new unvetted `git:`/`github:`/`path:` dep (cleared by a `hex_vet.exs` pin from `/phx:deps-vet`);
+  the lock-SHA cache never skips the new-dep rule, and `PHX_SKIP_DEPS_AUDIT` is read from Claude Code's env only
 - `PreToolUse` (Edit|Write|NotebookEdit): `freeze-gate.sh` — enforces `/phx:freeze` edit-scope locks (sentinel-backed read-only/dir-scoped locks)
 - `PostToolUse` (Edit): Auto `mix format --check-formatted`, **programmatic Iron Law verification**,
   **debug statement detection** — all use `if` conditions to only fire on `.ex`/`.exs` files

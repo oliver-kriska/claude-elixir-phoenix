@@ -19,6 +19,7 @@ Run this BEFORE merging a `mix.lock` PR to certify new versions.
 
 ```text
 phx-deps-vet phoenix 1.7.21      # vet a single package version
+phx-deps-vet my_dep github:org/repo@tag:v1.0   # vet a git/github/path dep pin
 phx-deps-vet --seed              # import curated baseline seed (~30 pkgs)
 phx-deps-vet --list              # show existing ledger entries
 phx-deps-vet --check             # cross-check mix.lock vs ledger
@@ -54,12 +55,26 @@ If hex_vet.exs exists at project root:
     Read it via Code.eval_file/1
 Else:
     Write the empty-ledger stub (see references/hex-vet.md §"Empty ledger")
-    Inform user: "Created hex_vet.exs at project root."
+    Inform user: "Created hex_vet.exs at project root. Its policy is
+    block_on_unvetted: :new_only, so the deps gate now BLOCKS `mix deps.get`
+    when a new unvetted dep appears (it was warn-only without a ledger).
+    Set it to false to keep warn-only."
 ```
+
+The stub always writes `policy.block_on_unvetted` explicitly. Never create a
+ledger without it: the gate infers `:new_only` from a bare ledger, and that
+silent switch from warn-only to blocking surprises users.
 
 ### Step 2: Branch by mode
 
 - **`<pkg> <version>`** → single-vet path (Step 3-7).
+- **`<dep> <pin>`** where the pin starts with `git:`, `github:` or `path:` →
+  non-Hex path. Use the exact pin the gate printed (`phx-deps-vet my_dep
+  github:org/repo@tag:v1.0`); the gate matches it character for character.
+  Skip Steps 3-4 (no Hex tarball). Show the `mix.exs` tuple and what the pin
+  points at, and say that a `branch:`, a missing ref, or a `path:` is
+  mutable: the vet records a decision, not reviewed content. Then Steps 6-7
+  with `version: "<pin>"`. See hex-vet.md §"Non-Hex dep pins".
 - **`--seed`** → import `priv/hex_vet_seed.exs`. Before prompting,
   `Code.eval_file/1` the seed and **compute** (Iron Law #6): the
   `criteria` split (`Enum.frequencies_by(seed.audits, & &1.criteria)`)
@@ -74,7 +89,8 @@ Else:
   drift. Read the lock via `Code.eval_file("mix.lock")` with
   **`2>/dev/null`** — modern locks have quoted keys and emit a
   `found quoted keyword` warning per package (tens of KB of noise that
-  gets persisted as an oversized tool result otherwise).
+  gets persisted as an oversized tool result otherwise). Non-Hex pin
+  entries are checked against `mix.exs` tuples, not lock versions.
 
 ### Step 3: Fetch the tarball (single-vet)
 

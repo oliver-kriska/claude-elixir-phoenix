@@ -216,6 +216,12 @@ silently off.
 
 **Never add a deny path that relies on a non-zero exit code.**
 
+Both Bash gates also cover shell commands started by the **Monitor** tool. Since CC
+2.1.314, Monitor commands reach `PreToolUse` as `tool_name: "Bash"` and match
+`"if": "Bash(...)"` conditions (verified on 2.1.316). Such hooks can block or ask, but not
+approve or rewrite. Keep the `tool_name == "Bash"` check. Don't add a separate `Monitor`
+branch.
+
 ---
 
 ## `deps-audit-gate.sh`
@@ -230,8 +236,16 @@ the latency of a command you run often:
 
 | Tier | Budget | What runs |
 |---|---|---|
-| Tier 0 | <200 ms | Cache hit — `mix.lock` SHA matches `.claude/deps-audit/last-run.json`, previous audit passed, policy unchanged → silent exit |
-| Tier 1 | <2 s | Rule 1 (bidi/RLO control chars in `mix.lock`) + Rule 5 (new `:git` / `:path` deps vs `origin/main`). Zero false positives, no network, no LLM |
+| Tier 0 | <200 ms | Cache hit — `mix.lock` SHA matches `.claude/deps-audit/last-run.json`, previous audit passed, policy unchanged → skip Rule 1. Vouches for `mix.lock` only, never Rule 5 |
+| Tier 1 | <2 s | Rule 1 (bidi/RLO control chars in `mix.lock`) + Rule 5 (new `git:` / `github:` / `path:` deps vs `origin/main`, cleared by a matching `hex_vet.exs` pin). Zero false positives, no network, no LLM |
+
+Rule 5 always runs. A dep added to `mix.exs` isn't in `mix.lock` until the
+`mix deps.get` being judged adds it, so a lock-keyed cache can't vouch for it
+(issue #160: an audit's cache hit let a new git dep through unseen). Each
+non-Hex dep normalizes to a pin — `my_dep github:org/repo@tag:v1.0` — with
+comments stripped and multi-line tuples joined, and the block message prints
+`/phx:deps-vet <dep> <pin>` for each one. Before #160 the rule grepped lines
+for `git:` / `path:`, so `github:` deps passed unseen.
 | Tier 2 | opt-in | The full audit pipeline. **Not** chained from the hook — the budget is already spent by Tier 1. `:full` mode runs it from the skill body instead |
 
 ### Policy modes
@@ -240,8 +254,8 @@ Read from `hex_vet.exs` → `policy.block_on_unvetted`:
 
 | Value | Behavior |
 |---|---|
-| absent / `false` | Warn only, never blocks |
-| `:new_only` | Blocks when the change *adds* an unvetted version (default once a ledger exists) |
+| no ledger / `false` | Warn only, never blocks |
+| `:new_only` | Blocks when the change *adds* an unvetted version. Default once a ledger exists; when inferred from a ledger without the key, the block message says so |
 | `:strict` | Blocks on any Tier 1 finding |
 | `:full` | `:strict` rules, and Tier 2 runs via the skill |
 | `true` | Deprecated — treated as `:strict`, with a notice |
@@ -255,9 +269,15 @@ in the worst possible direction.
 ### Escape hatches
 
 ```bash
-PHX_SKIP_DEPS_AUDIT=1 mix deps.get   # skip the gate entirely
+PHX_SKIP_DEPS_AUDIT=1 claude         # skip the gate for the whole session
 PHX_DEPS_AUDIT_BASE=origin/develop   # change the git ref for the new-dep diff
 ```
+
+Both are read from the hook's own environment, which is Claude Code's. A
+`PHX_SKIP_DEPS_AUDIT=1 mix deps.get` prefix on the judged command is ignored on
+purpose: the block message goes to Claude, and a bypass Claude can type itself
+would turn every block into advice. Inside a session, clear a block with
+`/phx:deps-vet` (user-confirmed) or by having the user run `! mix deps.get`.
 
 Note this gate reports via **exit 2 + stderr**, not a JSON permission decision —
 it predates the `emit_block` convention and surfaces findings as a message.

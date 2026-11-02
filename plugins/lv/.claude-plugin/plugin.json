@@ -1,7 +1,7 @@
 {
   "name": "lv",
   "displayName": "Elixir/Phoenix: LiveView",
-  "version": "3.2.0",
+  "version": "3.2.1",
   "description": "Compatibility namespace for the Elixir/Phoenix plugin's /lv:* commands",
   "keywords": ["elixir", "phoenix", "liveview"],
   "author": {

@@ -60,7 +60,8 @@ LiveView, worker, and internal tracing prompts directly, then merge their
 results. Never spawn an orchestrator that cannot delegate.
 
 ```
-Agent(subagent_type: "phx:call-tracer", prompt: "Build call tree for MyApp.Accounts.update_user/2")
+Agent(subagent_type: "phx:call-tracer", prompt: "Build call tree for MyApp.Accounts.update_user/2",
+  run_in_background: false)
 ```
 
 The call-tracer agent uses **parallel subagents** for each entry point category:

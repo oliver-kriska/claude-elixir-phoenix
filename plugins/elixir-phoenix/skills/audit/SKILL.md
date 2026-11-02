@@ -114,7 +114,7 @@ Output: .claude/audit/summaries/
 Priority: Health scores per category, critical findings
 only, cross-category correlations, deduplicate findings
 found by 2+ agents.
-""")
+""", run_in_background: false)
 ```
 
 Read `.claude/audit/summaries/consolidated.md` for synthesis.

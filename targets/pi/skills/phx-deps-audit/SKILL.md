@@ -151,7 +151,9 @@ Risk band: 0 clean · 1–5 low · 6–15 medium · 16+ high.
 Output:
 
 1. **Stdout:** markdown table — `pkg | old → new | risk | findings | diff.hex.pm | maintainer-change` plus a per-package detail section for any non-clean row.
-2. **Sidecar (MANDATORY):** Write `.claude/deps-audit/last-run.json`. The Phase 3 gate reads this; an audit that doesn't write it is a no-op for the gate. Always emit, even on clean runs.
+2. **Sidecar (MANDATORY):** Write `.claude/deps-audit/last-run.json` with `lock_sha`,
+   `audit_passed` and `policy_mode` at the top level — the gate's cache reads exactly
+   these three; without them it never hits. Always emit, even on clean runs.
 
 `--json` flag emits JSON to stdout instead of markdown. See
 `references/output-renderer.md` for table format,

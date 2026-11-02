@@ -180,7 +180,7 @@ print a message and get out of the way. For the ones that block:
 
 | Hook | Escape hatch |
 |---|---|
-| `deps-audit-gate` | `PHX_SKIP_DEPS_AUDIT=1 mix deps.get` |
+| `deps-audit-gate` | `/phx:deps-vet <dep> <pin>` for a new git/path dep, or start Claude Code with `PHX_SKIP_DEPS_AUDIT=1` (a prefix on the command is ignored). In Claude Code, `! mix deps.get` |
 | `freeze-gate` | `/phx:freeze off` (dormant unless you turned it on) |
 | `block-dangerous-ops` | By design, none — run the command yourself in your terminal. In Claude Code, prefix with `!` |
 

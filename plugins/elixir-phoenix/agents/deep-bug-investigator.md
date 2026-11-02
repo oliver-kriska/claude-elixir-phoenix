@@ -258,7 +258,8 @@ Agent(subagent_type: "phx:context-supervisor",
       Reproduction steps → KEEP ALL,
       Impact scope/severity → KEEP ALL,
       Fix options/trade-offs → COMPRESS (40%),
-      Background context → AGGRESSIVE (20%)")
+      Background context → AGGRESSIVE (20%)",
+  run_in_background: false)
 ```
 
 Read `{output_dir}/summaries/consolidated.md` for synthesis.

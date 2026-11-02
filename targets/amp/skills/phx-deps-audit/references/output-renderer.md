@@ -252,10 +252,33 @@ incompatible upgrades without parsing.
 ## Sidecar file
 
 Always written to `.claude/deps-audit/last-run.json` regardless of `--json`
-flag. Phase 3 PreToolUse hook reads this file to detect "recently audited"
-state — if `generated_at` is within the last 10 minutes AND the working
-`mix.lock` has the same SHA-256, allow `mix deps.get`/`update` without
-re-audit prompt.
+flag. It is the `--json` document plus three top-level fields that the
+`deps-audit-gate.sh` hook's Tier 0 cache reads. Without all three, the cache
+never hits:
+
+```json
+{
+  "version": 1,
+  "generated_at": "2026-05-12T10:32:18Z",
+  "lock_sha": "<sha256 of mix.lock as audited — `shasum -a 256 mix.lock`>",
+  "audit_passed": true,
+  "policy_mode": ":new_only",
+  "...": "rest of the --json schema"
+}
+```
+
+| Field | Value |
+|---|---|
+| `lock_sha` | Hex SHA-256 of the `mix.lock` the audit ran on |
+| `audit_passed` | `true` only when `summary.blocks_total == 0` and no audit infrastructure failed (exit code 0) |
+| `policy_mode` | `policy.block_on_unvetted` from `hex_vet.exs` as the gate reads it: `"false"`, `":new_only"`, `":strict"`, `":full"` (`true` → `":strict"`; absent key with a ledger → `":new_only"`; no ledger → `"false"`) |
+
+The gate takes a cache hit when the current `mix.lock` SHA, `audit_passed:
+true` and the current policy mode all match; there is no time window. A hit
+vouches for `mix.lock` only and skips the gate's rule 1 (bidi). It never skips
+rule 5: a git/github/path dep added to `mix.exs` isn't in `mix.lock` until the
+`mix deps.get` being judged adds it, so it is cleared with
+`phx-deps-vet <dep> <pin>` instead.
 
 ## Quiet mode
 

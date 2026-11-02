@@ -21,15 +21,22 @@ only for what changed:
 
 | Tier | Budget | Work | Exit |
 |------|--------|------|------|
-| 0 | <200ms | lock-SHA cache lookup | 0 silent |
-| 1 | <2s | bidi grep + `:git`/`:path` diff | 0 with hint, or 2 to block |
+| 0 | <200ms | lock-SHA cache lookup (skips rule 1 only) | — |
+| 1 | <2s | bidi grep + git/github/path dep diff | 0 with hint, or 2 to block |
 | 2 | unbounded | full Phase 2 pipeline (only `:full` mode) | 0 or 2 |
 
 ## Tier 0: cache hit
 
 Read `.claude/deps-audit/last-run.json`. If the lock-SHA matches the
 cached run AND `audit_passed: true` AND the policy mode is unchanged,
-exit 0 immediately. Cost: one `shasum` + one `jq` per dep operation.
+skip rule 1. Cost: one `shasum` + one `jq` per dep operation. The audit
+writes these three fields (`lock_sha`, `audit_passed`, `policy_mode`) per
+`output-renderer.md` §"Sidecar file".
+
+The cache vouches for `mix.lock` only, so rule 5 runs even on a hit. A
+git/github/path dep added to `mix.exs` isn't in `mix.lock` until the
+`mix deps.get` being judged adds it, so a lock-keyed cache can't vouch
+for it.
 
 The policy-mode equality check is necessary because a user who flipped
 from `false` to `:strict` between runs must not get a stale "passed"
@@ -39,11 +46,16 @@ from the warn-only era.
 
 Only two Phase 1 rules run inline:
 
-- **Rule 1 — bidi/RLO chars in `mix.lock`.** One `perl` scan over a
-  small file. Either present or not.
-- **Rule 5 — new `:git` or `:path` deps in `mix.exs`.** Git-diffs
-  against `${PHX_DEPS_AUDIT_BASE:-origin/main}` to isolate ADDED
-  non-Hex deps. Re-locks of existing `:git` deps are ignored.
+- **Rule 1 — bidi/RLO chars in `mix.lock`.** One byte-level `grep`
+  over a small file. Either present or not.
+- **Rule 5 — new `git:`, `github:` or `path:` deps in `mix.exs`.**
+  Normalizes every non-Hex dep tuple (comments stripped, multi-line
+  tuples joined) to a pin such as `my_dep github:org/repo@tag:v1.0`,
+  then diffs against `${PHX_DEPS_AUDIT_BASE:-origin/main}` to isolate
+  ADDED pins. Re-locks of existing git deps are ignored; a changed tag
+  or ref is a new pin. An added pin with a matching `hex_vet.exs` entry
+  (`package` + exact `version` pin, written by `phx-deps-vet <dep>
+  <pin>`) is cleared. The block message prints that command per dep.
 
 Both rules are **zero false positive** by design and produce stable
 NDJSON findings compatible with the Phase 2 differ output. If both
@@ -75,13 +87,22 @@ findings accordingly:
 | Mode | On Tier 1 findings |
 |------|--------------------|
 | `false` | Print summary, exit 0 (warn-only) |
-| `:new_only` (default) | Block ONLY on rule 1 (bidi) and rule 5 (new dep). Both ARE "new" signals by definition. |
+| `:new_only` (default) | Block ONLY on rule 1 (bidi) and rule 5 (new unvetted dep). Both ARE "new" signals by definition. |
 | `:strict` | Block on any Tier 1 finding |
 | `:full` | Same as `:strict` for hook scope; full pipeline runs via skill body |
 
-Override: `PHX_SKIP_DEPS_AUDIT=1 mix deps.get` bypasses the gate
-entirely. The escape hatch is critical for emergency unblocks and CI
-environments where the audit runs separately.
+When the ledger exists but sets no `block_on_unvetted`, the mode is
+inferred as `:new_only` and block messages say so — creating
+`hex_vet.exs` alone turns the gate from warn-only to blocking.
+
+Override: `PHX_SKIP_DEPS_AUDIT=1` bypasses the gate entirely, but the
+hook reads it from **its own environment** — Claude Code's, set before
+Claude Code starts (or in CI). A `PHX_SKIP_DEPS_AUDIT=1 mix deps.get`
+prefix typed into a Claude Code command does nothing, deliberately: the
+block message goes to Claude, and a bypass Claude can type itself would
+turn every block into advice. In a session, clear a block by vetting
+(`phx-deps-vet`, which needs the user's confirmation) or by having the
+user run the command themselves (`! mix deps.get`).
 
 ## Latency budget rationale
 
@@ -105,7 +126,7 @@ environments where the audit runs separately.
   Worst case: 2s of work, then a fresh `last-run.json` overwrites.
 - **`PHX_DEPS_AUDIT_BASE` unreachable** → Rule 5 treats whole `mix.exs`
   as new (false-positive favored over silent-pass). Set the env to a
-  local ref (`HEAD~1`) for offline work.
+  local ref (`HEAD~1`) for offline work, or vet each pin once.
 
 ## Hook registration
 
@@ -130,7 +151,7 @@ not a stuck `mix` invocation.
 
 ## CI usage
 
-In CI, set `PHX_SKIP_DEPS_AUDIT=1` for `mix deps.get` steps and run
+In CI, set `PHX_SKIP_DEPS_AUDIT=1` in the environment of `mix deps.get` steps and run
 `mix phx.deps_audit --ci` as a separate job — CI wants determinism
 and full Tier 2 output, not the fast-path hook.
 
