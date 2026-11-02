@@ -150,7 +150,12 @@ the pin never has to be typed by hand. Changing the tag or ref makes a new
 pin, which needs a new vet (lock-wins, as for Hex versions). A `branch:`, a
 tuple with no ref, and a `path:` all point at mutable content: the entry
 records that someone accepted the dep, not that its current code was
-reviewed. Prefer `tag:` or `ref:` for deps you vet.
+reviewed. Prefer `tag:` or `ref:` for deps you vet. When `mix deps.update`
+moves a branch-pinned dep, the hook allows it but tells Claude which commit
+`mix.lock` held, so the new commits can be reviewed.
+
+`mix igniter.install my_dep@github:org/repo` is judged before igniter writes
+the tuple, so its pin is the argument after `my_dep@`: `github:org/repo`.
 
 Pins containing `#` can't be matched, because the hook strips `#` comments
 before matching (fail closed).

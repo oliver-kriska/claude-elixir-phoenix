@@ -96,7 +96,7 @@ Claude to stop retrying — the Critic→Refiner pattern from AutoHarness
 | Hook | Fires on | Does |
 |---|---|---|
 | `block-dangerous-ops` | every `Bash` | Denies `mix ecto.reset/drop`, force push, non-build `MIX_ENV=prod` tasks, BEAM pattern kills; reads the scripts a command runs |
-| `deps-audit-gate` | `mix deps.*` | Tiered supply-chain gate (cache hit <200 ms, fast rules <2 s) |
+| `deps-audit-gate` | mix commands that fetch deps: `deps.*`, `igniter.install`, aliases such as `mix setup` | Tiered supply-chain gate (cache hit <200 ms, fast rules <2 s); warns Claude when `deps.update` moves a branch-pinned git dep |
 | `freeze-gate` | `Edit`/`Write`/`NotebookEdit` | Enforces `/phx:freeze` edit-scope locks |
 
 ### `PostToolUse` — advises after the edit
@@ -180,7 +180,7 @@ print a message and get out of the way. For the ones that block:
 
 | Hook | Escape hatch |
 |---|---|
-| `deps-audit-gate` | `/phx:deps-vet <dep> <pin>` for a new git/path dep, or start Claude Code with `PHX_SKIP_DEPS_AUDIT=1` (a prefix on the command is ignored). In Claude Code, `! mix deps.get` |
+| `deps-audit-gate` | `/phx:deps-vet <dep> <pin>` for a new git/path dep, or start Claude Code with `PHX_SKIP_DEPS_AUDIT=1` (a prefix on the command is ignored). In Claude Code, have the user run the command with a leading `!` |
 | `freeze-gate` | `/phx:freeze off` (dormant unless you turned it on) |
 | `block-dangerous-ops` | By design, none — run the command yourself in your terminal. In Claude Code, prefix with `!` |
 

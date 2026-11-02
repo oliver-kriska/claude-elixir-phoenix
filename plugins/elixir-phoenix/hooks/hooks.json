@@ -138,7 +138,7 @@
           },
           {
             "type": "command",
-            "if": "Bash(*mix deps.*)",
+            "if": "Bash(*mix *)",
             "command": "\"${CLAUDE_PLUGIN_ROOT}/hooks/scripts/deps-audit-gate.sh\"",
             "timeout": 5,
             "statusMessage": "Tiered deps audit..."

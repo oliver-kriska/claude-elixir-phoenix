@@ -13,7 +13,7 @@ what stops it from immediately retrying the same command.
 | Script | Fires on | Can block? |
 |---|---|---|
 | `block-dangerous-ops.sh` | every `Bash` call | Yes — destructive commands |
-| `deps-audit-gate.sh` | `Bash(*mix deps.*)` | Yes — unvetted dependency changes |
+| `deps-audit-gate.sh` | `Bash(*mix *)`, then only commands that fetch deps | Yes — unvetted dependency changes |
 | `freeze-gate.sh` | `Edit` / `Write` / `NotebookEdit` | Yes — when a freeze is active |
 
 ---
@@ -226,8 +226,9 @@ branch.
 
 ## `deps-audit-gate.sh`
 
-Guards `mix deps.get`, `mix deps.update`, and `mix deps.compile` against
-supply-chain risk. It is the enforcement arm of the `/phx:deps-audit` skill —
+Guards every mix command that fetches deps against supply-chain risk:
+`mix deps.get`, `mix deps.update`, `mix deps.compile`, `mix igniter.install`,
+and any `mix.exs` alias that runs one of them, such as Phoenix's `mix setup`. It is the enforcement arm of the `/phx:deps-audit` skill —
 the skill does the deep scan, the hook keeps you from silently pulling in
 something the scan flagged.
 
@@ -238,6 +239,7 @@ the latency of a command you run often:
 |---|---|---|
 | Tier 0 | <200 ms | Cache hit — `mix.lock` SHA matches `.claude/deps-audit/last-run.json`, previous audit passed, policy unchanged → skip Rule 1. Vouches for `mix.lock` only, never Rule 5 |
 | Tier 1 | <2 s | Rule 1 (bidi/RLO control chars in `mix.lock`) + Rule 5 (new `git:` / `github:` / `path:` deps vs `origin/main`, cleared by a matching `hex_vet.exs` pin). Zero false positives, no network, no LLM |
+| Tier 2 | opt-in | The full audit pipeline. **Not** chained from the hook — the budget is already spent by Tier 1. `:full` mode runs it from the skill body instead |
 
 Rule 5 always runs. A dep added to `mix.exs` isn't in `mix.lock` until the
 `mix deps.get` being judged adds it, so a lock-keyed cache can't vouch for it
@@ -246,7 +248,30 @@ non-Hex dep normalizes to a pin — `my_dep github:org/repo@tag:v1.0` — with
 comments stripped and multi-line tuples joined, and the block message prints
 `/phx:deps-vet <dep> <pin>` for each one. Before #160 the rule grepped lines
 for `git:` / `path:`, so `github:` deps passed unseen.
-| Tier 2 | opt-in | The full audit pipeline. **Not** chained from the hook — the budget is already spent by Tier 1. `:full` mode runs it from the skill body instead |
+
+### Which commands it judges
+
+Until v3.2.2 the gate fired only on a literal `mix deps.*`, so `mix setup` — the
+first command in every generated Phoenix README — fetched a new git dep with no
+check. Now `hooks.json` fires the script on `Bash(*mix *)`, and the script
+decides: the three `deps.*` tasks, `igniter.install`, and any alias in
+`mix.exs` whose task list reaches one of them (comments stripped, up to three
+alias levels). Every other mix command exits at the first check, silently. The
+`if` can't be narrower, because only `mix.exs` says what an alias runs.
+
+`mix igniter.install` adds the dep itself, so `mix.exs` has nothing new when
+the hook runs. For `name@github:org/repo` (also `@git:`, `@path:`) arguments,
+Rule 5 takes the pin from the argument instead.
+
+### Branch-pinned git deps
+
+`mix deps.update` on a git dep pinned to a branch, or to no ref, pulls new
+commits with no `mix.exs` change, and a vetted pin still matches: vetting
+recorded the pin, not a commit. The gate doesn't block this. It allows the
+command and passes Claude an `additionalContext` note naming each dep that will
+move, the commit `mix.lock` holds now, and the `git -C deps/<name> log` command
+to review what arrived. That note is the only JSON this gate emits; PreToolUse
+stderr on exit 0 never reaches Claude.
 
 ### Policy modes
 
@@ -277,7 +302,8 @@ Both are read from the hook's own environment, which is Claude Code's. A
 `PHX_SKIP_DEPS_AUDIT=1 mix deps.get` prefix on the judged command is ignored on
 purpose: the block message goes to Claude, and a bypass Claude can type itself
 would turn every block into advice. Inside a session, clear a block with
-`/phx:deps-vet` (user-confirmed) or by having the user run `! mix deps.get`.
+`/phx:deps-vet` (user-confirmed) or by having the user run the command with a
+leading `!`.
 
 Note this gate reports via **exit 2 + stderr**, not a JSON permission decision —
 it predates the `emit_block` convention and surfaces findings as a message.

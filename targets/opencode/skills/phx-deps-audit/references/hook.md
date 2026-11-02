@@ -1,10 +1,20 @@
 # PreToolUse `deps-audit-gate.sh` — tiered fast-path
 
-Phase 3 wires the audit into the hot loop: every `mix deps.get`,
-`mix deps.update`, and `mix deps.compile` runs through a tiered hook
-before mix actually executes. The hook must stay invisible on the
+Phase 3 wires the audit into the hot loop: every mix command that
+fetches deps runs through a tiered hook before mix actually executes. The hook must stay invisible on the
 common path (sub-second), block on real risk, and never lock users out
 of their own machine.
+
+## Commands the gate judges
+
+- `mix deps.get`, `mix deps.update`, `mix deps.compile`.
+- `mix igniter.install`, which adds a dep to `mix.exs` and fetches it.
+- Any `mix.exs` alias whose task list runs one of those, directly or
+  through up to two more aliases. Phoenix's generated
+  `setup: ["deps.get", ...]` makes `mix setup` the most common case.
+  Commented-out aliases are ignored.
+
+Every other mix command exits at the first check, with no output.
 
 ## Why tiered
 
@@ -56,6 +66,21 @@ Only two Phase 1 rules run inline:
   or ref is a new pin. An added pin with a matching `hex_vet.exs` entry
   (`package` + exact `version` pin, written by `/phx-deps-vet <dep>
   <pin>`) is cleared. The block message prints that command per dep.
+  For `mix igniter.install name@github:org/repo` (also `@git:`,
+  `@path:`) the dep isn't in `mix.exs` yet, so the pin comes from the
+  argument: everything after `name@`, for example `github:org/repo`.
+
+## Branch-pinned git deps
+
+`mix deps.update` on a git dep pinned to a branch, or to no ref at all,
+pulls new commits without changing `mix.exs`. Rule 5 can't see that,
+and a vetted pin still matches, because vetting recorded the pin, not a
+commit. The gate never blocks this. When the command names such a dep
+(or passes `--all`), it allows the command and tells Claude through
+`additionalContext`: which deps will move, the commit `mix.lock` holds
+now, and `git -C deps/<name> log --oneline <sha>..HEAD` to review the
+new commits afterwards. Tag- and ref-pinned deps don't move, so they
+get no warning.
 
 Both rules are **zero false positive** by design and produce stable
 NDJSON findings compatible with the Phase 2 differ output. If both
@@ -102,7 +127,7 @@ prefix typed into a Claude Code command does nothing, deliberately: the
 block message goes to Claude, and a bypass Claude can type itself would
 turn every block into advice. In a session, clear a block by vetting
 (`/phx-deps-vet`, which needs the user's confirmation) or by having the
-user run the command themselves (`! mix deps.get`).
+user run the command themselves (`!` followed by the command).
 
 ## Latency budget rationale
 
@@ -131,14 +156,15 @@ user run the command themselves (`! mix deps.get`).
 ## Hook registration
 
 In `hooks/hooks.json`, the gate runs under `PreToolUse → Bash`
-alongside `block-dangerous-ops.sh`. The `if: "Bash(*mix deps.*)"`
-condition keeps the script silent on non-deps commands — the script
-itself also re-checks the command, defense-in-depth.
+alongside `block-dangerous-ops.sh`. The `if: "Bash(*mix *)"` condition
+skips non-mix commands. It can't be narrower: an alias such as `mix setup`
+only reveals that it fetches deps once the script reads `mix.exs`. The
+script exits at once on mix commands that don't fetch deps.
 
 ```json
 {
   "type": "command",
-  "if": "Bash(*mix deps.*)",
+  "if": "Bash(*mix *)",
   "command": "[Claude Code-only hook unavailable in the OpenCode skills-only target: hooks/scripts/deps-audit-gate.sh]",
   "timeout": 5,
   "statusMessage": "Tiered deps audit..."

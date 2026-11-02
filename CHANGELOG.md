@@ -13,6 +13,38 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Fixed
 
+## [3.2.2] - 2026-11-02
+
+Patch: the deps-audit gate now judges `mix setup`, other dep-fetching aliases and
+`mix igniter.install`, and its test suite runs in CI.
+
+### Added
+
+- **`deps-audit-gate.sh` warns Claude when `mix deps.update` moves a branch-pinned git dep.**
+  A dep pinned to a branch (or to no ref) pulls new commits with no `mix.exs` change, and a
+  vetted pin still matches. The gate allows the command and passes an `additionalContext` note
+  naming the deps that will move, the commit `mix.lock` holds now, and the
+  `git -C deps/<name> log` command to review what arrived. It never blocks on this
+- The gate's smoke suite (`lab/deps-audit/smoke-test/gate-test.sh`, now 30 checks) runs in
+  `make test` and GitHub CI through `scripts/tests/test_deps_audit_gate.py`. It ran nowhere
+  automatically before, which is how the `github:` gap in #160 went unnoticed. The same file
+  checks that every `last-run.json` field the gate reads is documented in the
+  `/phx:deps-audit` sidecar schema, the drift behind #160 §4
+
+### Fixed
+
+- **`mix setup` and other dep-fetching commands no longer skip the deps-audit gate.** The
+  hook fired only on a literal `mix deps.*`, so Phoenix's `mix setup` alias (the first command
+  in every generated README) fetched a new git dep unchecked, and so did
+  `mix igniter.install`. `hooks.json` now fires on `Bash(*mix *)`, and the script judges
+  `deps.get`/`deps.update`/`deps.compile`, `igniter.install`, and any `mix.exs` alias whose
+  task list reaches them (comments stripped, up to three alias levels). Other mix commands
+  exit at the first check with no output. For `mix igniter.install name@github:org/repo`
+  (also `@git:`, `@path:`) the pin comes from the argument, since igniter writes the tuple
+  only after the hook runs
+- `hooks/docs/safety-gates.md`: the deps-audit tier table was split by a paragraph, so the
+  Tier 2 row rendered as stray text
+
 ## [3.2.1] - 2026-11-02
 
 Patch: the deps-audit gate catches new `github:` deps and every block it raises can be cleared

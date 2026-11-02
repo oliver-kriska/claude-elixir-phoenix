@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
-# PreToolUse hook: tiered deps-audit gate on `mix deps.get`, `mix deps.update`,
-# `mix deps.compile`. Implements the Phase 3 fast-path architecture:
+# PreToolUse hook: tiered deps-audit gate on every mix command that fetches
+# deps: `mix deps.get`, `mix deps.update`, `mix deps.compile`, `mix igniter.install`,
+# and any mix.exs alias that runs one of them (Phoenix’s `mix setup`). hooks.json
+# fires it on `Bash(*mix *)`; every other mix command exits silently here.
+# Implements the Phase 3 fast-path architecture:
 #
 #   Tier 0 (<200ms): mix.lock cache hit via .claude/deps-audit/last-run.json.
 #                    Vouches for mix.lock only, so it skips rule 1, never rule 5.
@@ -34,9 +37,80 @@ TOOL=$(echo "$INPUT" | jq -r '.tool_name // empty')
 COMMAND=$(echo "$INPUT" | jq -r '.tool_input.command // empty')
 [[ -n "$COMMAND" ]] || exit 0
 
-if ! echo "$COMMAND" | grep -qE 'mix[[:space:]]+deps\.(get|update|compile)\b'; then
-  exit 0
-fi
+[[ "$COMMAND" == *mix* ]] || exit 0
+
+# Locate project root (cwd, since the gate runs in the user’s project)
+PROJECT_ROOT="$(pwd)"
+LOCK_FILE="$PROJECT_ROOT/mix.lock"
+MIX_EXS="$PROJECT_ROOT/mix.exs"
+
+# Flatten a file to one line with # comments stripped; sets FLAT. A dep tuple
+# or alias list the formatter split across lines then parses like a one-liner.
+flatten_source() {
+  local line
+  FLAT=""
+  [[ -s "$1" ]] || return 0
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    FLAT+="${line%%#*} "
+  done < "$1"
+}
+
+flatten_source "$MIX_EXS"
+MIX_FLAT="$FLAT"
+
+# True when mix.exs defines alias $1 and its task list runs a dep-fetching task,
+# directly or through another alias (up to three levels deep).
+alias_fetches_deps() {
+  local name="$1" depth="$2" list item
+  [[ "$depth" -lt 3 ]] || return 1
+  local re="(^|[[:space:],[{])\"?${name//./\\.}\"?:[[:space:]]*\\[([^]]*)\\]"
+  [[ $MIX_FLAT =~ $re ]] || return 1
+  list=${BASH_REMATCH[2]}
+  local re_item='"([a-z][a-z0-9_.]*)'
+  while [[ $list =~ $re_item ]]; do
+    item=${BASH_REMATCH[1]}
+    list=${list#*"${BASH_REMATCH[0]}"}
+    case "$item" in
+      deps.get|deps.update|deps.compile|igniter.install) return 0 ;;
+    esac
+    [[ "$item" != "$name" ]] && alias_fetches_deps "$item" $((depth + 1)) && return 0
+  done
+  return 1
+}
+
+# The text after a task name, up to the next shell separator.
+task_args() {
+  local rest="${1%%[;&|]*}"
+  printf '%s' "${rest%%$'\n'*}"
+}
+
+# Walk every `mix <task>` in the command. Sets FETCHES_DEPS, plus the arguments
+# of a direct `mix deps.update` (branch-pin warning) and `mix igniter.install`
+# (whose new dep isn’t in mix.exs until the command runs).
+FETCHES_DEPS=false
+DEPS_UPDATE=false
+UPDATE_ARGS=""
+IGNITER_ARGS=""
+re_task='(^|[^[:alnum:]_.-])mix[[:space:]]+([a-z][a-z0-9_.]*)'
+rest="$COMMAND"
+while [[ $rest =~ $re_task ]]; do
+  task=${BASH_REMATCH[2]}
+  rest=${rest#*"${BASH_REMATCH[0]}"}
+  case "$task" in
+    deps.get|deps.compile) FETCHES_DEPS=true ;;
+    deps.update)
+      FETCHES_DEPS=true
+      DEPS_UPDATE=true
+      UPDATE_ARGS+=" $(task_args "$rest")"
+      ;;
+    igniter.install)
+      FETCHES_DEPS=true
+      IGNITER_ARGS+=" $(task_args "$rest")"
+      ;;
+    *) alias_fetches_deps "$task" 0 && FETCHES_DEPS=true ;;
+  esac
+done
+$FETCHES_DEPS || exit 0
 
 # Escape hatch
 if [[ "${PHX_SKIP_DEPS_AUDIT:-}" == "1" ]]; then
@@ -44,9 +118,6 @@ if [[ "${PHX_SKIP_DEPS_AUDIT:-}" == "1" ]]; then
   exit 0
 fi
 
-# Locate project root (cwd, since the gate runs in the user’s project)
-PROJECT_ROOT="$(pwd)"
-LOCK_FILE="$PROJECT_ROOT/mix.lock"
 [[ -f "$LOCK_FILE" ]] || exit 0  # no mix.lock yet → first deps.get, defer
 
 CACHE_DIR="$PROJECT_ROOT/.claude/deps-audit"
@@ -142,14 +213,12 @@ tier1_rule1_bidi() {
 # the same as a one-liner. A tuple whose name doesn’t parse prints as "?" so it
 # still gets flagged (and can never be vetted).
 non_hex_dep_specs() {
-  local file="$1" line flat="" chunk name spec
+  local flat chunk name spec
   local re_name='^([a-z_0-9]+)'
   local re_src='(^|[[:space:],])(git|github|path):[[:space:]]*"([^"]*)"'
   local re_ref='(^|[[:space:],])(tag|ref|branch):[[:space:]]*"([^"]*)"'
-  [[ -s "$file" ]] || return 0
-  while IFS= read -r line || [[ -n "$line" ]]; do
-    flat+="${line%%#*} "
-  done < "$file"
+  flatten_source "$1"
+  flat="$FLAT"
   while [[ "$flat" == *"{:"* ]]; do
     flat=${flat#*"{:"}
     chunk=${flat%%\}*}
@@ -191,7 +260,7 @@ tier1_rule5_git_path_deps() {
   # Detect git/github/path deps newly added in mix.exs since the reference
   # commit. Reference defaults to origin/main; override via PHX_DEPS_AUDIT_BASE.
   local base="${PHX_DEPS_AUDIT_BASE:-origin/main}"
-  local mix_exs="$PROJECT_ROOT/mix.exs"
+  local mix_exs="$MIX_EXS"
   [[ -f "$mix_exs" ]] || return 0
 
   # Pull base mix.exs; fall back to empty (treats whole file as new)
@@ -218,6 +287,85 @@ tier1_rule5_git_path_deps() {
   return $rc
 }
 
+# Rule 5 for `mix igniter.install name@git:URL | name@github:org/repo | name@path:DIR`.
+# The dep isn’t in mix.exs until the command runs, so read it from the arguments.
+# The pin is everything after the name, so a ref suffix makes a distinct pin.
+tier1_rule5_igniter() {
+  local word name spec rc=0
+  local -a words
+  local re='^([a-z_0-9]+)@(git|github|path):(.+)$'
+  read -r -a words <<< "$IGNITER_ARGS"
+  for word in "${words[@]+"${words[@]}"}"; do
+    word=${word//\"/}
+    word=${word//\'/}
+    [[ $word =~ $re ]] || continue
+    name=${BASH_REMATCH[1]}
+    spec="${BASH_REMATCH[2]}:${BASH_REMATCH[3]}"
+    ledger_vets_pin "$name" "$spec" && continue
+    jq -cn --arg dep "$name" --arg pin "$spec" \
+      '{rule_id: 5, severity: "warn", file: "igniter.install", message: "New non-Hex dep", dep: $dep, pin: $pin}' \
+      >> "$tier1_findings_file"
+    rc=1
+  done
+  return $rc
+}
+
+# The commit mix.lock holds for git dep $1 (first 12 chars), or nothing.
+locked_git_sha() {
+  local line re="\"$1\": \\{:git, \"[^\"]*\", \"([0-9a-f]+)\""
+  while IFS= read -r line || [[ -n "$line" ]]; do
+    if [[ $line =~ $re ]]; then
+      printf '%s' "${BASH_REMATCH[1]:0:12}"
+      return 0
+    fi
+  done < "$LOCK_FILE"
+}
+
+# `mix deps.update` on a git dep pinned to a branch (or to nothing) pulls new
+# commits without any mix.exs change, so rule 5 can’t see it and a vetted pin
+# still matches. Warn, never block: name the locked commit to review from.
+BRANCH_WARNINGS=()
+collect_branch_warnings() {
+  $DEPS_UPDATE || return 0
+  local all=false arg name spec sha targets=" "
+  local -a args
+  read -r -a args <<< "$UPDATE_ARGS"
+  for arg in "${args[@]+"${args[@]}"}"; do
+    case "$arg" in
+      --all) all=true ;;
+      -*) ;;
+      *) targets+="$arg " ;;
+    esac
+  done
+  while read -r name spec; do
+    [[ -n "$name" ]] || continue
+    case "$spec" in git:*|github:*) ;; *) continue ;; esac
+    case "$spec" in *@tag:*|*@ref:*) continue ;; esac
+    $all || [[ "$targets" == *" $name "* ]] || continue
+    sha=$(locked_git_sha "$name")
+    BRANCH_WARNINGS+=("  $name ($spec) will move to the branch head${sha:+ from $sha}; vetting recorded the pin, not this code. After the update, review: git -C deps/$name log --oneline ${sha:-<locked-sha>}..HEAD")
+  done < <(non_hex_dep_specs "$MIX_EXS")
+}
+collect_branch_warnings
+
+branch_note=""
+if [[ ${#BRANCH_WARNINGS[@]} -gt 0 ]]; then
+  branch_note="phx-deps-audit: branch-pinned git deps will pull unreviewed commits:"
+  for w in "${BRANCH_WARNINGS[@]}"; do
+    branch_note+=$'\n'"$w"
+  done
+fi
+
+# Allow the command, passing the branch-pin warning to Claude when there is one.
+# PreToolUse stderr on exit 0 never reaches Claude; additionalContext does.
+allow_with_note() {
+  if [[ -n "$branch_note" ]]; then
+    jq -cn --arg ctx "$branch_note" \
+      '{hookSpecificOutput: {hookEventName: "PreToolUse", additionalContext: $ctx}}'
+  fi
+  exit 0
+}
+
 tier0_hit=false
 tier0_cache_hit && tier0_hit=true
 
@@ -226,12 +374,13 @@ if ! $tier0_hit; then
   tier1_rule1_bidi || tier1_clean=false
 fi
 tier1_rule5_git_path_deps || tier1_clean=false
+tier1_rule5_igniter || tier1_clean=false
 
 if $tier1_clean; then
-  $tier0_hit && exit 0  # silent — common path, no narration
+  $tier0_hit && allow_with_note  # silent unless a branch pin moves
   # Soft hint, no block. The user can still opt into full audit explicitly.
   echo "phx-deps-audit: Tier 1 clean. Run /phx:deps-audit for full pipeline." >&2
-  exit 0
+  allow_with_note
 fi
 
 # ──────────── Findings: apply policy ────────────
@@ -249,7 +398,7 @@ fi
 override_lines=(
   "  Override: PHX_SKIP_DEPS_AUDIT=1 is read from Claude Code’s environment, not from this command,"
   "            so a prefix on the command does not work. Set it before starting Claude Code, or have"
-  "            the user run the command themselves (\`! mix deps.get\` in Claude Code). Do not retry."
+  "            the user run the command themselves (prefix it with \`!\` in Claude Code). Do not retry."
 )
 
 print_block() {
@@ -259,6 +408,7 @@ print_block() {
     printf '%s\n' "  Vet each new non-Hex dep (records its exact pin in hex_vet.exs):" "$vet_hints" >&2
   fi
   [[ -n "$policy_note" ]] && printf '%s\n' "$policy_note" >&2
+  [[ -n "$branch_note" ]] && printf '%s\n' "$branch_note" >&2
   printf '%s\n' "${override_lines[@]}" >&2
 }
 
@@ -268,7 +418,7 @@ case "$POLICY_MODE" in
       "phx-deps-audit: Tier 1 found risk signals (warn-only mode)." \
       "  $findings_summary" \
       "  Run /phx:deps-audit for full triage." >&2
-    exit 0
+    allow_with_note
     ;;
 
   ":new_only")
@@ -281,7 +431,7 @@ case "$POLICY_MODE" in
       print_block "phx-deps-audit: BLOCKED (:new_only). New git/github/path dep needs vetting."
       exit 2
     fi
-    exit 0
+    allow_with_note
     ;;
 
   ":strict"|":full")
@@ -293,4 +443,4 @@ case "$POLICY_MODE" in
     ;;
 esac
 
-exit 0
+allow_with_note

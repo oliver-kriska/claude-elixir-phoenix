@@ -277,6 +277,98 @@ fixture_24_command_prefix_is_not_an_override() {
   rm -rf "$d"
 }
 
+# Add an aliases function to a make_rule5_dir fixture. $1 = dir, $2 = body.
+add_aliases() {
+  local d="$1" body="$2" exs
+  exs=$(cat "$d/mix.exs")
+  printf '%s\n' "${exs%end}  defp aliases do" "$body" "  end" "end" > "$d/mix.exs"
+}
+
+# Put a git dep entry in mix.lock. $1 = dir, $2 = name, $3 = sha.
+lock_git_dep() {
+  printf '%%{\n  "jason": {:hex, :jason, "1.4.4"},\n  "%s": {:git, "https://github.com/org/%s.git", "%s", [branch: "main"]},\n}\n' \
+    "$2" "$2" "$3" > "$1/mix.lock"
+}
+
+# ───── Fixture 25: setup_alias_is_gated ─────
+# Phoenix’s `mix setup` runs deps.get through an alias; the gate must judge it.
+fixture_25_setup_alias_is_gated() {
+  local d
+  d=$(make_rule5_dir "25_setup" '      {:my_dep, github: "org/repo"}' "$LEDGER_NO_POLICY")
+  add_aliases "$d" '    [setup: ["deps.get", "ecto.setup"], test: ["ecto.create --quiet", "test"]]'
+  run_gate "$d" "mix setup"
+  assert_gate "25_setup_alias_blocks" 2 'BLOCKED \(:new_only\)'
+  run_gate "$d" "mix test"
+  assert_gate "25_unrelated_alias_silent" 0 '^$'
+  refute_gate "25_unrelated_alias_silent_no_output" '.'
+  run_gate "$d" "cd . && MIX_ENV=dev mix setup"
+  assert_gate "25_setup_in_compound_command" 2 'BLOCKED'
+  rm -rf "$d"
+}
+
+# ───── Fixture 26: nested_and_split_alias ─────
+# A quoted dotted alias whose formatter-split list calls `setup`, which runs
+# deps.get: one level of indirection still gates. A commented alias does not.
+fixture_26_nested_and_split_alias() {
+  local d
+  d=$(make_rule5_dir "26_nested" '      {:my_dep, github: "org/repo"}' "$LEDGER_NO_POLICY")
+  add_aliases "$d" "$(printf '%s\n' \
+    '    [' \
+    '      setup: ["deps.get"],' \
+    '      "ci.full": [' \
+    '        "setup",' \
+    '        "test"' \
+    '      ],' \
+    '      # "old.fetch": ["deps.get"],' \
+    '      lint: ["format --check-formatted"]' \
+    '    ]')"
+  run_gate "$d" "mix ci.full"
+  assert_gate "26_nested_alias_blocks" 2 'BLOCKED'
+  run_gate "$d" "mix old.fetch"
+  assert_gate "26_commented_alias_silent" 0 '^$'
+  refute_gate "26_commented_alias_silent_no_output" '.'
+  run_gate "$d" "mix lint"
+  assert_gate "26_other_alias_silent" 0 '^$'
+  refute_gate "26_other_alias_silent_no_output" '.'
+  rm -rf "$d"
+}
+
+# ───── Fixture 27: igniter_install ─────
+# igniter.install adds the dep itself, so mix.exs has nothing new yet; the gate
+# reads the pin from the argument. A vetted pin clears; a Hex package passes.
+fixture_27_igniter_install() {
+  local d
+  d=$(make_rule5_dir "27_igniter" '' "$LEDGER_NO_POLICY")
+  run_gate "$d" "mix igniter.install foo@github:org/foo --yes"
+  assert_gate "27_igniter_github_blocks" 2 '/phx:deps-vet foo github:org/foo'
+  run_gate "$d" "mix igniter.install ash_oban"
+  assert_gate "27_igniter_hex_passes" 0 'Tier 1 clean'
+  printf '%s' '%{audits: [%{package: "foo", version: "github:org/foo", criteria: :safe_to_deploy}], policy: %{block_on_unvetted: :new_only}}' > "$d/hex_vet.exs"
+  run_gate "$d" "mix igniter.install foo@github:org/foo"
+  assert_gate "27_igniter_vetted_clears" 0 'Tier 1 clean'
+  rm -rf "$d"
+}
+
+# ───── Fixture 28: branch_pin_update_warns ─────
+# deps.update on a vetted branch-pinned git dep pulls new commits with no
+# mix.exs change. Never blocks; tells Claude (additionalContext) the locked SHA.
+fixture_28_branch_pin_update_warns() {
+  local d
+  d=$(make_rule5_dir "28_branch" '      {:my_dep, github: "org/my_dep", branch: "main"},
+      {:tagged, github: "org/tagged", tag: "v1.0"}' "")
+  (cd "$d" && git add mix.exs && git -c user.email=t@t -c user.name=t commit -q -m deps >/dev/null 2>&1) || :
+  lock_git_dep "$d" my_dep 0123456789abcdef0123456789abcdef01234567
+  printf '%s' '%{audits: [], policy: %{block_on_unvetted: :new_only}}' > "$d/hex_vet.exs"
+  run_gate "$d" "mix deps.update my_dep"
+  assert_gate "28_branch_update_allows_with_context" 0 'additionalContext.*my_dep \(github:org/my_dep@branch:main\).*0123456789ab'
+  run_gate "$d" "mix deps.update --all"
+  assert_gate "28_update_all_warns" 0 'git -C deps/my_dep log --oneline 0123456789ab\.\.HEAD'
+  refute_gate "28_tag_pin_not_warned" 'tagged \('
+  run_gate "$d" "mix deps.update jason"
+  refute_gate "28_unnamed_dep_not_warned" 'additionalContext'
+  rm -rf "$d"
+}
+
 main() {
   echo "Gate smoke tests (deps-audit-gate.sh):"
   fixture_15_commented_policy
@@ -289,6 +381,10 @@ main() {
   fixture_22_cache_hit_does_not_skip_rule5
   fixture_23_commented_dep_ignored
   fixture_24_command_prefix_is_not_an_override
+  fixture_25_setup_alias_is_gated
+  fixture_26_nested_and_split_alias
+  fixture_27_igniter_install
+  fixture_28_branch_pin_update_warns
   echo
   echo "gate-test: ${gate_pass} pass, ${gate_fail} fail"
   [ "$gate_fail" -eq 0 ]

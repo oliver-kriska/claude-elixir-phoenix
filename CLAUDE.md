@@ -299,9 +299,12 @@ change that ships without them loses that permanently. See
   `MIX_ENV=prod` with any task but the release build steps, `pkill`/`killall` naming a BEAM process)
   before execution; also greps the local script a command runs (`bash x.sh`, `./x.sh`, `dir/x.sh`)
   for the `MIX_ENV=prod` and pattern-kill denials, failing open on a missing or unreadable file
-- `PreToolUse` (Bash, `"if": "Bash(*mix deps.*)"`): `deps-audit-gate.sh` — blocks `mix deps.*` on bidi chars in
-  `mix.lock` or a new unvetted `git:`/`github:`/`path:` dep (cleared by a `hex_vet.exs` pin from `/phx:deps-vet`);
-  the lock-SHA cache never skips the new-dep rule, and `PHX_SKIP_DEPS_AUDIT` is read from Claude Code's env only
+- `PreToolUse` (Bash, `"if": "Bash(*mix *)"`): `deps-audit-gate.sh` — judges every mix command that fetches deps
+  (`deps.get/update/compile`, `igniter.install`, any mix.exs alias reaching them, e.g. `mix setup`; others exit silently).
+  Blocks on bidi chars in `mix.lock` or a new unvetted `git:`/`github:`/`path:` dep (cleared by a `hex_vet.exs` pin from
+  `/phx:deps-vet`); the lock-SHA cache never skips the new-dep rule; `deps.update` of a branch-pinned git dep is allowed
+  with an `additionalContext` review note. `PHX_SKIP_DEPS_AUDIT` is read from Claude Code's env only. Tested by
+  `lab/deps-audit/smoke-test/gate-test.sh`, run in CI via `scripts/tests/test_deps_audit_gate.py`
 - `PreToolUse` (Edit|Write|NotebookEdit): `freeze-gate.sh` — enforces `/phx:freeze` edit-scope locks (sentinel-backed read-only/dir-scoped locks)
 - `PostToolUse` (Edit): Auto `mix format --check-formatted`, **programmatic Iron Law verification**,
   **debug statement detection** — all use `if` conditions to only fire on `.ex`/`.exs` files
