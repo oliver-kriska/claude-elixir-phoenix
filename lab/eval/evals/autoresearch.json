@@ -1,0 +1,159 @@
+{
+  "skill": "autoresearch",
+  "skill_path": "plugins/elixir-phoenix/skills/autoresearch/SKILL.md",
+  "dimensions": {
+    "completeness": {
+      "weight": 0.15,
+      "checks": [
+        {
+          "type": "frontmatter_field",
+          "field": "name",
+          "desc": "Has name field"
+        },
+        {
+          "type": "frontmatter_field",
+          "field": "description",
+          "desc": "Has description field"
+        },
+        {
+          "type": "has_iron_laws",
+          "min_count": 3,
+          "desc": "At least 3 Iron Laws"
+        },
+        {
+          "type": "section_exists",
+          "section": "Usage",
+          "desc": "Has Usage section"
+        },
+        {
+          "type": "frontmatter_field",
+          "field": "argument-hint",
+          "desc": "Has argument-hint"
+        },
+        {
+          "type": "content_present",
+          "pattern": "references/",
+          "desc": "Has References section"
+        }
+      ]
+    },
+    "accuracy": {
+      "weight": 0.1,
+      "checks": [
+        {
+          "type": "valid_skill_refs",
+          "desc": "All skill references valid"
+        },
+        {
+          "type": "valid_agent_refs",
+          "desc": "All agent references valid"
+        },
+        {
+          "type": "valid_file_refs",
+          "desc": "All reference file paths valid"
+        }
+      ]
+    },
+    "conciseness": {
+      "weight": 0.12,
+      "checks": [
+        {
+          "type": "line_count",
+          "target": 100,
+          "tolerance": 85,
+          "desc": "Near 100-line target (185 max)"
+        },
+        {
+          "type": "max_section_lines",
+          "max": 45,
+          "desc": "No section exceeds 45 lines"
+        },
+        {
+          "type": "content_absent",
+          "pattern": "In this section|As mentioned above|It is important to note",
+          "desc": "No filler phrases"
+        }
+      ]
+    },
+    "triggering": {
+      "weight": 0.1,
+      "checks": [
+        {
+          "type": "description_length",
+          "min": 50,
+          "max": 500,
+          "desc": "Description in sweet spot"
+        },
+        {
+          "type": "description_keywords",
+          "min": 3,
+          "desc": "Enough domain keywords"
+        },
+        {
+          "type": "description_no_vague",
+          "desc": "No vague words in description"
+        }
+      ]
+    },
+    "safety": {
+      "weight": 0.08,
+      "checks": [
+        {
+          "type": "has_iron_laws",
+          "min_count": 3,
+          "desc": "At least 3 Iron Laws"
+        },
+        {
+          "type": "no_dangerous_patterns",
+          "desc": "No unsafe code patterns"
+        },
+        {
+          "type": "content_present",
+          "pattern": "NEVER|MUST NOT|DO NOT|CRITICAL",
+          "desc": "Has explicit prohibitions or critical rules"
+        }
+      ]
+    },
+    "clarity": {
+      "weight": 0.13,
+      "checks": [
+        {
+          "type": "action_density",
+          "min_ratio": 0.25,
+          "desc": "Action density (>25% actionable lines)"
+        },
+        {
+          "type": "no_duplication",
+          "desc": "No cross-section duplication"
+        },
+        {
+          "type": "workflow_step_coverage",
+          "desc": "No missing workflow steps"
+        }
+      ]
+    },
+    "specificity": {
+      "weight": 0.12,
+      "checks": [
+        {
+          "type": "specificity_ratio",
+          "min_ratio": 0.15,
+          "desc": "Concrete over vague (>15% specific lines)"
+        },
+        {
+          "type": "has_examples",
+          "min_blocks": 1,
+          "desc": "Has code examples"
+        },
+        {
+          "type": "description_structure",
+          "desc": "Description has what+when components"
+        }
+      ]
+    },
+    "behavioral": {
+      "weight": 0.2,
+      "checks": []
+    }
+  }
+}
