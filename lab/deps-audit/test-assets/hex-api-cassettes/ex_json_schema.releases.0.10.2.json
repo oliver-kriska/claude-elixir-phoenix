@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "elixir": "~> 1.6",
+    "app": "ex_json_schema",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.10.2",
+  "checksum": "37f43be60f8407659d4d0155a7e45e7f406dab1f827051d3d35858a709baf6a6",
+  "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.10.2",
+  "has_docs": true,
+  "inserted_at": "2023-11-15T15:56:33.821857Z",
+  "updated_at": "2023-11-15T15:56:35.967375Z",
+  "requirements": {
+    "decimal": {
+      "app": "decimal",
+      "optional": false,
+      "requirement": "~> 2.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/ex_json_schema/0.10.2",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/profdrhecht",
+    "email": "jonas.schmidt@gmx.com",
+    "username": "profdrhecht"
+  },
+  "package_url": "https://hex.pm/api/packages/ex_json_schema",
+  "downloads": 1951465,
+  "security_advisories": [],
+  "docs_html_url": "https://ex-json-schema.hexdocs.pm/0.10.2/",
+  "configs": {
+    "erlang.mk": "dep_ex_json_schema = hex 0.10.2",
+    "mix.exs": "{:ex_json_schema, \"~> 0.10.2\"}",
+    "rebar.config": "{ex_json_schema, \"0.10.2\"}"
+  }
+}

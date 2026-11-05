@@ -1,0 +1,75 @@
+{
+  "meta": {
+    "elixir": "~> 1.7",
+    "app": "phoenix_html",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "4.1.1",
+  "checksum": "f2f2df5a72bc9a2f510b21497fd7d2b86d932ec0598f0210fed4114adc546c6f",
+  "url": "https://hex.pm/api/packages/phoenix_html/releases/4.1.1",
+  "has_docs": true,
+  "inserted_at": "2024-03-01T19:58:03.853571Z",
+  "updated_at": "2024-03-01T19:58:06.548751Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/phoenix_html/4.1.1",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/chrismccord",
+    "email": "chris@chrismccord.com",
+    "username": "chrismccord"
+  },
+  "package_url": "https://hex.pm/api/packages/phoenix_html",
+  "downloads": 5940374,
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-117645",
+      "aliases": [
+        "CVE-2026-117645"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-117645.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/phoenixframework/phoenix_html/commit/6ad3a1d7960891a468d54636054a98e11dfb5111"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix_html/commit/d9e4e6b2d9be49e25fb6d6b4fdbb2008174f01a6"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/phoenixframework/phoenix_html/commit/a47dc8944a773b7e9273d9691dc6744ec793f1de"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/phoenix_html"
+        }
+      ],
+      "summary": "Phoenix.HTML vulnerable to attribute injection via unvalidated attribute names in attributes_escape/1",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-117645",
+      "published_at": "2026-10-30T20:25:06Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-117645",
+      "cvss_score": 5.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:N/UI:P/VC:L/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-10-30T20:30:03Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.0.0 and < 3.3.5",
+        ">= 4.0.0 and < 4.4.0"
+      ]
+    }
+  ],
+  "docs_html_url": "https://phoenix-html.hexdocs.pm/4.1.1/",
+  "configs": {
+    "erlang.mk": "dep_phoenix_html = hex 4.1.1",
+    "mix.exs": "{:phoenix_html, \"~> 4.1\"}",
+    "rebar.config": "{phoenix_html, \"4.1.1\"}"
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/dashbitco/nimble_parsec"
+    },
+    "description": "A simple and fast library for text-based parser combinators",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "nimble_parsec",
+  "url": "https://hex.pm/api/packages/nimble_parsec",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/dashbit",
+      "username": "dashbit"
+    }
+  ],
+  "inserted_at": "2018-03-02T20:17:42.325829Z",
+  "updated_at": "2025-08-22T17:53:26.040900Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.4.2",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.4.2",
+      "has_docs": true,
+      "inserted_at": "2025-01-21T19:45:18.418361Z"
+    },
+    {
+      "version": "1.4.1",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.4.1",
+      "has_docs": true,
+      "inserted_at": "2025-01-15T14:17:40.361876Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2023-11-08T13:51:23.862508Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2023-04-30T08:22:23.397875Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2023-03-27T11:02:07.622458Z"
+    },
+    {
+      "version": "1.2.3",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.2.3",
+      "has_docs": true,
+      "inserted_at": "2022-02-28T11:22:40.176836Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2022-02-12T09:51:52.798983Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2022-01-26T11:08:25.490173Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2021-11-07T08:03:45.896374Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-02T10:30:29.863962Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2020-09-25T10:12:15.598830Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2020-05-25T14:43:14.601872Z"
+    },
+    {
+      "version": "0.5.3",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.5.3",
+      "has_docs": true,
+      "inserted_at": "2019-12-11T12:54:45.268008Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.5.2",
+      "has_docs": true,
+      "inserted_at": "2019-11-10T10:10:34.734592Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2019-08-04T16:55:11.076828Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2018-12-12T10:03:34.741137Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2018-08-10T16:58:48.906565Z"
+    },
+    {
+      "version": "0.3.2",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.3.2",
+      "has_docs": true,
+      "inserted_at": "2018-06-02T08:19:59.272121Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2018-04-10T20:59:12.949995Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2018-04-08T08:05:08.236915Z"
+    },
+    {
+      "version": "0.2.2",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.2.2",
+      "has_docs": true,
+      "inserted_at": "2018-03-08T07:21:03.381341Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2018-03-04T21:01:41.363830Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2018-03-04T11:08:08.196275Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/nimble_parsec/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2018-03-02T20:17:42.332770Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/nimble_parsec",
+  "latest_version": "1.4.2",
+  "downloads": {
+    "all": 111457234,
+    "day": 69785,
+    "recent": 4556557,
+    "week": 393671
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://nimble-parsec.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_nimble_parsec = hex 1.4.2",
+    "mix.exs": "{:nimble_parsec, \"~> 1.4\"}",
+    "rebar.config": "{nimble_parsec, \"1.4.2\"}"
+  },
+  "latest_stable_version": "1.4.2"
+}

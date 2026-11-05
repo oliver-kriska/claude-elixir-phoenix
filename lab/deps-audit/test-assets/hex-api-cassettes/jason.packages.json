@@ -144,20 +144,20 @@
     }
   ],
   "html_url": "https://hex.pm/packages/jason",
+  "latest_version": "1.5.0-alpha.2",
   "downloads": {
-    "all": 199332083,
-    "day": 85352,
-    "recent": 4642840,
-    "week": 473491
+    "all": 216531667,
+    "day": 152031,
+    "recent": 10828076,
+    "week": 1085486
   },
   "security_advisories": [],
-  "latest_version": "1.5.0-alpha.2",
-  "docs_html_url": "https://hexdocs.pm/jason/",
+  "docs_html_url": "https://jason.hexdocs.pm/",
+  "retirements": {},
   "configs": {
     "erlang.mk": "dep_jason = hex 1.4.5",
     "mix.exs": "{:jason, \"~> 1.4\"}",
     "rebar.config": "{jason, \"1.4.5\"}"
   },
-  "retirements": {},
   "latest_stable_version": "1.4.5"
 }

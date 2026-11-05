@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "elixir": "~> 1.12",
+    "app": "nanoid",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.1.0",
+  "checksum": "ebc7a342d02d213534a7f93a091d569b9fea7f26fcd3a638dc655060fc1f76ac",
+  "url": "https://hex.pm/api/packages/nanoid/releases/2.1.0",
+  "has_docs": true,
+  "inserted_at": "2023-07-12T06:46:35.389546Z",
+  "updated_at": "2023-07-12T06:46:37.930966Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/nanoid/2.1.0",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/railsmechanic",
+    "username": "railsmechanic"
+  },
+  "package_url": "https://hex.pm/api/packages/nanoid",
+  "downloads": 1326163,
+  "security_advisories": [],
+  "docs_html_url": "https://nanoid.hexdocs.pm/2.1.0/",
+  "configs": {
+    "erlang.mk": "dep_nanoid = hex 2.1.0",
+    "mix.exs": "{:nanoid, \"~> 2.1\"}",
+    "rebar.config": "{nanoid, \"2.1.0\"}"
+  }
+}

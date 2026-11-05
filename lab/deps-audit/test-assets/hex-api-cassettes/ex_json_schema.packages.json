@@ -1,0 +1,282 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/jonasschmidt/ex_json_schema"
+    },
+    "description": "A JSON Schema validator with full support for the draft 4 specification\n  and zero dependencies.",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "ex_json_schema",
+  "url": "https://hex.pm/api/packages/ex_json_schema",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/profdrhecht",
+      "email": "jonas.schmidt@gmx.com",
+      "username": "profdrhecht"
+    }
+  ],
+  "inserted_at": "2015-09-20T10:04:21.417890Z",
+  "updated_at": "2026-07-09T15:11:42.658184Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.11.5",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.11.5",
+      "has_docs": true,
+      "inserted_at": "2026-07-09T15:11:40.904201Z"
+    },
+    {
+      "version": "0.11.4",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.11.4",
+      "has_docs": true,
+      "inserted_at": "2026-05-11T13:07:27.125499Z"
+    },
+    {
+      "version": "0.11.3",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.11.3",
+      "has_docs": true,
+      "inserted_at": "2026-05-06T10:12:48.838039Z"
+    },
+    {
+      "version": "0.11.2",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.11.2",
+      "has_docs": true,
+      "inserted_at": "2025-12-16T15:52:04.119796Z"
+    },
+    {
+      "version": "0.11.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.11.1",
+      "has_docs": true,
+      "inserted_at": "2025-05-22T14:35:17.583968Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2025-05-06T14:16:49.434645Z"
+    },
+    {
+      "version": "0.10.2",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.10.2",
+      "has_docs": true,
+      "inserted_at": "2023-11-15T15:56:33.821857Z"
+    },
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.10.1",
+      "has_docs": true,
+      "inserted_at": "2023-07-27T16:27:00.092216Z"
+    },
+    {
+      "version": "0.9.3",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.9.3",
+      "has_docs": true,
+      "inserted_at": "2023-05-30T08:28:23.411580Z"
+    },
+    {
+      "version": "0.9.2",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.9.2",
+      "has_docs": true,
+      "inserted_at": "2022-09-12T09:37:18.449511Z"
+    },
+    {
+      "version": "0.9.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.9.1",
+      "has_docs": true,
+      "inserted_at": "2021-11-11T10:37:13.676818Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2021-09-08T11:22:37.688209Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2021-06-10T10:20:42.115005Z"
+    },
+    {
+      "version": "0.8.0-rc1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.8.0-rc1",
+      "has_docs": true,
+      "inserted_at": "2021-02-25T09:24:49.779627Z"
+    },
+    {
+      "version": "0.7.4",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.7.4",
+      "has_docs": true,
+      "inserted_at": "2020-03-26T09:19:14.065688Z"
+    },
+    {
+      "version": "0.7.3",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.7.3",
+      "has_docs": true,
+      "inserted_at": "2019-11-27T13:05:02.783283Z"
+    },
+    {
+      "version": "0.7.2",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.7.2",
+      "has_docs": true,
+      "inserted_at": "2019-11-15T16:34:11.837156Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2019-09-27T18:29:36.017634Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2019-09-25T10:15:29.496264Z"
+    },
+    {
+      "version": "0.6.2",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.6.2",
+      "has_docs": true,
+      "inserted_at": "2019-09-03T12:05:19.125979Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2019-05-31T10:05:02.099007Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2019-05-31T08:30:54.664286Z"
+    },
+    {
+      "version": "0.6.0-rc.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.6.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2019-04-09T06:32:57.000322Z"
+    },
+    {
+      "version": "0.5.8",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.5.8",
+      "has_docs": true,
+      "inserted_at": "2019-03-12T09:17:40.258480Z"
+    },
+    {
+      "version": "0.5.7",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.5.7",
+      "has_docs": true,
+      "inserted_at": "2018-04-23T07:00:46.973615Z"
+    },
+    {
+      "version": "0.5.6",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.5.6",
+      "has_docs": true,
+      "inserted_at": "2018-02-12T08:49:49.508235Z"
+    },
+    {
+      "version": "0.5.5",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.5.5",
+      "has_docs": true,
+      "inserted_at": "2017-02-07T14:56:00.604292Z"
+    },
+    {
+      "version": "0.5.4",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.5.4",
+      "has_docs": true,
+      "inserted_at": "2017-02-01T14:38:05.666984Z"
+    },
+    {
+      "version": "0.5.3",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.5.3",
+      "has_docs": true,
+      "inserted_at": "2016-12-16T08:31:36.193031Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.5.2",
+      "has_docs": true,
+      "inserted_at": "2016-11-04T15:41:34.116287Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.5.1",
+      "has_docs": false,
+      "inserted_at": "2016-07-26T08:48:17.469393Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.5.0",
+      "has_docs": false,
+      "inserted_at": "2016-07-20T07:51:41.526580Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.4.1",
+      "has_docs": false,
+      "inserted_at": "2016-06-02T08:24:38.546254Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.4.0",
+      "has_docs": false,
+      "inserted_at": "2016-05-12T08:23:36.957448Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.3.1",
+      "has_docs": false,
+      "inserted_at": "2016-01-06T09:02:42.540568Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.3.0",
+      "has_docs": false,
+      "inserted_at": "2015-10-25T10:38:41.082143Z"
+    },
+    {
+      "version": "0.2.2",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.2.2",
+      "has_docs": false,
+      "inserted_at": "2015-10-11T10:52:37.986268Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.2.1",
+      "has_docs": false,
+      "inserted_at": "2015-10-01T18:53:50.480962Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/ex_json_schema/releases/0.2.0",
+      "has_docs": false,
+      "inserted_at": "2015-09-20T10:04:22.115650Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/ex_json_schema",
+  "latest_version": "0.11.5",
+  "downloads": {
+    "all": 35594858,
+    "day": 11870,
+    "recent": 794488,
+    "week": 70673
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://ex-json-schema.hexdocs.pm/",
+  "retirements": {
+    "0.7.2": {
+      "message": "The version contains debug code that was accidentally pushed",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_ex_json_schema = hex 0.11.5",
+    "mix.exs": "{:ex_json_schema, \"~> 0.11.5\"}",
+    "rebar.config": "{ex_json_schema, \"0.11.5\"}"
+  },
+  "latest_stable_version": "0.11.5"
+}

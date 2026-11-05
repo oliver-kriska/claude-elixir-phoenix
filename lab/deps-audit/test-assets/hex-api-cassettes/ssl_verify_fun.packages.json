@@ -1,0 +1,155 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/deadtrickster/ssl_verify_fun.erl"
+    },
+    "description": "SSL verification library",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "ssl_verify_fun",
+  "url": "https://hex.pm/api/packages/ssl_verify_fun",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/deadtrickster",
+      "email": "i.khaprov@gmail.com",
+      "username": "deadtrickster"
+    }
+  ],
+  "inserted_at": "2016-03-11T21:28:59.328055Z",
+  "updated_at": "2026-10-31T11:58:42.178961Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.1.9",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.9",
+      "has_docs": true,
+      "inserted_at": "2026-10-31T11:58:40.776608Z"
+    },
+    {
+      "version": "1.1.8",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.8",
+      "has_docs": false,
+      "inserted_at": "2026-10-30T19:41:00.766515Z"
+    },
+    {
+      "version": "1.1.7",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.7",
+      "has_docs": false,
+      "inserted_at": "2023-06-20T21:44:33.416572Z"
+    },
+    {
+      "version": "1.1.6",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.6",
+      "has_docs": false,
+      "inserted_at": "2020-05-15T08:54:15.460813Z"
+    },
+    {
+      "version": "1.1.5",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.5",
+      "has_docs": false,
+      "inserted_at": "2019-05-12T05:01:47.676161Z"
+    },
+    {
+      "version": "1.1.4",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.4",
+      "has_docs": false,
+      "inserted_at": "2018-07-15T08:31:46.455636Z"
+    },
+    {
+      "version": "1.1.3",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.3",
+      "has_docs": false,
+      "inserted_at": "2017-11-02T16:39:15.463767Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.2",
+      "has_docs": false,
+      "inserted_at": "2017-03-13T21:29:48.869257Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.1",
+      "has_docs": false,
+      "inserted_at": "2016-07-15T10:51:50.737732Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.0",
+      "has_docs": false,
+      "inserted_at": "2016-03-19T10:09:47.099216Z"
+    },
+    {
+      "version": "1.0.8",
+      "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.0.8",
+      "has_docs": false,
+      "inserted_at": "2016-03-11T21:28:59.356118Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/ssl_verify_fun",
+  "latest_version": "1.1.9",
+  "downloads": {
+    "all": 176015577,
+    "day": 85386,
+    "recent": 5097507,
+    "week": 461887
+  },
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-117666",
+      "aliases": [
+        "CVE-2026-117666",
+        "GHSA-7gw2-hphm-c5px"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/deadtrickster/ssl_verify_fun.erl/security/advisories/GHSA-7gw2-hphm-c5px"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-117666.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/deadtrickster/ssl_verify_fun.erl/pull/33"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/deadtrickster/ssl_verify_fun.erl/commit/a49ca56923356c7a3981692b23c42ef32c2990e0"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/deadtrickster/ssl_verify_fun.erl/commit/ca34031299cd2e0c98794c0da4ba556b94e39aad"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/ssl_verify_fun"
+        }
+      ],
+      "summary": "ssl_verify_fun: partial-label wildcard certificate matches hostnames across a label boundary",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-117666",
+      "published_at": "2026-10-30T20:22:16Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-117666",
+      "cvss_score": 9.1,
+      "cvss_rating": "critical",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-10-30T20:41:08Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.0.1 and < 1.1.8"
+      ]
+    }
+  ],
+  "docs_html_url": "https://ssl-verify-fun.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_ssl_verify_fun = hex 1.1.9",
+    "mix.exs": "{:ssl_verify_fun, \"~> 1.1\"}",
+    "rebar.config": "{ssl_verify_fun, \"1.1.9\"}"
+  },
+  "latest_stable_version": "1.1.9"
+}

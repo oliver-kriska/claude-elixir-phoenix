@@ -1,0 +1,118 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/railsmechanic/nanoid/blob/master/CHANGELOG.md",
+      "GitHub": "https://github.com/railsmechanic/nanoid"
+    },
+    "description": "Elixir port of NanoID (https://github.com/ai/nanoid), a tiny, secure URL-friendly unique string ID generator.",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "nanoid",
+  "url": "https://hex.pm/api/packages/nanoid",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/railsmechanic",
+      "username": "railsmechanic"
+    }
+  ],
+  "inserted_at": "2018-01-02T15:21:32.108767Z",
+  "updated_at": "2026-05-28T12:41:07.833543Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "3.0.0-rc.2",
+      "url": "https://hex.pm/api/packages/nanoid/releases/3.0.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2026-05-28T12:41:06.768503Z"
+    },
+    {
+      "version": "3.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/nanoid/releases/3.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2026-05-22T09:06:13.799876Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/nanoid/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2023-07-12T06:46:35.389546Z"
+    },
+    {
+      "version": "2.0.5",
+      "url": "https://hex.pm/api/packages/nanoid/releases/2.0.5",
+      "has_docs": true,
+      "inserted_at": "2020-12-29T19:18:48.447705Z"
+    },
+    {
+      "version": "2.0.4",
+      "url": "https://hex.pm/api/packages/nanoid/releases/2.0.4",
+      "has_docs": true,
+      "inserted_at": "2020-07-07T17:06:34.902414Z"
+    },
+    {
+      "version": "2.0.3",
+      "url": "https://hex.pm/api/packages/nanoid/releases/2.0.3",
+      "has_docs": true,
+      "inserted_at": "2020-06-19T10:32:27.764263Z"
+    },
+    {
+      "version": "2.0.2",
+      "url": "https://hex.pm/api/packages/nanoid/releases/2.0.2",
+      "has_docs": true,
+      "inserted_at": "2019-08-09T13:16:43.127742Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/nanoid/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2018-12-09T13:20:07.780422Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/nanoid/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2018-11-30T17:04:41.877588Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/nanoid/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2018-01-15T11:36:43.212155Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/nanoid/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2018-01-02T15:21:32.112659Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/nanoid",
+  "latest_version": "3.0.0-rc.2",
+  "downloads": {
+    "all": 2367518,
+    "day": 2491,
+    "recent": 154134,
+    "week": 15944
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://nanoid.hexdocs.pm/",
+  "retirements": {
+    "1.0.0": {
+      "message": "Added backward compatibility for Elixir >= 1.4",
+      "reason": "other"
+    },
+    "2.0.3": {
+      "message": "The default size of a nanoid was accidently lowered to 1",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_nanoid = hex 2.1.0",
+    "mix.exs": "{:nanoid, \"~> 2.1\"}",
+    "rebar.config": "{nanoid, \"2.1.0\"}"
+  },
+  "latest_stable_version": "2.1.0"
+}

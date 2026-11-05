@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "elixir": "~> 1.12",
+    "app": "nimble_parsec",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.4.0",
+  "checksum": "9c565862810fb383e9838c1dd2d7d2c437b3d13b267414ba6af33e50d2d1cf28",
+  "url": "https://hex.pm/api/packages/nimble_parsec/releases/1.4.0",
+  "has_docs": true,
+  "inserted_at": "2023-11-08T13:51:23.862508Z",
+  "updated_at": "2023-11-08T13:51:26.666581Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/nimble_parsec/1.4.0",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/nimble_parsec",
+  "downloads": 10361111,
+  "security_advisories": [],
+  "docs_html_url": "https://nimble-parsec.hexdocs.pm/1.4.0/",
+  "configs": {
+    "erlang.mk": "dep_nimble_parsec = hex 1.4.0",
+    "mix.exs": "{:nimble_parsec, \"~> 1.4\"}",
+    "rebar.config": "{nimble_parsec, \"1.4.0\"}"
+  }
+}

@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "elixir": ">= 1.6.0",
+    "app": "dialyxir",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.4.4",
+  "checksum": "cd6111e8017ccd563e65621a4d9a4a1c5cd333df30cebc7face8029cacb4eff6",
+  "url": "https://hex.pm/api/packages/dialyxir/releases/1.4.4",
+  "has_docs": true,
+  "inserted_at": "2024-09-28T16:32:42.615963Z",
+  "updated_at": "2024-09-28T16:32:45.155768Z",
+  "requirements": {
+    "erlex": {
+      "app": "erlex",
+      "optional": false,
+      "requirement": ">= 0.2.7"
+    }
+  },
+  "html_url": "https://hex.pm/packages/dialyxir/1.4.4",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/jeremyjh",
+    "email": "jeremy@jeremyhuffman.com",
+    "username": "jeremyjh"
+  },
+  "package_url": "https://hex.pm/api/packages/dialyxir",
+  "downloads": 808453,
+  "security_advisories": [],
+  "docs_html_url": "https://dialyxir.hexdocs.pm/1.4.4/",
+  "configs": {
+    "erlang.mk": "dep_dialyxir = hex 1.4.4",
+    "mix.exs": "{:dialyxir, \"~> 1.4\"}",
+    "rebar.config": "{dialyxir, \"1.4.4\"}"
+  }
+}

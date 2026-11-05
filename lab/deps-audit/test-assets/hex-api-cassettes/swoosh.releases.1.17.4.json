@@ -1,0 +1,203 @@
+{
+  "meta": {
+    "elixir": "~> 1.13",
+    "app": "swoosh",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.17.4",
+  "checksum": "4b954a8a63d558a8bb2977e84b6baf6fb836da8d88002984bdb653f3259e4e22",
+  "url": "https://hex.pm/api/packages/swoosh/releases/1.17.4",
+  "has_docs": true,
+  "inserted_at": "2024-12-11T10:56:03.205099Z",
+  "updated_at": "2024-12-15T06:48:29.869991Z",
+  "requirements": {
+    "bandit": {
+      "app": "bandit",
+      "optional": true,
+      "requirement": ">= 1.0.0"
+    },
+    "cowboy": {
+      "app": "cowboy",
+      "optional": true,
+      "requirement": "~> 1.1 or ~> 2.4"
+    },
+    "ex_aws": {
+      "app": "ex_aws",
+      "optional": true,
+      "requirement": "~> 2.1"
+    },
+    "finch": {
+      "app": "finch",
+      "optional": true,
+      "requirement": "~> 0.6"
+    },
+    "gen_smtp": {
+      "app": "gen_smtp",
+      "optional": true,
+      "requirement": "~> 0.13 or ~> 1.0"
+    },
+    "hackney": {
+      "app": "hackney",
+      "optional": true,
+      "requirement": "~> 1.9"
+    },
+    "jason": {
+      "app": "jason",
+      "optional": false,
+      "requirement": "~> 1.0"
+    },
+    "mail": {
+      "app": "mail",
+      "optional": true,
+      "requirement": "~> 0.2"
+    },
+    "mime": {
+      "app": "mime",
+      "optional": false,
+      "requirement": "~> 1.1 or ~> 2.0"
+    },
+    "mua": {
+      "app": "mua",
+      "optional": true,
+      "requirement": "~> 0.2.3"
+    },
+    "multipart": {
+      "app": "multipart",
+      "optional": true,
+      "requirement": "~> 0.4"
+    },
+    "plug": {
+      "app": "plug",
+      "optional": true,
+      "requirement": "~> 1.9"
+    },
+    "plug_cowboy": {
+      "app": "plug_cowboy",
+      "optional": true,
+      "requirement": ">= 1.0.0"
+    },
+    "req": {
+      "app": "req",
+      "optional": true,
+      "requirement": "~> 0.5 or ~> 1.0"
+    },
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 0.4.2 or ~> 1.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/swoosh/1.17.4",
+  "oidc_claims": null,
+  "retirement": {
+    "message": "broken Swoosh.Adapters.Mua",
+    "reason": "deprecated"
+  },
+  "publisher": {
+    "url": "https://hex.pm/api/users/princemaple",
+    "email": "chenpaul914@gmail.com",
+    "username": "princemaple"
+  },
+  "package_url": "https://hex.pm/api/packages/swoosh",
+  "downloads": 33018,
+  "security_advisories": [
+    {
+      "id": "GHSA-754j-98wh-57rf",
+      "aliases": [
+        "CVE-2026-54893",
+        "EEF-CVE-2026-54893"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/swoosh/swoosh"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/swoosh/swoosh/security/advisories/GHSA-754j-98wh-57rf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-54893"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54893"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/swoosh/swoosh/commit/23bfcdab71aee4613858ba6d116bb3311b72aa58"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/swoosh/swoosh/commit/e38235453e81d1727bfc8d91e69ec4cb211ccf61"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-54893.html"
+        }
+      ],
+      "summary": "swoosh has email-derived URL path injection in Microsoft Graph endpoint",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-754j-98wh-57rf",
+      "published_at": "2026-10-16T19:22:31Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-754j-98wh-57rf",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-10-16T19:30:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.12.0 and < 1.26.3"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-54893",
+      "aliases": [
+        "CVE-2026-54893",
+        "GHSA-754j-98wh-57rf"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/swoosh/swoosh/security/advisories/GHSA-754j-98wh-57rf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-54893.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/swoosh/swoosh/commit/23bfcdab71aee4613858ba6d116bb3311b72aa58"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/swoosh/swoosh/commit/e38235453e81d1727bfc8d91e69ec4cb211ccf61"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/swoosh"
+        }
+      ],
+      "summary": "Email-derived URL path injection in the Swoosh Microsoft Graph adapter",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-54893",
+      "published_at": "2026-07-06T14:04:16Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-54893",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-09-24T21:30:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.12.0 and < 1.26.3"
+      ]
+    }
+  ],
+  "docs_html_url": "https://swoosh.hexdocs.pm/1.17.4/",
+  "configs": {
+    "erlang.mk": "dep_swoosh = hex 1.17.4",
+    "mix.exs": "{:swoosh, \"~> 1.17\"}",
+    "rebar.config": "{swoosh, \"1.17.4\"}"
+  }
+}

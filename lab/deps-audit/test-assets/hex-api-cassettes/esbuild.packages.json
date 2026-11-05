@@ -1,0 +1,212 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/phoenixframework/esbuild",
+      "esbuild": "https://esbuild.github.io"
+    },
+    "description": "Mix tasks for installing and invoking esbuild",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "esbuild",
+  "url": "https://hex.pm/api/packages/esbuild",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/chrismccord",
+      "email": "chris@chrismccord.com",
+      "username": "chrismccord"
+    },
+    {
+      "url": "https://hex.pm/api/users/gazler",
+      "email": "gazler@gmail.com",
+      "username": "gazler"
+    },
+    {
+      "url": "https://hex.pm/api/users/josevalim",
+      "email": "jose.valim@gmail.com",
+      "username": "josevalim"
+    },
+    {
+      "url": "https://hex.pm/api/users/steffend",
+      "username": "steffend"
+    },
+    {
+      "url": "https://hex.pm/api/users/wojtekmach",
+      "email": "wojtek@wojtekmach.pl",
+      "username": "wojtekmach"
+    }
+  ],
+  "inserted_at": "2021-07-18T07:54:34.741161Z",
+  "updated_at": "2026-10-19T15:03:13.201572Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.10.1",
+      "has_docs": true,
+      "inserted_at": "2026-10-19T15:03:11.831156Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2025-05-27T11:29:48.576686Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2025-02-10T15:32:13.966833Z"
+    },
+    {
+      "version": "0.8.2",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.8.2",
+      "has_docs": true,
+      "inserted_at": "2024-10-18T12:34:40.411848Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2023-11-02T22:47:10.270637Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2023-11-02T18:04:34.435951Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2023-06-26T12:31:59.258822Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2023-03-16T14:27:26.807846Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2023-02-09T13:36:19.480814Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2022-12-12T17:11:49.897658Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2022-05-27T18:14:52.328973Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2021-11-27T18:02:23.873844Z"
+    },
+    {
+      "version": "0.3.4",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.3.4",
+      "has_docs": true,
+      "inserted_at": "2021-10-30T07:51:34.093116Z"
+    },
+    {
+      "version": "0.3.3",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.3.3",
+      "has_docs": true,
+      "inserted_at": "2021-10-11T07:39:06.422958Z"
+    },
+    {
+      "version": "0.3.2",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.3.2",
+      "has_docs": true,
+      "inserted_at": "2021-10-06T08:19:27.575889Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2021-09-08T08:22:08.244748Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2021-09-05T07:51:24.070012Z"
+    },
+    {
+      "version": "0.2.2",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.2.2",
+      "has_docs": true,
+      "inserted_at": "2021-08-28T12:28:29.697594Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2021-08-09T16:24:24.725668Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2021-07-29T17:09:47.160647Z"
+    },
+    {
+      "version": "0.1.3",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.1.3",
+      "has_docs": true,
+      "inserted_at": "2021-07-21T18:21:29.312294Z"
+    },
+    {
+      "version": "0.1.2",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.1.2",
+      "has_docs": true,
+      "inserted_at": "2021-07-18T21:03:04.122980Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.1.1",
+      "has_docs": true,
+      "inserted_at": "2021-07-18T11:40:52.424100Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/esbuild/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2021-07-18T07:54:34.753869Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/esbuild",
+  "latest_version": "0.10.1",
+  "downloads": {
+    "all": 21381452,
+    "day": 50394,
+    "recent": 2641428,
+    "week": 309150
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://esbuild.hexdocs.pm/",
+  "retirements": {
+    "0.8.0": {
+      "message": "Package has a breaking bug",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_esbuild = hex 0.10.1",
+    "mix.exs": "{:esbuild, \"~> 0.10.1\"}",
+    "rebar.config": "{esbuild, \"0.10.1\"}"
+  },
+  "latest_stable_version": "0.10.1"
+}

@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "elixir": "~> 1.14",
+    "app": "oban",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.18.3",
+  "checksum": "36ca6ca84ef6518f9c2c759ea88efd438a3c81d667ba23b02b062a0aa785475e",
+  "url": "https://hex.pm/api/packages/oban/releases/2.18.3",
+  "has_docs": true,
+  "inserted_at": "2024-09-10T23:29:24.754313Z",
+  "updated_at": "2024-09-10T23:29:27.243800Z",
+  "requirements": {
+    "ecto_sql": {
+      "app": "ecto_sql",
+      "optional": false,
+      "requirement": "~> 3.10"
+    },
+    "ecto_sqlite3": {
+      "app": "ecto_sqlite3",
+      "optional": true,
+      "requirement": "~> 0.9"
+    },
+    "jason": {
+      "app": "jason",
+      "optional": false,
+      "requirement": "~> 1.1"
+    },
+    "postgrex": {
+      "app": "postgrex",
+      "optional": true,
+      "requirement": "~> 0.16"
+    },
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 0.4 or ~> 1.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/oban/2.18.3",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/sorentwo",
+    "email": "parker@sorentwo.com",
+    "username": "sorentwo"
+  },
+  "package_url": "https://hex.pm/api/packages/oban",
+  "downloads": 2461502,
+  "security_advisories": [],
+  "docs_html_url": "https://oban.hexdocs.pm/2.18.3/",
+  "configs": {
+    "erlang.mk": "dep_oban = hex 2.18.3",
+    "mix.exs": "{:oban, \"~> 2.18\"}",
+    "rebar.config": "{oban, \"2.18.3\"}"
+  }
+}

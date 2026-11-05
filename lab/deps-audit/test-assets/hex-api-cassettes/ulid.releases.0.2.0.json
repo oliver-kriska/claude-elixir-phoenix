@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "elixir": "~> 1.3",
+    "app": "ulid",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.2.0",
+  "checksum": "fadcc1d4cfa49028172f54bab9e464a69fb14f48f7652dad706d2bbb1ef76a6c",
+  "url": "https://hex.pm/api/packages/ulid/releases/0.2.0",
+  "has_docs": true,
+  "inserted_at": "2018-06-05T19:12:29.406294Z",
+  "updated_at": "2019-07-28T20:53:16.037589Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/ulid/0.2.0",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/merongivian",
+    "email": "jose_anasco@hotmail.com",
+    "username": "merongivian"
+  },
+  "package_url": "https://hex.pm/api/packages/ulid",
+  "downloads": 309388,
+  "security_advisories": [],
+  "docs_html_url": "https://ulid.hexdocs.pm/0.2.0/",
+  "configs": {
+    "erlang.mk": "dep_ulid = hex 0.2.0",
+    "mix.exs": "{:ulid, \"~> 0.2.0\"}",
+    "rebar.config": "{ulid, \"0.2.0\"}"
+  }
+}

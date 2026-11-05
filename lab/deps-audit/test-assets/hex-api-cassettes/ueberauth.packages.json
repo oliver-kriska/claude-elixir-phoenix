@@ -1,0 +1,168 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://hexdocs.pm/ueberauth/changelog.html",
+      "GitHub": "https://github.com/ueberauth/ueberauth"
+    },
+    "description": "An Elixir Authentication System for Plug-based Web Applications",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "ueberauth",
+  "url": "https://hex.pm/api/packages/ueberauth",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ueberauth",
+      "username": "ueberauth"
+    }
+  ],
+  "inserted_at": "2015-11-15T19:04:00.759057Z",
+  "updated_at": "2026-10-11T07:16:55.670255Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2026-10-11T07:16:54.544357Z"
+    },
+    {
+      "version": "0.10.8",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.10.8",
+      "has_docs": true,
+      "inserted_at": "2024-02-27T15:48:30.747760Z"
+    },
+    {
+      "version": "0.10.7",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.10.7",
+      "has_docs": true,
+      "inserted_at": "2024-01-04T02:25:42.097744Z"
+    },
+    {
+      "version": "0.10.6",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.10.6",
+      "has_docs": true,
+      "inserted_at": "2023-12-01T18:54:12.842058Z"
+    },
+    {
+      "version": "0.10.5",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.10.5",
+      "has_docs": true,
+      "inserted_at": "2023-03-09T21:51:49.429390Z"
+    },
+    {
+      "version": "0.10.3",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.10.3",
+      "has_docs": true,
+      "inserted_at": "2022-09-14T08:35:40.160810Z"
+    },
+    {
+      "version": "0.10.2",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.10.2",
+      "has_docs": true,
+      "inserted_at": "2022-08-16T15:42:07.210186Z"
+    },
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.10.1",
+      "has_docs": true,
+      "inserted_at": "2022-07-05T23:53:48.650906Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2022-06-18T18:12:05.329450Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2022-05-16T21:17:46.821130Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2021-06-29T17:27:59.017496Z"
+    },
+    {
+      "version": "0.6.3",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.6.3",
+      "has_docs": true,
+      "inserted_at": "2020-03-05T12:40:07.946901Z"
+    },
+    {
+      "version": "0.6.2",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.6.2",
+      "has_docs": true,
+      "inserted_at": "2019-09-11T14:11:02.510883Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2019-03-14T19:48:28.598559Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2019-03-12T21:00:26.208521Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2017-11-17T19:19:44.533514Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2016-09-22T02:06:39.492506Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2016-07-19T17:54:18.170172Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2015-11-29T08:53:28.666257Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/ueberauth/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-11-15T19:04:00.793351Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/ueberauth",
+  "latest_version": "0.11.0",
+  "downloads": {
+    "all": 10476666,
+    "day": 16310,
+    "recent": 689810,
+    "week": 64489
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://ueberauth.hexdocs.pm/",
+  "retirements": {
+    "0.10.6": {
+      "message": "Breaks existing routing",
+      "reason": "other"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_ueberauth = hex 0.11.0",
+    "mix.exs": "{:ueberauth, \"~> 0.11.0\"}",
+    "rebar.config": "{ueberauth, \"0.11.0\"}"
+  },
+  "latest_stable_version": "0.11.0"
+}

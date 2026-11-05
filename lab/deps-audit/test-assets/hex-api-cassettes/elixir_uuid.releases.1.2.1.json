@@ -1,0 +1,32 @@
+{
+  "meta": {
+    "elixir": "~> 1.7",
+    "app": "elixir_uuid",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.2.1",
+  "checksum": "f7eba2ea6c3555cea09706492716b0d87397b88946e6380898c2889d68585752",
+  "url": "https://hex.pm/api/packages/elixir_uuid/releases/1.2.1",
+  "has_docs": true,
+  "inserted_at": "2019-10-24T13:31:55.305484Z",
+  "updated_at": "2019-10-24T13:33:33.862674Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/elixir_uuid/1.2.1",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/andreimihu",
+    "username": "andreimihu"
+  },
+  "package_url": "https://hex.pm/api/packages/elixir_uuid",
+  "downloads": 16658295,
+  "security_advisories": [],
+  "docs_html_url": "https://elixir-uuid.hexdocs.pm/1.2.1/",
+  "configs": {
+    "erlang.mk": "dep_elixir_uuid = hex 1.2.1",
+    "mix.exs": "{:elixir_uuid, \"~> 1.2\"}",
+    "rebar.config": "{elixir_uuid, \"1.2.1\"}"
+  }
+}

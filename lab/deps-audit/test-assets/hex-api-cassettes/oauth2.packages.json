@@ -1,0 +1,211 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://hexdocs.pm/oauth2/changelog.html",
+      "GitHub": "https://github.com/scrogson/oauth2"
+    },
+    "description": "An Elixir OAuth 2.0 Client Library",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "oauth2",
+  "url": "https://hex.pm/api/packages/oauth2",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/ueberauth",
+      "username": "ueberauth"
+    }
+  ],
+  "inserted_at": "2014-12-17T07:22:46.000000Z",
+  "updated_at": "2026-06-03T17:52:18.626709Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/oauth2/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2026-06-03T17:52:17.432766Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2023-01-02T17:32:45.781610Z"
+    },
+    {
+      "version": "2.0.1",
+      "url": "https://hex.pm/api/packages/oauth2/releases/2.0.1",
+      "has_docs": true,
+      "inserted_at": "2022-06-20T15:09:40.045304Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2019-07-15T22:06:34.984108Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/oauth2/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2019-04-12T17:06:46.906794Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2019-03-13T16:18:39.399503Z"
+    },
+    {
+      "version": "0.9.4",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.9.4",
+      "has_docs": true,
+      "inserted_at": "2018-10-18T21:47:14.177187Z"
+    },
+    {
+      "version": "0.9.3",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.9.3",
+      "has_docs": true,
+      "inserted_at": "2018-08-13T22:53:54.108355Z"
+    },
+    {
+      "version": "0.9.2",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.9.2",
+      "has_docs": true,
+      "inserted_at": "2017-11-17T15:26:30.958309Z"
+    },
+    {
+      "version": "0.9.1",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.9.1",
+      "has_docs": true,
+      "inserted_at": "2017-03-10T22:02:27.073837Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2017-02-03T00:27:27.957095Z"
+    },
+    {
+      "version": "0.8.3",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.8.3",
+      "has_docs": true,
+      "inserted_at": "2017-01-26T22:46:08.633645Z"
+    },
+    {
+      "version": "0.8.2",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.8.2",
+      "has_docs": true,
+      "inserted_at": "2016-11-22T12:23:48.167054Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2016-11-18T17:17:46.271686Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-05T22:28:51.954348Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2016-08-17T04:10:16.009726Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2016-03-08T21:27:46.339024Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2015-11-03T06:38:13.092173Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2015-10-28T02:03:04.359107Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-19T22:28:21.931313Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2015-07-13T16:12:14.488258Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.1.1",
+      "has_docs": true,
+      "inserted_at": "2015-04-18T22:53:33.908962Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-04-14T23:04:28.000000Z"
+    },
+    {
+      "version": "0.0.5",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.0.5",
+      "has_docs": false,
+      "inserted_at": "2015-03-16T08:07:54.000000Z"
+    },
+    {
+      "version": "0.0.4",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.0.4",
+      "has_docs": false,
+      "inserted_at": "2015-03-14T23:15:44.000000Z"
+    },
+    {
+      "version": "0.0.3",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.0.3",
+      "has_docs": false,
+      "inserted_at": "2015-01-12T17:13:17.000000Z"
+    },
+    {
+      "version": "0.0.2",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.0.2",
+      "has_docs": false,
+      "inserted_at": "2015-01-10T17:20:49.000000Z"
+    },
+    {
+      "version": "0.0.1",
+      "url": "https://hex.pm/api/packages/oauth2/releases/0.0.1",
+      "has_docs": false,
+      "inserted_at": "2014-12-17T07:22:47.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/oauth2",
+  "latest_version": "2.1.1",
+  "downloads": {
+    "all": 15118244,
+    "day": 18175,
+    "recent": 814564,
+    "week": 73979
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://oauth2.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_oauth2 = hex 2.1.1",
+    "mix.exs": "{:oauth2, \"~> 2.1\"}",
+    "rebar.config": "{oauth2, \"2.1.1\"}"
+  },
+  "latest_stable_version": "2.1.1"
+}

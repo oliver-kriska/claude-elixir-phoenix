@@ -1,0 +1,313 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://hexdocs.pm/finch/changelog.html",
+      "GitHub": "https://github.com/sneako/finch"
+    },
+    "description": "An HTTP client focused on performance.",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "finch",
+  "url": "https://hex.pm/api/packages/finch",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/keathley",
+      "email": "c@keathley.io",
+      "username": "keathley"
+    },
+    {
+      "url": "https://hex.pm/api/users/rozap",
+      "email": "chrisd1891@gmail.com",
+      "username": "rozap"
+    },
+    {
+      "url": "https://hex.pm/api/users/sneako",
+      "email": "nico.piderman@gmail.com",
+      "username": "sneako"
+    }
+  ],
+  "inserted_at": "2014-09-15T01:51:29.000000Z",
+  "updated_at": "2026-09-29T10:14:28.258432Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.24.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.24.0",
+      "has_docs": true,
+      "inserted_at": "2026-09-29T10:14:26.983152Z"
+    },
+    {
+      "version": "0.23.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.23.0",
+      "has_docs": true,
+      "inserted_at": "2026-06-17T06:08:24.041050Z"
+    },
+    {
+      "version": "0.22.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.22.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-12T13:07:33.489018Z"
+    },
+    {
+      "version": "0.21.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.21.0",
+      "has_docs": true,
+      "inserted_at": "2026-01-22T09:17:49.871005Z"
+    },
+    {
+      "version": "0.20.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.20.0",
+      "has_docs": true,
+      "inserted_at": "2025-07-04T08:57:19.465006Z"
+    },
+    {
+      "version": "0.19.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.19.0",
+      "has_docs": true,
+      "inserted_at": "2024-09-04T17:03:37.410673Z"
+    },
+    {
+      "version": "0.18.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.18.0",
+      "has_docs": true,
+      "inserted_at": "2024-02-09T14:50:54.865087Z"
+    },
+    {
+      "version": "0.17.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.17.0",
+      "has_docs": true,
+      "inserted_at": "2024-01-07T14:59:46.602856Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.16.0",
+      "has_docs": true,
+      "inserted_at": "2023-04-13T10:47:39.062947Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2023-03-16T11:54:53.218030Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2022-11-30T09:00:25.068378Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2022-07-27T06:48:11.767105Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2022-05-03T17:17:55.729445Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2022-03-28T09:07:08.415834Z"
+    },
+    {
+      "version": "0.10.2",
+      "url": "https://hex.pm/api/packages/finch/releases/0.10.2",
+      "has_docs": true,
+      "inserted_at": "2022-01-12T08:51:46.438021Z"
+    },
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/finch/releases/0.10.1",
+      "has_docs": true,
+      "inserted_at": "2021-12-27T08:15:36.673266Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2021-12-13T09:32:31.621152Z"
+    },
+    {
+      "version": "0.9.1",
+      "url": "https://hex.pm/api/packages/finch/releases/0.9.1",
+      "has_docs": true,
+      "inserted_at": "2021-11-11T17:47:46.121426Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2021-10-17T16:04:21.725442Z"
+    },
+    {
+      "version": "0.8.3",
+      "url": "https://hex.pm/api/packages/finch/releases/0.8.3",
+      "has_docs": true,
+      "inserted_at": "2021-10-15T10:13:17.336658Z"
+    },
+    {
+      "version": "0.8.2",
+      "url": "https://hex.pm/api/packages/finch/releases/0.8.2",
+      "has_docs": true,
+      "inserted_at": "2021-09-09T18:46:37.343070Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/finch/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2021-07-27T08:01:55.545267Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2021-06-23T15:14:57.932817Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2021-05-10T17:28:45.293141Z"
+    },
+    {
+      "version": "0.6.3",
+      "url": "https://hex.pm/api/packages/finch/releases/0.6.3",
+      "has_docs": true,
+      "inserted_at": "2021-02-22T14:52:14.541970Z"
+    },
+    {
+      "version": "0.6.2",
+      "url": "https://hex.pm/api/packages/finch/releases/0.6.2",
+      "has_docs": true,
+      "inserted_at": "2021-02-19T16:43:35.289526Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/finch/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2021-02-17T08:27:57.519941Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2020-12-15T20:21:17.532537Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/finch/releases/0.5.2",
+      "has_docs": true,
+      "inserted_at": "2020-11-10T15:32:54.295065Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/finch/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2020-10-27T16:35:24.017154Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-26T15:39:21.108545Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-02T13:48:09.970412Z"
+    },
+    {
+      "version": "0.3.2",
+      "url": "https://hex.pm/api/packages/finch/releases/0.3.2",
+      "has_docs": true,
+      "inserted_at": "2020-09-18T15:04:29.772499Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/finch/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2020-08-29T16:49:50.026640Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2020-06-24T13:03:11.750559Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-05-06T14:43:08.368884Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/finch/releases/0.1.1",
+      "has_docs": true,
+      "inserted_at": "2020-05-04T15:44:12.264679Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/finch/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-25T19:22:29.296855Z"
+    },
+    {
+      "version": "0.0.3",
+      "url": "https://hex.pm/api/packages/finch/releases/0.0.3",
+      "has_docs": false,
+      "inserted_at": "2014-10-19T22:20:42.000000Z"
+    },
+    {
+      "version": "0.0.2",
+      "url": "https://hex.pm/api/packages/finch/releases/0.0.2",
+      "has_docs": false,
+      "inserted_at": "2014-09-17T01:09:00.000000Z"
+    },
+    {
+      "version": "0.0.1",
+      "url": "https://hex.pm/api/packages/finch/releases/0.0.1",
+      "has_docs": false,
+      "inserted_at": "2014-09-15T01:51:29.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/finch",
+  "latest_version": "0.24.0",
+  "downloads": {
+    "all": 64325762,
+    "day": 98213,
+    "recent": 5519145,
+    "week": 546892
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://finch.hexdocs.pm/",
+  "retirements": {
+    "0.0.1": {
+      "message": "it was never a good idea",
+      "reason": "deprecated"
+    },
+    "0.0.2": {
+      "message": "it was never a good idea",
+      "reason": "deprecated"
+    },
+    "0.0.3": {
+      "message": "it was never a good idea",
+      "reason": "deprecated"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_finch = hex 0.24.0",
+    "mix.exs": "{:finch, \"~> 0.24.0\"}",
+    "rebar.config": "{finch, \"0.24.0\"}"
+  },
+  "latest_stable_version": "0.24.0"
+}

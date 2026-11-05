@@ -1,0 +1,81 @@
+{
+  "meta": {
+    "elixir": null,
+    "app": "ssl_verify_fun",
+    "build_tools": [
+      "mix",
+      "rebar3",
+      "make"
+    ]
+  },
+  "version": "1.1.7",
+  "checksum": "fe4c190e8f37401d30167c8c405eda19469f34577987c76dde613e838bbc67f8",
+  "url": "https://hex.pm/api/packages/ssl_verify_fun/releases/1.1.7",
+  "has_docs": false,
+  "inserted_at": "2023-06-20T21:44:33.416572Z",
+  "updated_at": "2023-06-20T21:44:33.416572Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/ssl_verify_fun/1.1.7",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/deadtrickster",
+    "email": "i.khaprov@gmail.com",
+    "username": "deadtrickster"
+  },
+  "package_url": "https://hex.pm/api/packages/ssl_verify_fun",
+  "downloads": 44614386,
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-117666",
+      "aliases": [
+        "CVE-2026-117666",
+        "GHSA-7gw2-hphm-c5px"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/deadtrickster/ssl_verify_fun.erl/security/advisories/GHSA-7gw2-hphm-c5px"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-117666.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/deadtrickster/ssl_verify_fun.erl/pull/33"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/deadtrickster/ssl_verify_fun.erl/commit/a49ca56923356c7a3981692b23c42ef32c2990e0"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/deadtrickster/ssl_verify_fun.erl/commit/ca34031299cd2e0c98794c0da4ba556b94e39aad"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/ssl_verify_fun"
+        }
+      ],
+      "summary": "ssl_verify_fun: partial-label wildcard certificate matches hostnames across a label boundary",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-117666",
+      "published_at": "2026-10-30T20:22:16Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-117666",
+      "cvss_score": 9.1,
+      "cvss_rating": "critical",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:H/AT:P/PR:N/UI:N/VC:H/VI:H/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-10-30T20:41:08Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.0.1 and < 1.1.8"
+      ]
+    }
+  ],
+  "docs_html_url": null,
+  "configs": {
+    "erlang.mk": "dep_ssl_verify_fun = hex 1.1.7",
+    "mix.exs": "{:ssl_verify_fun, \"~> 1.1\"}",
+    "rebar.config": "{ssl_verify_fun, \"1.1.7\"}"
+  }
+}

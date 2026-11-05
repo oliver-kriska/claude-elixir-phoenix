@@ -1,0 +1,39 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "tailwind",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.2.4",
+  "checksum": "c6e4a82b8727bab593700c998a4d98cf3d8025678bfde059aed71d0000c3e463",
+  "url": "https://hex.pm/api/packages/tailwind/releases/0.2.4",
+  "has_docs": true,
+  "inserted_at": "2024-10-18T12:42:33.203167Z",
+  "updated_at": "2024-10-18T12:43:14.588465Z",
+  "requirements": {
+    "castore": {
+      "app": "castore",
+      "optional": false,
+      "requirement": ">= 0.0.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/tailwind/0.2.4",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/gazler",
+    "email": "gazler@gmail.com",
+    "username": "gazler"
+  },
+  "package_url": "https://hex.pm/api/packages/tailwind",
+  "downloads": 2383891,
+  "security_advisories": [],
+  "docs_html_url": "https://tailwind.hexdocs.pm/0.2.4/",
+  "configs": {
+    "erlang.mk": "dep_tailwind = hex 0.2.4",
+    "mix.exs": "{:tailwind, \"~> 0.2.4\"}",
+    "rebar.config": "{tailwind, \"0.2.4\"}"
+  }
+}

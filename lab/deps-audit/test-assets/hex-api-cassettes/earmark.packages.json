@@ -1,0 +1,1076 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/pragdave/earmark"
+    },
+    "description": "Earmark is a pure-Elixir Markdown converter.\n\nIt is intended to be used as a library (just call Earmark.as_html),\nbut can also be used as a command-line tool (run mix escript.build\nfirst).\n\nOutput generation is pluggable.",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "earmark",
+  "url": "https://hex.pm/api/packages/earmark",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/amyth",
+      "email": "amitchaudhari9121@gmail.com",
+      "username": "amyth"
+    },
+    {
+      "url": "https://hex.pm/api/users/lab42",
+      "email": "robert.dober@gmail.com",
+      "username": "lab42"
+    },
+    {
+      "url": "https://hex.pm/api/users/maennchen",
+      "email": "jonatan@maennchen.ch",
+      "username": "maennchen"
+    },
+    {
+      "url": "https://hex.pm/api/users/pragdave",
+      "email": "dave@pragdave.me",
+      "username": "pragdave"
+    }
+  ],
+  "inserted_at": "2014-07-09T16:15:39.000000Z",
+  "updated_at": "2026-06-17T16:22:17.942948Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.5.0-pre1",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.5.0-pre1",
+      "has_docs": true,
+      "inserted_at": "2022-03-13T09:25:07.853486Z"
+    },
+    {
+      "version": "1.5.0-pre",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.5.0-pre",
+      "has_docs": true,
+      "inserted_at": "2022-02-21T13:44:21.696003Z"
+    },
+    {
+      "version": "1.4.49",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.49",
+      "has_docs": true,
+      "inserted_at": "2026-06-02T07:10:42.992229Z"
+    },
+    {
+      "version": "1.4.48",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.48",
+      "has_docs": true,
+      "inserted_at": "2025-06-21T10:48:03.611822Z"
+    },
+    {
+      "version": "1.4.47",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.47",
+      "has_docs": true,
+      "inserted_at": "2024-07-12T17:57:54.929612Z"
+    },
+    {
+      "version": "1.4.46",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.46",
+      "has_docs": true,
+      "inserted_at": "2023-10-01T08:49:11.702331Z"
+    },
+    {
+      "version": "1.4.45",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.45",
+      "has_docs": true,
+      "inserted_at": "2023-09-27T12:21:07.339937Z"
+    },
+    {
+      "version": "1.4.44",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.44",
+      "has_docs": true,
+      "inserted_at": "2023-09-26T18:58:04.443527Z"
+    },
+    {
+      "version": "1.4.43",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.43",
+      "has_docs": true,
+      "inserted_at": "2023-09-20T18:22:29.665320Z"
+    },
+    {
+      "version": "1.4.42",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.42",
+      "has_docs": true,
+      "inserted_at": "2023-09-20T07:01:01.814640Z"
+    },
+    {
+      "version": "1.4.41",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.41",
+      "has_docs": true,
+      "inserted_at": "2023-09-19T15:16:41.912486Z"
+    },
+    {
+      "version": "1.4.40",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.40",
+      "has_docs": true,
+      "inserted_at": "2023-09-12T18:35:05.299840Z"
+    },
+    {
+      "version": "1.4.39",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.39",
+      "has_docs": true,
+      "inserted_at": "2023-07-14T12:48:39.002433Z"
+    },
+    {
+      "version": "1.4.38",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.38",
+      "has_docs": true,
+      "inserted_at": "2023-04-29T17:32:22.359660Z"
+    },
+    {
+      "version": "1.4.37",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.37",
+      "has_docs": true,
+      "inserted_at": "2023-03-03T20:21:23.224303Z"
+    },
+    {
+      "version": "1.4.36",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.36",
+      "has_docs": true,
+      "inserted_at": "2023-02-11T06:59:50.310520Z"
+    },
+    {
+      "version": "1.4.35",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.35",
+      "has_docs": true,
+      "inserted_at": "2023-01-27T18:05:36.853546Z"
+    },
+    {
+      "version": "1.4.34",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.34",
+      "has_docs": true,
+      "inserted_at": "2022-11-27T13:59:32.262423Z"
+    },
+    {
+      "version": "1.4.33",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.33",
+      "has_docs": true,
+      "inserted_at": "2022-11-02T09:21:21.455998Z"
+    },
+    {
+      "version": "1.4.32",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.32",
+      "has_docs": true,
+      "inserted_at": "2022-10-31T18:03:34.416779Z"
+    },
+    {
+      "version": "1.4.31",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.31",
+      "has_docs": true,
+      "inserted_at": "2022-10-20T16:10:33.874686Z"
+    },
+    {
+      "version": "1.4.30",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.30",
+      "has_docs": true,
+      "inserted_at": "2022-10-01T14:36:19.887993Z"
+    },
+    {
+      "version": "1.4.29",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.29",
+      "has_docs": true,
+      "inserted_at": "2022-09-29T20:15:37.180994Z"
+    },
+    {
+      "version": "1.4.28",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.28",
+      "has_docs": true,
+      "inserted_at": "2022-09-29T20:06:23.466520Z"
+    },
+    {
+      "version": "1.4.27",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.27",
+      "has_docs": true,
+      "inserted_at": "2022-08-11T19:08:58.693547Z"
+    },
+    {
+      "version": "1.4.26",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.26",
+      "has_docs": true,
+      "inserted_at": "2022-06-15T19:16:26.503817Z"
+    },
+    {
+      "version": "1.4.25",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.25",
+      "has_docs": true,
+      "inserted_at": "2022-05-01T07:09:47.221681Z"
+    },
+    {
+      "version": "1.4.24",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.24",
+      "has_docs": true,
+      "inserted_at": "2022-03-24T18:19:27.602911Z"
+    },
+    {
+      "version": "1.4.23",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.23",
+      "has_docs": true,
+      "inserted_at": "2022-03-20T09:48:43.277779Z"
+    },
+    {
+      "version": "1.4.22",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.22",
+      "has_docs": true,
+      "inserted_at": "2022-03-16T19:49:21.630969Z"
+    },
+    {
+      "version": "1.4.21",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.21",
+      "has_docs": true,
+      "inserted_at": "2022-03-14T22:37:22.073185Z"
+    },
+    {
+      "version": "1.4.20",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.20",
+      "has_docs": true,
+      "inserted_at": "2022-01-08T07:20:50.853984Z"
+    },
+    {
+      "version": "1.4.19",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.19",
+      "has_docs": true,
+      "inserted_at": "2021-12-04T18:22:57.509680Z"
+    },
+    {
+      "version": "1.4.18",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.18",
+      "has_docs": true,
+      "inserted_at": "2021-10-30T07:11:25.422544Z"
+    },
+    {
+      "version": "1.4.17",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.17",
+      "has_docs": true,
+      "inserted_at": "2021-10-27T13:59:16.412205Z"
+    },
+    {
+      "version": "1.4.16",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.16",
+      "has_docs": true,
+      "inserted_at": "2021-10-07T16:32:17.198818Z"
+    },
+    {
+      "version": "1.4.16-pre2",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.16-pre2",
+      "has_docs": true,
+      "inserted_at": "2021-09-28T20:16:42.633388Z"
+    },
+    {
+      "version": "1.4.16-pre1",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.16-pre1",
+      "has_docs": true,
+      "inserted_at": "2021-09-28T07:41:34.822455Z"
+    },
+    {
+      "version": "1.4.16-pre",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.16-pre",
+      "has_docs": true,
+      "inserted_at": "2021-09-20T14:32:47.337709Z"
+    },
+    {
+      "version": "1.4.15",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.15",
+      "has_docs": true,
+      "inserted_at": "2021-04-18T14:25:21.230784Z"
+    },
+    {
+      "version": "1.4.14",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.14",
+      "has_docs": true,
+      "inserted_at": "2021-02-21T18:03:16.278923Z"
+    },
+    {
+      "version": "1.4.13",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.13",
+      "has_docs": true,
+      "inserted_at": "2020-12-03T21:00:22.977049Z"
+    },
+    {
+      "version": "1.4.12",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.12",
+      "has_docs": true,
+      "inserted_at": "2020-11-27T16:22:20.552204Z"
+    },
+    {
+      "version": "1.4.10",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.10",
+      "has_docs": true,
+      "inserted_at": "2020-07-18T10:17:05.824351Z"
+    },
+    {
+      "version": "1.4.9",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.9",
+      "has_docs": true,
+      "inserted_at": "2020-07-02T07:37:20.601347Z"
+    },
+    {
+      "version": "1.4.8",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.8",
+      "has_docs": true,
+      "inserted_at": "2020-07-01T08:54:19.757523Z"
+    },
+    {
+      "version": "1.4.7",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.7",
+      "has_docs": true,
+      "inserted_at": "2020-06-29T16:36:32.730378Z"
+    },
+    {
+      "version": "1.4.6",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.6",
+      "has_docs": true,
+      "inserted_at": "2020-06-28T19:30:32.147564Z"
+    },
+    {
+      "version": "1.4.5",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.5",
+      "has_docs": true,
+      "inserted_at": "2020-06-06T16:51:03.108743Z"
+    },
+    {
+      "version": "1.4.4",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.4",
+      "has_docs": true,
+      "inserted_at": "2020-05-01T06:56:48.454895Z"
+    },
+    {
+      "version": "1.4.3",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.3",
+      "has_docs": true,
+      "inserted_at": "2019-11-23T10:08:06.104950Z"
+    },
+    {
+      "version": "1.4.2",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.2",
+      "has_docs": true,
+      "inserted_at": "2019-10-14T14:41:39.597258Z"
+    },
+    {
+      "version": "1.4.1",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.1",
+      "has_docs": true,
+      "inserted_at": "2019-09-24T08:17:29.007137Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2019-09-05T07:04:05.929187Z"
+    },
+    {
+      "version": "1.3.6",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.3.6",
+      "has_docs": true,
+      "inserted_at": "2019-08-30T12:16:42.252034Z"
+    },
+    {
+      "version": "1.3.5",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.3.5",
+      "has_docs": true,
+      "inserted_at": "2019-08-01T11:38:51.326038Z"
+    },
+    {
+      "version": "1.3.4",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.3.4",
+      "has_docs": true,
+      "inserted_at": "2019-07-29T06:27:57.566653Z"
+    },
+    {
+      "version": "1.3.3",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.3.3",
+      "has_docs": true,
+      "inserted_at": "2019-07-23T07:32:45.778487Z"
+    },
+    {
+      "version": "1.3.2",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.3.2",
+      "has_docs": true,
+      "inserted_at": "2019-03-23T21:27:22.428057Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2018-12-21T19:59:24.113765Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2018-11-15T08:46:40.359392Z"
+    },
+    {
+      "version": "1.2.6",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.2.6",
+      "has_docs": true,
+      "inserted_at": "2018-08-21T17:01:39.314524Z"
+    },
+    {
+      "version": "1.2.5",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.2.5",
+      "has_docs": true,
+      "inserted_at": "2018-04-02T20:46:59.503542Z"
+    },
+    {
+      "version": "1.2.4",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.2.4",
+      "has_docs": true,
+      "inserted_at": "2017-11-28T23:27:20.275239Z"
+    },
+    {
+      "version": "1.2.3",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.2.3",
+      "has_docs": false,
+      "inserted_at": "2017-07-26T17:15:43.620509Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2017-05-11T21:30:48.393689Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2017-05-03T17:25:59.956528Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2017-03-10T22:12:03.280328Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2017-02-03T06:03:12.272963Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2017-01-22T23:16:45.099812Z"
+    },
+    {
+      "version": "1.0.3",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.0.3",
+      "has_docs": true,
+      "inserted_at": "2016-11-02T19:21:59.177783Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2016-10-10T15:39:14.514239Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.0.1",
+      "has_docs": false,
+      "inserted_at": "2016-07-06T18:59:16.716639Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/earmark/releases/1.0.0",
+      "has_docs": false,
+      "inserted_at": "2016-07-06T16:38:57.527107Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.2.1",
+      "has_docs": false,
+      "inserted_at": "2016-01-15T17:40:32.483214Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.2.0",
+      "has_docs": false,
+      "inserted_at": "2015-12-28T17:09:42.685632Z"
+    },
+    {
+      "version": "0.1.19",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.19",
+      "has_docs": false,
+      "inserted_at": "2015-10-27T03:27:23.607066Z"
+    },
+    {
+      "version": "0.1.18",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.18",
+      "has_docs": false,
+      "inserted_at": "2015-10-19T17:36:49.813308Z"
+    },
+    {
+      "version": "0.1.17",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.17",
+      "has_docs": false,
+      "inserted_at": "2015-05-18T14:05:46.833829Z"
+    },
+    {
+      "version": "0.1.16",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.16",
+      "has_docs": false,
+      "inserted_at": "2015-05-08T17:13:43.476291Z"
+    },
+    {
+      "version": "0.1.15",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.15",
+      "has_docs": false,
+      "inserted_at": "2015-03-25T17:43:51.000000Z"
+    },
+    {
+      "version": "0.1.14",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.14",
+      "has_docs": false,
+      "inserted_at": "2015-03-25T17:18:10.000000Z"
+    },
+    {
+      "version": "0.1.13",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.13",
+      "has_docs": false,
+      "inserted_at": "2015-01-31T18:51:39.000000Z"
+    },
+    {
+      "version": "0.1.12",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.12",
+      "has_docs": false,
+      "inserted_at": "2014-11-07T04:08:43.000000Z"
+    },
+    {
+      "version": "0.1.10",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.10",
+      "has_docs": false,
+      "inserted_at": "2014-08-13T22:14:31.000000Z"
+    },
+    {
+      "version": "0.1.9",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.9",
+      "has_docs": false,
+      "inserted_at": "2014-08-05T23:51:42.000000Z"
+    },
+    {
+      "version": "0.1.8",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.8",
+      "has_docs": false,
+      "inserted_at": "2014-08-02T21:22:45.000000Z"
+    },
+    {
+      "version": "0.1.7",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.7",
+      "has_docs": false,
+      "inserted_at": "2014-07-26T16:03:25.000000Z"
+    },
+    {
+      "version": "0.1.6",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.6",
+      "has_docs": false,
+      "inserted_at": "2014-07-25T21:05:20.000000Z"
+    },
+    {
+      "version": "0.1.5",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.5",
+      "has_docs": false,
+      "inserted_at": "2014-07-20T17:38:55.000000Z"
+    },
+    {
+      "version": "0.1.4",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.4",
+      "has_docs": false,
+      "inserted_at": "2014-07-16T18:41:01.000000Z"
+    },
+    {
+      "version": "0.1.3",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.3",
+      "has_docs": false,
+      "inserted_at": "2014-07-16T16:57:48.000000Z"
+    },
+    {
+      "version": "0.1.2",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.2",
+      "has_docs": false,
+      "inserted_at": "2014-07-16T03:09:04.000000Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.1",
+      "has_docs": false,
+      "inserted_at": "2014-07-12T18:45:34.000000Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/earmark/releases/0.1.0",
+      "has_docs": false,
+      "inserted_at": "2014-07-09T16:15:39.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/earmark",
+  "latest_version": "1.5.0-pre1",
+  "downloads": {
+    "all": 73922942,
+    "day": 8160,
+    "recent": 680323,
+    "week": 53545
+  },
+  "security_advisories": [
+    {
+      "id": "GHSA-52mm-h59v-f3c7",
+      "aliases": [
+        "CVE-2026-48591",
+        "EEF-CVE-2026-48591"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48591"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48591.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/pragdave/earmark"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-48591"
+        }
+      ],
+      "summary": "earmark: Stored XSS via unescaped HTML attribute values",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-52mm-h59v-f3c7",
+      "published_at": "2026-06-17T18:35:58Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-52mm-h59v-f3c7",
+      "cvss_score": 4.8,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-06-18T15:11:22Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.4.1 and <= 1.5.0-pre1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-48591",
+      "aliases": [
+        "CVE-2026-48591",
+        "GHSA-52mm-h59v-f3c7"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48591.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/earmark"
+        }
+      ],
+      "summary": "Stored XSS via unescaped HTML attribute values in earmark",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-48591",
+      "published_at": "2026-06-17T16:42:37Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-48591",
+      "cvss_score": 4.8,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-09-08T03:30:05Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.4.1"
+      ]
+    }
+  ],
+  "docs_html_url": "https://earmark.hexdocs.pm/",
+  "retirements": {
+    "1.4.48": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.5.0-pre": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.6": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.2": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.7": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.10": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.16": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.13": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.35": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.33": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.3.6": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.3": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.28": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.16": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.1": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.1.1": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.13": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.0.2": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.6": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.12": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.2": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.4": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.23": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.46": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.12": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.0.3": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.3.2": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.0.0": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.9": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.3.3": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.0.1": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.43": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.18": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.7": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.8": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.22": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.2.1": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.2.0": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.30": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.2.1": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.2.6": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.2.2": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.8": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.5": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.32": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.3.5": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.19": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.45": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.26": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.15": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.1.0": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.16-pre": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.3.1": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.1": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.10": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.16-pre2": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.16-pre1": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.34": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.5": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.3.0": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.29": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.41": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.4": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.27": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.3": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.9": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.42": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.17": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.44": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.17": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.2.3": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.3.4": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.19": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.39": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.21": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.49": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.2.4": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.0": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.36": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.2.0": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.2.5": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.14": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.24": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.25": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.15": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.37": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.31": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.20": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.0": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.38": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.5.0-pre1": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "0.1.18": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.40": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.14": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    },
+    "1.4.47": {
+      "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+      "reason": "deprecated"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_earmark = hex 1.4.49",
+    "mix.exs": "{:earmark, \"~> 1.4\"}",
+    "rebar.config": "{earmark, \"1.4.49\"}"
+  },
+  "latest_stable_version": "1.4.49"
+}

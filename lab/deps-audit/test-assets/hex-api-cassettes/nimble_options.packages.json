@@ -1,0 +1,173 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/dashbitco/nimble_options"
+    },
+    "description": "A tiny library for validating and documenting high-level options",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "nimble_options",
+  "url": "https://hex.pm/api/packages/nimble_options",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/dashbit",
+      "username": "dashbit"
+    },
+    {
+      "url": "https://hex.pm/api/users/whatyouhide",
+      "email": "hi@andrealeopardi.com",
+      "username": "whatyouhide"
+    }
+  ],
+  "inserted_at": "2020-04-07T16:36:29.967190Z",
+  "updated_at": "2026-11-02T08:37:26.892094Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2026-11-02T08:37:25.588622Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2024-05-25T10:51:15.797968Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2023-12-13T09:40:10.923427Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2023-04-21T13:15:40.868791Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2023-03-13T19:18:47.551932Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2023-03-08T20:49:21.648764Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.5.2",
+      "has_docs": true,
+      "inserted_at": "2022-12-15T12:07:18.480179Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2022-11-05T10:44:09.164196Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2022-09-20T19:50:27.715920Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2021-10-28T15:30:34.589038Z"
+    },
+    {
+      "version": "0.3.7",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.3.7",
+      "has_docs": true,
+      "inserted_at": "2021-09-11T08:36:36.291009Z"
+    },
+    {
+      "version": "0.3.6",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.3.6",
+      "has_docs": true,
+      "inserted_at": "2021-07-13T08:06:37.172836Z"
+    },
+    {
+      "version": "0.3.5",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.3.5",
+      "has_docs": true,
+      "inserted_at": "2020-11-09T07:44:28.740596Z"
+    },
+    {
+      "version": "0.3.4",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.3.4",
+      "has_docs": true,
+      "inserted_at": "2020-11-05T15:05:39.482190Z"
+    },
+    {
+      "version": "0.3.3",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.3.3",
+      "has_docs": true,
+      "inserted_at": "2020-11-02T07:32:03.138632Z"
+    },
+    {
+      "version": "0.3.2",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.3.2",
+      "has_docs": true,
+      "inserted_at": "2020-10-26T15:33:09.680630Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2020-10-25T18:21:50.863665Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2020-06-14T19:09:30.880548Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2020-05-08T17:10:32.176170Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-11T15:10:56.398910Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/nimble_options/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-07T16:36:29.972957Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/nimble_options",
+  "latest_version": "1.2.0",
+  "downloads": {
+    "all": 73256926,
+    "day": 108554,
+    "recent": 6299743,
+    "week": 601710
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://nimble-options.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_nimble_options = hex 1.2.0",
+    "mix.exs": "{:nimble_options, \"~> 1.2\"}",
+    "rebar.config": "{nimble_options, \"1.2.0\"}"
+  },
+  "latest_stable_version": "1.2.0"
+}

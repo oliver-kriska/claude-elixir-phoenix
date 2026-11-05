@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "elixir": "~> 1.13",
+    "app": "floki",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.36.3",
+  "checksum": "fe0158bff509e407735f6d40b3ee0d7deb47f3f3ee7c6c182ad28599f9f6b27a",
+  "url": "https://hex.pm/api/packages/floki/releases/0.36.3",
+  "has_docs": true,
+  "inserted_at": "2024-10-21T19:35:11.283974Z",
+  "updated_at": "2024-10-21T19:35:15.131409Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/floki/0.36.3",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/philip",
+    "email": "philip.sampaio@gmail.com",
+    "username": "philip"
+  },
+  "package_url": "https://hex.pm/api/packages/floki",
+  "downloads": 716447,
+  "security_advisories": [],
+  "docs_html_url": "https://floki.hexdocs.pm/0.36.3/",
+  "configs": {
+    "erlang.mk": "dep_floki = hex 0.36.3",
+    "mix.exs": "{:floki, \"~> 0.36.3\"}",
+    "rebar.config": "{floki, \"0.36.3\"}"
+  }
+}

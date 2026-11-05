@@ -1,0 +1,103 @@
+{
+  "meta": {
+    "elixir": "~> 1.12",
+    "app": "earmark",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.4.46",
+  "checksum": "798d86db3d79964e759ddc0c077d5eb254968ed426399fbf5a62de2b5ff8910a",
+  "url": "https://hex.pm/api/packages/earmark/releases/1.4.46",
+  "has_docs": true,
+  "inserted_at": "2023-10-01T08:49:11.702331Z",
+  "updated_at": "2026-06-17T16:21:20.030612Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/earmark/1.4.46",
+  "oidc_claims": null,
+  "retirement": {
+    "message": "Earmark is no longer maintained. Migrate to a replacement, for example MDEx (https://hex.pm/packages/mdex).",
+    "reason": "deprecated"
+  },
+  "publisher": {
+    "url": "https://hex.pm/api/users/lab42",
+    "email": "robert.dober@gmail.com",
+    "username": "lab42"
+  },
+  "package_url": "https://hex.pm/api/packages/earmark",
+  "downloads": 1850417,
+  "security_advisories": [
+    {
+      "id": "GHSA-52mm-h59v-f3c7",
+      "aliases": [
+        "CVE-2026-48591",
+        "EEF-CVE-2026-48591"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48591"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48591.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/pragdave/earmark"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-48591"
+        }
+      ],
+      "summary": "earmark: Stored XSS via unescaped HTML attribute values",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-52mm-h59v-f3c7",
+      "published_at": "2026-06-17T18:35:58Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-52mm-h59v-f3c7",
+      "cvss_score": 4.8,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-06-18T15:11:22Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.4.1 and <= 1.5.0-pre1"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-48591",
+      "aliases": [
+        "CVE-2026-48591",
+        "GHSA-52mm-h59v-f3c7"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48591.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/earmark"
+        }
+      ],
+      "summary": "Stored XSS via unescaped HTML attribute values in earmark",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-48591",
+      "published_at": "2026-06-17T16:42:37Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-48591",
+      "cvss_score": 4.8,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:N/PR:N/UI:P/VC:L/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-09-08T03:30:05Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.4.1"
+      ]
+    }
+  ],
+  "docs_html_url": "https://earmark.hexdocs.pm/1.4.46/",
+  "configs": {
+    "erlang.mk": "dep_earmark = hex 1.4.46",
+    "mix.exs": "{:earmark, \"~> 1.4\"}",
+    "rebar.config": "{earmark, \"1.4.46\"}"
+  }
+}

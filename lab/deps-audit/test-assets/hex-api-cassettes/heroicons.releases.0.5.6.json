@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "heroicons",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.5.6",
+  "checksum": "ca267f02a5fa695a4178a737b649fb6644a2e399639d4ba7964c18e8a58c2352",
+  "url": "https://hex.pm/api/packages/heroicons/releases/0.5.6",
+  "has_docs": true,
+  "inserted_at": "2024-08-20T14:34:57.615996Z",
+  "updated_at": "2024-08-20T14:35:00.612723Z",
+  "requirements": {
+    "castore": {
+      "app": "castore",
+      "optional": false,
+      "requirement": ">= 0.0.0"
+    },
+    "phoenix_live_view": {
+      "app": "phoenix_live_view",
+      "optional": false,
+      "requirement": ">= 0.18.2"
+    }
+  },
+  "html_url": "https://hex.pm/packages/heroicons/0.5.6",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/mveytsman",
+    "email": "maxim@ontoillogical.com",
+    "username": "mveytsman"
+  },
+  "package_url": "https://hex.pm/api/packages/heroicons",
+  "downloads": 759290,
+  "security_advisories": [],
+  "docs_html_url": "https://heroicons.hexdocs.pm/0.5.6/",
+  "configs": {
+    "erlang.mk": "dep_heroicons = hex 0.5.6",
+    "mix.exs": "{:heroicons, \"~> 0.5.6\"}",
+    "rebar.config": "{heroicons, \"0.5.6\"}"
+  }
+}

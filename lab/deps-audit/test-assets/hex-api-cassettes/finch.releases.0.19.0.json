@@ -1,0 +1,59 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "finch",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.19.0",
+  "checksum": "fc5324ce209125d1e2fa0fcd2634601c52a787aff1cd33ee833664a5af4ea2b6",
+  "url": "https://hex.pm/api/packages/finch/releases/0.19.0",
+  "has_docs": true,
+  "inserted_at": "2024-09-04T17:03:37.410673Z",
+  "updated_at": "2024-09-04T17:03:41.638254Z",
+  "requirements": {
+    "mime": {
+      "app": "mime",
+      "optional": false,
+      "requirement": "~> 1.0 or ~> 2.0"
+    },
+    "mint": {
+      "app": "mint",
+      "optional": false,
+      "requirement": "~> 1.6.2 or ~> 1.7"
+    },
+    "nimble_options": {
+      "app": "nimble_options",
+      "optional": false,
+      "requirement": "~> 0.4 or ~> 1.0"
+    },
+    "nimble_pool": {
+      "app": "nimble_pool",
+      "optional": false,
+      "requirement": "~> 1.1"
+    },
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 0.4 or ~> 1.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/finch/0.19.0",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/sneako",
+    "email": "nico.piderman@gmail.com",
+    "username": "sneako"
+  },
+  "package_url": "https://hex.pm/api/packages/finch",
+  "downloads": 9931132,
+  "security_advisories": [],
+  "docs_html_url": "https://finch.hexdocs.pm/0.19.0/",
+  "configs": {
+    "erlang.mk": "dep_finch = hex 0.19.0",
+    "mix.exs": "{:finch, \"~> 0.19.0\"}",
+    "rebar.config": "{finch, \"0.19.0\"}"
+  }
+}

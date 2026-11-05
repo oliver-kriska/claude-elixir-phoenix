@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "elixir": "~> 1.8",
+    "app": "ueberauth_google",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.12.1",
+  "checksum": "7f7deacd679b2b66e3bffb68ecc77aa1b5396a0cbac2941815f253128e458c38",
+  "url": "https://hex.pm/api/packages/ueberauth_google/releases/0.12.1",
+  "has_docs": true,
+  "inserted_at": "2023-11-14T17:48:29.755012Z",
+  "updated_at": "2023-11-14T17:48:31.864002Z",
+  "requirements": {
+    "oauth2": {
+      "app": "oauth2",
+      "optional": false,
+      "requirement": "~> 1.0 or ~> 2.0"
+    },
+    "ueberauth": {
+      "app": "ueberauth",
+      "optional": false,
+      "requirement": "~> 0.10.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/ueberauth_google/0.12.1",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/ueberauth",
+    "username": "ueberauth"
+  },
+  "package_url": "https://hex.pm/api/packages/ueberauth_google",
+  "downloads": 2508512,
+  "security_advisories": [],
+  "docs_html_url": "https://ueberauth-google.hexdocs.pm/0.12.1/",
+  "configs": {
+    "erlang.mk": "dep_ueberauth_google = hex 0.12.1",
+    "mix.exs": "{:ueberauth_google, \"~> 0.12.1\"}",
+    "rebar.config": "{ueberauth_google, \"0.12.1\"}"
+  }
+}

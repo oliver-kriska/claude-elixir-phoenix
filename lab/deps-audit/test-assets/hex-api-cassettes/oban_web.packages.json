@@ -1,0 +1,328 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/oban-bg/oban_web/blob/main/CHANGELOG.md",
+      "GitHub": "https://github.com/oban-bg/oban_web",
+      "Website": "https://oban.pro"
+    },
+    "description": "Dashboard for the Oban job orchestration framework",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "oban_web",
+  "url": "https://hex.pm/api/packages/oban_web",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/sorentwo",
+      "email": "parker@sorentwo.com",
+      "username": "sorentwo"
+    }
+  ],
+  "inserted_at": "2025-01-16T17:06:52.319068Z",
+  "updated_at": "2026-10-08T14:28:16.887698Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.13.1",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.13.1",
+      "has_docs": true,
+      "inserted_at": "2026-10-08T14:28:15.606521Z"
+    },
+    {
+      "version": "2.13.0",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.13.0",
+      "has_docs": true,
+      "inserted_at": "2026-09-17T14:56:42.144639Z"
+    },
+    {
+      "version": "2.12.7",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.12.7",
+      "has_docs": true,
+      "inserted_at": "2026-08-28T18:01:55.830551Z"
+    },
+    {
+      "version": "2.12.6",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.12.6",
+      "has_docs": true,
+      "inserted_at": "2026-07-06T18:34:05.983561Z"
+    },
+    {
+      "version": "2.12.5",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.12.5",
+      "has_docs": true,
+      "inserted_at": "2026-05-26T19:28:44.285878Z"
+    },
+    {
+      "version": "2.12.4",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.12.4",
+      "has_docs": true,
+      "inserted_at": "2026-05-11T10:17:07.547918Z"
+    },
+    {
+      "version": "2.12.3",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.12.3",
+      "has_docs": true,
+      "inserted_at": "2026-04-15T12:29:08.479356Z"
+    },
+    {
+      "version": "2.12.2",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.12.2",
+      "has_docs": true,
+      "inserted_at": "2026-03-31T09:51:28.617733Z"
+    },
+    {
+      "version": "2.12.1",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.12.1",
+      "has_docs": true,
+      "inserted_at": "2026-03-25T16:46:31.018685Z"
+    },
+    {
+      "version": "2.12.0",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.12.0",
+      "has_docs": true,
+      "inserted_at": "2026-03-25T15:18:07.611422Z"
+    },
+    {
+      "version": "2.11.8",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.11.8",
+      "has_docs": true,
+      "inserted_at": "2026-02-06T12:45:17.805072Z"
+    },
+    {
+      "version": "2.11.7",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.11.7",
+      "has_docs": true,
+      "inserted_at": "2026-01-22T11:04:56.168889Z"
+    },
+    {
+      "version": "2.11.6",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.11.6",
+      "has_docs": true,
+      "inserted_at": "2025-10-24T09:39:34.470344Z"
+    },
+    {
+      "version": "2.11.5",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.11.5",
+      "has_docs": true,
+      "inserted_at": "2025-10-23T15:58:22.955897Z"
+    },
+    {
+      "version": "2.11.4",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.11.4",
+      "has_docs": true,
+      "inserted_at": "2025-07-31T21:22:47.583719Z"
+    },
+    {
+      "version": "2.11.3",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.11.3",
+      "has_docs": true,
+      "inserted_at": "2025-04-21T15:57:13.701873Z"
+    },
+    {
+      "version": "2.11.2",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.11.2",
+      "has_docs": true,
+      "inserted_at": "2025-04-21T14:48:11.378539Z"
+    },
+    {
+      "version": "2.11.1",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.11.1",
+      "has_docs": true,
+      "inserted_at": "2025-02-06T19:42:08.326082Z"
+    },
+    {
+      "version": "2.11.0",
+      "url": "https://hex.pm/api/packages/oban_web/releases/2.11.0",
+      "has_docs": true,
+      "inserted_at": "2025-01-16T17:06:52.339110Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/oban_web",
+  "latest_version": "2.13.1",
+  "downloads": {
+    "all": 4620213,
+    "day": 26380,
+    "recent": 1258006,
+    "week": 127342
+  },
+  "security_advisories": [
+    {
+      "id": "GHSA-389x-rgxr-8m33",
+      "aliases": [
+        "CVE-2026-48592",
+        "EEF-CVE-2026-48592"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://github.com/oban-bg/oban_web/security/advisories/GHSA-389x-rgxr-8m33"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48592"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/oban-bg/oban_web/commit/ab3c5d1d3eba06c62045f16f2cd7781c7752e248"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48592.html"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/oban-bg/oban_web"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-48592"
+        }
+      ],
+      "summary": "oban_web missing authorization check on `save-job` event handler",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-389x-rgxr-8m33",
+      "published_at": "2026-06-30T18:33:20Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-389x-rgxr-8m33",
+      "cvss_score": 5.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-06-30T18:45:32Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.12.0 and < 2.12.5"
+      ]
+    },
+    {
+      "id": "GHSA-6xh2-93p9-vqh4",
+      "aliases": [
+        "CVE-2026-48593",
+        "EEF-CVE-2026-48593"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-48593"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/oban-bg/oban_web"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48593.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/oban-bg/oban_web/commit/a97c7960bb389b05aaab4cf8042985f02ceddc24"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/oban-bg/oban_web/commit/9998b7e284e02fdd4645dd6231760038e63b584d"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-48593"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/oban-bg/oban_web/security/advisories/GHSA-6xh2-93p9-vqh4"
+        }
+      ],
+      "summary": "oban_web: Unbounded range expansion in cron describe causes memory exhaustion",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-6xh2-93p9-vqh4",
+      "published_at": "2026-06-30T18:32:49Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-6xh2-93p9-vqh4",
+      "cvss_score": 5.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:P/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-06-30T18:45:32Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.12.0 and < 2.12.5"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-48592",
+      "aliases": [
+        "CVE-2026-48592",
+        "GHSA-389x-rgxr-8m33"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48592.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/oban-bg/oban_web/security/advisories/GHSA-389x-rgxr-8m33"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/oban_web"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/oban-bg/oban_web/commit/ab3c5d1d3eba06c62045f16f2cd7781c7752e248"
+        }
+      ],
+      "summary": "Missing authorization check on save-job event handler in oban_web",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-48592",
+      "published_at": "2026-05-26T19:46:48Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-48592",
+      "cvss_score": 5.3,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:L/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-09-08T03:30:08Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.12.0 and < 2.12.5"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-48593",
+      "aliases": [
+        "CVE-2026-48593",
+        "GHSA-6xh2-93p9-vqh4"
+      ],
+      "references": [
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-48593.html"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/oban-bg/oban_web/security/advisories/GHSA-6xh2-93p9-vqh4"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/oban_web"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/oban-bg/oban_web/commit/9998b7e284e02fdd4645dd6231760038e63b584d"
+        }
+      ],
+      "summary": "Unbounded range expansion in cron describe causes memory exhaustion in oban_web",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-48593",
+      "published_at": "2026-05-26T19:46:43Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-48593",
+      "cvss_score": 5.9,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:L/UI:P/VC:N/VI:N/VA:H/SC:N/SI:N/SA:N",
+      "modified_at": "2026-09-08T03:45:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 2.12.0 and < 2.12.5"
+      ]
+    }
+  ],
+  "docs_html_url": "https://oban-web.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_oban_web = hex 2.13.1",
+    "mix.exs": "{:oban_web, \"~> 2.13\"}",
+    "rebar.config": "{oban_web, \"2.13.1\"}"
+  },
+  "latest_stable_version": "2.13.1"
+}

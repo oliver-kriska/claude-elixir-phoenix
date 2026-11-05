@@ -1,0 +1,43 @@
+{
+  "meta": {
+    "elixir": "~> 1.9",
+    "app": "tz",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.27.1",
+  "checksum": "215c9120dab5b7f7db4c93e91085c290b2efe478e147d84285a6583fd220727f",
+  "url": "https://hex.pm/api/packages/tz/releases/0.27.1",
+  "has_docs": true,
+  "inserted_at": "2024-07-29T12:59:05.152020Z",
+  "updated_at": "2024-07-29T12:59:07.828360Z",
+  "requirements": {
+    "castore": {
+      "app": "castore",
+      "optional": true,
+      "requirement": "~> 0.1 or ~> 1.0"
+    },
+    "mint": {
+      "app": "mint",
+      "optional": true,
+      "requirement": "~> 1.6"
+    }
+  },
+  "html_url": "https://hex.pm/packages/tz/0.27.1",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/mathieuprog",
+    "username": "mathieuprog"
+  },
+  "package_url": "https://hex.pm/api/packages/tz",
+  "downloads": 46851,
+  "security_advisories": [],
+  "docs_html_url": "https://tz.hexdocs.pm/0.27.1/",
+  "configs": {
+    "erlang.mk": "dep_tz = hex 0.27.1",
+    "mix.exs": "{:tz, \"~> 0.27.1\"}",
+    "rebar.config": "{tz, \"0.27.1\"}"
+  }
+}

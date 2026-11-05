@@ -1,0 +1,516 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/sobelow/sobelow/blob/main/CHANGELOG.md",
+      "GitHub": "https://github.com/sobelow/sobelow"
+    },
+    "description": "Security-focused static analysis for Elixir & the Phoenix framework",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "sobelow",
+  "url": "https://hex.pm/api/packages/sobelow",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/griffinbyatt",
+      "email": "byatt.griffin@gmail.com",
+      "username": "griffinbyatt"
+    },
+    {
+      "url": "https://hex.pm/api/users/holden.oullette",
+      "username": "holden.oullette"
+    }
+  ],
+  "inserted_at": "2017-05-19T10:52:43.830855Z",
+  "updated_at": "2026-10-29T18:59:17.234910Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.18.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.18.1",
+      "has_docs": true,
+      "inserted_at": "2026-10-29T18:59:16.000294Z"
+    },
+    {
+      "version": "0.18.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.18.0",
+      "has_docs": true,
+      "inserted_at": "2026-10-29T00:00:52.804572Z"
+    },
+    {
+      "version": "0.17.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.17.0",
+      "has_docs": true,
+      "inserted_at": "2026-10-28T04:49:56.458316Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.16.0",
+      "has_docs": true,
+      "inserted_at": "2026-09-30T21:00:34.743131Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2026-08-05T21:02:20.019698Z"
+    },
+    {
+      "version": "0.14.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.14.1",
+      "has_docs": true,
+      "inserted_at": "2025-10-14T00:52:21.943346Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2025-05-09T01:57:35.927473Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2023-08-06T16:48:56.635353Z"
+    },
+    {
+      "version": "0.12.2",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.12.2",
+      "has_docs": true,
+      "inserted_at": "2023-04-02T04:35:12.583256Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2023-03-30T16:04:30.932808Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2023-03-29T22:03:09.313531Z"
+    },
+    {
+      "version": "0.11.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.11.1",
+      "has_docs": true,
+      "inserted_at": "2021-03-16T12:51:30.135829Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2021-01-10T18:42:56.571727Z"
+    },
+    {
+      "version": "0.10.6",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.10.6",
+      "has_docs": true,
+      "inserted_at": "2020-11-14T16:14:49.723972Z"
+    },
+    {
+      "version": "0.10.5",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.10.5",
+      "has_docs": true,
+      "inserted_at": "2020-11-01T23:21:33.739030Z"
+    },
+    {
+      "version": "0.10.4",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.10.4",
+      "has_docs": true,
+      "inserted_at": "2020-07-21T01:15:38.261602Z"
+    },
+    {
+      "version": "0.10.3",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.10.3",
+      "has_docs": true,
+      "inserted_at": "2020-06-09T01:03:24.671068Z"
+    },
+    {
+      "version": "0.10.2",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.10.2",
+      "has_docs": true,
+      "inserted_at": "2020-05-05T00:55:55.787960Z"
+    },
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.10.1",
+      "has_docs": true,
+      "inserted_at": "2020-02-24T03:34:45.461777Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-04T00:02:43.255774Z"
+    },
+    {
+      "version": "0.9.3",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.9.3",
+      "has_docs": true,
+      "inserted_at": "2019-12-18T00:54:53.275264Z"
+    },
+    {
+      "version": "0.9.2",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.9.2",
+      "has_docs": true,
+      "inserted_at": "2019-11-13T02:29:15.797684Z"
+    },
+    {
+      "version": "0.9.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.9.1",
+      "has_docs": true,
+      "inserted_at": "2019-10-14T04:03:34.203835Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2019-10-13T19:06:49.846266Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-21T11:26:02.676116Z"
+    },
+    {
+      "version": "0.7.8",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.7.8",
+      "has_docs": true,
+      "inserted_at": "2019-06-09T02:56:13.820426Z"
+    },
+    {
+      "version": "0.7.7",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.7.7",
+      "has_docs": true,
+      "inserted_at": "2019-04-21T14:55:37.057554Z"
+    },
+    {
+      "version": "0.7.6",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.7.6",
+      "has_docs": true,
+      "inserted_at": "2019-02-02T01:06:35.090558Z"
+    },
+    {
+      "version": "0.7.5",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.7.5",
+      "has_docs": true,
+      "inserted_at": "2019-01-31T00:48:56.041669Z"
+    },
+    {
+      "version": "0.7.4",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.7.4",
+      "has_docs": true,
+      "inserted_at": "2018-11-30T15:02:51.078249Z"
+    },
+    {
+      "version": "0.7.3",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.7.3",
+      "has_docs": true,
+      "inserted_at": "2018-11-26T03:48:38.433223Z"
+    },
+    {
+      "version": "0.7.2",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.7.2",
+      "has_docs": true,
+      "inserted_at": "2018-11-25T19:32:31.193106Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2018-07-16T21:58:54.737881Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2018-05-30T23:36:24.587132Z"
+    },
+    {
+      "version": "0.6.9",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.9",
+      "has_docs": true,
+      "inserted_at": "2018-03-18T20:37:04.166206Z"
+    },
+    {
+      "version": "0.6.8",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.8",
+      "has_docs": true,
+      "inserted_at": "2018-02-06T01:58:15.249502Z"
+    },
+    {
+      "version": "0.6.7",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.7",
+      "has_docs": true,
+      "inserted_at": "2018-01-24T01:26:26.989976Z"
+    },
+    {
+      "version": "0.6.6",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.6",
+      "has_docs": true,
+      "inserted_at": "2018-01-08T16:00:44.427911Z"
+    },
+    {
+      "version": "0.6.5",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.5",
+      "has_docs": true,
+      "inserted_at": "2017-11-17T03:56:34.608110Z"
+    },
+    {
+      "version": "0.6.4",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.4",
+      "has_docs": true,
+      "inserted_at": "2017-11-06T18:01:54.682998Z"
+    },
+    {
+      "version": "0.6.3",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.3",
+      "has_docs": true,
+      "inserted_at": "2017-10-30T01:15:01.101242Z"
+    },
+    {
+      "version": "0.6.2",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.2",
+      "has_docs": true,
+      "inserted_at": "2017-09-27T12:01:10.338092Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2017-09-11T11:13:48.596281Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2017-09-05T10:58:04.825341Z"
+    },
+    {
+      "version": "0.5.4",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.5.4",
+      "has_docs": true,
+      "inserted_at": "2017-08-25T20:36:08.854809Z"
+    },
+    {
+      "version": "0.5.3",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.5.3",
+      "has_docs": true,
+      "inserted_at": "2017-08-22T23:39:00.703157Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.5.2",
+      "has_docs": true,
+      "inserted_at": "2017-08-22T13:54:29.185824Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2017-08-21T11:18:56.746424Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2017-08-19T15:26:27.530176Z"
+    },
+    {
+      "version": "0.4.9",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.9",
+      "has_docs": true,
+      "inserted_at": "2017-08-13T15:59:15.282711Z"
+    },
+    {
+      "version": "0.4.8",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.8",
+      "has_docs": true,
+      "inserted_at": "2017-08-07T15:10:24.769351Z"
+    },
+    {
+      "version": "0.4.7",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.7",
+      "has_docs": true,
+      "inserted_at": "2017-07-31T13:35:59.052967Z"
+    },
+    {
+      "version": "0.4.6",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.6",
+      "has_docs": true,
+      "inserted_at": "2017-07-26T14:18:32.110309Z"
+    },
+    {
+      "version": "0.4.5",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.5",
+      "has_docs": true,
+      "inserted_at": "2017-07-26T10:13:23.182043Z"
+    },
+    {
+      "version": "0.4.4",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.4",
+      "has_docs": true,
+      "inserted_at": "2017-07-24T21:11:31.053679Z"
+    },
+    {
+      "version": "0.4.3",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.3",
+      "has_docs": true,
+      "inserted_at": "2017-07-24T19:44:22.195686Z"
+    },
+    {
+      "version": "0.4.2",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.2",
+      "has_docs": true,
+      "inserted_at": "2017-07-21T14:05:34.134025Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.1",
+      "has_docs": true,
+      "inserted_at": "2017-07-20T18:20:32.516480Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2017-07-19T18:36:16.723603Z"
+    },
+    {
+      "version": "0.3.12",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.12",
+      "has_docs": true,
+      "inserted_at": "2017-07-14T23:19:21.719639Z"
+    },
+    {
+      "version": "0.3.11",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.11",
+      "has_docs": true,
+      "inserted_at": "2017-07-14T20:44:25.655299Z"
+    },
+    {
+      "version": "0.3.10",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.10",
+      "has_docs": true,
+      "inserted_at": "2017-07-06T01:10:54.544553Z"
+    },
+    {
+      "version": "0.3.9",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.9",
+      "has_docs": true,
+      "inserted_at": "2017-07-05T20:27:16.385455Z"
+    },
+    {
+      "version": "0.3.8",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.8",
+      "has_docs": true,
+      "inserted_at": "2017-06-28T18:16:40.295899Z"
+    },
+    {
+      "version": "0.3.7",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.7",
+      "has_docs": true,
+      "inserted_at": "2017-06-21T16:43:42.705246Z"
+    },
+    {
+      "version": "0.3.6",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.6",
+      "has_docs": true,
+      "inserted_at": "2017-06-08T17:50:31.528728Z"
+    },
+    {
+      "version": "0.3.5",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.5",
+      "has_docs": true,
+      "inserted_at": "2017-06-07T15:03:34.672376Z"
+    },
+    {
+      "version": "0.3.4",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.4",
+      "has_docs": true,
+      "inserted_at": "2017-06-06T15:13:38.375971Z"
+    },
+    {
+      "version": "0.3.3",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.3",
+      "has_docs": true,
+      "inserted_at": "2017-06-05T17:04:51.093445Z"
+    },
+    {
+      "version": "0.3.2",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.2",
+      "has_docs": true,
+      "inserted_at": "2017-06-05T13:18:59.040629Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.1",
+      "has_docs": false,
+      "inserted_at": "2017-05-31T16:37:15.857897Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2017-05-30T18:01:03.950499Z"
+    },
+    {
+      "version": "0.2.8",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.2.8",
+      "has_docs": true,
+      "inserted_at": "2017-05-29T01:03:01.173558Z"
+    },
+    {
+      "version": "0.2.7",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.2.7",
+      "has_docs": true,
+      "inserted_at": "2017-05-24T02:40:12.721506Z"
+    },
+    {
+      "version": "0.2.6",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.2.6",
+      "has_docs": true,
+      "inserted_at": "2017-05-23T21:55:28.158903Z"
+    },
+    {
+      "version": "0.2.5",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.2.5",
+      "has_docs": true,
+      "inserted_at": "2017-05-23T02:01:48.515887Z"
+    },
+    {
+      "version": "0.2.4",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.2.4",
+      "has_docs": true,
+      "inserted_at": "2017-05-21T23:26:14.563160Z"
+    },
+    {
+      "version": "0.2.3",
+      "url": "https://hex.pm/api/packages/sobelow/releases/0.2.3",
+      "has_docs": true,
+      "inserted_at": "2017-05-19T10:52:43.844850Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/sobelow",
+  "latest_version": "0.18.1",
+  "downloads": {
+    "all": 43127186,
+    "day": 37946,
+    "recent": 1829840,
+    "week": 192582
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://sobelow.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_sobelow = hex 0.18.1",
+    "mix.exs": "{:sobelow, \"~> 0.18.1\"}",
+    "rebar.config": "{sobelow, \"0.18.1\"}"
+  },
+  "latest_stable_version": "0.18.1"
+}

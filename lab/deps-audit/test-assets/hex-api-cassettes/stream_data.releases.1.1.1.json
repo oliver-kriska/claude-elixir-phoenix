@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "elixir": "~> 1.12",
+    "app": "stream_data",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.1.1",
+  "checksum": "45d0cd46bd06738463fd53f22b70042dbb58c384bb99ef4e7576e7bb7d3b8c8c",
+  "url": "https://hex.pm/api/packages/stream_data/releases/1.1.1",
+  "has_docs": true,
+  "inserted_at": "2024-06-12T10:54:08.573977Z",
+  "updated_at": "2024-06-12T10:54:11.314952Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/stream_data/1.1.1",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/whatyouhide",
+    "email": "hi@andrealeopardi.com",
+    "username": "whatyouhide"
+  },
+  "package_url": "https://hex.pm/api/packages/stream_data",
+  "downloads": 512004,
+  "security_advisories": [],
+  "docs_html_url": "https://stream-data.hexdocs.pm/1.1.1/",
+  "configs": {
+    "erlang.mk": "dep_stream_data = hex 1.1.1",
+    "mix.exs": "{:stream_data, \"~> 1.1\"}",
+    "rebar.config": "{stream_data, \"1.1.1\"}"
+  }
+}

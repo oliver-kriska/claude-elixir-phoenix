@@ -1,0 +1,1277 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/swoosh/swoosh/blob/main/CHANGELOG.md",
+      "GitHub": "https://github.com/swoosh/swoosh"
+    },
+    "description": "Compose, deliver and test your emails easily in Elixir. Supports SMTP,\nSendgrid, Mandrill, Postmark, Mailgun and many more out of the box.\nPreview your emails in the browser. Test your email sending code.",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "swoosh",
+  "url": "https://hex.pm/api/packages/swoosh",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/princemaple",
+      "email": "chenpaul914@gmail.com",
+      "username": "princemaple"
+    },
+    {
+      "url": "https://hex.pm/api/users/stevedomin",
+      "email": "steve@stevedomin.com",
+      "username": "stevedomin"
+    }
+  ],
+  "inserted_at": "2016-03-21T16:42:22.935555Z",
+  "updated_at": "2026-10-28T12:32:08.966433Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.29.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.29.3",
+      "has_docs": true,
+      "inserted_at": "2026-10-28T12:32:07.667347Z"
+    },
+    {
+      "version": "1.29.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.29.2",
+      "has_docs": true,
+      "inserted_at": "2026-10-28T00:53:11.655212Z"
+    },
+    {
+      "version": "1.29.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.29.0",
+      "has_docs": true,
+      "inserted_at": "2026-10-08T15:36:51.891437Z"
+    },
+    {
+      "version": "1.28.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.28.1",
+      "has_docs": true,
+      "inserted_at": "2026-09-16T15:58:19.770263Z"
+    },
+    {
+      "version": "1.28.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.28.0",
+      "has_docs": true,
+      "inserted_at": "2026-08-23T08:13:45.012023Z"
+    },
+    {
+      "version": "1.27.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.27.1",
+      "has_docs": true,
+      "inserted_at": "2026-08-15T06:28:48.714384Z"
+    },
+    {
+      "version": "1.27.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.27.0",
+      "has_docs": true,
+      "inserted_at": "2026-07-29T13:38:19.012915Z"
+    },
+    {
+      "version": "1.26.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.26.3",
+      "has_docs": true,
+      "inserted_at": "2026-07-05T01:56:22.088524Z"
+    },
+    {
+      "version": "1.26.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.26.2",
+      "has_docs": true,
+      "inserted_at": "2026-06-25T12:42:43.009651Z"
+    },
+    {
+      "version": "1.26.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.26.1",
+      "has_docs": true,
+      "inserted_at": "2026-06-04T05:02:41.494183Z"
+    },
+    {
+      "version": "1.26.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.26.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-30T02:15:19.775208Z"
+    },
+    {
+      "version": "1.25.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.25.3",
+      "has_docs": true,
+      "inserted_at": "2026-05-26T15:55:02.297073Z"
+    },
+    {
+      "version": "1.25.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.25.2",
+      "has_docs": true,
+      "inserted_at": "2026-05-11T13:41:41.063231Z"
+    },
+    {
+      "version": "1.25.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.25.1",
+      "has_docs": true,
+      "inserted_at": "2026-04-29T02:19:42.289915Z"
+    },
+    {
+      "version": "1.25.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.25.0",
+      "has_docs": true,
+      "inserted_at": "2026-04-02T12:23:34.082800Z"
+    },
+    {
+      "version": "1.24.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.24.0",
+      "has_docs": true,
+      "inserted_at": "2026-03-23T20:55:43.495970Z"
+    },
+    {
+      "version": "1.23.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.23.1",
+      "has_docs": true,
+      "inserted_at": "2026-03-17T16:10:50.869200Z"
+    },
+    {
+      "version": "1.23.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.23.0",
+      "has_docs": true,
+      "inserted_at": "2026-03-05T02:40:49.911627Z"
+    },
+    {
+      "version": "1.22.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.22.1",
+      "has_docs": true,
+      "inserted_at": "2026-02-25T12:24:20.290083Z"
+    },
+    {
+      "version": "1.22.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.22.0",
+      "has_docs": true,
+      "inserted_at": "2026-02-19T08:36:40.533352Z"
+    },
+    {
+      "version": "1.21.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.21.0",
+      "has_docs": true,
+      "inserted_at": "2026-01-21T00:29:18.705512Z"
+    },
+    {
+      "version": "1.20.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.20.1",
+      "has_docs": true,
+      "inserted_at": "2026-01-19T07:32:41.061967Z"
+    },
+    {
+      "version": "1.20.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.20.0",
+      "has_docs": true,
+      "inserted_at": "2025-12-26T11:44:37.681258Z"
+    },
+    {
+      "version": "1.19.9",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.9",
+      "has_docs": true,
+      "inserted_at": "2025-12-09T12:22:54.600887Z"
+    },
+    {
+      "version": "1.19.8",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.8",
+      "has_docs": true,
+      "inserted_at": "2025-09-25T06:47:48.556875Z"
+    },
+    {
+      "version": "1.19.7",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.7",
+      "has_docs": true,
+      "inserted_at": "2025-09-24T12:52:04.737037Z"
+    },
+    {
+      "version": "1.19.6",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.6",
+      "has_docs": true,
+      "inserted_at": "2025-09-21T07:30:41.241733Z"
+    },
+    {
+      "version": "1.19.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.5",
+      "has_docs": true,
+      "inserted_at": "2025-07-29T03:40:04.117924Z"
+    },
+    {
+      "version": "1.19.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.4",
+      "has_docs": true,
+      "inserted_at": "2025-07-26T05:06:29.341384Z"
+    },
+    {
+      "version": "1.19.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.3",
+      "has_docs": true,
+      "inserted_at": "2025-06-19T13:14:25.389724Z"
+    },
+    {
+      "version": "1.19.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.2",
+      "has_docs": true,
+      "inserted_at": "2025-06-11T03:00:24.392730Z"
+    },
+    {
+      "version": "1.19.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.1",
+      "has_docs": true,
+      "inserted_at": "2025-05-15T11:59:13.985018Z"
+    },
+    {
+      "version": "1.19.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.19.0",
+      "has_docs": true,
+      "inserted_at": "2025-05-01T11:31:38.804260Z"
+    },
+    {
+      "version": "1.18.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.18.4",
+      "has_docs": true,
+      "inserted_at": "2025-03-31T03:35:48.514031Z"
+    },
+    {
+      "version": "1.18.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.18.3",
+      "has_docs": true,
+      "inserted_at": "2025-03-21T15:52:17.945056Z"
+    },
+    {
+      "version": "1.18.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.18.2",
+      "has_docs": true,
+      "inserted_at": "2025-03-08T04:56:00.079126Z"
+    },
+    {
+      "version": "1.18.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.18.1",
+      "has_docs": true,
+      "inserted_at": "2025-03-05T04:40:22.883707Z"
+    },
+    {
+      "version": "1.18.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.18.0",
+      "has_docs": true,
+      "inserted_at": "2025-03-03T11:52:14.032627Z"
+    },
+    {
+      "version": "1.17.10",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.10",
+      "has_docs": true,
+      "inserted_at": "2025-02-06T09:04:24.691969Z"
+    },
+    {
+      "version": "1.17.9",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.9",
+      "has_docs": true,
+      "inserted_at": "2025-02-02T08:29:51.460852Z"
+    },
+    {
+      "version": "1.17.8",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.8",
+      "has_docs": true,
+      "inserted_at": "2025-02-01T06:32:22.166979Z"
+    },
+    {
+      "version": "1.17.7",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.7",
+      "has_docs": true,
+      "inserted_at": "2025-01-31T01:30:43.271871Z"
+    },
+    {
+      "version": "1.17.6",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.6",
+      "has_docs": true,
+      "inserted_at": "2024-12-31T00:08:01.368437Z"
+    },
+    {
+      "version": "1.17.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.5",
+      "has_docs": true,
+      "inserted_at": "2024-12-15T07:00:04.089884Z"
+    },
+    {
+      "version": "1.17.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.4",
+      "has_docs": true,
+      "inserted_at": "2024-12-11T10:56:03.205099Z"
+    },
+    {
+      "version": "1.17.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.3",
+      "has_docs": true,
+      "inserted_at": "2024-11-07T21:59:46.885243Z"
+    },
+    {
+      "version": "1.17.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.2",
+      "has_docs": true,
+      "inserted_at": "2024-10-04T11:08:23.234037Z"
+    },
+    {
+      "version": "1.17.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.1",
+      "has_docs": true,
+      "inserted_at": "2024-09-14T00:53:45.716958Z"
+    },
+    {
+      "version": "1.17.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.17.0",
+      "has_docs": true,
+      "inserted_at": "2024-09-05T15:29:08.444646Z"
+    },
+    {
+      "version": "1.16.12",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.12",
+      "has_docs": true,
+      "inserted_at": "2024-08-20T13:27:06.822019Z"
+    },
+    {
+      "version": "1.16.11",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.11",
+      "has_docs": true,
+      "inserted_at": "2024-08-20T00:24:54.239073Z"
+    },
+    {
+      "version": "1.16.10",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.10",
+      "has_docs": true,
+      "inserted_at": "2024-07-19T10:37:31.497277Z"
+    },
+    {
+      "version": "1.16.9",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.9",
+      "has_docs": true,
+      "inserted_at": "2024-05-30T02:39:48.767547Z"
+    },
+    {
+      "version": "1.16.8",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.8",
+      "has_docs": true,
+      "inserted_at": "2024-05-29T07:39:48.513008Z"
+    },
+    {
+      "version": "1.16.7",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.7",
+      "has_docs": true,
+      "inserted_at": "2024-05-17T00:19:18.333498Z"
+    },
+    {
+      "version": "1.16.6",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.6",
+      "has_docs": true,
+      "inserted_at": "2024-05-15T23:48:10.810318Z"
+    },
+    {
+      "version": "1.16.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.5",
+      "has_docs": true,
+      "inserted_at": "2024-04-29T06:53:36.142700Z"
+    },
+    {
+      "version": "1.16.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.4",
+      "has_docs": true,
+      "inserted_at": "2024-04-20T23:28:48.577427Z"
+    },
+    {
+      "version": "1.16.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.3",
+      "has_docs": true,
+      "inserted_at": "2024-03-18T22:39:42.247866Z"
+    },
+    {
+      "version": "1.16.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.2",
+      "has_docs": true,
+      "inserted_at": "2024-03-18T09:11:49.372518Z"
+    },
+    {
+      "version": "1.16.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.1",
+      "has_docs": true,
+      "inserted_at": "2024-03-15T22:00:48.690542Z"
+    },
+    {
+      "version": "1.16.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.16.0",
+      "has_docs": true,
+      "inserted_at": "2024-03-14T03:15:32.209091Z"
+    },
+    {
+      "version": "1.15.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.15.3",
+      "has_docs": true,
+      "inserted_at": "2024-02-27T05:02:40.390301Z"
+    },
+    {
+      "version": "1.15.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.15.2",
+      "has_docs": true,
+      "inserted_at": "2024-02-07T00:27:54.778781Z"
+    },
+    {
+      "version": "1.15.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.15.1",
+      "has_docs": true,
+      "inserted_at": "2024-01-30T21:02:58.480812Z"
+    },
+    {
+      "version": "1.15.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.15.0",
+      "has_docs": true,
+      "inserted_at": "2024-01-26T03:43:28.797781Z"
+    },
+    {
+      "version": "1.14.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.14.4",
+      "has_docs": true,
+      "inserted_at": "2024-01-17T23:11:37.132057Z"
+    },
+    {
+      "version": "1.14.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.14.3",
+      "has_docs": true,
+      "inserted_at": "2023-12-21T04:45:11.512503Z"
+    },
+    {
+      "version": "1.14.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.14.2",
+      "has_docs": true,
+      "inserted_at": "2023-11-27T01:26:56.442505Z"
+    },
+    {
+      "version": "1.14.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.14.1",
+      "has_docs": true,
+      "inserted_at": "2023-11-13T08:07:31.713959Z"
+    },
+    {
+      "version": "1.14.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.14.0",
+      "has_docs": true,
+      "inserted_at": "2023-10-26T02:49:24.705046Z"
+    },
+    {
+      "version": "1.13.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.13.0",
+      "has_docs": true,
+      "inserted_at": "2023-10-23T15:10:09.914580Z"
+    },
+    {
+      "version": "1.12.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.12.0",
+      "has_docs": true,
+      "inserted_at": "2023-09-26T10:32:59.808789Z"
+    },
+    {
+      "version": "1.11.6",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.11.6",
+      "has_docs": true,
+      "inserted_at": "2023-09-10T23:41:48.145396Z"
+    },
+    {
+      "version": "1.11.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.11.5",
+      "has_docs": true,
+      "inserted_at": "2023-08-09T10:33:42.637702Z"
+    },
+    {
+      "version": "1.11.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.11.4",
+      "has_docs": true,
+      "inserted_at": "2023-07-13T10:58:00.782562Z"
+    },
+    {
+      "version": "1.11.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.11.3",
+      "has_docs": true,
+      "inserted_at": "2023-07-06T11:11:48.890704Z"
+    },
+    {
+      "version": "1.11.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.11.2",
+      "has_docs": true,
+      "inserted_at": "2023-06-20T11:44:45.609908Z"
+    },
+    {
+      "version": "1.11.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.11.1",
+      "has_docs": true,
+      "inserted_at": "2023-06-09T10:19:23.183834Z"
+    },
+    {
+      "version": "1.11.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.11.0",
+      "has_docs": true,
+      "inserted_at": "2023-05-27T06:25:59.986982Z"
+    },
+    {
+      "version": "1.10.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.10.3",
+      "has_docs": true,
+      "inserted_at": "2023-05-19T06:58:00.460806Z"
+    },
+    {
+      "version": "1.10.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.10.2",
+      "has_docs": true,
+      "inserted_at": "2023-05-02T22:41:58.612710Z"
+    },
+    {
+      "version": "1.10.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.10.1",
+      "has_docs": true,
+      "inserted_at": "2023-04-26T23:45:25.831759Z"
+    },
+    {
+      "version": "1.10.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.10.0",
+      "has_docs": true,
+      "inserted_at": "2023-04-22T03:30:36.388255Z"
+    },
+    {
+      "version": "1.9.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.9.1",
+      "has_docs": true,
+      "inserted_at": "2022-12-26T04:08:49.853062Z"
+    },
+    {
+      "version": "1.9.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.9.0",
+      "has_docs": true,
+      "inserted_at": "2022-12-17T20:45:45.486645Z"
+    },
+    {
+      "version": "1.8.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.8.3",
+      "has_docs": true,
+      "inserted_at": "2022-12-01T11:50:21.210170Z"
+    },
+    {
+      "version": "1.8.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.8.2",
+      "has_docs": true,
+      "inserted_at": "2022-10-23T22:21:25.890044Z"
+    },
+    {
+      "version": "1.8.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.8.1",
+      "has_docs": true,
+      "inserted_at": "2022-10-07T05:09:31.959473Z"
+    },
+    {
+      "version": "1.8.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.8.0",
+      "has_docs": true,
+      "inserted_at": "2022-09-09T10:11:48.484778Z"
+    },
+    {
+      "version": "1.7.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.7.5",
+      "has_docs": true,
+      "inserted_at": "2022-09-03T23:50:11.412682Z"
+    },
+    {
+      "version": "1.7.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.7.4",
+      "has_docs": true,
+      "inserted_at": "2022-08-10T12:55:44.663433Z"
+    },
+    {
+      "version": "1.7.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.7.3",
+      "has_docs": true,
+      "inserted_at": "2022-07-14T06:01:35.112755Z"
+    },
+    {
+      "version": "1.7.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.7.2",
+      "has_docs": true,
+      "inserted_at": "2022-07-13T23:53:48.586320Z"
+    },
+    {
+      "version": "1.7.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.7.1",
+      "has_docs": true,
+      "inserted_at": "2022-05-31T07:39:53.077200Z"
+    },
+    {
+      "version": "1.7.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.7.0",
+      "has_docs": true,
+      "inserted_at": "2022-05-28T11:18:24.895816Z"
+    },
+    {
+      "version": "1.6.6",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.6.6",
+      "has_docs": true,
+      "inserted_at": "2022-04-28T06:37:00.583056Z"
+    },
+    {
+      "version": "1.6.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.6.5",
+      "has_docs": true,
+      "inserted_at": "2022-04-27T04:04:22.538190Z"
+    },
+    {
+      "version": "1.6.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.6.4",
+      "has_docs": true,
+      "inserted_at": "2022-04-06T06:18:16.370247Z"
+    },
+    {
+      "version": "1.6.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.6.3",
+      "has_docs": true,
+      "inserted_at": "2022-02-14T10:10:34.118599Z"
+    },
+    {
+      "version": "1.6.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.6.2",
+      "has_docs": true,
+      "inserted_at": "2022-02-03T23:34:06.143760Z"
+    },
+    {
+      "version": "1.6.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.6.1",
+      "has_docs": true,
+      "inserted_at": "2022-01-28T21:26:02.500822Z"
+    },
+    {
+      "version": "1.6.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.6.0",
+      "has_docs": true,
+      "inserted_at": "2022-01-15T22:13:36.061303Z"
+    },
+    {
+      "version": "1.5.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.5.2",
+      "has_docs": true,
+      "inserted_at": "2021-11-12T20:25:51.935607Z"
+    },
+    {
+      "version": "1.5.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.5.1",
+      "has_docs": true,
+      "inserted_at": "2021-10-13T05:04:14.451217Z"
+    },
+    {
+      "version": "1.5.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.5.0",
+      "has_docs": true,
+      "inserted_at": "2021-07-26T07:21:37.994023Z"
+    },
+    {
+      "version": "1.4.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.4.0",
+      "has_docs": true,
+      "inserted_at": "2021-07-05T01:16:14.432845Z"
+    },
+    {
+      "version": "1.3.11",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.11",
+      "has_docs": true,
+      "inserted_at": "2021-05-23T00:14:01.197544Z"
+    },
+    {
+      "version": "1.3.10",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.10",
+      "has_docs": true,
+      "inserted_at": "2021-05-17T23:40:59.986653Z"
+    },
+    {
+      "version": "1.3.9",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.9",
+      "has_docs": true,
+      "inserted_at": "2021-05-17T23:01:54.525650Z"
+    },
+    {
+      "version": "1.3.8",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.8",
+      "has_docs": true,
+      "inserted_at": "2021-05-12T12:05:38.839150Z"
+    },
+    {
+      "version": "1.3.7",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.7",
+      "has_docs": true,
+      "inserted_at": "2021-05-12T11:34:14.030665Z"
+    },
+    {
+      "version": "1.3.6",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.6",
+      "has_docs": true,
+      "inserted_at": "2021-05-12T09:27:10.965648Z"
+    },
+    {
+      "version": "1.3.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.5",
+      "has_docs": true,
+      "inserted_at": "2021-04-24T08:54:18.259682Z"
+    },
+    {
+      "version": "1.3.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.4",
+      "has_docs": true,
+      "inserted_at": "2021-03-08T22:00:26.357804Z"
+    },
+    {
+      "version": "1.3.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.3",
+      "has_docs": true,
+      "inserted_at": "2021-03-03T22:13:34.001997Z"
+    },
+    {
+      "version": "1.3.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.2",
+      "has_docs": true,
+      "inserted_at": "2021-02-04T23:34:08.592213Z"
+    },
+    {
+      "version": "1.3.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.1",
+      "has_docs": true,
+      "inserted_at": "2021-02-02T05:35:31.440763Z"
+    },
+    {
+      "version": "1.3.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.3.0",
+      "has_docs": true,
+      "inserted_at": "2021-01-23T23:23:15.552334Z"
+    },
+    {
+      "version": "1.2.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.2.2",
+      "has_docs": true,
+      "inserted_at": "2021-01-21T22:42:12.609312Z"
+    },
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2021-01-20T12:03:17.869150Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2021-01-17T04:26:46.570425Z"
+    },
+    {
+      "version": "1.1.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.1.2",
+      "has_docs": true,
+      "inserted_at": "2020-11-25T01:20:47.643256Z"
+    },
+    {
+      "version": "1.1.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.1.1",
+      "has_docs": true,
+      "inserted_at": "2020-11-12T21:37:30.188685Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-11-08T05:52:34.719850Z"
+    },
+    {
+      "version": "1.0.9",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.9",
+      "has_docs": true,
+      "inserted_at": "2020-10-29T09:44:12.404311Z"
+    },
+    {
+      "version": "1.0.8",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.8",
+      "has_docs": true,
+      "inserted_at": "2020-10-29T04:07:27.309382Z"
+    },
+    {
+      "version": "1.0.7",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.7",
+      "has_docs": true,
+      "inserted_at": "2020-10-29T02:06:42.367748Z"
+    },
+    {
+      "version": "1.0.6",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.6",
+      "has_docs": true,
+      "inserted_at": "2020-10-12T22:52:52.539040Z"
+    },
+    {
+      "version": "1.0.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.5",
+      "has_docs": true,
+      "inserted_at": "2020-10-09T23:37:43.405251Z"
+    },
+    {
+      "version": "1.0.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.4",
+      "has_docs": true,
+      "inserted_at": "2020-10-09T09:12:07.133766Z"
+    },
+    {
+      "version": "1.0.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.3",
+      "has_docs": true,
+      "inserted_at": "2020-09-16T11:47:12.562247Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2020-08-24T23:38:33.966089Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2020-08-04T02:56:03.509838Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2020-07-08T02:30:42.843776Z"
+    },
+    {
+      "version": "0.25.6",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.25.6",
+      "has_docs": true,
+      "inserted_at": "2020-06-26T13:06:00.719729Z"
+    },
+    {
+      "version": "0.25.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.25.5",
+      "has_docs": true,
+      "inserted_at": "2020-05-22T01:21:16.022216Z"
+    },
+    {
+      "version": "0.25.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.25.4",
+      "has_docs": true,
+      "inserted_at": "2020-04-28T23:20:27.572722Z"
+    },
+    {
+      "version": "0.25.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.25.3",
+      "has_docs": true,
+      "inserted_at": "2020-04-28T11:20:29.830872Z"
+    },
+    {
+      "version": "0.25.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.25.2",
+      "has_docs": true,
+      "inserted_at": "2020-04-10T03:51:23.837402Z"
+    },
+    {
+      "version": "0.25.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.25.1",
+      "has_docs": true,
+      "inserted_at": "2020-04-01T06:36:27.261394Z"
+    },
+    {
+      "version": "0.25.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.25.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-16T23:58:46.390970Z"
+    },
+    {
+      "version": "0.24.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.24.4",
+      "has_docs": true,
+      "inserted_at": "2020-01-29T02:39:52.325999Z"
+    },
+    {
+      "version": "0.24.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.24.3",
+      "has_docs": true,
+      "inserted_at": "2019-12-02T23:38:55.526325Z"
+    },
+    {
+      "version": "0.24.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.24.2",
+      "has_docs": true,
+      "inserted_at": "2019-10-29T03:54:44.583427Z"
+    },
+    {
+      "version": "0.24.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.24.1",
+      "has_docs": true,
+      "inserted_at": "2019-10-27T06:36:05.738188Z"
+    },
+    {
+      "version": "0.24.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.24.0",
+      "has_docs": true,
+      "inserted_at": "2019-10-24T05:40:54.039736Z"
+    },
+    {
+      "version": "0.23.5",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.23.5",
+      "has_docs": true,
+      "inserted_at": "2019-10-11T18:04:00.212274Z"
+    },
+    {
+      "version": "0.23.4",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.23.4",
+      "has_docs": true,
+      "inserted_at": "2019-08-31T01:14:32.369959Z"
+    },
+    {
+      "version": "0.23.3",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.23.3",
+      "has_docs": true,
+      "inserted_at": "2019-07-12T04:33:09.312967Z"
+    },
+    {
+      "version": "0.23.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.23.2",
+      "has_docs": true,
+      "inserted_at": "2019-06-04T12:11:12.970825Z"
+    },
+    {
+      "version": "0.23.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.23.1",
+      "has_docs": true,
+      "inserted_at": "2019-03-21T23:33:08.482545Z"
+    },
+    {
+      "version": "0.23.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.23.0",
+      "has_docs": true,
+      "inserted_at": "2019-03-18T21:28:13.537252Z"
+    },
+    {
+      "version": "0.22.2",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.22.2",
+      "has_docs": true,
+      "inserted_at": "2019-02-27T21:21:04.825103Z"
+    },
+    {
+      "version": "0.22.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.22.1",
+      "has_docs": true,
+      "inserted_at": "2019-02-21T21:52:09.581794Z"
+    },
+    {
+      "version": "0.22.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.22.0",
+      "has_docs": true,
+      "inserted_at": "2019-02-20T00:41:44.261620Z"
+    },
+    {
+      "version": "0.21.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.21.1",
+      "has_docs": true,
+      "inserted_at": "2019-02-10T23:21:53.953520Z"
+    },
+    {
+      "version": "0.21.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.21.0",
+      "has_docs": true,
+      "inserted_at": "2018-12-27T05:54:48.363858Z"
+    },
+    {
+      "version": "0.20.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.20.0",
+      "has_docs": true,
+      "inserted_at": "2018-09-21T00:00:20.737529Z"
+    },
+    {
+      "version": "0.19.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.19.0",
+      "has_docs": true,
+      "inserted_at": "2018-09-11T06:58:19.189388Z"
+    },
+    {
+      "version": "0.18.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.18.0",
+      "has_docs": true,
+      "inserted_at": "2018-09-07T07:39:36.495043Z"
+    },
+    {
+      "version": "0.17.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.17.0",
+      "has_docs": true,
+      "inserted_at": "2018-08-20T05:22:31.229986Z"
+    },
+    {
+      "version": "0.16.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.16.1",
+      "has_docs": true,
+      "inserted_at": "2018-08-08T05:31:12.791511Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.16.0",
+      "has_docs": true,
+      "inserted_at": "2018-07-26T08:15:06.631459Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2018-06-15T03:48:11.580880Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2018-05-18T09:27:45.483968Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2018-01-18T08:05:13.606329Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2018-01-05T14:44:16.501296Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2017-12-13T15:58:21.503020Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2017-11-01T12:44:48.921852Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2017-09-13T12:48:22.167339Z"
+    },
+    {
+      "version": "0.9.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.9.1",
+      "has_docs": true,
+      "inserted_at": "2017-08-16T10:47:58.584197Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2017-08-04T14:29:42.735850Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2017-06-10T10:57:49.348355Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2017-05-06T09:29:27.879044Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2017-03-14T09:20:00.117185Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2017-02-13T20:21:54.655571Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-19T19:51:52.162662Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2016-06-25T15:21:15.997558Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2016-04-20T17:32:30.587257Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2016-03-31T22:59:23.343565Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/swoosh/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2016-03-21T16:42:22.947909Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/swoosh",
+  "latest_version": "1.29.3",
+  "downloads": {
+    "all": 23858429,
+    "day": 46672,
+    "recent": 2499154,
+    "week": 255462
+  },
+  "security_advisories": [
+    {
+      "id": "GHSA-754j-98wh-57rf",
+      "aliases": [
+        "CVE-2026-54893",
+        "EEF-CVE-2026-54893"
+      ],
+      "references": [
+        {
+          "type": "PACKAGE",
+          "url": "https://github.com/swoosh/swoosh"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/swoosh/swoosh/security/advisories/GHSA-754j-98wh-57rf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://osv.dev/vulnerability/EEF-CVE-2026-54893"
+        },
+        {
+          "type": "ADVISORY",
+          "url": "https://nvd.nist.gov/vuln/detail/CVE-2026-54893"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/swoosh/swoosh/commit/23bfcdab71aee4613858ba6d116bb3311b72aa58"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/swoosh/swoosh/commit/e38235453e81d1727bfc8d91e69ec4cb211ccf61"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-54893.html"
+        }
+      ],
+      "summary": "swoosh has email-derived URL path injection in Microsoft Graph endpoint",
+      "api_url": "https://api.osv.dev/v1/vulns/GHSA-754j-98wh-57rf",
+      "published_at": "2026-10-16T19:22:31Z",
+      "html_url": "https://osv.dev/vulnerability/GHSA-754j-98wh-57rf",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-10-16T19:30:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.12.0 and < 1.26.3"
+      ]
+    },
+    {
+      "id": "EEF-CVE-2026-54893",
+      "aliases": [
+        "CVE-2026-54893",
+        "GHSA-754j-98wh-57rf"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/swoosh/swoosh/security/advisories/GHSA-754j-98wh-57rf"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-54893.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/swoosh/swoosh/commit/23bfcdab71aee4613858ba6d116bb3311b72aa58"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/swoosh/swoosh/commit/e38235453e81d1727bfc8d91e69ec4cb211ccf61"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/swoosh"
+        }
+      ],
+      "summary": "Email-derived URL path injection in the Swoosh Microsoft Graph adapter",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-54893",
+      "published_at": "2026-07-06T14:04:16Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-54893",
+      "cvss_score": 2.1,
+      "cvss_rating": "low",
+      "cvss_vector": "CVSS:4.0/AV:L/AC:L/AT:P/PR:N/UI:N/VC:N/VI:L/VA:N/SC:L/SI:L/SA:N",
+      "modified_at": "2026-09-24T21:30:04Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.12.0 and < 1.26.3"
+      ]
+    }
+  ],
+  "docs_html_url": "https://swoosh.hexdocs.pm/",
+  "retirements": {
+    "0.25.3": {
+      "message": "broken sendgrid adapter",
+      "reason": "invalid"
+    },
+    "1.0.7": {
+      "message": "gen_smtp may not exist",
+      "reason": "invalid"
+    },
+    "1.0.8": {
+      "message": "Code.ensure_loaded?(:gen_smtp) always return false, use :gen_smtp_application",
+      "reason": "invalid"
+    },
+    "1.3.6": {
+      "message": "included unfished code",
+      "reason": "invalid"
+    },
+    "1.3.8": {
+      "message": "has regression",
+      "reason": "invalid"
+    },
+    "1.11.1": {
+      "message": "broke SES and Sendmail BCC only emails",
+      "reason": "invalid"
+    },
+    "1.16.1": {
+      "message": "Emits unnecessary warning",
+      "reason": "invalid"
+    },
+    "1.16.2": {
+      "message": "Mailgun not sending correctly",
+      "reason": "invalid"
+    },
+    "1.17.4": {
+      "message": "broken Swoosh.Adapters.Mua",
+      "reason": "deprecated"
+    },
+    "1.17.7": {
+      "message": "Not working as expected",
+      "reason": "invalid"
+    },
+    "1.17.8": {
+      "message": "Not working as expected",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_swoosh = hex 1.29.3",
+    "mix.exs": "{:swoosh, \"~> 1.29\"}",
+    "rebar.config": "{swoosh, \"1.29.3\"}"
+  },
+  "latest_stable_version": "1.29.3"
+}

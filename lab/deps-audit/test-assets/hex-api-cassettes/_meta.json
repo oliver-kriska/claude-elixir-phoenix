@@ -1,16 +1,1021 @@
 {
   "capture_source": "https://hex.pm/api",
-  "captured_at": "2026-05-12T10:21:09.584688+00:00",
+  "captured_at": "2026-11-05T17:08:26.238828+00:00",
   "files": {
+    "#.packages.json": {
+      "captured_at": "2026-11-05T17:08:17.978025+00:00",
+      "endpoint": "/api/packages/#",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.Auth.json": {
+      "captured_at": "2026-11-05T17:07:59.402057+00:00",
+      "endpoint": "/api/packages/#/releases/Auth",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Background.json": {
+      "captured_at": "2026-11-05T17:08:10.283148+00:00",
+      "endpoint": "/api/packages/#/releases/Background",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Build.json": {
+      "captured_at": "2026-11-05T17:08:12.528646+00:00",
+      "endpoint": "/api/packages/#/releases/Build",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.CSV.json": {
+      "captured_at": "2026-11-05T17:08:19.827482+00:00",
+      "endpoint": "/api/packages/#/releases/CSV",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.Calendar.json": {
+      "captured_at": "2026-11-05T17:08:09.236363+00:00",
+      "endpoint": "/api/packages/#/releases/Calendar",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Code.json": {
+      "captured_at": "2026-11-05T17:08:18.763324+00:00",
+      "endpoint": "/api/packages/#/releases/Code",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.Compression.json": {
+      "captured_at": "2026-11-05T17:08:21.485060+00:00",
+      "endpoint": "/api/packages/#/releases/Compression",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.Core.json": {
+      "captured_at": "2026-11-05T17:07:53.847738+00:00",
+      "endpoint": "/api/packages/#/releases/Core",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Crypto.json": {
+      "captured_at": "2026-11-05T17:08:01.897973+00:00",
+      "endpoint": "/api/packages/#/releases/Crypto",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Email.json": {
+      "captured_at": "2026-11-05T17:08:11.393573+00:00",
+      "endpoint": "/api/packages/#/releases/Email",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Format:.json": {
+      "captured_at": "2026-11-05T17:07:47.924992+00:00",
+      "endpoint": "/api/packages/#/releases/Format:",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Geo.json": {
+      "captured_at": "2026-11-05T17:08:22.862451+00:00",
+      "endpoint": "/api/packages/#/releases/Geo",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.HTTP.json": {
+      "captured_at": "2026-11-05T17:07:56.213052+00:00",
+      "endpoint": "/api/packages/#/releases/HTTP",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Image.json": {
+      "captured_at": "2026-11-05T17:08:22.319268+00:00",
+      "endpoint": "/api/packages/#/releases/Image",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.JSON.json": {
+      "captured_at": "2026-11-05T17:08:15.363210+00:00",
+      "endpoint": "/api/packages/#/releases/JSON",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Last.json": {
+      "captured_at": "2026-11-05T17:07:49.115583+00:00",
+      "endpoint": "/api/packages/#/releases/Last",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Loader:.json": {
+      "captured_at": "2026-11-05T17:07:48.405826+00:00",
+      "endpoint": "/api/packages/#/releases/Loader:",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Markdown.json": {
+      "captured_at": "2026-11-05T17:08:08.045544+00:00",
+      "endpoint": "/api/packages/#/releases/Markdown",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Misc.json": {
+      "captured_at": "2026-11-05T17:08:24.348634+00:00",
+      "endpoint": "/api/packages/#/releases/Misc",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.OAuth.json": {
+      "captured_at": "2026-11-05T17:08:06.598309+00:00",
+      "endpoint": "/api/packages/#/releases/OAuth",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.OTP.json": {
+      "captured_at": "2026-11-05T17:08:00.814982+00:00",
+      "endpoint": "/api/packages/#/releases/OTP",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.OpenAPI.json": {
+      "captured_at": "2026-11-05T17:08:23.769656+00:00",
+      "endpoint": "/api/packages/#/releases/OpenAPI",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.Phoenix.json": {
+      "captured_at": "2026-11-05T17:08:16.753285+00:00",
+      "endpoint": "/api/packages/#/releases/Phoenix",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Strictly.json": {
+      "captured_at": "2026-11-05T17:07:49.971121+00:00",
+      "endpoint": "/api/packages/#/releases/Strictly",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.String.json": {
+      "captured_at": "2026-11-05T17:08:20.673074+00:00",
+      "endpoint": "/api/packages/#/releases/String",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.Test.json": {
+      "captured_at": "2026-11-05T17:08:04.933531+00:00",
+      "endpoint": "/api/packages/#/releases/Test",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.Tooling.json": {
+      "captured_at": "2026-11-05T17:08:17.978025+00:00",
+      "endpoint": "/api/packages/#/releases/Tooling",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "#.releases.Top.json": {
+      "captured_at": "2026-11-05T17:07:46.133717+00:00",
+      "endpoint": "/api/packages/#/releases/Top",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.UUID.json": {
+      "captured_at": "2026-11-05T17:08:13.940999+00:00",
+      "endpoint": "/api/packages/#/releases/UUID",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.app's.json": {
+      "captured_at": "2026-11-05T17:07:46.598037+00:00",
+      "endpoint": "/api/packages/#/releases/app's",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.bench:.json": {
+      "captured_at": "2026-11-05T17:07:47.143299+00:00",
+      "endpoint": "/api/packages/#/releases/bench:",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "#.releases.version.json": {
+      "captured_at": "2026-11-05T17:07:50.487012+00:00",
+      "endpoint": "/api/packages/#/releases/version",
+      "sha256": "7aea6d32ee60e0a13fa436917e7bfc3032905d7cd2c8703648b50ec2f101555f"
+    },
+    "argon2_elixir.packages.json": {
+      "captured_at": "2026-11-05T17:07:59.691526+00:00",
+      "endpoint": "/api/packages/argon2_elixir",
+      "sha256": "cb1de07a55b37a202c05b2a4aaca6dafd7614f7c735c7ecbe722e7e560746b94"
+    },
+    "argon2_elixir.releases.4.0.0.json": {
+      "captured_at": "2026-11-05T17:07:59.691526+00:00",
+      "endpoint": "/api/packages/argon2_elixir/releases/4.0.0",
+      "sha256": "6430a0868a68e1d232a48426dcfc668b68bd26bc17fd03fbcce594e181fb7ddf"
+    },
+    "bcrypt_elixir.packages.json": {
+      "captured_at": "2026-11-05T17:08:00.028772+00:00",
+      "endpoint": "/api/packages/bcrypt_elixir",
+      "sha256": "e899e52bf15975b2b60c28fbdb323da0177d167eeaa8cbdb30baaabefeac3060"
+    },
+    "bcrypt_elixir.releases.3.2.0.json": {
+      "captured_at": "2026-11-05T17:08:00.028772+00:00",
+      "endpoint": "/api/packages/bcrypt_elixir/releases/3.2.0",
+      "sha256": "e9d5ef6dd034590be3a054c17e4ef05ee64e75134b4b9d154a02406c3f17baee"
+    },
+    "castore.packages.json": {
+      "captured_at": "2026-11-05T17:08:02.180504+00:00",
+      "endpoint": "/api/packages/castore",
+      "sha256": "abcba8ca15a3e8babd0e330b9179273d62e19acef1b1fd466624f2cd426eb796"
+    },
+    "castore.releases.1.0.10.json": {
+      "captured_at": "2026-11-05T17:08:02.180504+00:00",
+      "endpoint": "/api/packages/castore/releases/1.0.10",
+      "sha256": "89cbd6a56e2aec4451870d907ae1dc29ef488bdc27ea6181dbcafa35fda53f20"
+    },
+    "cowboy.packages.json": {
+      "captured_at": "2026-11-05T17:07:57.170595+00:00",
+      "endpoint": "/api/packages/cowboy",
+      "sha256": "5a6cbd9056c1457ba1c5e02c2e5a36286a07ec496bcc6b9e2e25607d050dfd81"
+    },
+    "cowboy.releases.2.12.0.json": {
+      "captured_at": "2026-11-05T17:07:57.170595+00:00",
+      "endpoint": "/api/packages/cowboy/releases/2.12.0",
+      "sha256": "effd1396be5804a34d31d554efd4918950bbe71ff0b59fb1375aa73e7c7f03a1"
+    },
+    "cowboy_telemetry.packages.json": {
+      "captured_at": "2026-11-05T17:07:57.428995+00:00",
+      "endpoint": "/api/packages/cowboy_telemetry",
+      "sha256": "0a806a549b1fb7f62877a9ab90414156ded5ff01d8c2bc164b17301a42f308d1"
+    },
+    "cowboy_telemetry.releases.0.4.0.json": {
+      "captured_at": "2026-11-05T17:07:57.428995+00:00",
+      "endpoint": "/api/packages/cowboy_telemetry/releases/0.4.0",
+      "sha256": "9462b3d3bea6ac499c94ae1085be21c2f94ade51b50e45a3455e81a0ff34a8a1"
+    },
+    "cowlib.packages.json": {
+      "captured_at": "2026-11-05T17:07:57.728734+00:00",
+      "endpoint": "/api/packages/cowlib",
+      "sha256": "9ff9587fcb4c03f2b6c356c0581ee9210003571a76e33fd13cbb050650aba398"
+    },
+    "cowlib.releases.2.13.0.json": {
+      "captured_at": "2026-11-05T17:07:57.728734+00:00",
+      "endpoint": "/api/packages/cowlib/releases/2.13.0",
+      "sha256": "d2fb65006c0c213d4c92ec74316162ca828cee8978a58f88ba5727450d5f37ff"
+    },
+    "credo.packages.json": {
+      "captured_at": "2026-11-05T17:08:12.822577+00:00",
+      "endpoint": "/api/packages/credo",
+      "sha256": "bc628bc24ed9726260cbac49425ec3cd4ea36d2c9bf822ed4e40208c058c91d9"
+    },
+    "credo.releases.1.7.10.json": {
+      "captured_at": "2026-11-05T17:08:12.822577+00:00",
+      "endpoint": "/api/packages/credo/releases/1.7.10",
+      "sha256": "ba2d20e87bc11d00613561b1a185591758f47225105a60a77f8824ed05fac6f0"
+    },
+    "csv.packages.json": {
+      "captured_at": "2026-11-05T17:08:20.133282+00:00",
+      "endpoint": "/api/packages/csv",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "csv.releases.3.2.1.json": {
+      "captured_at": "2026-11-05T17:08:20.133282+00:00",
+      "endpoint": "/api/packages/csv/releases/3.2.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "db_connection.packages.json": {
+      "captured_at": "2026-11-05T17:07:55.380179+00:00",
+      "endpoint": "/api/packages/db_connection",
+      "sha256": "3af03c5153701a067e0cfab535e4796019a5aab1335fa851a50732b2da335ebb"
+    },
+    "db_connection.releases.2.7.0.json": {
+      "captured_at": "2026-11-05T17:07:55.380179+00:00",
+      "endpoint": "/api/packages/db_connection/releases/2.7.0",
+      "sha256": "d82d2a1989e62afb2f3ec84a414976d3fabd03ae197a1cadde46d614a2c7fd22"
+    },
+    "decimal.packages.json": {
+      "captured_at": "2026-11-05T17:07:55.672230+00:00",
+      "endpoint": "/api/packages/decimal",
+      "sha256": "c6d77aafa4ce90a7a310400177d1259c0293551d55239746ddb9a5c8bfa0b961"
+    },
+    "decimal.releases.2.1.1.json": {
+      "captured_at": "2026-11-05T17:07:55.672230+00:00",
+      "endpoint": "/api/packages/decimal/releases/2.1.1",
+      "sha256": "cebfe7273807cde0803be138d6ad822db9f3e5a0bf4dfea95b89f6781869dac0"
+    },
+    "dialyxir.packages.json": {
+      "captured_at": "2026-11-05T17:08:13.119361+00:00",
+      "endpoint": "/api/packages/dialyxir",
+      "sha256": "69d4bab24204989ed2a1ead2fb96de07fde049fe26062cbc3f93aff151a4a5d3"
+    },
+    "dialyxir.releases.1.4.4.json": {
+      "captured_at": "2026-11-05T17:08:13.119361+00:00",
+      "endpoint": "/api/packages/dialyxir/releases/1.4.4",
+      "sha256": "febb2d2a504ceee4cd355a5523265e03c98a3573e14a686947502aeb08c14dfa"
+    },
+    "earmark.packages.json": {
+      "captured_at": "2026-11-05T17:08:08.382607+00:00",
+      "endpoint": "/api/packages/earmark",
+      "sha256": "fe53b708247cc9b373056e620051070489eea27be57287676a3498bf9753ff70"
+    },
+    "earmark.releases.1.4.46.json": {
+      "captured_at": "2026-11-05T17:08:08.382607+00:00",
+      "endpoint": "/api/packages/earmark/releases/1.4.46",
+      "sha256": "13f78a25e3876a69e3c692562ae7196fe5dd55c11f5e49f8dc949715d41613b9"
+    },
+    "ecto.packages.json": {
+      "captured_at": "2026-11-05T17:07:54.477837+00:00",
+      "endpoint": "/api/packages/ecto",
+      "sha256": "4e2c32fea6d2518c9bd409ea4939b15ed10c19fa1c3c2bfeb5f40a2e64681eaa"
+    },
+    "ecto.releases.3.12.4.json": {
+      "captured_at": "2026-11-05T17:07:54.477837+00:00",
+      "endpoint": "/api/packages/ecto/releases/3.12.4",
+      "sha256": "f8d790cb4288491e4e928b40394f7a046e5a1a2407693d71c9e05d6b8ac21595"
+    },
+    "ecto_sql.packages.json": {
+      "captured_at": "2026-11-05T17:07:54.735416+00:00",
+      "endpoint": "/api/packages/ecto_sql",
+      "sha256": "f0ce2b8b0650c96bc9b2ccea57339448ff7f2c3a6620960d3e1ff702bc3f54b3"
+    },
+    "ecto_sql.releases.3.12.1.json": {
+      "captured_at": "2026-11-05T17:07:54.735416+00:00",
+      "endpoint": "/api/packages/ecto_sql/releases/3.12.1",
+      "sha256": "a088f1b87aaa19130905f0ea2e5e6ac90a59c5daef913af61f68ece1557a91db"
+    },
+    "eex.packages.json": {
+      "captured_at": "2026-11-05T17:08:08.671620+00:00",
+      "endpoint": "/api/packages/eex",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "eex.releases.1.18.1.json": {
+      "captured_at": "2026-11-05T17:08:08.671620+00:00",
+      "endpoint": "/api/packages/eex/releases/1.18.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "elixir_uuid.packages.json": {
+      "captured_at": "2026-11-05T17:08:14.234852+00:00",
+      "endpoint": "/api/packages/elixir_uuid",
+      "sha256": "fc5f23918d24eb2521af1365563a06f219f8e0d1def9b4174a5bbcfe9b6c21f7"
+    },
+    "elixir_uuid.releases.1.2.1.json": {
+      "captured_at": "2026-11-05T17:08:14.234852+00:00",
+      "endpoint": "/api/packages/elixir_uuid/releases/1.2.1",
+      "sha256": "289b85ce8370ad2dfe312c1e4721c1d663097ffd72f107b102622e02af00c7ec"
+    },
+    "esbuild.packages.json": {
+      "captured_at": "2026-11-05T17:08:17.706993+00:00",
+      "endpoint": "/api/packages/esbuild",
+      "sha256": "b0df7b6cbe35dbcbc4f8cfe0f7b84841209b079b75d46d178de13a9db5b7ea08"
+    },
+    "esbuild.releases.0.8.2.json": {
+      "captured_at": "2026-11-05T17:08:17.706993+00:00",
+      "endpoint": "/api/packages/esbuild/releases/0.8.2",
+      "sha256": "042edecc064bce3bb5b65ec165b6f5490ea33809016ab032cd2f0bfe5c95ba23"
+    },
+    "ex_aws.packages.json": {
+      "captured_at": "2026-11-05T17:08:03.798549+00:00",
+      "endpoint": "/api/packages/ex_aws",
+      "sha256": "98eebd1766384d03d4aa09570d819e03dc462b51da0929017c4b293e62108f33"
+    },
+    "ex_aws.releases.2.5.5.json": {
+      "captured_at": "2026-11-05T17:08:03.798549+00:00",
+      "endpoint": "/api/packages/ex_aws/releases/2.5.5",
+      "sha256": "9900ddc03dd66432132db2361fd2fef906ab9ecc2ed1e33dcb2c2fb0dd2dd6dc"
+    },
+    "ex_aws_s3.packages.json": {
+      "captured_at": "2026-11-05T17:08:04.065066+00:00",
+      "endpoint": "/api/packages/ex_aws_s3",
+      "sha256": "29f7d4f8e2402c36f75bb432551b467f7beeee2bfe921319c1d300a393d280c0"
+    },
+    "ex_aws_s3.releases.2.5.4.json": {
+      "captured_at": "2026-11-05T17:08:04.065066+00:00",
+      "endpoint": "/api/packages/ex_aws_s3/releases/2.5.4",
+      "sha256": "f7a72728c05346e745a7ced8c066a69d1c1b04f210fc6bc07468976c3e5f016e"
+    },
+    "ex_json_schema.packages.json": {
+      "captured_at": "2026-11-05T17:08:15.646577+00:00",
+      "endpoint": "/api/packages/ex_json_schema",
+      "sha256": "c0646487959265c9e34bdd53085ff15cc58e1ebe126d7f19c1452b7294700db2"
+    },
+    "ex_json_schema.releases.0.10.2.json": {
+      "captured_at": "2026-11-05T17:08:15.646577+00:00",
+      "endpoint": "/api/packages/ex_json_schema/releases/0.10.2",
+      "sha256": "34e095292ef5a320c45390c2b1b62c545c3b558d2aced3e7948e84a0f76f6e81"
+    },
+    "ex_machina.packages.json": {
+      "captured_at": "2026-11-05T17:08:05.201438+00:00",
+      "endpoint": "/api/packages/ex_machina",
+      "sha256": "ab4c9788d1ee0728db3c93651b2222078359463c082e0cf0c30cd38d574feae6"
+    },
+    "ex_machina.releases.2.8.0.json": {
+      "captured_at": "2026-11-05T17:08:05.201438+00:00",
+      "endpoint": "/api/packages/ex_machina/releases/2.8.0",
+      "sha256": "d0eeaf34274415349826dc522d31b81ffd0cf49b74d7f3fce46c0804d9d65e88"
+    },
+    "expo.packages.json": {
+      "captured_at": "2026-11-05T17:08:24.895571+00:00",
+      "endpoint": "/api/packages/expo",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "expo.releases.1.1.0.json": {
+      "captured_at": "2026-11-05T17:08:24.895571+00:00",
+      "endpoint": "/api/packages/expo/releases/1.1.0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "file_system.packages.json": {
+      "captured_at": "2026-11-05T17:08:25.978411+00:00",
+      "endpoint": "/api/packages/file_system",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "file_system.releases.1.0.1.json": {
+      "captured_at": "2026-11-05T17:08:25.978411+00:00",
+      "endpoint": "/api/packages/file_system/releases/1.0.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "finch.packages.json": {
+      "captured_at": "2026-11-05T17:08:11.991778+00:00",
+      "endpoint": "/api/packages/finch",
+      "sha256": "93d23d73a78efae9a036d0fc26d9052de19974a283a797eecb479833a470aa50"
+    },
+    "finch.releases.0.19.0.json": {
+      "captured_at": "2026-11-05T17:08:11.991778+00:00",
+      "endpoint": "/api/packages/finch/releases/0.19.0",
+      "sha256": "6de13a38e96bce3604f6e807cd4c0bb23705f43c1716c6b01cd443fc873a63a7"
+    },
+    "floki.packages.json": {
+      "captured_at": "2026-11-05T17:08:06.061469+00:00",
+      "endpoint": "/api/packages/floki",
+      "sha256": "0cc3f63984711f67be3d2a3fb9d1d4be26cbb744496a4f2cdda8ce7271efa415"
+    },
+    "floki.releases.0.36.3.json": {
+      "captured_at": "2026-11-05T17:08:06.061469+00:00",
+      "endpoint": "/api/packages/floki/releases/0.36.3",
+      "sha256": "3e25440d511c91e99bf773d0d77a917cf05aa8ba4fa6b4b2ca4ff6f5a76f0fb7"
+    },
+    "flow.packages.json": {
+      "captured_at": "2026-11-05T17:08:01.403562+00:00",
+      "endpoint": "/api/packages/flow",
+      "sha256": "cac288212412e04766b63d3752e45128faa72396e14df0c3e717c0a061d5545d"
+    },
+    "flow.releases.1.2.4.json": {
+      "captured_at": "2026-11-05T17:08:01.403562+00:00",
+      "endpoint": "/api/packages/flow/releases/1.2.4",
+      "sha256": "b17fc91ae06598cd65f1c96c04eda95f8ac882cbc265d2581ed482503867b9f3"
+    },
+    "fs.packages.json": {
+      "captured_at": "2026-11-05T17:08:26.238828+00:00",
+      "endpoint": "/api/packages/fs",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "fs.releases.8.6.1.json": {
+      "captured_at": "2026-11-05T17:08:26.238828+00:00",
+      "endpoint": "/api/packages/fs/releases/8.6.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "gen_stage.packages.json": {
+      "captured_at": "2026-11-05T17:08:01.090076+00:00",
+      "endpoint": "/api/packages/gen_stage",
+      "sha256": "8f143f5aafd7f880840efe56154a06cacd427aac3568bc91929361c3c89741ed"
+    },
+    "gen_stage.releases.1.2.1.json": {
+      "captured_at": "2026-11-05T17:08:01.090076+00:00",
+      "endpoint": "/api/packages/gen_stage/releases/1.2.1",
+      "sha256": "ef87b7a0f4457e571c56e087a1aa12658f4b9205d6dade4d8d53b747e4ae8ef9"
+    },
+    "geo.packages.json": {
+      "captured_at": "2026-11-05T17:08:23.171394+00:00",
+      "endpoint": "/api/packages/geo",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "geo.releases.3.6.0.json": {
+      "captured_at": "2026-11-05T17:08:23.171394+00:00",
+      "endpoint": "/api/packages/geo/releases/3.6.0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "geo_postgis.packages.json": {
+      "captured_at": "2026-11-05T17:08:23.453558+00:00",
+      "endpoint": "/api/packages/geo_postgis",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "geo_postgis.releases.3.5.1.json": {
+      "captured_at": "2026-11-05T17:08:23.453558+00:00",
+      "endpoint": "/api/packages/geo_postgis/releases/3.5.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "gettext.packages.json": {
+      "captured_at": "2026-11-05T17:08:24.642816+00:00",
+      "endpoint": "/api/packages/gettext",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "gettext.releases.0.26.2.json": {
+      "captured_at": "2026-11-05T17:08:24.642816+00:00",
+      "endpoint": "/api/packages/gettext/releases/0.26.2",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "gzip.packages.json": {
+      "captured_at": "2026-11-05T17:08:03.497059+00:00",
+      "endpoint": "/api/packages/gzip",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "gzip.releases.0.7.0.json": {
+      "captured_at": "2026-11-05T17:08:03.497059+00:00",
+      "endpoint": "/api/packages/gzip/releases/0.7.0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "hackney.packages.json": {
+      "captured_at": "2026-11-05T17:08:04.390339+00:00",
+      "endpoint": "/api/packages/hackney",
+      "sha256": "637d1606c162b3ec1c8a29b1257bdb7435b80cdf573e69d4ebb2a59435532d8e"
+    },
+    "hackney.releases.1.20.1.json": {
+      "captured_at": "2026-11-05T17:08:04.390339+00:00",
+      "endpoint": "/api/packages/hackney/releases/1.20.1",
+      "sha256": "242405344a90982fe97b2b9f000a4ca248d15dbcc1e89a09429ae70512a5ab07"
+    },
+    "heroicons.packages.json": {
+      "captured_at": "2026-11-05T17:08:17.049724+00:00",
+      "endpoint": "/api/packages/heroicons",
+      "sha256": "4de7b841ac9ad4f0262588432c454c80876123cdd5bd270b59f9b14bda4e445f"
+    },
+    "heroicons.releases.0.5.6.json": {
+      "captured_at": "2026-11-05T17:08:17.049724+00:00",
+      "endpoint": "/api/packages/heroicons/releases/0.5.6",
+      "sha256": "fb3799316309d4eaf9d5d3a82f474c9e29ba72b54f43a6bb5d5634b91917d6f7"
+    },
+    "inflex.packages.json": {
+      "captured_at": "2026-11-05T17:08:21.193438+00:00",
+      "endpoint": "/api/packages/inflex",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "inflex.releases.2.1.0.json": {
+      "captured_at": "2026-11-05T17:08:21.193438+00:00",
+      "endpoint": "/api/packages/inflex/releases/2.1.0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
     "jason.packages.json": {
-      "captured_at": "2026-05-12T10:21:09.584688+00:00",
+      "captured_at": "2026-11-05T17:07:54.123090+00:00",
       "endpoint": "/api/packages/jason",
-      "sha256": "7cb8b90520d8d80c5de49ba8d983b308cacb31b6cfb903e1fc17238c6bb4cc67"
+      "sha256": "e297d299aa953129033d4b04f6e1ed590c07ba692b82fa9123593f00d670fcda"
     },
     "jason.releases.1.4.4.json": {
-      "captured_at": "2026-05-12T10:21:09.584688+00:00",
+      "captured_at": "2026-11-05T17:07:54.123090+00:00",
       "endpoint": "/api/packages/jason/releases/1.4.4",
-      "sha256": "e826ef1bb226895903111860e6f71e5b9e13a77222af9ee96b22017e137a5659"
+      "sha256": "b7e6a5f2058009b6f35da99396aad6983525ab200fb1354c2fee19962a735bc5"
+    },
+    "makeup.packages.json": {
+      "captured_at": "2026-11-05T17:08:19.017466+00:00",
+      "endpoint": "/api/packages/makeup",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "makeup.releases.1.2.1.json": {
+      "captured_at": "2026-11-05T17:08:19.017466+00:00",
+      "endpoint": "/api/packages/makeup/releases/1.2.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "makeup_elixir.packages.json": {
+      "captured_at": "2026-11-05T17:08:19.285367+00:00",
+      "endpoint": "/api/packages/makeup_elixir",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "makeup_elixir.releases.1.0.1.json": {
+      "captured_at": "2026-11-05T17:08:19.285367+00:00",
+      "endpoint": "/api/packages/makeup_elixir/releases/1.0.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "makeup_erlang.packages.json": {
+      "captured_at": "2026-11-05T17:08:19.565473+00:00",
+      "endpoint": "/api/packages/makeup_erlang",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "makeup_erlang.releases.1.0.1.json": {
+      "captured_at": "2026-11-05T17:08:19.565473+00:00",
+      "endpoint": "/api/packages/makeup_erlang/releases/1.0.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mime.packages.json": {
+      "captured_at": "2026-11-05T17:07:58.012685+00:00",
+      "endpoint": "/api/packages/mime",
+      "sha256": "527d877831b5790a9c4b2fd0185de777573b70233739fae10ecb110c66b73b8d"
+    },
+    "mime.releases.2.0.6.json": {
+      "captured_at": "2026-11-05T17:07:58.012685+00:00",
+      "endpoint": "/api/packages/mime/releases/2.0.6",
+      "sha256": "a4604fb7cc8b88ec129fb2933b34be9f96ce8322d5e983cf29b3a2773339e183"
+    },
+    "mint.packages.json": {
+      "captured_at": "2026-11-05T17:08:02.466852+00:00",
+      "endpoint": "/api/packages/mint",
+      "sha256": "bfae890417311aa0f5f1c307ce8d2399ce17b8453d7aab7d397eb61bf90f9e8e"
+    },
+    "mint.releases.1.6.2.json": {
+      "captured_at": "2026-11-05T17:08:02.466852+00:00",
+      "endpoint": "/api/packages/mint/releases/1.6.2",
+      "sha256": "5196feced871091586b18af2938143846afa362d6f329e4da2dc8eb76ff3d564"
+    },
+    "mix_audit.packages.json": {
+      "captured_at": "2026-11-05T17:08:18.487171+00:00",
+      "endpoint": "/api/packages/mix_audit",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mix_audit.releases.2.1.4.json": {
+      "captured_at": "2026-11-05T17:08:18.487171+00:00",
+      "endpoint": "/api/packages/mix_audit/releases/2.1.4",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mix_test_watch.packages.json": {
+      "captured_at": "2026-11-05T17:08:18.224175+00:00",
+      "endpoint": "/api/packages/mix_test_watch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mix_test_watch.releases.1.2.0.json": {
+      "captured_at": "2026-11-05T17:08:18.224175+00:00",
+      "endpoint": "/api/packages/mix_test_watch/releases/1.2.0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mogrify.packages.json": {
+      "captured_at": "2026-11-05T17:08:22.577443+00:00",
+      "endpoint": "/api/packages/mogrify",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mogrify.releases.0.9.3.json": {
+      "captured_at": "2026-11-05T17:08:22.577443+00:00",
+      "endpoint": "/api/packages/mogrify/releases/0.9.3",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "mox.packages.json": {
+      "captured_at": "2026-11-05T17:08:05.506342+00:00",
+      "endpoint": "/api/packages/mox",
+      "sha256": "f4c0880da49823810f6d30a36c44c08859878b87d4357f56167916e81c1f14af"
+    },
+    "mox.releases.1.2.0.json": {
+      "captured_at": "2026-11-05T17:08:05.506342+00:00",
+      "endpoint": "/api/packages/mox/releases/1.2.0",
+      "sha256": "da09e5399082f16ce2cfe020d16b25e4c6160cd965c461619d46e575f05a0911"
+    },
+    "nanoid.packages.json": {
+      "captured_at": "2026-11-05T17:08:14.526053+00:00",
+      "endpoint": "/api/packages/nanoid",
+      "sha256": "8e92e1543503e288f61ce8cc7dcc55429dc32417b8e81dc26d0355352b273c55"
+    },
+    "nanoid.releases.2.1.0.json": {
+      "captured_at": "2026-11-05T17:08:14.526053+00:00",
+      "endpoint": "/api/packages/nanoid/releases/2.1.0",
+      "sha256": "7b7799797c6d82cf23ddfcd933cae5eb84e3f39f5b26bd8141f50d770c042475"
+    },
+    "nimble_csv.packages.json": {
+      "captured_at": "2026-11-05T17:08:20.400067+00:00",
+      "endpoint": "/api/packages/nimble_csv",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "nimble_csv.releases.1.2.0.json": {
+      "captured_at": "2026-11-05T17:08:20.400067+00:00",
+      "endpoint": "/api/packages/nimble_csv/releases/1.2.0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "nimble_options.packages.json": {
+      "captured_at": "2026-11-05T17:08:15.929611+00:00",
+      "endpoint": "/api/packages/nimble_options",
+      "sha256": "04fb9abe6bfc027799f86516146cd7e496ee641d7dfe1a797143c13a0481b3fc"
+    },
+    "nimble_options.releases.1.1.1.json": {
+      "captured_at": "2026-11-05T17:08:15.929611+00:00",
+      "endpoint": "/api/packages/nimble_options/releases/1.1.1",
+      "sha256": "14cd2122b98ebbf84420d51aeae1dc98112749c184a15889d3b2da4a85fb7670"
+    },
+    "nimble_parsec.packages.json": {
+      "captured_at": "2026-11-05T17:08:16.221334+00:00",
+      "endpoint": "/api/packages/nimble_parsec",
+      "sha256": "71643612bed6a9a6bf30988f7704665316aaea812ad5350ef29f2f4738f71e3b"
+    },
+    "nimble_parsec.releases.1.4.0.json": {
+      "captured_at": "2026-11-05T17:08:16.221334+00:00",
+      "endpoint": "/api/packages/nimble_parsec/releases/1.4.0",
+      "sha256": "e7110e4de2ad6a503e6deb43ab2c360d3b31c3afb543ff77bf11d06af4449a51"
+    },
+    "oauth2.packages.json": {
+      "captured_at": "2026-11-05T17:08:07.506964+00:00",
+      "endpoint": "/api/packages/oauth2",
+      "sha256": "dc0438d0ad0834fa498732fbc45d007706ee2bc223907d0e320d33433468a6fa"
+    },
+    "oauth2.releases.2.1.0.json": {
+      "captured_at": "2026-11-05T17:08:07.506964+00:00",
+      "endpoint": "/api/packages/oauth2/releases/2.1.0",
+      "sha256": "473822cd2eb56d43561cda9176d323bbdc5e68dce69ee027e360ce31e480ce50"
+    },
+    "oban.packages.json": {
+      "captured_at": "2026-11-05T17:08:10.568453+00:00",
+      "endpoint": "/api/packages/oban",
+      "sha256": "abf99be687465afc6e58b341e70be58118bfe8c7d7bd766f9be35151c33649f9"
+    },
+    "oban.releases.2.18.3.json": {
+      "captured_at": "2026-11-05T17:08:10.568453+00:00",
+      "endpoint": "/api/packages/oban/releases/2.18.3",
+      "sha256": "d865e5bd784974dcdf8665c92b7ef856d3485e3e1678e45ee176c10005322e85"
+    },
+    "oban_web.packages.json": {
+      "captured_at": "2026-11-05T17:08:10.858421+00:00",
+      "endpoint": "/api/packages/oban_web",
+      "sha256": "14576e4abc9be5ad8f6869b5b27dd4995f13859d4ef0ae91deee8b13f523a0e1"
+    },
+    "oban_web.releases.2.10.4.json": {
+      "captured_at": "2026-11-05T17:08:10.858421+00:00",
+      "endpoint": "/api/packages/oban_web/releases/2.10.4",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "open_api_spex.packages.json": {
+      "captured_at": "2026-11-05T17:08:24.051834+00:00",
+      "endpoint": "/api/packages/open_api_spex",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "open_api_spex.releases.3.21.2.json": {
+      "captured_at": "2026-11-05T17:08:24.051834+00:00",
+      "endpoint": "/api/packages/open_api_spex/releases/3.21.2",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "parse_trans.packages.json": {
+      "captured_at": "2026-11-05T17:08:25.724982+00:00",
+      "endpoint": "/api/packages/parse_trans",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "parse_trans.releases.3.4.1.json": {
+      "captured_at": "2026-11-05T17:08:25.724982+00:00",
+      "endpoint": "/api/packages/parse_trans/releases/3.4.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "phoenix.packages.json": {
+      "captured_at": "2026-11-05T17:07:50.823304+00:00",
+      "endpoint": "/api/packages/phoenix",
+      "sha256": "01ef3589a5475f88e2b939df49563efa203220098f9449dd8bc6a8770a95c3a9"
+    },
+    "phoenix.releases.1.7.21.json": {
+      "captured_at": "2026-11-05T17:07:50.823304+00:00",
+      "endpoint": "/api/packages/phoenix/releases/1.7.21",
+      "sha256": "0c1ba0da4df07bf26a32f7877af2df3dff16e5d90ffa28ec52fb8a29decb3a6d"
+    },
+    "phoenix_ecto.packages.json": {
+      "captured_at": "2026-11-05T17:07:51.970505+00:00",
+      "endpoint": "/api/packages/phoenix_ecto",
+      "sha256": "891053041599055aa3329f11ad1e56193f5425e56dd702add1397530348482db"
+    },
+    "phoenix_ecto.releases.4.6.2.json": {
+      "captured_at": "2026-11-05T17:07:51.970505+00:00",
+      "endpoint": "/api/packages/phoenix_ecto/releases/4.6.2",
+      "sha256": "f31af9b5b04e4040fe9e23b03ba201abef4ae67b54933fa24d6219fafd9badc3"
+    },
+    "phoenix_html.packages.json": {
+      "captured_at": "2026-11-05T17:07:51.404394+00:00",
+      "endpoint": "/api/packages/phoenix_html",
+      "sha256": "394b9d0e8ceca97ec90e6c3d906f9573cfb27d831b0e284b1fe3cdfa57385313"
+    },
+    "phoenix_html.releases.4.1.1.json": {
+      "captured_at": "2026-11-05T17:07:51.404394+00:00",
+      "endpoint": "/api/packages/phoenix_html/releases/4.1.1",
+      "sha256": "1431e38b8557304791f83fd8f95763571d62bf5328728ce1d10c1f65d0966b6e"
+    },
+    "phoenix_live_dashboard.packages.json": {
+      "captured_at": "2026-11-05T17:07:52.839802+00:00",
+      "endpoint": "/api/packages/phoenix_live_dashboard",
+      "sha256": "5da2037ae55b298062041655a17b7fd5012302e68601b7817ac868be7035402a"
+    },
+    "phoenix_live_dashboard.releases.0.8.5.json": {
+      "captured_at": "2026-11-05T17:07:52.839802+00:00",
+      "endpoint": "/api/packages/phoenix_live_dashboard/releases/0.8.5",
+      "sha256": "c6965c41a021b90b99faece1493939cb26e1c47bc824778097216243b53a2728"
+    },
+    "phoenix_live_reload.packages.json": {
+      "captured_at": "2026-11-05T17:07:53.117537+00:00",
+      "endpoint": "/api/packages/phoenix_live_reload",
+      "sha256": "877805515014a2bd3e3a7eabd7bacb0bb259e10bc96ded8eb2f2a913e9a167fc"
+    },
+    "phoenix_live_reload.releases.1.5.3.json": {
+      "captured_at": "2026-11-05T17:07:53.117537+00:00",
+      "endpoint": "/api/packages/phoenix_live_reload/releases/1.5.3",
+      "sha256": "2b16031cae51304e618f1986ff3f5a29ec5230a23fe86b01482dc0ecd21bc080"
+    },
+    "phoenix_live_view.packages.json": {
+      "captured_at": "2026-11-05T17:07:51.112183+00:00",
+      "endpoint": "/api/packages/phoenix_live_view",
+      "sha256": "403506f3c2d6797cd6711a7a3ccf5d73ad68e64134bd4c102c7b2ac2503d0f52"
+    },
+    "phoenix_live_view.releases.1.0.5.json": {
+      "captured_at": "2026-11-05T17:07:51.112183+00:00",
+      "endpoint": "/api/packages/phoenix_live_view/releases/1.0.5",
+      "sha256": "477b7549e90e0c0b8923576d8b7208e28c5cfdde4a84b0f237588ad67aecb60c"
+    },
+    "phoenix_pubsub.packages.json": {
+      "captured_at": "2026-11-05T17:07:51.676881+00:00",
+      "endpoint": "/api/packages/phoenix_pubsub",
+      "sha256": "98872d8641907f2754a3e9777328c492e8a940b7abf677ba8539244a40edcaac"
+    },
+    "phoenix_pubsub.releases.2.1.3.json": {
+      "captured_at": "2026-11-05T17:07:51.676881+00:00",
+      "endpoint": "/api/packages/phoenix_pubsub/releases/2.1.3",
+      "sha256": "de7d5eea54029bdaf8b005c1fc5253f848929324d4230c1dba52bfecacb3da59"
+    },
+    "phoenix_swoosh.packages.json": {
+      "captured_at": "2026-11-05T17:08:22.055512+00:00",
+      "endpoint": "/api/packages/phoenix_swoosh",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "phoenix_swoosh.releases.1.2.1.json": {
+      "captured_at": "2026-11-05T17:08:22.055512+00:00",
+      "endpoint": "/api/packages/phoenix_swoosh/releases/1.2.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "phoenix_template.packages.json": {
+      "captured_at": "2026-11-05T17:07:52.570606+00:00",
+      "endpoint": "/api/packages/phoenix_template",
+      "sha256": "7e029460a188843a2a0f7fd7c83df4b3a26971014733637d66815c60a8f58696"
+    },
+    "phoenix_template.releases.1.0.4.json": {
+      "captured_at": "2026-11-05T17:07:52.570606+00:00",
+      "endpoint": "/api/packages/phoenix_template/releases/1.0.4",
+      "sha256": "89318db92a7a5e2eac0f3c3bd86c92598e7284cee2c531a0279912e2bb139024"
+    },
+    "phoenix_view.packages.json": {
+      "captured_at": "2026-11-05T17:07:52.272514+00:00",
+      "endpoint": "/api/packages/phoenix_view",
+      "sha256": "031dc0494b797cdb3707db6988758cf4432b3584a2f1cf420c2c1b4d2ebfdf0b"
+    },
+    "phoenix_view.releases.2.0.4.json": {
+      "captured_at": "2026-11-05T17:07:52.272514+00:00",
+      "endpoint": "/api/packages/phoenix_view/releases/2.0.4",
+      "sha256": "212808c53b3da2a439fd954759d26df6e39ee3437fc6099c980dd0b53f21b49c"
+    },
+    "plug.packages.json": {
+      "captured_at": "2026-11-05T17:07:56.529653+00:00",
+      "endpoint": "/api/packages/plug",
+      "sha256": "55bd488fd8985a1d7fa6a53a6d32d1f89047e1a5f26edefa0ac9a2b0b1cfcbee"
+    },
+    "plug.releases.1.16.1.json": {
+      "captured_at": "2026-11-05T17:07:56.529653+00:00",
+      "endpoint": "/api/packages/plug/releases/1.16.1",
+      "sha256": "9720f99e9f25a214a0105e44fd50902b08aa542d380ef666f0dea669fb34594a"
+    },
+    "plug_cowboy.packages.json": {
+      "captured_at": "2026-11-05T17:07:56.873457+00:00",
+      "endpoint": "/api/packages/plug_cowboy",
+      "sha256": "327a229020cfcf4cf2f77d5224758efb7512c4fad204d0ef036667fb06ad6625"
+    },
+    "plug_cowboy.releases.2.7.2.json": {
+      "captured_at": "2026-11-05T17:07:56.873457+00:00",
+      "endpoint": "/api/packages/plug_cowboy/releases/2.7.2",
+      "sha256": "9d5838c42a8c27d97bcafe50cd2c9a7e45687a4e1a1c20af90096c7a77845426"
+    },
+    "plug_crypto.packages.json": {
+      "captured_at": "2026-11-05T17:08:00.308347+00:00",
+      "endpoint": "/api/packages/plug_crypto",
+      "sha256": "9ae8e6c72f26f42fe5dde9a0961a52b848958f1f8ed7de04c1d6b8c0b3ece1a6"
+    },
+    "plug_crypto.releases.2.1.0.json": {
+      "captured_at": "2026-11-05T17:08:00.308347+00:00",
+      "endpoint": "/api/packages/plug_crypto/releases/2.1.0",
+      "sha256": "34d3a7f709793b5c4cdeb509c58e3a31fe2d574b69263445c295251791e3fca2"
+    },
+    "poolboy.packages.json": {
+      "captured_at": "2026-11-05T17:08:25.176277+00:00",
+      "endpoint": "/api/packages/poolboy",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "poolboy.releases.1.5.2.json": {
+      "captured_at": "2026-11-05T17:08:25.176277+00:00",
+      "endpoint": "/api/packages/poolboy/releases/1.5.2",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "postgrex.packages.json": {
+      "captured_at": "2026-11-05T17:07:55.056785+00:00",
+      "endpoint": "/api/packages/postgrex",
+      "sha256": "e509811b3c01f34ad83a38895d3047436c603b33df457c0bddb58de79a58dbe9"
+    },
+    "postgrex.releases.0.19.3.json": {
+      "captured_at": "2026-11-05T17:07:55.056785+00:00",
+      "endpoint": "/api/packages/postgrex/releases/0.19.3",
+      "sha256": "9a7f9c2f5b3ea332fd334b6da980fc2581422913283487d2dd46b2b8b839d82e"
+    },
+    "ranch.packages.json": {
+      "captured_at": "2026-11-05T17:08:25.454084+00:00",
+      "endpoint": "/api/packages/ranch",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "ranch.releases.2.1.0.json": {
+      "captured_at": "2026-11-05T17:08:25.454084+00:00",
+      "endpoint": "/api/packages/ranch/releases/2.1.0",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recase.packages.json": {
+      "captured_at": "2026-11-05T17:08:20.938911+00:00",
+      "endpoint": "/api/packages/recase",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "recase.releases.0.8.1.json": {
+      "captured_at": "2026-11-05T17:08:20.938911+00:00",
+      "endpoint": "/api/packages/recase/releases/0.8.1",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "sobelow.packages.json": {
+      "captured_at": "2026-11-05T17:08:13.402370+00:00",
+      "endpoint": "/api/packages/sobelow",
+      "sha256": "6881cd8657ac6fa06ddfc730ba133d72517ff7cc0c66e9a5b2244bec68a18caf"
+    },
+    "sobelow.releases.0.13.0.json": {
+      "captured_at": "2026-11-05T17:08:13.402370+00:00",
+      "endpoint": "/api/packages/sobelow/releases/0.13.0",
+      "sha256": "a74032b0e37610f571b5892282d78036326600c3736757df03324e2e297cee4e"
+    },
+    "ssl_verify_fun.packages.json": {
+      "captured_at": "2026-11-05T17:08:02.730022+00:00",
+      "endpoint": "/api/packages/ssl_verify_fun",
+      "sha256": "72d51716077bf0ea6638fa4d4e90e75701236e51aec287df91b74f9d5702721b"
+    },
+    "ssl_verify_fun.releases.1.1.7.json": {
+      "captured_at": "2026-11-05T17:08:02.730022+00:00",
+      "endpoint": "/api/packages/ssl_verify_fun/releases/1.1.7",
+      "sha256": "2415362895d92802c79e084f6f213ed0226044ef51987b4f2119e5fa30dce690"
+    },
+    "stream_data.packages.json": {
+      "captured_at": "2026-11-05T17:08:05.779536+00:00",
+      "endpoint": "/api/packages/stream_data",
+      "sha256": "124a063505ca9cbe716f9a7f149cd96da81ece02d0bd786559e93dd110cfd515"
+    },
+    "stream_data.releases.1.1.1.json": {
+      "captured_at": "2026-11-05T17:08:05.779536+00:00",
+      "endpoint": "/api/packages/stream_data/releases/1.1.1",
+      "sha256": "f300388bdcc5b6272e7c48fe9ba3c7ff696a4729033f5407e7b1fe08a0d9f46c"
+    },
+    "swoosh.packages.json": {
+      "captured_at": "2026-11-05T17:08:11.688617+00:00",
+      "endpoint": "/api/packages/swoosh",
+      "sha256": "c6774af9b3bbc7f8d55a0b7306b8c4efd94f929cc7797c16c2077e69d2a878d9"
+    },
+    "swoosh.releases.1.17.4.json": {
+      "captured_at": "2026-11-05T17:08:11.688617+00:00",
+      "endpoint": "/api/packages/swoosh/releases/1.17.4",
+      "sha256": "f9c196b0e02683a240ac0590d848c0d615c844a6409a39d7acbd716a092ddeeb"
+    },
+    "tailwind.packages.json": {
+      "captured_at": "2026-11-05T17:08:17.395909+00:00",
+      "endpoint": "/api/packages/tailwind",
+      "sha256": "8713eadade6d1743700680bbbfea5c8a3803c9dd847a9db47e828dbbe7698302"
+    },
+    "tailwind.releases.0.2.4.json": {
+      "captured_at": "2026-11-05T17:08:17.395909+00:00",
+      "endpoint": "/api/packages/tailwind/releases/0.2.4",
+      "sha256": "2fe4911623cd0c9517bf35a54593b332ff64b5648629869ca8712dd86a64550f"
+    },
+    "telemetry.packages.json": {
+      "captured_at": "2026-11-05T17:07:58.300619+00:00",
+      "endpoint": "/api/packages/telemetry",
+      "sha256": "ef2bfbc71ed22aa4e34c67247bf72dfa3f8041bd3e0feba48ea8cf8d70d7cf3d"
+    },
+    "telemetry.releases.1.3.0.json": {
+      "captured_at": "2026-11-05T17:07:58.300619+00:00",
+      "endpoint": "/api/packages/telemetry/releases/1.3.0",
+      "sha256": "fb95123a18079af44f4aa89f866d8309dbf26c588735b5062685c99fea7ca157"
+    },
+    "telemetry_metrics.packages.json": {
+      "captured_at": "2026-11-05T17:07:58.833989+00:00",
+      "endpoint": "/api/packages/telemetry_metrics",
+      "sha256": "4dbd0a67327e1e7b509f166cce4466d74ce29380d4a3df07ae86366a94486048"
+    },
+    "telemetry_metrics.releases.1.1.0.json": {
+      "captured_at": "2026-11-05T17:07:58.833989+00:00",
+      "endpoint": "/api/packages/telemetry_metrics/releases/1.1.0",
+      "sha256": "dc10de2b0348495c56fe532b5352a1cd163cc3dee076125a8f69b20d789dbf3a"
+    },
+    "telemetry_poller.packages.json": {
+      "captured_at": "2026-11-05T17:07:58.564992+00:00",
+      "endpoint": "/api/packages/telemetry_poller",
+      "sha256": "d70f0e2d3d078a9149d14b0e5519631f359a9fcb59ac7ca855382af9e631e593"
+    },
+    "telemetry_poller.releases.1.1.0.json": {
+      "captured_at": "2026-11-05T17:07:58.564992+00:00",
+      "endpoint": "/api/packages/telemetry_poller/releases/1.1.0",
+      "sha256": "f7ceeeb5fe5c611198a620bf2a60a461c117217dad24d8fab0f730ba2aacab43"
+    },
+    "timex.packages.json": {
+      "captured_at": "2026-11-05T17:08:09.563400+00:00",
+      "endpoint": "/api/packages/timex",
+      "sha256": "18f55deba02756d28de89cd8b61dbe7f7b8931852a13df716f16d6907515d49d"
+    },
+    "timex.releases.3.7.11.json": {
+      "captured_at": "2026-11-05T17:08:09.563400+00:00",
+      "endpoint": "/api/packages/timex/releases/3.7.11",
+      "sha256": "5bdb83c7f63382f5efc81120fe715f089dca24475e6991caef227e5aca0f64d8"
+    },
+    "tz.packages.json": {
+      "captured_at": "2026-11-05T17:08:09.847668+00:00",
+      "endpoint": "/api/packages/tz",
+      "sha256": "379c2ff1f1e162e3b699109340da8c4845a74ffc0c989edd5ede5dc0c41d4fa8"
+    },
+    "tz.releases.0.27.1.json": {
+      "captured_at": "2026-11-05T17:08:09.847668+00:00",
+      "endpoint": "/api/packages/tz/releases/0.27.1",
+      "sha256": "8d77de85823851cce18ba7bd17743d852e1c933895d58a1fa2be416df1874eff"
+    },
+    "ueberauth.packages.json": {
+      "captured_at": "2026-11-05T17:08:06.931721+00:00",
+      "endpoint": "/api/packages/ueberauth",
+      "sha256": "248ffa877547e1aa2ee23ccaf5d11c3cbb76b6708f24cc6b5d27f16fa9424e60"
+    },
+    "ueberauth.releases.0.10.8.json": {
+      "captured_at": "2026-11-05T17:08:06.931721+00:00",
+      "endpoint": "/api/packages/ueberauth/releases/0.10.8",
+      "sha256": "c7edac8ca1021e20377c63757ad87dd66a271d3e78efdfd857f24517cbfc99dd"
+    },
+    "ueberauth_google.packages.json": {
+      "captured_at": "2026-11-05T17:08:07.219686+00:00",
+      "endpoint": "/api/packages/ueberauth_google",
+      "sha256": "f56c52c3b09003739d640219137dadf7956b968cd43373aa6864dad9809a93b1"
+    },
+    "ueberauth_google.releases.0.12.1.json": {
+      "captured_at": "2026-11-05T17:08:07.219686+00:00",
+      "endpoint": "/api/packages/ueberauth_google/releases/0.12.1",
+      "sha256": "0ade68c3d797f0bf3ffcf65c153c20f4c38c8b595ef45a816f39d70cc68b3679"
+    },
+    "ulid.packages.json": {
+      "captured_at": "2026-11-05T17:08:14.805561+00:00",
+      "endpoint": "/api/packages/ulid",
+      "sha256": "7994daa48140f25680f3567b1e56e4131981182f4f3a11069b76dff4d2c77850"
+    },
+    "ulid.releases.0.2.0.json": {
+      "captured_at": "2026-11-05T17:08:14.805561+00:00",
+      "endpoint": "/api/packages/ulid/releases/0.2.0",
+      "sha256": "4f563a66e00bf67ca906f10b03e03e8c0e212d327fab14ed427396940068bcca"
+    },
+    "zstream.packages.json": {
+      "captured_at": "2026-11-05T17:08:21.768672+00:00",
+      "endpoint": "/api/packages/zstream",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "zstream.releases.0.6.4.json": {
+      "captured_at": "2026-11-05T17:08:21.768672+00:00",
+      "endpoint": "/api/packages/zstream/releases/0.6.4",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     }
   }
 }

@@ -1,0 +1,87 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "plug_crypto",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.1.0",
+  "checksum": "131216a4b030b8f8ce0f26038bc4421ae60e4bb95c5cf5395e1421437824c4fa",
+  "url": "https://hex.pm/api/packages/plug_crypto/releases/2.1.0",
+  "has_docs": true,
+  "inserted_at": "2024-05-02T14:35:37.316823Z",
+  "updated_at": "2024-05-02T14:35:39.752439Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/plug_crypto/2.1.0",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/plug_crypto",
+  "downloads": 11609581,
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-105963",
+      "aliases": [
+        "CVE-2026-105963",
+        "GHSA-ffw9-w85g-f2vh"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-plug/plug/security/advisories/GHSA-ffw9-w85g-f2vh"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-105963.html"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug/commit/56000c33d8a0a2fbac491f8be06b9c5112bc2276"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug/commit/aeaa90e76b73ea90c3ecca9aae16fce71bd2a8d4"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-plug/plug_crypto/commit/2d078b7b8264c565f0ff71235c515f4f46882dcf"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-plug/plug_crypto/commit/981887493dada0fce7003c61861c00dfbb0fc8c5"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/plug_crypto"
+        }
+      ],
+      "summary": "Secret key base exposed in stack trace arguments on wrong-typed Plug.Crypto arguments",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-105963",
+      "published_at": "2026-10-23T09:56:58Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-105963",
+      "cvss_score": 5.1,
+      "cvss_rating": "medium",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:N/PR:H/UI:N/VC:L/VI:N/VA:N/SC:N/SI:N/SA:N",
+      "modified_at": "2026-10-23T10:10:50Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 1.0.0 and < 2.2.1"
+      ]
+    }
+  ],
+  "docs_html_url": "https://plug-crypto.hexdocs.pm/2.1.0/",
+  "configs": {
+    "erlang.mk": "dep_plug_crypto = hex 2.1.0",
+    "mix.exs": "{:plug_crypto, \"~> 2.1\"}",
+    "rebar.config": "{plug_crypto, \"2.1.0\"}"
+  }
+}

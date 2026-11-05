@@ -1,0 +1,784 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/bitwalker/timex/blob/main/CHANGELOG.md",
+      "GitHub": "https://github.com/bitwalker/timex"
+    },
+    "description": "Timex is a rich, comprehensive Date/Time library for Elixir projects, with full timezone support via the :tzdata package.\nIf you need to manipulate dates, times, datetimes, timestamps, etc., then Timex is for you!",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "timex",
+  "url": "https://hex.pm/api/packages/timex",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/bitwalker",
+      "username": "bitwalker"
+    }
+  ],
+  "inserted_at": "2014-04-23T04:00:39.000000Z",
+  "updated_at": "2026-11-03T18:03:50.866888Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "4.0.0",
+      "url": "https://hex.pm/api/packages/timex/releases/4.0.0",
+      "has_docs": true,
+      "inserted_at": "2026-11-03T18:03:49.540856Z"
+    },
+    {
+      "version": "3.7.13",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.13",
+      "has_docs": true,
+      "inserted_at": "2025-06-14T15:28:44.134921Z"
+    },
+    {
+      "version": "3.7.12",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.12",
+      "has_docs": true,
+      "inserted_at": "2025-06-07T15:05:56.271980Z"
+    },
+    {
+      "version": "3.7.11",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.11",
+      "has_docs": true,
+      "inserted_at": "2023-03-24T16:09:15.367567Z"
+    },
+    {
+      "version": "3.7.9",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.9",
+      "has_docs": true,
+      "inserted_at": "2022-08-08T21:20:08.001663Z"
+    },
+    {
+      "version": "3.7.8",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.8",
+      "has_docs": true,
+      "inserted_at": "2022-05-03T22:54:55.655004Z"
+    },
+    {
+      "version": "3.7.7",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.7",
+      "has_docs": true,
+      "inserted_at": "2022-03-08T01:07:45.604610Z"
+    },
+    {
+      "version": "3.7.6",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.6",
+      "has_docs": true,
+      "inserted_at": "2021-08-02T21:26:40.175922Z"
+    },
+    {
+      "version": "3.7.5",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.5",
+      "has_docs": true,
+      "inserted_at": "2021-04-04T06:33:32.289270Z"
+    },
+    {
+      "version": "3.7.3",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.3",
+      "has_docs": true,
+      "inserted_at": "2021-03-19T20:21:59.247190Z"
+    },
+    {
+      "version": "3.7.2",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.2",
+      "has_docs": true,
+      "inserted_at": "2021-03-19T06:50:11.693686Z"
+    },
+    {
+      "version": "3.7.1",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.1",
+      "has_docs": true,
+      "inserted_at": "2021-03-18T17:10:12.113341Z"
+    },
+    {
+      "version": "3.7.0",
+      "url": "https://hex.pm/api/packages/timex/releases/3.7.0",
+      "has_docs": true,
+      "inserted_at": "2021-03-18T06:09:00.773786Z"
+    },
+    {
+      "version": "3.6.4",
+      "url": "https://hex.pm/api/packages/timex/releases/3.6.4",
+      "has_docs": true,
+      "inserted_at": "2021-02-26T23:10:49.738334Z"
+    },
+    {
+      "version": "3.6.3",
+      "url": "https://hex.pm/api/packages/timex/releases/3.6.3",
+      "has_docs": true,
+      "inserted_at": "2020-12-25T01:37:40.202037Z"
+    },
+    {
+      "version": "3.6.2",
+      "url": "https://hex.pm/api/packages/timex/releases/3.6.2",
+      "has_docs": true,
+      "inserted_at": "2020-05-18T22:57:42.030436Z"
+    },
+    {
+      "version": "3.6.1",
+      "url": "https://hex.pm/api/packages/timex/releases/3.6.1",
+      "has_docs": true,
+      "inserted_at": "2019-06-27T20:19:38.221185Z"
+    },
+    {
+      "version": "3.6.0",
+      "url": "https://hex.pm/api/packages/timex/releases/3.6.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-26T22:41:04.280786Z"
+    },
+    {
+      "version": "3.5.0",
+      "url": "https://hex.pm/api/packages/timex/releases/3.5.0",
+      "has_docs": true,
+      "inserted_at": "2019-01-18T16:42:47.039079Z"
+    },
+    {
+      "version": "3.4.2",
+      "url": "https://hex.pm/api/packages/timex/releases/3.4.2",
+      "has_docs": true,
+      "inserted_at": "2018-11-03T18:08:04.635799Z"
+    },
+    {
+      "version": "3.4.1",
+      "url": "https://hex.pm/api/packages/timex/releases/3.4.1",
+      "has_docs": true,
+      "inserted_at": "2018-09-19T17:17:55.655581Z"
+    },
+    {
+      "version": "3.3.0",
+      "url": "https://hex.pm/api/packages/timex/releases/3.3.0",
+      "has_docs": true,
+      "inserted_at": "2018-05-08T23:25:18.997177Z"
+    },
+    {
+      "version": "3.2.2",
+      "url": "https://hex.pm/api/packages/timex/releases/3.2.2",
+      "has_docs": true,
+      "inserted_at": "2018-04-14T01:07:14.508438Z"
+    },
+    {
+      "version": "3.2.1",
+      "url": "https://hex.pm/api/packages/timex/releases/3.2.1",
+      "has_docs": true,
+      "inserted_at": "2018-02-20T18:39:16.682088Z"
+    },
+    {
+      "version": "3.2.0",
+      "url": "https://hex.pm/api/packages/timex/releases/3.2.0",
+      "has_docs": true,
+      "inserted_at": "2018-02-20T18:31:38.082453Z"
+    },
+    {
+      "version": "3.1.25",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.25",
+      "has_docs": true,
+      "inserted_at": "2018-01-30T21:36:58.617505Z"
+    },
+    {
+      "version": "3.1.24",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.24",
+      "has_docs": true,
+      "inserted_at": "2017-07-19T02:54:32.199717Z"
+    },
+    {
+      "version": "3.1.23",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.23",
+      "has_docs": true,
+      "inserted_at": "2017-07-17T17:07:28.057193Z"
+    },
+    {
+      "version": "3.1.22",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.22",
+      "has_docs": true,
+      "inserted_at": "2017-07-17T15:01:37.127918Z"
+    },
+    {
+      "version": "3.1.21",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.21",
+      "has_docs": true,
+      "inserted_at": "2017-07-01T16:38:46.603396Z"
+    },
+    {
+      "version": "3.1.20",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.20",
+      "has_docs": true,
+      "inserted_at": "2017-06-28T19:33:45.580974Z"
+    },
+    {
+      "version": "3.1.19",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.19",
+      "has_docs": true,
+      "inserted_at": "2017-06-27T22:17:13.183060Z"
+    },
+    {
+      "version": "3.1.18",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.18",
+      "has_docs": true,
+      "inserted_at": "2017-06-27T18:08:23.364353Z"
+    },
+    {
+      "version": "3.1.17",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.17",
+      "has_docs": true,
+      "inserted_at": "2017-06-21T21:21:00.847697Z"
+    },
+    {
+      "version": "3.1.16",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.16",
+      "has_docs": true,
+      "inserted_at": "2017-06-21T18:14:14.794456Z"
+    },
+    {
+      "version": "3.1.15",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.15",
+      "has_docs": true,
+      "inserted_at": "2017-05-17T22:22:44.580087Z"
+    },
+    {
+      "version": "3.1.13",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.13",
+      "has_docs": true,
+      "inserted_at": "2017-02-17T15:22:38.828127Z"
+    },
+    {
+      "version": "3.1.12",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.12",
+      "has_docs": true,
+      "inserted_at": "2017-02-13T04:43:15.830734Z"
+    },
+    {
+      "version": "3.1.11",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.11",
+      "has_docs": true,
+      "inserted_at": "2017-02-09T17:58:15.720475Z"
+    },
+    {
+      "version": "3.1.10",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.10",
+      "has_docs": true,
+      "inserted_at": "2017-02-07T20:16:23.073252Z"
+    },
+    {
+      "version": "3.1.9",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.9",
+      "has_docs": true,
+      "inserted_at": "2017-02-02T02:12:57.039989Z"
+    },
+    {
+      "version": "3.1.8",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.8",
+      "has_docs": true,
+      "inserted_at": "2017-01-19T20:57:44.678734Z"
+    },
+    {
+      "version": "3.1.7",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.7",
+      "has_docs": true,
+      "inserted_at": "2017-01-05T03:32:48.740169Z"
+    },
+    {
+      "version": "3.1.6",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.6",
+      "has_docs": true,
+      "inserted_at": "2017-01-03T21:15:35.262401Z"
+    },
+    {
+      "version": "3.1.5",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.5",
+      "has_docs": true,
+      "inserted_at": "2016-11-06T19:43:37.174367Z"
+    },
+    {
+      "version": "3.1.4",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.4",
+      "has_docs": true,
+      "inserted_at": "2016-11-06T05:55:24.775729Z"
+    },
+    {
+      "version": "3.1.3",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.3",
+      "has_docs": true,
+      "inserted_at": "2016-10-28T15:45:26.773940Z"
+    },
+    {
+      "version": "3.1.2",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.2",
+      "has_docs": true,
+      "inserted_at": "2016-10-27T17:05:34.096177Z"
+    },
+    {
+      "version": "3.1.1",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.1",
+      "has_docs": true,
+      "inserted_at": "2016-10-25T21:22:15.941135Z"
+    },
+    {
+      "version": "3.1.0",
+      "url": "https://hex.pm/api/packages/timex/releases/3.1.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-11T21:16:45.222008Z"
+    },
+    {
+      "version": "3.0.8",
+      "url": "https://hex.pm/api/packages/timex/releases/3.0.8",
+      "has_docs": true,
+      "inserted_at": "2016-08-18T14:44:54.024142Z"
+    },
+    {
+      "version": "3.0.7",
+      "url": "https://hex.pm/api/packages/timex/releases/3.0.7",
+      "has_docs": true,
+      "inserted_at": "2016-08-15T18:05:46.146331Z"
+    },
+    {
+      "version": "3.0.6",
+      "url": "https://hex.pm/api/packages/timex/releases/3.0.6",
+      "has_docs": true,
+      "inserted_at": "2016-08-10T17:49:11.422511Z"
+    },
+    {
+      "version": "3.0.5",
+      "url": "https://hex.pm/api/packages/timex/releases/3.0.5",
+      "has_docs": true,
+      "inserted_at": "2016-07-30T23:30:16.048121Z"
+    },
+    {
+      "version": "3.0.4",
+      "url": "https://hex.pm/api/packages/timex/releases/3.0.4",
+      "has_docs": true,
+      "inserted_at": "2016-07-19T03:55:21.289561Z"
+    },
+    {
+      "version": "3.0.3",
+      "url": "https://hex.pm/api/packages/timex/releases/3.0.3",
+      "has_docs": true,
+      "inserted_at": "2016-07-15T16:37:44.436004Z"
+    },
+    {
+      "version": "3.0.2",
+      "url": "https://hex.pm/api/packages/timex/releases/3.0.2",
+      "has_docs": false,
+      "inserted_at": "2016-07-13T16:51:19.522700Z"
+    },
+    {
+      "version": "3.0.1",
+      "url": "https://hex.pm/api/packages/timex/releases/3.0.1",
+      "has_docs": true,
+      "inserted_at": "2016-07-13T02:26:29.803002Z"
+    },
+    {
+      "version": "3.0.0",
+      "url": "https://hex.pm/api/packages/timex/releases/3.0.0",
+      "has_docs": true,
+      "inserted_at": "2016-07-13T01:24:01.089079Z"
+    },
+    {
+      "version": "2.2.1",
+      "url": "https://hex.pm/api/packages/timex/releases/2.2.1",
+      "has_docs": true,
+      "inserted_at": "2016-06-24T06:42:00.057451Z"
+    },
+    {
+      "version": "2.1.6",
+      "url": "https://hex.pm/api/packages/timex/releases/2.1.6",
+      "has_docs": true,
+      "inserted_at": "2016-06-01T04:08:48.292244Z"
+    },
+    {
+      "version": "2.1.5",
+      "url": "https://hex.pm/api/packages/timex/releases/2.1.5",
+      "has_docs": true,
+      "inserted_at": "2016-05-24T02:32:35.307348Z"
+    },
+    {
+      "version": "2.1.4",
+      "url": "https://hex.pm/api/packages/timex/releases/2.1.4",
+      "has_docs": true,
+      "inserted_at": "2016-03-30T18:03:16.447343Z"
+    },
+    {
+      "version": "2.1.3",
+      "url": "https://hex.pm/api/packages/timex/releases/2.1.3",
+      "has_docs": true,
+      "inserted_at": "2016-03-28T19:47:01.838295Z"
+    },
+    {
+      "version": "2.1.2",
+      "url": "https://hex.pm/api/packages/timex/releases/2.1.2",
+      "has_docs": true,
+      "inserted_at": "2016-03-27T17:37:38.015510Z"
+    },
+    {
+      "version": "2.1.1",
+      "url": "https://hex.pm/api/packages/timex/releases/2.1.1",
+      "has_docs": true,
+      "inserted_at": "2016-03-10T21:45:23.324419Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/timex/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2016-03-09T18:31:08.884572Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/timex/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2016-03-06T23:57:03.767381Z"
+    },
+    {
+      "version": "1.0.2",
+      "url": "https://hex.pm/api/packages/timex/releases/1.0.2",
+      "has_docs": true,
+      "inserted_at": "2016-03-01T00:05:37.496375Z"
+    },
+    {
+      "version": "1.0.1",
+      "url": "https://hex.pm/api/packages/timex/releases/1.0.1",
+      "has_docs": true,
+      "inserted_at": "2016-02-05T23:37:17.605284Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/timex/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2015-12-30T03:06:04.648657Z"
+    },
+    {
+      "version": "1.0.0-rc4",
+      "url": "https://hex.pm/api/packages/timex/releases/1.0.0-rc4",
+      "has_docs": true,
+      "inserted_at": "2015-12-11T00:42:43.701273Z"
+    },
+    {
+      "version": "1.0.0-rc3",
+      "url": "https://hex.pm/api/packages/timex/releases/1.0.0-rc3",
+      "has_docs": true,
+      "inserted_at": "2015-11-24T20:03:31.154122Z"
+    },
+    {
+      "version": "1.0.0-rc2",
+      "url": "https://hex.pm/api/packages/timex/releases/1.0.0-rc2",
+      "has_docs": true,
+      "inserted_at": "2015-11-08T01:38:09.605764Z"
+    },
+    {
+      "version": "1.0.0-rc1",
+      "url": "https://hex.pm/api/packages/timex/releases/1.0.0-rc1",
+      "has_docs": true,
+      "inserted_at": "2015-10-13T19:44:22.818400Z"
+    },
+    {
+      "version": "1.0.0-pre",
+      "url": "https://hex.pm/api/packages/timex/releases/1.0.0-pre",
+      "has_docs": true,
+      "inserted_at": "2015-10-10T04:46:50.089250Z"
+    },
+    {
+      "version": "0.19.5",
+      "url": "https://hex.pm/api/packages/timex/releases/0.19.5",
+      "has_docs": true,
+      "inserted_at": "2015-09-24T22:23:22.939686Z"
+    },
+    {
+      "version": "0.19.4",
+      "url": "https://hex.pm/api/packages/timex/releases/0.19.4",
+      "has_docs": true,
+      "inserted_at": "2015-09-08T21:17:46.212673Z"
+    },
+    {
+      "version": "0.19.3",
+      "url": "https://hex.pm/api/packages/timex/releases/0.19.3",
+      "has_docs": true,
+      "inserted_at": "2015-09-02T14:28:48.621739Z"
+    },
+    {
+      "version": "0.19.2",
+      "url": "https://hex.pm/api/packages/timex/releases/0.19.2",
+      "has_docs": false,
+      "inserted_at": "2015-08-13T19:50:37.441450Z"
+    },
+    {
+      "version": "0.19.1",
+      "url": "https://hex.pm/api/packages/timex/releases/0.19.1",
+      "has_docs": false,
+      "inserted_at": "2015-08-18T19:33:25.948290Z"
+    },
+    {
+      "version": "0.19.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.19.0",
+      "has_docs": false,
+      "inserted_at": "2015-08-18T19:33:37.704877Z"
+    },
+    {
+      "version": "0.18.2",
+      "url": "https://hex.pm/api/packages/timex/releases/0.18.2",
+      "has_docs": true,
+      "inserted_at": "2015-08-11T19:17:35.074072Z"
+    },
+    {
+      "version": "0.18.1",
+      "url": "https://hex.pm/api/packages/timex/releases/0.18.1",
+      "has_docs": true,
+      "inserted_at": "2015-08-11T15:40:24.747638Z"
+    },
+    {
+      "version": "0.18.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.18.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-10T18:22:33.029858Z"
+    },
+    {
+      "version": "0.17.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.17.0",
+      "has_docs": true,
+      "inserted_at": "2015-08-05T22:06:56.270646Z"
+    },
+    {
+      "version": "0.16.2",
+      "url": "https://hex.pm/api/packages/timex/releases/0.16.2",
+      "has_docs": false,
+      "inserted_at": "2015-07-23T00:28:43.861761Z"
+    },
+    {
+      "version": "0.16.1",
+      "url": "https://hex.pm/api/packages/timex/releases/0.16.1",
+      "has_docs": false,
+      "inserted_at": "2015-07-10T03:35:40.105585Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.16.0",
+      "has_docs": false,
+      "inserted_at": "2015-07-02T17:57:31.702120Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2015-06-25T20:23:27.665918Z"
+    },
+    {
+      "version": "0.14.3",
+      "url": "https://hex.pm/api/packages/timex/releases/0.14.3",
+      "has_docs": true,
+      "inserted_at": "2015-06-23T18:52:08.715859Z"
+    },
+    {
+      "version": "0.14.2",
+      "url": "https://hex.pm/api/packages/timex/releases/0.14.2",
+      "has_docs": false,
+      "inserted_at": "2015-06-23T15:47:35.211280Z"
+    },
+    {
+      "version": "0.14.1",
+      "url": "https://hex.pm/api/packages/timex/releases/0.14.1",
+      "has_docs": true,
+      "inserted_at": "2015-06-23T14:39:12.790641Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2015-06-19T17:56:41.389844Z"
+    },
+    {
+      "version": "0.13.5",
+      "url": "https://hex.pm/api/packages/timex/releases/0.13.5",
+      "has_docs": true,
+      "inserted_at": "2015-06-17T15:17:39.406291Z"
+    },
+    {
+      "version": "0.13.4",
+      "url": "https://hex.pm/api/packages/timex/releases/0.13.4",
+      "has_docs": true,
+      "inserted_at": "2015-03-20T21:12:54.000000Z"
+    },
+    {
+      "version": "0.13.3",
+      "url": "https://hex.pm/api/packages/timex/releases/0.13.3",
+      "has_docs": true,
+      "inserted_at": "2015-01-10T00:25:14.000000Z"
+    },
+    {
+      "version": "0.13.2",
+      "url": "https://hex.pm/api/packages/timex/releases/0.13.2",
+      "has_docs": false,
+      "inserted_at": "2014-12-05T15:38:01.000000Z"
+    },
+    {
+      "version": "0.13.1",
+      "url": "https://hex.pm/api/packages/timex/releases/0.13.1",
+      "has_docs": false,
+      "inserted_at": "2014-11-07T17:32:43.000000Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.13.0",
+      "has_docs": false,
+      "inserted_at": "2014-10-20T20:58:37.000000Z"
+    },
+    {
+      "version": "0.12.9",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.9",
+      "has_docs": false,
+      "inserted_at": "2014-10-03T08:10:17.000000Z"
+    },
+    {
+      "version": "0.12.8",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.8",
+      "has_docs": false,
+      "inserted_at": "2014-09-22T09:20:07.000000Z"
+    },
+    {
+      "version": "0.12.7",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.7",
+      "has_docs": false,
+      "inserted_at": "2014-09-12T03:02:39.000000Z"
+    },
+    {
+      "version": "0.12.6",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.6",
+      "has_docs": false,
+      "inserted_at": "2014-09-12T02:48:26.000000Z"
+    },
+    {
+      "version": "0.12.5",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.5",
+      "has_docs": false,
+      "inserted_at": "2014-09-04T02:09:02.000000Z"
+    },
+    {
+      "version": "0.12.4",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.4",
+      "has_docs": false,
+      "inserted_at": "2014-08-17T21:26:27.000000Z"
+    },
+    {
+      "version": "0.12.3",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.3",
+      "has_docs": false,
+      "inserted_at": "2014-08-14T15:08:45.000000Z"
+    },
+    {
+      "version": "0.12.2",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.2",
+      "has_docs": false,
+      "inserted_at": "2014-08-13T21:12:26.000000Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.1",
+      "has_docs": false,
+      "inserted_at": "2014-08-13T21:07:43.000000Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.12.0",
+      "has_docs": false,
+      "inserted_at": "2014-08-12T15:51:45.000000Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.11.0",
+      "has_docs": false,
+      "inserted_at": "2014-08-02T20:35:59.000000Z"
+    },
+    {
+      "version": "0.10.2",
+      "url": "https://hex.pm/api/packages/timex/releases/0.10.2",
+      "has_docs": false,
+      "inserted_at": "2014-07-28T06:50:34.000000Z"
+    },
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/timex/releases/0.10.1",
+      "has_docs": false,
+      "inserted_at": "2014-07-20T09:17:43.000000Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.10.0",
+      "has_docs": false,
+      "inserted_at": "2014-07-13T04:47:41.000000Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.9.0",
+      "has_docs": false,
+      "inserted_at": "2014-06-30T01:34:19.000000Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.8.0",
+      "has_docs": false,
+      "inserted_at": "2014-06-19T20:54:14.000000Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/timex/releases/0.7.1",
+      "has_docs": false,
+      "inserted_at": "2014-06-12T16:18:16.000000Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.6.0",
+      "has_docs": false,
+      "inserted_at": "2014-05-27T14:06:12.000000Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/timex/releases/0.5.0",
+      "has_docs": false,
+      "inserted_at": "2014-05-02T17:00:11.000000Z"
+    },
+    {
+      "version": "0.4.8",
+      "url": "https://hex.pm/api/packages/timex/releases/0.4.8",
+      "has_docs": false,
+      "inserted_at": "2014-04-23T12:37:33.000000Z"
+    },
+    {
+      "version": "0.4.7",
+      "url": "https://hex.pm/api/packages/timex/releases/0.4.7",
+      "has_docs": false,
+      "inserted_at": "2014-04-23T04:05:03.000000Z"
+    },
+    {
+      "version": "0.4.6",
+      "url": "https://hex.pm/api/packages/timex/releases/0.4.6",
+      "has_docs": false,
+      "inserted_at": "2014-04-23T04:00:39.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/timex",
+  "latest_version": "4.0.0",
+  "downloads": {
+    "all": 134930089,
+    "day": 21685,
+    "recent": 1492376,
+    "week": 119258
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://timex.hexdocs.pm/",
+  "retirements": {
+    "3.1.25": {
+      "message": "Incorrect Elixir version requirement",
+      "reason": "invalid"
+    },
+    "3.6.2": {
+      "message": "handling of non-olson timezones was broken",
+      "reason": "other"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_timex = hex 4.0.0",
+    "mix.exs": "{:timex, \"~> 4.0\"}",
+    "rebar.config": "{timex, \"4.0.0\"}"
+  },
+  "latest_stable_version": "4.0.0"
+}

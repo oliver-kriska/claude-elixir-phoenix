@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "elixir": "~> 1.7",
+    "app": "sobelow",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.13.0",
+  "checksum": "cd6e9026b85fc35d7529da14f95e85a078d9dd1907a9097b3ba6ac7ebbe34a0d",
+  "url": "https://hex.pm/api/packages/sobelow/releases/0.13.0",
+  "has_docs": true,
+  "inserted_at": "2023-08-06T16:48:56.635353Z",
+  "updated_at": "2023-08-06T16:48:59.279945Z",
+  "requirements": {
+    "jason": {
+      "app": "jason",
+      "optional": false,
+      "requirement": "~> 1.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/sobelow/0.13.0",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/holden.oullette",
+    "username": "holden.oullette"
+  },
+  "package_url": "https://hex.pm/api/packages/sobelow",
+  "downloads": 7471289,
+  "security_advisories": [],
+  "docs_html_url": "https://sobelow.hexdocs.pm/0.13.0/",
+  "configs": {
+    "erlang.mk": "dep_sobelow = hex 0.13.0",
+    "mix.exs": "{:sobelow, \"~> 0.13.0\"}",
+    "rebar.config": "{sobelow, \"0.13.0\"}"
+  }
+}

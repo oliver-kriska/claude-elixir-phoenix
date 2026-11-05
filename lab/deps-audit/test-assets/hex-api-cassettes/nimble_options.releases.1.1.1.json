@@ -1,0 +1,33 @@
+{
+  "meta": {
+    "elixir": "~> 1.9",
+    "app": "nimble_options",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.1.1",
+  "checksum": "821b2470ca9442c4b6984882fe9bb0389371b8ddec4d45a9504f00a66f650b44",
+  "url": "https://hex.pm/api/packages/nimble_options/releases/1.1.1",
+  "has_docs": true,
+  "inserted_at": "2024-05-25T10:51:15.797968Z",
+  "updated_at": "2024-05-25T10:51:18.552164Z",
+  "requirements": {},
+  "html_url": "https://hex.pm/packages/nimble_options/1.1.1",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/nimble_options",
+  "downloads": 31155130,
+  "security_advisories": [],
+  "docs_html_url": "https://nimble-options.hexdocs.pm/1.1.1/",
+  "configs": {
+    "erlang.mk": "dep_nimble_options = hex 1.1.1",
+    "mix.exs": "{:nimble_options, \"~> 1.1\"}",
+    "rebar.config": "{nimble_options, \"1.1.1\"}"
+  }
+}

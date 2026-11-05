@@ -1,0 +1,162 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/mveytsman/heroicons_elixir"
+    },
+    "description": "Phoenix components for Heroicons!",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "heroicons",
+  "url": "https://hex.pm/api/packages/heroicons",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/mveytsman",
+      "email": "maxim@ontoillogical.com",
+      "username": "mveytsman"
+    }
+  ],
+  "inserted_at": "2021-03-06T22:03:00.616027Z",
+  "updated_at": "2025-12-18T17:31:22.291738Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.5.7",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.5.7",
+      "has_docs": true,
+      "inserted_at": "2025-12-18T17:31:18.764245Z"
+    },
+    {
+      "version": "0.5.6",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.5.6",
+      "has_docs": true,
+      "inserted_at": "2024-08-20T14:34:57.615996Z"
+    },
+    {
+      "version": "0.5.5",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.5.5",
+      "has_docs": true,
+      "inserted_at": "2024-03-18T03:21:53.140985Z"
+    },
+    {
+      "version": "0.5.4",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.5.4",
+      "has_docs": true,
+      "inserted_at": "2024-03-15T20:03:13.619149Z"
+    },
+    {
+      "version": "0.5.3",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.5.3",
+      "has_docs": true,
+      "inserted_at": "2023-06-02T15:38:18.308866Z"
+    },
+    {
+      "version": "0.5.2",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.5.2",
+      "has_docs": true,
+      "inserted_at": "2022-12-13T20:49:30.504503Z"
+    },
+    {
+      "version": "0.5.1",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.5.1",
+      "has_docs": true,
+      "inserted_at": "2022-10-12T19:13:35.959285Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2022-09-21T15:42:41.956938Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.4.1",
+      "has_docs": true,
+      "inserted_at": "2022-09-03T01:05:41.659448Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2022-09-02T23:07:15.418934Z"
+    },
+    {
+      "version": "0.3.2",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.3.2",
+      "has_docs": true,
+      "inserted_at": "2022-02-21T17:07:14.137723Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2022-02-16T04:46:44.284625Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2021-11-12T17:09:54.358920Z"
+    },
+    {
+      "version": "0.2.4",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.2.4",
+      "has_docs": true,
+      "inserted_at": "2021-09-09T04:23:07.481507Z"
+    },
+    {
+      "version": "0.2.2",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.2.2",
+      "has_docs": true,
+      "inserted_at": "2021-04-19T19:22:07.281268Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2021-03-19T16:31:55.507114Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2021-03-10T19:31:11.942102Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.1.1",
+      "has_docs": true,
+      "inserted_at": "2021-03-10T18:52:24.402941Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/heroicons/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2021-03-06T22:03:00.624851Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/heroicons",
+  "latest_version": "0.5.7",
+  "downloads": {
+    "all": 3271725,
+    "day": 2071,
+    "recent": 153282,
+    "week": 11459
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://heroicons.hexdocs.pm/",
+  "retirements": {
+    "0.5.4": {
+      "message": "bug which threw an error on some heroicons",
+      "reason": "invalid"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_heroicons = hex 0.5.7",
+    "mix.exs": "{:heroicons, \"~> 0.5.7\"}",
+    "rebar.config": "{heroicons, \"0.5.7\"}"
+  },
+  "latest_stable_version": "0.5.7"
+}

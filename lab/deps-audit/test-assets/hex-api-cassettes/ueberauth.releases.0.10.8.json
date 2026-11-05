@@ -1,0 +1,38 @@
+{
+  "meta": {
+    "elixir": "~> 1.7",
+    "app": "ueberauth",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.10.8",
+  "checksum": "f2d3172e52821375bccb8460e5fa5cb91cfd60b19b636b6e57e9759b6f8c10c1",
+  "url": "https://hex.pm/api/packages/ueberauth/releases/0.10.8",
+  "has_docs": true,
+  "inserted_at": "2024-02-27T15:48:30.747760Z",
+  "updated_at": "2024-02-27T15:48:32.987496Z",
+  "requirements": {
+    "plug": {
+      "app": "plug",
+      "optional": false,
+      "requirement": "~> 1.5"
+    }
+  },
+  "html_url": "https://hex.pm/packages/ueberauth/0.10.8",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/ueberauth",
+    "username": "ueberauth"
+  },
+  "package_url": "https://hex.pm/api/packages/ueberauth",
+  "downloads": 3733257,
+  "security_advisories": [],
+  "docs_html_url": "https://ueberauth.hexdocs.pm/0.10.8/",
+  "configs": {
+    "erlang.mk": "dep_ueberauth = hex 0.10.8",
+    "mix.exs": "{:ueberauth, \"~> 0.10.8\"}",
+    "rebar.config": "{ueberauth, \"0.10.8\"}"
+  }
+}

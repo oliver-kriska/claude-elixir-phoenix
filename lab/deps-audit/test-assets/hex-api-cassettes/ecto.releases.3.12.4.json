@@ -1,0 +1,115 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "ecto",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "3.12.4",
+  "checksum": "ef04e4101688a67d061e1b10d7bc1fbf00d1d13c17eef08b71d070ff9188f747",
+  "url": "https://hex.pm/api/packages/ecto/releases/3.12.4",
+  "has_docs": true,
+  "inserted_at": "2024-10-07T08:53:24.365184Z",
+  "updated_at": "2024-10-07T08:53:27.638224Z",
+  "requirements": {
+    "decimal": {
+      "app": "decimal",
+      "optional": false,
+      "requirement": "~> 2.0"
+    },
+    "jason": {
+      "app": "jason",
+      "optional": true,
+      "requirement": "~> 1.0"
+    },
+    "telemetry": {
+      "app": "telemetry",
+      "optional": false,
+      "requirement": "~> 0.4 or ~> 1.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/ecto/3.12.4",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/josevalim",
+    "email": "jose.valim@gmail.com",
+    "username": "josevalim"
+  },
+  "package_url": "https://hex.pm/api/packages/ecto",
+  "downloads": 1441361,
+  "security_advisories": [
+    {
+      "id": "EEF-CVE-2026-118391",
+      "aliases": [
+        "CVE-2026-118391",
+        "GHSA-cxjx-vmm2-qr8r"
+      ],
+      "references": [
+        {
+          "type": "ADVISORY",
+          "url": "https://github.com/elixir-ecto/ecto/security/advisories/GHSA-cxjx-vmm2-qr8r"
+        },
+        {
+          "type": "WEB",
+          "url": "https://cna.erlef.org/cves/CVE-2026-118391.html"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/ecto/commit/d0e97d8a6e274c81c25fbf08087da8d8b9bae0ea"
+        },
+        {
+          "type": "WEB",
+          "url": "https://ecto.hexdocs.pm/Ecto.Query.API.html#json_extract_path/2"
+        },
+        {
+          "type": "WEB",
+          "url": "https://ecto.hexdocs.pm/Ecto.Query.API.html#splice/1"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/ecto/commit/eb03f45b999e2bf67ffae92811233eb6e56dba55"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/ecto/issues/4470"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/ecto/issues/1031"
+        },
+        {
+          "type": "WEB",
+          "url": "https://github.com/elixir-ecto/ecto/commit/cb2f03964dac324a9771f84f5088e395326e6de8"
+        },
+        {
+          "type": "FIX",
+          "url": "https://github.com/elixir-ecto/ecto/commit/eef014ad090d27d1a5b69c0e32a50eabd44ab3bb"
+        },
+        {
+          "type": "PACKAGE",
+          "url": "https://hex.pm/packages/ecto"
+        }
+      ],
+      "summary": "Unbounded query cache growth from interpolated JSON paths and splice lists in Ecto",
+      "api_url": "https://api.osv.dev/v1/vulns/EEF-CVE-2026-118391",
+      "published_at": "2026-11-04T13:57:29Z",
+      "html_url": "https://osv.dev/vulnerability/EEF-CVE-2026-118391",
+      "cvss_score": 8.9,
+      "cvss_rating": "high",
+      "cvss_vector": "CVSS:4.0/AV:N/AC:L/AT:P/PR:N/UI:N/VC:N/VI:N/VA:H/SC:N/SI:N/SA:H",
+      "modified_at": "2026-11-04T14:11:10Z",
+      "withdrawn_at": null,
+      "affected": [
+        ">= 3.4.0 and < 3.14.3"
+      ]
+    }
+  ],
+  "docs_html_url": "https://ecto.hexdocs.pm/3.12.4/",
+  "configs": {
+    "erlang.mk": "dep_ecto = hex 3.12.4",
+    "mix.exs": "{:ecto, \"~> 3.12\"}",
+    "rebar.config": "{ecto, \"3.12.4\"}"
+  }
+}

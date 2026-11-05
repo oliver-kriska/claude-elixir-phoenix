@@ -1,0 +1,57 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/merongivian/ulid"
+    },
+    "description": "Universally Unique Lexicographically Sortable Identifier",
+    "licenses": [
+      "Apache 2.0"
+    ],
+    "maintainers": [
+      "Jose Añasco"
+    ]
+  },
+  "name": "ulid",
+  "url": "https://hex.pm/api/packages/ulid",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/merongivian",
+      "email": "jose_anasco@hotmail.com",
+      "username": "merongivian"
+    }
+  ],
+  "inserted_at": "2016-09-15T01:52:30.304166Z",
+  "updated_at": "2019-01-28T19:14:13.525497Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/ulid/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2018-06-05T19:12:29.406294Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/ulid/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2016-09-15T01:52:30.311301Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/ulid",
+  "latest_version": "0.2.0",
+  "downloads": {
+    "all": 334300,
+    "day": 87,
+    "recent": 10074,
+    "week": 1011
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://ulid.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_ulid = hex 0.2.0",
+    "mix.exs": "{:ulid, \"~> 0.2.0\"}",
+    "rebar.config": "{ulid, \"0.2.0\"}"
+  },
+  "latest_stable_version": "0.2.0"
+}

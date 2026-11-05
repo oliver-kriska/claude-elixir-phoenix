@@ -1,0 +1,710 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://github.com/oban-bg/oban/blob/main/CHANGELOG.md",
+      "GitHub": "https://github.com/oban-bg/oban",
+      "Website": "https://oban.pro"
+    },
+    "description": "Robust job processing, backed by modern PostgreSQL, SQLite3, and MySQL.",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "oban",
+  "url": "https://hex.pm/api/packages/oban",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/sorentwo",
+      "email": "parker@sorentwo.com",
+      "username": "sorentwo"
+    }
+  ],
+  "inserted_at": "2019-03-10T21:24:21.178917Z",
+  "updated_at": "2026-10-14T07:41:38.957475Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "2.24.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.24.2",
+      "has_docs": true,
+      "inserted_at": "2026-10-14T07:41:37.176731Z"
+    },
+    {
+      "version": "2.24.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.24.1",
+      "has_docs": true,
+      "inserted_at": "2026-09-03T14:15:18.408377Z"
+    },
+    {
+      "version": "2.24.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.24.0",
+      "has_docs": true,
+      "inserted_at": "2026-08-25T15:34:56.637370Z"
+    },
+    {
+      "version": "2.23.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.23.1",
+      "has_docs": true,
+      "inserted_at": "2026-08-03T12:56:16.557754Z"
+    },
+    {
+      "version": "2.23.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.23.0",
+      "has_docs": true,
+      "inserted_at": "2026-05-27T13:18:08.603439Z"
+    },
+    {
+      "version": "2.22.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.22.1",
+      "has_docs": true,
+      "inserted_at": "2026-04-30T12:44:36.284373Z"
+    },
+    {
+      "version": "2.22.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.22.0",
+      "has_docs": true,
+      "inserted_at": "2026-04-28T09:13:03.651845Z"
+    },
+    {
+      "version": "2.21.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.21.1",
+      "has_docs": true,
+      "inserted_at": "2026-03-26T12:56:39.963292Z"
+    },
+    {
+      "version": "2.21.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.21.0",
+      "has_docs": true,
+      "inserted_at": "2026-03-25T14:42:45.198611Z"
+    },
+    {
+      "version": "2.20.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.20.3",
+      "has_docs": true,
+      "inserted_at": "2026-01-22T11:16:52.335762Z"
+    },
+    {
+      "version": "2.20.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.20.2",
+      "has_docs": true,
+      "inserted_at": "2025-12-04T09:08:15.992081Z"
+    },
+    {
+      "version": "2.20.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.20.1",
+      "has_docs": true,
+      "inserted_at": "2025-08-15T19:08:06.928984Z"
+    },
+    {
+      "version": "2.20.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.20.0",
+      "has_docs": true,
+      "inserted_at": "2025-08-14T14:27:38.054214Z"
+    },
+    {
+      "version": "2.19.4",
+      "url": "https://hex.pm/api/packages/oban/releases/2.19.4",
+      "has_docs": true,
+      "inserted_at": "2025-03-25T16:12:27.823315Z"
+    },
+    {
+      "version": "2.19.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.19.3",
+      "has_docs": true,
+      "inserted_at": "2025-03-24T15:18:35.754828Z"
+    },
+    {
+      "version": "2.19.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.19.2",
+      "has_docs": true,
+      "inserted_at": "2025-02-18T13:49:27.020526Z"
+    },
+    {
+      "version": "2.19.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.19.1",
+      "has_docs": true,
+      "inserted_at": "2025-01-27T11:04:01.031239Z"
+    },
+    {
+      "version": "2.19.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.19.0",
+      "has_docs": true,
+      "inserted_at": "2025-01-16T16:41:37.234586Z"
+    },
+    {
+      "version": "2.18.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.18.3",
+      "has_docs": true,
+      "inserted_at": "2024-09-10T23:29:24.754313Z"
+    },
+    {
+      "version": "2.18.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.18.2",
+      "has_docs": true,
+      "inserted_at": "2024-08-16T15:22:11.713217Z"
+    },
+    {
+      "version": "2.18.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.18.1",
+      "has_docs": true,
+      "inserted_at": "2024-08-15T13:33:32.217696Z"
+    },
+    {
+      "version": "2.18.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.18.0",
+      "has_docs": true,
+      "inserted_at": "2024-07-26T12:41:30.799548Z"
+    },
+    {
+      "version": "2.17.12",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.12",
+      "has_docs": true,
+      "inserted_at": "2024-06-28T13:34:06.896821Z"
+    },
+    {
+      "version": "2.17.11",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.11",
+      "has_docs": true,
+      "inserted_at": "2024-06-25T15:23:40.250354Z"
+    },
+    {
+      "version": "2.17.10",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.10",
+      "has_docs": true,
+      "inserted_at": "2024-04-26T17:36:05.560178Z"
+    },
+    {
+      "version": "2.17.9",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.9",
+      "has_docs": true,
+      "inserted_at": "2024-04-20T11:16:59.150213Z"
+    },
+    {
+      "version": "2.17.8",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.8",
+      "has_docs": true,
+      "inserted_at": "2024-04-07T18:23:33.926168Z"
+    },
+    {
+      "version": "2.17.7",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.7",
+      "has_docs": true,
+      "inserted_at": "2024-03-25T08:53:37.645628Z"
+    },
+    {
+      "version": "2.17.6",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.6",
+      "has_docs": true,
+      "inserted_at": "2024-03-01T15:58:31.689326Z"
+    },
+    {
+      "version": "2.17.5",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.5",
+      "has_docs": true,
+      "inserted_at": "2024-02-25T22:16:26.701077Z"
+    },
+    {
+      "version": "2.17.4",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.4",
+      "has_docs": true,
+      "inserted_at": "2024-02-16T14:37:20.315361Z"
+    },
+    {
+      "version": "2.17.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.3",
+      "has_docs": true,
+      "inserted_at": "2024-01-23T20:44:48.910986Z"
+    },
+    {
+      "version": "2.17.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.2",
+      "has_docs": true,
+      "inserted_at": "2024-01-11T16:49:44.764501Z"
+    },
+    {
+      "version": "2.17.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.1",
+      "has_docs": true,
+      "inserted_at": "2023-12-11T14:57:00.040954Z"
+    },
+    {
+      "version": "2.17.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.17.0",
+      "has_docs": true,
+      "inserted_at": "2023-12-08T19:43:53.800806Z"
+    },
+    {
+      "version": "2.16.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.16.3",
+      "has_docs": true,
+      "inserted_at": "2023-10-26T14:02:58.037980Z"
+    },
+    {
+      "version": "2.16.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.16.2",
+      "has_docs": true,
+      "inserted_at": "2023-10-03T18:06:56.622160Z"
+    },
+    {
+      "version": "2.16.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.16.1",
+      "has_docs": true,
+      "inserted_at": "2023-09-25T15:48:39.013828Z"
+    },
+    {
+      "version": "2.16.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.16.0",
+      "has_docs": true,
+      "inserted_at": "2023-09-22T17:59:14.760552Z"
+    },
+    {
+      "version": "2.15.4",
+      "url": "https://hex.pm/api/packages/oban/releases/2.15.4",
+      "has_docs": true,
+      "inserted_at": "2023-08-07T19:45:23.211929Z"
+    },
+    {
+      "version": "2.15.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.15.3",
+      "has_docs": true,
+      "inserted_at": "2023-08-04T16:34:57.688100Z"
+    },
+    {
+      "version": "2.15.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.15.2",
+      "has_docs": true,
+      "inserted_at": "2023-06-22T13:41:04.429314Z"
+    },
+    {
+      "version": "2.15.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.15.1",
+      "has_docs": true,
+      "inserted_at": "2023-05-11T17:40:18.515603Z"
+    },
+    {
+      "version": "2.15.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.15.0",
+      "has_docs": true,
+      "inserted_at": "2023-04-13T12:11:51.906949Z"
+    },
+    {
+      "version": "2.14.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.14.2",
+      "has_docs": true,
+      "inserted_at": "2023-02-17T18:27:39.538935Z"
+    },
+    {
+      "version": "2.14.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.14.1",
+      "has_docs": true,
+      "inserted_at": "2023-01-26T22:10:12.512900Z"
+    },
+    {
+      "version": "2.14.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.14.0",
+      "has_docs": true,
+      "inserted_at": "2023-01-26T14:16:31.839483Z"
+    },
+    {
+      "version": "2.13.6",
+      "url": "https://hex.pm/api/packages/oban/releases/2.13.6",
+      "has_docs": true,
+      "inserted_at": "2022-11-28T14:02:40.802871Z"
+    },
+    {
+      "version": "2.13.5",
+      "url": "https://hex.pm/api/packages/oban/releases/2.13.5",
+      "has_docs": true,
+      "inserted_at": "2022-11-14T14:40:10.985859Z"
+    },
+    {
+      "version": "2.13.4",
+      "url": "https://hex.pm/api/packages/oban/releases/2.13.4",
+      "has_docs": true,
+      "inserted_at": "2022-09-23T14:09:26.607574Z"
+    },
+    {
+      "version": "2.13.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.13.3",
+      "has_docs": true,
+      "inserted_at": "2022-09-07T14:48:24.185695Z"
+    },
+    {
+      "version": "2.13.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.13.2",
+      "has_docs": true,
+      "inserted_at": "2022-08-19T15:14:56.314007Z"
+    },
+    {
+      "version": "2.13.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.13.1",
+      "has_docs": true,
+      "inserted_at": "2022-08-09T18:17:36.687434Z"
+    },
+    {
+      "version": "2.13.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.13.0",
+      "has_docs": true,
+      "inserted_at": "2022-07-21T15:36:07.388895Z"
+    },
+    {
+      "version": "2.12.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.12.1",
+      "has_docs": true,
+      "inserted_at": "2022-05-24T18:23:57.881899Z"
+    },
+    {
+      "version": "2.12.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.12.0",
+      "has_docs": true,
+      "inserted_at": "2022-04-21T21:54:11.139315Z"
+    },
+    {
+      "version": "2.11.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.11.3",
+      "has_docs": true,
+      "inserted_at": "2022-03-23T22:05:24.471505Z"
+    },
+    {
+      "version": "2.11.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.11.2",
+      "has_docs": true,
+      "inserted_at": "2022-02-25T20:22:24.435922Z"
+    },
+    {
+      "version": "2.11.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.11.1",
+      "has_docs": true,
+      "inserted_at": "2022-02-24T21:59:13.601010Z"
+    },
+    {
+      "version": "2.11.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.11.0",
+      "has_docs": true,
+      "inserted_at": "2022-02-13T15:45:39.857835Z"
+    },
+    {
+      "version": "2.10.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.10.1",
+      "has_docs": true,
+      "inserted_at": "2021-11-09T22:14:18.051715Z"
+    },
+    {
+      "version": "2.10.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.10.0",
+      "has_docs": true,
+      "inserted_at": "2021-11-09T21:20:58.410831Z"
+    },
+    {
+      "version": "2.9.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.9.2",
+      "has_docs": true,
+      "inserted_at": "2021-09-27T19:34:17.036492Z"
+    },
+    {
+      "version": "2.9.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.9.1",
+      "has_docs": true,
+      "inserted_at": "2021-09-23T13:05:29.770691Z"
+    },
+    {
+      "version": "2.9.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.9.0",
+      "has_docs": true,
+      "inserted_at": "2021-09-15T19:50:22.006832Z"
+    },
+    {
+      "version": "2.8.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.8.0",
+      "has_docs": true,
+      "inserted_at": "2021-07-30T17:48:23.009958Z"
+    },
+    {
+      "version": "2.7.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.7.2",
+      "has_docs": true,
+      "inserted_at": "2021-06-10T19:46:47.916392Z"
+    },
+    {
+      "version": "2.7.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.7.1",
+      "has_docs": true,
+      "inserted_at": "2021-05-26T15:22:13.506028Z"
+    },
+    {
+      "version": "2.7.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.7.0",
+      "has_docs": true,
+      "inserted_at": "2021-05-25T18:08:54.880046Z"
+    },
+    {
+      "version": "2.6.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.6.1",
+      "has_docs": true,
+      "inserted_at": "2021-04-02T15:57:25.577787Z"
+    },
+    {
+      "version": "2.6.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.6.0",
+      "has_docs": true,
+      "inserted_at": "2021-04-02T15:29:23.948243Z"
+    },
+    {
+      "version": "2.5.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.5.0",
+      "has_docs": true,
+      "inserted_at": "2021-02-26T16:39:11.567471Z"
+    },
+    {
+      "version": "2.4.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.4.3",
+      "has_docs": true,
+      "inserted_at": "2021-02-07T13:54:16.878595Z"
+    },
+    {
+      "version": "2.4.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.4.2",
+      "has_docs": true,
+      "inserted_at": "2021-01-28T16:38:29.100483Z"
+    },
+    {
+      "version": "2.4.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.4.1",
+      "has_docs": true,
+      "inserted_at": "2021-01-27T15:06:14.647258Z"
+    },
+    {
+      "version": "2.4.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.4.0",
+      "has_docs": true,
+      "inserted_at": "2021-01-26T16:02:21.178487Z"
+    },
+    {
+      "version": "2.3.4",
+      "url": "https://hex.pm/api/packages/oban/releases/2.3.4",
+      "has_docs": true,
+      "inserted_at": "2020-12-02T17:08:00.470226Z"
+    },
+    {
+      "version": "2.3.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.3.3",
+      "has_docs": true,
+      "inserted_at": "2020-11-10T13:49:18.076442Z"
+    },
+    {
+      "version": "2.3.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.3.2",
+      "has_docs": true,
+      "inserted_at": "2020-11-06T16:04:17.631907Z"
+    },
+    {
+      "version": "2.3.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.3.1",
+      "has_docs": true,
+      "inserted_at": "2020-11-06T15:04:42.551451Z"
+    },
+    {
+      "version": "2.3.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.3.0",
+      "has_docs": false,
+      "inserted_at": "2020-11-06T13:53:15.560346Z"
+    },
+    {
+      "version": "2.2.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-10T19:36:47.242899Z"
+    },
+    {
+      "version": "2.1.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-08-21T13:01:11.138515Z"
+    },
+    {
+      "version": "2.0.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.0.0",
+      "has_docs": true,
+      "inserted_at": "2020-07-10T14:59:18.511880Z"
+    },
+    {
+      "version": "2.0.0-rc.3",
+      "url": "https://hex.pm/api/packages/oban/releases/2.0.0-rc.3",
+      "has_docs": true,
+      "inserted_at": "2020-07-01T17:05:00.066578Z"
+    },
+    {
+      "version": "2.0.0-rc.2",
+      "url": "https://hex.pm/api/packages/oban/releases/2.0.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2020-06-23T18:12:21.833201Z"
+    },
+    {
+      "version": "2.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/oban/releases/2.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2020-06-12T15:09:37.429910Z"
+    },
+    {
+      "version": "2.0.0-rc.0",
+      "url": "https://hex.pm/api/packages/oban/releases/2.0.0-rc.0",
+      "has_docs": true,
+      "inserted_at": "2020-06-03T20:39:04.709801Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/oban/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-05T15:39:17.965062Z"
+    },
+    {
+      "version": "1.1.0",
+      "url": "https://hex.pm/api/packages/oban/releases/1.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-17T19:40:57.011873Z"
+    },
+    {
+      "version": "1.0.0",
+      "url": "https://hex.pm/api/packages/oban/releases/1.0.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-29T11:27:30.848256Z"
+    },
+    {
+      "version": "1.0.0-rc.2",
+      "url": "https://hex.pm/api/packages/oban/releases/1.0.0-rc.2",
+      "has_docs": true,
+      "inserted_at": "2020-01-22T21:13:58.535765Z"
+    },
+    {
+      "version": "1.0.0-rc.1",
+      "url": "https://hex.pm/api/packages/oban/releases/1.0.0-rc.1",
+      "has_docs": true,
+      "inserted_at": "2020-01-21T12:04:12.061052Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/oban/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2019-12-13T23:23:15.549496Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2019-11-26T15:59:51.966544Z"
+    },
+    {
+      "version": "0.11.1",
+      "url": "https://hex.pm/api/packages/oban/releases/0.11.1",
+      "has_docs": true,
+      "inserted_at": "2019-11-13T07:44:01.919409Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2019-11-06T14:01:33.528645Z"
+    },
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/oban/releases/0.10.1",
+      "has_docs": true,
+      "inserted_at": "2019-10-08T14:08:46.781958Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2019-10-04T00:39:18.686877Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2019-09-20T14:58:59.749130Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/oban/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2019-09-11T14:39:00.902929Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2019-09-06T18:44:52.615215Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/oban/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2019-08-15T15:11:13.925064Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2019-08-08T19:39:55.674767Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2019-07-26T13:53:22.434528Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-27T18:50:55.658449Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2019-06-10T21:19:38.111783Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2019-05-29T15:50:53.447476Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2019-05-15T13:28:37.319219Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/oban/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2019-03-10T21:24:21.211555Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/oban",
+  "latest_version": "2.24.2",
+  "downloads": {
+    "all": 29132680,
+    "day": 57722,
+    "recent": 3198748,
+    "week": 315066
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://oban.hexdocs.pm/",
+  "retirements": {
+    "2.10.0": {
+      "message": "Reverting a telemetry change before it gets any use",
+      "reason": "other"
+    }
+  },
+  "configs": {
+    "erlang.mk": "dep_oban = hex 2.24.2",
+    "mix.exs": "{:oban, \"~> 2.24\"}",
+    "rebar.config": "{oban, \"2.24.2\"}"
+  },
+  "latest_stable_version": "2.24.2"
+}

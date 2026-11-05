@@ -1,0 +1,337 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/mathieuprog/tz",
+      "Sponsor": "https://github.com/sponsors/mathieuprog"
+    },
+    "description": "Time zone support for Elixir",
+    "licenses": [
+      "Apache-2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "tz",
+  "url": "https://hex.pm/api/packages/tz",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/mathieuprog",
+      "username": "mathieuprog"
+    }
+  ],
+  "inserted_at": "2020-02-19T13:52:12.455217Z",
+  "updated_at": "2026-09-15T08:00:40.866610Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.28.4",
+      "url": "https://hex.pm/api/packages/tz/releases/0.28.4",
+      "has_docs": true,
+      "inserted_at": "2026-09-15T08:00:38.960657Z"
+    },
+    {
+      "version": "0.28.2",
+      "url": "https://hex.pm/api/packages/tz/releases/0.28.2",
+      "has_docs": true,
+      "inserted_at": "2026-05-27T07:51:37.210936Z"
+    },
+    {
+      "version": "0.28.1",
+      "url": "https://hex.pm/api/packages/tz/releases/0.28.1",
+      "has_docs": true,
+      "inserted_at": "2024-09-09T07:26:25.414463Z"
+    },
+    {
+      "version": "0.28.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.28.0",
+      "has_docs": true,
+      "inserted_at": "2024-09-09T05:35:24.940744Z"
+    },
+    {
+      "version": "0.27.3",
+      "url": "https://hex.pm/api/packages/tz/releases/0.27.3",
+      "has_docs": true,
+      "inserted_at": "2024-09-07T12:38:38.914561Z"
+    },
+    {
+      "version": "0.27.2",
+      "url": "https://hex.pm/api/packages/tz/releases/0.27.2",
+      "has_docs": true,
+      "inserted_at": "2024-09-06T02:51:49.844119Z"
+    },
+    {
+      "version": "0.27.1",
+      "url": "https://hex.pm/api/packages/tz/releases/0.27.1",
+      "has_docs": true,
+      "inserted_at": "2024-07-29T12:59:05.152020Z"
+    },
+    {
+      "version": "0.27.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.27.0",
+      "has_docs": true,
+      "inserted_at": "2024-07-29T00:54:10.236361Z"
+    },
+    {
+      "version": "0.26.6",
+      "url": "https://hex.pm/api/packages/tz/releases/0.26.6",
+      "has_docs": true,
+      "inserted_at": "2024-07-19T08:48:50.429825Z"
+    },
+    {
+      "version": "0.26.5",
+      "url": "https://hex.pm/api/packages/tz/releases/0.26.5",
+      "has_docs": true,
+      "inserted_at": "2023-12-09T18:13:24.520794Z"
+    },
+    {
+      "version": "0.26.4",
+      "url": "https://hex.pm/api/packages/tz/releases/0.26.4",
+      "has_docs": true,
+      "inserted_at": "2023-12-09T16:20:41.446938Z"
+    },
+    {
+      "version": "0.26.3",
+      "url": "https://hex.pm/api/packages/tz/releases/0.26.3",
+      "has_docs": true,
+      "inserted_at": "2023-12-09T15:49:54.114636Z"
+    },
+    {
+      "version": "0.26.2",
+      "url": "https://hex.pm/api/packages/tz/releases/0.26.2",
+      "has_docs": true,
+      "inserted_at": "2023-05-30T05:59:31.196127Z"
+    },
+    {
+      "version": "0.26.1",
+      "url": "https://hex.pm/api/packages/tz/releases/0.26.1",
+      "has_docs": true,
+      "inserted_at": "2023-04-01T12:45:18.950336Z"
+    },
+    {
+      "version": "0.26.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.26.0",
+      "has_docs": true,
+      "inserted_at": "2023-04-01T12:42:01.293846Z"
+    },
+    {
+      "version": "0.25.1",
+      "url": "https://hex.pm/api/packages/tz/releases/0.25.1",
+      "has_docs": true,
+      "inserted_at": "2023-03-24T00:51:20.643092Z"
+    },
+    {
+      "version": "0.25.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.25.0",
+      "has_docs": true,
+      "inserted_at": "2023-03-23T10:15:05.592845Z"
+    },
+    {
+      "version": "0.24.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.24.0",
+      "has_docs": true,
+      "inserted_at": "2022-11-09T13:15:55.721982Z"
+    },
+    {
+      "version": "0.23.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.23.0",
+      "has_docs": true,
+      "inserted_at": "2022-11-09T02:51:22.244684Z"
+    },
+    {
+      "version": "0.22.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.22.0",
+      "has_docs": true,
+      "inserted_at": "2022-08-31T13:50:17.567395Z"
+    },
+    {
+      "version": "0.21.1",
+      "url": "https://hex.pm/api/packages/tz/releases/0.21.1",
+      "has_docs": true,
+      "inserted_at": "2022-07-19T05:30:23.095780Z"
+    },
+    {
+      "version": "0.21.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.21.0",
+      "has_docs": true,
+      "inserted_at": "2022-07-16T13:15:00.640056Z"
+    },
+    {
+      "version": "0.20.1",
+      "url": "https://hex.pm/api/packages/tz/releases/0.20.1",
+      "has_docs": true,
+      "inserted_at": "2021-09-23T11:59:51.499052Z"
+    },
+    {
+      "version": "0.20.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.20.0",
+      "has_docs": true,
+      "inserted_at": "2021-08-16T20:48:21.422666Z"
+    },
+    {
+      "version": "0.19.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.19.0",
+      "has_docs": true,
+      "inserted_at": "2021-07-27T10:17:13.735015Z"
+    },
+    {
+      "version": "0.17.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.17.0",
+      "has_docs": true,
+      "inserted_at": "2021-06-25T10:11:01.285529Z"
+    },
+    {
+      "version": "0.16.2",
+      "url": "https://hex.pm/api/packages/tz/releases/0.16.2",
+      "has_docs": true,
+      "inserted_at": "2021-05-22T19:08:52.761775Z"
+    },
+    {
+      "version": "0.16.1",
+      "url": "https://hex.pm/api/packages/tz/releases/0.16.1",
+      "has_docs": true,
+      "inserted_at": "2021-05-22T19:04:16.829433Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.16.0",
+      "has_docs": true,
+      "inserted_at": "2021-05-02T14:34:18.373474Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2021-05-01T12:54:51.892082Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2021-04-29T16:49:04.795753Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.13.0",
+      "has_docs": false,
+      "inserted_at": "2021-04-29T16:44:38.045751Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2021-01-14T11:32:19.935525Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-23T20:14:40.910922Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2020-06-07T03:26:36.782371Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2020-04-06T13:46:30.222172Z"
+    },
+    {
+      "version": "0.8.2",
+      "url": "https://hex.pm/api/packages/tz/releases/0.8.2",
+      "has_docs": true,
+      "inserted_at": "2020-03-29T09:13:34.460823Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/tz/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2020-03-28T08:26:05.185548Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-11T16:57:08.496808Z"
+    },
+    {
+      "version": "0.7.3",
+      "url": "https://hex.pm/api/packages/tz/releases/0.7.3",
+      "has_docs": true,
+      "inserted_at": "2020-03-08T07:22:40.864954Z"
+    },
+    {
+      "version": "0.7.2",
+      "url": "https://hex.pm/api/packages/tz/releases/0.7.2",
+      "has_docs": true,
+      "inserted_at": "2020-03-07T04:06:54.764819Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/tz/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2020-03-04T20:15:34.451330Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-04T12:37:29.918421Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2020-03-02T15:50:06.696505Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-27T09:25:00.546016Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-25T08:34:39.993280Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-25T07:59:36.779262Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-22T07:13:08.125689Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/tz/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-19T13:52:12.458780Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/tz",
+  "latest_version": "0.28.4",
+  "downloads": {
+    "all": 3323410,
+    "day": 25529,
+    "recent": 923686,
+    "week": 119917
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://tz.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_tz = hex 0.28.4",
+    "mix.exs": "{:tz, \"~> 0.28.4\"}",
+    "rebar.config": "{tz, \"0.28.4\"}"
+  },
+  "latest_stable_version": "0.28.4"
+}

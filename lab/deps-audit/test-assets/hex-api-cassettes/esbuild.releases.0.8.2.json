@@ -1,0 +1,44 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "esbuild",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "0.8.2",
+  "checksum": "558a8a08ed78eb820efbfda1de196569d8bfa9b51e8371a1934fbb31345feda7",
+  "url": "https://hex.pm/api/packages/esbuild/releases/0.8.2",
+  "has_docs": true,
+  "inserted_at": "2024-10-18T12:34:40.411848Z",
+  "updated_at": "2024-10-18T12:35:09.370953Z",
+  "requirements": {
+    "castore": {
+      "app": "castore",
+      "optional": false,
+      "requirement": ">= 0.0.0"
+    },
+    "jason": {
+      "app": "jason",
+      "optional": false,
+      "requirement": "~> 1.4"
+    }
+  },
+  "html_url": "https://hex.pm/packages/esbuild/0.8.2",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/gazler",
+    "email": "gazler@gmail.com",
+    "username": "gazler"
+  },
+  "package_url": "https://hex.pm/api/packages/esbuild",
+  "downloads": 1649031,
+  "security_advisories": [],
+  "docs_html_url": "https://esbuild.hexdocs.pm/0.8.2/",
+  "configs": {
+    "erlang.mk": "dep_esbuild = hex 0.8.2",
+    "mix.exs": "{:esbuild, \"~> 0.8.2\"}",
+    "rebar.config": "{esbuild, \"0.8.2\"}"
+  }
+}

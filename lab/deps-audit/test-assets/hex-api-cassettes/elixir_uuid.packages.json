@@ -1,0 +1,54 @@
+{
+  "meta": {
+    "links": {
+      "GitHub": "https://github.com/zyro/elixir-uuid"
+    },
+    "description": "UUID generator and utilities for Elixir.",
+    "licenses": [
+      "Apache 2.0"
+    ],
+    "maintainers": []
+  },
+  "name": "elixir_uuid",
+  "url": "https://hex.pm/api/packages/elixir_uuid",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/andreimihu",
+      "username": "andreimihu"
+    }
+  ],
+  "inserted_at": "2018-06-24T11:07:49.233740Z",
+  "updated_at": "2019-10-24T13:33:33.863903Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "1.2.1",
+      "url": "https://hex.pm/api/packages/elixir_uuid/releases/1.2.1",
+      "has_docs": true,
+      "inserted_at": "2019-10-24T13:31:55.305484Z"
+    },
+    {
+      "version": "1.2.0",
+      "url": "https://hex.pm/api/packages/elixir_uuid/releases/1.2.0",
+      "has_docs": true,
+      "inserted_at": "2018-06-24T11:07:49.239639Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/elixir_uuid",
+  "latest_version": "1.2.1",
+  "downloads": {
+    "all": 18590171,
+    "day": 12833,
+    "recent": 919514,
+    "week": 72674
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://elixir-uuid.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_elixir_uuid = hex 1.2.1",
+    "mix.exs": "{:elixir_uuid, \"~> 1.2\"}",
+    "rebar.config": "{elixir_uuid, \"1.2.1\"}"
+  },
+  "latest_stable_version": "1.2.1"
+}

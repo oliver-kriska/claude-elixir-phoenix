@@ -1,0 +1,567 @@
+{
+  "meta": {
+    "links": {
+      "Changelog": "https://hexdocs.pm/floki/changelog.html",
+      "GitHub": "https://github.com/philss/floki",
+      "Sponsor": "https://github.com/sponsors/philss"
+    },
+    "description": "Floki is a simple HTML parser that enables search for nodes using CSS selectors.",
+    "licenses": [
+      "MIT"
+    ],
+    "maintainers": []
+  },
+  "name": "floki",
+  "url": "https://hex.pm/api/packages/floki",
+  "owners": [
+    {
+      "url": "https://hex.pm/api/users/philip",
+      "email": "philip.sampaio@gmail.com",
+      "username": "philip"
+    }
+  ],
+  "inserted_at": "2014-11-02T21:51:44.000000Z",
+  "updated_at": "2026-10-29T14:47:03.004628Z",
+  "repository": "hexpm",
+  "releases": [
+    {
+      "version": "0.38.5",
+      "url": "https://hex.pm/api/packages/floki/releases/0.38.5",
+      "has_docs": true,
+      "inserted_at": "2026-10-29T14:47:01.246849Z"
+    },
+    {
+      "version": "0.38.4",
+      "url": "https://hex.pm/api/packages/floki/releases/0.38.4",
+      "has_docs": true,
+      "inserted_at": "2026-06-16T01:14:38.543911Z"
+    },
+    {
+      "version": "0.38.3",
+      "url": "https://hex.pm/api/packages/floki/releases/0.38.3",
+      "has_docs": true,
+      "inserted_at": "2026-05-21T17:18:54.956249Z"
+    },
+    {
+      "version": "0.38.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.38.2",
+      "has_docs": true,
+      "inserted_at": "2026-05-19T02:15:06.329422Z"
+    },
+    {
+      "version": "0.38.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.38.1",
+      "has_docs": true,
+      "inserted_at": "2026-03-17T20:51:10.880462Z"
+    },
+    {
+      "version": "0.38.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.38.0",
+      "has_docs": true,
+      "inserted_at": "2025-06-15T02:51:01.680050Z"
+    },
+    {
+      "version": "0.37.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.37.1",
+      "has_docs": true,
+      "inserted_at": "2025-03-22T22:28:56.603871Z"
+    },
+    {
+      "version": "0.37.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.37.0",
+      "has_docs": true,
+      "inserted_at": "2024-12-06T13:21:30.478124Z"
+    },
+    {
+      "version": "0.36.3",
+      "url": "https://hex.pm/api/packages/floki/releases/0.36.3",
+      "has_docs": true,
+      "inserted_at": "2024-10-21T19:35:11.283974Z"
+    },
+    {
+      "version": "0.36.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.36.2",
+      "has_docs": true,
+      "inserted_at": "2024-04-26T22:53:49.905628Z"
+    },
+    {
+      "version": "0.36.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.36.1",
+      "has_docs": true,
+      "inserted_at": "2024-03-18T04:49:13.442360Z"
+    },
+    {
+      "version": "0.36.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.36.0",
+      "has_docs": true,
+      "inserted_at": "2024-03-01T21:33:49.525139Z"
+    },
+    {
+      "version": "0.35.4",
+      "url": "https://hex.pm/api/packages/floki/releases/0.35.4",
+      "has_docs": true,
+      "inserted_at": "2024-02-20T01:58:48.864862Z"
+    },
+    {
+      "version": "0.35.3",
+      "url": "https://hex.pm/api/packages/floki/releases/0.35.3",
+      "has_docs": true,
+      "inserted_at": "2024-01-25T20:24:30.263282Z"
+    },
+    {
+      "version": "0.35.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.35.2",
+      "has_docs": true,
+      "inserted_at": "2023-10-25T19:18:17.672013Z"
+    },
+    {
+      "version": "0.35.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.35.1",
+      "has_docs": true,
+      "inserted_at": "2023-10-16T23:09:41.032260Z"
+    },
+    {
+      "version": "0.35.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.35.0",
+      "has_docs": true,
+      "inserted_at": "2023-10-13T18:14:50.699421Z"
+    },
+    {
+      "version": "0.34.3",
+      "url": "https://hex.pm/api/packages/floki/releases/0.34.3",
+      "has_docs": true,
+      "inserted_at": "2023-06-02T20:57:09.747377Z"
+    },
+    {
+      "version": "0.34.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.34.2",
+      "has_docs": true,
+      "inserted_at": "2023-02-24T21:13:15.301519Z"
+    },
+    {
+      "version": "0.34.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.34.1",
+      "has_docs": true,
+      "inserted_at": "2023-02-11T03:10:11.885689Z"
+    },
+    {
+      "version": "0.34.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.34.0",
+      "has_docs": true,
+      "inserted_at": "2022-11-03T19:16:19.772750Z"
+    },
+    {
+      "version": "0.33.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.33.1",
+      "has_docs": true,
+      "inserted_at": "2022-06-28T21:40:52.044968Z"
+    },
+    {
+      "version": "0.33.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.33.0",
+      "has_docs": true,
+      "inserted_at": "2022-06-28T14:52:31.790405Z"
+    },
+    {
+      "version": "0.32.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.32.1",
+      "has_docs": true,
+      "inserted_at": "2022-03-24T16:40:28.467721Z"
+    },
+    {
+      "version": "0.32.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.32.0",
+      "has_docs": true,
+      "inserted_at": "2021-10-18T16:44:33.441362Z"
+    },
+    {
+      "version": "0.31.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.31.0",
+      "has_docs": true,
+      "inserted_at": "2021-06-11T22:36:34.461562Z"
+    },
+    {
+      "version": "0.30.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.30.1",
+      "has_docs": true,
+      "inserted_at": "2021-03-29T21:02:37.362715Z"
+    },
+    {
+      "version": "0.30.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.30.0",
+      "has_docs": true,
+      "inserted_at": "2021-02-06T06:29:17.086583Z"
+    },
+    {
+      "version": "0.29.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.29.0",
+      "has_docs": true,
+      "inserted_at": "2020-10-02T22:41:51.041362Z"
+    },
+    {
+      "version": "0.28.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.28.0",
+      "has_docs": true,
+      "inserted_at": "2020-08-26T15:57:39.171226Z"
+    },
+    {
+      "version": "0.27.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.27.0",
+      "has_docs": true,
+      "inserted_at": "2020-07-07T04:38:49.616038Z"
+    },
+    {
+      "version": "0.26.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.26.0",
+      "has_docs": true,
+      "inserted_at": "2020-02-18T00:17:09.800044Z"
+    },
+    {
+      "version": "0.25.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.25.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-26T16:36:50.267409Z"
+    },
+    {
+      "version": "0.24.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.24.0",
+      "has_docs": true,
+      "inserted_at": "2020-01-02T00:00:53.057852Z"
+    },
+    {
+      "version": "0.23.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.23.1",
+      "has_docs": true,
+      "inserted_at": "2019-12-01T18:12:38.485871Z"
+    },
+    {
+      "version": "0.23.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.23.0",
+      "has_docs": true,
+      "inserted_at": "2019-09-12T01:32:58.149122Z"
+    },
+    {
+      "version": "0.22.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.22.0",
+      "has_docs": true,
+      "inserted_at": "2019-08-22T01:28:09.064278Z"
+    },
+    {
+      "version": "0.21.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.21.0",
+      "has_docs": true,
+      "inserted_at": "2019-04-18T01:23:47.677916Z"
+    },
+    {
+      "version": "0.20.4",
+      "url": "https://hex.pm/api/packages/floki/releases/0.20.4",
+      "has_docs": true,
+      "inserted_at": "2018-09-24T04:23:38.246371Z"
+    },
+    {
+      "version": "0.20.3",
+      "url": "https://hex.pm/api/packages/floki/releases/0.20.3",
+      "has_docs": true,
+      "inserted_at": "2018-06-22T16:59:55.138798Z"
+    },
+    {
+      "version": "0.20.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.20.2",
+      "has_docs": true,
+      "inserted_at": "2018-05-10T03:04:03.199202Z"
+    },
+    {
+      "version": "0.20.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.20.1",
+      "has_docs": true,
+      "inserted_at": "2018-04-06T02:28:10.568047Z"
+    },
+    {
+      "version": "0.20.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.20.0",
+      "has_docs": true,
+      "inserted_at": "2018-02-06T02:07:01.852001Z"
+    },
+    {
+      "version": "0.19.3",
+      "url": "https://hex.pm/api/packages/floki/releases/0.19.3",
+      "has_docs": true,
+      "inserted_at": "2018-01-25T23:54:46.800782Z"
+    },
+    {
+      "version": "0.19.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.19.2",
+      "has_docs": true,
+      "inserted_at": "2017-12-22T22:12:09.731075Z"
+    },
+    {
+      "version": "0.19.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.19.1",
+      "has_docs": true,
+      "inserted_at": "2017-12-04T05:19:41.288787Z"
+    },
+    {
+      "version": "0.19.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.19.0",
+      "has_docs": true,
+      "inserted_at": "2017-11-11T16:56:18.203572Z"
+    },
+    {
+      "version": "0.18.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.18.1",
+      "has_docs": true,
+      "inserted_at": "2017-10-13T04:51:47.486993Z"
+    },
+    {
+      "version": "0.18.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.18.0",
+      "has_docs": true,
+      "inserted_at": "2017-08-05T22:02:58.160456Z"
+    },
+    {
+      "version": "0.17.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.17.2",
+      "has_docs": true,
+      "inserted_at": "2017-05-25T04:04:55.004900Z"
+    },
+    {
+      "version": "0.17.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.17.1",
+      "has_docs": true,
+      "inserted_at": "2017-05-22T04:50:54.911505Z"
+    },
+    {
+      "version": "0.17.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.17.0",
+      "has_docs": true,
+      "inserted_at": "2017-04-13T02:01:46.116980Z"
+    },
+    {
+      "version": "0.16.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.16.0",
+      "has_docs": true,
+      "inserted_at": "2017-04-05T05:00:02.900036Z"
+    },
+    {
+      "version": "0.15.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.15.0",
+      "has_docs": true,
+      "inserted_at": "2017-03-14T04:51:56.102394Z"
+    },
+    {
+      "version": "0.14.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.14.0",
+      "has_docs": true,
+      "inserted_at": "2017-02-08T01:51:29.557833Z"
+    },
+    {
+      "version": "0.13.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.13.2",
+      "has_docs": true,
+      "inserted_at": "2017-02-08T01:12:20.527240Z"
+    },
+    {
+      "version": "0.13.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.13.1",
+      "has_docs": true,
+      "inserted_at": "2017-01-22T17:55:09.482928Z"
+    },
+    {
+      "version": "0.13.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.13.0",
+      "has_docs": true,
+      "inserted_at": "2017-01-22T17:32:28.703202Z"
+    },
+    {
+      "version": "0.12.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.12.1",
+      "has_docs": true,
+      "inserted_at": "2017-01-20T23:39:03.461738Z"
+    },
+    {
+      "version": "0.12.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.12.0",
+      "has_docs": true,
+      "inserted_at": "2016-12-29T01:38:30.993626Z"
+    },
+    {
+      "version": "0.11.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.11.0",
+      "has_docs": true,
+      "inserted_at": "2016-10-12T22:51:59.773216Z"
+    },
+    {
+      "version": "0.10.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.10.1",
+      "has_docs": true,
+      "inserted_at": "2016-08-28T17:14:45.217176Z"
+    },
+    {
+      "version": "0.10.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.10.0",
+      "has_docs": true,
+      "inserted_at": "2016-08-05T22:28:07.994564Z"
+    },
+    {
+      "version": "0.9.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.9.0",
+      "has_docs": true,
+      "inserted_at": "2016-06-17T04:27:04.054712Z"
+    },
+    {
+      "version": "0.8.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.8.1",
+      "has_docs": true,
+      "inserted_at": "2016-05-20T05:22:42.379863Z"
+    },
+    {
+      "version": "0.8.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.8.0",
+      "has_docs": true,
+      "inserted_at": "2016-03-06T06:29:22.809692Z"
+    },
+    {
+      "version": "0.7.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.7.2",
+      "has_docs": true,
+      "inserted_at": "2016-02-23T16:15:00.139375Z"
+    },
+    {
+      "version": "0.7.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.7.1",
+      "has_docs": true,
+      "inserted_at": "2015-11-15T00:22:12.032798Z"
+    },
+    {
+      "version": "0.7.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.7.0",
+      "has_docs": true,
+      "inserted_at": "2015-11-04T00:24:31.729429Z"
+    },
+    {
+      "version": "0.6.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.6.1",
+      "has_docs": true,
+      "inserted_at": "2015-10-12T00:40:09.708861Z"
+    },
+    {
+      "version": "0.6.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.6.0",
+      "has_docs": true,
+      "inserted_at": "2015-10-08T01:47:13.363010Z"
+    },
+    {
+      "version": "0.5.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.5.0",
+      "has_docs": true,
+      "inserted_at": "2015-09-27T03:21:08.509618Z"
+    },
+    {
+      "version": "0.4.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.4.1",
+      "has_docs": true,
+      "inserted_at": "2015-09-18T05:24:06.416056Z"
+    },
+    {
+      "version": "0.4.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.4.0",
+      "has_docs": true,
+      "inserted_at": "2015-09-17T14:11:47.961396Z"
+    },
+    {
+      "version": "0.3.3",
+      "url": "https://hex.pm/api/packages/floki/releases/0.3.3",
+      "has_docs": true,
+      "inserted_at": "2015-08-23T04:32:08.222591Z"
+    },
+    {
+      "version": "0.3.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.3.2",
+      "has_docs": true,
+      "inserted_at": "2015-06-27T22:12:15.247148Z"
+    },
+    {
+      "version": "0.3.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.3.1",
+      "has_docs": true,
+      "inserted_at": "2015-06-22T02:37:01.546328Z"
+    },
+    {
+      "version": "0.3.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.3.0",
+      "has_docs": true,
+      "inserted_at": "2015-06-07T23:58:08.399685Z"
+    },
+    {
+      "version": "0.2.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.2.1",
+      "has_docs": true,
+      "inserted_at": "2015-06-04T18:15:46.113461Z"
+    },
+    {
+      "version": "0.2.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.2.0",
+      "has_docs": true,
+      "inserted_at": "2015-05-03T22:37:59.940702Z"
+    },
+    {
+      "version": "0.1.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.1.1",
+      "has_docs": true,
+      "inserted_at": "2015-03-25T22:45:31.000000Z"
+    },
+    {
+      "version": "0.1.0",
+      "url": "https://hex.pm/api/packages/floki/releases/0.1.0",
+      "has_docs": true,
+      "inserted_at": "2015-02-15T19:18:37.000000Z"
+    },
+    {
+      "version": "0.0.5",
+      "url": "https://hex.pm/api/packages/floki/releases/0.0.5",
+      "has_docs": true,
+      "inserted_at": "2014-12-21T03:05:03.000000Z"
+    },
+    {
+      "version": "0.0.4",
+      "url": "https://hex.pm/api/packages/floki/releases/0.0.4",
+      "has_docs": true,
+      "inserted_at": "2014-11-11T03:07:19.000000Z"
+    },
+    {
+      "version": "0.0.3",
+      "url": "https://hex.pm/api/packages/floki/releases/0.0.3",
+      "has_docs": false,
+      "inserted_at": "2014-11-09T05:34:15.000000Z"
+    },
+    {
+      "version": "0.0.2",
+      "url": "https://hex.pm/api/packages/floki/releases/0.0.2",
+      "has_docs": false,
+      "inserted_at": "2014-11-03T22:07:32.000000Z"
+    },
+    {
+      "version": "0.0.1",
+      "url": "https://hex.pm/api/packages/floki/releases/0.0.1",
+      "has_docs": false,
+      "inserted_at": "2014-11-02T21:51:44.000000Z"
+    }
+  ],
+  "html_url": "https://hex.pm/packages/floki",
+  "latest_version": "0.38.5",
+  "downloads": {
+    "all": 54330926,
+    "day": 26732,
+    "recent": 1930716,
+    "week": 263219
+  },
+  "security_advisories": [],
+  "docs_html_url": "https://floki.hexdocs.pm/",
+  "retirements": {},
+  "configs": {
+    "erlang.mk": "dep_floki = hex 0.38.5",
+    "mix.exs": "{:floki, \"~> 0.38.5\"}",
+    "rebar.config": "{floki, \"0.38.5\"}"
+  },
+  "latest_stable_version": "0.38.5"
+}

@@ -1,0 +1,35 @@
+{
+  "meta": {
+    "elixir": "~> 1.2",
+    "app": "oauth2",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "2.1.0",
+  "checksum": "8ac07f85b3307dd1acfeb0ec852f64161b22f57d0ce0c15e616a1dfc8ebe2b41",
+  "url": "https://hex.pm/api/packages/oauth2/releases/2.1.0",
+  "has_docs": true,
+  "inserted_at": "2023-01-02T17:32:45.781610Z",
+  "updated_at": "2023-01-02T17:32:46.524696Z",
+  "requirements": {
+    "tesla": {
+      "app": "tesla",
+      "optional": false,
+      "requirement": "~> 1.5"
+    }
+  },
+  "html_url": "https://hex.pm/packages/oauth2/2.1.0",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": null,
+  "package_url": "https://hex.pm/api/packages/oauth2",
+  "downloads": 6525641,
+  "security_advisories": [],
+  "docs_html_url": "https://oauth2.hexdocs.pm/2.1.0/",
+  "configs": {
+    "erlang.mk": "dep_oauth2 = hex 2.1.0",
+    "mix.exs": "{:oauth2, \"~> 2.1\"}",
+    "rebar.config": "{oauth2, \"2.1.0\"}"
+  }
+}

@@ -1,0 +1,48 @@
+{
+  "meta": {
+    "elixir": "~> 1.11",
+    "app": "timex",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "3.7.11",
+  "checksum": "8b9024f7efbabaf9bd7aa04f65cf8dcd7c9818ca5737677c7b76acbc6a94d1aa",
+  "url": "https://hex.pm/api/packages/timex/releases/3.7.11",
+  "has_docs": true,
+  "inserted_at": "2023-03-24T16:09:15.367567Z",
+  "updated_at": "2023-03-24T16:14:19.192192Z",
+  "requirements": {
+    "combine": {
+      "app": "combine",
+      "optional": false,
+      "requirement": "~> 0.10"
+    },
+    "gettext": {
+      "app": "gettext",
+      "optional": false,
+      "requirement": "~> 0.20"
+    },
+    "tzdata": {
+      "app": "tzdata",
+      "optional": false,
+      "requirement": "~> 1.1"
+    }
+  },
+  "html_url": "https://hex.pm/packages/timex/3.7.11",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/bitwalker",
+    "username": "bitwalker"
+  },
+  "package_url": "https://hex.pm/api/packages/timex",
+  "downloads": 14593584,
+  "security_advisories": [],
+  "docs_html_url": "https://timex.hexdocs.pm/3.7.11/",
+  "configs": {
+    "erlang.mk": "dep_timex = hex 3.7.11",
+    "mix.exs": "{:timex, \"~> 3.7\"}",
+    "rebar.config": "{timex, \"3.7.11\"}"
+  }
+}

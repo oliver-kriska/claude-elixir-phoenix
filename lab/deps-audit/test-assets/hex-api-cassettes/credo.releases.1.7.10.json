@@ -1,0 +1,49 @@
+{
+  "meta": {
+    "elixir": ">= 1.13.0",
+    "app": "credo",
+    "build_tools": [
+      "mix"
+    ]
+  },
+  "version": "1.7.10",
+  "checksum": "71fbc9a6b8be21d993deca85bf151df023a3097b01e09a2809d460348561d8cd",
+  "url": "https://hex.pm/api/packages/credo/releases/1.7.10",
+  "has_docs": true,
+  "inserted_at": "2024-11-04T20:25:05.659143Z",
+  "updated_at": "2024-11-04T20:25:38.728231Z",
+  "requirements": {
+    "bunt": {
+      "app": "bunt",
+      "optional": false,
+      "requirement": "~> 0.2.1 or ~> 1.0"
+    },
+    "file_system": {
+      "app": "file_system",
+      "optional": false,
+      "requirement": "~> 0.2 or ~> 1.0"
+    },
+    "jason": {
+      "app": "jason",
+      "optional": false,
+      "requirement": "~> 1.0"
+    }
+  },
+  "html_url": "https://hex.pm/packages/credo/1.7.10",
+  "oidc_claims": null,
+  "retirement": null,
+  "publisher": {
+    "url": "https://hex.pm/api/users/rrrene",
+    "email": "rf@bamaru.de",
+    "username": "rrrene"
+  },
+  "package_url": "https://hex.pm/api/packages/credo",
+  "downloads": 1407483,
+  "security_advisories": [],
+  "docs_html_url": "https://credo.hexdocs.pm/1.7.10/",
+  "configs": {
+    "erlang.mk": "dep_credo = hex 1.7.10",
+    "mix.exs": "{:credo, \"~> 1.7\"}",
+    "rebar.config": "{credo, \"1.7.10\"}"
+  }
+}
