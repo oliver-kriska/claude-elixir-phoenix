@@ -28,7 +28,10 @@ No telemetry, and no network calls except a localhost Tidewave probe.
 pushes, `MIX_ENV=prod` tasks other than release build steps, and pattern kills
 of BEAM processes (`pkill -f beam`) are denied before they execute, with a
 safer alternative attached so Claude does not just retry. A local script the
-command runs is checked for the last two as well.
+command runs is checked for the last two as well. The one exception is
+dropping a test partition's database (`MIX_ENV=test MIX_TEST_PARTITION=<suffix>
+mix ecto.drop`, alone) in a project whose `config/test.exs` reads
+`MIX_TEST_PARTITION`.
 
 **2. Verify code against the Iron Laws.** After every edit to an Elixir file,
 the content you just wrote is scanned for seven of the non-negotiable rules —
@@ -182,7 +185,7 @@ print a message and get out of the way. For the ones that block:
 |---|---|
 | `deps-audit-gate` | `/phx:deps-vet <dep> <pin>` for a new git/path dep, or start Claude Code with `PHX_SKIP_DEPS_AUDIT=1` (a prefix on the command is ignored). In Claude Code, have the user run the command with a leading `!` |
 | `freeze-gate` | `/phx:freeze off` (dormant unless you turned it on) |
-| `block-dangerous-ops` | By design, none — run the command yourself in your terminal. In Claude Code, prefix with `!` |
+| `block-dangerous-ops` | By design, none — run the command yourself in your terminal. In Claude Code, prefix with `!`. A test partition's database can be dropped as `MIX_ENV=test MIX_TEST_PARTITION=<suffix> mix ecto.drop` when `config/test.exs` reads the suffix |
 
 To disable a hook outright, remove its entry from
 `plugins/elixir-phoenix/hooks/hooks.json` in your installed copy, or uninstall

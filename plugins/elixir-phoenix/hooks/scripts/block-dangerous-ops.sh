@@ -54,14 +54,34 @@ emit_block() {
 # (`mix do ecto.drop, ecto.create`), separator, `)`, or end-of-command —
 # preserving sibling tasks like `mix ecto.gen.migration`.
 # See ANCHOR NOTE below the force-push pattern for `^[[:space:](]*`.
-if [[ "$is_elixir" == 1 ]] && echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*mix[[:space:]]+(do[[:space:]]+)?ecto\.(reset|drop)([[:space:];&|,)]|$)'; then
+#
+# One exception: dropping a partitioned test database. `mix test` creates one
+# database per MIX_TEST_PARTITION suffix (Phoenix's config/test.exs appends
+# the suffix to the database name), and nothing removes them, so they pile up.
+# A drop passes only as the whole command
+# `MIX_ENV=test MIX_TEST_PARTITION=<suffix> mix ecto.drop [--quiet]`, with
+# nothing chained, and only when the project's config/test.exs reads
+# MIX_TEST_PARTITION. Without that config the suffix would not change the
+# database name and the drop would hit the shared test database, so it stays
+# blocked. `ecto.reset` is never excepted.
+PARTITION_DROP='^[[:space:]]*MIX_ENV=test[[:space:]]+MIX_TEST_PARTITION=[A-Za-z0-9_-]+[[:space:]]+mix[[:space:]]+ecto[.]drop([[:space:]]+--quiet)?[[:space:]]*$'
+partition_drop() {
+  [[ "$COMMAND" != *$'\n'* ]] &&
+    echo "$COMMAND" | grep -qE "$PARTITION_DROP" &&
+    grep -qF 'System.get_env("MIX_TEST_PARTITION")' "$proj/config/test.exs" 2>/dev/null
+}
+
+if [[ "$is_elixir" == 1 ]] && echo "$COMMAND" | grep -qE '(^[[:space:](]*|[;&|]+[[:space:]]*)(env[[:space:]]+)?([A-Za-z_][A-Za-z0-9_]*=[^[:space:]]*[[:space:]]+)*mix[[:space:]]+(do[[:space:]]+)?ecto\.(reset|drop)([[:space:];&|,)]|$)' &&
+  ! partition_drop; then
   emit_block \
-    "The user’s previous Bash call (‘mix ecto.reset’ / ‘mix ecto.drop’) was blocked by the elixir-phoenix plugin to prevent data loss. Prefer ‘mix ecto.rollback --step 1’ to undo the last migration, ‘mix ecto.migrate’ to apply pending ones, or author a corrective migration with ‘mix ecto.gen.migration NAME’. Do not retry the reset/drop unless the user explicitly asks again." \
+    "The user’s previous Bash call (‘mix ecto.reset’ / ‘mix ecto.drop’) was blocked by the elixir-phoenix plugin to prevent data loss. Prefer ‘mix ecto.rollback --step 1’ to undo the last migration, ‘mix ecto.migrate’ to apply pending ones, or author a corrective migration with ‘mix ecto.gen.migration NAME’. To remove a test partition database this session created, run ‘MIX_ENV=test MIX_TEST_PARTITION=<suffix> mix ecto.drop’ alone (config/test.exs must read MIX_TEST_PARTITION). Do not retry the reset/drop unless the user explicitly asks again." \
     "BLOCKED: Destructive database operation detected." \
     "mix ecto.reset/drop will destroy all data. If intentional, run manually" \
     "outside Claude Code. Safer alternatives:" \
     "- mix ecto.rollback --step 1 (undo last migration)" \
-    "- mix ecto.migrate (apply pending migrations)"
+    "- mix ecto.migrate (apply pending migrations)" \
+    "- MIX_ENV=test MIX_TEST_PARTITION=<suffix> mix ecto.drop, run alone," \
+    "  drops one test partition (config/test.exs must read MIX_TEST_PARTITION)"
 fi
 
 # Global: force-push (intentionally not gated on mix.exs).

@@ -156,6 +156,35 @@ run_hook allow 'echo "never MIX_ENV=test mix ecto.reset" && mix test'  # quoted 
 run_hook allow 'echo "(mix ecto.drop)" && mix test'  # quoted, paren-wrapped
 
 echo ""
+echo "── ecto.drop of a MIX_TEST_PARTITION test database ─────────────"
+
+# Without config/test.exs reading MIX_TEST_PARTITION the suffix would not
+# change the database name, so the drop would hit the shared test database.
+run_hook block "MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.drop"
+mkdir -p "$TMP/config"
+echo 'config :app, App.Repo, database: "app_test"' > "$TMP/config/test.exs"
+run_hook block "MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.drop"
+
+echo 'config :app, App.Repo, database: "app_test#{System.get_env("MIX_TEST_PARTITION")}"' \
+  > "$TMP/config/test.exs"
+run_hook allow "MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.drop"
+run_hook allow "MIX_ENV=test MIX_TEST_PARTITION=feature_x-2 mix ecto.drop --quiet"
+run_hook allow "  MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.drop  "
+run_hook block "mix ecto.drop"                                     # no partition
+run_hook block "MIX_TEST_PARTITION=w1 mix ecto.drop"               # dev env
+run_hook block "MIX_ENV=dev MIX_TEST_PARTITION=w1 mix ecto.drop"
+run_hook block "MIX_ENV=test mix ecto.drop"                        # shared test db
+run_hook block "MIX_ENV=test MIX_TEST_PARTITION= mix ecto.drop"    # empty suffix
+run_hook block "MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.reset"
+run_hook block "MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.drop -r Other.Repo"
+run_hook block "MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.drop && mix ecto.drop"
+run_hook block "MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.drop; mix ecto.drop"
+run_hook block "cd app && MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.drop"
+run_hook block "MIX_ENV=test MIX_TEST_PARTITION=\$(whoami) mix ecto.drop"
+run_hook block "$(printf 'MIX_ENV=test MIX_TEST_PARTITION=w1 mix ecto.drop\nmix ecto.drop')"
+rm -rf "$TMP/config"
+
+echo ""
 echo "── MIX_ENV=prod mix (Elixir-only) ───────────────────────────────"
 
 # Build-only steps are allowed under MIX_ENV=prod; every other task is denied.
