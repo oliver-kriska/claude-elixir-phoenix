@@ -11,6 +11,13 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Changed
 
+- `block-dangerous-ops` lets Claude drop a partitioned test database:
+  `MIX_ENV=test MIX_TEST_PARTITION=<suffix> mix ecto.drop`, run as the whole
+  command, when `config/test.exs` reads `MIX_TEST_PARTITION`. Each partition
+  suffix creates a database that nothing else removes. Every other
+  `ecto.drop`/`ecto.reset` is still denied, as is this one in a project whose
+  test config ignores the suffix (the drop would hit the shared test database).
+
 ### Fixed
 
 ## [3.2.2] - 2026-11-02
