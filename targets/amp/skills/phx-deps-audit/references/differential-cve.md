@@ -148,6 +148,7 @@ maps to setting `DIFFERENTIAL=0` in the driver.
 | Tmpdir copy fails (no disk) | Surface error; DO NOT fall back to mutating real lock |
 | GHSA cache stale | Emit freshness WARN; continue (results may miss new disclosures) |
 | OLD lock parse error | Skip diff; emit WARN |
+| `cves_old.json` / `cves_new.json` not valid mix_audit JSON (scan crashed, truncated, error object) | `diff_cves.py` exits 3, writes no findings; report the CVE diff as failed, never as "patched" |
 
 ## Related
 
