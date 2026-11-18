@@ -289,6 +289,32 @@ class TestNoDangerousPatterns:
         passed, _ = no_dangerous_patterns(safe)
         assert passed
 
+    def test_raw_call_outside_iron_laws(self):
+        bad = (
+            VALID_SKILL
+            + "\n## Examples\n\n```elixir\ncontent_tag(:div, raw(comment.body))\n```\n"
+        )
+        passed, _ = no_dangerous_patterns(bad)
+        assert not passed
+
+    def test_piped_raw_outside_iron_laws(self):
+        bad = VALID_SKILL + "\n## Examples\n\n```elixir\ncomment.body |> raw()\n```\n"
+        passed, _ = no_dangerous_patterns(bad)
+        assert not passed
+
+    def test_raw_safe_in_iron_laws(self):
+        safe = "---\nname: x\n---\n## Iron Laws\n1. NEVER call raw(user_input) or pipe input |> raw\n"
+        passed, _ = no_dangerous_patterns(safe)
+        assert passed
+
+    def test_words_containing_raw_are_not_flagged(self):
+        ok = (
+            VALID_SKILL
+            + "\n## Examples\n\n```elixir\nCanvas.draw(shape)\nraw_sql |> run()\n```\n"
+        )
+        passed, _ = no_dangerous_patterns(ok)
+        assert passed
+
 
 class TestAskUserQuestionOptionLimit:
     def test_no_mentions(self):

@@ -537,10 +537,10 @@ def no_dangerous_patterns(
     Skips Iron Laws sections where anti-patterns are documented as warnings.
     """
     dangerous = patterns or [
-        r"raw\(/1",
+        r"\braw\(",
         r"String\.to_atom\(",
         r"MIX_ENV=prod",
-        r"\|\s*raw\b",
+        r"\|>\s*raw\b",
     ]
 
     # Get body, excluding:
