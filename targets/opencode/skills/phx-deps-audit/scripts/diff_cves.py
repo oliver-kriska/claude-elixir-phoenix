@@ -59,6 +59,10 @@ Severity mapping per category:
 The renderer (references/output-renderer.md) lifts patched findings to
 the headline section despite their low severity.
 
+A scan file that exists but is not valid mix_audit JSON (truncated,
+empty, an error object) exits 3 with no findings written. A missing
+file is treated as an empty scan.
+
 Usage:
     python3 diff_cves.py \\
       --old cves_old.json \\
@@ -126,17 +130,27 @@ def _exposure_days(disclosed_at: str | None) -> int | None:
     return max(delta.days, 0)
 
 
+class ScanUnreadable(Exception):
+    """A mix_audit scan file exists but holds no usable result."""
+
+
 def _load_vulns(path: Path | None) -> list[dict[str, Any]]:
+    # A missing file means "no scan for this side" (e.g. a new project with
+    # no OLD lock): every NEW CVE is then `introduced`. A file that exists
+    # but can't be read is a failed scan, not an empty one; treating it as
+    # [] would turn every OLD CVE into `patched` (a false green).
     if path is None or not path.exists():
         return []
     try:
         data = json.loads(path.read_text(encoding="utf-8"))
     except json.JSONDecodeError as e:
-        print(f"diff_cves: invalid JSON in {path}: {e}", file=sys.stderr)
-        return []
+        raise ScanUnreadable(f"invalid JSON in {path}: {e}") from e
     if isinstance(data, list):
         return data  # already a list of vulns
-    return data.get("vulnerabilities", []) or []
+    vulns = data.get("vulnerabilities") if isinstance(data, dict) else None
+    if not isinstance(vulns, list):
+        raise ScanUnreadable(f"no 'vulnerabilities' list in {path}")
+    return vulns
 
 
 def _build_finding(
@@ -258,8 +272,13 @@ def main(argv: list[str]) -> int:
     )
     args = p.parse_args(argv)
 
-    old = _load_vulns(Path(args.old))
-    new = _load_vulns(Path(args.new))
+    try:
+        old = _load_vulns(Path(args.old))
+        new = _load_vulns(Path(args.new))
+    except ScanUnreadable as e:
+        # Exit 3 = audit infrastructure failed (output-renderer.md rubric).
+        print(f"diff_cves: {e}; CVE diff not computed", file=sys.stderr)
+        return 3
     findings = diff_cves(old, new)
     n = write_ndjson(Path(args.out), findings)
 
